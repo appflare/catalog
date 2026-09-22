@@ -177,8 +177,8 @@ jobs:
           node "${pack}" verify "dist/${APP}" --hashes-only
           node "${pack}" sign "dist/${APP}" --sign-key-env APPFLARE_SIGNING_KEY --key-id "${KEY_ID}"
           node scripts/check-manifest-plan.ts --plan "${plan}" --root dist --slug "${APP}" --signed
-          # TODO: --require-signed once catalog-2026-09 is in signingKeys at .appflare-ref.
-          node "${pack}" verify "dist/${APP}" --hashes-only
+          # Against the keys embedded in @appflare/schema at .appflare-ref, as the manager verifies.
+          node "${pack}" verify "dist/${APP}" --require-signed
       - name: Upload exactly signed-<slug>
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
@@ -240,8 +240,7 @@ jobs:
               echo "::error::${dir}/manifest.json is not ${slug}@${version}"
               exit 1
             fi
-            # TODO: --require-signed once catalog-2026-09 is in signingKeys at .appflare-ref.
-            node "${pack}" verify "${dir}" --hashes-only
+            node "${pack}" verify "${dir}" --require-signed
             tag="${slug}@${version}"
             if state="$(gh release view "${tag}" --json isDraft,isPrerelease,assets --jq '[(.isDraft | tostring), (.isPrerelease | tostring), ([.assets[].name] | sort | join(","))] | join(" ")' 2> /dev/null)"; then
               expected="$(printf '%s\n' "${slug}-${version}.zip" manifest.json manifest.sig | LC_ALL=C sort | paste -sd, -)"

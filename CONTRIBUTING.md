@@ -179,8 +179,8 @@ Each job gets only the secret it needs:
 | `build-packer` | `APPFLARE_REPO_TOKEN`, `contents: read` | builds the packer bundle; runs no app code |
 | `plan` | none; `contents: read` token for `gh api` | `publish-plan --out`; fails on a metadata-only edit or a broken release |
 | `pack` (per app) | none; `contents: read`, no persisted credentials | `pack-app --key-id catalog-2026-09`, which runs the app's install and build; uploads exactly `dist/<slug>` as `unsigned-<slug>` |
-| `sign` (per app) | `APPFLARE_SIGNING_KEY`; `contents: read` to check out the catalog | runs no app code; checks the artifact against the plan, `verify --hashes-only`, `sign`, checks and verifies again; uploads `signed-<slug>` |
-| `release` | `contents: write` | re-checks every planned artifact against the plan, verifies, creates `<slug>@<version>` with the three assets (skips complete existing releases), `build-index --releases-only`, commits `index.json` as `github-actions[bot]` with `[skip ci]` |
+| `sign` (per app) | `APPFLARE_SIGNING_KEY`; `contents: read` to check out the catalog | runs no app code; checks the artifact against the plan, `verify --hashes-only`, `sign`, checks it again and runs `verify --require-signed`; uploads `signed-<slug>` |
+| `release` | `contents: write` | re-checks every planned artifact against the plan, `verify --require-signed`, creates `<slug>@<version>` with the three assets (skips complete existing releases), `build-index --releases-only`, commits `index.json` as `github-actions[bot]` with `[skip ci]` |
 | `pages` | `pages: write`, `id-token: write` | deploys `index.json` and `schema/v1.json` |
 
 ### What the signing step trusts
@@ -211,10 +211,10 @@ again before creating anything.
 After deployment, `https://appflare.github.io/catalog/index.json` and
 `https://appflare.github.io/catalog/schema/v1.json` serve the two files.
 
-Until the `catalog-2026-09` public key is in `signingKeys` at `.appflare-ref`, the
-`sign` and `release` jobs verify with `--hashes-only` (marked `TODO`). Once it
-is, they switch to `--require-signed`, which checks against the keys the manager
-trusts.
+After signing, `sign` and `release` run `appflare-pack verify --require-signed`
+without `--public-key`, so the signature is checked against the keys embedded in
+`@appflare/schema` at `.appflare-ref`: the same keys the manager trusts. Only the
+pre-sign check in `sign` (and `pack-app`'s own check) uses `--hashes-only`.
 
 Secrets:
 
@@ -224,9 +224,9 @@ Secrets:
 | `APPFLARE_SIGNING_KEY` | `publish.yml` `sign` job only | Base64 PKCS#8 Ed25519 private key, key id `catalog-2026-09` |
 
 The `sign` job fails with an explicit error while `APPFLARE_SIGNING_KEY` is unset.
-Add the matching public key to `signingKeys` in `appflare/appflare` and bump
-`.appflare-ref` before the first real publish, so the manager can verify what the
-catalog signs.
+Its public half is `catalog-2026-09` in `signingKeys` in `appflare/appflare`. When
+the key rotates, add the new public key there and bump `.appflare-ref` before
+publishing with it, or `verify --require-signed` fails.
 
 Repository settings the maintainer has to make:
 
