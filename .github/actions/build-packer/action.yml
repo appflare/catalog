@@ -1,0 +1,79 @@
+name: Build the packer bundle
+description: >
+  Checks out appflare/appflare at the SHA in .appflare-ref (using the
+  APPFLARE_REPO_TOKEN secret), builds it, and uploads a self-contained bundle of
+  @appflare/pack and @appflare/schema (each with its production node_modules,
+  made with `pnpm deploy`) as the workflow artifact "appflare-packer". No app
+  code runs here. Expects the catalog checked out at ./catalog.
+inputs:
+  appflare-token:
+    description: Read-only token for appflare/appflare (the APPFLARE_REPO_TOKEN secret).
+    required: true
+runs:
+  using: composite
+  steps:
+    - name: Require APPFLARE_REPO_TOKEN
+      shell: bash
+      env:
+        APPFLARE_REPO_TOKEN: ${{ inputs.appflare-token }}
+      run: |
+        if [ -z "${APPFLARE_REPO_TOKEN}" ]; then
+          echo "::error title=APPFLARE_REPO_TOKEN is not set::The catalog builds @appflare/pack from a pinned checkout of appflare/appflare, which is private. Add a fine-grained PAT with Contents: read on appflare/appflare as the APPFLARE_REPO_TOKEN secret (see CONTRIBUTING.md). Pull requests from forks do not receive secrets and fail here until appflare/appflare is public."
+          exit 1
+        fi
+
+    - name: Read .appflare-ref
+      id: ref
+      shell: bash
+      working-directory: catalog
+      run: |
+        sha="$(tr -d '[:space:]' < .appflare-ref)"
+        if ! [[ "${sha}" =~ ^[0-9a-f]{40}$ ]]; then
+          echo "::error file=.appflare-ref::.appflare-ref must hold one 40-character commit SHA of appflare/appflare"
+          exit 1
+        fi
+        echo "sha=${sha}" >> "${GITHUB_OUTPUT}"
+
+    - name: Check out appflare/appflare at the pinned SHA
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      with:
+        repository: appflare/appflare
+        ref: ${{ steps.ref.outputs.sha }}
+        token: ${{ inputs.appflare-token }}
+        path: appflare-src
+        persist-credentials: false
+
+    - name: Set up pnpm
+      uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+      with:
+        package_json_file: catalog/package.json
+
+    - name: Set up Node
+      uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+      with:
+        node-version-file: catalog/.node-version
+
+    - name: Build and bundle @appflare/pack and @appflare/schema
+      shell: bash
+      working-directory: appflare-src
+      run: |
+        set -euo pipefail
+        pnpm install --frozen-lockfile
+        # Only the packer and what it depends on (schema, cf-api), not the manager.
+        pnpm exec turbo run build --filter=@appflare/pack...
+        out="${RUNNER_TEMP}/appflare-packer"
+        rm -rf "${out}"
+        # --legacy: pnpm 10's deploy otherwise requires inject-workspace-packages.
+        pnpm --filter @appflare/pack deploy --prod --legacy "${out}/packages/pack"
+        pnpm --filter @appflare/schema deploy --prod --legacy "${out}/packages/schema"
+        # tar keeps node_modules' (relative) symlinks, which artifact upload would not.
+        tar -C "${out}" -czf "${RUNNER_TEMP}/appflare-packer.tgz" packages
+
+    - name: Upload the packer bundle
+      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      with:
+        name: appflare-packer
+        path: ${{ runner.temp }}/appflare-packer.tgz
+        if-no-files-found: error
+        retention-days: 1
+        compression-level: 0

@@ -1,0 +1,24 @@
+name: bump
+
+# Stub. Will run nightly: for each app, compare upstream tags/SHA with the pin in
+# appflare.jsonc and open a bump PR. Manual trigger only until then.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: bump
+  cancel-in-progress: false
+
+jobs:
+  bump:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Not implemented yet
+        run: |
+          # TODO: compare each app's upstream tags/SHA with source.sha and open a bump PR.
+          echo "TODO: for each app, compare upstream tags/SHA with the pin and open a bump PR"

@@ -1,0 +1,33 @@
+{
+  "name": "appflare-catalog",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@10.34.5",
+  "engines": {
+    "node": ">=22.18"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "lint": "biome check .",
+    "format": "biome format --write .",
+    "test": "vitest run",
+    "check": "pnpm typecheck && pnpm lint && pnpm test",
+    "validate": "node scripts/validate.ts",
+    "build-index": "node scripts/build-index.ts",
+    "pack-app": "node scripts/pack-app.ts",
+    "sync-schema": "node scripts/sync-schema.ts",
+    "gen-codeowners": "node scripts/gen-codeowners.ts",
+    "changed-apps": "node scripts/changed-apps.ts",
+    "publish-plan": "node scripts/publish-plan.ts"
+  },
+  "dependencies": {
+    "zod": "4.6.5"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.5.14",
+    "@types/node": "22.20.4",
+    "typescript": "7.0.2",
+    "vitest": "4.1.11"
+  }
+}

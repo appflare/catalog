@@ -1,0 +1,113 @@
+name: verify
+
+# Pull requests: check the catalog tooling, then validate each changed app's
+# manifest, pack it (unsigned), and verify the artifact's hashes. No release,
+# no Cloudflare account. Only build-packer sees a secret (APPFLARE_REPO_TOKEN);
+# the jobs that run pull-request or app code see none.
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: verify-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: bash
+    working-directory: catalog
+
+jobs:
+  build-packer:
+    name: build packer
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          path: catalog
+          persist-credentials: false
+      - uses: ./catalog/.github/actions/build-packer
+        with:
+          appflare-token: ${{ secrets.APPFLARE_REPO_TOKEN }}
+
+  check:
+    name: check (typecheck, lint, test, generated files)
+    needs: build-packer
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          path: catalog
+          persist-credentials: false
+      - uses: ./catalog/.github/actions/use-packer
+      - run: pnpm check
+      - run: pnpm validate
+      - run: pnpm sync-schema --check
+      - run: pnpm gen-codeowners --check
+
+  changes:
+    name: changed apps
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    outputs:
+      apps: ${{ steps.changed.outputs.apps }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          path: catalog
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: catalog/.node-version
+      - id: changed
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          apps="$(node scripts/changed-apps.ts --base "${BASE_SHA}" --head "${HEAD_SHA}")"
+          echo "changed apps: ${apps}"
+          echo "apps=${apps}" >> "${GITHUB_OUTPUT}"
+
+  pack:
+    name: pack ${{ matrix.app }}
+    needs: [build-packer, changes]
+    if: needs.changes.outputs.apps != '[]'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        app: ${{ fromJSON(needs.changes.outputs.apps) }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          path: catalog
+          persist-credentials: false
+      - uses: ./catalog/.github/actions/use-packer
+      - name: Validate manifest
+        env:
+          APP: ${{ matrix.app }}
+        run: pnpm validate "${APP}"
+      - name: Pack (unsigned) and verify hashes
+        env:
+          APP: ${{ matrix.app }}
+        run: pnpm pack-app "${APP}" --out "dist/${APP}"
+      - name: Upload artifact
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: artifact-${{ matrix.app }}
+          path: catalog/dist/${{ matrix.app }}
+          if-no-files-found: error
+          retention-days: 7
+      - name: Install into the CI account
+        env:
+          APP: ${{ matrix.app }}
+        run: |
+          # TODO: install the artifact into the CI Cloudflare account, health-check it, uninstall.
+          echo "TODO: install ${APP} into the CI account, health check, uninstall"

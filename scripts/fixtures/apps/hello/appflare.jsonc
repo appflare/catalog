@@ -1,0 +1,25 @@
+// Test fixture for scripts/lib/*.test.ts. Not a real catalog app.
+{
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "hello",
+  "name": "Hello",
+  "summary": "Fixture app for the catalog scripts' tests.",
+  "homepage": "https://github.com/example/hello",
+  "repo": "example/hello",
+  "license": "MIT",
+  "categories": ["utilities"],
+  "maintainers": ["octocat", "@example/maintainers"],
+  "source": { "ref": "v1.2.3", "sha": "0123456789abcdef0123456789abcdef01234567" },
+  "install": {
+    "tier": "artifact",
+    "packageManager": "pnpm",
+    "wranglerConfig": "wrangler.jsonc",
+    "workerName": "hello"
+  },
+  "plan": "free",
+  "requires": ["r2"],
+  "secrets": [],
+  "vars": [],
+  "postInstall": [],
+  "tokenPermissions": []
+}

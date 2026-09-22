@@ -1,0 +1,24 @@
+name: nightly
+
+# Stub. Will run nightly: reinstall every app into the CI account and set
+# "last verified" in index.json. Manual trigger only until then.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: nightly
+  cancel-in-progress: false
+
+jobs:
+  nightly:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Not implemented yet
+        run: |
+          # TODO: reinstall every app into the CI account and set lastVerified in index.json.
+          echo "TODO: reinstall every app into the CI account and set lastVerified in index.json"
