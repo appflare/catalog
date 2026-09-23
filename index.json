@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-23T12:19:40.276Z",
+  "generatedAt": "2026-09-23T12:27:29.137Z",
   "apps": [
     {
       "slug": "cut",
@@ -31,6 +31,25 @@
         "sig": "https://github.com/appflare/catalog/releases/download/openai-gemini@0.0.0-20251222.61a83bd/manifest.sig"
       },
       "digest": "e3744316bcd3d3e3475468054de21b3c86d6396efc8c512c7ae54627799181b8",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "maintainers": [
+        "MendyLanda"
+      ]
+    },
+    {
+      "slug": "unifi-ddns",
+      "name": "UniFi DDNS",
+      "summary": "Dynamic DNS for UniFi gateways: keeps Cloudflare A/AAAA records on your current IP.",
+      "version": "3.3.1",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/unifi-ddns@3.3.1/unifi-ddns-3.3.1.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/unifi-ddns@3.3.1/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/unifi-ddns@3.3.1/manifest.sig"
+      },
+      "digest": "1decd124c931015a1dd139ac6a8ab0fc20604ef8c5f61ee96751471757888238",
       "tier": "artifact",
       "plan": "free",
       "requires": [],
