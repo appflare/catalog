@@ -52,6 +52,19 @@ app's own wrangler config, so the manifest does not repeat them.
    CODEOWNERS and approve bumps to their app.
 4. Run the checks below, then open a pull request.
 
+### At most 21 Worker modules
+
+The manager installs an app from inside a Cloudflare Workflow on the Workers free
+plan, which allows 50 subrequests per invocation. It uploads the Worker in one
+step, fetching each module from the release as its own subrequest, so an app can
+have at most `MAX_WORKER_MODULES` modules (21, exported by `@appflare/schema`).
+Every `appflare-pack verify` in CI passes `--max-modules` with that number, read
+from the schema package, and `pack-app` prints the count. An artifact over the
+limit fails verify with the packer's message instead of failing later, at
+install. A build that code-splits into many chunks, such as a framework's server
+build or a bundler with dynamic imports, must be configured to emit a single
+Worker module before the app can join the catalog.
+
 ### Metadata-only edits fail publish
 
 A release is identified by its version, and the version comes from the pin. Releases
@@ -84,6 +97,7 @@ pnpm -s bump apply <slug> --ref <ref> --sha <sha>  # edit source, keeping commen
 node scripts/ci-install.ts deploy|cleanup <artifactDir> --suffix <suffix>  # needs a CI account
 pnpm sync-schema [--check]          # copy schema/v1.json from @appflare/schema
 pnpm gen-codeowners [--check]       # regenerate CODEOWNERS
+pnpm -s max-modules                 # the Worker module limit from @appflare/schema
 ```
 
 Tests that need the real schema skip themselves when `APPFLARE_DIR` has no build.

@@ -125,7 +125,7 @@ jobs:
       - uses: ./catalog/.github/actions/use-packer
         with:
           sha256: ${{ needs.build-packer.outputs.packer-sha256 }}
-      - name: Pack an unsigned intermediate and verify hashes
+      - name: Pack an unsigned intermediate, verify hashes and the module limit
         env:
           APP: ${{ matrix.app }}
         run: pnpm pack-app "${APP}" --out "dist/${APP}" --key-id "${KEY_ID}"
@@ -203,12 +203,14 @@ jobs:
           tar -xzf "${bundle}" -C "${RUNNER_TEMP}/appflare"
           pack="${RUNNER_TEMP}/appflare/packages/pack/bin/appflare-pack.js"
           plan="${RUNNER_TEMP}/plan/publish-plan.json"
+          # The most Worker modules the manager can install, from @appflare/schema.
+          max_modules="$(APPFLARE_DIR="${RUNNER_TEMP}/appflare" node scripts/max-modules.ts)"
           node scripts/check-manifest-plan.ts --plan "${plan}" --root dist --slug "${APP}" --unsigned
-          node "${pack}" verify "dist/${APP}" --hashes-only
+          node "${pack}" verify "dist/${APP}" --hashes-only --max-modules "${max_modules}"
           node "${pack}" sign "dist/${APP}" --sign-key-env APPFLARE_SIGNING_KEY --key-id "${KEY_ID}"
           node scripts/check-manifest-plan.ts --plan "${plan}" --root dist --slug "${APP}" --signed
           # Against the keys embedded in @appflare/schema at .appflare-ref, as the manager verifies.
-          node "${pack}" verify "dist/${APP}" --require-signed
+          node "${pack}" verify "dist/${APP}" --require-signed --max-modules "${max_modules}"
       - name: Upload exactly signed-<slug>
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
@@ -273,6 +275,7 @@ jobs:
           set -euo pipefail
           pack="${APPFLARE_DIR}/packages/pack/bin/appflare-pack.js"
           plan="${RUNNER_TEMP}/plan/publish-plan.json"
+          max_modules="$(node scripts/max-modules.ts)"
           # Every planned slug present as dist/signed-<slug>, nothing else, each matching the plan.
           node scripts/check-manifest-plan.ts --plan "${plan}" --root dist --prefix signed- --signed
           mapfile -t slugs < <(jq -r '.[]' <<< "${PLANNED_APPS}")
@@ -287,7 +290,7 @@ jobs:
               echo "::error::${dir}/manifest.json is not ${slug}@${version}"
               exit 1
             fi
-            node "${pack}" verify "${dir}" --require-signed
+            node "${pack}" verify "${dir}" --require-signed --max-modules "${max_modules}"
             tag="${slug}@${version}"
             local_sha="$(sha256sum "${dir}/manifest.json" | cut -d' ' -f1)"
             if state="$(gh release view "${tag}" --json isDraft,isPrerelease,assets --jq '[(.isDraft | tostring), (.isPrerelease | tostring), ([.assets[].name] | sort | join(","))] | join(" ")' 2> /dev/null)"; then

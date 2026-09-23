@@ -16,7 +16,9 @@ const USAGE = `Usage: pnpm pack-app <slug> [--out <dir>] [--key-id <id>]
 
 Clones the app's repo at source.sha into a temp dir, builds the artifact with
 appflare-pack (dependencies installed with --ignore-scripts), and checks it
-with appflare-pack verify --hashes-only. Never signs and never sees a secret.
+with appflare-pack verify --hashes-only --max-modules (the most Worker modules
+the manager can install, from @appflare/schema). Never signs and never sees a
+secret.
 APPFLARE_DIR points at a built appflare checkout or packer bundle.
 
   --out <dir>      output directory (default: dist/<slug>)
@@ -101,11 +103,22 @@ runMain(async () => {
     }
     info(`packing ${slug}@${expectedVersion} with appflare-pack (no signing key present)`);
     mustRun(process.execPath, packArgs);
-    if (run(process.execPath, [packBin, "verify", outDir, "--hashes-only"]) !== 0) {
+    const verifyArgs = [
+      packBin,
+      "verify",
+      outDir,
+      "--hashes-only",
+      "--max-modules",
+      String(schema.maxWorkerModules),
+    ];
+    if (run(process.execPath, verifyArgs) !== 0) {
       // Never leave an artifact that failed verification where build-index or
       // a later CI step could pick it up.
       clearArtifactDir(outDir);
-      throw new Error(`appflare-pack verify --hashes-only failed for ${outDir}`);
+      throw new Error(
+        `appflare-pack verify failed for ${outDir} (its message is above). A Worker with more ` +
+          `than ${schema.maxWorkerModules} modules cannot be installed by the manager.`,
+      );
     }
   } finally {
     rmSync(tmp, { recursive: true, force: true });
@@ -131,7 +144,7 @@ runMain(async () => {
     [
       `${slug}@${artifact.version} (keyId=${artifact.keyId}, not signed)`,
       `  source:     ${artifact.source.repo}@${artifact.source.sha} (${artifact.source.ref})`,
-      `  modules:    ${artifact.worker.modules.length}`,
+      `  modules:    ${artifact.worker.modules.length} (the manager installs at most ${schema.maxWorkerModules})`,
       `  assets:     ${artifact.assets.files.length}`,
       `  migrations: ${migrations}`,
       `  zip:        ${zipPath} (${statSync(zipPath).size} bytes)`,

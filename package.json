@@ -21,7 +21,8 @@
     "changed-apps": "node scripts/changed-apps.ts",
     "publish-plan": "node scripts/publish-plan.ts",
     "bump": "node scripts/bump.ts",
-    "record-verified": "node scripts/record-verified.ts"
+    "record-verified": "node scripts/record-verified.ts",
+    "max-modules": "node scripts/max-modules.ts"
   },
   "dependencies": {
     "zod": "4.6.5"

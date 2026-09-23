@@ -118,7 +118,8 @@ jobs:
         env:
           APP: ${{ matrix.app }}
         run: pnpm validate "${APP}"
-      - name: Pack (unsigned) and verify hashes
+      # pack-app runs appflare-pack verify --hashes-only --max-modules.
+      - name: Pack (unsigned), verify hashes and the module limit
         env:
           APP: ${{ matrix.app }}
         run: pnpm pack-app "${APP}" --out "dist/${APP}"

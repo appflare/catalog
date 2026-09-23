@@ -22,5 +22,7 @@ export async function testSchema(): Promise<AppflareSchema> {
     catalogManifest: passthrough(),
     artifactManifest: passthrough(),
     indexJson: passthrough(),
+    // The value @appflare/schema exports; only used when it is not available.
+    maxWorkerModules: 21,
   };
 }

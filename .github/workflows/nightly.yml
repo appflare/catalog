@@ -101,7 +101,9 @@ jobs:
           dir="dist/${SLUG}"
           rm -rf "${dir}"
           gh release download "${SLUG}@${VERSION}" --dir "${dir}"
-          node "${APPFLARE_DIR}/packages/pack/bin/appflare-pack.js" verify "${dir}" --require-signed
+          max_modules="$(node scripts/max-modules.ts)"
+          node "${APPFLARE_DIR}/packages/pack/bin/appflare-pack.js" verify "${dir}" --require-signed \
+            --max-modules "${max_modules}"
       - name: Deploy to the CI account and health-check
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}

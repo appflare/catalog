@@ -22,6 +22,11 @@ export interface AppflareSchema {
   catalogManifest: Parser<CatalogManifest>;
   artifactManifest: Parser<ArtifactManifest>;
   indexJson: Parser<IndexJson>;
+  /**
+   * Most Worker modules the manager can install: it uploads each module as its
+   * own subrequest, within the free plan's per-invocation subrequest limit.
+   */
+  maxWorkerModules: number;
 }
 
 /**
@@ -37,6 +42,7 @@ export async function loadAppflareSchema(appflareDir: string): Promise<AppflareS
     catalogManifest: pickParser<CatalogManifest>(mod, "catalogManifestSchema"),
     artifactManifest: pickParser<ArtifactManifest>(mod, "artifactManifestSchema"),
     indexJson: pickParser<IndexJson>(mod, "indexJsonSchema"),
+    maxWorkerModules: pickPositiveInt(mod, "MAX_WORKER_MODULES"),
   };
 }
 
@@ -48,6 +54,14 @@ function pickParser<T>(mod: unknown, exportName: string): Parser<T> {
   // The runtime check above establishes the Parser shape; the output type T is
   // the local subset view from types.ts of what this schema produces.
   return value as Parser<T>;
+}
+
+function pickPositiveInt(mod: unknown, exportName: string): number {
+  const value = (mod as Record<string, unknown> | null)?.[exportName];
+  if (typeof value !== "number" || !Number.isInteger(value) || value < 1) {
+    throw new Error(`@appflare/schema does not export a positive integer named ${exportName}`);
+  }
+  return value;
 }
 
 /** Formats issues as `- path.to.field: message` lines. */
