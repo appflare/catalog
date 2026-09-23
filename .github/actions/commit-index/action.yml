@@ -5,11 +5,14 @@ description: >
   verified-file it rebuilds the index from the GitHub Releases (build-index
   --releases-only); with one it only patches lastVerified into the existing rows
   (record-verified), never adding or removing apps. Expects the catalog checked
-  out at ./catalog without persisted credentials, and APPFLARE_DIR set
-  (use-packer).
+  out at ./catalog by actions/checkout with ssh-key set to the CATALOG_PUSH_KEY
+  secret and persist-credentials true, and APPFLARE_DIR set (use-packer). git
+  fetches and pushes over SSH with that key, never with the workflow token:
+  main's ruleset requires status checks on every push and lets only repository
+  admins and deploy keys bypass them.
 inputs:
   github-token:
-    description: Token with contents write, used for the push and the release lookups.
+    description: Token for the GitHub Releases lookups of build-index; not used by git.
     required: true
   message:
     description: Commit message.
@@ -30,9 +33,13 @@ runs:
         VERIFIED_FILE: ${{ inputs.verified-file }}
       run: |
         set -euo pipefail
+        origin="$(git remote get-url origin)"
+        if [[ "${origin}" != git@* ]]; then
+          echo "::error title=CATALOG_PUSH_KEY not in use::origin is ${origin}, not an SSH URL, so the push to main would be rejected. Set the CATALOG_PUSH_KEY secret and check out the catalog with ssh-key set to it and persist-credentials true (checkout falls back to HTTPS when the secret is empty)."
+          exit 1
+        fi
         git config user.name "github-actions[bot]"
         git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-        gh auth setup-git
         if [ -n "${VERIFIED_FILE}" ]; then
           update=(record-verified --verified "${VERIFIED_FILE}")
         else

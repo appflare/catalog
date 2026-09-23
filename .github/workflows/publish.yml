@@ -8,8 +8,8 @@ name: publish
 #                 into an unsigned intermediate with keyId catalog-2026-09
 #   sign          APPFLARE_SIGNING_KEY only; runs no app code; signs only a manifest.json
 #                 whose app, version, source, keyId, and catalog equal the plan
-#   release       contents: write; re-checks against the plan, creates the releases,
-#                 rebuilds and commits index.json
+#   release       contents: write, CATALOG_PUSH_KEY; re-checks against the plan,
+#                 creates the releases, rebuilds and commits index.json
 #   pages         deploys index.json and schema/v1.json to GitHub Pages
 #
 # The plan is computed from the manifests and existing releases, so any run
@@ -227,16 +227,25 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     permissions:
+      # gh release create; the index.json push uses CATALOG_PUSH_KEY instead.
       contents: write
       # gh run download of this run's signed-<slug> artifacts.
       actions: read
     steps:
+      # main's ruleset requires status checks on every push and lets only
+      # repository admins and deploy keys bypass them, so a push with the
+      # workflow token is rejected. The index.json commit is pushed over SSH
+      # with CATALOG_PUSH_KEY, a deploy key with write access, instead.
+      # With ssh-key, origin is the SSH URL and core.sshCommand points at the
+      # key until the job ends, which is what persist-credentials keeps. Every
+      # later step can read the key, so this job runs no app code: only the
+      # catalog's own scripts, the packer bundle, and gh.
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           path: catalog
           ref: main
-          # Credentials are configured only for the push below.
-          persist-credentials: false
+          ssh-key: ${{ secrets.CATALOG_PUSH_KEY }}
+          persist-credentials: true
       - uses: ./catalog/.github/actions/use-packer
         with:
           sha256: ${{ needs.build-packer.outputs.packer-sha256 }}
@@ -316,6 +325,8 @@ jobs:
               --title "${tag}" \
               --notes "Built from ${source}. manifest.json sha256: ${local_sha}."
           done
+      # A deploy key's push starts push workflows (conventions runs on every
+      # push to main); [skip ci] in the message keeps it from doing so.
       - name: Rebuild and commit index.json
         uses: ./catalog/.github/actions/commit-index
         with:

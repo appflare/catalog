@@ -12,6 +12,7 @@ import {
   gateBump,
   gateOnAppDirectory,
   planBumps,
+  readAutoMerge,
   readPin,
   renderBumpBody,
   TAG_PIN_NOTE,
@@ -49,6 +50,7 @@ describe("decideBump for a tag pin", () => {
       to: { ref: "v1.3.0", sha: NEW, kind: "tag" },
       branch: "bump/hello/89abcde",
       title: "chore(hello): bump to v1.3.0",
+      autoMerge: false,
     });
   });
 
@@ -355,6 +357,74 @@ describe("renderBumpBody", () => {
       "- [ ] Set `install.version` in `apps/hello/appflare.jsonc` to Hello's version at the " +
         "new commit (it is `1.1.10` now).",
     );
+  });
+});
+
+describe("auto-merge", () => {
+  const autoApp = findApp(
+    path.join(import.meta.dirname, "..", "fixtures", "auto-merge-apps"),
+    "hello-auto",
+  );
+  const autoPin = readPin(autoApp);
+
+  it("reads bump.autoMerge from the raw JSONC, comments included", () => {
+    expect(autoPin.autoMerge).toBe(true);
+    expect(tagPin.autoMerge).toBe(false);
+  });
+
+  it("counts only a literal true, so a malformed setting never merges or stops the bot", () => {
+    expect(readAutoMerge({ bump: { autoMerge: true } })).toBe(true);
+    for (const manifest of [
+      {},
+      null,
+      "bump",
+      { bump: true },
+      { bump: [true] },
+      { bump: {} },
+      { bump: { autoMerge: false } },
+      { bump: { autoMerge: "true" } },
+      { bump: { autoMerge: 1 } },
+    ]) {
+      expect(readAutoMerge(manifest)).toBe(false);
+    }
+  });
+
+  it("marks the bump for auto-merge and says so in the body", () => {
+    const plan = planBumps([autoApp], {
+      resolve: () => tag("v1.3.0"),
+      compare: () => ({ total: 0, subjects: [] }),
+      relation: never,
+      changedFiles: never,
+    });
+    expect(plan.bumps).toHaveLength(1);
+    const bump = plan.bumps[0] as Bump;
+    expect(bump.autoMerge).toBe(true);
+    expect(bump.title).toBe("chore(hello-auto): bump to v1.3.0");
+    const body = renderBumpBody(autoPin, bump, null);
+    expect(body).toContain("**This pull request merges itself.**");
+    expect(body).toContain("`apps/hello-auto/appflare.jsonc` sets `bump.autoMerge`");
+    expect(body).toContain("the next nightly bump run publishes the new version");
+    expect(body).not.toContain("A maintainer merges");
+    expect(body).not.toContain("Merging publishes");
+  });
+
+  it("leaves an entry without the setting to a maintainer", () => {
+    const bump = bumped(decideBump(tagPin, tag("v1.3.0"), never));
+    expect(bump.autoMerge).toBe(false);
+    const body = renderBumpBody(tagPin, bump, null);
+    expect(body).toContain("**A maintainer merges this pull request** after reviewing");
+    expect(body).toContain("Merging publishes the new version.");
+    expect(body).not.toContain("merges itself.**");
+  });
+
+  it("never auto-merges an entry that sets install.version", () => {
+    const versioned: AppPin = { ...autoPin, install: { ...autoPin.install, version: "1.1.10" } };
+    const bump = bumped(decideBump(versioned, tag("v1.3.0"), never));
+    expect(bump.autoMerge).toBe(false);
+    const body = renderBumpBody(versioned, bump, null);
+    expect(body).toContain("but it also sets `install.version`");
+    expect(body).toContain("- [ ] Set `install.version`");
+    expect(body).not.toContain("merges itself.**");
   });
 });
 

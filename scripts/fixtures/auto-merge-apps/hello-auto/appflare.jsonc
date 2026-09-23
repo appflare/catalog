@@ -1,0 +1,29 @@
+// Test fixture for scripts/lib/bump.test.ts: an entry whose bump pull requests
+// merge themselves. Kept out of fixtures/apps so the other tests' app list stays
+// the same. Not a real catalog app.
+{
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "hello-auto",
+  "name": "Hello Auto",
+  "summary": "Fixture app for the bump bot's auto-merge tests.",
+  "homepage": "https://github.com/example/hello-auto",
+  "repo": "example/hello-auto",
+  "license": "MIT",
+  "categories": ["utilities"],
+  "maintainers": ["octocat"],
+  "source": { "ref": "v1.2.3", "sha": "0123456789abcdef0123456789abcdef01234567" },
+  "install": {
+    "tier": "artifact",
+    "packageManager": "pnpm",
+    "wranglerConfig": "wrangler.jsonc",
+    "workerName": "hello-auto"
+  },
+  "plan": "free",
+  "requires": [],
+  "secrets": [],
+  "vars": [],
+  "postInstall": [],
+  "tokenPermissions": [],
+  // The maintainers trust upstream's tags.
+  "bump": { "autoMerge": true }
+}
