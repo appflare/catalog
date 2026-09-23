@@ -78,7 +78,7 @@ runMain(() => {
     const summary = [
       ...bumps.map(
         (b) =>
-          `- ${b.slug}: bump ${b.from.ref}@${shortSha(b.from.sha)} to ${b.to.ref}@${shortSha(b.to.sha)}`,
+          `- ${b.slug}: bump ${b.from.ref}@${shortSha(b.from.sha)} to ${b.to.ref}@${shortSha(b.to.sha)}${b.note ? ` (${b.note})` : ""}`,
       ),
       ...plan.skipped.map((s) => `- ${s.slug}: skipped, ${s.reason}`),
       ...plan.failed.map((f) => `- ${f.slug}: **failed**, ${f.error}`),

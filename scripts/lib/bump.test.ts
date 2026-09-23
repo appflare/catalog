@@ -11,6 +11,7 @@ import {
   planBumps,
   readPin,
   renderBumpBody,
+  TAG_PIN_NOTE,
 } from "./bump.ts";
 import { parseJsonc } from "./jsonc.ts";
 import type { UpstreamSource, UpstreamTarget } from "./upstream.ts";
@@ -80,7 +81,7 @@ describe("decideBump for other pins", () => {
     const asked: string[] = [];
     const ahead = (n: number) => (base: string, h: string) => {
       asked.push(`${base}...${h}`);
-      return n;
+      return { ahead: n, behind: 0 };
     };
     expect(bumped(decideBump(branchPin, head(), ahead(3))).title).toBe(
       "chore(hello): bump to main@89abcde",
@@ -90,9 +91,37 @@ describe("decideBump for other pins", () => {
     expect(decideBump(branchPin, head(PIN), never).action).toBe("skip");
   });
 
-  it("moves a branch pin to a first stable tag that is ahead of it", () => {
-    expect(bumped(decideBump(branchPin, tag("v1.0.0"), () => 5)).to.kind).toBe("tag");
-    expect(decideBump(branchPin, tag("v1.0.0"), () => 0).action).toBe("skip");
+  it("moves a branch pin to a stable tag on the pinned commit, without comparing", () => {
+    const b = bumped(decideBump(branchPin, tag("v0.1.0", PIN), never));
+    expect(b).toMatchObject({
+      from: { ref: "main", sha: PIN },
+      to: { ref: "v0.1.0", sha: PIN, kind: "tag" },
+      title: "chore(hello): bump to v0.1.0",
+      note: TAG_PIN_NOTE,
+    });
+    expect(renderBumpBody(branchPin, b, null)).toContain(`Why: ${TAG_PIN_NOTE}.`);
+    expect(renderBumpBody(branchPin, b, { total: 0, subjects: [] })).toContain(
+      "No new commits: the target is the pinned commit.",
+    );
+  });
+
+  it("moves a branch pin to a stable tag on a later commit", () => {
+    const b = bumped(decideBump(branchPin, tag("v1.0.0"), () => ({ ahead: 5, behind: 0 })));
+    expect(b.to).toEqual({ ref: "v1.0.0", sha: NEW, kind: "tag" });
+  });
+
+  it("refuses a tag on an older or unrelated commit", () => {
+    expect(decideBump(branchPin, tag("v1.0.0"), () => ({ ahead: 0, behind: 3 }))).toEqual({
+      action: "skip",
+      reason: `tag v1.0.0@89abcde does not contain the pinned 0123456`,
+    });
+    expect(decideBump(branchPin, tag("v1.0.0"), () => ({ ahead: 2, behind: 4 })).action).toBe(
+      "skip",
+    );
+  });
+
+  it("does not bump a branch pin to a head that is behind or diverged without new commits", () => {
+    expect(decideBump(branchPin, head(), () => ({ ahead: 0, behind: 2 })).action).toBe("skip");
   });
 
   it("keeps the title within the commit header limit", () => {
@@ -105,7 +134,7 @@ describe("planBumps", () => {
   const upstream = (resolve: UpstreamSource["resolve"]): UpstreamSource => ({
     resolve,
     compare: () => ({ total: 0, subjects: [] }),
-    aheadBy: () => 1,
+    relation: () => ({ ahead: 1, behind: 0 }),
   });
 
   it("keeps only moves forward", () => {
@@ -141,7 +170,7 @@ describe("planBumps", () => {
 describe("gateBump", () => {
   const now = new Date("2026-09-24T00:00:00Z");
   const tagBump = bumped(decideBump(tagPin, tag("v1.3.0"), never));
-  const branchBump = bumped(decideBump(branchPin, head(), () => 1));
+  const branchBump = bumped(decideBump(branchPin, head(), () => ({ ahead: 1, behind: 0 })));
   const pr = (number: number, head: string, state: "open" | "closed", createdAt: string) => ({
     number,
     head,

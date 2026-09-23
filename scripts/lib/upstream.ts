@@ -9,6 +9,11 @@ import { type GhRunner, runGh } from "./github-releases.ts";
  * default branch's head commit, with `ref` set to the branch name.
  */
 
+export interface CommitRelation {
+  ahead: number;
+  behind: number;
+}
+
 export interface UpstreamTarget {
   ref: string;
   sha: string;
@@ -80,8 +85,12 @@ export interface UpstreamSource {
   resolve(repo: string): UpstreamTarget;
   /** Commit subjects between two SHAs (oldest first) and the total count. */
   compare(repo: string, from: string, to: string): { total: number; subjects: string[] };
-  /** How many commits `head` has that `base` does not (the compare API's `ahead_by`). */
-  aheadBy(repo: string, base: string, head: string): number;
+  /**
+   * How two commits relate (the compare API's `ahead_by` and `behind_by`):
+   * `ahead` counts commits in `head` that `base` lacks, `behind` the reverse.
+   * `behind === 0` means `base` is reachable from `head`.
+   */
+  relation(repo: string, base: string, head: string): CommitRelation;
 }
 
 export function createGhUpstream(run: GhRunner = runGh): UpstreamSource {
@@ -121,14 +130,21 @@ export function createGhUpstream(run: GhRunner = runGh): UpstreamSource {
       ) as { total: number; subjects: string[] };
       return out;
     },
-    aheadBy(repo, base, head) {
-      const n = Number(
-        text(["api", `repos/${repo}/compare/${base}...${head}`, "--jq", ".ahead_by"]),
-      );
-      if (!Number.isInteger(n) || n < 0) {
-        throw new Error(`unexpected ahead_by comparing ${base}...${head} in ${repo}`);
+    relation(repo, base, head) {
+      const [ahead, behind] = text([
+        "api",
+        `repos/${repo}/compare/${base}...${head}`,
+        "--jq",
+        '"\\(.ahead_by) \\(.behind_by)"',
+      ])
+        .split(" ")
+        .map(Number);
+      const count = (n: number | undefined): n is number =>
+        n !== undefined && Number.isInteger(n) && n >= 0;
+      if (!count(ahead) || !count(behind)) {
+        throw new Error(`unexpected compare result for ${base}...${head} in ${repo}`);
       }
-      return n;
+      return { ahead, behind };
     },
   };
 }

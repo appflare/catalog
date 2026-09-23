@@ -122,3 +122,23 @@ describe("isPrereleaseTag", () => {
     expect(isPrereleaseTag("main")).toBe(false);
   });
 });
+
+describe("relation", () => {
+  it("reads ahead_by and behind_by from the compare API", () => {
+    const run = ((args: string[]) => {
+      expect(args.slice(0, 2)).toEqual(["api", `repos/o/r/compare/${sha("a")}...${sha("b")}`]);
+      return Buffer.from("0 3\n");
+    }) as GhRunner;
+    expect(createGhUpstream(run).relation("o/r", sha("a"), sha("b"))).toEqual({
+      ahead: 0,
+      behind: 3,
+    });
+  });
+
+  it("rejects an unexpected answer", () => {
+    const run = (() => Buffer.from("null null")) as GhRunner;
+    expect(() => createGhUpstream(run).relation("o/r", sha("a"), sha("b"))).toThrow(
+      /unexpected compare/,
+    );
+  });
+});

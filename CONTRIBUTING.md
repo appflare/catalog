@@ -314,9 +314,13 @@ A bump only ever moves forward:
   moves to an older tag, and never to a branch head if the tags disappear.
 - A pin on a prerelease tag is left alone and noted in the run summary; someone
   chose it on purpose.
-- A pin on a branch moves when the target commit is ahead of the pinned one,
-  meaning GitHub's compare API reports `ahead_by > 0` from the pin to the
-  target. The target can be the new head, or the repository's first stable tag.
+- A pin on a branch moves to the repository's newest stable tag when the tag
+  is on the pinned commit or on a later one that contains it, meaning GitHub's
+  compare API reports `behind_by == 0` from the pin to the tag. A tag pin gives
+  the app a semver version instead of a date-based one. A tag on an older or
+  unrelated commit is refused.
+- Without stable tags, a pin on a branch moves to the new head when the head is
+  ahead of the pinned commit (`ahead_by > 0`).
 
 For each app that moves, the workflow edits `source.ref` and `source.sha` in
 place, keeping the manifest's comments and layout. It commits

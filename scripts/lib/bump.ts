@@ -3,6 +3,7 @@ import type { AppEntry } from "./apps.ts";
 import { readManifestFile } from "./apps.ts";
 import { setJsoncStrings } from "./jsonc-edit.ts";
 import {
+  type CommitRelation,
   compareSemver,
   isPrereleaseTag,
   parseStableTag,
@@ -37,6 +38,8 @@ export interface Bump {
   branch: string;
   /** Conventional commit subject and PR title. */
   title: string;
+  /** Why this bump, when it is not simply a newer commit. */
+  note?: string;
 }
 
 /** Longest commit header the repository's commitlint accepts. */
@@ -65,20 +68,25 @@ function bumpFor(pin: AppPin, target: UpstreamTarget): Bump {
 
 export type BumpDecision = { action: "bump"; bump: Bump } | { action: "skip"; reason: string };
 
+/** Why a branch pin moves to a tag on the same or a later commit. */
+export const TAG_PIN_NOTE = "a tag pin gives the app a semver version instead of a date-based one";
+
 /**
  * Whether `target` is newer than the pin, so a bump never goes backwards:
  *
  * - a stable tag pin moves only to a tag with a greater version, never to a
  *   branch head;
  * - a prerelease tag pin is left alone (someone chose it on purpose);
- * - a branch pin moves when the target commit is ahead of the pinned one
- *   (`ahead_by > 0` in the compare API; this also covers histories that
- *   diverged), whether the target is the branch head or a first stable tag.
+ * - a branch pin moves to a stable tag whose commit is the pinned commit or
+ *   contains it (`behind_by === 0` in the compare API); a tag on an older or
+ *   unrelated commit is refused;
+ * - a branch pin moves to a newer branch head when the head is ahead of the
+ *   pinned commit (`ahead_by > 0`; this also covers histories that diverged).
  */
 export function decideBump(
   pin: AppPin,
   target: UpstreamTarget,
-  aheadBy: (base: string, head: string) => number,
+  relation: (base: string, head: string) => CommitRelation,
 ): BumpDecision {
   const { ref, sha } = pin.source;
   if (target.sha === sha && target.ref === ref) {
@@ -101,11 +109,19 @@ export function decideBump(
     }
     return { action: "bump", bump: bumpFor(pin, target) };
   }
+  if (target.kind === "tag") {
+    if (target.sha !== sha && relation(sha, target.sha).behind > 0) {
+      return {
+        action: "skip",
+        reason: `tag ${target.ref}@${shortSha(target.sha)} does not contain the pinned ${shortSha(sha)}`,
+      };
+    }
+    return { action: "bump", bump: { ...bumpFor(pin, target), note: TAG_PIN_NOTE } };
+  }
   if (target.sha === sha) {
     return { action: "skip", reason: "upstream still points at the pinned commit" };
   }
-  const ahead = aheadBy(sha, target.sha);
-  if (ahead <= 0) {
+  if (relation(sha, target.sha).ahead <= 0) {
     return {
       action: "skip",
       reason: `${target.ref}@${shortSha(target.sha)} is not ahead of the pinned ${shortSha(sha)}`,
@@ -128,7 +144,7 @@ export function planBumps(apps: readonly AppEntry[], upstream: UpstreamSource): 
     try {
       const pin = readPin(app);
       const decision = decideBump(pin, upstream.resolve(pin.repo), (base, head) =>
-        upstream.aheadBy(pin.repo, base, head),
+        upstream.relation(pin.repo, base, head),
       );
       if (decision.action === "bump") {
         plan.bumps.push(decision.bump);
@@ -208,6 +224,7 @@ export function renderBumpBody(
     `| from | ${codeSpan(bump.from.ref)} | ${codeSpan(bump.from.sha)} |`,
     `| to | ${codeSpan(bump.to.ref)} | ${codeSpan(bump.to.sha)} |`,
     "",
+    ...(bump.note ? [`Why: ${bump.note}.`, ""] : []),
     `Upstream changes: ${compareUrl}`,
     "",
   ];
@@ -215,6 +232,8 @@ export function renderBumpBody(
     lines.push(
       "The two commits could not be compared (for example, upstream history was rewritten).",
     );
+  } else if (changes.total === 0) {
+    lines.push("No new commits: the target is the pinned commit.");
   } else {
     const shown = changes.subjects.slice(-50);
     lines.push(`${changes.total} commit${changes.total === 1 ? "" : "s"}:`, "");
