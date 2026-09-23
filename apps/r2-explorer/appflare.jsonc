@@ -17,6 +17,9 @@
     "packageManager": "pnpm",
     "wranglerConfig": "r2-explorer-template/wrangler.json",
     "workerName": "r2-explorer",
+    // The cloudflare/templates tag numbers the whole monorepo; this is the
+    // R2 Explorer release the template ships. Change it whenever source moves.
+    "version": "1.1.10",
     // Runs Worker code (the static dashboard at / would answer even if the Worker
     // failed) and needs no credentials.
     "healthPath": "/api/server/config"
