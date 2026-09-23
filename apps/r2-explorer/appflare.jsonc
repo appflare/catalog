@@ -1,0 +1,46 @@
+{
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "r2-explorer",
+  "name": "R2 Explorer",
+  "summary": "A Google Drive-like file browser for an R2 bucket, on Workers + R2.",
+  "homepage": "https://github.com/cloudflare/templates/tree/main/r2-explorer-template",
+  "repo": "cloudflare/templates",
+  "license": "MIT",
+  "categories": ["storage"],
+  "maintainers": ["MendyLanda"],
+  // The Deploy-button template lives in a subdirectory of cloudflare/templates;
+  // wranglerConfig points into it. The repository's semver tags cover every
+  // template, so a bump can move the pin while this template is unchanged.
+  "source": { "ref": "v11.0.0", "sha": "47645c985c10aa8afc2f837b983a3678a36a60cb" },
+  "install": {
+    "tier": "artifact",
+    "packageManager": "pnpm",
+    "wranglerConfig": "r2-explorer-template/wrangler.json",
+    "workerName": "r2-explorer",
+    // Runs Worker code (the static dashboard at / would answer even if the Worker
+    // failed) and needs no credentials.
+    "healthPath": "/api/server/config"
+  },
+  // R2's free tier covers this app, but R2 has to be enabled on the account
+  // first, which needs a payment method on file.
+  "plan": "free",
+  "requires": ["r2"],
+  // The template configures authentication in code, not through secrets or vars.
+  "secrets": [],
+  "vars": [],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "Open {{workerUrl}} to browse the new R2 bucket. It is read-only: upload files with the Cloudflare dashboard or `wrangler r2 object put`."
+    },
+    {
+      "type": "markdown",
+      "content": "**Anyone with the URL can list and download every file in the bucket until you protect it.** In the Cloudflare dashboard, open Workers & Pages, select this Worker, open the Access tab, choose Protect this Worker behind Access, select All traffic, and pick who may sign in. Access needs Zero Trust turned on for the account; its free plan is enough."
+    },
+    {
+      "type": "markdown",
+      "content": "R2 must be enabled on the account before installing, which needs a payment method on file even though R2's free tier covers typical use."
+    }
+  ],
+  "tokenPermissions": []
+}
