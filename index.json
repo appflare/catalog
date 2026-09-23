@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-23T12:55:53.157Z",
+  "generatedAt": "2026-09-23T13:29:47.760Z",
   "apps": [
     {
       "slug": "chatgpt-telegram-workers",
@@ -73,6 +73,27 @@
       "plan": "free",
       "requires": [
         "r2"
+      ],
+      "lastVerified": null,
+      "maintainers": [
+        "MendyLanda"
+      ]
+    },
+    {
+      "slug": "second-brain-cloudflare",
+      "name": "Second Brain",
+      "summary": "A personal memory for your AI assistants: an MCP server that stores notes in D1 and recalls them by meaning with Vectorize and Workers AI.",
+      "version": "2.2.0",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/second-brain-cloudflare@2.2.0/second-brain-cloudflare-2.2.0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/second-brain-cloudflare@2.2.0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/second-brain-cloudflare@2.2.0/manifest.sig"
+      },
+      "digest": "87d892be0b0f809c01b3e5627e1749096d86243e32017abbbc0b66fa6347c98d",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "workers-ai"
       ],
       "lastVerified": null,
       "maintainers": [
