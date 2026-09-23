@@ -1,16 +1,35 @@
 import { execFileSync } from "node:child_process";
 import { parseArgs } from "node:util";
-import { findApp, listApps } from "./lib/apps.ts";
-import { isNullSha, slugsFromChangedPaths } from "./lib/changed-apps.ts";
+import { findApp, listApps, readManifestFile } from "./lib/apps.ts";
+import {
+  declaredTier,
+  filterByTier,
+  isNullSha,
+  slugsFromChangedPaths,
+} from "./lib/changed-apps.ts";
 import { runMain, warn } from "./lib/cli.ts";
 import { appsDir, catalogRoot } from "./lib/paths.ts";
 
-const USAGE = `Usage: pnpm -s changed-apps (--base <sha> [--head <sha>] | --all)
+const USAGE = `Usage: pnpm -s changed-apps (--base <sha> [--head <sha>] | --all) [--tiers <t,...>]
 
 Prints a JSON array of app slugs whose apps/<slug>/appflare.jsonc changed between
 <base> and <head> (default HEAD). With --all, or when <base> is missing or not
 in the local history, prints every app.
+
+  --tiers <t,...>  only apps whose install.tier is one of these (artifact,
+                   sandbox, self-deploying); a missing or unreadable tier
+                   counts as artifact
 `;
+
+const TIERS = ["artifact", "sandbox", "self-deploying"];
+
+function tierOf(slug: string): string {
+  try {
+    return declaredTier(readManifestFile(findApp(appsDir, slug).manifestPath));
+  } catch {
+    return "artifact";
+  }
+}
 
 function git(args: string[]): string {
   return execFileSync("git", args, { cwd: catalogRoot, encoding: "utf8" });
@@ -31,6 +50,7 @@ runMain(() => {
       base: { type: "string" },
       head: { type: "string" },
       all: { type: "boolean" },
+      tiers: { type: "string" },
       help: { type: "boolean", short: "h" },
     },
   });
@@ -58,6 +78,17 @@ runMain(() => {
         return false;
       }
     });
+  }
+  if (values.tiers !== undefined) {
+    const tiers = values.tiers
+      .split(",")
+      .map((t) => t.trim())
+      .filter(Boolean);
+    const unknown = tiers.filter((t) => !TIERS.includes(t));
+    if (unknown.length > 0) {
+      throw new Error(`unknown tier(s): ${unknown.join(", ")}; expected ${TIERS.join(", ")}`);
+    }
+    slugs = filterByTier(slugs, tierOf, tiers);
   }
   process.stdout.write(`${JSON.stringify(slugs)}\n`);
   return 0;

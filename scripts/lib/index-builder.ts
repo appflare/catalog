@@ -7,12 +7,29 @@ import {
   type ReleaseArtifact,
   type ReleaseLookup,
 } from "./github-releases.ts";
-import type { ArtifactManifest, CatalogManifest, IndexApp, IndexJson } from "./types.ts";
+import { type SandboxDefaults, sandboxBuild } from "./sandbox-entry.ts";
+import type {
+  ArtifactManifest,
+  CatalogManifest,
+  IndexApp,
+  IndexArtifacts,
+  IndexJson,
+} from "./types.ts";
 import type { VersionResolver } from "./versions.ts";
 
 /**
- * Builds the catalog index. Where each app's `version` and `digest`
- * come from:
+ * Builds the catalog index. Rows depend on the entry's `install.tier`:
+ *
+ * - `sandbox`: no artifact. The row's `version` is what the current pin packs
+ *   to, and its `build` block names the pin and the entry's catalog manifest
+ *   as published on GitHub Pages (see `sandbox-entry.ts`), with the sha256
+ *   of those bytes, the build command, and the build size and time with the
+ *   schema's defaults filled in. The user's manager builds it in its sandbox
+ *   Worker.
+ * - `self-deploying`: left out with a warning; no manager can install it yet.
+ * - `artifact`: as below.
+ *
+ * Where an `artifact` tier app's `version` and `digest` come from:
  *
  * 1. A local artifact at `<distDir>/<slug>/manifest.json` (written by
  *    `pack-app`), when present and built from the manifest's current pin
@@ -48,6 +65,8 @@ export interface IndexBuildOptions {
   warn: (message: string) => void;
   /** Rows of the index being replaced, to carry `lastVerified` forward. */
   previousApps?: readonly IndexApp[];
+  /** What `install.sandbox` defaults to, from `@appflare/schema`. */
+  sandboxDefaults: SandboxDefaults;
 }
 
 /** Where an app's listed version came from. */
@@ -62,7 +81,7 @@ export function sha256Hex(bytes: Uint8Array): string {
 }
 
 /** Release-asset URLs for one app version. */
-export function artifactUrls(repo: string, slug: string, version: string): IndexApp["artifacts"] {
+export function artifactUrls(repo: string, slug: string, version: string): IndexArtifacts {
   const base = `https://github.com/${repo}/releases/download/${slug}@${version}`;
   return {
     zip: `${base}/${slug}-${version}.zip`,
@@ -166,9 +185,19 @@ export function resolveArtifact(
 }
 
 /**
+ * The digest that identifies what a row installs, which `lastVerified` is
+ * about: the artifact manifest's `digest`, or for a sandbox tier row the
+ * published catalog manifest's `build.manifestDigest`. Null for neither.
+ */
+export function verifiedDigest(row: Pick<IndexApp, "digest" | "build">): string | null {
+  return row.digest ?? row.build?.manifestDigest ?? null;
+}
+
+/**
  * `lastVerified` for a rebuilt row: carried over from the previous index row
- * while the artifact (version and digest) is the same, null for a new one.
- * Only the nightly install check sets it (scripts/record-verified.ts).
+ * while what it installs (version and {@link verifiedDigest}) is the same,
+ * null for a new one. Only a passing install check sets it
+ * (scripts/record-verified.ts).
  */
 export function lastVerifiedFor(
   slug: string,
@@ -176,7 +205,7 @@ export function lastVerifiedFor(
   previous: readonly IndexApp[],
 ): string | null {
   const before = previous.find((row) => row.slug === slug);
-  return before && before.version === artifact.version && before.digest === artifact.digest
+  return before && before.version === artifact.version && verifiedDigest(before) === artifact.digest
     ? before.lastVerified
     : null;
 }
@@ -203,7 +232,48 @@ export function toIndexApp(
   };
 }
 
-/** Index rows for every manifest that has a resolvable artifact, in slug order. */
+/**
+ * The index row of a `sandbox` tier entry, or null (with a warning) when the
+ * version its pin packs to cannot be worked out and `strictReleases` is off.
+ */
+export function toSandboxIndexApp(
+  manifest: CatalogManifest,
+  options: IndexBuildOptions,
+): IndexApp | null {
+  let version: string;
+  try {
+    version = options.versions.versionOf(manifest);
+  } catch (err) {
+    if (options.strictReleases) {
+      throw err;
+    }
+    options.warn(
+      `${manifest.slug}: omitted: could not work out the version of the current pin: ${
+        err instanceof Error ? err.message : String(err)
+      }`,
+    );
+    return null;
+  }
+  const build = sandboxBuild(manifest, options.repo, options.sandboxDefaults);
+  return {
+    slug: manifest.slug,
+    name: manifest.name,
+    summary: manifest.summary,
+    version,
+    tier: manifest.install.tier,
+    plan: manifest.plan,
+    requires: [...manifest.requires],
+    lastVerified: lastVerifiedFor(
+      manifest.slug,
+      { version, digest: build.manifestDigest },
+      options.previousApps ?? [],
+    ),
+    maintainers: [...manifest.maintainers],
+    build,
+  };
+}
+
+/** Index rows for every listable manifest, in slug order (see this module's header). */
 export function buildIndexApps(
   manifests: readonly CatalogManifest[],
   options: IndexBuildOptions,
@@ -211,6 +281,20 @@ export function buildIndexApps(
   const state = { releasesDisabled: false };
   const rows: IndexApp[] = [];
   for (const manifest of [...manifests].sort((a, b) => a.slug.localeCompare(b.slug))) {
+    const tier = manifest.install.tier;
+    if (tier === "sandbox") {
+      const row = toSandboxIndexApp(manifest, options);
+      if (row) {
+        rows.push(row);
+      }
+      continue;
+    }
+    if (tier !== "artifact") {
+      options.warn(
+        `${manifest.slug}: omitted: ${tier} tier entries are not listed until the manager can install them`,
+      );
+      continue;
+    }
     const artifact = resolveArtifact(manifest, options, state);
     if (artifact) {
       const verifiedAt = lastVerifiedFor(manifest.slug, artifact, options.previousApps ?? []);

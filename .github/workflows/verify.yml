@@ -5,6 +5,13 @@ name: verify
 # packed artifact into the CI Cloudflare account to check that it deploys and
 # answers, deleting everything afterwards. No release.
 #
+# What runs depends on the entry's install.tier:
+#   artifact        validate, pack, install check
+#   sandbox         validate, pack (proves the pinned commit builds and fits
+#                   the module limit); no install check: the user's account
+#                   builds it, and verify-tier.yml checks it by hand
+#   self-deploying  validate only (the check job validates every manifest)
+#
 # Secrets: build-packer gets APPFLARE_DEPLOY_KEY; install gets the CI account's
 # CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID in its deploy and cleanup steps
 # only. pack, which runs the app's install and build, gets none. Fork pull
@@ -74,7 +81,9 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     outputs:
-      apps: ${{ steps.changed.outputs.apps }}
+      # Changed apps to pack (artifact and sandbox tiers) and to install (artifact tier).
+      pack: ${{ steps.changed.outputs.pack }}
+      install: ${{ steps.changed.outputs.install }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -95,20 +104,23 @@ jobs:
             # workflow_dispatch: compare the branch with main.
             base="$(git rev-parse origin/main)"
           fi
-          apps="$(node scripts/changed-apps.ts --base "${base}" --head "${HEAD_SHA}")"
-          echo "changed apps: ${apps}"
-          echo "apps=${apps}" >> "${GITHUB_OUTPUT}"
+          pack="$(node scripts/changed-apps.ts --base "${base}" --head "${HEAD_SHA}" --tiers artifact,sandbox)"
+          install="$(node scripts/changed-apps.ts --base "${base}" --head "${HEAD_SHA}" --tiers artifact)"
+          echo "changed apps to pack: ${pack}"
+          echo "changed apps to install: ${install}"
+          echo "pack=${pack}" >> "${GITHUB_OUTPUT}"
+          echo "install=${install}" >> "${GITHUB_OUTPUT}"
 
   pack:
     name: pack ${{ matrix.app }}
     needs: [build-packer, changes]
-    if: needs.changes.outputs.apps != '[]'
+    if: needs.changes.outputs.pack != '[]'
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     strategy:
       fail-fast: false
       matrix:
-        app: ${{ fromJSON(needs.changes.outputs.apps) }}
+        app: ${{ fromJSON(needs.changes.outputs.pack) }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -126,7 +138,9 @@ jobs:
         env:
           APP: ${{ matrix.app }}
         run: pnpm pack-app "${APP}" --out "dist/${APP}"
+      # Only the install check needs the artifact; a sandbox entry's pack is the whole check.
       - name: Upload artifact
+        if: contains(fromJSON(needs.changes.outputs.install), matrix.app)
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: artifact-${{ matrix.app }}
@@ -139,7 +153,7 @@ jobs:
     needs: [build-packer, changes, pack]
     # Fork pull requests get no secrets; there is nothing to install with.
     if: >-
-      needs.changes.outputs.apps != '[]' &&
+      needs.changes.outputs.install != '[]' &&
       (github.event_name != 'pull_request' ||
        github.event.pull_request.head.repo.full_name == github.repository)
     runs-on: ubuntu-24.04
@@ -151,7 +165,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        app: ${{ fromJSON(needs.changes.outputs.apps) }}
+        app: ${{ fromJSON(needs.changes.outputs.install) }}
     # One install per Worker name at a time, never cancelled: a superseded
     # run's cleanup finishes before the next run deploys under the same name.
     concurrency:
@@ -202,7 +216,8 @@ jobs:
   # The one check of this workflow a branch ruleset can require. The pack and
   # install jobs are named per app, and GitHub auto-merge waits only for
   # required checks, which need fixed names. Passes only when every job above
-  # succeeded; pack and install may be skipped only when no app changed.
+  # succeeded; pack may be skipped only when no artifact or sandbox tier app
+  # changed, and install only when no artifact tier app changed.
   verify-passed:
     name: verify passed
     needs: [build-packer, check, changes, pack, install]
@@ -215,7 +230,8 @@ jobs:
         working-directory: .
         env:
           RESULTS: ${{ toJSON(needs) }}
-          APPS: ${{ needs.changes.outputs.apps }}
+          PACK_APPS: ${{ needs.changes.outputs.pack }}
+          INSTALL_APPS: ${{ needs.changes.outputs.install }}
         run: |
           set -euo pipefail
           # The jobs in `needs` above; each must be evaluated exactly once.
@@ -228,7 +244,9 @@ jobs:
             [ -n "${job}" ] || continue
             seen="${seen:+${seen} }${job}"
             allowed="success"
-            if [ "${APPS}" = "[]" ] && { [ "${job}" = "pack" ] || [ "${job}" = "install" ]; }; then
+            # Each list is empty only when the changes job succeeded and found no such app.
+            if { [ "${job}" = "pack" ] && [ "${PACK_APPS}" = "[]" ]; } ||
+               { [ "${job}" = "install" ] && [ "${INSTALL_APPS}" = "[]" ]; }; then
               allowed="success skipped"
             fi
             if [[ " ${allowed} " == *" ${result} "* ]]; then

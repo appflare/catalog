@@ -13,8 +13,9 @@ import { createVersionResolver, loadPackerVersioning } from "./lib/versions.ts";
 
 const USAGE = `Usage: pnpm -s publish-plan [--out <plan.json>] [--only <slug,...>]
 
-Prints a JSON array of the app slugs publish CI must pack: every app whose
-current pin packs to a version <v> with no GitHub Release <slug>@<v> yet.
+Prints a JSON array of the app slugs publish CI must pack: every artifact tier
+app whose current pin packs to a version <v> with no GitHub Release <slug>@<v>
+yet. Sandbox and self-deploying entries are never packed or released.
 Fails when a release exists for the pin but appflare.jsonc changed since, or
 when the release for the tag is a draft, a prerelease, or incomplete.
 Needs gh (read-only) and APPFLARE_DIR.
@@ -54,7 +55,9 @@ runMain(async () => {
         schema.artifactManifest,
         SIGNING_KEY_ID,
       );
-      if (decision.action === "publish") {
+      if (decision.action === "not-released") {
+        info(`${decision.slug}: ${decision.tier} tier; built in the user's account, no release`);
+      } else if (decision.action === "publish") {
         info(`${decision.tag}: not released yet; publishing`);
         plan.apps[decision.slug] = decision.planned;
       } else if (decision.action === "skip") {

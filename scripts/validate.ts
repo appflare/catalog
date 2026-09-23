@@ -3,12 +3,15 @@ import { loadAppflareSchema } from "./lib/appflare-schema.ts";
 import { findApp, listApps, loadManifest } from "./lib/apps.ts";
 import { info, runMain } from "./lib/cli.ts";
 import { appsDir, resolveAppflareDir } from "./lib/paths.ts";
+import { tierProblems } from "./lib/tier-rules.ts";
 
 const USAGE = `Usage: pnpm validate [<slug>...]
 
 Validates apps/<slug>/appflare.jsonc (every app when no slug is given) with the
-catalog manifest schema from @appflare/schema (APPFLARE_DIR) and the catalog's
-layout rules.
+catalog manifest schema from @appflare/schema (APPFLARE_DIR), the catalog's
+layout rules, and its tier rules: a sandbox tier entry must set plan "paid" and
+declare install.buildCommand, and entries CI does not install (sandbox,
+self-deploying) must not set bump.autoMerge.
 `;
 
 runMain(async () => {
@@ -27,6 +30,10 @@ runMain(async () => {
   for (const app of apps) {
     try {
       const manifest = loadManifest(app, schema.catalogManifest);
+      const problems = tierProblems(manifest);
+      if (problems.length > 0) {
+        throw new Error(`apps/${app.slug}/appflare.jsonc is invalid:\n${problems.join("\n")}`);
+      }
       info(`${manifest.slug}: ok (${manifest.repo}@${manifest.source.sha.slice(0, 7)})`);
     } catch (err) {
       failures.push(err instanceof Error ? err.message : String(err));

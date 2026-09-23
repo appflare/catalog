@@ -20,3 +20,29 @@ export function slugsFromChangedPaths(
 export function isNullSha(sha: string | undefined): boolean {
   return !sha || /^0+$/.test(sha);
 }
+
+/**
+ * The `install.tier` a raw (unvalidated) manifest declares. A missing or
+ * malformed tier counts as `artifact`, so the entry gets the full checks and
+ * its validate step reports the problem.
+ */
+export function declaredTier(raw: unknown): string {
+  if (typeof raw !== "object" || raw === null || Array.isArray(raw)) {
+    return "artifact";
+  }
+  const install = (raw as { install?: unknown }).install;
+  const tier =
+    typeof install === "object" && install !== null
+      ? (install as { tier?: unknown }).tier
+      : undefined;
+  return tier === "sandbox" || tier === "self-deploying" ? tier : "artifact";
+}
+
+/** The slugs whose tier is one of `tiers`, in their original order. */
+export function filterByTier(
+  slugs: readonly string[],
+  tierOf: (slug: string) => string,
+  tiers: readonly string[],
+): string[] {
+  return slugs.filter((slug) => tiers.includes(tierOf(slug)));
+}

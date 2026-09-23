@@ -13,7 +13,10 @@ import { createVersionResolver, loadPackerVersioning } from "./lib/versions.ts";
 const USAGE = `Usage: pnpm build-index [--releases-only] [--out <file>]
 
 Validates every apps/<slug>/appflare.jsonc and writes index.json.
-Each app's version and digest come from dist/<slug>/manifest.json when it was
+A sandbox tier entry is listed with a build block instead of an artifact: its
+pin, the URL and sha256 of its catalog manifest as build-site publishes it,
+and its build size and time. Self-deploying entries are left out.
+Each artifact tier app's version and digest come from dist/<slug>/manifest.json when it was
 built from the current pin, otherwise from the GitHub Release <slug>@<version>
 for the version the current pin packs to (via gh api), provided its manifest
 has the same source.sha; otherwise the app is omitted with a warning.
@@ -22,7 +25,8 @@ has the same source.sha; otherwise the app is omitted with a warning.
   --out <file>      output path (default: index.json)
 
 lastVerified carries over from the previous index while an app's version and
-digest stay the same, and is null for a new artifact.
+digest (manifestDigest for a sandbox entry) stay the same, and is null for a
+new one.
 `;
 
 /** Rows of the index being replaced; none if it is missing or unreadable. */
@@ -69,12 +73,17 @@ runMain(async () => {
     artifactManifest: schema.artifactManifest,
     warn,
     previousApps: previousRows(previous),
+    sandboxDefaults: schema.sandboxDefaults,
   });
   const index = finalizeIndex(apps, previous, new Date(), schema.indexJson);
   writeFileSync(outPath, serializeIndex(index));
   info(`wrote ${outPath}: ${index.apps.length} of ${manifests.length} apps listed`);
   for (const app of index.apps) {
-    info(`${app.slug}@${app.version} digest=${app.digest}`);
+    info(
+      app.build === undefined
+        ? `${app.slug}@${app.version} digest=${app.digest}`
+        : `${app.slug}@${app.version} ${app.tier}: built in the user's account from ${app.build.pin.slice(0, 12)}, manifestDigest=${app.build.manifestDigest}`,
+    );
   }
   return 0;
 });

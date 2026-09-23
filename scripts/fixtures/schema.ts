@@ -24,5 +24,6 @@ export async function testSchema(): Promise<AppflareSchema> {
     indexJson: passthrough(),
     // The value @appflare/schema exports; only used when it is not available.
     maxWorkerModules: 21,
+    sandboxDefaults: { expectedMinutes: 10, instanceType: "standard-1" },
   };
 }
