@@ -1,0 +1,34 @@
+{
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "openai-gemini",
+  "name": "OpenAI Gemini",
+  "summary": "OpenAI-compatible API adapter for Gemini, on Workers.",
+  "homepage": "https://github.com/PublicAffairs/openai-gemini",
+  "repo": "PublicAffairs/openai-gemini",
+  "license": "MIT",
+  "categories": ["ai"],
+  "maintainers": ["MendyLanda"],
+  // Upstream has no semver release tags (its tags name Gemini models); the pin tracks main.
+  "source": { "ref": "main", "sha": "61a83bd9d0def59811624b6ae7d8213a231185d0" },
+  "install": {
+    "tier": "artifact",
+    "packageManager": "npm",
+    "wranglerConfig": "wrangler.toml",
+    "workerName": "openai-gemini",
+    // "/" answers 404. A GET here is rejected with 400 by the Worker itself,
+    // before any call to Google, so it needs no API key and no network.
+    "healthPath": "/v1/chat/completions"
+  },
+  "plan": "free",
+  "requires": [],
+  // Callers send their own Gemini API key as the bearer token; the Worker stores none.
+  "secrets": [],
+  "vars": [],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "Point an OpenAI client at {{workerUrl}}/v1 and use your Gemini API key from Google AI Studio as the API key."
+    }
+  ],
+  "tokenPermissions": []
+}

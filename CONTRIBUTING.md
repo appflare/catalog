@@ -372,6 +372,8 @@ Cloudflare account and delete it again:
    Every secret in the catalog manifest is set to a random value, and each var
    gets its default. A required var without a default gets the placeholder `ci`.
 5. Wait up to 60 seconds for `https://<worker>.<subdomain>.workers.dev/` to answer.
+   The check probes the manifest's `install.healthPath` instead of `/` when it is
+   set, as the manager does.
    A 5xx, a `1042` refusal, or no answer is retried and fails at the deadline. Any
    other status passes. A plain 404 is retried too, but passes at the deadline,
    since an app may serve 404 at `/`.
