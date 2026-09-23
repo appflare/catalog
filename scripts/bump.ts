@@ -25,8 +25,9 @@ plan   Resolves each app's upstream with read-only gh api calls (newest stable
        semver tag, else the default branch head) and keeps only moves forward.
        Skips targets already proposed, and branch-tracked apps with a bump pull
        request opened in the last week. Prints { bumps, failed } as JSON (each
-       bump with the open pull requests it supersedes) and writes the pull
-       request body for each bump to <dir>/<slug>.md.
+       bump with the open pull requests it supersedes, and autoMerge: true when
+       its entry sets bump.autoMerge without install.version) and writes the
+       pull request body for each bump to <dir>/<slug>.md.
 apply  Sets source.ref and source.sha in apps/<slug>/appflare.jsonc, keeping
        its comments and layout.
 `;

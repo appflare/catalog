@@ -24,14 +24,44 @@ const pinSchema = z.object({
     version: z.string().min(1).optional(),
   }),
 });
-export type AppPin = z.infer<typeof pinSchema>;
+export type AppPin = z.infer<typeof pinSchema> & {
+  /** `bump.autoMerge` in the manifest; see `readAutoMerge`. */
+  autoMerge: boolean;
+};
 
 export function readPin(app: AppEntry): AppPin {
-  const result = pinSchema.safeParse(readManifestFile(app.manifestPath));
+  const manifest = readManifestFile(app.manifestPath);
+  const result = pinSchema.safeParse(manifest);
   if (!result.success) {
     throw new Error(`${app.manifestPath}: ${z.prettifyError(result.error)}`);
   }
-  return result.data;
+  return { ...result.data, autoMerge: readAutoMerge(manifest) };
+}
+
+/**
+ * Whether a raw manifest sets `bump.autoMerge` to exactly `true`. Read from the
+ * parsed JSONC rather than the synced schema, which may be older than the field;
+ * a missing or malformed `bump` never stops the bot and means a maintainer
+ * merges (the validate step reports a malformed one once the schema has it).
+ */
+export function readAutoMerge(manifest: unknown): boolean {
+  if (!isRecord(manifest) || !isRecord(manifest.bump)) {
+    return false;
+  }
+  return manifest.bump.autoMerge === true;
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+/**
+ * Whether the bump pull request for `pin` merges itself. An entry that states
+ * `install.version` never does: a person has to set the new version first, or
+ * publish refuses the moved pin.
+ */
+export function autoMerges(pin: AppPin): boolean {
+  return pin.autoMerge && pin.install.version === undefined;
 }
 
 /** A pin that moved upstream. */
@@ -46,6 +76,12 @@ export interface Bump {
   title: string;
   /** Why this bump, when it is not simply a newer commit. */
   note?: string;
+  /**
+   * The workflow enables GitHub auto-merge (squash, with `title` as the
+   * subject) on the pull request, so it merges once the required checks pass.
+   * False leaves the merge to a maintainer.
+   */
+  autoMerge: boolean;
 }
 
 /** Longest commit header the repository's commitlint accepts. */
@@ -69,6 +105,7 @@ function bumpFor(pin: AppPin, target: UpstreamTarget): Bump {
     to: target,
     branch: `bump/${pin.slug}/${shortSha(target.sha)}`,
     title,
+    autoMerge: autoMerges(pin),
   };
 }
 
@@ -310,9 +347,36 @@ export function renderBumpBody(
   lines.push(
     "",
     "The verify workflow packs this pin, checks the artifact's hashes, and installs it into " +
-      "the CI account. Merging publishes the new version.",
+      "the CI account.",
+    "",
+    mergePathText(pin),
   );
   return `${lines.join("\n")}\n`;
+}
+
+/** The pull request body's closing paragraph: who merges it, why, and when it publishes. */
+function mergePathText(pin: AppPin): string {
+  const manifest = `\`apps/${pin.slug}/appflare.jsonc\``;
+  if (autoMerges(pin)) {
+    return (
+      `**This pull request merges itself.** ${manifest} sets \`bump.autoMerge\`, so it ` +
+      "squash-merges once the required checks pass, the install check included, and the " +
+      "next nightly bump run publishes the new version. To stop that, disable auto-merge " +
+      "here or close the pull request."
+    );
+  }
+  if (pin.autoMerge) {
+    return (
+      `**A maintainer merges this pull request.** ${manifest} sets \`bump.autoMerge\`, but ` +
+      "it also sets `install.version`, which has to be updated by hand first, so this " +
+      "pull request does not merge itself. Merging publishes the new version."
+    );
+  }
+  return (
+    "**A maintainer merges this pull request** after reviewing the upstream changes. " +
+    "Merging publishes the new version. An entry whose maintainers trust upstream's tags " +
+    "can set `bump.autoMerge` so bumps merge themselves once the checks pass."
+  );
 }
 
 /** `appflare.jsonc` text with `source.ref`/`source.sha` replaced, comments kept. */

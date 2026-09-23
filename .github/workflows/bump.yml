@@ -12,6 +12,21 @@ name: bump
 #
 # Pull requests opened with the workflow token do not trigger pull_request
 # workflows, so this starts verify and conventions on each new branch.
+#
+# An app whose appflare.jsonc sets bump.autoMerge (and not install.version) gets
+# GitHub auto-merge (squash) enabled on its pull request, so it merges once the
+# required checks pass; every other bump waits for a maintainer. Auto-merge is
+# enabled with the GraphQL mutation rather than `gh pr merge --auto`, because gh
+# merges at once when the pull request is already mergeable, which would skip
+# the install check whenever no check is required; the mutation refuses instead.
+# Before that, the workflow reads main's rules and enables auto-merge only when
+# "verify passed" is a required status check. In either case the pull request
+# is left for a maintainer with a comment saying why.
+#
+# A merge done by auto-merge that this workflow's token enabled does not start
+# push workflows, so publish does not run for it. The publish-merged job starts
+# a full publish run when main changed apps/ since publish last covered every
+# app; publish itself only releases what is missing.
 
 on:
   schedule:
@@ -75,11 +90,58 @@ jobs:
       - name: Open a pull request per app
         env:
           GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
         run: |
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           gh auth setup-git
+          # Auto-merge waits only for required checks. Unless main's rules
+          # require "verify passed", a bump could merge before its install check
+          # finished, so no bump merges itself. Failing to read the rules counts
+          # as not required.
+          verify_required=false
+          if contexts="$(gh api --paginate "repos/${GH_REPO}/rules/branches/main" \
+            --jq '.[] | select(.type == "required_status_checks")
+                  | .parameters.required_status_checks[]?.context')"; then
+            if grep -Fxq "verify passed" <<< "${contexts}"; then
+              verify_required=true
+            fi
+          else
+            echo "::warning::could not read the rules for main; no bump merges itself this run"
+          fi
+          echo "verify passed required on main: ${verify_required}"
+          # Comments why a bump that asked for auto-merge does not get it.
+          leave_for_maintainer() {
+            gh pr comment "$1" --body "$2 This pull request does not merge itself; a maintainer merges it once the checks pass." || true
+          }
+          # Squash auto-merge for the commit just pushed, with the bump's
+          # conventional title as the subject. Returns non-zero, never merges,
+          # when GitHub refuses (for example, nothing is left to wait for).
+          # A few tries: a new pull request's merge state takes a moment.
+          enable_auto_merge() {
+            local number="$1" headline="$2" body="$3" oid id attempt
+            oid="$(git rev-parse HEAD)"
+            id="$(gh pr view "${number}" --json id --jq .id)" || return 1
+            for attempt in 1 2 3; do
+              # The $names in the query are GraphQL variables, not shell ones.
+              # shellcheck disable=SC2016
+              if gh api graphql \
+                -f query='mutation($id: ID!, $oid: GitObjectID!, $headline: String!, $body: String!) {
+                  enablePullRequestAutoMerge(input: {
+                    pullRequestId: $id, expectedHeadOid: $oid, mergeMethod: SQUASH,
+                    commitHeadline: $headline, commitBody: $body
+                  }) { clientMutationId }
+                }' \
+                -f id="${id}" -f oid="${oid}" -f headline="${headline}" -f body="${body}" \
+                > /dev/null; then
+                return 0
+              fi
+              echo "auto-merge for #${number}: attempt ${attempt} refused"
+              sleep 10
+            done
+            return 1
+          }
           count="$(jq '.bumps | length' "${RUNNER_TEMP}/bumps.json")"
           for i in $(seq 0 $((count - 1))); do
             field() { jq -r --argjson i "${i}" ".bumps[\$i].$1" "${RUNNER_TEMP}/bumps.json"; }
@@ -102,12 +164,28 @@ jobs:
             url="$(gh pr create --base main --head "${branch}" --title "${title}" \
               --body-file "${RUNNER_TEMP}/bumps/${slug}.md")"
             number="${url##*/}"
+            # Before the checks start, so the pull request is still waiting on them.
+            merge="a maintainer merges it"
+            if [ "$(field autoMerge)" = "true" ]; then
+              if [ "${verify_required}" != "true" ]; then
+                echo "::warning::#${number} (${slug}): verify passed is not required on main; not enabling auto-merge"
+                leave_for_maintainer "${number}" "\`verify passed\` is not a required status check on \`main\`, so auto-merge would not wait for the install check."
+                merge="verify passed not required on main; a maintainer merges it"
+              elif enable_auto_merge "${number}" "${title}" \
+                "Merged by auto-merge: apps/${slug}/appflare.jsonc sets bump.autoMerge."; then
+                merge="merges itself when the required checks pass"
+              else
+                echo "::warning::could not enable auto-merge on #${number} (${slug})"
+                leave_for_maintainer "${number}" "GitHub refused to enable auto-merge (see the bump workflow's log)."
+                merge="auto-merge refused; a maintainer merges it"
+              fi
+            fi
             gh workflow run verify.yml --ref "${branch}"
             gh workflow run conventions.yml --ref "${branch}"
             for old in $(jq -r --argjson i "${i}" '.bumps[$i].supersedes[]' "${RUNNER_TEMP}/bumps.json"); do
               gh pr close "${old}" --delete-branch --comment "Superseded by #${number}."
             done
-            echo "- opened #${number} (${branch})" >> "${GITHUB_STEP_SUMMARY}"
+            echo "- opened #${number} (${branch}); ${merge}" >> "${GITHUB_STEP_SUMMARY}"
           done
       - name: Fail if any upstream could not be read
         run: |
@@ -117,3 +195,61 @@ jobs:
             echo "${failed}"
             exit 1
           fi
+
+  # Auto-merged bumps land on main without starting publish (see the top of
+  # this file). Runs apart from the bump job so a failed upstream check does not
+  # hold it up.
+  #
+  # It looks for the newest publish run on main that covers every app and has
+  # succeeded or is still going: a push run, or a manual run this workflow
+  # started (always without the "apps" input). A manual run by a person may be
+  # narrowed to some apps, and a failed run published nothing for sure, so
+  # neither counts. When main changed apps/ since that run's commit, it starts
+  # one full publish run. That cannot publish twice (publish skips every
+  # release that exists, and its runs queue in one concurrency group) or loop
+  # (publish starts nothing, and this runs once a night). A publish that keeps
+  # failing on the same commit is retried once a night until it is fixed.
+  publish-merged:
+    name: publish auto-merged bumps
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      # List publish runs and start one.
+      actions: write
+      # The commits and compare APIs.
+      contents: read
+    steps:
+      - name: Start publish when main changed apps/ since publish last covered it
+        working-directory: ${{ github.workspace }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          head="$(gh api "repos/${GH_REPO}/commits/main" --jq .sha)"
+          # Newest first. actor (not triggering_actor) stays the bot when a
+          # person re-runs a run this workflow started; a re-run keeps its inputs.
+          last="$(gh api "repos/${GH_REPO}/actions/workflows/publish.yml/runs?branch=main&per_page=100" \
+            --jq '[.workflow_runs[]
+                   | select(.event == "push"
+                            or (.event == "workflow_dispatch"
+                                and .actor.login == "github-actions[bot]"))
+                   | select(.status != "completed" or .conclusion == "success")
+                  ][0].head_sha // ""')"
+          if [ "${last}" = "${head}" ]; then
+            echo "a full publish run succeeded or is running on main at ${head}"
+            exit 0
+          fi
+          if [ -n "${last}" ]; then
+            changed="$(gh api "repos/${GH_REPO}/compare/${last}...${head}" \
+              --jq '[.files[]?.filename | select(startswith("apps/"))] | length')"
+            if [ "${changed}" -eq 0 ]; then
+              echo "nothing under apps/ changed since the full publish run at ${last}"
+              exit 0
+            fi
+            reason="apps/ changed since the last full publish run, at ${last}"
+          else
+            reason="no recent full publish run succeeded"
+          fi
+          gh workflow run publish.yml --ref main
+          echo "- started publish for main at ${head}: ${reason}" >> "${GITHUB_STEP_SUMMARY}"

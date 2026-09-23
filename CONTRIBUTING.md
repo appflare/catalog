@@ -53,7 +53,8 @@ app's own wrangler config, so the manifest does not repeat them.
    wins over the tag. It must change whenever `source` moves: publish refuses a
    new pin under an `install.version` that is already released.
 3. List at least one GitHub user in `maintainers`. They own `/apps/<slug>/` in
-   CODEOWNERS and approve bumps to their app.
+   CODEOWNERS, so GitHub asks them to review every pull request for their app,
+   bumps included.
 4. Run the checks below, then open a pull request.
 
 ### At most 21 Worker modules
@@ -199,9 +200,11 @@ requests from forks do not receive secrets, so **fork PRs fail `verify` until
 In `verify.yml`, `build-packer` runs the pull request's own copy of
 `.github/actions/build-packer`, with `APPFLARE_DEPLOY_KEY` in scope. Fork PRs get no
 secrets, so only people with write access to this repository can run a modified
-action with the key, by pushing a branch here. Protect `main` with a rule that
-requires review for changes under `.github/` (a CODEOWNERS entry for `/.github/`
-plus "Require review from Code Owners").
+action with the key, by pushing a branch here. Give write access only to people
+you would trust with the key. `main`'s ruleset does not require code-owner review
+(see "Repository settings" below), so a CODEOWNERS entry for `/.github/` asks for
+a review of workflow changes but does not enforce one, and the key is readable
+from a pushed branch before any review happens anyway.
 
 When the packages are published to npm, drop the pin:
 
@@ -217,7 +220,8 @@ When the packages are published to npm, drop the pin:
 ## Publishing
 
 `publish.yml` runs on every push to `main` that touches `apps/**`, and on manual
-dispatch. It does not diff commits. `publish-plan` works out, for every app, the tag
+dispatch. `bump.yml` also starts it for bumps that merged themselves (see "Who
+merges a bump"). It does not diff commits. `publish-plan` works out, for every app, the tag
 its current pin packs to and publishes the apps whose tag does not exist yet. That
 makes every run idempotent: a re-run, a manual run, or the run after a cancelled
 one publishes whatever is missing. Runs share the `publish` concurrency group and
@@ -238,7 +242,7 @@ Each job gets only the secret it needs:
 | `plan` | none; `contents: read` token for `gh api` | `publish-plan --out`; fails on a metadata-only edit or a broken release |
 | `pack` (per app) | none; `contents: read`, no persisted credentials | `pack-app --key-id catalog-2026-09`, which runs the app's install and build; uploads exactly `dist/<slug>` as `unsigned-<slug>` |
 | `sign` (per app) | `APPFLARE_SIGNING_KEY`; `contents: read` to check out the catalog | runs no app code; checks the artifact against the plan, `verify --hashes-only`, `sign`, checks it again and runs `verify --require-signed`; uploads `signed-<slug>` |
-| `release` | `contents: write` | re-checks every planned artifact against the plan, `verify --require-signed`, creates `<slug>@<version>` with the three assets (skips complete existing releases), `build-index --releases-only`, commits `index.json` as `github-actions[bot]` with `[skip ci]` |
+| `release` | `CATALOG_PUSH_KEY`; `contents: write` for the releases | re-checks every planned artifact against the plan, `verify --require-signed`, creates `<slug>@<version>` with the three assets (skips complete existing releases), `build-index --releases-only`, commits `index.json` as `github-actions[bot]` with `[skip ci]` and pushes it with `CATALOG_PUSH_KEY` |
 | `pages` | `pages: write`, `id-token: write` | deploys `index.json` and `schema/v1.json` |
 
 ### What the signing step trusts
@@ -280,6 +284,7 @@ Secrets:
 |---|---|---|
 | `APPFLARE_DEPLOY_KEY` | `build-packer` only | Private half of a read-only SSH deploy key registered on `appflare/appflare` |
 | `APPFLARE_SIGNING_KEY` | `publish.yml` `sign` job only | Base64 PKCS#8 Ed25519 private key, key id `catalog-2026-09` |
+| `CATALOG_PUSH_KEY` | `publish.yml` `release` and `nightly.yml` `record results` only | Private half (OpenSSH, Ed25519) of a deploy key with write access registered on this repository; pushes the `index.json` commit to `main` |
 
 The `sign` job fails with an explicit error while `APPFLARE_SIGNING_KEY` is unset.
 Its public half is `catalog-2026-09` in `signingKeys` in `appflare/appflare`. When
@@ -298,8 +303,32 @@ Repository settings the maintainer has to make:
 - GitHub Pages only works on a public repository, or a private one on GitHub Pro,
   Team, or Enterprise. Enable Pages with source **GitHub Actions** under Settings >
   Pages. The deploy uses the `github-pages` environment that Pages creates.
-- If `main` is protected, allow `github-actions[bot]` to push, or the `index.json`
-  commit fails.
+- Generate an Ed25519 key pair (`ssh-keygen -t ed25519 -N ''`), add the public half
+  under Settings > Deploy keys with **Allow write access**, and store the private
+  half as the `CATALOG_PUSH_KEY` secret. The `index.json` commits of `publish.yml`
+  and `nightly.yml` are pushed with it, because the ruleset below applies to every
+  push to `main` and would reject a push with the workflow's own token. Pushes
+  with a deploy key start push workflows, so those commits carry `[skip ci]`.
+- Turn on **Allow auto-merge** under Settings > General, for entries that set
+  `bump.autoMerge`.
+- Protect `main` with a branch ruleset that requires the status checks `verify
+  passed` (from `verify.yml`) and `commit messages` (from `conventions.yml`), with
+  **Repository admin** and **Deploy keys** in its bypass list (deploy keys, so the
+  `index.json` pushes above get through).
+  Auto-merge waits only for required checks, and a required check needs a fixed
+  name, which the per-app `pack <slug>` and `install check <slug>` jobs do not
+  have. `verify passed` fails unless every other `verify.yml` job succeeded;
+  `pack` and `install check` may be skipped only when no app changed. `bump.yml`
+  enables auto-merge only while `verify passed` is required on `main`.
+- Do not turn on **Require review from Code Owners** in that ruleset. It would
+  hold every auto-merge bump until an owner approves, which is the step
+  `bump.autoMerge` exists to skip. CODEOWNERS stays, so owners are still asked to
+  review and are notified of every pull request for their app, and a maintainer
+  still reviews and merges every bump of an entry without `bump.autoMerge`.
+- Requiring `verify passed` means a pull request from a fork cannot merge
+  without a maintainer bypassing the rule: fork pull requests get no secrets, so
+  `build packer` fails and `verify passed` with it, as the install check already
+  does for them.
 
 ## Keeping pins current
 
@@ -358,8 +387,65 @@ Cadence and cleanup:
 Pull requests opened with the workflow's own token do not start `pull_request`
 workflows. `bump.yml` therefore starts `verify.yml` and `conventions.yml` on each
 new branch with `workflow_dispatch`. Their checks attach to the pull request's
-commit, so required checks can pass. Maintainers from CODEOWNERS review and
-merge. Merging publishes the new version.
+commit, so required checks can pass.
+
+### Who merges a bump
+
+By default, a maintainer from CODEOWNERS reviews the upstream changes and merges
+once the checks pass. Merging publishes the new version. The ruleset on `main`
+requires the checks, not the review (see "Repository settings" above), so the
+merge itself is the maintainer's approval.
+
+An entry whose maintainers trust upstream's tags to be releasable as they are can
+let its bumps merge themselves:
+
+```jsonc
+"bump": { "autoMerge": true }
+```
+
+For such an entry, `bump.yml` enables GitHub auto-merge on the pull request right
+after opening it, before the checks start. GitHub squash-merges it once the
+required checks pass, with the pull request's title (`chore(<slug>): bump to
+<ref>`) as the commit subject. The checks are the same as for any other pull
+request, the full install check in the CI account included: auto-merge skips the
+review, not the checks. A failing check leaves the pull request open for a
+maintainer. Code owners are still asked to review and can step in until the
+checks finish:
+
+- To stop one bump, disable auto-merge on the pull request (the "Disable
+  auto-merge" button, or `gh pr merge --disable-auto <number>`), or close it.
+- To stop all future bumps of an entry from merging themselves, remove
+  `bump.autoMerge` from its `appflare.jsonc` (or set it to `false`). Pull
+  requests already open keep auto-merge until it is disabled on each.
+
+The pull request body says which path applies. These cases fall back to a
+maintainer:
+
+- An entry that also sets `install.version` never merges itself: someone has to
+  set the new version first.
+- `bump.yml` asks GitHub for `main`'s rules first and enables auto-merge only
+  when `verify passed` is a required status check. Otherwise nothing would stop
+  a bump from merging before its install check finished, so the workflow
+  comments on the pull request and leaves it open.
+- GitHub refuses to enable auto-merge, for example when the repository does not
+  allow it. The workflow comments and leaves the pull request open. It calls
+  GitHub's auto-merge API itself rather than `gh pr merge --auto`, which merges
+  a pull request that is already mergeable at once, without waiting for the
+  install check.
+
+An auto-merged bump is published by the next nightly run, not at once. GitHub
+starts no workflows for events caused by a workflow's own token, and the merge
+counts as one because `bump.yml` enabled it. Each `bump.yml` run therefore starts
+a full `publish.yml` run when `apps/` changed on `main` since the newest publish
+run that covered every app and succeeded (or is still running): a push run, or
+one `bump.yml` started. A manual run may have been narrowed with `apps`, so it
+does not count, and neither does a failed run. A publish that keeps failing is
+retried once a night until it is fixed.
+
+Adding `bump` to an entry changes its `appflare.jsonc`, so for a version that is
+already released it is a metadata-only edit and publish fails (see above). Add it
+together with a move of `source`, for example as an extra commit on the entry's
+next bump pull request.
 
 ## Install checks
 
@@ -429,9 +515,9 @@ Worker existed there.
 [`nightly.yml`](https://github.com/appflare/catalog/actions/workflows/nightly.yml)
 runs every night and reinstalls the current release of every app in `index.json`
 with the install check above, then deletes it again. Each app that passes gets a
-new `lastVerified` in `index.json`, which the manager shows as "Verified" with the
-date on its catalog pages, or "Not verified yet" for a version that has never
-passed.
+new `lastVerified` in `index.json`, which the manager shows as "Install checked"
+with the date on its catalog pages, or "Not checked yet" for a version that has
+never passed.
 
 A red run means something failed. The run summary lists every app; the ones marked
 **FAILED** also get a warning annotation. Open that app's `install check
