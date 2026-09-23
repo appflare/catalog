@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-23T12:31:33.965Z",
+  "generatedAt": "2026-09-23T12:45:14.720Z",
   "apps": [
     {
       "slug": "chatgpt-telegram-workers",
@@ -53,6 +53,27 @@
       "tier": "artifact",
       "plan": "free",
       "requires": [],
+      "lastVerified": null,
+      "maintainers": [
+        "MendyLanda"
+      ]
+    },
+    {
+      "slug": "r2-explorer",
+      "name": "R2 Explorer",
+      "summary": "A Google Drive-like file browser for an R2 bucket, on Workers + R2.",
+      "version": "11.0.0",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/r2-explorer@11.0.0/r2-explorer-11.0.0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/r2-explorer@11.0.0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/r2-explorer@11.0.0/manifest.sig"
+      },
+      "digest": "5c458f2af1a6c5a3b8704a70908bfb7798555110634f6fcc1c63468074127a42",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "r2"
+      ],
       "lastVerified": null,
       "maintainers": [
         "MendyLanda"
