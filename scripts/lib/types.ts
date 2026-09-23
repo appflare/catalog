@@ -69,6 +69,13 @@ export interface ArtifactManifest {
   source: { repo: string; sha: string; ref: string };
   worker: {
     name: string;
+    /**
+     * The wrangler config the Worker was built from, relative to the checkout:
+     * the manifest's `install.wranglerConfig`, and the config wrangler deploys
+     * (another one when the build left a redirect beside it). Omitted by
+     * packers that predate it.
+     */
+    wranglerConfig?: { declared: string; effective: string };
     mainModule: string;
     compatibilityDate: string;
     compatibilityFlags: string[];

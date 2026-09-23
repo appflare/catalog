@@ -140,10 +140,16 @@ runMain(async () => {
   }
   const zipPath = path.join(outDir, `${slug}-${artifact.version}.zip`);
   const migrations = Object.values(artifact.d1Migrations).reduce((n, l) => n + l.length, 0);
+  const configs = artifact.worker.wranglerConfig;
   process.stdout.write(
     [
       `${slug}@${artifact.version} (keyId=${artifact.keyId}, not signed)`,
       `  source:     ${artifact.source.repo}@${artifact.source.sha} (${artifact.source.ref})`,
+      ...(configs === undefined
+        ? []
+        : [
+            `  config:     ${configs.effective}${configs.effective === configs.declared ? "" : ` (redirected from ${configs.declared})`}`,
+          ]),
       `  modules:    ${artifact.worker.modules.length} (the manager installs at most ${schema.maxWorkerModules})`,
       `  assets:     ${artifact.assets.files.length}`,
       `  migrations: ${migrations}`,

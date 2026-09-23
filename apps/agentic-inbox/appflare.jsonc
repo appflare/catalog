@@ -1,0 +1,81 @@
+{
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "agentic-inbox",
+  "name": "Agentic Inbox",
+  "summary": "A self-hosted email client with an AI agent that reads, searches, and drafts replies, on Email Routing, Durable Objects, R2, and Workers AI.",
+  "homepage": "https://github.com/cloudflare/agentic-inbox",
+  "repo": "cloudflare/agentic-inbox",
+  "license": "Apache-2.0",
+  "categories": ["email", "ai"],
+  "maintainers": ["MendyLanda"],
+  // Upstream has no release tags, so the entry follows the default branch by commit.
+  "source": { "ref": "main", "sha": "48039bb6785af34e592c2966f87cde2b255c4c80" },
+  "install": {
+    "tier": "artifact",
+    "packageManager": "npm",
+    // The source config. Its entry imports a module only the Vite build
+    // provides: the build (with Cloudflare's Vite plugin) writes the bundled
+    // Worker and its deploy config to build/server/wrangler.json and points
+    // wrangler at it through .wrangler/deploy/config.json. The packer follows
+    // that redirect, as `wrangler deploy` does, and packs the generated config.
+    "wranglerConfig": "wrangler.jsonc",
+    "workerName": "agentic-inbox",
+    // Upstream's build script; the wrangler config has no build.command.
+    "buildCommand": "react-router build",
+    // Every route sits behind the app's own Cloudflare Access check, which
+    // refuses a request without an Access token, and answers 500 until
+    // POLICY_AUD and TEAM_DOMAIN are set. Any answer of the Worker counts.
+    "healthMode": "status-only",
+    // Upstream's setup points the zone's catch-all rule at the Worker; mail to
+    // an address without a mailbox is dropped by the app.
+    "emailRouting": { "catchAll": true }
+  },
+  // Receiving mail, SQLite Durable Objects, R2, and Workers AI fit the free
+  // plan. Sending works for free only to addresses verified in Email Routing;
+  // sending to anyone else needs Workers Paid and Email Sending.
+  "plan": "free",
+  "requires": ["zone", "email-routing", "r2", "workers-ai"],
+  // POLICY_AUD and TEAM_DOMAIN come from Cloudflare Access, which can only be
+  // turned on for the Worker after it exists, so they are set afterwards as
+  // secrets in the Worker's settings (see below); updates keep them.
+  "secrets": [],
+  "vars": [
+    {
+      "name": "DOMAINS",
+      "label": "Mail domain",
+      "help": "The domain you receive mail for, the zone you pick for Email Routing, for example example.com. Several are allowed, comma separated.",
+      // The wrangler config's value is upstream's placeholder, example.com.
+      // Without a default the form would start with it and accept it; an
+      // empty default makes the form ask for the real domain.
+      "default": "",
+      "required": true
+    },
+    {
+      // A list in the wrangler config, so the Worker gets it as JSON and the
+      // form takes JSON text; the form starts with the config's empty list.
+      "name": "EMAIL_ADDRESSES",
+      "label": "Allowed addresses",
+      "help": "Optional. A JSON list of the only addresses that may have a mailbox, for example [\"hello@example.com\", \"sales@example.com\"]. Mail to any other address is dropped. Leave [] to allow any address in your domain.",
+      "required": false
+    }
+  ],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "**The app refuses every request until Cloudflare Access protects it.** In the Cloudflare dashboard, open Workers & Pages, select this Worker, open Settings, Domains & Routes, and turn on Cloudflare Access for its workers.dev address. The dialog shows the application audience (AUD) tag and the team domain. Add them as secrets of the Worker named `POLICY_AUD` and `TEAM_DOMAIN` (the team domain as `https://<team>.cloudflareaccess.com`)."
+    },
+    {
+      "type": "markdown",
+      "content": "Then open {{workerUrl}}, sign in through Access, and create a mailbox for an address in your domain, for example `hello@example.com`. Mail to addresses without a mailbox is dropped."
+    },
+    {
+      "type": "markdown",
+      "content": "Sending uses the Worker's `EMAIL` binding. Without further setup it can only send to addresses verified under Email Routing, Destination addresses. To send to anyone, onboard the domain to Email Sending, which needs Workers Paid."
+    },
+    {
+      "type": "markdown",
+      "content": "Anyone who passes the Access policy can open every mailbox, including through the MCP server at {{workerUrl}}/mcp, so keep the policy to the people who should read all of them."
+    }
+  ],
+  "tokenPermissions": []
+}
