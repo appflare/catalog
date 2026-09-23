@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-23T16:08:13.033Z",
+  "generatedAt": "2026-09-23T17:48:20.907Z",
   "apps": [
     {
       "slug": "chatgpt-telegram-workers",
@@ -35,6 +35,51 @@
       "plan": "free",
       "requires": [],
       "lastVerified": "2026-09-23T16:07:26.000Z",
+      "maintainers": [
+        "MendyLanda"
+      ]
+    },
+    {
+      "slug": "flaremo",
+      "name": "FlareMo",
+      "summary": "A Memos-compatible notes app for quick capture: timeline, tags, attachments, semantic search, and an MCP server, on D1, R2, and Vectorize.",
+      "version": "0.20.1",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/flaremo@0.20.1/flaremo-0.20.1.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/flaremo@0.20.1/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/flaremo@0.20.1/manifest.sig"
+      },
+      "digest": "5f70b5772b8bb3a38240e42e8273e95601a7e6a6c69fb045746cdf2e6ce6b2bc",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "r2",
+        "workers-ai"
+      ],
+      "lastVerified": null,
+      "maintainers": [
+        "MendyLanda"
+      ]
+    },
+    {
+      "slug": "mail2telegram",
+      "name": "mail2telegram",
+      "summary": "Receive your domain's email in Telegram: a push for every message and a Mini App inbox with attachments, filters, and AI summaries.",
+      "version": "2.0.0",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/mail2telegram@2.0.0/mail2telegram-2.0.0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/mail2telegram@2.0.0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/mail2telegram@2.0.0/manifest.sig"
+      },
+      "digest": "6a847e9d696e51798eca0e07e0c22d24ab195bfb01898b33f507e2d73573d560",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "zone",
+        "email-routing",
+        "r2"
+      ],
+      "lastVerified": null,
       "maintainers": [
         "MendyLanda"
       ]
