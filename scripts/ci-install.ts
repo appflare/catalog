@@ -18,6 +18,7 @@ import {
   ciWorkerName,
   cleanupCiInstall,
   createCfRequest,
+  healthUrl,
   planCiInstall,
   randomSecret,
   unpackArtifact,
@@ -40,7 +41,8 @@ deploy   Unpacks the artifact (checking every file's sha256), removes anything
          from manifest.json (bindings without ids, so wrangler provisions them),
          runs wrangler deploy --strict, applies D1 migrations, sets each catalog
          secret to a random value, and waits up to 60 s for
-         https://<worker>.<subdomain>.workers.dev/ to answer.
+         https://<worker>.<subdomain>.workers.dev<healthPath> to answer
+         (install.healthPath from the catalog manifest, else /).
 cleanup  Deletes the Worker and every resource the deploy may have created,
          and fails unless all of them are gone.
 
@@ -165,7 +167,7 @@ runMain(async () => {
     for (const secret of plan.secrets) {
       wrangler(bin, work, ["secret", "put", secret, "--name", plan.name], randomSecret());
     }
-    const url = `https://${plan.name}.${await workersSubdomain(request)}.workers.dev/`;
+    const url = healthUrl(plan.name, await workersSubdomain(request), plan.healthPath);
     info(`waiting for ${url}`);
     const health = await waitForHealth(
       async () => {

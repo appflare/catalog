@@ -59,6 +59,8 @@ export interface CiInstallPlan {
   secrets: string[];
   /** D1 databases with migrations to apply, by database name. */
   d1Migrations: string[];
+  /** The path the health check probes: the catalog's `install.healthPath`, else `/`. */
+  healthPath: string;
 }
 
 type WranglerRule =
@@ -120,6 +122,31 @@ export function catalogForms(catalog: unknown): CatalogForms {
         }))
     : [];
   return { secrets, vars };
+}
+
+/** Same rule as the catalog schema: a URL path starting with `/`, without query or fragment. */
+const HEALTH_PATH = /^\/[^\s?#]*$/;
+
+/**
+ * The path to probe, from `install.healthPath` in the catalog manifest embedded
+ * in the artifact; `/` when it is absent, as the manager does. Throws for a
+ * value the schema would reject, rather than probing somewhere else.
+ */
+export function catalogHealthPath(catalog: unknown): string {
+  const install = (catalog as { install?: { healthPath?: unknown } } | null)?.install;
+  const healthPath = install?.healthPath;
+  if (healthPath === undefined) {
+    return "/";
+  }
+  if (typeof healthPath !== "string" || !HEALTH_PATH.test(healthPath)) {
+    throw new Error(`install.healthPath ${JSON.stringify(healthPath)} is not a URL path`);
+  }
+  return healthPath;
+}
+
+/** The URL the health check probes for Worker `name` in the account's workers.dev subdomain. */
+export function healthUrl(name: string, subdomain: string, healthPath: string): string {
+  return `https://${name}.${subdomain}.workers.dev${healthPath}`;
 }
 
 /** Placeholder for a required var without a default; the check only needs the Worker to start. */
@@ -269,7 +296,14 @@ export function planCiInstall(manifest: ArtifactManifest, name: string): CiInsta
     ...(worker.placement ? { placement: { ...worker.placement } } : {}),
     ...(worker.limits ? { limits: { ...worker.limits } } : {}),
   };
-  return { name, config, resources, secrets: forms.secrets, d1Migrations };
+  return {
+    name,
+    config,
+    resources,
+    secrets: forms.secrets,
+    d1Migrations,
+    healthPath: catalogHealthPath(manifest.catalog),
+  };
 }
 
 /** Resolves a manifest path under `root`, refusing anything that could escape it. */
@@ -375,8 +409,8 @@ export interface HealthResult {
 
 /**
  * Polls `url` until it answers something other than a 5xx or a 404, for up to
- * `timeoutMs`. A plain 404 that persists to the deadline passes (an app may
- * serve 404 at `/`); a 1042, a 5xx, or no answer fails.
+ * `timeoutMs`. A plain 404 that persists to the deadline passes (an app without
+ * a health path may serve 404 at `/`); a 1042, a 5xx, or no answer fails.
  */
 export async function waitForHealth(
   probe: () => Promise<Probe>,

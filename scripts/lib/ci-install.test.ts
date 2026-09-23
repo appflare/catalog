@@ -8,9 +8,11 @@ import {
   type CfRequest,
   type CfResponse,
   type CiInstallPlan,
+  catalogHealthPath,
   ciWorkerName,
   classifyProbe,
   cleanupCiInstall,
+  healthUrl,
   type Probe,
   planCiInstall,
   unpackArtifact,
@@ -105,6 +107,32 @@ describe("planCiInstall", () => {
     );
     expect(plan.secrets).toEqual(["ADMIN_PASSWORD"]);
     expect(plan.config.vars).toEqual({ REGION: "eu", API_URL: "ci" });
+  });
+
+  it("probes the catalog's install.healthPath, else /", () => {
+    expect(planCiInstall(manifest(), "ci-hello-pr1").healthPath).toBe("/");
+    const plan = planCiInstall(
+      manifest((m) => {
+        const install = (m.catalog as { install: Record<string, unknown> }).install;
+        install.healthPath = "/v1/chat/completions";
+      }),
+      "ci-hello-pr1",
+    );
+    expect(plan.healthPath).toBe("/v1/chat/completions");
+    expect(healthUrl(plan.name, "acme", plan.healthPath)).toBe(
+      "https://ci-hello-pr1.acme.workers.dev/v1/chat/completions",
+    );
+    expect(healthUrl("ci-cut-pr1", "acme", "/")).toBe("https://ci-cut-pr1.acme.workers.dev/");
+  });
+
+  it("refuses a health path the schema would reject", () => {
+    for (const bad of ["health", "/a?b=1", "/a#b", "/a b", "", 42]) {
+      expect(() => catalogHealthPath({ install: { healthPath: bad } })).toThrow(
+        /install\.healthPath .* is not a URL path/,
+      );
+    }
+    expect(catalogHealthPath(null)).toBe("/");
+    expect(catalogHealthPath({ install: {} })).toBe("/");
   });
 
   it("refuses bindings it cannot create and clean up", () => {
@@ -327,6 +355,7 @@ describe("cleanupCiInstall", () => {
     config: {},
     secrets: [],
     d1Migrations: [],
+    healthPath: "/",
     resources: [
       { type: "kv", name: "ci-hello-pr1-cut-kv", binding: "CUT_KV" },
       { type: "d1", name: "ci-hello-pr1-db", binding: "DB" },
