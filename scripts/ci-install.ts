@@ -43,7 +43,9 @@ deploy   Unpacks the artifact (checking every file's sha256), removes anything
          left from an earlier run under the same name, writes a wrangler.json
          from manifest.json (bindings without ids, so wrangler provisions them;
          Vectorize indexes and queues are created first through the API, and
-         each rate limit gets a random namespace id), runs wrangler deploy
+         each rate limit gets a random namespace id; vars as the manager sets
+         them, JSON vars kept as JSON and {{workerUrl}} and {{workerName}}
+         filled in for the CI Worker), runs wrangler deploy
          --strict, attaches the recorded queue consumers through the API,
          applies D1 migrations, sets each catalog secret to a random value,
          and waits up to 60 s for
@@ -149,15 +151,19 @@ runMain(async () => {
   const { token, accountId } = credentials();
   const request = createCfRequest(token, accountId);
   const { manifest, zipPath } = await loadArtifact(path.resolve(dir));
-  const plan = planCiInstall(manifest, ciWorkerName(manifest.app, values.suffix));
+  const name = ciWorkerName(manifest.app, values.suffix);
 
   if (command === "cleanup") {
-    await cleanup(request, plan);
+    // Cleanup finds everything by name; var values do not matter here.
+    await cleanup(request, planCiInstall(manifest, name));
     return 0;
   }
   if (command !== "deploy") {
     throw new Error(`unknown command "${command}"`);
   }
+  // Var values may hold {{workerUrl}}, which needs the account's subdomain.
+  const subdomain = await workersSubdomain(request);
+  const plan = planCiInstall(manifest, name, { subdomain });
 
   const bin = wranglerBin(resolveAppflareDir());
   const work = mkdtempSync(path.join(tmpdir(), `ci-install-${plan.name}-`));
@@ -181,7 +187,7 @@ runMain(async () => {
     for (const secret of plan.secrets) {
       wrangler(bin, work, ["secret", "put", secret, "--name", plan.name], randomSecret());
     }
-    const url = healthUrl(plan.name, await workersSubdomain(request), plan.healthPath);
+    const url = healthUrl(plan.name, subdomain, plan.healthPath);
     info(`waiting for ${url}`);
     const health = await waitForHealth(
       async () => {

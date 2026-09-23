@@ -358,19 +358,98 @@ export function consumerSettings(consumer: ArtifactQueueConsumer): QueueConsumer
 export const REQUIRED_VAR_PLACEHOLDER = "ci";
 
 /**
+ * What the manager fills in for `{{workerUrl}}` and `{{workerName}}` in var
+ * values: the wrangler config's own vars (strings, and strings inside JSON
+ * values) and the catalog's var defaults.
+ */
+export interface PlaceholderValues {
+  /** `https://<worker>.<subdomain>.workers.dev`; null keeps `{{workerUrl}}` as written. */
+  workerUrl: string | null;
+  workerName: string;
+}
+
+/** A JSON value: what a `json` var holds. */
+export type JsonValue =
+  | string
+  | number
+  | boolean
+  | null
+  | JsonValue[]
+  | { [key: string]: JsonValue };
+
+// The manager's rules, from @appflare/schema: whitespace inside the braces is
+// allowed, and anything else in double braces is left as written. A test
+// checks these copies against the schema package's own functions.
+const PLACEHOLDER_PATTERN = /\{\{\s*(workerUrl|workerName)\s*\}\}/g;
+
+/** `text` with `{{workerUrl}}` and `{{workerName}}` filled in, as the manager does. */
+export function renderPlaceholders(text: string, values: PlaceholderValues): string {
+  return text.replace(PLACEHOLDER_PATTERN, (match, key: string) => {
+    if (key === "workerName") return values.workerName;
+    return values.workerUrl ?? match;
+  });
+}
+
+/** `value` with placeholders filled in inside every string it holds (keys excepted). */
+export function renderJsonPlaceholders(value: JsonValue, values: PlaceholderValues): JsonValue {
+  if (typeof value === "string") return renderPlaceholders(value, values);
+  if (Array.isArray(value)) return value.map((item) => renderJsonPlaceholders(item, values));
+  if (value !== null && typeof value === "object") {
+    const out: { [key: string]: JsonValue } = {};
+    for (const [key, item] of Object.entries(value)) {
+      // Plain assignment of `__proto__` would set the prototype instead.
+      Object.defineProperty(out, key, {
+        value: renderJsonPlaceholders(item, values),
+        enumerable: true,
+        writable: true,
+        configurable: true,
+      });
+    }
+    return out;
+  }
+  return value;
+}
+
+/**
+ * The catalog default of the `json` var `name`, parsed. The packer refuses an
+ * artifact whose default is not JSON; this refuses one that got through
+ * anyway rather than deploying the Worker with its JSON text as a string.
+ */
+function jsonDefault(name: string, text: string): JsonValue {
+  try {
+    return JSON.parse(text) as JsonValue;
+  } catch (error) {
+    throw new Error(
+      `the catalog default of the var ${name} is not valid JSON (${error instanceof Error ? error.message : String(error)}), ` +
+        `but the wrangler config gives ${name} a value that is not a string`,
+    );
+  }
+}
+
+/**
  * Plans the CI install of `manifest` as Worker `name`: the wrangler config
  * (bindings without ids, so wrangler provisions them under
  * {@link resourceName}), the resources to clean up, and the secrets to set.
  * Throws for a binding kind this check cannot create or clean up yet, instead
  * of deploying a Worker with a binding missing.
+ *
+ * Vars follow the manager: a catalog default overrides the wrangler config's
+ * value, a `json` var's default is parsed and stays JSON, and
+ * `{{workerName}}` and `{{workerUrl}}` are filled in with `name` and its
+ * workers.dev URL in `subdomain` (kept as written when `subdomain` is not
+ * given, which only a plan for cleanup should do).
  */
 export function planCiInstall(
   manifest: ArtifactManifest,
   name: string,
-  options: { namespaceId?: () => string } = {},
+  options: { namespaceId?: () => string; subdomain?: string } = {},
 ): CiInstallPlan {
   const { worker } = manifest;
   const namespaceId = options.namespaceId ?? randomNamespaceId;
+  const placeholders: PlaceholderValues = {
+    workerName: name,
+    workerUrl: options.subdomain === undefined ? null : healthUrl(name, options.subdomain, ""),
+  };
   const resources: CiResource[] = [];
   const kv: Record<string, string>[] = [];
   const d1: Record<string, string>[] = [];
@@ -386,7 +465,8 @@ export function planCiInstall(
   const sendEmail: Record<string, unknown>[] = [];
   const notes: string[] = [];
   const singles: Record<string, { binding: string }> = {};
-  const vars: Record<string, unknown> = {};
+  const vars: Record<string, JsonValue> = {};
+  const jsonVars = new Set<string>();
   const d1Migrations: string[] = [];
 
   for (const binding of worker.bindings) {
@@ -482,7 +562,12 @@ export function planCiInstall(
         vars[binding.name] = binding.text;
         break;
       case "json":
-        vars[binding.name] = binding.json;
+        // A non-string wrangler var: it stays JSON, not its JSON text.
+        if (!Object.hasOwn(binding, "json")) {
+          throw new Error(`binding ${binding.name} (json) has no json value`);
+        }
+        vars[binding.name] = binding.json as JsonValue;
+        jsonVars.add(binding.name);
         break;
       case "assets":
         break;
@@ -500,10 +585,13 @@ export function planCiInstall(
   const forms = catalogForms(manifest.catalog);
   for (const v of forms.vars) {
     if (v.default !== undefined) {
-      vars[v.name] = v.default;
+      vars[v.name] = jsonVars.has(v.name) ? jsonDefault(v.name, v.default) : v.default;
     } else if (v.required && vars[v.name] === undefined) {
       vars[v.name] = REQUIRED_VAR_PLACEHOLDER;
     }
+  }
+  for (const [varName, value] of Object.entries(vars)) {
+    vars[varName] = renderJsonPlaceholders(value, placeholders);
   }
 
   const rules = new Map<WranglerRule, string[]>();

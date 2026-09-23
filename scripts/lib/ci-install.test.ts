@@ -2,8 +2,10 @@ import { createHash } from "node:crypto";
 import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
+import { pathToFileURL } from "node:url";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { artifactManifestFixture } from "../fixtures/artifact-manifest.ts";
+import { appflareAvailable, appflareDir } from "../fixtures/schema.ts";
 import {
   attachQueueConsumers,
   type CfRequest,
@@ -18,13 +20,17 @@ import {
   createQueues,
   createVectorizeIndexes,
   healthUrl,
+  type JsonValue,
   type Probe,
   planCiInstall,
   randomNamespaceId,
+  renderJsonPlaceholders,
+  renderPlaceholders,
   unpackArtifact,
   waitForHealth,
   workersSubdomain,
 } from "./ci-install.ts";
+import { appflarePaths } from "./paths.ts";
 import type { ArtifactManifest } from "./types.ts";
 
 const PIN = "0123456789abcdef0123456789abcdef01234567";
@@ -157,6 +163,85 @@ describe("planCiInstall", () => {
     );
     expect(plan.secrets).toEqual(["ADMIN_PASSWORD"]);
     expect(plan.config.vars).toEqual({ REGION: "eu", API_URL: "ci" });
+  });
+
+  it("keeps JSON vars typed and parses a JSON var's catalog default", () => {
+    const plan = planCiInstall(
+      manifest((m) => {
+        worker(m).bindings = [
+          { type: "json", name: "EMAIL_ADDRESSES", json: [] },
+          { type: "json", name: "LIMITS", json: { max: 5, strict: true } },
+          { type: "json", name: "RETRIES", json: 3 },
+          { type: "json", name: "EMPTY", json: null },
+          { type: "plain_text", name: "MODE", text: "prod" },
+        ];
+        (m.catalog as Record<string, unknown>).vars = [
+          { name: "EMAIL_ADDRESSES", label: "Addresses", default: '["a@example.com"]' },
+          { name: "RETRIES", label: "Retries", required: true },
+          { name: "MODE", label: "Mode", default: "[1]" },
+        ];
+      }),
+      "ci-hello-pr1",
+      { subdomain: "acme" },
+    );
+    expect(plan.config.vars).toEqual({
+      EMAIL_ADDRESSES: ["a@example.com"],
+      LIMITS: { max: 5, strict: true },
+      RETRIES: 3,
+      EMPTY: null,
+      // A text var's default is text, whatever it looks like.
+      MODE: "[1]",
+    });
+    expect(JSON.stringify(plan.config)).toContain('"EMAIL_ADDRESSES":["a@example.com"]');
+  });
+
+  it("refuses a JSON var's catalog default that is not JSON", () => {
+    expect(() =>
+      planCiInstall(
+        manifest((m) => {
+          worker(m).bindings = [{ type: "json", name: "EMAIL_ADDRESSES", json: [] }];
+          (m.catalog as Record<string, unknown>).vars = [
+            { name: "EMAIL_ADDRESSES", label: "Addresses", default: "a@example.com" },
+          ];
+        }),
+        "ci-hello-pr1",
+      ),
+    ).toThrow(/catalog default of the var EMAIL_ADDRESSES is not valid JSON/);
+  });
+
+  it("fills in {{workerUrl}} and {{workerName}} in every var, as the manager does", () => {
+    const edit = (m: Record<string, unknown>) => {
+      worker(m).bindings = [
+        { type: "plain_text", name: "PUBLIC_URL", text: "{{workerUrl}}" },
+        { type: "plain_text", name: "OTHER", text: "{{ workerName }}/{{notMine}}" },
+        {
+          type: "json",
+          name: "ORIGINS",
+          json: { "{{workerName}}": ["{{workerUrl}}/a", 1], nested: { url: "{{workerUrl}}" } },
+        },
+        { type: "json", name: "TRUSTED", json: [] },
+      ];
+      (m.catalog as Record<string, unknown>).vars = [
+        { name: "TRUSTED", label: "Trusted", default: '["{{workerUrl}}"]' },
+        { name: "CALLBACK", label: "Callback", default: "{{workerUrl}}/cb?w={{workerName}}" },
+      ];
+    };
+    const url = "https://ci-hello-pr1.acme.workers.dev";
+    expect(
+      planCiInstall(manifest(edit), "ci-hello-pr1", { subdomain: "acme" }).config.vars,
+    ).toEqual({
+      PUBLIC_URL: url,
+      OTHER: "ci-hello-pr1/{{notMine}}",
+      // Keys are not rendered, only the strings inside the value.
+      ORIGINS: { "{{workerName}}": [`${url}/a`, 1], nested: { url } },
+      TRUSTED: [url],
+      CALLBACK: `${url}/cb?w=ci-hello-pr1`,
+    });
+    // Without the subdomain (a plan for cleanup) {{workerUrl}} stays as written.
+    expect(planCiInstall(manifest(edit), "ci-hello-pr1").config.vars).toMatchObject({
+      PUBLIC_URL: "{{workerUrl}}",
+      CALLBACK: "{{workerUrl}}/cb?w=ci-hello-pr1",
+    });
   });
 
   it("probes the catalog's install.healthPath, else /", () => {
@@ -1000,5 +1085,40 @@ describe("createCfRequest", () => {
     });
     expect(seen[1]?.init.body).toBeUndefined();
     expect(seen[1]?.init.headers).toEqual({ authorization: "Bearer test-token" });
+  });
+});
+
+describe.skipIf(!appflareAvailable)("placeholders match @appflare/schema", () => {
+  it("renders text and JSON values like the manager's own functions", async () => {
+    const schema = (await import(pathToFileURL(appflarePaths(appflareDir).schemaDist).href)) as {
+      renderPlaceholders: typeof renderPlaceholders;
+      renderJsonPlaceholders: typeof renderJsonPlaceholders;
+    };
+    const texts = [
+      "{{workerUrl}}",
+      "{{ workerName }}-{{workerUrl}}/x",
+      "{{workerurl}} {{other}} {workerName} {{{workerName}}}",
+      "",
+    ];
+    const jsons: JsonValue[] = [
+      ["{{workerUrl}}", 1, null, true],
+      { "{{workerName}}": { deep: ["{{ workerUrl }}"] }, n: 2 },
+      JSON.parse('{"__proto__": "{{workerName}}"}') as JsonValue,
+      "{{workerName}}",
+      7,
+    ];
+    for (const values of [
+      { workerUrl: "https://w.acme.workers.dev", workerName: "w" },
+      { workerUrl: null, workerName: "w" },
+    ]) {
+      for (const text of texts) {
+        expect(renderPlaceholders(text, values)).toBe(schema.renderPlaceholders(text, values));
+      }
+      for (const json of jsons) {
+        expect(JSON.stringify(renderJsonPlaceholders(json, values))).toBe(
+          JSON.stringify(schema.renderJsonPlaceholders(json, values)),
+        );
+      }
+    }
   });
 });
