@@ -2,3 +2,4 @@
 # Do not edit by hand: run `pnpm gen-codeowners`.
 
 /apps/cut/ @MendyLanda
+/apps/unifi-ddns/ @MendyLanda

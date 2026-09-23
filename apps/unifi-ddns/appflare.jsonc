@@ -1,0 +1,44 @@
+{
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "unifi-ddns",
+  "name": "UniFi DDNS",
+  "summary": "Dynamic DNS for UniFi gateways: keeps Cloudflare A/AAAA records on your current IP.",
+  "homepage": "https://github.com/willswire/unifi-ddns",
+  "repo": "willswire/unifi-ddns",
+  "license": "MIT",
+  "categories": ["networking"],
+  "maintainers": ["MendyLanda"],
+  "source": { "ref": "v3.3.1", "sha": "c3f1f1bf59378582c977fbed8c97b19cc9143736" },
+  "install": {
+    "tier": "artifact",
+    "packageManager": "npm",
+    "wranglerConfig": "wrangler.toml",
+    "workerName": "unifi-ddns"
+  },
+  "plan": "free",
+  // The Worker edits DNS with a token the router sends on every request, not
+  // with access granted by Appflare, so it needs no zone from the account.
+  "requires": [],
+  // The app reads no secrets or vars. The router passes the user's Cloudflare
+  // token as the password of each update request (HTTP Basic auth), so the
+  // token lives in the UniFi controller, never in this Worker or in Appflare.
+  "secrets": [],
+  "vars": [],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "Create a user API token (not an account API token) with the permission listed for this app, limited to the one zone that holds your hostname. The Worker refuses a token that can see more than one zone. The DNS record must already exist in that zone; the Worker updates it and never creates it."
+    },
+    {
+      "type": "markdown",
+      "content": "In the UniFi controller, open **Settings > Internet > WAN > Dynamic DNS** and create an entry:\n\n- **Service:** `custom`\n- **Hostname:** the record to update, for example `home.example.com` (several, comma-separated, are allowed)\n- **Username:** your Cloudflare account email\n- **Password:** the API token\n- **Server:** {{workerUrl}} without `https://`, followed by `/update?ip=%i&hostname=%h`\n\nOlder gateways (USG, USG Pro) take the host name alone in **Server**, without the path."
+    }
+  ],
+  "tokenPermissions": [
+    {
+      "name": "Zone.DNS",
+      "description": "Edit DNS records in the one zone the router updates.",
+      "scope": "zone"
+    }
+  ]
+}
