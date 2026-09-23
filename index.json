@@ -1,6 +1,25 @@
 {
-  "generatedAt": "2026-09-23T12:27:29.137Z",
+  "generatedAt": "2026-09-23T12:31:33.965Z",
   "apps": [
+    {
+      "slug": "chatgpt-telegram-workers",
+      "name": "ChatGPT Telegram Bot",
+      "summary": "Your own AI chat bot on Telegram, backed by OpenAI, Anthropic, Workers AI, or any OpenAI-compatible API.",
+      "version": "2.0.0",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/chatgpt-telegram-workers@2.0.0/chatgpt-telegram-workers-2.0.0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/chatgpt-telegram-workers@2.0.0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/chatgpt-telegram-workers@2.0.0/manifest.sig"
+      },
+      "digest": "3b9a3045538667cf8b625e6169e0bc91a7964f35d6914f813796befd3be645ab",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "maintainers": [
+        "MendyLanda"
+      ]
+    },
     {
       "slug": "cut",
       "name": "Cut",
