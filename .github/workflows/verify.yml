@@ -1,18 +1,28 @@
 name: verify
 
 # Pull requests: check the catalog tooling, then validate each changed app's
-# manifest, pack it (unsigned), and verify the artifact's hashes. No release,
-# no Cloudflare account. Only build-packer sees a secret (APPFLARE_DEPLOY_KEY);
-# the jobs that run pull-request or app code see none.
+# manifest, pack it (unsigned), verify the artifact's hashes, and install the
+# packed artifact into the CI Cloudflare account to check that it deploys and
+# answers, deleting everything afterwards. No release.
+#
+# Secrets: build-packer gets APPFLARE_DEPLOY_KEY; install gets the CI account's
+# CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID in its deploy and cleanup steps
+# only. pack, which runs the app's install and build, gets none. Fork pull
+# requests get no secrets, so build-packer fails and install is skipped.
+#
+# Pull requests opened by the bump workflow (with the workflow token) do not
+# trigger pull_request runs, so that workflow starts this one with
+# workflow_dispatch on the bump branch; changed apps are then diffed against main.
 
 on:
   pull_request:
+  workflow_dispatch:
 
 permissions:
   contents: read
 
 concurrency:
-  group: verify-${{ github.event.pull_request.number }}
+  group: verify-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 defaults:
@@ -25,12 +35,16 @@ jobs:
     name: build packer
     runs-on: ubuntu-24.04
     timeout-minutes: 15
+    outputs:
+      # Every job that downloads the bundle checks it against this.
+      packer-sha256: ${{ steps.build.outputs.sha256 }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           path: catalog
           persist-credentials: false
-      - uses: ./catalog/.github/actions/build-packer
+      - id: build
+        uses: ./catalog/.github/actions/build-packer
         with:
           appflare-deploy-key: ${{ secrets.APPFLARE_DEPLOY_KEY }}
 
@@ -45,6 +59,8 @@ jobs:
           path: catalog
           persist-credentials: false
       - uses: ./catalog/.github/actions/use-packer
+        with:
+          sha256: ${{ needs.build-packer.outputs.packer-sha256 }}
       - run: pnpm check
       - run: pnpm validate
       - run: pnpm sync-schema --check
@@ -68,9 +84,15 @@ jobs:
       - id: changed
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
-          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
         run: |
-          apps="$(node scripts/changed-apps.ts --base "${BASE_SHA}" --head "${HEAD_SHA}")"
+          set -euo pipefail
+          base="${BASE_SHA}"
+          if [ -z "${base}" ]; then
+            # workflow_dispatch: compare the branch with main.
+            base="$(git rev-parse origin/main)"
+          fi
+          apps="$(node scripts/changed-apps.ts --base "${base}" --head "${HEAD_SHA}")"
           echo "changed apps: ${apps}"
           echo "apps=${apps}" >> "${GITHUB_OUTPUT}"
 
@@ -90,6 +112,8 @@ jobs:
           path: catalog
           persist-credentials: false
       - uses: ./catalog/.github/actions/use-packer
+        with:
+          sha256: ${{ needs.build-packer.outputs.packer-sha256 }}
       - name: Validate manifest
         env:
           APP: ${{ matrix.app }}
@@ -105,9 +129,68 @@ jobs:
           path: catalog/dist/${{ matrix.app }}
           if-no-files-found: error
           retention-days: 7
-      - name: Install into the CI account
+
+  install:
+    name: install check ${{ matrix.app }}
+    needs: [build-packer, changes, pack]
+    # Fork pull requests get no secrets; there is nothing to install with.
+    if: >-
+      needs.changes.outputs.apps != '[]' &&
+      (github.event_name != 'pull_request' ||
+       github.event.pull_request.head.repo.full_name == github.repository)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    # Deploys only the packed artifact (prebuilt modules and assets); never the
+    # app's own build scripts.
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        app: ${{ fromJSON(needs.changes.outputs.apps) }}
+    # One install per Worker name at a time, never cancelled: a superseded
+    # run's cleanup finishes before the next run deploys under the same name.
+    concurrency:
+      group: ci-install-${{ matrix.app }}-${{ github.event.pull_request.number || github.ref }}
+      cancel-in-progress: false
+    env:
+      APP: ${{ matrix.app }}
+    steps:
+      - name: Pick the CI Worker name
+        working-directory: .
         env:
-          APP: ${{ matrix.app }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
         run: |
-          # TODO: install the artifact into the CI Cloudflare account, health-check it, uninstall.
-          echo "TODO: install ${APP} into the CI account, health check, uninstall"
+          # ci-<slug>-pr<number>; a dispatched run (a bump branch) uses a short
+          # hash of its branch, so reruns reuse and clean up the same name.
+          if [ -n "${PR_NUMBER}" ]; then
+            suffix="pr${PR_NUMBER}"
+          else
+            suffix="b$(printf '%s' "${GITHUB_REF}" | sha256sum | cut -c1-8)"
+          fi
+          echo "SUFFIX=${suffix}" >> "${GITHUB_ENV}"
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          path: catalog
+          persist-credentials: false
+      - uses: ./catalog/.github/actions/use-packer
+        with:
+          sha256: ${{ needs.build-packer.outputs.packer-sha256 }}
+      - name: Download the packed artifact
+        id: download
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          # One named artifact: its files land directly in this directory.
+          name: artifact-${{ matrix.app }}
+          path: catalog/dist/${{ matrix.app }}
+      - name: Deploy to the CI account and health-check
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: node scripts/ci-install.ts deploy "dist/${APP}" --suffix "${SUFFIX}"
+      - name: Delete the CI Worker and its resources
+        if: always() && steps.download.outcome == 'success'
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: node scripts/ci-install.ts cleanup "dist/${APP}" --suffix "${SUFFIX}"

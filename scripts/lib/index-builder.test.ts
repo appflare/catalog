@@ -12,10 +12,11 @@ import {
   buildIndexApps,
   finalizeIndex,
   type IndexBuildOptions,
+  lastVerifiedFor,
   serializeIndex,
   sha256Hex,
 } from "./index-builder.ts";
-import type { CatalogManifest } from "./types.ts";
+import type { CatalogManifest, IndexApp } from "./types.ts";
 import type { VersionResolver } from "./versions.ts";
 
 const fixtureApps = path.join(import.meta.dirname, "..", "fixtures", "apps");
@@ -260,5 +261,37 @@ describe.skipIf(!appflareAvailable)("with the real @appflare/schema", () => {
   it("the committed index.json is schema-valid", () => {
     const text = readFileSync(path.join(import.meta.dirname, "..", "..", "index.json"), "utf8");
     expect(schema.indexJson.safeParse(JSON.parse(text)).success).toBe(true);
+  });
+});
+
+describe("lastVerified", () => {
+  const artifact = { version: "1.2.3", digest: "d".repeat(64) };
+  const row = (over: Partial<IndexApp>): IndexApp => ({
+    slug: "hello",
+    name: "Hello",
+    summary: "s",
+    version: "1.2.3",
+    artifacts: artifactUrls("appflare/catalog", "hello", "1.2.3"),
+    digest: "d".repeat(64),
+    tier: "artifact",
+    plan: "free",
+    requires: [],
+    lastVerified: "2026-09-01T00:00:00.000Z",
+    maintainers: ["octocat"],
+    ...over,
+  });
+
+  it("carries the previous value while version and digest are unchanged, and resets otherwise", () => {
+    expect(lastVerifiedFor("hello", artifact, [row({})])).toBe("2026-09-01T00:00:00.000Z");
+    expect(lastVerifiedFor("hello", artifact, [row({ version: "1.2.2" })])).toBe(null);
+    expect(lastVerifiedFor("hello", artifact, [row({ digest: "e".repeat(64) })])).toBe(null);
+    expect(lastVerifiedFor("hello", artifact, [])).toBe(null);
+  });
+
+  it("is carried into rebuilt rows by buildIndexApps", () => {
+    const bytes = writeLocal(artifactManifestFixture({ app: "hello", version: "1.2.3", sha: PIN }));
+    const previousApps = [row({ digest: sha256Hex(bytes) })];
+    const [r] = buildIndexApps([hello], options({ previousApps }));
+    expect(r?.lastVerified).toBe("2026-09-01T00:00:00.000Z");
   });
 });

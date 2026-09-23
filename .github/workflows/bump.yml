@@ -1,24 +1,119 @@
 name: bump
 
-# Stub. Will run nightly: for each app, compare upstream tags/SHA with the pin in
-# appflare.jsonc and open a bump PR. Manual trigger only until then.
+# Nightly: for each app, find where its upstream is now (the newest stable
+# semver tag, or the default branch head for repositories without one) and,
+# when that is ahead of the pin in appflare.jsonc, open one pull request per
+# app on bump/<slug>/<short sha> that moves source.ref and source.sha. Tag pins
+# only move to greater versions; prerelease pins are left alone. A target that
+# already has a branch or pull request is skipped, so a closed bump is not
+# reopened; branch-tracked apps get at most one new bump a week, and a new bump
+# closes the app's older open ones. An app whose upstream cannot be read is
+# listed in the summary and fails the run after the others are done.
+#
+# Pull requests opened with the workflow token do not trigger pull_request
+# workflows, so this starts verify and conventions on each new branch.
 
 on:
+  schedule:
+    - cron: "17 4 * * *"
   workflow_dispatch:
+    inputs:
+      apps:
+        description: Comma-separated app slugs to check (for example "cut"). Empty checks every app.
+        type: string
+        required: false
+        default: ""
 
-permissions:
-  contents: read
+permissions: {}
 
 concurrency:
   group: bump
   cancel-in-progress: false
 
+defaults:
+  run:
+    shell: bash
+    working-directory: catalog
+
 jobs:
   bump:
+    name: open bump pull requests
     runs-on: ubuntu-24.04
-    timeout-minutes: 5
+    timeout-minutes: 15
+    permissions:
+      contents: write
+      pull-requests: write
+      # gh workflow run verify.yml and conventions.yml on each new branch.
+      actions: write
     steps:
-      - name: Not implemented yet
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          path: catalog
+          ref: main
+          # Credentials are configured only for the pushes below.
+          persist-credentials: false
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+        with:
+          package_json_file: catalog/package.json
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: catalog/.node-version
+      - run: pnpm install --frozen-lockfile
+      - name: Find pins that moved upstream
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          ONLY_APPS: ${{ inputs.apps }}
         run: |
-          # TODO: compare each app's upstream tags/SHA with source.sha and open a bump PR.
-          echo "TODO: for each app, compare upstream tags/SHA with the pin and open a bump PR"
+          set -euo pipefail
+          only=()
+          if [ -n "${ONLY_APPS:-}" ]; then
+            only=(--only "${ONLY_APPS}")
+          fi
+          pnpm -s bump plan --out "${RUNNER_TEMP}/bumps" "${only[@]}" > "${RUNNER_TEMP}/bumps.json"
+          echo "bumps: $(jq -c '.bumps | map(.branch)' "${RUNNER_TEMP}/bumps.json")"
+      - name: Open a pull request per app
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          gh auth setup-git
+          count="$(jq '.bumps | length' "${RUNNER_TEMP}/bumps.json")"
+          for i in $(seq 0 $((count - 1))); do
+            field() { jq -r --argjson i "${i}" ".bumps[\$i].$1" "${RUNNER_TEMP}/bumps.json"; }
+            slug="$(field slug)"
+            branch="$(field branch)"
+            title="$(field title)"
+            ref="$(field to.ref)"
+            sha="$(field to.sha)"
+            # The plan already skipped targets with a branch; this guards a race.
+            if git ls-remote --exit-code --heads origin "${branch}" > /dev/null; then
+              echo "::notice::${branch} already exists; skipping ${slug}"
+              continue
+            fi
+            git switch --quiet main
+            git switch --quiet -c "${branch}"
+            pnpm -s bump apply "${slug}" --ref "${ref}" --sha "${sha}"
+            git add "apps/${slug}/appflare.jsonc"
+            git commit --quiet -m "${title}"
+            git push --quiet origin "${branch}"
+            url="$(gh pr create --base main --head "${branch}" --title "${title}" \
+              --body-file "${RUNNER_TEMP}/bumps/${slug}.md")"
+            number="${url##*/}"
+            gh workflow run verify.yml --ref "${branch}"
+            gh workflow run conventions.yml --ref "${branch}"
+            for old in $(jq -r --argjson i "${i}" '.bumps[$i].supersedes[]' "${RUNNER_TEMP}/bumps.json"); do
+              gh pr close "${old}" --delete-branch --comment "Superseded by #${number}."
+            done
+            echo "- opened #${number} (${branch})" >> "${GITHUB_STEP_SUMMARY}"
+          done
+      - name: Fail if any upstream could not be read
+        run: |
+          failed="$(jq -r '.failed[] | "\(.slug): \(.error)"' "${RUNNER_TEMP}/bumps.json")"
+          if [ -n "${failed}" ]; then
+            echo "::error::could not check every upstream:"
+            echo "${failed}"
+            exit 1
+          fi

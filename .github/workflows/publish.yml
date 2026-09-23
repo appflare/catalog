@@ -51,12 +51,16 @@ jobs:
     timeout-minutes: 15
     permissions:
       contents: read
+    outputs:
+      # Every job that downloads the bundle checks it against this.
+      packer-sha256: ${{ steps.build.outputs.sha256 }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           path: catalog
           persist-credentials: false
-      - uses: ./catalog/.github/actions/build-packer
+      - id: build
+        uses: ./catalog/.github/actions/build-packer
         with:
           appflare-deploy-key: ${{ secrets.APPFLARE_DEPLOY_KEY }}
 
@@ -75,6 +79,8 @@ jobs:
           path: catalog
           persist-credentials: false
       - uses: ./catalog/.github/actions/use-packer
+        with:
+          sha256: ${{ needs.build-packer.outputs.packer-sha256 }}
       - id: plan
         env:
           GH_TOKEN: ${{ github.token }}
@@ -117,6 +123,8 @@ jobs:
           path: catalog
           persist-credentials: false
       - uses: ./catalog/.github/actions/use-packer
+        with:
+          sha256: ${{ needs.build-packer.outputs.packer-sha256 }}
       - name: Pack an unsigned intermediate and verify hashes
         env:
           APP: ${{ matrix.app }}
@@ -180,10 +188,19 @@ jobs:
         env:
           APP: ${{ matrix.app }}
           APPFLARE_SIGNING_KEY: ${{ secrets.APPFLARE_SIGNING_KEY }}
+          EXPECTED_PACKER_SHA256: ${{ needs.build-packer.outputs.packer-sha256 }}
         run: |
           set -euo pipefail
+          bundle="${RUNNER_TEMP}/appflare-packer/appflare-packer.tgz"
+          # Only run the bundle build-packer produced (its sha256 is a job output,
+          # which the pack job cannot change).
+          actual="$(sha256sum "${bundle}" | cut -d' ' -f1)"
+          if ! [[ "${EXPECTED_PACKER_SHA256}" =~ ^[0-9a-f]{64}$ ]] || [ "${actual}" != "${EXPECTED_PACKER_SHA256}" ]; then
+            echo "::error title=Packer bundle mismatch::appflare-packer.tgz has sha256 ${actual}, but build-packer produced ${EXPECTED_PACKER_SHA256:-(nothing)}. Refusing to run it."
+            exit 1
+          fi
           mkdir -p "${RUNNER_TEMP}/appflare"
-          tar -xzf "${RUNNER_TEMP}/appflare-packer/appflare-packer.tgz" -C "${RUNNER_TEMP}/appflare"
+          tar -xzf "${bundle}" -C "${RUNNER_TEMP}/appflare"
           pack="${RUNNER_TEMP}/appflare/packages/pack/bin/appflare-pack.js"
           plan="${RUNNER_TEMP}/plan/publish-plan.json"
           node scripts/check-manifest-plan.ts --plan "${plan}" --root dist --slug "${APP}" --unsigned
@@ -219,6 +236,8 @@ jobs:
           # Credentials are configured only for the push below.
           persist-credentials: false
       - uses: ./catalog/.github/actions/use-packer
+        with:
+          sha256: ${{ needs.build-packer.outputs.packer-sha256 }}
       - name: Download the publish plan
         if: needs.plan.outputs.apps != '[]'
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
@@ -294,24 +313,11 @@ jobs:
               --title "${tag}" \
               --notes "Built from ${source}. manifest.json sha256: ${local_sha}."
           done
-      - name: Build index.json from the releases
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: pnpm build-index --releases-only
-      - name: Commit index.json
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          if git diff --quiet -- index.json; then
-            echo "index.json unchanged"
-            exit 0
-          fi
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add index.json
-          git commit -m "chore: update index.json [skip ci]"
-          gh auth setup-git
-          git push origin HEAD:main
+      - name: Rebuild and commit index.json
+        uses: ./catalog/.github/actions/commit-index
+        with:
+          github-token: ${{ github.token }}
+          message: "chore: update index.json [skip ci]"
       - name: Assemble the Pages site
         run: |
           rm -rf site

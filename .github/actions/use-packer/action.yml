@@ -3,6 +3,12 @@ description: >
   Downloads the "appflare-packer" artifact from build-packer into ./appflare,
   sets APPFLARE_DIR, sets up pnpm and Node, and installs the catalog's own
   dependencies. Needs no secrets. Expects the catalog checked out at ./catalog.
+  The download is checked against the sha256 build-packer reported before
+  anything in it is extracted or run.
+inputs:
+  sha256:
+    description: The build-packer job's packer-sha256 output.
+    required: true
 runs:
   using: composite
   steps:
@@ -12,12 +18,20 @@ runs:
         name: appflare-packer
         path: ${{ runner.temp }}/appflare-packer
 
-    - name: Unpack to ./appflare
+    - name: Check the bundle's sha256 and unpack it to ./appflare
       shell: bash
+      env:
+        EXPECTED_SHA256: ${{ inputs.sha256 }}
       run: |
         set -euo pipefail
+        bundle="${RUNNER_TEMP}/appflare-packer/appflare-packer.tgz"
+        actual="$(sha256sum "${bundle}" | cut -d' ' -f1)"
+        if ! [[ "${EXPECTED_SHA256}" =~ ^[0-9a-f]{64}$ ]] || [ "${actual}" != "${EXPECTED_SHA256}" ]; then
+          echo "::error title=Packer bundle mismatch::appflare-packer.tgz has sha256 ${actual}, but build-packer produced ${EXPECTED_SHA256:-(nothing)}. Refusing to run it."
+          exit 1
+        fi
         mkdir -p "${GITHUB_WORKSPACE}/appflare"
-        tar -xzf "${RUNNER_TEMP}/appflare-packer/appflare-packer.tgz" -C "${GITHUB_WORKSPACE}/appflare"
+        tar -xzf "${bundle}" -C "${GITHUB_WORKSPACE}/appflare"
         echo "APPFLARE_DIR=${GITHUB_WORKSPACE}/appflare" >> "${GITHUB_ENV}"
 
     - name: Set up pnpm

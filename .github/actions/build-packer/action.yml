@@ -12,6 +12,13 @@ inputs:
       (the APPFLARE_DEPLOY_KEY secret). Composite actions cannot read secrets,
       so each workflow passes it in.
     required: true
+outputs:
+  sha256:
+    description: >
+      sha256 of the uploaded appflare-packer.tgz. Expose it as a job output: every
+      job that downloads the bundle checks it first, so a later job (such as
+      pack, which runs app code) cannot swap the bundle other jobs run.
+    value: ${{ steps.bundle.outputs.sha256 }}
 runs:
   using: composite
   steps:
@@ -57,6 +64,7 @@ runs:
         node-version-file: catalog/.node-version
 
     - name: Build and bundle @appflare/pack and @appflare/schema
+      id: bundle
       shell: bash
       working-directory: appflare-src
       run: |
@@ -71,6 +79,9 @@ runs:
         pnpm --filter @appflare/schema deploy --prod --legacy "${out}/packages/schema"
         # tar keeps node_modules' (relative) symlinks, which artifact upload would not.
         tar -C "${out}" -czf "${RUNNER_TEMP}/appflare-packer.tgz" packages
+        sha="$(sha256sum "${RUNNER_TEMP}/appflare-packer.tgz" | cut -d' ' -f1)"
+        echo "appflare-packer.tgz sha256 ${sha}"
+        echo "sha256=${sha}" >> "${GITHUB_OUTPUT}"
 
     - name: Upload the packer bundle
       uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1

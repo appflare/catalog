@@ -46,6 +46,8 @@ export interface IndexBuildOptions {
   strictReleases: boolean;
   artifactManifest: Parser<ArtifactManifest>;
   warn: (message: string) => void;
+  /** Rows of the index being replaced, to carry `lastVerified` forward. */
+  previousApps?: readonly IndexApp[];
 }
 
 /** Where an app's listed version came from. */
@@ -163,11 +165,28 @@ export function resolveArtifact(
   return null;
 }
 
+/**
+ * `lastVerified` for a rebuilt row: carried over from the previous index row
+ * while the artifact (version and digest) is the same, null for a new one.
+ * Only the nightly install check sets it (scripts/record-verified.ts).
+ */
+export function lastVerifiedFor(
+  slug: string,
+  artifact: { version: string; digest: string },
+  previous: readonly IndexApp[],
+): string | null {
+  const before = previous.find((row) => row.slug === slug);
+  return before && before.version === artifact.version && before.digest === artifact.digest
+    ? before.lastVerified
+    : null;
+}
+
 /** One index row from a catalog manifest and its resolved artifact. */
 export function toIndexApp(
   manifest: CatalogManifest,
   artifact: ResolvedArtifact,
   repo: string,
+  lastVerified: string | null = null,
 ): IndexApp {
   return {
     slug: manifest.slug,
@@ -179,8 +198,7 @@ export function toIndexApp(
     tier: manifest.install.tier,
     plan: manifest.plan,
     requires: [...manifest.requires],
-    // TODO: set from the nightly verification run.
-    lastVerified: null,
+    lastVerified,
     maintainers: [...manifest.maintainers],
   };
 }
@@ -195,7 +213,8 @@ export function buildIndexApps(
   for (const manifest of [...manifests].sort((a, b) => a.slug.localeCompare(b.slug))) {
     const artifact = resolveArtifact(manifest, options, state);
     if (artifact) {
-      rows.push(toIndexApp(manifest, artifact, options.repo));
+      const verifiedAt = lastVerifiedFor(manifest.slug, artifact, options.previousApps ?? []);
+      rows.push(toIndexApp(manifest, artifact, options.repo, verifiedAt));
     }
   }
   return rows;

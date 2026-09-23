@@ -1,24 +1,220 @@
 name: nightly
 
-# Stub. Will run nightly: reinstall every app into the CI account and set
-# "last verified" in index.json. Manual trigger only until then.
+# Nightly: install every published app's current release into the CI
+# Cloudflare account, health-check it, and delete it again. Each artifact that
+# passes gets lastVerified in index.json. A failure is listed in the run
+# summary and fails its job; the app stays in the catalog and keeps its
+# previous lastVerified.
 
 on:
+  schedule:
+    - cron: "43 3 * * *"
   workflow_dispatch:
 
-permissions:
-  contents: read
+permissions: {}
 
 concurrency:
   group: nightly
   cancel-in-progress: false
 
+defaults:
+  run:
+    shell: bash
+    working-directory: catalog
+
 jobs:
-  nightly:
+  build-packer:
+    name: build packer
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    outputs:
+      # Every job that downloads the bundle checks it against this.
+      packer-sha256: ${{ steps.build.outputs.sha256 }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          path: catalog
+          persist-credentials: false
+      - id: build
+        uses: ./catalog/.github/actions/build-packer
+        with:
+          appflare-deploy-key: ${{ secrets.APPFLARE_DEPLOY_KEY }}
+
+  apps:
+    name: published apps
     runs-on: ubuntu-24.04
     timeout-minutes: 5
+    permissions:
+      contents: read
+    outputs:
+      apps: ${{ steps.list.outputs.apps }}
     steps:
-      - name: Not implemented yet
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          path: catalog
+          ref: main
+          persist-credentials: false
+      - id: list
         run: |
-          # TODO: reinstall every app into the CI account and set lastVerified in index.json.
-          echo "TODO: reinstall every app into the CI account and set lastVerified in index.json"
+          set -euo pipefail
+          apps="$(jq -c '[.apps[] | {slug, version}]' index.json)"
+          echo "published apps: ${apps}"
+          echo "apps=${apps}" >> "${GITHUB_OUTPUT}"
+
+  install:
+    name: install check ${{ matrix.slug }}@${{ matrix.version }}
+    needs: [build-packer, apps]
+    if: needs.apps.outputs.apps != '[]'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        include: ${{ fromJSON(needs.apps.outputs.apps) }}
+    # Shares nothing with pull request runs (their names end in pr<n> or b<hash>).
+    concurrency:
+      group: ci-install-${{ matrix.slug }}-nightly
+      cancel-in-progress: false
+    env:
+      SLUG: ${{ matrix.slug }}
+      VERSION: ${{ matrix.version }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          path: catalog
+          ref: main
+          persist-credentials: false
+      - uses: ./catalog/.github/actions/use-packer
+        with:
+          sha256: ${{ needs.build-packer.outputs.packer-sha256 }}
+      - name: Download and verify the release
+        id: download
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          dir="dist/${SLUG}"
+          rm -rf "${dir}"
+          gh release download "${SLUG}@${VERSION}" --dir "${dir}"
+          node "${APPFLARE_DIR}/packages/pack/bin/appflare-pack.js" verify "${dir}" --require-signed
+      - name: Deploy to the CI account and health-check
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: node scripts/ci-install.ts deploy "dist/${SLUG}" --suffix nightly
+      - name: Delete the CI Worker and its resources
+        id: cleanup
+        if: always() && steps.download.outcome == 'success'
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: node scripts/ci-install.ts cleanup "dist/${SLUG}" --suffix nightly
+      - name: Record the verification
+        run: |
+          set -euo pipefail
+          mkdir -p "${RUNNER_TEMP}/verified"
+          manifest="dist/${SLUG}/manifest.json"
+          jq -n --arg slug "${SLUG}" --arg version "$(jq -r .version "${manifest}")" \
+            --arg digest "$(sha256sum "${manifest}" | cut -d' ' -f1)" \
+            --arg at "$(date -u +%Y-%m-%dT%H:%M:%S.000Z)" \
+            '{slug: $slug, version: $version, digest: $digest, at: $at}' \
+            > "${RUNNER_TEMP}/verified/${SLUG}.json"
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: verified-${{ matrix.slug }}
+          path: ${{ runner.temp }}/verified/${{ matrix.slug }}.json
+          if-no-files-found: error
+          retention-days: 7
+
+  index:
+    name: record results
+    needs: [build-packer, apps, install]
+    # Runs after failed install checks too: passing apps still get recorded,
+    # failing ones are listed below.
+    if: ${{ !cancelled() && needs.apps.result == 'success' && needs.apps.outputs.apps != '[]' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      contents: write
+      # gh run download of this run's verified-<slug> artifacts.
+      actions: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          path: catalog
+          ref: main
+          persist-credentials: false
+      - name: Collect the passing checks
+        env:
+          GH_TOKEN: ${{ github.token }}
+          APPS: ${{ needs.apps.outputs.apps }}
+        run: |
+          set -euo pipefail
+          dir="${RUNNER_TEMP}/verified"
+          mkdir -p "${dir}"
+          # One --name per app, so each file lands directly in dir; a failed app
+          # uploaded nothing.
+          for slug in $(jq -r '.[].slug' <<< "${APPS}"); do
+            gh run download "${GITHUB_RUN_ID}" --repo "${GITHUB_REPOSITORY}" \
+              --name "verified-${slug}" --dir "${dir}" 2> /dev/null || true
+          done
+          shopt -s nullglob
+          files=("${dir}"/*.json)
+          if [ "${#files[@]}" -eq 0 ]; then
+            echo '{}' > "${RUNNER_TEMP}/verified.json"
+          else
+            jq -s 'map({(.slug): {version, digest, at}}) | add' "${files[@]}" > "${RUNNER_TEMP}/verified.json"
+          fi
+          {
+            echo "| app | version | install check |"
+            echo "|---|---|---|"
+            for row in $(jq -c '.[]' <<< "${APPS}"); do
+              slug="$(jq -r .slug <<< "${row}")"
+              version="$(jq -r .version <<< "${row}")"
+              if jq -e --arg s "${slug}" 'has($s)' "${RUNNER_TEMP}/verified.json" > /dev/null; then
+                echo "| ${slug} | ${version} | passed |"
+              else
+                echo "| ${slug} | ${version} | **FAILED** (kept in the catalog) |"
+                echo "::warning::${slug}@${version} failed the nightly install check"
+              fi
+            done
+          } >> "${GITHUB_STEP_SUMMARY}"
+      - uses: ./catalog/.github/actions/use-packer
+        with:
+          sha256: ${{ needs.build-packer.outputs.packer-sha256 }}
+      - name: Rebuild and commit index.json
+        uses: ./catalog/.github/actions/commit-index
+        with:
+          github-token: ${{ github.token }}
+          message: "chore: record nightly install checks in index.json [skip ci]"
+          verified-file: ${{ runner.temp }}/verified.json
+      - name: Assemble the Pages site
+        run: |
+          rm -rf site
+          mkdir -p site/schema
+          cp index.json site/index.json
+          cp schema/v1.json site/schema/v1.json
+      - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          path: catalog/site
+
+  pages:
+    name: deploy Pages
+    needs: index
+    if: ${{ !cancelled() && needs.index.result == 'success' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - id: deploy
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1

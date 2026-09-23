@@ -7,6 +7,7 @@ import { catalogRepo, info, runMain, warn } from "./lib/cli.ts";
 import { createGhReleaseLookup } from "./lib/github-releases.ts";
 import { buildIndexApps, finalizeIndex, serializeIndex } from "./lib/index-builder.ts";
 import { appsDir, distDir, indexFile, resolveAppflareDir } from "./lib/paths.ts";
+import type { IndexApp } from "./lib/types.ts";
 import { createVersionResolver, loadPackerVersioning } from "./lib/versions.ts";
 
 const USAGE = `Usage: pnpm build-index [--releases-only] [--out <file>]
@@ -19,7 +20,23 @@ has the same source.sha; otherwise the app is omitted with a warning.
 
   --releases-only   ignore dist/; fail if the release lookup fails (publish CI)
   --out <file>      output path (default: index.json)
+
+lastVerified carries over from the previous index while an app's version and
+digest stay the same, and is null for a new artifact.
 `;
+
+/** Rows of the index being replaced; none if it is missing or unreadable. */
+function previousRows(text: string | null): IndexApp[] {
+  if (text === null) {
+    return [];
+  }
+  try {
+    const apps = (JSON.parse(text) as { apps?: unknown }).apps;
+    return Array.isArray(apps) ? (apps as IndexApp[]) : [];
+  } catch {
+    return [];
+  }
+}
 
 runMain(async () => {
   const { values } = parseArgs({
@@ -41,6 +58,8 @@ runMain(async () => {
   const versions = createVersionResolver(await loadPackerVersioning(appflareDir));
   const manifests = listApps(appsDir).map((app) => loadManifest(app, schema.catalogManifest));
   const repo = catalogRepo();
+  const previous = existsSync(outPath) ? readFileSync(outPath, "utf8") : null;
+
   const apps = buildIndexApps(manifests, {
     repo,
     distDir: releasesOnly ? null : distDir,
@@ -49,8 +68,8 @@ runMain(async () => {
     strictReleases: releasesOnly,
     artifactManifest: schema.artifactManifest,
     warn,
+    previousApps: previousRows(previous),
   });
-  const previous = existsSync(outPath) ? readFileSync(outPath, "utf8") : null;
   const index = finalizeIndex(apps, previous, new Date(), schema.indexJson);
   writeFileSync(outPath, serializeIndex(index));
   info(`wrote ${outPath}: ${index.apps.length} of ${manifests.length} apps listed`);

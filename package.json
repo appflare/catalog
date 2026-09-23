@@ -19,7 +19,9 @@
     "sync-schema": "node scripts/sync-schema.ts",
     "gen-codeowners": "node scripts/gen-codeowners.ts",
     "changed-apps": "node scripts/changed-apps.ts",
-    "publish-plan": "node scripts/publish-plan.ts"
+    "publish-plan": "node scripts/publish-plan.ts",
+    "bump": "node scripts/bump.ts",
+    "record-verified": "node scripts/record-verified.ts"
   },
   "dependencies": {
     "zod": "4.6.5"

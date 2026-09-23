@@ -1,0 +1,57 @@
+name: Rebuild and commit index.json
+description: >
+  Updates index.json on top of the current main and pushes it, retrying when
+  main moved in between (publish and nightly both write it). With no
+  verified-file it rebuilds the index from the GitHub Releases (build-index
+  --releases-only); with one it only patches lastVerified into the existing rows
+  (record-verified), never adding or removing apps. Expects the catalog checked
+  out at ./catalog without persisted credentials, and APPFLARE_DIR set
+  (use-packer).
+inputs:
+  github-token:
+    description: Token with contents write, used for the push and the release lookups.
+    required: true
+  message:
+    description: Commit message.
+    required: true
+  verified-file:
+    description: JSON of install checks that passed; switches to patching lastVerified only.
+    required: false
+    default: ""
+runs:
+  using: composite
+  steps:
+    - name: Rebuild and push index.json
+      shell: bash
+      working-directory: catalog
+      env:
+        GH_TOKEN: ${{ inputs.github-token }}
+        MESSAGE: ${{ inputs.message }}
+        VERIFIED_FILE: ${{ inputs.verified-file }}
+      run: |
+        set -euo pipefail
+        git config user.name "github-actions[bot]"
+        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        gh auth setup-git
+        if [ -n "${VERIFIED_FILE}" ]; then
+          update=(record-verified --verified "${VERIFIED_FILE}")
+        else
+          update=(build-index --releases-only)
+        fi
+        for attempt in 1 2 3; do
+          git fetch --quiet origin main
+          git reset --quiet --hard origin/main
+          pnpm -s "${update[@]}"
+          if git diff --quiet -- index.json; then
+            echo "index.json unchanged"
+            exit 0
+          fi
+          git add index.json
+          git commit --quiet -m "${MESSAGE}"
+          if git push --quiet origin HEAD:main; then
+            exit 0
+          fi
+          echo "main moved while committing (attempt ${attempt}); rebuilding on top of it"
+        done
+        echo "::error::could not push index.json after 3 attempts"
+        exit 1
