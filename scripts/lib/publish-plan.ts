@@ -13,6 +13,9 @@ import type { VersionResolver } from "./versions.ts";
  *   `sign` and `release` jobs hold the artifact to;
  * - a complete release whose embedded catalog manifest equals the current one:
  *   up to date, skip;
+ * - a complete release built from another commit while the manifest sets
+ *   `install.version`: error; the pin moved but `install.version` did not, and
+ *   the version must change with the pin;
  * - a complete release with a different catalog manifest (a metadata-only edit
  *   under the same pin): error; the author must re-pin `source`;
  * - a draft, prerelease, or incomplete release: the lookup throws, naming it.
@@ -47,6 +50,19 @@ export function decide(
     JSON.parse(release.manifestBytes.toString("utf8")),
     label,
   );
+  const installVersion = manifest.install.version;
+  if (installVersion !== undefined && published.source.sha !== manifest.source.sha) {
+    return {
+      slug,
+      tag,
+      action: "error",
+      message:
+        `apps/${slug}/appflare.jsonc pins ${manifest.source.ref}@${manifest.source.sha.slice(0, 7)}, ` +
+        `but install.version is still ${installVersion}, and ${tag} is already released from ` +
+        `${published.source.ref}@${published.source.sha.slice(0, 7)}. Releases are immutable: ` +
+        "bump install.version to the app's version at the new pin.",
+    };
+  }
   const changed = changedFields(published.catalog, manifest);
   if (changed.length === 0) {
     return { slug, tag, action: "skip" };
@@ -58,6 +74,9 @@ export function decide(
     message:
       `apps/${slug}/appflare.jsonc changed (${changed.join(", ")}) but its pin still packs to ` +
       `${tag}, which is already released with the old manifest. Releases are immutable: ` +
-      "re-pin `source` (a new source.sha, or a new tag in source.ref) to publish the change.",
+      (installVersion === undefined
+        ? "re-pin `source` (a new source.sha, or a new tag in source.ref) to publish the change."
+        : "this entry's version comes from install.version, so bump it (and re-pin `source` " +
+          "if the app changed) to publish the change."),
   };
 }

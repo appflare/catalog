@@ -47,7 +47,11 @@ app's own wrangler config, so the manifest does not repeat them.
 2. Pin `source.sha` to a full 40-character commit SHA. Set `source.ref` to the tag
    it belongs to (`v1.2.3`) or to the branch (`main`) for untagged apps. The packer
    derives the version from it: a semver tag gives `1.2.3`, anything else gives
-   `0.0.0-<commit date YYYYMMDD>.<sha7>`.
+   `0.0.0-<commit date YYYYMMDD>.<sha7>`. When the repository's tags do not
+   describe the app, as in a monorepo of many templates, set `install.version` to
+   the app's own version (`"version": "1.1.10"`, semver without a leading `v`); it
+   wins over the tag. It must change whenever `source` moves: publish refuses a
+   new pin under an `install.version` that is already released.
 3. List at least one GitHub user in `maintainers`. They own `/apps/<slug>/` in
    CODEOWNERS and approve bumps to their app.
 4. Run the checks below, then open a pull request.
@@ -322,11 +326,21 @@ A bump only ever moves forward:
 - Without stable tags, a pin on a branch moves to the new head when the head is
   ahead of the pinned commit (`ahead_by > 0`).
 
+An app whose `install.wranglerConfig` is in a subdirectory of its repository
+(`r2-explorer-template/wrangler.json`) moves only when GitHub's compare API lists
+a changed file under that directory between the pin and the target. Otherwise
+the run summary notes the skip and the pin stays; the next run compares from the
+same pin again, so a later change to the directory is still found. When the
+compare lists 300 files, the most GitHub returns, the list may be cut short and
+the bump goes ahead.
+
 For each app that moves, the workflow edits `source.ref` and `source.sha` in
 place, keeping the manifest's comments and layout. It commits
 `chore(<slug>): bump to <ref>` (branch targets add `@<short sha>`) on
 `bump/<slug>/<short sha>` and opens a pull request. The pull request body links
-the upstream compare view and lists the commits in between.
+the upstream compare view and lists the commits in between. For an app that sets
+`install.version`, the body also has a checklist item to update it: the
+workflow cannot know the app's new version.
 
 Cadence and cleanup:
 

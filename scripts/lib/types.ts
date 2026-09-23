@@ -28,6 +28,8 @@ export interface CatalogManifest {
     packageManager: string;
     wranglerConfig: string;
     workerName: string;
+    /** The app's version when the repository's tags do not describe it (monorepos). */
+    version?: string;
   };
   plan: Plan;
   requires: string[];

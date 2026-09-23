@@ -25,8 +25,8 @@ beforeAll(async () => {
 });
 
 /** A lookup where `tag` is released with `catalog` embedded in its manifest.json. */
-function releasedWith(tag: string, catalog: unknown): ReleaseLookup {
-  const manifest = artifactManifestFixture({ app: "hello", version: "1.2.3", sha: PIN });
+function releasedWith(tag: string, catalog: unknown, sha = PIN, ref?: string): ReleaseLookup {
+  const manifest = artifactManifestFixture({ app: "hello", version: "1.2.3", sha, ref });
   manifest.catalog = catalog;
   return {
     byTag: (t) =>
@@ -92,5 +92,41 @@ describe("canonicalJson / changedFields", () => {
         { name: "A", vars: [{ name: "Y" }], added: true },
       ),
     ).toEqual(["added", "old", "vars"]);
+  });
+});
+
+describe("decide with install.version", () => {
+  const OLD = "89abcdef0123456789abcdef0123456789abcdef";
+  const withVersion = (m: CatalogManifest, version: string): CatalogManifest => ({
+    ...m,
+    install: { ...m.install, version },
+  });
+
+  it("refuses a moved pin whose install.version is already released", () => {
+    const current = withVersion(hello, "1.2.3");
+    const published = { ...current, source: { ref: "v1.2.2", sha: OLD } };
+    const releases = releasedWith("hello@1.2.3", published, OLD, "v1.2.2");
+    const decision = decide(current, versions, releases, schema.artifactManifest, KEY_ID);
+    expect(decision.action).toBe("error");
+    expect(decision.action === "error" && decision.message).toMatch(
+      /pins v1\.2\.3@0123456, but install\.version is still 1\.2\.3, and hello@1\.2\.3 is already released from v1\.2\.2@89abcde\..*bump install\.version/,
+    );
+  });
+
+  it("skips when the release was built from the same pin and manifest", () => {
+    const current = withVersion(hello, "1.2.3");
+    const releases = releasedWith("hello@1.2.3", JSON.parse(canonicalJson(current)));
+    expect(decide(current, versions, releases, schema.artifactManifest, KEY_ID).action).toBe(
+      "skip",
+    );
+  });
+
+  it("asks for a new install.version on a metadata-only edit", () => {
+    const current = withVersion(hello, "1.2.3");
+    const releases = releasedWith("hello@1.2.3", { ...current, summary: "Old summary." });
+    const decision = decide(current, versions, releases, schema.artifactManifest, KEY_ID);
+    expect(decision.action === "error" && decision.message).toMatch(
+      /changed \(summary\).*comes from install\.version, so bump it/,
+    );
   });
 });

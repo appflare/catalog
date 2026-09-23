@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { GhNotFoundError, type GhRunner } from "./github-releases.ts";
 import {
+  COMPARE_FILES_LIMIT,
   compareSemver,
   createGhUpstream,
   isPrereleaseTag,
@@ -139,6 +140,36 @@ describe("relation", () => {
     const run = (() => Buffer.from("null null")) as GhRunner;
     expect(() => createGhUpstream(run).relation("o/r", sha("a"), sha("b"))).toThrow(
       /unexpected compare/,
+    );
+  });
+});
+
+describe("changedFiles", () => {
+  const listing = (count: number | null, paths: string[]) =>
+    (() => Buffer.from(`${JSON.stringify({ count, paths })}\n`)) as GhRunner;
+
+  it("reads file names from the compare API", () => {
+    const run = ((args: string[]) => {
+      expect(args.slice(0, 2)).toEqual(["api", `repos/o/r/compare/${sha("a")}...${sha("b")}`]);
+      return Buffer.from(JSON.stringify({ count: 2, paths: ["a/x.ts", "b/y.ts", "a/old.ts"] }));
+    }) as GhRunner;
+    expect(createGhUpstream(run).changedFiles("o/r", sha("a"), sha("b"))).toEqual({
+      paths: ["a/x.ts", "b/y.ts", "a/old.ts"],
+      complete: true,
+    });
+  });
+
+  it("marks a list GitHub may have cut short, or a missing one, as incomplete", () => {
+    const paths = Array.from({ length: COMPARE_FILES_LIMIT }, (_, i) => `f${i}`);
+    expect(
+      createGhUpstream(listing(COMPARE_FILES_LIMIT, paths)).changedFiles("o/r", sha("a"), sha("b"))
+        .complete,
+    ).toBe(false);
+    expect(
+      createGhUpstream(listing(null, [])).changedFiles("o/r", sha("a"), sha("b")).complete,
+    ).toBe(false);
+    expect(createGhUpstream(listing(0, [])).changedFiles("o/r", sha("a"), sha("b")).complete).toBe(
+      true,
     );
   });
 });

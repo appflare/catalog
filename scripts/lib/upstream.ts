@@ -77,6 +77,26 @@ export function pickUpstreamTarget(
     : { ref: branch.name, sha: branch.sha, kind: "branch" };
 }
 
+/**
+ * The most files GitHub's compare API lists for one comparison ("up to 300
+ * changed files for the entire comparison", REST docs, "Compare two commits").
+ * A list this long may be cut short.
+ */
+export const COMPARE_FILES_LIMIT = 300;
+
+/** Paths a comparison changed, and whether GitHub listed all of them. */
+export interface ChangedFiles {
+  /** Each changed file's path, plus the old path of a renamed file. */
+  paths: string[];
+  /** False when the list may be truncated, so a missing path proves nothing. */
+  complete: boolean;
+}
+
+const changedFilesSchema = z.object({
+  count: z.number().int().nonnegative().nullable(),
+  paths: z.array(z.string()),
+});
+
 const tagSchema = z.object({ name: z.string(), sha: z.string().regex(/^[0-9a-f]{40}$/) });
 const shaSchema = z.string().regex(/^[0-9a-f]{40}$/);
 
@@ -91,6 +111,8 @@ export interface UpstreamSource {
    * `behind === 0` means `base` is reachable from `head`.
    */
   relation(repo: string, base: string, head: string): CommitRelation;
+  /** Files changed between two commits (the compare API's `files[].filename`). */
+  changedFiles(repo: string, base: string, head: string): ChangedFiles;
 }
 
 export function createGhUpstream(run: GhRunner = runGh): UpstreamSource {
@@ -145,6 +167,23 @@ export function createGhUpstream(run: GhRunner = runGh): UpstreamSource {
         throw new Error(`unexpected compare result for ${base}...${head} in ${repo}`);
       }
       return { ahead, behind };
+    },
+    changedFiles(repo, base, head) {
+      const out = changedFilesSchema.parse(
+        JSON.parse(
+          text([
+            "api",
+            `repos/${repo}/compare/${base}...${head}`,
+            "--jq",
+            "{count: (if .files == null then null else (.files | length) end), " +
+              "paths: [.files[]? | .filename, (.previous_filename // empty)]}",
+          ]),
+        ),
+      );
+      return {
+        paths: out.paths,
+        complete: out.count !== null && out.count < COMPARE_FILES_LIMIT,
+      };
     },
   };
 }

@@ -1,8 +1,10 @@
+import path from "node:path";
 import { z } from "zod";
 import type { AppEntry } from "./apps.ts";
 import { readManifestFile } from "./apps.ts";
 import { setJsoncStrings } from "./jsonc-edit.ts";
 import {
+  type ChangedFiles,
   type CommitRelation,
   compareSemver,
   isPrereleaseTag,
@@ -17,6 +19,10 @@ const pinSchema = z.object({
   name: z.string().min(1),
   repo: z.string().regex(/^[^/\s]+\/[^/\s]+$/),
   source: z.object({ ref: z.string().min(1), sha: z.string().regex(/^[0-9a-f]{40}$/) }),
+  install: z.object({
+    wranglerConfig: z.string().min(1),
+    version: z.string().min(1).optional(),
+  }),
 });
 export type AppPin = z.infer<typeof pinSchema>;
 
@@ -130,6 +136,44 @@ export function decideBump(
   return { action: "bump", bump: bumpFor(pin, target) };
 }
 
+/**
+ * The repository directory an app lives in, from its `install.wranglerConfig`
+ * (`r2-explorer-template/wrangler.json` gives `r2-explorer-template`); null when
+ * the config is at the repository root.
+ */
+export function appDirectory(wranglerConfig: string): string | null {
+  const dir = path.posix.dirname(path.posix.normalize(wranglerConfig.replaceAll("\\", "/")));
+  return dir === "." || dir === "/" ? null : dir.replace(/^\/+|\/+$/g, "");
+}
+
+/**
+ * Keeps a bump for an app in a subdirectory of its repository (a monorepo of
+ * many apps) only when the upstream changes touch that directory, since a new
+ * repository tag says nothing about this app then. A file list GitHub may have
+ * cut short cannot prove the directory is untouched, so the bump stays.
+ */
+export function gateOnAppDirectory(
+  pin: AppPin,
+  bump: Bump,
+  changedFiles: (base: string, head: string) => ChangedFiles,
+): BumpDecision {
+  const dir = appDirectory(pin.install.wranglerConfig);
+  if (dir === null) {
+    return { action: "bump", bump };
+  }
+  const changed = changedFiles(bump.from.sha, bump.to.sha);
+  const prefix = `${dir}/`;
+  if (!changed.complete || changed.paths.some((p) => p.startsWith(prefix))) {
+    return { action: "bump", bump };
+  }
+  return {
+    action: "skip",
+    reason:
+      `${bump.to.ref}@${shortSha(bump.to.sha)} changes nothing under ${prefix} since ` +
+      `${bump.from.ref}@${shortSha(bump.from.sha)}; not bumping`,
+  };
+}
+
 export interface BumpPlan {
   bumps: Bump[];
   skipped: { slug: string; reason: string }[];
@@ -143,9 +187,14 @@ export function planBumps(apps: readonly AppEntry[], upstream: UpstreamSource): 
   for (const app of apps) {
     try {
       const pin = readPin(app);
-      const decision = decideBump(pin, upstream.resolve(pin.repo), (base, head) =>
+      let decision = decideBump(pin, upstream.resolve(pin.repo), (base, head) =>
         upstream.relation(pin.repo, base, head),
       );
+      if (decision.action === "bump") {
+        decision = gateOnAppDirectory(pin, decision.bump, (base, head) =>
+          upstream.changedFiles(pin.repo, base, head),
+        );
+      }
       if (decision.action === "bump") {
         plan.bumps.push(decision.bump);
       } else {
@@ -209,7 +258,10 @@ function codeSpan(text: string): string {
   return `\`${text.replaceAll("`", "'").trim()}\``;
 }
 
-/** The pull request body: where the pin moves, the compare link, and the commits. */
+/**
+ * The pull request body: where the pin moves, the compare link, the commits,
+ * and, for an entry that states `install.version`, a reminder to update it.
+ */
 export function renderBumpBody(
   pin: AppPin,
   bump: Bump,
@@ -243,6 +295,17 @@ export function renderBumpBody(
     for (const subject of shown) {
       lines.push(`- ${codeSpan(subject)}`);
     }
+  }
+  if (pin.install.version !== undefined) {
+    lines.push(
+      "",
+      "Before merging:",
+      "",
+      `- [ ] Set \`install.version\` in \`apps/${pin.slug}/appflare.jsonc\` to ${pin.name}'s ` +
+        `version at the new commit (it is ${codeSpan(pin.install.version)} now). The repository's ` +
+        "tag does not describe this app, so this pull request cannot tell the new version, and " +
+        "publish refuses a moved pin under an `install.version` that is already released.",
+    );
   }
   lines.push(
     "",

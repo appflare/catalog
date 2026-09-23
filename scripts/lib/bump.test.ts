@@ -1,20 +1,23 @@
-import { readFileSync } from "node:fs";
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { findApp } from "./apps.ts";
 import {
   type AppPin,
+  appDirectory,
   applyBump,
   type Bump,
   decideBump,
   gateBump,
+  gateOnAppDirectory,
   planBumps,
   readPin,
   renderBumpBody,
   TAG_PIN_NOTE,
 } from "./bump.ts";
 import { parseJsonc } from "./jsonc.ts";
-import type { UpstreamSource, UpstreamTarget } from "./upstream.ts";
+import type { ChangedFiles, UpstreamSource, UpstreamTarget } from "./upstream.ts";
 
 const fixtureApps = path.join(import.meta.dirname, "..", "fixtures", "apps");
 const hello = findApp(fixtureApps, "hello");
@@ -130,11 +133,85 @@ describe("decideBump for other pins", () => {
   });
 });
 
+describe("appDirectory", () => {
+  it("is the wrangler config's directory, or null at the repository root", () => {
+    expect(appDirectory("wrangler.jsonc")).toBeNull();
+    expect(appDirectory("./wrangler.toml")).toBeNull();
+    expect(appDirectory("r2-explorer-template/wrangler.json")).toBe("r2-explorer-template");
+    expect(appDirectory("./apps/web/wrangler.jsonc")).toBe("apps/web");
+  });
+});
+
+describe("gateOnAppDirectory", () => {
+  const monoPin: AppPin = {
+    ...tagPin,
+    install: { wranglerConfig: "r2-explorer-template/wrangler.json" },
+  };
+  const bump = bumped(decideBump(monoPin, tag("v1.3.0"), never));
+  const files =
+    (paths: string[], complete = true) =>
+    (): ChangedFiles => ({ paths, complete });
+
+  it("never lists files for an app at the repository root", () => {
+    expect(
+      gateOnAppDirectory(tagPin, bump, () => {
+        throw new Error("must not list files");
+      }),
+    ).toEqual({ action: "bump", bump });
+  });
+
+  it("skips a target that changes nothing under the app's directory", () => {
+    const decision = gateOnAppDirectory(
+      monoPin,
+      bump,
+      files(["other-template/src/index.ts", "r2-explorer-template.md", "package.json"]),
+    );
+    expect(decision).toEqual({
+      action: "skip",
+      reason:
+        "v1.3.0@89abcde changes nothing under r2-explorer-template/ since v1.2.3@0123456; " +
+        "not bumping",
+    });
+  });
+
+  it("keeps a target that changes the app's directory, including a rename out of it", () => {
+    expect(
+      gateOnAppDirectory(monoPin, bump, files(["r2-explorer-template/package.json"])).action,
+    ).toBe("bump");
+    expect(
+      gateOnAppDirectory(
+        monoPin,
+        bump,
+        files(["elsewhere/wrangler.json", "r2-explorer-template/wrangler.json"]),
+      ).action,
+    ).toBe("bump");
+  });
+
+  it("keeps the bump when GitHub's file list may be cut short", () => {
+    expect(gateOnAppDirectory(monoPin, bump, files(["other/x.ts"], false)).action).toBe("bump");
+  });
+
+  it("passes the pinned and target commits to the file listing", () => {
+    const asked: string[] = [];
+    gateOnAppDirectory(monoPin, bump, (base, head) => {
+      asked.push(`${base}...${head}`);
+      return { paths: [], complete: true };
+    });
+    expect(asked).toEqual([`${PIN}...${NEW}`]);
+  });
+});
+
 describe("planBumps", () => {
-  const upstream = (resolve: UpstreamSource["resolve"]): UpstreamSource => ({
+  const upstream = (
+    resolve: UpstreamSource["resolve"],
+    changedFiles: UpstreamSource["changedFiles"] = () => {
+      throw new Error("must not list files");
+    },
+  ): UpstreamSource => ({
     resolve,
     compare: () => ({ total: 0, subjects: [] }),
     relation: () => ({ ahead: 1, behind: 0 }),
+    changedFiles,
   });
 
   it("keeps only moves forward", () => {
@@ -164,6 +241,45 @@ describe("planBumps", () => {
     );
     expect(plan.failed).toEqual([{ slug: "hello-again", error: "HTTP 404: repository gone" }]);
     expect(plan.bumps).toHaveLength(2);
+  });
+
+  it("skips an app in a subdirectory when the target leaves that directory alone", () => {
+    const root = mkdtempSync(path.join(tmpdir(), "appflare-bump-mono-"));
+    try {
+      const dir = path.join(root, "hello");
+      mkdirSync(dir);
+      const text = readFileSync(hello.manifestPath, "utf8").replace(
+        '"wranglerConfig": "wrangler.jsonc"',
+        '"wranglerConfig": "hello-template/wrangler.jsonc"',
+      );
+      writeFileSync(path.join(dir, "appflare.jsonc"), text);
+      const app = findApp(root, "hello");
+      const untouched = planBumps(
+        [app],
+        upstream(
+          () => tag("v1.3.0"),
+          () => ({ paths: ["other-template/index.ts"], complete: true }),
+        ),
+      );
+      expect(untouched.bumps).toEqual([]);
+      expect(untouched.skipped).toEqual([
+        {
+          slug: "hello",
+          reason:
+            "v1.3.0@89abcde changes nothing under hello-template/ since v1.2.3@0123456; not bumping",
+        },
+      ]);
+      const touched = planBumps(
+        [app],
+        upstream(
+          () => tag("v1.3.0"),
+          () => ({ paths: ["hello-template/src/index.ts"], complete: true }),
+        ),
+      );
+      expect(touched.bumps.map((b) => b.branch)).toEqual(["bump/hello/89abcde"]);
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
   });
 });
 
@@ -226,6 +342,19 @@ describe("renderBumpBody", () => {
 
   it("says so when the commits cannot be compared", () => {
     expect(renderBumpBody(tagPin, bump, null)).toContain("could not be compared");
+  });
+
+  it("asks to update install.version only for entries that set it", () => {
+    expect(renderBumpBody(tagPin, bump, null)).not.toContain("install.version");
+    const versioned: AppPin = {
+      ...tagPin,
+      install: { ...tagPin.install, version: "1.1.10" },
+    };
+    const body = renderBumpBody(versioned, bump, null);
+    expect(body).toContain(
+      "- [ ] Set `install.version` in `apps/hello/appflare.jsonc` to Hello's version at the " +
+        "new commit (it is `1.1.10` now).",
+    );
   });
 });
 
