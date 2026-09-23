@@ -46,6 +46,20 @@ export interface ArtifactFile {
 /** A Worker binding as the packer records it: wrangler's shape without account ids. */
 export type ArtifactBinding = { type: string; name: string } & Record<string, unknown>;
 
+/** A queue as the artifact names it: by its producer binding, or by its upstream name. */
+export type QueueRef = { binding: string } | { name: string };
+
+/** `QueueConsumer`: a queue consumer as the packer records it, in wrangler's names and units. */
+export interface ArtifactQueueConsumer {
+  queue: QueueRef;
+  max_batch_size?: number;
+  max_batch_timeout?: number;
+  max_retries?: number;
+  dead_letter_queue?: QueueRef;
+  max_concurrency?: number | null;
+  retry_delay?: number;
+}
+
 /** Subset of `ArtifactManifest`. */
 export interface ArtifactManifest {
   format: 1;
@@ -62,6 +76,8 @@ export interface ArtifactManifest {
     bindings: ArtifactBinding[];
     migrations: Record<string, unknown>[];
     crons: string[];
+    /** Queues the Worker consumes; omitted when there are none. */
+    queueConsumers?: ArtifactQueueConsumer[];
     observability: Record<string, unknown> | null;
     placement: Record<string, unknown> | null;
     limits: Record<string, unknown> | null;

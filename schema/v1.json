@@ -99,10 +99,67 @@
           "type": "string",
           "pattern": "^\\/[^\\s?#]*$"
         },
+        "healthMode": {
+          "type": "string",
+          "enum": [
+            "default",
+            "status-only"
+          ],
+          "description": "How the health check reads the Worker's answer. `\"default\"` counts redirects and 4xx answers as verified and server errors (5xx) as unhealthy. `\"status-only\"` counts any answer from the Worker itself as verified, server errors included: use it for apps whose health path sits behind Cloudflare Access or the app's own sign-in. Either way, connection failures and Cloudflare's error pages (such as `error code: 1042` while the route goes live) are retried. Defaults to `\"default\"`."
+        },
+        "buildCommand": {
+          "type": "string",
+          "maxLength": 256,
+          "pattern": "^[A-Za-z0-9@%+,./:=_ -]+$",
+          "description": "One command the packer runs at the root of the checkout after installing dependencies (with install scripts disabled) and before bundling, for example `pnpm --filter @scope/web build`. Use it when the wrangler config has no `build.command`. It runs as a plain command without a shell, with no credentials in its environment, and the checkout's `node_modules/.bin` on its PATH, so pipes, redirects, quotes, variables, and environment assignments are not allowed. At most 256 characters."
+        },
         "version": {
           "type": "string",
           "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?(?:\\+[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?$",
           "description": "The version shown for this entry when the repository's tag does not describe this app (monorepos); it must change whenever `source` moves."
+        },
+        "emailRouting": {
+          "type": "object",
+          "properties": {
+            "catchAll": {
+              "type": "boolean",
+              "description": "Send every address of the zone that no other rule matches to the app (the zone's catch-all rule). The install refuses when the catch-all already sends mail somewhere else."
+            },
+            "rules": {
+              "maxItems": 10,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^(?=[^@]{1,64}(?:@|$))[a-z0-9]+(?:[._+-][a-z0-9]+)*(?:@[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)+)?$"
+              },
+              "description": "Addresses to route to the app, one routing rule each: a local part such as `inbox` (becomes `inbox@<zone>`) or a full address in the chosen zone. The install refuses an address that already has a rule.",
+              "uniqueItems": true
+            }
+          },
+          "additionalProperties": false,
+          "description": "Email the app receives through Email Routing. The install form asks for one of the account's zones; the install turns Email Routing on there if it is off, then points the listed addresses (and, with `catchAll`, every other address) at the app's Worker, which must export an `email` handler. Uninstalling removes what the install added.",
+          "anyOf": [
+            {
+              "required": [
+                "catchAll"
+              ],
+              "properties": {
+                "catchAll": {
+                  "const": true
+                }
+              }
+            },
+            {
+              "required": [
+                "rules"
+              ],
+              "properties": {
+                "rules": {
+                  "minItems": 1
+                }
+              }
+            }
+          ]
         }
       },
       "required": [
