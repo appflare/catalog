@@ -1,7 +1,13 @@
 import { createHash, randomBytes } from "node:crypto";
 import { closeSync, mkdirSync, openSync, readSync, statSync, writeFileSync } from "node:fs";
 import path from "node:path";
-import type { ArtifactBinding, ArtifactFile, ArtifactManifest } from "./types.ts";
+import type {
+  ArtifactBinding,
+  ArtifactFile,
+  ArtifactManifest,
+  ArtifactQueueConsumer,
+  QueueRef,
+} from "./types.ts";
 
 /**
  * Installs a packed artifact into the CI Cloudflare account with wrangler, to
@@ -9,11 +15,12 @@ import type { ArtifactBinding, ArtifactFile, ArtifactManifest } from "./types.ts
  *
  * This is not the manager's install path. The manager creates each resource
  * through the API and records it; here `wrangler deploy` provisions the
- * resources from bindings without ids. Vectorize indexes are the exception:
- * wrangler cannot provision one, so the check creates each through the API
- * before the deploy. Both use the same names,
- * `<worker>-<binding, lowercased, "_" -> "-">`, so the CI Worker's resources can
- * be found and deleted by name afterwards without any records.
+ * resources from bindings without ids. Vectorize indexes and queues are the
+ * exceptions: wrangler cannot provision them, so the check creates each
+ * through the API before the deploy, and attaches the artifact's queue
+ * consumers through the API after it, as the manager does. All of them use the
+ * same names, `<worker>-<binding, lowercased, "_" -> "-">`, so the CI Worker's
+ * resources can be found and deleted by name afterwards without any records.
  */
 
 export const WORKER_DIR = "worker";
@@ -43,7 +50,7 @@ export function resourceName(workerName: string, bindingName: string): string {
   return `${workerName}-${bindingName.toLowerCase().replaceAll("_", "-")}`;
 }
 
-export type CiResourceType = "kv" | "d1" | "r2" | "workflow" | "vectorize";
+export type CiResourceType = "kv" | "d1" | "r2" | "workflow" | "vectorize" | "queue";
 
 export interface CiResource {
   type: CiResourceType;
@@ -66,6 +73,29 @@ const VECTORIZE_MAX_NAME = 64;
 const VECTORIZE_MAX_DIMENSIONS = 1536;
 const VECTORIZE_METRICS: readonly string[] = ["cosine", "euclidean", "dot-product"];
 
+/** Queue names allow 1-63 of `[a-z0-9-]`. */
+const QUEUE_MAX_NAME = 63;
+
+/**
+ * Delivery settings of a queue consumer in the API's names and units
+ * (wrangler's `max_batch_timeout` in seconds is `max_wait_time_ms` here).
+ */
+export interface QueueConsumerSettings {
+  batch_size?: number;
+  max_retries?: number;
+  max_wait_time_ms?: number;
+  max_concurrency?: number | null;
+  retry_delay?: number;
+}
+
+/** A Worker consumer to attach after the deploy, by queue name. */
+export interface CiQueueConsumer {
+  queue: string;
+  /** The dead-letter queue's name, or null for none. */
+  deadLetterQueue: string | null;
+  settings: QueueConsumerSettings;
+}
+
 export interface CiInstallPlan {
   name: string;
   /** The generated `wrangler.json`. */
@@ -78,8 +108,16 @@ export interface CiInstallPlan {
   d1Migrations: string[];
   /** Vectorize indexes to create before the deploy (wrangler cannot provision them). */
   vectorizeIndexes: CiVectorizeIndex[];
+  /** Queues to create before the deploy (wrangler cannot provision them), by name. */
+  queues: string[];
+  /** Consumers to attach once the Worker is deployed. */
+  queueConsumers: CiQueueConsumer[];
+  /** What the check deploys but cannot exercise, for the run's summary. */
+  notes: string[];
   /** The path the health check probes: the catalog's `install.healthPath`, else `/`. */
   healthPath: string;
+  /** How the health check reads the answer: the catalog's `install.healthMode`, else `default`. */
+  healthMode: HealthMode;
 }
 
 type WranglerRule =
@@ -193,9 +231,127 @@ export function catalogHealthPath(catalog: unknown): string {
   return healthPath;
 }
 
+/**
+ * How the health check reads the Worker's answer, the manager's rule:
+ * `default` fails a persistent 5xx; `status-only` (apps whose every route sits
+ * behind Cloudflare Access or their own sign-in) counts any answer of the
+ * Worker itself as healthy, a 5xx of its own included.
+ */
+export type HealthMode = "default" | "status-only";
+
+/**
+ * The mode from `install.healthMode` in the catalog manifest embedded in the
+ * artifact; `default` when it is absent. Read loosely, since the schema this
+ * repository validates against may not know the field yet. Throws for a value
+ * the manager would not accept, rather than checking by another rule.
+ */
+export function catalogHealthMode(catalog: unknown): HealthMode {
+  const install = (catalog as { install?: { healthMode?: unknown } } | null)?.install;
+  const mode = install?.healthMode;
+  if (mode === undefined) {
+    return "default";
+  }
+  if (mode !== "default" && mode !== "status-only") {
+    throw new Error(`install.healthMode ${JSON.stringify(mode)} is not "default" or "status-only"`);
+  }
+  return mode;
+}
+
 /** The URL the health check probes for Worker `name` in the account's workers.dev subdomain. */
 export function healthUrl(name: string, subdomain: string, healthPath: string): string {
   return `https://${name}.${subdomain}.workers.dev${healthPath}`;
+}
+
+/** The largest rate limit namespace id the check assigns: 2^31-1, as the manager does. */
+const MAX_NAMESPACE_ID = 2_147_483_647;
+
+/**
+ * A random rate limit namespace id, 1 to 2^31-1, as the decimal string
+ * wrangler expects. Cloudflare shares a namespace's counters across every
+ * Worker in the account that binds the same id, so each run gets its own
+ * rather than the id the app's author wrote.
+ */
+export function randomNamespaceId(): string {
+  return String((randomBytes(4).readUInt32BE(0) % MAX_NAMESPACE_ID) + 1);
+}
+
+/** The periods, in seconds, a rate limit may count over. */
+const RATE_LIMIT_PERIODS: readonly number[] = [10, 60];
+
+/** The `simple` settings of a `ratelimit` binding; throws when they are missing or unusable. */
+function rateLimitSimple(binding: ArtifactBinding): { limit: number; period: number } {
+  const simple = binding.simple as { limit?: unknown; period?: unknown } | null | undefined;
+  const limit = simple?.limit;
+  const period = simple?.period;
+  if (
+    typeof limit !== "number" ||
+    typeof period !== "number" ||
+    !RATE_LIMIT_PERIODS.includes(period)
+  ) {
+    throw new Error(
+      `ratelimit binding ${binding.name} records no usable simple.limit and simple.period (10 or 60)`,
+    );
+  }
+  return { limit, period };
+}
+
+/** The restriction fields of a `send_email` binding, in wrangler's names. */
+const SEND_EMAIL_RESTRICTIONS = [
+  "destination_address",
+  "allowed_destination_addresses",
+  "allowed_sender_addresses",
+] as const;
+
+/**
+ * A `send_email` binding as recorded. Deploying one needs no zone and no
+ * verified address; only sending does (to verified destination addresses, from
+ * a domain onboarded to Email Service), and the check never sends. Returns a
+ * note when the binding restricts its addresses, since those restrictions can
+ * only be exercised in an account that verified the addresses.
+ */
+function sendEmailBinding(binding: ArtifactBinding): {
+  config: Record<string, unknown>;
+  note: string | null;
+} {
+  const config: Record<string, unknown> = { name: binding.name };
+  const restricted: string[] = [];
+  for (const field of SEND_EMAIL_RESTRICTIONS) {
+    if (binding[field] !== undefined) {
+      config[field] = binding[field];
+      restricted.push(field);
+    }
+  }
+  return {
+    config,
+    note:
+      restricted.length === 0
+        ? null
+        : `send_email binding ${binding.name} is deployed with its ${restricted.join(", ")} as recorded; ` +
+          "sending is not exercised, since it needs those addresses verified in the installing account",
+  };
+}
+
+/** A queue name for `resource`; throws when it is longer than Cloudflare allows. */
+function queueName(resource: string): string {
+  if (resource.length > QUEUE_MAX_NAME) {
+    throw new Error(
+      `the queue name "${resource}" is longer than ${QUEUE_MAX_NAME} characters; use a shorter suffix`,
+    );
+  }
+  return resource;
+}
+
+/** Wrangler's consumer settings in the API's names and units (seconds become ms), as the manager sends them. */
+export function consumerSettings(consumer: ArtifactQueueConsumer): QueueConsumerSettings {
+  const settings: QueueConsumerSettings = {};
+  if (consumer.max_batch_size !== undefined) settings.batch_size = consumer.max_batch_size;
+  if (consumer.max_retries !== undefined) settings.max_retries = consumer.max_retries;
+  if (consumer.max_batch_timeout !== undefined) {
+    settings.max_wait_time_ms = Math.round(consumer.max_batch_timeout * 1000);
+  }
+  if (consumer.max_concurrency !== undefined) settings.max_concurrency = consumer.max_concurrency;
+  if (consumer.retry_delay !== undefined) settings.retry_delay = consumer.retry_delay;
+  return settings;
 }
 
 /** Placeholder for a required var without a default; the check only needs the Worker to start. */
@@ -208,8 +364,13 @@ export const REQUIRED_VAR_PLACEHOLDER = "ci";
  * Throws for a binding kind this check cannot create or clean up yet, instead
  * of deploying a Worker with a binding missing.
  */
-export function planCiInstall(manifest: ArtifactManifest, name: string): CiInstallPlan {
+export function planCiInstall(
+  manifest: ArtifactManifest,
+  name: string,
+  options: { namespaceId?: () => string } = {},
+): CiInstallPlan {
   const { worker } = manifest;
+  const namespaceId = options.namespaceId ?? randomNamespaceId;
   const resources: CiResource[] = [];
   const kv: Record<string, string>[] = [];
   const d1: Record<string, string>[] = [];
@@ -219,6 +380,11 @@ export function planCiInstall(manifest: ArtifactManifest, name: string): CiInsta
   const analytics: Record<string, string>[] = [];
   const vectorize: Record<string, string>[] = [];
   const vectorizeIndexes: CiVectorizeIndex[] = [];
+  const producers: Record<string, unknown>[] = [];
+  const queues: string[] = [];
+  const ratelimits: Record<string, unknown>[] = [];
+  const sendEmail: Record<string, unknown>[] = [];
+  const notes: string[] = [];
   const singles: Record<string, { binding: string }> = {};
   const vars: Record<string, unknown> = {};
   const d1Migrations: string[] = [];
@@ -271,16 +437,49 @@ export function planCiInstall(manifest: ArtifactManifest, name: string): CiInsta
         vectorize.push({ binding: binding.name, index_name: resource });
         resources.push({ type: "vectorize", name: resource, binding: binding.name });
         break;
+      case "queue": {
+        // Created through the API before the deploy; the producer names it.
+        const queue = queueName(resource);
+        const delay = binding.delivery_delay;
+        producers.push({
+          binding: binding.name,
+          queue,
+          ...(typeof delay === "number" ? { delivery_delay: delay } : {}),
+        });
+        queues.push(queue);
+        resources.push({ type: "queue", name: queue, binding: binding.name });
+        break;
+      }
+      case "ratelimit":
+        ratelimits.push({
+          name: binding.name,
+          namespace_id: namespaceId(),
+          simple: rateLimitSimple(binding),
+        });
+        break;
+      case "send_email": {
+        const mail = sendEmailBinding(binding);
+        sendEmail.push(mail.config);
+        if (mail.note !== null) {
+          notes.push(mail.note);
+        }
+        break;
+      }
       case "analytics_engine":
         analytics.push({ binding: binding.name, ...optionalStr(binding, "dataset") });
         break;
       case "ai":
       case "browser":
+      case "images":
       case "version_metadata":
         singles[binding.type] = { binding: binding.name };
         break;
       case "plain_text":
-        vars[binding.name] = str(binding, "text");
+        // An empty var is a value too (upstream configs use "" for "unset").
+        if (typeof binding.text !== "string") {
+          throw new Error(`binding ${binding.name} (plain_text) has no text`);
+        }
+        vars[binding.name] = binding.text;
         break;
       case "json":
         vars[binding.name] = binding.json;
@@ -288,13 +487,15 @@ export function planCiInstall(manifest: ArtifactManifest, name: string): CiInsta
       case "assets":
         break;
       default:
-        // TODO: queues, Hyperdrive, service bindings, mTLS and email
-        // need resources or peers this check does not create and clean up yet.
+        // TODO: Hyperdrive, service bindings and mTLS certificates need
+        // resources or peers this check does not create and clean up yet.
         throw new Error(
           `the CI install check cannot create a ${binding.type} binding (${binding.name}) yet`,
         );
     }
   }
+
+  const queueConsumers = planQueueConsumers(worker, name, resources, queues);
 
   const forms = catalogForms(manifest.catalog);
   for (const v of forms.vars) {
@@ -344,6 +545,10 @@ export function planCiInstall(manifest: ArtifactManifest, name: string): CiInsta
     ...(workflows.length > 0 ? { workflows } : {}),
     ...(analytics.length > 0 ? { analytics_engine_datasets: analytics } : {}),
     ...(vectorize.length > 0 ? { vectorize } : {}),
+    // Consumers are attached through the API after the deploy, as the manager does.
+    ...(producers.length > 0 ? { queues: { producers } } : {}),
+    ...(ratelimits.length > 0 ? { ratelimits } : {}),
+    ...(sendEmail.length > 0 ? { send_email: sendEmail } : {}),
     ...singles,
     ...(Object.keys(vars).length > 0 ? { vars } : {}),
     triggers: { crons: [...worker.crons] },
@@ -361,8 +566,69 @@ export function planCiInstall(manifest: ArtifactManifest, name: string): CiInsta
     secrets: forms.secrets,
     d1Migrations,
     vectorizeIndexes,
+    queues,
+    queueConsumers,
+    notes,
     healthPath: catalogHealthPath(manifest.catalog),
+    healthMode: catalogHealthMode(manifest.catalog),
   };
+}
+
+/**
+ * The Worker's queue consumers by queue name. A queue named by its producer
+ * binding is that binding's queue; one named by its upstream name (typically
+ * a dead-letter queue) gets a queue of its own, `<worker>-<name>`, added to
+ * `queues` and `resources` so it is created and deleted like the others.
+ * Throws for a consumer the manager would refuse: a binding reference to no
+ * queue binding, an upstream name that collides with a binding's resource, or
+ * a queue consumed twice.
+ */
+function planQueueConsumers(
+  worker: ArtifactManifest["worker"],
+  name: string,
+  resources: CiResource[],
+  queues: string[],
+): CiQueueConsumer[] {
+  const queueBindings = new Set(
+    worker.bindings.filter((b) => b.type === "queue").map((b) => b.name),
+  );
+  const bindingNames = new Set(worker.bindings.map((b) => b.name));
+  const bound = new Set(resources.map((r) => r.name));
+  const queueOf = (ref: QueueRef): string => {
+    if ("binding" in ref) {
+      if (!queueBindings.has(ref.binding)) {
+        throw new Error(
+          `a queue consumer names the queue binding ${ref.binding}, but the Worker has no queue binding by that name`,
+        );
+      }
+      return resourceName(name, ref.binding);
+    }
+    const queue = queueName(resourceName(name, ref.name));
+    if (bindingNames.has(ref.name) || bound.has(queue)) {
+      throw new Error(
+        `the queue "${ref.name}" would share its name with a binding's resource (${queue})`,
+      );
+    }
+    if (!queues.includes(queue)) {
+      queues.push(queue);
+      resources.push({ type: "queue", name: queue, binding: ref.name });
+    }
+    return queue;
+  };
+  const consumers: CiQueueConsumer[] = [];
+  for (const consumer of worker.queueConsumers ?? []) {
+    const queue = queueOf(consumer.queue);
+    if (consumers.some((c) => c.queue === queue)) {
+      throw new Error(`the queue ${queue} has more than one consumer`);
+    }
+    consumers.push({
+      queue,
+      deadLetterQueue:
+        consumer.dead_letter_queue === undefined ? null : queueOf(consumer.dead_letter_queue),
+      settings: consumerSettings(consumer),
+    });
+  }
+  return consumers;
 }
 
 /** Resolves a manifest path under `root`, refusing anything that could escape it. */
@@ -445,18 +711,28 @@ export function randomSecret(): string {
 
 export type Probe = { status: number; body: string } | { error: string };
 
-/** Whether a probe settles the check or should be retried. */
-export function classifyProbe(probe: Probe): "ok" | "retry" | "soft-404" {
+/**
+ * Whether a probe settles the check or should be retried. Under `status-only`
+ * any answer of the Worker itself settles it, a 5xx included; Cloudflare's own
+ * error pages (`error code: <n>`) are not the Worker's answer.
+ */
+export function classifyProbe(
+  probe: Probe,
+  mode: HealthMode = "default",
+): "ok" | "retry" | "soft-404" {
   if ("error" in probe) {
-    return "retry";
-  }
-  if (probe.status >= 500) {
     return "retry";
   }
   if (probe.status === 404) {
     // 1042: the edge refused the request (e.g. the route is not live yet).
     // Any other 404 may still be the workers.dev route propagating.
     return probe.body.includes("error code: 1042") ? "retry" : "soft-404";
+  }
+  if (mode === "status-only" && !/^error code: \d+/.test(probe.body.trimStart())) {
+    return "ok";
+  }
+  if (probe.status >= 500) {
+    return "retry";
   }
   return "ok";
 }
@@ -470,6 +746,7 @@ export interface HealthResult {
  * Polls `url` until it answers something other than a 5xx or a 404, for up to
  * `timeoutMs`. A plain 404 that persists to the deadline passes (an app without
  * a health path may serve 404 at `/`); a 1042, a 5xx, or no answer fails.
+ * Under `status-only` a 5xx of the Worker's own passes too.
  */
 export async function waitForHealth(
   probe: () => Promise<Probe>,
@@ -478,13 +755,14 @@ export async function waitForHealth(
     intervalMs: number;
     sleep: (ms: number) => Promise<void>;
     now: () => number;
+    mode?: HealthMode;
   },
 ): Promise<HealthResult> {
   const deadline = options.now() + options.timeoutMs;
   let last: Probe = { error: "not checked" };
   for (;;) {
     last = await probe();
-    const verdict = classifyProbe(last);
+    const verdict = classifyProbe(last, options.mode);
     if (verdict === "ok") {
       return { ok: true, detail: `HTTP ${(last as { status: number }).status}` };
     }
@@ -562,9 +840,27 @@ export async function workersSubdomain(request: CfRequest): Promise<string> {
   return sub;
 }
 
+/**
+ * A queue's id by name; null when it does not exist. Filters by name like
+ * wrangler's own lookup (`GET /queues?page=1&name=<name>`), then matches the
+ * name exactly.
+ */
+async function findQueueId(request: CfRequest, queue: string): Promise<string | null> {
+  const res = await request("GET", `/queues?page=1&name=${encodeURIComponent(queue)}`);
+  if (res.status !== 200 || !Array.isArray(res.body?.result)) {
+    throw new Error(`listing queues failed: ${describe(res)}`);
+  }
+  const hit = (res.body.result as { queue_id?: unknown; queue_name?: unknown }[]).find(
+    (q) => q.queue_name === queue,
+  );
+  return typeof hit?.queue_id === "string" ? hit.queue_id : null;
+}
+
 /** Finds a resource's id by name; null when it does not exist. */
 async function findResource(request: CfRequest, resource: CiResource): Promise<string | null> {
   switch (resource.type) {
+    case "queue":
+      return findQueueId(request, resource.name);
     case "kv": {
       for (let page = 1; page <= 50; page++) {
         const res = await request("GET", `/storage/kv/namespaces?per_page=100&page=${page}`);
@@ -669,7 +965,14 @@ function deletePath(resource: CiResource, id: string): string {
       return `/workflows/${encodeURIComponent(id)}`;
     case "vectorize":
       return `/vectorize/v2/indexes/${encodeURIComponent(id)}`;
+    case "queue":
+      return `/queues/${encodeURIComponent(id)}`;
   }
+}
+
+/** Whether a v4 create call went through (Cloudflare answers 200 or 201). */
+function created(res: CfResponse): boolean {
+  return res.status >= 200 && res.status < 300 && res.body?.success === true;
 }
 
 /**
@@ -689,22 +992,121 @@ export async function createVectorizeIndexes(
     });
     // Cloudflare answers 201 Created for a new index; the v4 envelope's
     // `success` is what says the create went through.
-    const created = res.status >= 200 && res.status < 300 && res.body?.success === true;
-    if (!created) {
+    if (!created(res)) {
       throw new Error(`creating Vectorize index ${index.name} failed: ${describe(res)}`);
     }
   }
 }
 
 /**
- * Deletes the CI Worker (with `force=true`, like `wrangler delete --force`, so
- * Durable Object and other bindings do not block it) and every resource in
- * the plan, then checks that each is gone. Missing things are fine (the deploy
- * may have failed before creating them). Returns every problem; empty means
- * the account is clean.
+ * Creates each queue in the plan with `POST /queues` and `{ queue_name }`,
+ * dead-letter queues included. Like the Vectorize indexes, run after the
+ * cleanup of an earlier run, so a queue that already exists is an error.
+ */
+export async function createQueues(
+  request: CfRequest,
+  plan: Pick<CiInstallPlan, "queues">,
+): Promise<void> {
+  for (const queue of plan.queues) {
+    const res = await request("POST", "/queues", { queue_name: queue });
+    if (!created(res)) {
+      throw new Error(`creating queue ${queue} failed: ${describe(res)}`);
+    }
+  }
+}
+
+/**
+ * Points each queue the plan consumes at the deployed Worker, as the manager
+ * does after its script upload: `POST /queues/{queue_id}/consumers` with
+ * `{ type: "worker", script_name, settings, dead_letter_queue }`, where the
+ * dead-letter queue is named, not addressed by id.
+ */
+export async function attachQueueConsumers(
+  request: CfRequest,
+  plan: Pick<CiInstallPlan, "name" | "queueConsumers">,
+): Promise<void> {
+  for (const consumer of plan.queueConsumers) {
+    const queueId = await findQueueId(request, consumer.queue);
+    if (queueId === null) {
+      throw new Error(`the queue ${consumer.queue} does not exist, so no consumer can be attached`);
+    }
+    const res = await request("POST", `/queues/${encodeURIComponent(queueId)}/consumers`, {
+      type: "worker",
+      script_name: plan.name,
+      ...(consumer.deadLetterQueue === null ? {} : { dead_letter_queue: consumer.deadLetterQueue }),
+      ...(Object.keys(consumer.settings).length > 0 ? { settings: consumer.settings } : {}),
+    });
+    if (!created(res)) {
+      throw new Error(`attaching a consumer to queue ${consumer.queue} failed: ${describe(res)}`);
+    }
+  }
+}
+
+/** A consumer as `GET /queues/{id}/consumers` lists it (the fields read here). */
+interface ListedConsumer {
+  consumer_id?: unknown;
+  type?: unknown;
+  script_name?: unknown;
+  script?: unknown;
+  service?: unknown;
+}
+
+/**
+ * Removes the Worker's consumer from each of the plan's queues that still
+ * exists, so neither the Worker nor the queue is held by it. The API names
+ * the Worker in `script_name`, `script`, or `service`, depending on the
+ * consumer's age; any of them counts. Returns every problem.
+ */
+async function removeQueueConsumers(request: CfRequest, plan: CiInstallPlan): Promise<string[]> {
+  const problems: string[] = [];
+  for (const resource of plan.resources) {
+    if (resource.type !== "queue") {
+      continue;
+    }
+    try {
+      const queueId = await findQueueId(request, resource.name);
+      if (queueId === null) {
+        continue;
+      }
+      const base = `/queues/${encodeURIComponent(queueId)}/consumers`;
+      const list = await request("GET", base);
+      if (list.status !== 200 || !Array.isArray(list.body?.result)) {
+        throw new Error(`listing consumers failed: ${describe(list)}`);
+      }
+      const ours = (list.body.result as ListedConsumer[]).filter(
+        (c) =>
+          (c.type === undefined || c.type === "worker") &&
+          typeof c.consumer_id === "string" &&
+          [c.script_name, c.script, c.service].includes(plan.name),
+      );
+      for (const consumer of ours) {
+        const del = await request(
+          "DELETE",
+          `${base}/${encodeURIComponent(String(consumer.consumer_id))}`,
+        );
+        if (del.status !== 200 && del.status !== 404) {
+          problems.push(`consumer of queue ${resource.name}: delete failed: ${describe(del)}`);
+        }
+      }
+    } catch (err) {
+      problems.push(
+        `consumer of queue ${resource.name}: ${err instanceof Error ? err.message : String(err)}`,
+      );
+    }
+  }
+  return problems;
+}
+
+/**
+ * Removes the Worker's queue consumers, then deletes the CI Worker (with
+ * `force=true`, like `wrangler delete --force`, so Durable Object and other
+ * bindings do not block it) and every resource in the plan, then checks that
+ * each is gone (a queue that is gone takes its consumers with it). Missing
+ * things are fine (the deploy may have failed before creating them). Returns
+ * every problem; empty means the account is clean.
  */
 export async function cleanupCiInstall(request: CfRequest, plan: CiInstallPlan): Promise<string[]> {
-  const problems: string[] = [];
+  const problems = await removeQueueConsumers(request, plan);
   const script = `/workers/scripts/${encodeURIComponent(plan.name)}`;
   const del = await request("DELETE", `${script}?force=true`);
   if (del.status !== 200 && del.status !== 404) {

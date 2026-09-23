@@ -295,7 +295,7 @@ The install checks (next section) also use:
 
 | Secret | Used by | What it is |
 |---|---|---|
-| `CLOUDFLARE_API_TOKEN` | `verify.yml` and `nightly.yml` deploy and cleanup steps only | API token for the dedicated CI account: Workers Scripts, Workers KV Storage, D1, and Workers R2 Storage (edit), Account Settings (read) |
+| `CLOUDFLARE_API_TOKEN` | `verify.yml` and `nightly.yml` deploy and cleanup steps only | API token for the dedicated CI account: Workers Scripts, Workers KV Storage, D1, Workers R2 Storage, Vectorize, and Queues (edit), Account Settings (read) |
 | `CLOUDFLARE_ACCOUNT_ID` | the same steps | The CI account's id |
 
 Repository settings the maintainer has to make:
@@ -467,8 +467,15 @@ Cloudflare account and delete it again:
    Runs that share a name never overlap. The install job uses a concurrency
    group per name that is never cancelled, so a superseded run's cleanup
    finishes before the next run deploys.
-4. `wrangler deploy --strict`, which provisions the missing resources.
-   `wrangler d1 migrations apply --remote` runs for each database with migrations.
+4. Create the Vectorize indexes and queues through the API (wrangler does not
+   create them from a binding), then `wrangler deploy --strict`, which
+   provisions the other missing resources. Each rate limit binding gets a
+   random namespace id of the run's own, since Cloudflare shares a namespace's
+   counters across every Worker in the account that binds the same id. After
+   the deploy, each queue consumer the artifact records is attached to the
+   Worker through the API, with its settings and dead-letter queue, as the
+   manager does. `wrangler d1 migrations apply --remote` runs for each database
+   with migrations.
    Every secret in the catalog manifest is set to a random value, and each var
    gets its default. A required var without a default gets the placeholder `ci`.
 5. Wait up to 60 seconds for `https://<worker>.<subdomain>.workers.dev/` to answer.
@@ -476,9 +483,13 @@ Cloudflare account and delete it again:
    set, as the manager does.
    A 5xx, a `1042` refusal, or no answer is retried and fails at the deadline. Any
    other status passes. A plain 404 is retried too, but passes at the deadline,
-   since an app may serve 404 at `/`.
-6. Always, even after a failure or cancellation: delete the Worker and every
-   resource by name, then confirm each is gone. R2 buckets are emptied first,
+   since an app may serve 404 at `/`. With `install.healthMode: "status-only"`
+   (for apps whose every route sits behind Cloudflare Access or their own
+   sign-in), a 5xx the Worker answers itself passes too; Cloudflare's own error
+   pages (`error code: <n>`) are still retried.
+6. Always, even after a failure or cancellation: remove the Worker's queue
+   consumers, delete the Worker and every resource by name, then confirm each
+   is gone. R2 buckets are emptied first,
    since only an empty bucket can be deleted; this gives up after 100 rounds of
    1000 deletes. The job fails if anything is left.
 
@@ -488,17 +499,25 @@ How this differs from installing with the manager:
   bucket through the API and records it, so update and uninstall work from its
   own records. Here `wrangler deploy` provisions them from bindings without ids,
   and cleanup finds them again by name. Both use the same names,
-  `<worker>-<binding, lowercased, "_" becomes "-">`. The one exception is a
-  Workflow, which the CI install names that way to keep runs apart.
+  `<worker>-<binding, lowercased, "_" becomes "-">`. A queue only a consumer
+  names (usually a dead-letter queue) is `<worker>-<its upstream name>`. The
+  one exception is a Workflow, which the CI install names that way to keep runs
+  apart.
 - **Uploads and migrations.** The manager uploads the modules and assets itself
   and applies D1 migrations itself, in the same `d1_migrations` table format
   wrangler uses. Here wrangler does both from the unpacked files.
 - **Inputs.** A real install uses the values the user entered. Here secrets are
   random and vars use their defaults, so this checks that the Worker deploys and
   starts, not that the app is fully configured.
-- **Binding kinds.** Queues, Vectorize, Hyperdrive, service bindings, mTLS
-  certificates, and email bindings are not supported by the check yet. An app
-  that uses them fails the check with a message naming the binding.
+- **Binding kinds.** Hyperdrive, service bindings, and mTLS certificates are
+  not supported by the check yet. An app that uses them fails the check with a
+  message naming the binding.
+- **Sending email.** A `send_email` binding is deployed as the artifact records
+  it; deploying one needs no zone or verified address. The check never sends
+  mail, so when the binding restricts its addresses
+  (`destination_address`, `allowed_destination_addresses`,
+  `allowed_sender_addresses`) the run's summary notes that sending was not
+  exercised.
 
 Fork pull requests get no secrets, so the install job is skipped for them. Pull
 requests from branches of this repository run their own copy of

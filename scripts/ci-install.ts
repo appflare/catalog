@@ -13,11 +13,13 @@ import path from "node:path";
 import { parseArgs } from "node:util";
 import { loadAppflareSchema, parseOrThrow } from "./lib/appflare-schema.ts";
 import {
+  attachQueueConsumers,
   type CfRequest,
   type CiInstallPlan,
   ciWorkerName,
   cleanupCiInstall,
   createCfRequest,
+  createQueues,
   createVectorizeIndexes,
   healthUrl,
   planCiInstall,
@@ -40,13 +42,16 @@ The Worker is named ci-<slug>-<suffix> (for example ci-cut-pr12).
 deploy   Unpacks the artifact (checking every file's sha256), removes anything
          left from an earlier run under the same name, writes a wrangler.json
          from manifest.json (bindings without ids, so wrangler provisions them;
-         Vectorize indexes are created first through the API with the recorded
-         dimensions and metric), runs wrangler deploy --strict, applies D1 migrations, sets each catalog
-         secret to a random value, and waits up to 60 s for
+         Vectorize indexes and queues are created first through the API, and
+         each rate limit gets a random namespace id), runs wrangler deploy
+         --strict, attaches the recorded queue consumers through the API,
+         applies D1 migrations, sets each catalog secret to a random value,
+         and waits up to 60 s for
          https://<worker>.<subdomain>.workers.dev<healthPath> to answer
          (install.healthPath from the catalog manifest, else /).
-cleanup  Deletes the Worker and every resource the deploy may have created,
-         and fails unless all of them are gone.
+cleanup  Removes the Worker's queue consumers, deletes the Worker and every
+         resource the deploy may have created, and fails unless all of them
+         are gone.
 
 Needs CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID, and APPFLARE_DIR (the
 packer bundle, for @appflare/schema and wrangler). Runs only the artifact's
@@ -161,11 +166,15 @@ runMain(async () => {
     // A re-run reuses the name; start from a clean account.
     await cleanup(request, plan);
     // wrangler provisions KV, D1, and R2 from bindings without ids, but not
-    // Vectorize: those indexes must exist before the deploy binds them.
+    // Vectorize indexes or named queues: those must exist before the deploy
+    // binds them.
     await createVectorizeIndexes(request, plan);
+    await createQueues(request, plan);
     writeFileSync(path.join(work, "wrangler.json"), `${JSON.stringify(plan.config, null, 2)}\n`);
     info(`deploying ${manifest.app}@${manifest.version} as ${plan.name}`);
     wrangler(bin, work, ["deploy", "--strict"]);
+    // A consumer belongs to the script, so it can only point at a deployed Worker.
+    await attachQueueConsumers(request, plan);
     for (const database of plan.d1Migrations) {
       wrangler(bin, work, ["d1", "migrations", "apply", database, "--remote"]);
     }
@@ -188,11 +197,15 @@ runMain(async () => {
         intervalMs: 3_000,
         sleep: (ms) => new Promise((r) => setTimeout(r, ms)),
         now: () => Date.now(),
+        mode: plan.healthMode,
       },
     );
     summary(
       `${health.ok ? "PASS" : "FAIL"} ${manifest.app}@${manifest.version} as ${plan.name}: ${health.detail}`,
     );
+    for (const note of plan.notes) {
+      summary(`- note: ${note}`);
+    }
     return health.ok ? 0 : 1;
   } finally {
     rmSync(work, { recursive: true, force: true });
