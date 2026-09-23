@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-23T12:01:04.841Z",
+  "generatedAt": "2026-09-23T12:19:40.276Z",
   "apps": [
     {
       "slug": "cut",
@@ -12,6 +12,25 @@
         "sig": "https://github.com/appflare/catalog/releases/download/cut@0.1.0/manifest.sig"
       },
       "digest": "86bbb3cbe1afbcff52c18a91a659b8f7876043a78f434a6a9c7eb274edb4a6c1",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "maintainers": [
+        "MendyLanda"
+      ]
+    },
+    {
+      "slug": "openai-gemini",
+      "name": "OpenAI Gemini",
+      "summary": "OpenAI-compatible API adapter for Gemini, on Workers.",
+      "version": "0.0.0-20251222.61a83bd",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/openai-gemini@0.0.0-20251222.61a83bd/openai-gemini-0.0.0-20251222.61a83bd.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/openai-gemini@0.0.0-20251222.61a83bd/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/openai-gemini@0.0.0-20251222.61a83bd/manifest.sig"
+      },
+      "digest": "e3744316bcd3d3e3475468054de21b3c86d6396efc8c512c7ae54627799181b8",
       "tier": "artifact",
       "plan": "free",
       "requires": [],
