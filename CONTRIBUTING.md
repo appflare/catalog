@@ -423,3 +423,21 @@ token, the installed Workers themselves can reach other things in the account.
 For example, a Durable Object or Workflow binding with a `script_name` in an
 app's manifest points at another Worker by name, and would bind to it if such a
 Worker existed there.
+
+## Nightly verification
+
+[`nightly.yml`](https://github.com/appflare/catalog/actions/workflows/nightly.yml)
+runs every night and reinstalls the current release of every app in `index.json`
+with the install check above, then deletes it again. Each app that passes gets a
+new `lastVerified` in `index.json`, which the manager shows as "Verified" with the
+date on its catalog pages, or "Not verified yet" for a version that has never
+passed.
+
+A red run means something failed. The run summary lists every app; the ones marked
+**FAILED** also get a warning annotation. Open that app's `install check
+<slug>@<version>` job and read its first failed step: the release download and
+signature check, the deploy and health check, or the cleanup, which fails when
+something is left in the CI account. A failed app stays in the catalog and keeps
+its previous `lastVerified`, so its date stops moving until a later run passes.
+When only `record results` or `deploy Pages` is red, the checks ran but the new
+dates did not reach the published `index.json`; re-run the failed jobs.
