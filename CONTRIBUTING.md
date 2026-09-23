@@ -20,7 +20,18 @@ scripts/                       catalog tooling (Node 22, run with pnpm)
 .github/workflows/publish.yml  main: pack, sign, release, index.json, GitHub Pages
 .github/workflows/bump.yml     stub: bump pins from upstream
 .github/workflows/nightly.yml  stub: reinstall every app, set lastVerified
+.github/workflows/conventions.yml  every push and PR: commit messages
 ```
+
+## Commit messages
+
+Commits follow [Conventional Commits](https://www.conventionalcommits.org/):
+`type(scope): subject` with a type from `feat`, `fix`, `build`, `chore`, `ci`,
+`docs`, `refactor`, `test`, or `perf`, a lower-case subject, and a header of at most
+72 characters, for example `feat(apps): add cut`. The body says why. The
+`conventions` workflow lints every commit of a push or pull request with commitlint
+(`commitlint.config.mjs`); run `pnpm exec commitlint --from origin/main` to check a
+branch locally.
 
 ## Catalog policy
 
