@@ -507,7 +507,8 @@ describe("createVectorizeIndexes", () => {
     const calls: { method: string; path: string; body: unknown }[] = [];
     const request: CfRequest = async (method, p, body) => {
       calls.push({ method, path: p, body });
-      return { status: 200, body: { success: true, result: {} } };
+      // What Cloudflare answers for a new index.
+      return { status: 201, body: { success: true, result: {} } };
     };
     await createVectorizeIndexes(request, {
       vectorizeIndexes: [
@@ -527,6 +528,17 @@ describe("createVectorizeIndexes", () => {
         body: { name: "ci-sb-pr8-images", config: { dimensions: 768, metric: "euclidean" } },
       },
     ]);
+  });
+
+  it("fails on a 2xx whose envelope does not report success", async () => {
+    for (const body of [{ success: false, errors: [] }, null]) {
+      const request: CfRequest = async () => ({ status: 200, body });
+      await expect(
+        createVectorizeIndexes(request, {
+          vectorizeIndexes: [{ name: "ci-sb-pr8-vectorize", dimensions: 384, metric: "cosine" }],
+        }),
+      ).rejects.toThrow("creating Vectorize index ci-sb-pr8-vectorize failed: HTTP 200");
+    }
   });
 
   it("fails with Cloudflare's error when a create is refused", async () => {

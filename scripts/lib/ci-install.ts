@@ -687,7 +687,10 @@ export async function createVectorizeIndexes(
       name: index.name,
       config: { dimensions: index.dimensions, metric: index.metric },
     });
-    if (res.status !== 200 || res.body?.success === false) {
+    // Cloudflare answers 201 Created for a new index; the v4 envelope's
+    // `success` is what says the create went through.
+    const created = res.status >= 200 && res.status < 300 && res.body?.success === true;
+    if (!created) {
       throw new Error(`creating Vectorize index ${index.name} failed: ${describe(res)}`);
     }
   }
