@@ -18,6 +18,7 @@ import {
   ciWorkerName,
   cleanupCiInstall,
   createCfRequest,
+  createVectorizeIndexes,
   healthUrl,
   planCiInstall,
   randomSecret,
@@ -38,8 +39,9 @@ The Worker is named ci-<slug>-<suffix> (for example ci-cut-pr12).
 
 deploy   Unpacks the artifact (checking every file's sha256), removes anything
          left from an earlier run under the same name, writes a wrangler.json
-         from manifest.json (bindings without ids, so wrangler provisions them),
-         runs wrangler deploy --strict, applies D1 migrations, sets each catalog
+         from manifest.json (bindings without ids, so wrangler provisions them;
+         Vectorize indexes are created first through the API with the recorded
+         dimensions and metric), runs wrangler deploy --strict, applies D1 migrations, sets each catalog
          secret to a random value, and waits up to 60 s for
          https://<worker>.<subdomain>.workers.dev<healthPath> to answer
          (install.healthPath from the catalog manifest, else /).
@@ -158,6 +160,9 @@ runMain(async () => {
     unpackArtifact(manifest, zipPath, work);
     // A re-run reuses the name; start from a clean account.
     await cleanup(request, plan);
+    // wrangler provisions KV, D1, and R2 from bindings without ids, but not
+    // Vectorize: those indexes must exist before the deploy binds them.
+    await createVectorizeIndexes(request, plan);
     writeFileSync(path.join(work, "wrangler.json"), `${JSON.stringify(plan.config, null, 2)}\n`);
     info(`deploying ${manifest.app}@${manifest.version} as ${plan.name}`);
     wrangler(bin, work, ["deploy", "--strict"]);

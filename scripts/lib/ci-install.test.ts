@@ -12,6 +12,8 @@ import {
   ciWorkerName,
   classifyProbe,
   cleanupCiInstall,
+  createCfRequest,
+  createVectorizeIndexes,
   healthUrl,
   type Probe,
   planCiInstall,
@@ -90,6 +92,50 @@ describe("planCiInstall", () => {
       triggers: { crons: [] },
     });
     expect(JSON.stringify(plan.config)).not.toMatch(/"id"|database_id|account_id/);
+  });
+
+  it("plans a Vectorize index with the recorded shape, created before the deploy", () => {
+    const plan = planCiInstall(
+      manifest((m) => {
+        worker(m).bindings = [
+          { type: "d1", name: "DB" },
+          { type: "vectorize", name: "VECTORIZE", dimensions: 384, metric: "cosine" },
+          { type: "ai", name: "AI" },
+        ];
+      }),
+      "ci-second-brain-cloudflare-pr8",
+    );
+    expect(plan.vectorizeIndexes).toEqual([
+      { name: "ci-second-brain-cloudflare-pr8-vectorize", dimensions: 384, metric: "cosine" },
+    ]);
+    expect(plan.resources).toContainEqual({
+      type: "vectorize",
+      name: "ci-second-brain-cloudflare-pr8-vectorize",
+      binding: "VECTORIZE",
+    });
+    expect(plan.config).toMatchObject({
+      vectorize: [{ binding: "VECTORIZE", index_name: "ci-second-brain-cloudflare-pr8-vectorize" }],
+      ai: { binding: "AI" },
+    });
+    expect(planCiInstall(manifest(), "ci-hello-pr1").vectorizeIndexes).toEqual([]);
+  });
+
+  it("refuses a Vectorize binding without a usable shape, or with a name over 64 characters", () => {
+    const withBinding =
+      (binding: Record<string, unknown>, name = "ci-hello-pr1") =>
+      () =>
+        planCiInstall(
+          manifest((m) => {
+            worker(m).bindings = [{ type: "vectorize", name: "VECTORIZE", ...binding }];
+          }),
+          name,
+        );
+    expect(withBinding({ metric: "cosine" })).toThrow(/records no usable dimensions \(1-1536\)/);
+    expect(withBinding({ dimensions: 2048, metric: "cosine" })).toThrow(/usable dimensions/);
+    expect(withBinding({ dimensions: 384, metric: "manhattan" })).toThrow(/no usable metric/);
+    expect(withBinding({ dimensions: 384, metric: "cosine" }, `ci-${"x".repeat(50)}-pr1`)).toThrow(
+      /Vectorize index name ".*-vectorize" is longer than 64 characters/,
+    );
   });
 
   it("takes secrets and var defaults from the catalog manifest", () => {
@@ -265,6 +311,7 @@ function fakeAccount(state: {
   d1: { uuid: string; name: string }[];
   r2: Set<string>;
   workflows: Set<string>;
+  vectorize?: Set<string>;
   failDelete?: string;
   /** Objects per bucket; a bucket with objects refuses deletion. */
   objects?: Map<string, string[]>;
@@ -342,6 +389,15 @@ function fakeAccount(state: {
         return ok({});
       }
     }
+    if (p === "/vectorize/v2/indexes") {
+      return ok([...(state.vectorize ?? [])].map((name) => ({ name })));
+    }
+    if (p.startsWith("/vectorize/v2/indexes/") && method === "DELETE") {
+      const name = decodeURIComponent(p.slice("/vectorize/v2/indexes/".length));
+      if (!state.vectorize?.has(name)) return missing;
+      state.vectorize.delete(name);
+      return ok(null);
+    }
     if (p === "/workers/subdomain") return ok({ subdomain: "appflare-ci" });
     throw new Error(`unexpected ${method} ${p}`);
   }) as CfRequest & { calls: string[] };
@@ -355,12 +411,14 @@ describe("cleanupCiInstall", () => {
     config: {},
     secrets: [],
     d1Migrations: [],
+    vectorizeIndexes: [{ name: "ci-hello-pr1-vectors", dimensions: 384, metric: "cosine" }],
     healthPath: "/",
     resources: [
       { type: "kv", name: "ci-hello-pr1-cut-kv", binding: "CUT_KV" },
       { type: "d1", name: "ci-hello-pr1-db", binding: "DB" },
       { type: "r2", name: "ci-hello-pr1-media", binding: "MEDIA" },
       { type: "workflow", name: "ci-hello-pr1-jobs", binding: "JOBS" },
+      { type: "vectorize", name: "ci-hello-pr1-vectors", binding: "VECTORS" },
     ],
   };
 
@@ -374,6 +432,7 @@ describe("cleanupCiInstall", () => {
       d1: [{ uuid: "db1", name: "ci-hello-pr1-db" }],
       r2: new Set(["ci-hello-pr1-media"]),
       workflows: new Set(["ci-hello-pr1-jobs"]),
+      vectorize: new Set(["ci-hello-pr1-vectors", "someone-elses-index"]),
       ...(failDelete ? { failDelete } : {}),
     };
   }
@@ -385,6 +444,15 @@ describe("cleanupCiInstall", () => {
     expect(state.kv).toEqual([{ id: "kv2", title: "keep-me" }]);
     expect(state.d1).toEqual([]);
     expect(state.r2.size + state.workflows.size).toBe(0);
+    expect([...state.vectorize]).toEqual(["someone-elses-index"]);
+  });
+
+  it("reports a Vectorize index it could not delete", async () => {
+    const problems = await cleanupCiInstall(fakeAccount(populated("/vectorize/v2/indexes/")), plan);
+    expect(problems).toEqual([
+      "vectorize ci-hello-pr1-vectors: delete failed: HTTP 409 (10008 bucket not empty)",
+      "vectorize ci-hello-pr1-vectors still exists",
+    ]);
   });
 
   it("is a no-op on a clean account (a deploy that never got far)", async () => {
@@ -431,5 +499,70 @@ describe("cleanupCiInstall", () => {
 
   it("reads the workers.dev subdomain", async () => {
     expect(await workersSubdomain(fakeAccount(populated()))).toBe("appflare-ci");
+  });
+});
+
+describe("createVectorizeIndexes", () => {
+  it("creates each index with its recorded dimensions and metric", async () => {
+    const calls: { method: string; path: string; body: unknown }[] = [];
+    const request: CfRequest = async (method, p, body) => {
+      calls.push({ method, path: p, body });
+      return { status: 200, body: { success: true, result: {} } };
+    };
+    await createVectorizeIndexes(request, {
+      vectorizeIndexes: [
+        { name: "ci-sb-pr8-vectorize", dimensions: 384, metric: "cosine" },
+        { name: "ci-sb-pr8-images", dimensions: 768, metric: "euclidean" },
+      ],
+    });
+    expect(calls).toEqual([
+      {
+        method: "POST",
+        path: "/vectorize/v2/indexes",
+        body: { name: "ci-sb-pr8-vectorize", config: { dimensions: 384, metric: "cosine" } },
+      },
+      {
+        method: "POST",
+        path: "/vectorize/v2/indexes",
+        body: { name: "ci-sb-pr8-images", config: { dimensions: 768, metric: "euclidean" } },
+      },
+    ]);
+  });
+
+  it("fails with Cloudflare's error when a create is refused", async () => {
+    const request: CfRequest = async () => ({
+      status: 409,
+      body: { success: false, errors: [{ code: 3002, message: "index already exists" }] },
+    });
+    await expect(
+      createVectorizeIndexes(request, {
+        vectorizeIndexes: [{ name: "ci-sb-pr8-vectorize", dimensions: 384, metric: "cosine" }],
+      }),
+    ).rejects.toThrow(
+      "creating Vectorize index ci-sb-pr8-vectorize failed: HTTP 409 (3002 index already exists)",
+    );
+  });
+});
+
+describe("createCfRequest", () => {
+  it("sends a body as JSON and none without one", async () => {
+    const seen: { url: string; init: RequestInit }[] = [];
+    const fetchFn = (async (url: string, init: RequestInit) => {
+      seen.push({ url, init });
+      return Response.json({ success: true, result: [] });
+    }) as unknown as typeof fetch;
+    const request = createCfRequest("test-token", "acct", fetchFn);
+    await request("POST", "/vectorize/v2/indexes", { name: "x" });
+    await request("GET", "/vectorize/v2/indexes");
+    expect(seen[0]?.url).toBe(
+      "https://api.cloudflare.com/client/v4/accounts/acct/vectorize/v2/indexes",
+    );
+    expect(seen[0]?.init.body).toBe('{"name":"x"}');
+    expect(seen[0]?.init.headers).toEqual({
+      authorization: "Bearer test-token",
+      "content-type": "application/json",
+    });
+    expect(seen[1]?.init.body).toBeUndefined();
+    expect(seen[1]?.init.headers).toEqual({ authorization: "Bearer test-token" });
   });
 });
