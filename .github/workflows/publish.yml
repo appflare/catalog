@@ -2,7 +2,7 @@ name: publish
 
 # main: publish every app whose current pin has no GitHub Release yet.
 #
-#   build-packer  APPFLARE_REPO_TOKEN only; builds the packer bundle, runs no app code
+#   build-packer  APPFLARE_DEPLOY_KEY only; builds the packer bundle, runs no app code
 #   plan          no secrets; lists apps whose <slug>@<version> tag does not exist
 #   pack          no secrets; packs each app (runs its install and build code)
 #                 into an unsigned intermediate with keyId catalog-2026-09
@@ -14,13 +14,21 @@ name: publish
 #
 # The plan is computed from the manifests and existing releases, so any run
 # (including a manual one, or the one after a cancelled run) publishes whatever
-# is missing.
+# is missing. A manual run can narrow the plan to some apps with the "apps" input.
 
 on:
   push:
     branches: [main]
     paths: ["apps/**"]
   workflow_dispatch:
+    inputs:
+      apps:
+        description: >
+          Comma-separated app slugs to consider (for example "cut"). Empty: every
+          app. Either way, only apps whose release does not exist yet are published.
+        type: string
+        required: false
+        default: ""
 
 permissions: {}
 
@@ -50,7 +58,7 @@ jobs:
           persist-credentials: false
       - uses: ./catalog/.github/actions/build-packer
         with:
-          appflare-token: ${{ secrets.APPFLARE_REPO_TOKEN }}
+          appflare-deploy-key: ${{ secrets.APPFLARE_DEPLOY_KEY }}
 
   plan:
     name: plan
@@ -70,9 +78,14 @@ jobs:
       - id: plan
         env:
           GH_TOKEN: ${{ github.token }}
+          ONLY_APPS: ${{ inputs.apps }}
         run: |
           set -euo pipefail
-          apps="$(pnpm -s publish-plan --out "${RUNNER_TEMP}/publish-plan.json")"
+          only=()
+          if [ -n "${ONLY_APPS:-}" ]; then
+            only=(--only "${ONLY_APPS}")
+          fi
+          apps="$(pnpm -s publish-plan --out "${RUNNER_TEMP}/publish-plan.json" "${only[@]}")"
           echo "apps to publish: ${apps}"
           echo "apps=${apps}" >> "${GITHUB_OUTPUT}"
       # What sign and release hold every artifact to: app, version, source,

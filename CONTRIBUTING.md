@@ -75,7 +75,7 @@ pnpm install
 pnpm check                          # typecheck, lint, test
 pnpm validate [<slug>...]           # validate manifests
 pnpm pack-app <slug> [--out dist/<slug>] [--key-id catalog-2026-09]
-pnpm publish-plan [--out plan.json] # apps whose current pin has no release (needs gh)
+pnpm publish-plan [--out plan.json] [--only cut,...]  # apps whose pin has no release (needs gh)
 node scripts/check-manifest-plan.ts --plan plan.json --root dist (--unsigned | --signed)
 pnpm build-index [--releases-only] [--out index.json]
 pnpm sync-schema [--check]          # copy schema/v1.json from @appflare/schema
@@ -149,17 +149,21 @@ the same with either.
 To move the catalog to a newer packer or schema, change `.appflare-ref`, then run
 `pnpm sync-schema` and commit both.
 
-While `appflare/appflare` is private, `build-packer` needs the `APPFLARE_REPO_TOKEN`
-secret: a fine-grained personal access token with **Contents: read** on
-`appflare/appflare` and nothing else. It is the only job that sees this token, and it
-fails with an explicit error when the token is missing. Pull requests from forks do
-not receive secrets, so **fork PRs fail `verify` until `appflare/appflare` is
-public.**
+While `appflare/appflare` is private, `build-packer` checks it out over SSH with a
+read-only deploy key. The public half is registered on `appflare/appflare` as a
+deploy key without write access. The private half is this repository's
+`APPFLARE_DEPLOY_KEY` secret. The key can read that one repository and nothing
+else. Composite actions cannot read secrets, so each workflow passes it to the
+action as the `appflare-deploy-key` input. `build-packer` is the only job that sees
+it, `actions/checkout` does not keep it after checkout (`persist-credentials:
+false`), and the job fails with an explicit error when the secret is missing. Pull
+requests from forks do not receive secrets, so **fork PRs fail `verify` until
+`appflare/appflare` is public.**
 
 In `verify.yml`, `build-packer` runs the pull request's own copy of
-`.github/actions/build-packer`, with `APPFLARE_REPO_TOKEN` in scope. Fork PRs get no
+`.github/actions/build-packer`, with `APPFLARE_DEPLOY_KEY` in scope. Fork PRs get no
 secrets, so only people with write access to this repository can run a modified
-action with the token, by pushing a branch here. Protect `main` with a rule that
+action with the key, by pushing a branch here. Protect `main` with a rule that
 requires review for changes under `.github/` (a CODEOWNERS entry for `/.github/`
 plus "Require review from Code Owners").
 
@@ -171,8 +175,8 @@ When the packages are published to npm, drop the pin:
    `scripts/lib/versions.ts`, and `scripts/lib/types.ts`. Run the packer from
    `node_modules/.bin/appflare-pack`.
 3. Delete the `build-packer` jobs and both setup actions, replacing them with
-   `pnpm install`. Delete `.appflare-ref`, `APPFLARE_DIR`, and the
-   `APPFLARE_REPO_TOKEN` secret.
+   `pnpm install`. Delete `.appflare-ref`, `APPFLARE_DIR`, the
+   `APPFLARE_DEPLOY_KEY` secret, and the deploy key on `appflare/appflare`.
 
 ## Publishing
 
@@ -183,11 +187,18 @@ makes every run idempotent: a re-run, a manual run, or the run after a cancelled
 one publishes whatever is missing. Runs share the `publish` concurrency group and
 are never cancelled mid-way.
 
+A manual run (Actions > publish > Run workflow) takes an optional `apps` input: a
+comma-separated list of slugs, such as `cut`. Leave it empty to let the plan
+consider every app. Listed apps still go through the plan, so an app whose release
+already exists is skipped, and an unknown slug fails the run. Use this to publish
+without touching `apps/**`, for example the first release after the signing key is
+set up.
+
 Each job gets only the secret it needs:
 
 | Job | Secrets and permissions | What it does |
 |---|---|---|
-| `build-packer` | `APPFLARE_REPO_TOKEN`, `contents: read` | builds the packer bundle; runs no app code |
+| `build-packer` | `APPFLARE_DEPLOY_KEY`, `contents: read` | builds the packer bundle; runs no app code |
 | `plan` | none; `contents: read` token for `gh api` | `publish-plan --out`; fails on a metadata-only edit or a broken release |
 | `pack` (per app) | none; `contents: read`, no persisted credentials | `pack-app --key-id catalog-2026-09`, which runs the app's install and build; uploads exactly `dist/<slug>` as `unsigned-<slug>` |
 | `sign` (per app) | `APPFLARE_SIGNING_KEY`; `contents: read` to check out the catalog | runs no app code; checks the artifact against the plan, `verify --hashes-only`, `sign`, checks it again and runs `verify --require-signed`; uploads `signed-<slug>` |
@@ -231,7 +242,7 @@ Secrets:
 
 | Secret | Used by | What it is |
 |---|---|---|
-| `APPFLARE_REPO_TOKEN` | `build-packer` only | Fine-grained PAT, Contents: read on `appflare/appflare` |
+| `APPFLARE_DEPLOY_KEY` | `build-packer` only | Private half of a read-only SSH deploy key registered on `appflare/appflare` |
 | `APPFLARE_SIGNING_KEY` | `publish.yml` `sign` job only | Base64 PKCS#8 Ed25519 private key, key id `catalog-2026-09` |
 
 The `sign` job fails with an explicit error while `APPFLARE_SIGNING_KEY` is unset.

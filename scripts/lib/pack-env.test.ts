@@ -9,7 +9,7 @@ describe("packerEnv", () => {
         [SIGNING_KEY_ENV]: "k",
         GITHUB_TOKEN: "t",
         GH_TOKEN: "t",
-        APPFLARE_REPO_TOKEN: "t",
+        APPFLARE_DEPLOY_KEY: "k",
         ACTIONS_ID_TOKEN_REQUEST_TOKEN: "t",
       }),
     ).toEqual({ PATH: "/usr/bin" });

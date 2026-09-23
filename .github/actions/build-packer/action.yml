@@ -1,24 +1,27 @@
 name: Build the packer bundle
 description: >
-  Checks out appflare/appflare at the SHA in .appflare-ref (using the
-  APPFLARE_REPO_TOKEN secret), builds it, and uploads a self-contained bundle of
+  Checks out appflare/appflare at the SHA in .appflare-ref (over SSH with the
+  read-only deploy key in the APPFLARE_DEPLOY_KEY secret), builds it, and uploads a self-contained bundle of
   @appflare/pack and @appflare/schema (each with its production node_modules,
   made with `pnpm deploy`) as the workflow artifact "appflare-packer". No app
   code runs here. Expects the catalog checked out at ./catalog.
 inputs:
-  appflare-token:
-    description: Read-only token for appflare/appflare (the APPFLARE_REPO_TOKEN secret).
+  appflare-deploy-key:
+    description: >
+      Private half of the read-only deploy key registered on appflare/appflare
+      (the APPFLARE_DEPLOY_KEY secret). Composite actions cannot read secrets,
+      so each workflow passes it in.
     required: true
 runs:
   using: composite
   steps:
-    - name: Require APPFLARE_REPO_TOKEN
+    - name: Require APPFLARE_DEPLOY_KEY
       shell: bash
       env:
-        APPFLARE_REPO_TOKEN: ${{ inputs.appflare-token }}
+        APPFLARE_DEPLOY_KEY: ${{ inputs.appflare-deploy-key }}
       run: |
-        if [ -z "${APPFLARE_REPO_TOKEN}" ]; then
-          echo "::error title=APPFLARE_REPO_TOKEN is not set::The catalog builds @appflare/pack from a pinned checkout of appflare/appflare, which is private. Add a fine-grained PAT with Contents: read on appflare/appflare as the APPFLARE_REPO_TOKEN secret (see CONTRIBUTING.md). Pull requests from forks do not receive secrets and fail here until appflare/appflare is public."
+        if [ -z "${APPFLARE_DEPLOY_KEY}" ]; then
+          echo "::error title=APPFLARE_DEPLOY_KEY is not set::The catalog builds @appflare/pack from a pinned checkout of appflare/appflare, which is private. Add the private half of the read-only deploy key registered on appflare/appflare as the APPFLARE_DEPLOY_KEY secret of this repository (see CONTRIBUTING.md). Pull requests from forks do not receive secrets and fail here until appflare/appflare is public."
           exit 1
         fi
 
@@ -39,7 +42,7 @@ runs:
       with:
         repository: appflare/appflare
         ref: ${{ steps.ref.outputs.sha }}
-        token: ${{ inputs.appflare-token }}
+        ssh-key: ${{ inputs.appflare-deploy-key }}
         path: appflare-src
         persist-credentials: false
 

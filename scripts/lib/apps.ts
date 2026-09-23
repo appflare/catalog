@@ -38,6 +38,29 @@ export function findApp(appsDir: string, slug: string): AppEntry {
   return app;
 }
 
+/**
+ * Narrows `apps` to a comma-separated slug list (whitespace and empty items
+ * ignored). No list, or an empty one, keeps every app. Unknown slugs throw.
+ */
+export function selectApps(apps: readonly AppEntry[], only: string | undefined): AppEntry[] {
+  const wanted = [
+    ...new Set(
+      (only ?? "")
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean),
+    ),
+  ];
+  if (wanted.length === 0) {
+    return [...apps];
+  }
+  const unknown = wanted.filter((slug) => !apps.some((a) => a.slug === slug));
+  if (unknown.length > 0) {
+    throw new Error(`unknown app slug(s): ${unknown.join(", ")}`);
+  }
+  return apps.filter((a) => wanted.includes(a.slug));
+}
+
 /** Reads `appflare.jsonc` as JSONC, naming the file in any parse error. */
 export function readManifestFile(manifestPath: string): unknown {
   try {

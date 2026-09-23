@@ -4,7 +4,7 @@ import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { appflareAvailable, testSchema } from "../fixtures/schema.ts";
 import type { Parser } from "./appflare-schema.ts";
-import { findApp, listApps, loadManifest } from "./apps.ts";
+import { findApp, listApps, loadManifest, selectApps } from "./apps.ts";
 import { appsDir } from "./paths.ts";
 import type { CatalogManifest } from "./types.ts";
 
@@ -18,6 +18,20 @@ describe("listApps / findApp", () => {
 
   it("names the expected path for an unknown slug", () => {
     expect(() => findApp(fixtureApps, "nope")).toThrow(/nope\/appflare\.jsonc/);
+  });
+});
+
+describe("selectApps", () => {
+  const apps = listApps(fixtureApps);
+
+  it("keeps every app for an empty or missing list", () => {
+    expect(selectApps(apps, undefined)).toEqual(apps);
+    expect(selectApps(apps, " , ")).toEqual(apps);
+  });
+
+  it("narrows to the listed slugs and rejects unknown ones", () => {
+    expect(selectApps(apps, " hello ,hello").map((a) => a.slug)).toEqual(["hello"]);
+    expect(() => selectApps(apps, "hello,nope")).toThrow(/unknown app slug\(s\): nope/);
   });
 });
 

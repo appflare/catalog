@@ -2,7 +2,7 @@ name: verify
 
 # Pull requests: check the catalog tooling, then validate each changed app's
 # manifest, pack it (unsigned), and verify the artifact's hashes. No release,
-# no Cloudflare account. Only build-packer sees a secret (APPFLARE_REPO_TOKEN);
+# no Cloudflare account. Only build-packer sees a secret (APPFLARE_DEPLOY_KEY);
 # the jobs that run pull-request or app code see none.
 
 on:
@@ -32,7 +32,7 @@ jobs:
           persist-credentials: false
       - uses: ./catalog/.github/actions/build-packer
         with:
-          appflare-token: ${{ secrets.APPFLARE_REPO_TOKEN }}
+          appflare-deploy-key: ${{ secrets.APPFLARE_DEPLOY_KEY }}
 
   check:
     name: check (typecheck, lint, test, generated files)

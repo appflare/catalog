@@ -2,7 +2,7 @@ import { writeFileSync } from "node:fs";
 import path from "node:path";
 import { parseArgs } from "node:util";
 import { loadAppflareSchema } from "./lib/appflare-schema.ts";
-import { listApps, loadManifest } from "./lib/apps.ts";
+import { listApps, loadManifest, selectApps } from "./lib/apps.ts";
 import { catalogRepo, info, runMain } from "./lib/cli.ts";
 import { createGhReleaseLookup } from "./lib/github-releases.ts";
 import type { PublishPlan } from "./lib/manifest-plan.ts";
@@ -11,7 +11,7 @@ import { appsDir, resolveAppflareDir } from "./lib/paths.ts";
 import { decide } from "./lib/publish-plan.ts";
 import { createVersionResolver, loadPackerVersioning } from "./lib/versions.ts";
 
-const USAGE = `Usage: pnpm -s publish-plan [--out <plan.json>]
+const USAGE = `Usage: pnpm -s publish-plan [--out <plan.json>] [--only <slug,...>]
 
 Prints a JSON array of the app slugs publish CI must pack: every app whose
 current pin packs to a version <v> with no GitHub Release <slug>@<v> yet.
@@ -21,11 +21,17 @@ Needs gh (read-only) and APPFLARE_DIR.
 
   --out <file>   also write the plan (expected app, version, source, keyId, and
                  catalog per slug) for scripts/check-manifest-plan.ts
+  --only <slugs> consider only these comma-separated apps (an unknown slug is an
+                 error); each is still skipped when its release exists
 `;
 
 runMain(async () => {
   const { values } = parseArgs({
-    options: { out: { type: "string" }, help: { type: "boolean", short: "h" } },
+    options: {
+      out: { type: "string" },
+      only: { type: "string" },
+      help: { type: "boolean", short: "h" },
+    },
   });
   if (values.help) {
     process.stdout.write(USAGE);
@@ -37,7 +43,8 @@ runMain(async () => {
   const releases = createGhReleaseLookup(catalogRepo());
   const plan: PublishPlan = { format: 1, apps: {} };
   const errors: string[] = [];
-  for (const app of listApps(appsDir)) {
+  const apps = selectApps(listApps(appsDir), values.only);
+  for (const app of apps) {
     const manifest = loadManifest(app, schema.catalogManifest);
     try {
       const decision = decide(
