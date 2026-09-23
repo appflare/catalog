@@ -1,21 +1,21 @@
 {
-  "generatedAt": "2026-09-23T11:12:28.464Z",
+  "generatedAt": "2026-09-23T12:01:04.841Z",
   "apps": [
     {
       "slug": "cut",
       "name": "Cut",
       "summary": "Self-hosted link shortener on Workers + KV.",
-      "version": "0.0.0-20260826.6056400",
+      "version": "0.1.0",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/cut@0.0.0-20260826.6056400/cut-0.0.0-20260826.6056400.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/cut@0.0.0-20260826.6056400/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/cut@0.0.0-20260826.6056400/manifest.sig"
+        "zip": "https://github.com/appflare/catalog/releases/download/cut@0.1.0/cut-0.1.0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/cut@0.1.0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/cut@0.1.0/manifest.sig"
       },
-      "digest": "81017e57bc784250aa21ade22bd7eebee987c5676bc60f06e7191b93d6b387c6",
+      "digest": "86bbb3cbe1afbcff52c18a91a659b8f7876043a78f434a6a9c7eb274edb4a6c1",
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-09-23T11:12:06.000Z",
+      "lastVerified": null,
       "maintainers": [
         "MendyLanda"
       ]
