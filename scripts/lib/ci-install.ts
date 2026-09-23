@@ -9,7 +9,9 @@ import type { ArtifactBinding, ArtifactFile, ArtifactManifest } from "./types.ts
  *
  * This is not the manager's install path. The manager creates each resource
  * through the API and records it; here `wrangler deploy` provisions the
- * resources from bindings without ids. Both use the same names,
+ * resources from bindings without ids. Vectorize indexes are the exception:
+ * wrangler cannot provision one, so the check creates each through the API
+ * before the deploy. Both use the same names,
  * `<worker>-<binding, lowercased, "_" -> "-">`, so the CI Worker's resources can
  * be found and deleted by name afterwards without any records.
  */
@@ -41,13 +43,28 @@ export function resourceName(workerName: string, bindingName: string): string {
   return `${workerName}-${bindingName.toLowerCase().replaceAll("_", "-")}`;
 }
 
-export type CiResourceType = "kv" | "d1" | "r2" | "workflow";
+export type CiResourceType = "kv" | "d1" | "r2" | "workflow" | "vectorize";
 
 export interface CiResource {
   type: CiResourceType;
   name: string;
   binding: string;
 }
+
+/** How a Vectorize index measures distance; fixed when the index is created. */
+export type VectorizeMetric = "cosine" | "euclidean" | "dot-product";
+
+/** A Vectorize index to create before the deploy, with the shape the artifact records. */
+export interface CiVectorizeIndex {
+  name: string;
+  dimensions: number;
+  metric: VectorizeMetric;
+}
+
+/** Vectorize's limits: index names up to 64 bytes, vectors up to 1536 dimensions. */
+const VECTORIZE_MAX_NAME = 64;
+const VECTORIZE_MAX_DIMENSIONS = 1536;
+const VECTORIZE_METRICS: readonly string[] = ["cosine", "euclidean", "dot-product"];
 
 export interface CiInstallPlan {
   name: string;
@@ -59,6 +76,8 @@ export interface CiInstallPlan {
   secrets: string[];
   /** D1 databases with migrations to apply, by database name. */
   d1Migrations: string[];
+  /** Vectorize indexes to create before the deploy (wrangler cannot provision them). */
+  vectorizeIndexes: CiVectorizeIndex[];
   /** The path the health check probes: the catalog's `install.healthPath`, else `/`. */
   healthPath: string;
 }
@@ -124,6 +143,36 @@ export function catalogForms(catalog: unknown): CatalogForms {
   return { secrets, vars };
 }
 
+/**
+ * The index a `vectorize` binding needs, named `resource`. The artifact
+ * records the shape from the catalog manifest's `resources.vectorize`; throws
+ * when it is missing or outside Vectorize's limits, or when the name is too long.
+ */
+function vectorizeIndex(binding: ArtifactBinding, resource: string): CiVectorizeIndex {
+  const { dimensions, metric } = binding;
+  if (
+    typeof dimensions !== "number" ||
+    !Number.isInteger(dimensions) ||
+    dimensions < 1 ||
+    dimensions > VECTORIZE_MAX_DIMENSIONS
+  ) {
+    throw new Error(
+      `vectorize binding ${binding.name} records no usable dimensions (1-${VECTORIZE_MAX_DIMENSIONS})`,
+    );
+  }
+  if (typeof metric !== "string" || !VECTORIZE_METRICS.includes(metric)) {
+    throw new Error(
+      `vectorize binding ${binding.name} records no usable metric (${VECTORIZE_METRICS.join(", ")})`,
+    );
+  }
+  if (resource.length > VECTORIZE_MAX_NAME) {
+    throw new Error(
+      `the Vectorize index name "${resource}" is longer than ${VECTORIZE_MAX_NAME} characters; use a shorter suffix`,
+    );
+  }
+  return { name: resource, dimensions, metric: metric as VectorizeMetric };
+}
+
 /** Same rule as the catalog schema: a URL path starting with `/`, without query or fragment. */
 const HEALTH_PATH = /^\/[^\s?#]*$/;
 
@@ -168,6 +217,8 @@ export function planCiInstall(manifest: ArtifactManifest, name: string): CiInsta
   const durableObjects: Record<string, string>[] = [];
   const workflows: Record<string, string>[] = [];
   const analytics: Record<string, string>[] = [];
+  const vectorize: Record<string, string>[] = [];
+  const vectorizeIndexes: CiVectorizeIndex[] = [];
   const singles: Record<string, { binding: string }> = {};
   const vars: Record<string, unknown> = {};
   const d1Migrations: string[] = [];
@@ -214,6 +265,12 @@ export function planCiInstall(manifest: ArtifactManifest, name: string): CiInsta
         });
         resources.push({ type: "workflow", name: resource, binding: binding.name });
         break;
+      case "vectorize":
+        // Created through the API before the deploy; the binding names it.
+        vectorizeIndexes.push(vectorizeIndex(binding, resource));
+        vectorize.push({ binding: binding.name, index_name: resource });
+        resources.push({ type: "vectorize", name: resource, binding: binding.name });
+        break;
       case "analytics_engine":
         analytics.push({ binding: binding.name, ...optionalStr(binding, "dataset") });
         break;
@@ -231,7 +288,7 @@ export function planCiInstall(manifest: ArtifactManifest, name: string): CiInsta
       case "assets":
         break;
       default:
-        // TODO: queues, Vectorize, Hyperdrive, service bindings, mTLS and email
+        // TODO: queues, Hyperdrive, service bindings, mTLS and email
         // need resources or peers this check does not create and clean up yet.
         throw new Error(
           `the CI install check cannot create a ${binding.type} binding (${binding.name}) yet`,
@@ -286,6 +343,7 @@ export function planCiInstall(manifest: ArtifactManifest, name: string): CiInsta
     ...(durableObjects.length > 0 ? { durable_objects: { bindings: durableObjects } } : {}),
     ...(workflows.length > 0 ? { workflows } : {}),
     ...(analytics.length > 0 ? { analytics_engine_datasets: analytics } : {}),
+    ...(vectorize.length > 0 ? { vectorize } : {}),
     ...singles,
     ...(Object.keys(vars).length > 0 ? { vars } : {}),
     triggers: { crons: [...worker.crons] },
@@ -302,6 +360,7 @@ export function planCiInstall(manifest: ArtifactManifest, name: string): CiInsta
     resources,
     secrets: forms.secrets,
     d1Migrations,
+    vectorizeIndexes,
     healthPath: catalogHealthPath(manifest.catalog),
   };
 }
@@ -457,7 +516,8 @@ export interface CfResponse {
   } | null;
 }
 
-export type CfRequest = (method: string, path: string) => Promise<CfResponse>;
+/** One API call; `body`, when given, is sent as JSON. */
+export type CfRequest = (method: string, path: string, body?: unknown) => Promise<CfResponse>;
 
 /** A minimal client for `https://api.cloudflare.com/client/v4/accounts/<id>`. */
 export function createCfRequest(
@@ -465,12 +525,16 @@ export function createCfRequest(
   accountId: string,
   fetchFn: typeof fetch = fetch,
 ): CfRequest {
-  return async (method, apiPath) => {
+  return async (method, apiPath, json) => {
     const res = await fetchFn(
       `https://api.cloudflare.com/client/v4/accounts/${accountId}${apiPath}`,
       {
         method,
-        headers: { authorization: `Bearer ${token}` },
+        headers: {
+          authorization: `Bearer ${token}`,
+          ...(json === undefined ? {} : { "content-type": "application/json" }),
+        },
+        ...(json === undefined ? {} : { body: JSON.stringify(json) }),
       },
     );
     let body: CfResponse["body"] = null;
@@ -530,6 +594,15 @@ async function findResource(request: CfRequest, resource: CiResource): Promise<s
         (db) => db.name === resource.name,
       );
       return hit?.uuid ?? null;
+    }
+    case "vectorize": {
+      // One page lists every index (an account has at most 50,000).
+      const res = await request("GET", "/vectorize/v2/indexes");
+      if (res.status !== 200 || !Array.isArray(res.body?.result)) {
+        throw new Error(`listing Vectorize indexes failed: ${describe(res)}`);
+      }
+      const hit = (res.body.result as { name?: unknown }[]).find((i) => i.name === resource.name);
+      return hit ? resource.name : null;
     }
     case "r2":
     case "workflow": {
@@ -594,6 +667,32 @@ function deletePath(resource: CiResource, id: string): string {
       return `/r2/buckets/${encodeURIComponent(id)}`;
     case "workflow":
       return `/workflows/${encodeURIComponent(id)}`;
+    case "vectorize":
+      return `/vectorize/v2/indexes/${encodeURIComponent(id)}`;
+  }
+}
+
+/**
+ * Creates each Vectorize index in the plan with
+ * `POST /vectorize/v2/indexes` and `{ name, config: { dimensions, metric } }`.
+ * Run after the cleanup of an earlier run, so every name is free; an index
+ * that already exists is an error rather than something to reuse.
+ */
+export async function createVectorizeIndexes(
+  request: CfRequest,
+  plan: Pick<CiInstallPlan, "vectorizeIndexes">,
+): Promise<void> {
+  for (const index of plan.vectorizeIndexes) {
+    const res = await request("POST", "/vectorize/v2/indexes", {
+      name: index.name,
+      config: { dimensions: index.dimensions, metric: index.metric },
+    });
+    // Cloudflare answers 201 Created for a new index; the v4 envelope's
+    // `success` is what says the create went through.
+    const created = res.status >= 200 && res.status < 300 && res.body?.success === true;
+    if (!created) {
+      throw new Error(`creating Vectorize index ${index.name} failed: ${describe(res)}`);
+    }
   }
 }
 
