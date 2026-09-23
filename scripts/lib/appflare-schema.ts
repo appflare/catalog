@@ -1,6 +1,7 @@
 import { pathToFileURL } from "node:url";
 import { appflarePaths, assertAppflareBuilt } from "./paths.ts";
-import type { ArtifactManifest, CatalogManifest, IndexJson } from "./types.ts";
+import type { SandboxDefaults } from "./sandbox-entry.ts";
+import type { ArtifactManifest, CatalogManifest, IndexJson, SandboxInstanceType } from "./types.ts";
 
 /** One validation problem, in the shape zod 4 reports it. */
 export interface ParseIssue {
@@ -27,6 +28,8 @@ export interface AppflareSchema {
    * own subrequest, within the free plan's per-invocation subrequest limit.
    */
   maxWorkerModules: number;
+  /** What a sandbox tier entry's `install.sandbox` defaults to. */
+  sandboxDefaults: SandboxDefaults;
 }
 
 /**
@@ -43,6 +46,10 @@ export async function loadAppflareSchema(appflareDir: string): Promise<AppflareS
     artifactManifest: pickParser<ArtifactManifest>(mod, "artifactManifestSchema"),
     indexJson: pickParser<IndexJson>(mod, "indexJsonSchema"),
     maxWorkerModules: pickPositiveInt(mod, "MAX_WORKER_MODULES"),
+    sandboxDefaults: {
+      expectedMinutes: pickPositiveInt(mod, "DEFAULT_EXPECTED_BUILD_MINUTES"),
+      instanceType: pickInstanceType(mod, "DEFAULT_SANDBOX_INSTANCE_TYPE"),
+    },
   };
 }
 
@@ -60,6 +67,16 @@ function pickPositiveInt(mod: unknown, exportName: string): number {
   const value = (mod as Record<string, unknown> | null)?.[exportName];
   if (typeof value !== "number" || !Number.isInteger(value) || value < 1) {
     throw new Error(`@appflare/schema does not export a positive integer named ${exportName}`);
+  }
+  return value;
+}
+
+function pickInstanceType(mod: unknown, exportName: string): SandboxInstanceType {
+  const value = (mod as Record<string, unknown> | null)?.[exportName];
+  if (value !== "standard-1" && value !== "standard-2") {
+    throw new Error(
+      `@appflare/schema does not export a container instance type named ${exportName}`,
+    );
   }
   return value;
 }

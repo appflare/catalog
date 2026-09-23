@@ -1,6 +1,7 @@
 import path from "node:path";
 import { beforeAll, describe, expect, it } from "vitest";
 import { artifactManifestFixture } from "../fixtures/artifact-manifest.ts";
+import { sandboxFixture } from "../fixtures/sandbox-manifest.ts";
 import { testSchema } from "../fixtures/schema.ts";
 import type { AppflareSchema } from "./appflare-schema.ts";
 import { findApp, loadManifest } from "./apps.ts";
@@ -35,6 +36,35 @@ function releasedWith(tag: string, catalog: unknown, sha = PIN, ref?: string): R
 }
 
 describe("decide", () => {
+  it("never packs or releases sandbox and self-deploying entries", () => {
+    const releases: ReleaseLookup = {
+      byTag: () => {
+        throw new Error("must not be consulted");
+      },
+    };
+    const noVersion: VersionResolver = {
+      versionOf: () => {
+        throw new Error("must not be consulted");
+      },
+    };
+    const built = sandboxFixture(hello, schema);
+    expect(decide(built, noVersion, releases, schema.artifactManifest, KEY_ID)).toEqual({
+      slug: "built",
+      action: "not-released",
+      tier: "sandbox",
+    });
+    const seo = {
+      ...hello,
+      slug: "seo",
+      install: { ...hello.install, tier: "self-deploying" as const },
+    };
+    expect(decide(seo, noVersion, releases, schema.artifactManifest, KEY_ID)).toEqual({
+      slug: "seo",
+      action: "not-released",
+      tier: "self-deploying",
+    });
+  });
+
   it("publishes when the tag for the current pin does not exist", () => {
     const none: ReleaseLookup = { byTag: () => null };
     expect(decide(hello, versions, none, schema.artifactManifest, KEY_ID)).toEqual({

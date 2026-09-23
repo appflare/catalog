@@ -2,12 +2,15 @@ import { type Parser, parseOrThrow } from "./appflare-schema.ts";
 import { changedFields } from "./canonical.ts";
 import type { ReleaseLookup } from "./github-releases.ts";
 import { type PlannedArtifact, plannedArtifact } from "./manifest-plan.ts";
-import type { ArtifactManifest, CatalogManifest } from "./types.ts";
+import type { ArtifactManifest, CatalogManifest, InstallTier } from "./types.ts";
 import type { VersionResolver } from "./versions.ts";
 
 /**
- * Which apps publish CI packs. For every catalog manifest, the version its
- * current pin packs to gives the tag `<slug>@<version>`:
+ * Which apps publish CI packs. Only `artifact` tier entries get a release:
+ * a `sandbox` tier entry is built in the user's account from its pin, and a
+ * `self-deploying` one installs itself, so neither is packed, signed, or
+ * released (`not-released`). For every artifact tier manifest, the version
+ * its current pin packs to gives the tag `<slug>@<version>`:
  *
  * - no release (and no draft) with that tag: publish, with the plan entry the
  *   `sign` and `release` jobs hold the artifact to;
@@ -25,6 +28,7 @@ import type { VersionResolver } from "./versions.ts";
  */
 
 export type PlanDecision =
+  | { slug: string; action: "not-released"; tier: InstallTier }
   | { slug: string; tag: string; action: "publish"; planned: PlannedArtifact }
   | { slug: string; tag: string; action: "skip" }
   | { slug: string; tag: string; action: "error"; message: string };
@@ -38,6 +42,9 @@ export function decide(
   keyId: string,
 ): PlanDecision {
   const slug = manifest.slug;
+  if (manifest.install.tier !== "artifact") {
+    return { slug, action: "not-released", tier: manifest.install.tier };
+  }
   const version = versions.versionOf(manifest);
   const tag = `${slug}@${version}`;
   const release = releases.byTag(tag);

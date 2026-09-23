@@ -15,6 +15,8 @@
     "check": "pnpm typecheck && pnpm lint && pnpm test",
     "validate": "node scripts/validate.ts",
     "build-index": "node scripts/build-index.ts",
+    "build-site": "node scripts/build-site.ts",
+    "verify-tier": "node scripts/verify-tier.ts",
     "pack-app": "node scripts/pack-app.ts",
     "sync-schema": "node scripts/sync-schema.ts",
     "gen-codeowners": "node scripts/gen-codeowners.ts",

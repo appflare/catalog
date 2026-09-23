@@ -11,6 +11,7 @@
 
 export type InstallTier = "artifact" | "sandbox" | "self-deploying";
 export type Plan = "free" | "paid";
+export type SandboxInstanceType = "standard-1" | "standard-2";
 
 /** Subset of `CatalogManifest`. */
 export interface CatalogManifest {
@@ -30,9 +31,15 @@ export interface CatalogManifest {
     workerName: string;
     /** The app's version when the repository's tags do not describe it (monorepos). */
     version?: string;
+    /** One command the packer runs after installing dependencies, before bundling. */
+    buildCommand?: string;
+    /** Build settings of a `sandbox` tier entry. */
+    sandbox?: { expectedMinutes?: number; instanceType?: SandboxInstanceType };
   };
   plan: Plan;
   requires: string[];
+  /** How the bump bot treats the entry. */
+  bump?: { autoMerge: boolean };
 }
 
 /** A file stored in the artifact zip, addressed by byte range. */
@@ -99,19 +106,43 @@ export interface ArtifactManifest {
   catalog: unknown;
 }
 
-/** `IndexApp`, in full: the catalog builds it. */
+/** `IndexArtifacts`: release-asset URLs of one app version. */
+export interface IndexArtifacts {
+  zip: string;
+  manifest: string;
+  sig: string;
+}
+
+/** `IndexBuild`, in full: how a `sandbox` tier entry is built in the user's account. */
+export interface IndexBuild {
+  /** The commit the build checks out: the manifest's `source.sha`. */
+  pin: string;
+  /** URL of the entry's catalog manifest, published as JSON next to `index.json`. */
+  manifest: string;
+  /** sha256 of the exact bytes at `manifest`. */
+  manifestDigest: string;
+  buildCommand?: string;
+  expectedMinutes?: number;
+  instanceType?: SandboxInstanceType;
+}
+
+/**
+ * `IndexApp`, in full: the catalog builds it. `artifact` tier rows carry
+ * `artifacts` and `digest`; `sandbox` tier rows carry `build` instead.
+ */
 export interface IndexApp {
   slug: string;
   name: string;
   summary: string;
   version: string;
-  artifacts: { zip: string; manifest: string; sig: string };
-  digest: string;
+  artifacts?: IndexArtifacts;
+  digest?: string;
   tier: InstallTier;
   plan: Plan;
   requires: string[];
   lastVerified: string | null;
   maintainers: string[];
+  build?: IndexBuild;
 }
 
 /** `IndexJson`, in full. */

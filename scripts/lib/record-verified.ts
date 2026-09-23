@@ -1,10 +1,13 @@
 import { z } from "zod";
+import { verifiedDigest } from "./index-builder.ts";
 import type { IndexJson } from "./types.ts";
 
 /**
- * Records nightly install checks in the published index. It only patches
- * `lastVerified` into rows that match a passing check by slug, version, and
- * digest. It never adds, removes, or rebuilds rows, so a failed or missing
+ * Records install checks in the published index: the nightly ones of
+ * artifact tier apps, and the ones a maintainer runs for sandbox tier apps
+ * (verify-tier.yml). It only patches `lastVerified` into rows that match a
+ * passing check by slug, version, and digest (a sandbox row's
+ * `build.manifestDigest`). It never adds, removes, or rebuilds rows, so a failed or missing
  * check can never drop an app from the catalog.
  */
 
@@ -37,7 +40,7 @@ export function patchLastVerified(
     if (
       check &&
       check.version === row.version &&
-      check.digest === row.digest &&
+      check.digest === verifiedDigest(row) &&
       check.at !== row.lastVerified
     ) {
       updated.push(row.slug);
@@ -50,7 +53,9 @@ export function patchLastVerified(
       ([slug, check]) =>
         !index.apps.some(
           (row) =>
-            row.slug === slug && row.version === check.version && row.digest === check.digest,
+            row.slug === slug &&
+            row.version === check.version &&
+            verifiedDigest(row) === check.digest,
         ),
     )
     .map(([slug]) => slug)

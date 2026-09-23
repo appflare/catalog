@@ -20,6 +20,7 @@ scripts/                       catalog tooling (Node 22, run with pnpm)
 .github/workflows/publish.yml  main: pack, sign, release, index.json, GitHub Pages
 .github/workflows/bump.yml     nightly: open a pull request for each pin that moved upstream
 .github/workflows/nightly.yml  nightly: install check of every release, set lastVerified
+.github/workflows/verify-tier.yml  manual: record lastVerified for a sandbox tier entry
 .github/workflows/conventions.yml  every push and PR: commit messages
 ```
 
@@ -79,6 +80,89 @@ is already released, publish fails and names the fields that changed. To ship th
 change, re-pin `source`: a newer `source.sha` (for branch pins), or a new tag in
 `source.ref` and its `source.sha`.
 
+## Sandbox tier
+
+Most entries use the `artifact` tier: CI builds, signs, and releases the app, and
+every manager installs that artifact. An entry with `"tier": "sandbox"` is built
+in each user's own account instead, by the sandbox Worker (`appflare-sandbox`),
+which runs the build in a Cloudflare container. The user enables it once with
+`npx @appflare/cli sandbox enable`. Containers need Workers Paid, so only users on
+the paid plan can install sandbox entries, and each install and update runs a
+build that is billed to their account.
+
+Use the sandbox tier only when an artifact built by the catalog will not do, for
+example a fast-moving app that must be built from its source for each install.
+Everything else stays on the `artifact` tier, which works on the free plan and
+installs a build that CI has checked.
+
+A sandbox entry must:
+
+- set `"plan": "paid"`;
+- declare `install.buildCommand`, the command that builds the app. `pnpm validate`
+  checks the manifest only and never reads the upstream wrangler config, so an
+  app built only by its wrangler `build.command` does not qualify. Do not
+  declare the same command in both places: the build would run twice;
+- not set `bump.autoMerge`, since CI never installs the entry (see below).
+
+It may set `install.sandbox`:
+
+```jsonc
+"install": {
+  "tier": "sandbox",
+  // ...
+  "buildCommand": "pnpm run build",
+  "sandbox": { "expectedMinutes": 12, "instanceType": "standard-1" }
+}
+```
+
+`expectedMinutes` (a whole number from 1 to 120, default 10) is about how long one
+build takes, and `instanceType` is the container it runs on: `standard-1` (the
+default, 1/2 vCPU, 4 GiB memory) or `standard-2` (1 vCPU, 6 GiB) for builds that
+run out of memory or disk. The manager uses both to show what a build costs
+before the user confirms an install or update. Measure `expectedMinutes` from
+a real build, and round it up.
+
+What CI does with a sandbox entry:
+
+- **Pull requests** (`verify.yml`): validate the manifest and pack the pinned
+  commit on the runner, as for any entry. The pack proves that the app builds
+  from the pin and stays within the Worker module limit. There is **no install
+  check**: the build a user gets comes from their own account's sandbox Worker,
+  which CI cannot reach.
+- **Publishing** (`publish.yml`): no pack, no signature, no GitHub Release.
+  `build-index` lists the entry with a `build` block instead of `artifacts` and
+  `digest`, which holds the pinned commit, the build command, `expectedMinutes`
+  and `instanceType` with the defaults filled in, and the URL and sha256 of the
+  entry's catalog manifest. The Pages site serves that manifest at
+  `apps/<slug>/manifest.json`, next to `index.json`: the schema-parsed manifest
+  with keys sorted, which the manager checks against the sha256 before it asks
+  its sandbox Worker to build. `build-site` refuses to publish a manifest whose
+  bytes do not match the digest in `index.json`.
+- **Nightly** (`nightly.yml`): skipped.
+
+So `lastVerified` of a sandbox entry is set only by hand, with
+[`verify-tier.yml`](.github/workflows/verify-tier.yml), in a Workers Paid account
+kept for this purpose (its `PAID_CLOUDFLARE_API_TOKEN`, with Workers Scripts read,
+and `PAID_CLOUDFLARE_ACCOUNT_ID` are secrets of this repository):
+
+1. Enable sandbox builds there with `npx @appflare/cli sandbox enable`, and
+   install the version `index.json` lists with the Appflare manager in that
+   account.
+2. Run Actions > verify tier > Run workflow with the slug, that version, and the
+   Worker name if you changed it at install.
+3. Uninstall the app in the manager.
+
+The workflow fails without recording anything when the secrets are missing,
+when the account has no `appflare-sandbox` Worker, when `index.json` lists
+another version, or when the app's Worker is missing or fails the health check
+(the same check as the other install checks). When it passes, it records
+`lastVerified` against the entry's version and catalog manifest digest and
+deploys Pages. It cannot tell which commit the running Worker was built from:
+your install through the manager vouches for that.
+
+`self-deploying` entries (apps that ship their own installer) are validated only.
+`build-index` leaves them out of `index.json` until the manager can install them.
+
 ## Local tooling
 
 The scripts use `@appflare/schema` and `@appflare/pack` from a built checkout of
@@ -96,6 +180,7 @@ pnpm pack-app <slug> [--out dist/<slug>] [--key-id catalog-2026-09]
 pnpm publish-plan [--out plan.json] [--only cut,...]  # apps whose pin has no release (needs gh)
 node scripts/check-manifest-plan.ts --plan plan.json --root dist (--unsigned | --signed)
 pnpm build-index [--releases-only] [--out index.json]
+pnpm -s build-site --out site       # the Pages site: index.json, schema, sandbox manifests
 pnpm record-verified --verified checks.json          # patch lastVerified only
 pnpm -s bump plan --out <dir> [--only cut,...]    # pins that moved upstream (needs gh)
 pnpm -s bump apply <slug> --ref <ref> --sha <sha>  # edit source, keeping comments
@@ -103,6 +188,7 @@ node scripts/ci-install.ts deploy|cleanup <artifactDir> --suffix <suffix>  # nee
 pnpm sync-schema [--check]          # copy schema/v1.json from @appflare/schema
 pnpm gen-codeowners [--check]       # regenerate CODEOWNERS
 pnpm -s max-modules                 # the Worker module limit from @appflare/schema
+pnpm -s verify-tier <slug> --version <v> --out checks.json [--worker <name>]  # needs a paid account
 ```
 
 Tests that need the real schema skip themselves when `APPFLARE_DIR` has no build.
@@ -219,8 +305,11 @@ When the packages are published to npm, drop the pin:
 
 ## Publishing
 
-`publish.yml` runs on every push to `main` that touches `apps/**`, and on manual
-dispatch. `bump.yml` also starts it for bumps that merged themselves (see "Who
+`publish.yml` runs on every push to `main` that touches `apps/**`, `.appflare-ref`,
+or `schema/**`, and on manual dispatch. A push with nothing to release still
+rebuilds `index.json` and the Pages site, which a new `.appflare-ref` or schema
+can change for sandbox tier entries. It packs, signs, and releases `artifact` tier entries only; see "Sandbox
+tier" for the rest. `bump.yml` also starts it for bumps that merged themselves (see "Who
 merges a bump"). It does not diff commits. `publish-plan` works out, for every app, the tag
 its current pin packs to and publishes the apps whose tag does not exist yet. That
 makes every run idempotent: a re-run, a manual run, or the run after a cancelled
@@ -243,7 +332,7 @@ Each job gets only the secret it needs:
 | `pack` (per app) | none; `contents: read`, no persisted credentials | `pack-app --key-id catalog-2026-09`, which runs the app's install and build; uploads exactly `dist/<slug>` as `unsigned-<slug>` |
 | `sign` (per app) | `APPFLARE_SIGNING_KEY`; `contents: read` to check out the catalog | runs no app code; checks the artifact against the plan, `verify --hashes-only`, `sign`, checks it again and runs `verify --require-signed`; uploads `signed-<slug>` |
 | `release` | `CATALOG_PUSH_KEY`; `contents: write` for the releases | re-checks every planned artifact against the plan, `verify --require-signed`, creates `<slug>@<version>` with the three assets (skips complete existing releases), `build-index --releases-only`, commits `index.json` as `github-actions[bot]` with `[skip ci]` and pushes it with `CATALOG_PUSH_KEY` |
-| `pages` | `pages: write`, `id-token: write` | deploys `index.json` and `schema/v1.json` |
+| `pages` | `pages: write`, `id-token: write` | deploys the site `build-site` assembles: `index.json`, `schema/v1.json`, and each sandbox entry's `apps/<slug>/manifest.json` |
 
 ### What the signing step trusts
 
@@ -318,7 +407,8 @@ Repository settings the maintainer has to make:
   Auto-merge waits only for required checks, and a required check needs a fixed
   name, which the per-app `pack <slug>` and `install check <slug>` jobs do not
   have. `verify passed` fails unless every other `verify.yml` job succeeded;
-  `pack` and `install check` may be skipped only when no app changed. `bump.yml`
+  `pack` may be skipped only when no artifact or sandbox tier entry changed,
+  and `install check` only when no artifact tier entry changed. `bump.yml`
   enables auto-merge only while `verify passed` is required on `main`.
 - Do not turn on **Require review from Code Owners** in that ruleset. It would
   hold every auto-merge bump until an owner approves, which is the step
@@ -449,9 +539,10 @@ next bump pull request.
 
 ## Install checks
 
-`verify.yml` (for each changed app, after packing) and `nightly.yml` (for the
-current release of every published app) install the artifact into a dedicated CI
-Cloudflare account and delete it again:
+`verify.yml` (for each changed artifact tier app, after packing) and `nightly.yml`
+(for the current release of every published artifact tier app) install the
+artifact into a dedicated CI Cloudflare account and delete it again. Sandbox and
+self-deploying entries have no install check in CI (see "Sandbox tier"). The steps:
 
 1. Unpack the artifact's Worker modules, assets, and D1 migrations, checking each
    file's sha256 against `manifest.json`. Nothing from the app's repository runs:
@@ -532,8 +623,8 @@ Worker existed there.
 ## Nightly verification
 
 [`nightly.yml`](https://github.com/appflare/catalog/actions/workflows/nightly.yml)
-runs every night and reinstalls the current release of every app in `index.json`
-with the install check above, then deletes it again. Each app that passes gets a
+runs every night and reinstalls the current release of every artifact tier app in
+`index.json` with the install check above, then deletes it again. Each app that passes gets a
 new `lastVerified` in `index.json`, which the manager shows as "Install checked"
 with the date on its catalog pages, or "Not checked yet" for a version that has
 never passed.

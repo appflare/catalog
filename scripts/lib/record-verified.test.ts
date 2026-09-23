@@ -63,3 +63,48 @@ describe("patchLastVerified", () => {
     expect(patchLastVerified(index, {}, NOW).index).toEqual(index);
   });
 });
+
+describe("patchLastVerified for sandbox tier rows", () => {
+  const M = "a".repeat(64);
+  const sandboxRow: IndexApp = {
+    slug: "built",
+    name: "Built",
+    summary: "s",
+    version: "1.0.0",
+    tier: "sandbox",
+    plan: "paid",
+    requires: [],
+    lastVerified: null,
+    maintainers: ["octocat"],
+    build: {
+      pin: "0".repeat(40),
+      manifest: "https://appflare.github.io/catalog/apps/built/manifest.json",
+      manifestDigest: M,
+      expectedMinutes: 10,
+      instanceType: "standard-1",
+    },
+  };
+  const sandboxIndex: IndexJson = { generatedAt: index.generatedAt, apps: [sandboxRow] };
+
+  it("matches the row by build.manifestDigest", () => {
+    const at = "2026-09-24T02:59:00.000Z";
+    const result = patchLastVerified(
+      sandboxIndex,
+      { built: { version: "1.0.0", digest: M, at } },
+      NOW,
+    );
+    expect(result.updated).toEqual(["built"]);
+    expect(result.unmatched).toEqual([]);
+    expect(result.index.apps[0]).toEqual({ ...sandboxRow, lastVerified: at });
+  });
+
+  it("does not record a check of another manifest", () => {
+    const result = patchLastVerified(
+      sandboxIndex,
+      { built: { version: "1.0.0", digest: D, at: "2026-09-24T02:59:00.000Z" } },
+      NOW,
+    );
+    expect(result.updated).toEqual([]);
+    expect(result.unmatched).toEqual(["built"]);
+  });
+});

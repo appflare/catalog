@@ -4,7 +4,9 @@ name: nightly
 # Cloudflare account, health-check it, and delete it again. Each artifact that
 # passes gets lastVerified in index.json. A failure is listed in the run
 # summary and fails its job; the app stays in the catalog and keeps its
-# previous lastVerified.
+# previous lastVerified. Only artifact tier apps have a release to install;
+# sandbox and self-deploying entries are skipped here and verified by hand
+# with verify-tier.yml.
 
 on:
   schedule:
@@ -59,7 +61,7 @@ jobs:
       - id: list
         run: |
           set -euo pipefail
-          apps="$(jq -c '[.apps[] | {slug, version}]' index.json)"
+          apps="$(jq -c '[.apps[] | select(.tier == "artifact") | {slug, version}]' index.json)"
           echo "published apps: ${apps}"
           echo "apps=${apps}" >> "${GITHUB_OUTPUT}"
 
@@ -208,11 +210,7 @@ jobs:
           message: "chore: record nightly install checks in index.json [skip ci]"
           verified-file: ${{ runner.temp }}/verified.json
       - name: Assemble the Pages site
-        run: |
-          rm -rf site
-          mkdir -p site/schema
-          cp index.json site/index.json
-          cp schema/v1.json site/schema/v1.json
+        run: pnpm -s build-site --out site
       - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
         with:
           path: catalog/site
