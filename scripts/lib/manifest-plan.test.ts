@@ -133,6 +133,33 @@ describe("checkArtifactRoot", () => {
     ]);
   });
 
+  it("accepts the release job's download layout: files directly under dist/signed-<slug>/", () => {
+    // gh run download --name signed-<slug> --dir dist/signed-<slug> extracts the
+    // artifact's files (uploaded from dist/<slug>/) straight into that directory.
+    const { manifest, planned } = fixture();
+    const plan: PublishPlan = { format: 1, apps: { hello: planned } };
+    const dist = path.join(root, "dist");
+    writeArtifact(path.join(dist, "signed-hello"), manifest, ["hello-1.2.3.zip", "manifest.sig"]);
+    expect(
+      checkArtifactRoot({ root: dist, plan, slugs: ["hello"], prefix: "signed-", signed: true }),
+    ).toEqual([]);
+  });
+
+  it("rejects a flattened download (a single artifact's files straight in dist/)", () => {
+    const { manifest, planned } = fixture();
+    const plan: PublishPlan = { format: 1, apps: { hello: planned } };
+    const dist = path.join(root, "dist");
+    writeArtifact(dist, manifest, ["hello-1.2.3.zip", "manifest.sig"]);
+    expect(
+      checkArtifactRoot({ root: dist, plan, slugs: ["hello"], prefix: "signed-", signed: true }),
+    ).toEqual([
+      `${dist}: unexpected entry "hello-1.2.3.zip"`,
+      `${dist}: unexpected entry "manifest.json"`,
+      `${dist}: unexpected entry "manifest.sig"`,
+      `${path.join(dist, "signed-hello")}: missing`,
+    ]);
+  });
+
   it("rejects a signature on an artifact that must still be unsigned", () => {
     const { manifest, planned } = fixture();
     const plan: PublishPlan = { format: 1, apps: { hello: planned } };

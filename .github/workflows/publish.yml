@@ -209,6 +209,8 @@ jobs:
     timeout-minutes: 20
     permissions:
       contents: write
+      # gh run download of this run's signed-<slug> artifacts.
+      actions: read
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -223,17 +225,30 @@ jobs:
         with:
           name: publish-plan
           path: ${{ runner.temp }}/plan
-      - name: Download the signed artifacts
+      - name: Download each planned signed-<slug> into dist/signed-<slug>
         if: needs.plan.outputs.apps != '[]'
-        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
-        with:
-          # One dist/signed-<slug>/ per artifact; anything unplanned fails the check below.
-          pattern: signed-*
-          path: catalog/dist
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PLANNED_APPS: ${{ needs.plan.outputs.apps }}
+        run: |
+          set -euo pipefail
+          # Not actions/download-artifact with a pattern: it nests each artifact in
+          # its own directory only when two or more match, and puts a single
+          # match's files straight into the target. Downloading by exact name
+          # into an explicit directory gives the same layout for any count.
+          rm -rf dist
+          mkdir -p dist
+          mapfile -t slugs < <(jq -r '.[]' <<< "${PLANNED_APPS}")
+          for slug in "${slugs[@]}"; do
+            # With exactly one --name, gh extracts the files directly into --dir.
+            gh run download "${GITHUB_RUN_ID}" --repo "${GITHUB_REPOSITORY}" \
+              --name "signed-${slug}" --dir "dist/signed-${slug}"
+          done
       - name: Check against the plan, verify, and create GitHub Releases
         if: needs.plan.outputs.apps != '[]'
         env:
           GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
           PLANNED_APPS: ${{ needs.plan.outputs.apps }}
         run: |
           set -euo pipefail
@@ -255,22 +270,29 @@ jobs:
             fi
             node "${pack}" verify "${dir}" --require-signed
             tag="${slug}@${version}"
+            local_sha="$(sha256sum "${dir}/manifest.json" | cut -d' ' -f1)"
             if state="$(gh release view "${tag}" --json isDraft,isPrerelease,assets --jq '[(.isDraft | tostring), (.isPrerelease | tostring), ([.assets[].name] | sort | join(","))] | join(" ")' 2> /dev/null)"; then
               expected="$(printf '%s\n' "${slug}-${version}.zip" manifest.json manifest.sig | LC_ALL=C sort | paste -sd, -)"
-              if [ "${state}" = "false false ${expected}" ]; then
-                echo "::notice::${tag} already exists; not re-releasing"
+              if [ "${state}" != "false false ${expected}" ]; then
+                echo "::error::release ${tag} exists but is a draft, a prerelease, or incomplete (${state}); fix or delete it by hand"
+                exit 1
+              fi
+              # A re-run after a partial failure: the release is already there
+              # with these exact bytes, so move on to the index and Pages.
+              remote_sha="$(gh release download "${tag}" --pattern manifest.json --output - | sha256sum | cut -d' ' -f1)"
+              if [ "${remote_sha}" = "${local_sha}" ]; then
+                echo "::notice::${tag} already released with the same manifest.json; skipping"
                 continue
               fi
-              echo "::error::release ${tag} exists but is a draft, a prerelease, or incomplete (${state}); fix or delete it by hand"
+              echo "::error::release ${tag} exists with a different manifest.json (released sha256 ${remote_sha}, this run ${local_sha}); fix or delete it by hand"
               exit 1
             fi
             source="$(jq -r '.source.repo + "@" + .source.sha + " (" + .source.ref + ")"' "${dir}/manifest.json")"
-            digest="$(sha256sum "${dir}/manifest.json" | cut -d' ' -f1)"
             gh release create "${tag}" \
               "${dir}/${slug}-${version}.zip" "${dir}/manifest.json" "${dir}/manifest.sig" \
               --target "${GITHUB_SHA}" \
               --title "${tag}" \
-              --notes "Built from ${source}. manifest.json sha256: ${digest}."
+              --notes "Built from ${source}. manifest.json sha256: ${local_sha}."
           done
       - name: Build index.json from the releases
         env:
