@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-24T06:55:46.994Z",
+  "generatedAt": "2026-09-24T07:18:03.545Z",
   "apps": [
     {
       "slug": "agentic-inbox",
@@ -86,6 +86,30 @@
       ]
     },
     {
+      "slug": "flaremo-sandbox",
+      "name": "FlareMo (sandbox build)",
+      "summary": "A Memos-compatible notes app for quick capture: timeline, tags, attachments, semantic search, and an MCP server, on D1, R2, and Vectorize.",
+      "version": "0.20.1",
+      "tier": "sandbox",
+      "plan": "paid",
+      "requires": [
+        "r2",
+        "workers-ai"
+      ],
+      "lastVerified": null,
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "build": {
+        "pin": "f87c98ee528848fb8c200ca538cd82d1db03505c",
+        "manifest": "https://appflare.github.io/catalog/apps/flaremo-sandbox/manifest.json",
+        "manifestDigest": "b952c67d7681548bc57ec5417f8cecbbe1e01e922d182471020fd5eab083e250",
+        "buildCommand": "pnpm --filter @flaremo/web build",
+        "expectedMinutes": 8,
+        "instanceType": "standard-1"
+      }
+    },
+    {
       "slug": "mail2telegram",
       "name": "mail2telegram",
       "summary": "Receive your domain's email in Telegram: a push for every message and a Mini App inbox with attachments, filters, and AI summaries.",
@@ -107,6 +131,31 @@
       "maintainers": [
         "MendyLanda"
       ]
+    },
+    {
+      "slug": "mail2telegram-sandbox",
+      "name": "mail2telegram (sandbox build)",
+      "summary": "Receive your domain's email in Telegram: a push for every message and a Mini App inbox with attachments, filters, and AI summaries.",
+      "version": "2.0.0",
+      "tier": "sandbox",
+      "plan": "paid",
+      "requires": [
+        "zone",
+        "email-routing",
+        "r2"
+      ],
+      "lastVerified": null,
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "build": {
+        "pin": "39234192b14404b25d6401272de7ebb0e29ce1bb",
+        "manifest": "https://appflare.github.io/catalog/apps/mail2telegram-sandbox/manifest.json",
+        "manifestDigest": "1282673ec8c8ec553808ff9fea5c227834f8870e3d2aef17a28a7d3f640a307b",
+        "buildCommand": "pnpm --filter @mail2telegram/web build",
+        "expectedMinutes": 3,
+        "instanceType": "standard-1"
+      }
     },
     {
       "slug": "mailflare",
@@ -142,16 +191,16 @@
         "r2",
         "containers"
       ],
-      "lastVerified": "2026-09-24T06:55:25.645Z",
+      "lastVerified": null,
       "maintainers": [
         "MendyLanda"
       ],
       "build": {
         "pin": "84e4705503ceaef54d1b284c167de9942563cdae",
         "manifest": "https://appflare.github.io/catalog/apps/open-seo/manifest.json",
-        "manifestDigest": "2554b182c1e68bbb7755406f2064fe4235244bd253197d27c0bb5d7bef77480a",
+        "manifestDigest": "fd997eeca880811d45368b8f68b744fc5d5f11ade9d3f8a8c1761765ae777625",
         "buildCommand": "pnpm exec vite build --mode selfhost",
-        "expectedMinutes": 15,
+        "expectedMinutes": 5,
         "instanceType": "standard-2"
       }
     },
