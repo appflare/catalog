@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-24T04:55:09.030Z",
+  "generatedAt": "2026-09-24T05:11:38.360Z",
   "apps": [
     {
       "slug": "agentic-inbox",
@@ -130,6 +130,30 @@
       "maintainers": [
         "MendyLanda"
       ]
+    },
+    {
+      "slug": "open-seo",
+      "name": "OpenSEO",
+      "summary": "Self-hosted SEO research: keywords, rankings, backlinks and site audits, on your own Cloudflare account and behind Cloudflare Access.",
+      "version": "0.1.9",
+      "tier": "self-deploying",
+      "plan": "paid",
+      "requires": [
+        "r2",
+        "containers"
+      ],
+      "lastVerified": null,
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "build": {
+        "pin": "84e4705503ceaef54d1b284c167de9942563cdae",
+        "manifest": "https://appflare.github.io/catalog/apps/open-seo/manifest.json",
+        "manifestDigest": "2554b182c1e68bbb7755406f2064fe4235244bd253197d27c0bb5d7bef77480a",
+        "buildCommand": "pnpm exec vite build --mode selfhost",
+        "expectedMinutes": 15,
+        "instanceType": "standard-2"
+      }
     },
     {
       "slug": "openai-gemini",
