@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-24T08:07:16.450Z",
+  "generatedAt": "2026-09-24T08:47:44.334Z",
   "apps": [
     {
       "slug": "agentic-inbox",
@@ -20,7 +20,7 @@
         "r2",
         "workers-ai"
       ],
-      "lastVerified": "2026-09-24T04:54:34.000Z",
+      "lastVerified": "2026-09-24T08:46:22.000Z",
       "maintainers": [
         "MendyLanda"
       ]
@@ -39,7 +39,7 @@
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-09-24T04:53:58.000Z",
+      "lastVerified": "2026-09-24T08:46:19.000Z",
       "maintainers": [
         "MendyLanda"
       ]
@@ -58,7 +58,7 @@
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-09-24T04:54:04.000Z",
+      "lastVerified": "2026-09-24T08:46:28.000Z",
       "maintainers": [
         "MendyLanda"
       ]
@@ -80,7 +80,7 @@
         "r2",
         "workers-ai"
       ],
-      "lastVerified": "2026-09-24T04:54:36.000Z",
+      "lastVerified": "2026-09-24T08:47:02.000Z",
       "maintainers": [
         "MendyLanda"
       ]
@@ -103,7 +103,7 @@
         "email-routing",
         "r2"
       ],
-      "lastVerified": "2026-09-24T04:54:04.000Z",
+      "lastVerified": "2026-09-24T08:46:32.000Z",
       "maintainers": [
         "MendyLanda"
       ]
@@ -126,7 +126,7 @@
         "email-routing",
         "r2"
       ],
-      "lastVerified": "2026-09-24T04:54:33.000Z",
+      "lastVerified": "2026-09-24T08:46:53.000Z",
       "maintainers": [
         "MendyLanda"
       ]
@@ -169,7 +169,7 @@
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-09-24T04:53:49.000Z",
+      "lastVerified": "2026-09-24T08:46:20.000Z",
       "maintainers": [
         "MendyLanda"
       ]
@@ -190,7 +190,7 @@
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-09-24T04:54:13.000Z",
+      "lastVerified": "2026-09-24T08:46:21.000Z",
       "maintainers": [
         "MendyLanda"
       ]
@@ -211,7 +211,7 @@
       "requires": [
         "workers-ai"
       ],
-      "lastVerified": "2026-09-24T04:54:02.000Z",
+      "lastVerified": "2026-09-24T08:46:28.000Z",
       "maintainers": [
         "MendyLanda"
       ]
@@ -230,7 +230,7 @@
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-09-24T04:54:03.000Z",
+      "lastVerified": "2026-09-24T08:46:16.000Z",
       "maintainers": [
         "MendyLanda"
       ]
