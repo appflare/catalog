@@ -1,0 +1,88 @@
+{
+  // This entry exists only to exercise the sandbox build path of the paid
+  // tiers, and will be removed. It installs the same pinned commit as the
+  // "mail2telegram" entry, built in the user's own account by the sandbox Worker
+  // instead of by CI.
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "mail2telegram-sandbox",
+  "name": "mail2telegram (sandbox build)",
+  "summary": "Receive your domain's email in Telegram: a push for every message and a Mini App inbox with attachments, filters, and AI summaries.",
+  "homepage": "https://github.com/TBXark/mail2telegram",
+  "repo": "TBXark/mail2telegram",
+  "license": "MIT",
+  "categories": ["email", "bots"],
+  "maintainers": ["MendyLanda"],
+  // Upstream tags releases without a "v" prefix (2.0.0); the packer reads both forms.
+  "source": { "ref": "2.0.0", "sha": "39234192b14404b25d6401272de7ebb0e29ce1bb" },
+  "install": {
+    "tier": "sandbox",
+    "packageManager": "pnpm",
+    "wranglerConfig": "wrangler.jsonc",
+    "workerName": "mail2telegram-sandbox",
+    // The wrangler config serves the Mini App from packages/web/dist/client but
+    // has no build.command; upstream's deploy script builds it with this.
+    "buildCommand": "pnpm --filter @mail2telegram/web build",
+    // An estimate, rounded up: the dependency install and a small Vite build
+    // of the Mini App. Replace it with a measured value after a live run.
+    "sandbox": { "expectedMinutes": 3 },
+    // Runs Worker code (the assets config sends /api/* to the Worker first) and
+    // needs no credentials: it only reports whether password sign-in is on.
+    // The Worker also checks the D1 schema on the first request of an isolate.
+    "healthPath": "/api/auth",
+    // Every address of the chosen zone that no other rule matches goes to the
+    // Worker's email handler, as upstream's deployment guide sets it up.
+    "emailRouting": { "catchAll": true }
+  },
+  // The app itself fits the free plan (see the "mail2telegram" entry), but its
+  // build runs in the sandbox Worker's container, which needs Workers Paid.
+  "plan": "paid",
+  // Workers AI is one of two summary backends and summaries are off by default,
+  // so it is not a requirement.
+  "requires": ["zone", "email-routing", "r2"],
+  // RESEND_API_KEY (replies through Resend) and OPENAI_API_KEY (the other
+  // summary backend) are optional in upstream, and every secret here must have
+  // a value, so they are left out: add them later as secrets in the Worker's
+  // settings, where updates keep them.
+  "secrets": [
+    {
+      "name": "TELEGRAM_TOKEN",
+      "label": "Telegram bot token",
+      "help": "Send /newbot to @BotFather in Telegram and paste the token it replies with. One Worker serves one bot."
+    },
+    {
+      "name": "WEB_PASSWORD",
+      "label": "Web password",
+      "help": "Opens the Mini App in a plain browser, outside Telegram. Inside Telegram no password is needed. Copy it now.",
+      "generate": true
+    }
+  ],
+  "vars": [
+    {
+      "name": "TELEGRAM_ID",
+      "label": "Telegram chat ids",
+      "help": "Where mail is pushed, comma separated: your numeric user id from @userinfobot, or a group id starting with -100. Only these chats can open the Mini App.",
+      "required": true
+    },
+    {
+      "name": "DOMAIN",
+      "label": "Mini App host",
+      "help": "Only to serve the Mini App from another host, for example mail.example.com. Leave empty: the Worker learns its own host when you open /init.",
+      "required": false
+    }
+  ],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "Open {{workerUrl}}/init once. It registers the Telegram webhook and points the bot's menu button at the Mini App. Then send `/start` to the bot."
+    },
+    {
+      "type": "markdown",
+      "content": "Every address of the zone you picked that has no other routing rule now reaches the bot. Send a test mail to any address there; it arrives as a Telegram message with Preview, Summary, and Open buttons."
+    },
+    {
+      "type": "markdown",
+      "content": "Settings live in the Mini App: allow and block lists, forwarding to a backup address (which must be verified under Email Routing, Destination addresses), mail size limits, and AI summaries with Workers AI or an OpenAI-compatible provider. To reply to mail from Telegram, add a Resend API key as the secret `RESEND_API_KEY` in the Worker's settings."
+    }
+  ],
+  "tokenPermissions": []
+}

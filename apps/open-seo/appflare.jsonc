@@ -30,11 +30,10 @@
     // One installer run: the dependency install, the Vite build of about 7,400
     // modules, then the deploy. The repository's .npmrc gives Node a 4 GiB
     // heap because the build needs more than the default, which leaves no
-    // room on standard-1 (4 GiB in all), so it runs on standard-2. The
-    // minutes are an estimate: upstream's preview deploys, which do the same
-    // work, have a 20-minute limit on a GitHub runner. Replace it with a
-    // measured, rounded-up value after the first manual check.
-    "sandbox": { "expectedMinutes": 15, "instanceType": "standard-2" },
+    // room on standard-1 (4 GiB in all), so it runs on standard-2. A live
+    // run measured 2.9 minutes for the install and 3.7 for the destroy; this
+    // is the longer of the two, rounded up, with some headroom.
+    "sandbox": { "expectedMinutes": 5, "instanceType": "standard-2" },
     "selfDeploying": {
       "tool": "alchemy",
       // `pnpm alchemy` is the package's script, which adds --experimental-strip-types.
