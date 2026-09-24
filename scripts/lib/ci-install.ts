@@ -331,6 +331,52 @@ function sendEmailBinding(binding: ArtifactBinding): {
   };
 }
 
+/**
+ * What an artifact records as the target of a service binding to the app's
+ * own Worker. The packer writes it in place of the Worker's name, since an
+ * install may run under another name, and the manager puts the install's name
+ * back when it uploads.
+ */
+export const SELF_SERVICE = "self";
+
+const SELF_SERVICE_FIELDS: readonly string[] = ["type", "name", "service", "entrypoint"];
+
+/**
+ * A service binding as wrangler's config writes it, aimed at Worker `name`:
+ * the only service binding an artifact may hold is one to the app's own
+ * Worker, `{ type: "service", name, service: "self", entrypoint? }` and
+ * nothing more, as the manager holds it. Every other service binding throws,
+ * since it would let the app call another Worker in the account.
+ *
+ * wrangler deploys a Worker that binds to itself on its first deploy (it
+ * accepts a binding to the Worker the deploy creates), so the CI Worker needs
+ * no earlier upload for this.
+ */
+function selfServiceBinding(binding: ArtifactBinding, name: string): Record<string, string> {
+  const extra = Object.keys(binding).filter((key) => !SELF_SERVICE_FIELDS.includes(key));
+  const { service, entrypoint } = binding;
+  const entrypointOk =
+    entrypoint === undefined || (typeof entrypoint === "string" && entrypoint.length > 0);
+  if (service !== SELF_SERVICE || !entrypointOk || extra.length > 0) {
+    const target = typeof service === "string" ? `the Worker "${service}"` : "no Worker";
+    const why =
+      service !== SELF_SERVICE
+        ? `points at ${target}`
+        : !entrypointOk
+          ? "records an entrypoint that is not a name"
+          : `also sets ${extra.join(", ")}`;
+    throw new Error(
+      `service binding ${binding.name} ${why}; an app may bind only to its own Worker ` +
+        `(recorded as service "${SELF_SERVICE}", with nothing but an optional entrypoint)`,
+    );
+  }
+  return {
+    binding: binding.name,
+    service: name,
+    ...(typeof entrypoint === "string" ? { entrypoint } : {}),
+  };
+}
+
 /** A queue name for `resource`; throws when it is longer than Cloudflare allows. */
 function queueName(resource: string): string {
   if (resource.length > QUEUE_MAX_NAME) {
@@ -431,7 +477,8 @@ function jsonDefault(name: string, text: string): JsonValue {
  * (bindings without ids, so wrangler provisions them under
  * {@link resourceName}), the resources to clean up, and the secrets to set.
  * Throws for a binding kind this check cannot create or clean up yet, instead
- * of deploying a Worker with a binding missing.
+ * of deploying a Worker with a binding missing, and for any service binding
+ * but one to the app's own Worker, which it aims at `name`.
  *
  * Vars follow the manager: a catalog default overrides the wrangler config's
  * value, a `json` var's default is parsed and stays JSON, and
@@ -463,6 +510,7 @@ export function planCiInstall(
   const queues: string[] = [];
   const ratelimits: Record<string, unknown>[] = [];
   const sendEmail: Record<string, unknown>[] = [];
+  const services: Record<string, string>[] = [];
   const notes: string[] = [];
   const singles: Record<string, { binding: string }> = {};
   const vars: Record<string, JsonValue> = {};
@@ -545,6 +593,10 @@ export function planCiInstall(
         }
         break;
       }
+      case "service":
+        // Aimed at the CI Worker itself, as the manager aims it at the install's Worker.
+        services.push(selfServiceBinding(binding, name));
+        break;
       case "analytics_engine":
         analytics.push({ binding: binding.name, ...optionalStr(binding, "dataset") });
         break;
@@ -572,8 +624,8 @@ export function planCiInstall(
       case "assets":
         break;
       default:
-        // TODO: Hyperdrive, service bindings and mTLS certificates need
-        // resources or peers this check does not create and clean up yet.
+        // TODO: Hyperdrive and mTLS certificates need resources this check
+        // does not create and clean up yet.
         throw new Error(
           `the CI install check cannot create a ${binding.type} binding (${binding.name}) yet`,
         );
@@ -637,6 +689,7 @@ export function planCiInstall(
     ...(producers.length > 0 ? { queues: { producers } } : {}),
     ...(ratelimits.length > 0 ? { ratelimits } : {}),
     ...(sendEmail.length > 0 ? { send_email: sendEmail } : {}),
+    ...(services.length > 0 ? { services } : {}),
     ...singles,
     ...(Object.keys(vars).length > 0 ? { vars } : {}),
     triggers: { crons: [...worker.crons] },

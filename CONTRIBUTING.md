@@ -600,9 +600,15 @@ How this differs from installing with the manager:
 - **Inputs.** A real install uses the values the user entered. Here secrets are
   random and vars use their defaults, so this checks that the Worker deploys and
   starts, not that the app is fully configured.
-- **Binding kinds.** Hyperdrive, service bindings, and mTLS certificates are
-  not supported by the check yet. An app that uses them fails the check with a
-  message naming the binding.
+- **Binding kinds.** Hyperdrive and mTLS certificates are not supported by the
+  check yet. An app that uses them fails the check with a message naming the
+  binding.
+- **Service bindings.** The only one an app may have is a binding to its own
+  Worker (OpenNext's `WORKER_SELF_REFERENCE`), which the packer records as
+  service `"self"`. The check aims it at the CI Worker, as the manager aims it at
+  the install's Worker; wrangler accepts a binding to the Worker the deploy
+  creates, so the first deploy needs nothing earlier. Any other service binding
+  fails the check, since it would let the app call another Worker in the account.
 - **Sending email.** A `send_email` binding is deployed as the artifact records
   it; deploying one needs no zone or verified address. The check never sends
   mail, so when the binding restricts its addresses

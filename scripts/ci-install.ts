@@ -45,7 +45,8 @@ deploy   Unpacks the artifact (checking every file's sha256), removes anything
          Vectorize indexes and queues are created first through the API, and
          each rate limit gets a random namespace id; vars as the manager sets
          them, JSON vars kept as JSON and {{workerUrl}} and {{workerName}}
-         filled in for the CI Worker), runs wrangler deploy
+         filled in for the CI Worker; a service binding to the app's own
+         Worker aimed at the CI Worker, any other refused), runs wrangler deploy
          --strict, attaches the recorded queue consumers through the API,
          applies D1 migrations, sets each catalog secret to a random value,
          and waits up to 60 s for

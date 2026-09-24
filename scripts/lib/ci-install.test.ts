@@ -26,6 +26,7 @@ import {
   randomNamespaceId,
   renderJsonPlaceholders,
   renderPlaceholders,
+  SELF_SERVICE,
   unpackArtifact,
   waitForHealth,
   workersSubdomain,
@@ -441,6 +442,49 @@ describe("planCiInstall", () => {
         "ci-hello-pr1",
       ),
     ).toThrow("binding MODE (plain_text) has no text");
+  });
+
+  it("aims a service binding to the app's own Worker at the CI Worker", () => {
+    const plan = planCiInstall(
+      manifest((m) => {
+        worker(m).bindings = [
+          { type: "service", name: "WORKER_SELF_REFERENCE", service: "self" },
+          { type: "service", name: "UNITS", service: "self", entrypoint: "Units" },
+        ];
+      }),
+      "ci-hello-pr1",
+    );
+    expect(plan.config.services).toEqual([
+      { binding: "WORKER_SELF_REFERENCE", service: "ci-hello-pr1" },
+      { binding: "UNITS", service: "ci-hello-pr1", entrypoint: "Units" },
+    ]);
+    expect(plan.resources).toEqual([]);
+    expect(plan.notes).toEqual([]);
+  });
+
+  it("refuses every other service binding", () => {
+    const plan = (binding: Record<string, unknown>) => () =>
+      planCiInstall(
+        manifest((m) => {
+          worker(m).bindings = [{ type: "service", name: "PEER", ...binding }];
+        }),
+        "ci-hello-pr1",
+      );
+    expect(plan({ service: "appflare" })).toThrow(
+      /^service binding PEER points at the Worker "appflare"; an app may bind only to its own Worker/,
+    );
+    expect(plan({ service: "ci-hello-pr1" })).toThrow(/points at the Worker "ci-hello-pr1"/);
+    expect(plan({})).toThrow(/points at no Worker/);
+    expect(plan({ service: "self", environment: "production" })).toThrow(
+      /service binding PEER also sets environment/,
+    );
+    expect(plan({ service: "self", props: { admin: true } })).toThrow(/also sets props/);
+    expect(plan({ service: "self", entrypoint: "" })).toThrow(
+      /records an entrypoint that is not a name/,
+    );
+    expect(plan({ service: "self", entrypoint: 1 })).toThrow(
+      /records an entrypoint that is not a name/,
+    );
   });
 
   it("passes images through", () => {
@@ -1118,6 +1162,39 @@ describe.skipIf(!appflareAvailable)("placeholders match @appflare/schema", () =>
         expect(JSON.stringify(renderJsonPlaceholders(json, values))).toBe(
           JSON.stringify(schema.renderJsonPlaceholders(json, values)),
         );
+      }
+    }
+  });
+});
+
+describe.skipIf(!appflareAvailable)("service bindings match @appflare/schema", () => {
+  it("accepts exactly the service bindings the manager accepts", async () => {
+    const schema = (await import(pathToFileURL(appflarePaths(appflareDir).schemaDist).href)) as {
+      SELF_SERVICE: string;
+      isSelfServiceBinding: (binding: Record<string, unknown>) => boolean;
+    };
+    expect(SELF_SERVICE).toBe(schema.SELF_SERVICE);
+    const bindings: Record<string, unknown>[] = [
+      { type: "service", name: "SELF", service: "self" },
+      { type: "service", name: "SELF", service: "self", entrypoint: "Units" },
+      { type: "service", name: "SELF", service: "self", entrypoint: "" },
+      { type: "service", name: "SELF", service: "self", environment: "production" },
+      { type: "service", name: "SELF", service: "self", props: {} },
+      { type: "service", name: "SELF", service: "appflare" },
+      { type: "service", name: "SELF" },
+    ];
+    for (const binding of bindings) {
+      const plan = () =>
+        planCiInstall(
+          manifest((m) => {
+            worker(m).bindings = [binding];
+          }),
+          "ci-hello-pr1",
+        );
+      if (schema.isSelfServiceBinding(binding)) {
+        expect(plan).not.toThrow();
+      } else {
+        expect(plan).toThrow(/an app may bind only to its own Worker/);
       }
     }
   });
