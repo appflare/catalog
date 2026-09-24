@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-24T10:26:33.701Z",
+  "generatedAt": "2026-09-24T11:27:30.248Z",
   "apps": [
     {
       "slug": "agentic-inbox",
@@ -30,7 +30,24 @@
       ],
       "maintainers": [
         "MendyLanda"
-      ]
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/agentic-inbox/icon.svg",
+          "sha256": "cc4d8665195f648a1c6913a228a903a453660aafaf678518afed3a930c05c5f8"
+        },
+        "cover": {
+          "url": "https://appflare.github.io/catalog/apps/agentic-inbox/cover.png",
+          "sha256": "ade84552d9196e9435c89f9cccfa360c976add955ae67a2c0238854202536551"
+        },
+        "screenshots": [
+          {
+            "url": "https://appflare.github.io/catalog/apps/agentic-inbox/screenshots/01-inbox-with-the-agent.png",
+            "sha256": "05e139a1ba42e691a8e56cd5c1c6b01a39132a36932dd33dc2d8e41c996f4a91",
+            "alt": "Agentic Inbox: Inbox with the agent"
+          }
+        ]
+      }
     },
     {
       "slug": "chatgpt-telegram-workers",
@@ -57,7 +74,24 @@
       ],
       "maintainers": [
         "MendyLanda"
-      ]
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/chatgpt-telegram-workers/icon.png",
+          "sha256": "12e754c952066fe36977d44a85ba4fed3083bbca807f1fe31aeb75240e99e3bd"
+        },
+        "cover": {
+          "url": "https://appflare.github.io/catalog/apps/chatgpt-telegram-workers/cover.png",
+          "sha256": "d7f93a542a299e4caa345feba7b51803eb7d1a063c0795812ffb529340f37e23"
+        },
+        "screenshots": [
+          {
+            "url": "https://appflare.github.io/catalog/apps/chatgpt-telegram-workers/screenshots/01-a-chat-in-telegram.png",
+            "sha256": "4abd37783e5e4e2cb6a07ff9ec51b38e6335ce5490cba8ce50181900c66a9afc",
+            "alt": "ChatGPT Telegram Bot: A chat in telegram"
+          }
+        ]
+      }
     },
     {
       "slug": "cut",
@@ -82,7 +116,18 @@
       ],
       "maintainers": [
         "MendyLanda"
-      ]
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/cut/icon.svg",
+          "sha256": "9aeb8bd7cee3770df6d9fc17f9a55537400d678ec9c95d911ab95182a98f6970"
+        },
+        "cover": {
+          "url": "https://appflare.github.io/catalog/apps/cut/cover.png",
+          "sha256": "192878162f757279f2060889a0506e038432fb4e73cddddc06bf4890bb7ede2c"
+        },
+        "screenshots": []
+      }
     },
     {
       "slug": "flaremo",
@@ -110,7 +155,34 @@
       ],
       "maintainers": [
         "MendyLanda"
-      ]
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/flaremo/icon.png",
+          "sha256": "33faa4d7cd1069cbbd27bf78bf6fbe7098f02112ccdf25bf28304b82268e720a"
+        },
+        "cover": {
+          "url": "https://appflare.github.io/catalog/apps/flaremo/cover.png",
+          "sha256": "c78c5c4c3b2c2d47d39a2c6767bae01293e658c6efcec7dc7d0b703ffdc21cff"
+        },
+        "screenshots": [
+          {
+            "url": "https://appflare.github.io/catalog/apps/flaremo/screenshots/01-timeline.png",
+            "sha256": "7d5f451001e5f742d1f7bb1ac6ed6c7041f187b5e0bf1546d7ccad7a41fa0a32",
+            "alt": "FlareMo: Timeline"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/flaremo/screenshots/02-timeline-in-dark-mode.png",
+            "sha256": "14b0ac6d3e8ccff7f9ec0b809867f34cf51fc03a5cf0fd88cbe9df772ebe8a17",
+            "alt": "FlareMo: Timeline in dark mode"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/flaremo/screenshots/03-on-a-phone.png",
+            "sha256": "107c66d7099537767b45a56ea2a7459a323f1573e6a62fb887e785f2d081ddc9",
+            "alt": "FlareMo: On a phone"
+          }
+        ]
+      }
     },
     {
       "slug": "mail2telegram",
@@ -141,7 +213,29 @@
       ],
       "maintainers": [
         "MendyLanda"
-      ]
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/mail2telegram/icon.png",
+          "sha256": "b4b5a16c527c25ddd944f7a39225c23dac17159770715494b1482cb6389f533d"
+        },
+        "cover": {
+          "url": "https://appflare.github.io/catalog/apps/mail2telegram/cover.png",
+          "sha256": "6ed6b4a15cb5f8079db61856924a6578e976dbdfb8b064eff14c3c1924060190"
+        },
+        "screenshots": [
+          {
+            "url": "https://appflare.github.io/catalog/apps/mail2telegram/screenshots/01-mini-app-inbox.png",
+            "sha256": "ca981421e9bd7d208d7584555077ce4cf440b0b4ddc152ac90cec05d7333b8f3",
+            "alt": "mail2telegram: Mini app inbox"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/mail2telegram/screenshots/02-messages-in-telegram.png",
+            "sha256": "e43c8725701b5184d0ca139f3d8e30c8d386a91001d28e2ddc34da649c01ccda",
+            "alt": "mail2telegram: Messages in telegram"
+          }
+        ]
+      }
     },
     {
       "slug": "mailflare",
@@ -171,7 +265,34 @@
       ],
       "maintainers": [
         "MendyLanda"
-      ]
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/mailflare/icon.png",
+          "sha256": "a25c5d679d63b5713f0b621fa093c27d4999d2acfa8caa24ab4cd051d80a1abe"
+        },
+        "cover": {
+          "url": "https://appflare.github.io/catalog/apps/mailflare/cover.png",
+          "sha256": "885e7d2546f529735731505959be64ef04af7074d2c76cafc18588a083e2d9ee"
+        },
+        "screenshots": [
+          {
+            "url": "https://appflare.github.io/catalog/apps/mailflare/screenshots/01-inbox.png",
+            "sha256": "5851bd9c1360add38150646306fce2979cbb657eeddab5e0126822482de22b05",
+            "alt": "Mailflare: Inbox"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/mailflare/screenshots/02-domains.png",
+            "sha256": "b2db3790cee7e45bc347f36889455cc7cf5f6a30280135921fbfb476f0e4de76",
+            "alt": "Mailflare: Domains"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/mailflare/screenshots/03-mailboxes.png",
+            "sha256": "450ffbebdd462fe98789d8e6c13a0757807726fad5bef16ce3751a0f23dcdbfb",
+            "alt": "Mailflare: Mailboxes"
+          }
+        ]
+      }
     },
     {
       "slug": "open-seo",
@@ -207,6 +328,23 @@
         "buildCommand": "pnpm exec vite build --mode selfhost",
         "expectedMinutes": 5,
         "instanceType": "standard-2"
+      },
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/open-seo/icon.png",
+          "sha256": "9d8d56587bd72607f0b86b096442122303b2be7406e43895da1c189a3ee72d27"
+        },
+        "cover": {
+          "url": "https://appflare.github.io/catalog/apps/open-seo/cover.png",
+          "sha256": "05925943a811776b456b56913532d132049104c73689ca55dc7ddcf9c381a3fc"
+        },
+        "screenshots": [
+          {
+            "url": "https://appflare.github.io/catalog/apps/open-seo/screenshots/01-keyword-research.png",
+            "sha256": "6d3dc3d7a23facf2fbbf95927b50ad505a28556e23b28cd842eb182351100894",
+            "alt": "OpenSEO: Keyword research"
+          }
+        ]
       }
     },
     {
@@ -232,7 +370,18 @@
       ],
       "maintainers": [
         "MendyLanda"
-      ]
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/openai-gemini/icon.png",
+          "sha256": "b2567628a754b862683e774213c63143bdf7c5c2d670dbeb00ad1771d26cc1b5"
+        },
+        "cover": {
+          "url": "https://appflare.github.io/catalog/apps/openai-gemini/cover.png",
+          "sha256": "4c2ef81f58e0cd51efe8abb6fd0405d245464ee243faab2e8a2b0241399bd7f8"
+        },
+        "screenshots": []
+      }
     },
     {
       "slug": "r2-explorer",
@@ -266,7 +415,18 @@
       ],
       "maintainers": [
         "MendyLanda"
-      ]
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/r2-explorer/icon.png",
+          "sha256": "3425d5d0578e0c874392b81161b18f8db9d24b2707b49fced8def4e848090cfc"
+        },
+        "cover": {
+          "url": "https://appflare.github.io/catalog/apps/r2-explorer/cover.png",
+          "sha256": "86fd6f3016206d90ff55b6de18e9d616032e27b55a411d914da525658e49f5eb"
+        },
+        "screenshots": []
+      }
     },
     {
       "slug": "second-brain-cloudflare",
@@ -295,7 +455,18 @@
       ],
       "maintainers": [
         "MendyLanda"
-      ]
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/second-brain-cloudflare/icon.svg",
+          "sha256": "bcacfce4a4b7971462264ea1a9491901034a678a165d7436c30c0aa28334b059"
+        },
+        "cover": {
+          "url": "https://appflare.github.io/catalog/apps/second-brain-cloudflare/cover.png",
+          "sha256": "b129ed161adcf6eb24161fa98c18af6429c250d9f9224a879d2873c06c3e6079"
+        },
+        "screenshots": []
+      }
     },
     {
       "slug": "unifi-ddns",
@@ -321,7 +492,20 @@
       ],
       "maintainers": [
         "MendyLanda"
-      ]
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/unifi-ddns/icon.png",
+          "sha256": "1a74e67b282e01f19a515e4b070080ccca262f604eccdff9e2c6c622ca61214a"
+        },
+        "cover": {
+          "url": "https://appflare.github.io/catalog/apps/unifi-ddns/cover.png",
+          "sha256": "4a09699886dd84633bf840ec899bc442e7be5249dd19e5a7717d7413e58eb53a"
+        },
+        "screenshots": []
+      }
     }
-  ]
+  ],
+  "featured": [],
+  "stats": "https://appflare.github.io/catalog/stats.json"
 }
