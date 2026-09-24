@@ -7,6 +7,7 @@
   "repo": "TBXark/ChatGPT-Telegram-Workers",
   "license": "MIT",
   "categories": ["ai", "bots"],
+  "authors": [{ "name": "TBXark", "url": "https://tbxark.com", "github": "TBXark", "x": "tbxark" }],
   "maintainers": ["MendyLanda"],
   // Upstream tags releases without a "v" prefix (2.0.0); the packer reads both forms.
   "source": { "ref": "2.0.0", "sha": "0d152e567a2b3db159d013957b6a48879262d5d2" },

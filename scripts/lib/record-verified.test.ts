@@ -19,6 +19,7 @@ function row(slug: string, version: string, digest = D): IndexApp {
     plan: "free",
     requires: [],
     lastVerified: null,
+    authors: [{ name: "octocat", github: "octocat" }],
     maintainers: ["octocat"],
   };
 }
@@ -75,6 +76,7 @@ describe("patchLastVerified for sandbox tier rows", () => {
     plan: "paid",
     requires: [],
     lastVerified: null,
+    authors: [{ name: "octocat", github: "octocat" }],
     maintainers: ["octocat"],
     build: {
       pin: "0".repeat(40),

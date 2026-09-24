@@ -7,6 +7,14 @@
   "repo": "rahilp/second-brain-cloudflare",
   "license": "MIT",
   "categories": ["ai", "productivity"],
+  "authors": [
+    {
+      "name": "Rahil Pirani",
+      "url": "https://rahilpirani.com",
+      "github": "rahilp",
+      "x": "rahilpirani"
+    }
+  ],
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v2.2.0", "sha": "8be9305f37aa1b1eddb9d08f9894f04a22af7d8e" },
   "install": {

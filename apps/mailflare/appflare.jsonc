@@ -8,6 +8,7 @@
   // The LICENSE file is the GNU AGPL version 3 with no "or any later version" grant.
   "license": "AGPL-3.0-only",
   "categories": ["email"],
+  "authors": [{ "name": "Hieu Nguyen", "github": "hieunc229", "x": "hieuSSR" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags, so the entry follows the default branch by commit.
   "source": { "ref": "main", "sha": "1bf70d2ef2771360a546704182752eb7a1ff63f2" },

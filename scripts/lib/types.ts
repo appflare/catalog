@@ -24,6 +24,17 @@ export interface CatalogSelfDeploying {
   workers: string[];
 }
 
+/** `CatalogAuthor`, in full: a person or organization that wrote the app upstream. */
+export interface CatalogAuthor {
+  name: string;
+  /** An https:// website. */
+  url?: string;
+  /** A login, without `@`. */
+  github?: string;
+  /** An X handle, without `@`. */
+  x?: string;
+}
+
 /** Subset of `CatalogManifest`. */
 export interface CatalogManifest {
   $schema?: string;
@@ -33,6 +44,8 @@ export interface CatalogManifest {
   homepage: string;
   repo: string;
   license: string;
+  /** Who wrote the app upstream; the index lists the owner of `repo` when omitted. */
+  authors?: CatalogAuthor[];
   maintainers: string[];
   source: { ref: string; sha: string };
   install: {
@@ -160,6 +173,11 @@ export interface IndexApp {
   plan: Plan;
   requires: string[];
   lastVerified: string | null;
+  /**
+   * Who wrote the app (see `indexAuthors`). The schema keeps it optional for
+   * indexes published before it existed; this catalog always writes it.
+   */
+  authors: CatalogAuthor[];
   maintainers: string[];
   build?: IndexBuild;
 }

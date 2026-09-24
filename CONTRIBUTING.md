@@ -53,10 +53,16 @@ app's own wrangler config, so the manifest does not repeat them.
    the app's own version (`"version": "1.1.10"`, semver without a leading `v`); it
    wins over the tag. It must change whenever `source` moves: publish refuses a
    new pin under an `install.version` that is already released.
-3. List at least one GitHub user in `maintainers`. They own `/apps/<slug>/` in
-   CODEOWNERS, so GitHub asks them to review every pull request for their app,
-   bumps included.
-4. Run the checks below, then open a pull request.
+3. List at least one GitHub user in `maintainers`: the people who package the app
+   for the catalog, shown as "Packaged by" on the app's page in the manager. They
+   own `/apps/<slug>/` in CODEOWNERS, so GitHub asks them to review every pull
+   request for their app, bumps included.
+4. List the people or organizations who wrote the app upstream in `authors`, as
+   the repository owner, its README, or its license names them. Each entry is
+   `{ "name", "url"?, "github"?, "x"? }`: an https website, and GitHub and X handles
+   without `@`. Catalog cards show the names; the app's page adds the links. When
+   `authors` is omitted, `index.json` lists the owner of `repo`.
+5. Run the checks below, then open a pull request.
 
 ### At most 21 Worker modules
 
@@ -79,6 +85,10 @@ built from. If you change `appflare.jsonc` but the pin still packs to a version 
 is already released, publish fails and names the fields that changed. To ship the
 change, re-pin `source`: a newer `source.sha` (for branch pins), or a new tag in
 `source.ref` and its `source.sha`.
+
+`authors` is the exception: `index.json` reads it from the current `appflare.jsonc`,
+not from the release, so an edit to `authors` alone publishes with the next
+`index.json` and needs no new release.
 
 ## Sandbox tier
 

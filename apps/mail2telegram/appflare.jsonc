@@ -7,6 +7,7 @@
   "repo": "TBXark/mail2telegram",
   "license": "MIT",
   "categories": ["email", "bots"],
+  "authors": [{ "name": "TBXark", "url": "https://tbxark.com", "github": "TBXark", "x": "tbxark" }],
   "maintainers": ["MendyLanda"],
   // Upstream tags releases without a "v" prefix (2.0.0); the packer reads both forms.
   "source": { "ref": "2.0.0", "sha": "39234192b14404b25d6401272de7ebb0e29ce1bb" },

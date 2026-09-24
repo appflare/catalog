@@ -126,6 +126,7 @@ describe("buildIndexApps", () => {
       plan: "free",
       requires: ["r2"],
       lastVerified: null,
+      authors: [{ name: "example", github: "example" }],
       maintainers: ["octocat", "@example/maintainers"],
     });
     expect(warnings.join("\n")).toMatch(/UNSIGNED/);
@@ -281,6 +282,7 @@ describe("lastVerified", () => {
     plan: "free",
     requires: [],
     lastVerified: "2026-09-01T00:00:00.000Z",
+    authors: [{ name: "octocat", github: "octocat" }],
     maintainers: ["octocat"],
     ...over,
   });
@@ -320,6 +322,7 @@ describe("sandbox tier entries", () => {
         plan: "paid",
         requires: ["r2"],
         lastVerified: null,
+        authors: [{ name: "example", github: "example" }],
         maintainers: ["octocat", "@example/maintainers"],
         build: {
           pin: PIN,
@@ -351,8 +354,23 @@ describe("sandbox tier entries", () => {
       plan: "free",
       requires: ["r2"],
       lastVerified: null,
+      authors: [{ name: "example", github: "example" }],
       maintainers: ["octocat", "@example/maintainers"],
     });
+  });
+
+  it("list the manifest's authors, or the repository owner when it names none", () => {
+    writeLocal(artifactManifestFixture({ app: "hello", version: "1.2.3", sha: PIN }));
+    const authors = [
+      { name: "Ada Lovelace", url: "https://ada.example", github: "ada", x: "ada_l" },
+      { name: "Example", github: "example" },
+    ];
+    const built = { ...sandboxFixture(hello, schema), authors };
+    const rows = buildIndexApps([built, hello], options());
+    expect(rows.map((r) => [r.slug, r.authors])).toEqual([
+      ["built", authors],
+      ["hello", [{ name: "example", github: "example" }]],
+    ]);
   });
 
   it("carry lastVerified over while version and manifestDigest stay the same", () => {
@@ -407,6 +425,7 @@ describe("self-deploying tier entries", () => {
         plan: "paid",
         requires: ["r2"],
         lastVerified: null,
+        authors: [{ name: "example", github: "example" }],
         maintainers: ["octocat", "@example/maintainers"],
         build: {
           pin: PIN,

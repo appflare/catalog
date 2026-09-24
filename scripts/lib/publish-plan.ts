@@ -20,12 +20,22 @@ import type { VersionResolver } from "./versions.ts";
  *   `install.version`: error; the pin moved but `install.version` did not, and
  *   the version must change with the pin;
  * - a complete release with a different catalog manifest (a metadata-only edit
- *   under the same pin): error; the author must re-pin `source`;
+ *   under the same pin): error; the author must re-pin `source`. Fields in
+ *   {@link INDEX_ONLY_FIELDS} do not count: the index reads them from the
+ *   current manifest, so they need no new release;
  * - a draft, prerelease, or incomplete release: the lookup throws, naming it.
  *
  * Decided from the manifests and the releases alone, so re-running is
  * idempotent and a cancelled or skipped run loses nothing.
  */
+
+/**
+ * Catalog manifest fields that change only what the index shows, never what an
+ * artifact installs. The index is built from the current manifest, so an edit
+ * to these alone is published by regenerating `index.json` and needs no new
+ * release; releases packed after the edit carry the new value anyway.
+ */
+export const INDEX_ONLY_FIELDS: readonly string[] = ["authors"];
 
 export type PlanDecision =
   | { slug: string; action: "not-released"; tier: InstallTier }
@@ -70,7 +80,9 @@ export function decide(
         "bump install.version to the app's version at the new pin.",
     };
   }
-  const changed = changedFields(published.catalog, manifest);
+  const changed = changedFields(published.catalog, manifest).filter(
+    (field) => !INDEX_ONLY_FIELDS.includes(field),
+  );
   if (changed.length === 0) {
     return { slug, tag, action: "skip" };
   }

@@ -7,6 +7,15 @@
   "repo": "cloudflare/templates",
   "license": "MIT",
   "categories": ["storage"],
+  "authors": [
+    {
+      "name": "Gabriel Massadas",
+      "url": "https://massadas.com",
+      "github": "G4brym",
+      "x": "G4brym"
+    },
+    { "name": "Cloudflare", "url": "https://www.cloudflare.com", "github": "cloudflare" }
+  ],
   "maintainers": ["MendyLanda"],
   // The Deploy-button template lives in a subdirectory of cloudflare/templates;
   // wranglerConfig points into it. The repository's semver tags cover every

@@ -7,6 +7,9 @@
   "repo": "cloudflare/agentic-inbox",
   "license": "Apache-2.0",
   "categories": ["email", "ai"],
+  "authors": [
+    { "name": "Cloudflare", "url": "https://www.cloudflare.com", "github": "cloudflare" }
+  ],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags, so the entry follows the default branch by commit.
   "source": { "ref": "main", "sha": "48039bb6785af34e592c2966f87cde2b255c4c80" },

@@ -12,6 +12,10 @@
   "repo": "every-app/open-seo",
   "license": "MIT",
   "categories": ["marketing", "analytics"],
+  "authors": [
+    { "name": "Ben Senescu", "github": "bensenescu", "x": "bensenescu" },
+    { "name": "Every App", "url": "https://everyapp.dev", "github": "every-app" }
+  ],
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v0.1.9", "sha": "84e4705503ceaef54d1b284c167de9942563cdae" },
   "install": {

@@ -7,6 +7,7 @@
   "repo": "realchendahuang/FlareMo",
   "license": "AGPL-3.0-only",
   "categories": ["productivity", "notes"],
+  "authors": [{ "name": "realchendahuang", "github": "realchendahuang" }],
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v0.20.1", "sha": "f87c98ee528848fb8c200ca538cd82d1db03505c" },
   "install": {

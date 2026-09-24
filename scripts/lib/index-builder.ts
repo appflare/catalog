@@ -2,6 +2,7 @@ import { createHash } from "node:crypto";
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { type Parser, parseOrThrow } from "./appflare-schema.ts";
+import { indexAuthors } from "./authors.ts";
 import {
   IncompleteReleaseError,
   type ReleaseArtifact,
@@ -18,7 +19,9 @@ import type {
 import type { VersionResolver } from "./versions.ts";
 
 /**
- * Builds the catalog index. Rows depend on the entry's `install.tier`:
+ * Builds the catalog index. Every row lists the app's `authors` from the
+ * current manifest, or the owner of its repository (`authors.ts`). Otherwise
+ * rows depend on the entry's `install.tier`:
  *
  * - `sandbox` and `self-deploying`: no artifact. The row's `version` is what
  *   the current pin packs to, and its `build` block names the pin and the
@@ -230,6 +233,7 @@ export function toIndexApp(
     plan: manifest.plan,
     requires: [...manifest.requires],
     lastVerified,
+    authors: indexAuthors(manifest),
     maintainers: [...manifest.maintainers],
   };
 }
@@ -271,6 +275,7 @@ export function toSandboxIndexApp(
       { version, digest: build.manifestDigest },
       options.previousApps ?? [],
     ),
+    authors: indexAuthors(manifest),
     maintainers: [...manifest.maintainers],
     build,
   };

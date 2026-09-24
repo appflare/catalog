@@ -7,6 +7,7 @@
   "repo": "MendyLanda/cut",
   "license": "MIT",
   "categories": ["utilities"],
+  "authors": [{ "name": "Mendy Landa", "github": "MendyLanda" }],
   "maintainers": ["MendyLanda"],
   // Cut has no release tags yet; the pin tracks main. The bump bot edits this.
   "source": { "ref": "v0.1.0", "sha": "6056400d47530aa87e4ae5764b37ffca9d00e87f" },

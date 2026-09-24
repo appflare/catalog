@@ -7,6 +7,7 @@
   "repo": "PublicAffairs/openai-gemini",
   "license": "MIT",
   "categories": ["ai"],
+  "authors": [{ "name": "PublicAffairs", "github": "PublicAffairs" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no semver release tags (its tags name Gemini models); the pin tracks main.
   "source": { "ref": "main", "sha": "61a83bd9d0def59811624b6ae7d8213a231185d0" },

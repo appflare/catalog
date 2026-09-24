@@ -40,6 +40,7 @@ beforeAll(async () => {
     plan: "paid",
     requires: [],
     lastVerified: null,
+    authors: [{ name: "octocat", github: "octocat" }],
     maintainers: ["octocat"],
     build: sandboxBuild(seo, "appflare/catalog", schema.sandboxDefaults),
   };
@@ -52,6 +53,7 @@ beforeAll(async () => {
     plan: "paid",
     requires: [],
     lastVerified: null,
+    authors: [{ name: "octocat", github: "octocat" }],
     maintainers: ["octocat"],
     build: sandboxBuild(built, "appflare/catalog", schema.sandboxDefaults),
   };
@@ -71,6 +73,7 @@ beforeAll(async () => {
         plan: "free",
         requires: [],
         lastVerified: null,
+        authors: [{ name: "octocat", github: "octocat" }],
         maintainers: ["octocat"],
       },
     ],

@@ -96,6 +96,27 @@ describe("decide", () => {
     );
   });
 
+  it("skips an edit to authors alone: the index reads them from the manifest", () => {
+    const authors = [{ name: "Ada Lovelace", github: "ada" }];
+    const released = releasedWith("hello@1.2.3", hello);
+    expect(
+      decide({ ...hello, authors }, versions, released, schema.artifactManifest, KEY_ID).action,
+    ).toBe("skip");
+    const other = releasedWith("hello@1.2.3", { ...hello, authors: [{ name: "Someone" }] });
+    expect(
+      decide({ ...hello, authors }, versions, other, schema.artifactManifest, KEY_ID).action,
+    ).toBe("skip");
+  });
+
+  it("still fails when authors change together with a field the artifact carries", () => {
+    const releases = releasedWith("hello@1.2.3", { ...hello, summary: "Old summary." });
+    const edited = { ...hello, authors: [{ name: "Ada Lovelace" }] };
+    const decision = decide(edited, versions, releases, schema.artifactManifest, KEY_ID);
+    expect(decision.action === "error" && decision.message).toMatch(
+      /appflare\.jsonc changed \(summary\)/,
+    );
+  });
+
   it("fails, naming the release, when the tag's release is incomplete", () => {
     const releases: ReleaseLookup = {
       byTag: () => {
