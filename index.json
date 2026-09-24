@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-24T08:47:44.334Z",
+  "generatedAt": "2026-09-24T10:26:33.701Z",
   "apps": [
     {
       "slug": "agentic-inbox",
@@ -21,6 +21,13 @@
         "workers-ai"
       ],
       "lastVerified": "2026-09-24T08:46:22.000Z",
+      "authors": [
+        {
+          "name": "Cloudflare",
+          "url": "https://www.cloudflare.com",
+          "github": "cloudflare"
+        }
+      ],
       "maintainers": [
         "MendyLanda"
       ]
@@ -40,6 +47,14 @@
       "plan": "free",
       "requires": [],
       "lastVerified": "2026-09-24T08:46:19.000Z",
+      "authors": [
+        {
+          "name": "TBXark",
+          "url": "https://tbxark.com",
+          "github": "TBXark",
+          "x": "tbxark"
+        }
+      ],
       "maintainers": [
         "MendyLanda"
       ]
@@ -59,6 +74,12 @@
       "plan": "free",
       "requires": [],
       "lastVerified": "2026-09-24T08:46:28.000Z",
+      "authors": [
+        {
+          "name": "Mendy Landa",
+          "github": "MendyLanda"
+        }
+      ],
       "maintainers": [
         "MendyLanda"
       ]
@@ -81,6 +102,12 @@
         "workers-ai"
       ],
       "lastVerified": "2026-09-24T08:47:02.000Z",
+      "authors": [
+        {
+          "name": "realchendahuang",
+          "github": "realchendahuang"
+        }
+      ],
       "maintainers": [
         "MendyLanda"
       ]
@@ -104,6 +131,14 @@
         "r2"
       ],
       "lastVerified": "2026-09-24T08:46:32.000Z",
+      "authors": [
+        {
+          "name": "TBXark",
+          "url": "https://tbxark.com",
+          "github": "TBXark",
+          "x": "tbxark"
+        }
+      ],
       "maintainers": [
         "MendyLanda"
       ]
@@ -127,6 +162,13 @@
         "r2"
       ],
       "lastVerified": "2026-09-24T08:46:53.000Z",
+      "authors": [
+        {
+          "name": "Hieu Nguyen",
+          "github": "hieunc229",
+          "x": "hieuSSR"
+        }
+      ],
       "maintainers": [
         "MendyLanda"
       ]
@@ -142,14 +184,26 @@
         "r2",
         "containers"
       ],
-      "lastVerified": "2026-09-24T08:06:50.655Z",
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Ben Senescu",
+          "github": "bensenescu",
+          "x": "bensenescu"
+        },
+        {
+          "name": "Every App",
+          "url": "https://everyapp.dev",
+          "github": "every-app"
+        }
+      ],
       "maintainers": [
         "MendyLanda"
       ],
       "build": {
         "pin": "84e4705503ceaef54d1b284c167de9942563cdae",
         "manifest": "https://appflare.github.io/catalog/apps/open-seo/manifest.json",
-        "manifestDigest": "fd997eeca880811d45368b8f68b744fc5d5f11ade9d3f8a8c1761765ae777625",
+        "manifestDigest": "b616d2b58fec148890d0db69a6f4780c8e5086a27c200072eae0bd3788fb7e25",
         "buildCommand": "pnpm exec vite build --mode selfhost",
         "expectedMinutes": 5,
         "instanceType": "standard-2"
@@ -170,6 +224,12 @@
       "plan": "free",
       "requires": [],
       "lastVerified": "2026-09-24T08:46:20.000Z",
+      "authors": [
+        {
+          "name": "PublicAffairs",
+          "github": "PublicAffairs"
+        }
+      ],
       "maintainers": [
         "MendyLanda"
       ]
@@ -191,6 +251,19 @@
         "r2"
       ],
       "lastVerified": "2026-09-24T08:46:21.000Z",
+      "authors": [
+        {
+          "name": "Gabriel Massadas",
+          "url": "https://massadas.com",
+          "github": "G4brym",
+          "x": "G4brym"
+        },
+        {
+          "name": "Cloudflare",
+          "url": "https://www.cloudflare.com",
+          "github": "cloudflare"
+        }
+      ],
       "maintainers": [
         "MendyLanda"
       ]
@@ -212,6 +285,14 @@
         "workers-ai"
       ],
       "lastVerified": "2026-09-24T08:46:28.000Z",
+      "authors": [
+        {
+          "name": "Rahil Pirani",
+          "url": "https://rahilpirani.com",
+          "github": "rahilp",
+          "x": "rahilpirani"
+        }
+      ],
       "maintainers": [
         "MendyLanda"
       ]
@@ -231,6 +312,13 @@
       "plan": "free",
       "requires": [],
       "lastVerified": "2026-09-24T08:46:16.000Z",
+      "authors": [
+        {
+          "name": "Will Walker",
+          "url": "https://willswire.com",
+          "github": "willswire"
+        }
+      ],
       "maintainers": [
         "MendyLanda"
       ]
