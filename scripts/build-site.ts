@@ -1,13 +1,20 @@
-import { copyFileSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { copyFileSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { parseArgs } from "node:util";
-import { loadAppflareSchema, parseOrThrow } from "./lib/appflare-schema.ts";
+import {
+  formatIssues,
+  loadAppflareSchema,
+  type Parser,
+  parseOrThrow,
+} from "./lib/appflare-schema.ts";
 import { findApp, loadManifest } from "./lib/apps.ts";
-import { catalogRepo, info, runMain } from "./lib/cli.ts";
-import { appsDir, indexFile, resolveAppflareDir, schemaFile } from "./lib/paths.ts";
-import { publishedManifestFor, publishedManifestPath } from "./lib/sandbox-entry.ts";
+import { catalogRepo, info, runMain, warn } from "./lib/cli.ts";
+import { publishedFeaturedFor, readFeatured } from "./lib/featured.ts";
+import { publishedMediaFor, readAppMedia } from "./lib/media.ts";
+import { appsDir, catalogRoot, indexFile, resolveAppflareDir, schemaFile } from "./lib/paths.ts";
+import { pagesBaseUrl, publishedManifestFor, publishedManifestPath } from "./lib/sandbox-entry.ts";
 
-const USAGE = `Usage: pnpm -s build-site --out <dir> [--index index.json]
+const USAGE = `Usage: pnpm -s build-site --out <dir> [--index index.json] [--stats <file> | --live-stats]
 
 Assembles the GitHub Pages site in <dir> (emptied first):
   index.json                  the catalog index, byte for byte
@@ -15,8 +22,19 @@ Assembles the GitHub Pages site in <dir> (emptied first):
   apps/<slug>/manifest.json   the catalog manifest of each row with a build
                               block (sandbox and self-deploying tiers),
                               written as build-index hashed it
-Fails when such a row's URL, pin, or manifestDigest does not match its
-current apps/<slug>/appflare.jsonc. Needs APPFLARE_DIR.
+  apps/<slug>/<image>         each row's icon, cover and screenshots
+  featured/<id>.png           each featured item's image
+  stats.json                  from --stats or --live-stats, when valid
+
+Fails when a row's build block or images, or a featured item's image, do not
+match the current files (rebuild index.json first). Missing or invalid stats
+are left out with a warning, so the popularity numbers can never block a
+publish. Needs APPFLARE_DIR.
+
+  --stats <file>   the stats.json to publish
+  --live-stats     publish the stats.json currently live on the catalog's Pages
+                   site; publish and nightly use it so a rebuild never removes
+                   the numbers the stats workflow maintains
 `;
 
 runMain(async () => {
@@ -24,6 +42,8 @@ runMain(async () => {
     options: {
       out: { type: "string" },
       index: { type: "string" },
+      stats: { type: "string" },
+      "live-stats": { type: "boolean" },
       help: { type: "boolean", short: "h" },
     },
   });
@@ -40,14 +60,32 @@ runMain(async () => {
 
   const files: { rel: string; bytes: Buffer }[] = [];
   for (const row of index.apps) {
-    if (row.build === undefined) {
-      continue;
+    const app = findApp(appsDir, row.slug);
+    if (row.build !== undefined) {
+      const manifest = loadManifest(app, schema.catalogManifest);
+      files.push({
+        rel: publishedManifestPath(row.slug),
+        bytes: publishedManifestFor(row, manifest, repo),
+      });
     }
-    const manifest = loadManifest(findApp(appsDir, row.slug), schema.catalogManifest);
-    files.push({
-      rel: publishedManifestPath(row.slug),
-      bytes: publishedManifestFor(row, manifest, repo),
-    });
+    files.push(...publishedMediaFor(row, readAppMedia(app.dir, row.slug, row.name, repo)));
+  }
+  files.push(
+    ...publishedFeaturedFor(index.featured, readFeatured(catalogRoot, repo, schema.featuredItem)),
+  );
+
+  let stats: Buffer | null = null;
+  if (values.stats !== undefined) {
+    const statsPath = path.resolve(values.stats);
+    if (existsSync(statsPath)) {
+      stats = checkedStats(readFileSync(statsPath), statsPath, schema.catalogStats);
+    } else {
+      warn(`${statsPath} does not exist; publishing without stats.json`);
+    }
+  } else if (values["live-stats"] === true) {
+    const url = `${pagesBaseUrl(repo)}stats.json`;
+    const live = await fetchLive(url);
+    stats = live === null ? null : checkedStats(live, url, schema.catalogStats);
   }
 
   rmSync(outDir, { recursive: true, force: true });
@@ -60,8 +98,45 @@ runMain(async () => {
     writeFileSync(target, file.bytes);
     info(`wrote ${path.relative(process.cwd(), target)}`);
   }
+  if (stats !== null) {
+    writeFileSync(path.join(outDir, "stats.json"), stats);
+  }
   info(
-    `site in ${outDir}: index.json, schema/v1.json, ${files.length} published catalog manifest(s)`,
+    `site in ${outDir}: index.json, schema/v1.json, ${files.length} other file(s)${stats === null ? "" : ", stats.json"}`,
   );
   return 0;
 });
+
+/** The bytes at `url`, or null (with a warning) when they cannot be fetched. */
+async function fetchLive(url: string): Promise<Buffer | null> {
+  try {
+    const response = await fetch(url, { signal: AbortSignal.timeout(20_000) });
+    if (!response.ok) {
+      warn(`${url} answered HTTP ${response.status}; publishing without stats.json`);
+      return null;
+    }
+    return Buffer.from(await response.arrayBuffer());
+  } catch (err) {
+    warn(`could not fetch ${url}: ${err instanceof Error ? err.message : String(err)}`);
+    return null;
+  }
+}
+
+/** `bytes` when they are a valid stats.json; otherwise null, with a warning. */
+function checkedStats(bytes: Buffer, statsPath: string, parser: Parser<unknown>): Buffer | null {
+  let json: unknown;
+  try {
+    json = JSON.parse(bytes.toString("utf8"));
+  } catch {
+    warn(`${statsPath} is not JSON; publishing without stats.json`);
+    return null;
+  }
+  const result = parser.safeParse(json);
+  if (!result.success) {
+    warn(
+      `${statsPath} is not a valid stats.json; publishing without it:\n${formatIssues(result.error.issues)}`,
+    );
+    return null;
+  }
+  return bytes;
+}

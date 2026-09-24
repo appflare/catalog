@@ -226,17 +226,25 @@ describe("finalizeIndex", () => {
     writeLocal(artifactManifestFixture({ app: "hello", version: "1.2.3", sha: PIN }));
     const apps = buildIndexApps([hello], options());
     const index = finalizeIndex(apps, null, now, schema.indexJson);
-    expect(index).toEqual({ generatedAt: "2026-09-22T12:00:00.000Z", apps });
+    expect(index).toEqual({ generatedAt: "2026-09-22T12:00:00.000Z", apps, featured: [] });
   });
 
   it("keeps the previous generatedAt when the apps are unchanged", () => {
     writeLocal(artifactManifestFixture({ app: "hello", version: "1.2.3", sha: PIN }));
     const apps = buildIndexApps([hello], options());
-    const previous = serializeIndex({ generatedAt: "2026-01-01T00:00:00.000Z", apps });
+    const previous = serializeIndex({
+      generatedAt: "2026-01-01T00:00:00.000Z",
+      apps,
+      featured: [],
+    });
     expect(finalizeIndex(apps, previous, now, schema.indexJson).generatedAt).toBe(
       "2026-01-01T00:00:00.000Z",
     );
-    const changed = serializeIndex({ generatedAt: "2026-01-01T00:00:00.000Z", apps: [] });
+    const changed = serializeIndex({
+      generatedAt: "2026-01-01T00:00:00.000Z",
+      apps: [],
+      featured: [],
+    });
     expect(finalizeIndex(apps, changed, now, schema.indexJson).generatedAt).toBe(now.toISOString());
     expect(finalizeIndex(apps, "not json", now, schema.indexJson).generatedAt).toBe(
       now.toISOString(),

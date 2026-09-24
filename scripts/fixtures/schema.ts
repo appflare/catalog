@@ -22,6 +22,8 @@ export async function testSchema(): Promise<AppflareSchema> {
     catalogManifest: passthrough(),
     artifactManifest: passthrough(),
     indexJson: passthrough(),
+    featuredItem: passthrough(),
+    catalogStats: passthrough(),
     // The value @appflare/schema exports; only used when it is not available.
     maxWorkerModules: 21,
     sandboxDefaults: { expectedMinutes: 10, instanceType: "standard-1" },

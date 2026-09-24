@@ -12,9 +12,11 @@ import { runsInSandbox, type SandboxDefaults, sandboxBuild } from "./sandbox-ent
 import type {
   ArtifactManifest,
   CatalogManifest,
+  FeaturedItem,
   IndexApp,
   IndexArtifacts,
   IndexJson,
+  IndexMedia,
 } from "./types.ts";
 import type { VersionResolver } from "./versions.ts";
 
@@ -71,6 +73,8 @@ export interface IndexBuildOptions {
   previousApps?: readonly IndexApp[];
   /** What `install.sandbox` defaults to, from `@appflare/schema`. */
   sandboxDefaults: SandboxDefaults;
+  /** The entry's images (see `media.ts`); rows get no `media` block without it. */
+  mediaFor?: (manifest: CatalogManifest) => IndexMedia | undefined;
 }
 
 /** Where an app's listed version came from. */
@@ -221,6 +225,7 @@ export function toIndexApp(
   artifact: ResolvedArtifact,
   repo: string,
   lastVerified: string | null = null,
+  media: IndexMedia | undefined = undefined,
 ): IndexApp {
   return {
     slug: manifest.slug,
@@ -235,6 +240,7 @@ export function toIndexApp(
     lastVerified,
     authors: indexAuthors(manifest),
     maintainers: [...manifest.maintainers],
+    ...(media === undefined ? {} : { media }),
   };
 }
 
@@ -278,7 +284,13 @@ export function toSandboxIndexApp(
     authors: indexAuthors(manifest),
     maintainers: [...manifest.maintainers],
     build,
+    ...mediaBlock(manifest, options),
   };
+}
+
+function mediaBlock(manifest: CatalogManifest, options: IndexBuildOptions): { media?: IndexMedia } {
+  const media = options.mediaFor?.(manifest);
+  return media === undefined ? {} : { media };
 }
 
 /** Index rows for every listable manifest, in slug order (see this module's header). */
@@ -299,38 +311,62 @@ export function buildIndexApps(
     const artifact = resolveArtifact(manifest, options, state);
     if (artifact) {
       const verifiedAt = lastVerifiedFor(manifest.slug, artifact, options.previousApps ?? []);
-      rows.push(toIndexApp(manifest, artifact, options.repo, verifiedAt));
+      rows.push(
+        toIndexApp(
+          manifest,
+          artifact,
+          options.repo,
+          verifiedAt,
+          mediaBlock(manifest, options).media,
+        ),
+      );
     }
   }
   return rows;
 }
 
+/** What `index.json` carries besides its rows. */
+export interface IndexExtras {
+  /** The sponsored slot, from `featured.json`; written even when empty. */
+  featured: FeaturedItem[];
+  /** URL of `stats.json` on the Pages site. */
+  stats?: string;
+}
+
 /**
  * Wraps rows into `index.json` and validates it. `generatedAt` is kept from the
- * previous file when the rows are unchanged, so regenerating is idempotent and
- * publish CI only commits real changes.
+ * previous file when the rows, featured items and stats URL are unchanged, so
+ * regenerating is idempotent and publish CI only commits real changes.
  */
 export function finalizeIndex(
   apps: IndexApp[],
   previousText: string | null,
   now: Date,
   parser: Parser<IndexJson>,
+  extras: IndexExtras = { featured: [] },
 ): IndexJson {
+  const body = {
+    apps,
+    featured: extras.featured,
+    ...(extras.stats === undefined ? {} : { stats: extras.stats }),
+  };
   let generatedAt = now.toISOString();
   if (previousText !== null) {
     try {
-      const previous = JSON.parse(previousText) as Partial<IndexJson>;
-      if (
-        typeof previous.generatedAt === "string" &&
-        JSON.stringify(previous.apps) === JSON.stringify(apps)
-      ) {
-        generatedAt = previous.generatedAt;
+      const { generatedAt: before, ...rest } = JSON.parse(previousText) as Partial<IndexJson>;
+      if (typeof before === "string" && JSON.stringify(rest) === JSON.stringify(body)) {
+        generatedAt = before;
       }
     } catch {
       // An unreadable previous index is simply replaced.
     }
   }
-  return parseOrThrow(parser, { generatedAt, apps }, "generated index.json");
+  return parseOrThrow(parser, { generatedAt, ...body }, "generated index.json");
+}
+
+/** The URL `stats.json` is published at, next to `index.json`. */
+export function statsUrl(pagesBase: string): string {
+  return `${pagesBase}stats.json`;
 }
 
 /** Serialized form written to disk. */

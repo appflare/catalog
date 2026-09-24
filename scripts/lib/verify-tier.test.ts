@@ -59,6 +59,7 @@ beforeAll(async () => {
   };
   index = {
     generatedAt: "2026-09-20T00:00:00.000Z",
+    featured: [],
     apps: [
       sandboxRow,
       seoRow,

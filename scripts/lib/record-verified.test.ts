@@ -27,6 +27,7 @@ function row(slug: string, version: string, digest = D): IndexApp {
 const index: IndexJson = {
   generatedAt: "2026-09-20T00:00:00.000Z",
   apps: [row("cut", "0.1.0"), row("other", "2.0.0"), row("third", "1.0.0")],
+  featured: [],
 };
 
 describe("patchLastVerified", () => {
@@ -86,7 +87,11 @@ describe("patchLastVerified for sandbox tier rows", () => {
       instanceType: "standard-1",
     },
   };
-  const sandboxIndex: IndexJson = { generatedAt: index.generatedAt, apps: [sandboxRow] };
+  const sandboxIndex: IndexJson = {
+    generatedAt: index.generatedAt,
+    apps: [sandboxRow],
+    featured: [],
+  };
 
   it("matches the row by build.manifestDigest", () => {
     const at = "2026-09-24T02:59:00.000Z";

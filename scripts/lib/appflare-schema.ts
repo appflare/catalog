@@ -1,7 +1,14 @@
 import { pathToFileURL } from "node:url";
 import { appflarePaths, assertAppflareBuilt } from "./paths.ts";
 import type { SandboxDefaults } from "./sandbox-entry.ts";
-import type { ArtifactManifest, CatalogManifest, IndexJson, SandboxInstanceType } from "./types.ts";
+import type {
+  ArtifactManifest,
+  CatalogManifest,
+  CatalogStats,
+  FeaturedItem,
+  IndexJson,
+  SandboxInstanceType,
+} from "./types.ts";
 
 /** One validation problem, in the shape zod 4 reports it. */
 export interface ParseIssue {
@@ -23,6 +30,10 @@ export interface AppflareSchema {
   catalogManifest: Parser<CatalogManifest>;
   artifactManifest: Parser<ArtifactManifest>;
   indexJson: Parser<IndexJson>;
+  /** One item of the sponsored slot. */
+  featuredItem: Parser<FeaturedItem>;
+  /** `stats.json`. */
+  catalogStats: Parser<CatalogStats>;
   /**
    * Most Worker modules the manager can install: it uploads each module as its
    * own subrequest, within the free plan's per-invocation subrequest limit.
@@ -45,6 +56,8 @@ export async function loadAppflareSchema(appflareDir: string): Promise<AppflareS
     catalogManifest: pickParser<CatalogManifest>(mod, "catalogManifestSchema"),
     artifactManifest: pickParser<ArtifactManifest>(mod, "artifactManifestSchema"),
     indexJson: pickParser<IndexJson>(mod, "indexJsonSchema"),
+    featuredItem: pickParser<FeaturedItem>(mod, "featuredItemSchema"),
+    catalogStats: pickParser<CatalogStats>(mod, "catalogStatsSchema"),
     maxWorkerModules: pickPositiveInt(mod, "MAX_WORKER_MODULES"),
     sandboxDefaults: {
       expectedMinutes: pickPositiveInt(mod, "DEFAULT_EXPECTED_BUILD_MINUTES"),

@@ -180,10 +180,61 @@ export interface IndexApp {
   authors: CatalogAuthor[];
   maintainers: string[];
   build?: IndexBuild;
+  /** The entry's images on the Pages site (see `media.ts`); omitted when it has none. */
+  media?: IndexMedia;
+}
+
+/** `IndexMediaFile`, in full: an image on the Pages site, pinned by the sha256 of its bytes. */
+export interface IndexMediaFile {
+  url: string;
+  sha256: string;
+}
+
+/** `IndexMedia`, in full. */
+export interface IndexMedia {
+  icon?: IndexMediaFile;
+  cover?: IndexMediaFile;
+  screenshots: (IndexMediaFile & { alt: string })[];
+}
+
+/** `FeaturedItem`, in full: one item of the sponsored slot (see `featured.ts`). */
+export interface FeaturedItem {
+  id: string;
+  title: string;
+  text: string;
+  sponsor: { name: string; url?: string };
+  image?: IndexMediaFile & { alt: string };
+  link?: { url: string; label: string };
+  slug?: string;
+  startsAt?: string;
+  endsAt?: string;
 }
 
 /** `IndexJson`, in full. */
 export interface IndexJson {
   generatedAt: string;
   apps: IndexApp[];
+  /** The sponsored slot; always written, empty while there is no sponsor. */
+  featured: FeaturedItem[];
+  /** URL of `stats.json` on the Pages site. */
+  stats?: string;
+}
+
+/** `CatalogAppStats`, in full: one app's numbers in `stats.json`. */
+export interface CatalogAppStats {
+  stars: { count: number; fetchedAt: string } | null;
+  installs: { last30d: number | null; active: number | null; fetchedAt: string } | null;
+}
+
+/** `CatalogStatsSource`, in full. */
+export interface CatalogStatsSource {
+  ok: boolean;
+  at: string | null;
+}
+
+/** `CatalogStats`, in full: `stats.json`. */
+export interface CatalogStats {
+  generatedAt: string;
+  apps: Record<string, CatalogAppStats>;
+  sources: { github: CatalogStatsSource; telemetry: CatalogStatsSource };
 }

@@ -13,7 +13,10 @@ describe("renderCodeowners", () => {
       { slug: "zeta", maintainers: ["alice"] },
       { slug: "alpha", maintainers: ["@bob", "bob", "acme/team"] },
     ]);
-    expect(out).toBe(`${CODEOWNERS_HEADER}\n/apps/alpha/ @bob @acme/team\n/apps/zeta/ @alice\n`);
+    expect(out).toBe(
+      `${CODEOWNERS_HEADER}\n/apps/alpha/ @bob @acme/team\n/apps/zeta/ @alice\n\n` +
+        "/featured.json @MendyLanda\n/featured/ @MendyLanda\n",
+    );
   });
 
   it("reads maintainers from the fixture manifest", () => {

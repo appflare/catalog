@@ -42,7 +42,17 @@ export function readOwnership(apps: readonly AppEntry[]): Ownership[] {
   });
 }
 
-/** Renders CODEOWNERS: one `/apps/<slug>/ @owner…` line per app, in slug order. */
+/**
+ * Who owns the sponsored slot (`featured.json` and `featured/`): the
+ * catalog's own maintainers, never an app's, so no app maintainer approves
+ * sponsor content.
+ */
+export const FEATURED_OWNERS = ["@MendyLanda"] as const;
+
+/**
+ * Renders CODEOWNERS: one `/apps/<slug>/ @owner…` line per app, in slug
+ * order, then the sponsored slot's lines.
+ */
 export function renderCodeowners(owners: readonly Ownership[]): string {
   const lines = [...owners]
     .sort((a, b) => a.slug.localeCompare(b.slug))
@@ -50,5 +60,6 @@ export function renderCodeowners(owners: readonly Ownership[]): string {
       const handles = [...new Set(o.maintainers.map((m) => `@${m.replace(/^@/, "")}`))];
       return `/apps/${o.slug}/ ${handles.join(" ")}`;
     });
-  return `${CODEOWNERS_HEADER}\n${lines.join("\n")}\n`;
+  const featured = FEATURED_OWNERS.join(" ");
+  return `${CODEOWNERS_HEADER}\n${lines.join("\n")}\n\n/featured.json ${featured}\n/featured/ ${featured}\n`;
 }

@@ -209,8 +209,17 @@ jobs:
           github-token: ${{ github.token }}
           message: "chore: record nightly install checks in index.json [skip ci]"
           verified-file: ${{ runner.temp }}/verified.json
+      # As in publish: stats.json is the live one, which the stats workflow owns.
       - name: Assemble the Pages site
-        run: pnpm -s build-site --out site
+        run: pnpm -s build-site --out site --live-stats
+      # The stats workflow redeploys exactly this site with a new stats.json.
+      - name: Keep the site for the stats workflow
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: catalog-site
+          path: catalog/site
+          if-no-files-found: error
+          retention-days: 30
       - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
         with:
           path: catalog/site
@@ -224,6 +233,10 @@ jobs:
     permissions:
       pages: write
       id-token: write
+    # Shared with publish and stats: one Pages deploy at a time.
+    concurrency:
+      group: pages
+      cancel-in-progress: false
     environment:
       name: github-pages
       url: ${{ steps.deploy.outputs.page_url }}

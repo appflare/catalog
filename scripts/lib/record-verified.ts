@@ -61,7 +61,9 @@ export function patchLastVerified(
     .map(([slug]) => slug)
     .sort();
   return {
+    // Everything but the rows (featured items, the stats URL) is kept as it was.
     index: {
+      ...index,
       generatedAt: updated.length > 0 ? now.toISOString() : index.generatedAt,
       apps,
     },

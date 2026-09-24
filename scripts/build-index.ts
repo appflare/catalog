@@ -4,9 +4,12 @@ import { parseArgs } from "node:util";
 import { loadAppflareSchema } from "./lib/appflare-schema.ts";
 import { listApps, loadManifest } from "./lib/apps.ts";
 import { catalogRepo, info, runMain, warn } from "./lib/cli.ts";
+import { readFeatured } from "./lib/featured.ts";
 import { createGhReleaseLookup } from "./lib/github-releases.ts";
-import { buildIndexApps, finalizeIndex, serializeIndex } from "./lib/index-builder.ts";
-import { appsDir, distDir, indexFile, resolveAppflareDir } from "./lib/paths.ts";
+import { buildIndexApps, finalizeIndex, serializeIndex, statsUrl } from "./lib/index-builder.ts";
+import { mediaReader } from "./lib/media.ts";
+import { appsDir, catalogRoot, distDir, indexFile, resolveAppflareDir } from "./lib/paths.ts";
+import { pagesBaseUrl } from "./lib/sandbox-entry.ts";
 import type { IndexApp } from "./lib/types.ts";
 import { createVersionResolver, loadPackerVersioning } from "./lib/versions.ts";
 
@@ -27,6 +30,11 @@ has the same source.sha; otherwise the app is omitted with a warning.
 lastVerified carries over from the previous index while an app's version and
 digest (manifestDigest for a sandbox or self-deploying entry) stay the same, and is null for a
 new one.
+
+Every row also lists the entry's images (apps/<slug>/icon.svg|icon.png,
+cover.png, screenshots/*.png) by their Pages URL and sha256. The index carries
+the sponsored items of featured.json (always written, even when empty) and the
+URL of stats.json, which the stats workflow publishes next to it.
 `;
 
 /** Rows of the index being replaced; none if it is missing or unreadable. */
@@ -74,8 +82,12 @@ runMain(async () => {
     warn,
     previousApps: previousRows(previous),
     sandboxDefaults: schema.sandboxDefaults,
+    mediaFor: mediaReader(appsDir, repo),
   });
-  const index = finalizeIndex(apps, previous, new Date(), schema.indexJson);
+  const index = finalizeIndex(apps, previous, new Date(), schema.indexJson, {
+    featured: readFeatured(catalogRoot, repo, schema.featuredItem).items,
+    stats: statsUrl(pagesBaseUrl(repo)),
+  });
   writeFileSync(outPath, serializeIndex(index));
   info(`wrote ${outPath}: ${index.apps.length} of ${manifests.length} apps listed`);
   for (const app of index.apps) {

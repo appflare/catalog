@@ -16,8 +16,11 @@ name: publish
 #                 whose app, version, source, keyId, and catalog equal the plan
 #   release       contents: write, CATALOG_PUSH_KEY; re-checks against the plan,
 #                 creates the releases, rebuilds and commits index.json
-#   pages         deploys index.json, schema/v1.json, and the catalog
-#                 manifests of sandbox and self-deploying entries to GitHub Pages
+#   pages         deploys index.json, schema/v1.json, the catalog manifests of
+#                 sandbox and self-deploying entries, every entry's images, the
+#                 featured images, and the live stats.json to GitHub Pages (the
+#                 site is also kept as the "catalog-site" artifact, which the
+#                 stats workflow redeploys with new numbers)
 #
 # The plan is computed from the manifests and existing releases, so any run
 # (including a manual one, or the one after a cancelled run) publishes whatever
@@ -29,7 +32,7 @@ on:
     # A new .appflare-ref or schema can change how every published entry's
     # catalog manifest is parsed, and so its published bytes and digest; the
     # index and Pages are rebuilt even when nothing needs a release.
-    paths: ["apps/**", ".appflare-ref", "schema/**"]
+    paths: ["apps/**", ".appflare-ref", "schema/**", "featured.json", "featured/**"]
   workflow_dispatch:
     inputs:
       apps:
@@ -342,10 +345,22 @@ jobs:
         with:
           github-token: ${{ github.token }}
           message: "chore: update index.json [skip ci]"
-      # index.json, schema/v1.json, and apps/<slug>/manifest.json for each
-      # row with a build block, checked against the digest in index.json.
+      # index.json, schema/v1.json, apps/<slug>/manifest.json for each row
+      # with a build block, and every entry's images and featured image, all
+      # checked against the digests in index.json. stats.json is the one
+      # currently live: the stats workflow owns it, and a publish must not
+      # remove it.
       - name: Assemble the Pages site
-        run: pnpm -s build-site --out site
+        run: pnpm -s build-site --out site --live-stats
+      # The stats workflow redeploys exactly this site with a new stats.json,
+      # so it never rebuilds (or rolls back) anything else.
+      - name: Keep the site for the stats workflow
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: catalog-site
+          path: catalog/site
+          if-no-files-found: error
+          retention-days: 30
       - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
         with:
           path: catalog/site
@@ -359,6 +374,10 @@ jobs:
     permissions:
       pages: write
       id-token: write
+    # Shared with nightly and stats: one Pages deploy at a time.
+    concurrency:
+      group: pages
+      cancel-in-progress: false
     environment:
       name: github-pages
       url: ${{ steps.deploy.outputs.page_url }}
