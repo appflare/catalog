@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-24T08:01:28.111Z",
+  "generatedAt": "2026-09-24T08:07:16.450Z",
   "apps": [
     {
       "slug": "agentic-inbox",
@@ -142,7 +142,7 @@
         "r2",
         "containers"
       ],
-      "lastVerified": null,
+      "lastVerified": "2026-09-24T08:06:50.655Z",
       "maintainers": [
         "MendyLanda"
       ],
