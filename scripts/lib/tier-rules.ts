@@ -15,12 +15,22 @@ import type { CatalogManifest } from "./types.ts";
  *   entry. The rule only reads the manifest, never the upstream wrangler config, so validation needs no
  *   network. Declaring the command here and in the wrangler config's
  *   `build.command` would run the build twice, so an app built only by its
- *   wrangler `build.command` does not qualify;
- * - must not set `bump.autoMerge`: a bump would merge itself without any
- *   install check, since CI does not install sandbox entries.
+ *   wrangler `build.command` does not qualify.
  *
- * `self-deploying` entries have no install check either, so they may not
- * set `bump.autoMerge` either.
+ * A `self-deploying` tier entry ships its own installer, which the sandbox
+ * Worker runs in the same kind of container, with a Cloudflare API token the
+ * admin creates for the app. CI only validates it. So a self-deploying entry:
+ *
+ * - must set `plan` to `"paid"`, for the container, whatever plan the app
+ *   itself would run on;
+ * - must declare `install.selfDeploying`, the installer's commands and the
+ *   Workers it creates (the schema requires it as well; repeated here so the
+ *   tier's rules read in one place);
+ * - must list `tokenPermissions`: the installer deploys with the app's own
+ *   token, and the admin creates that token from this list.
+ *
+ * Neither tier may set `bump.autoMerge`: a bump would merge itself without
+ * any install check, since CI installs neither.
  */
 export function tierProblems(manifest: CatalogManifest): string[] {
   const { tier } = manifest.install;
@@ -37,6 +47,26 @@ export function tierProblems(manifest: CatalogManifest): string[] {
         "- install.buildCommand: a sandbox tier entry must declare the command that builds " +
           "it; an app whose wrangler config builds it with build.command alone is not a " +
           "sandbox tier entry",
+      );
+    }
+  }
+  if (tier === "self-deploying") {
+    if (manifest.plan !== "paid") {
+      problems.push(
+        '- plan: must be "paid"; a self-deploying entry\'s installer runs in a container in ' +
+          "the user's account, which needs Workers Paid",
+      );
+    }
+    if (manifest.install.selfDeploying === undefined) {
+      problems.push(
+        "- install.selfDeploying: a self-deploying tier entry must describe its installer " +
+          "(tool, deploy and destroy commands, and the Workers it creates)",
+      );
+    }
+    if (manifest.tokenPermissions.length === 0) {
+      problems.push(
+        "- tokenPermissions: a self-deploying tier entry must list the permissions of the " +
+          "token its installer deploys with; the admin creates that token from this list",
       );
     }
   }

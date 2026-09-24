@@ -12,9 +12,10 @@ const USAGE = `Usage: pnpm -s build-site --out <dir> [--index index.json]
 Assembles the GitHub Pages site in <dir> (emptied first):
   index.json                  the catalog index, byte for byte
   schema/v1.json              the catalog manifest JSON Schema
-  apps/<slug>/manifest.json   the catalog manifest of each sandbox tier row,
+  apps/<slug>/manifest.json   the catalog manifest of each row with a build
+                              block (sandbox and self-deploying tiers),
                               written as build-index hashed it
-Fails when a sandbox row's URL, pin, or manifestDigest does not match its
+Fails when such a row's URL, pin, or manifestDigest does not match its
 current apps/<slug>/appflare.jsonc. Needs APPFLARE_DIR.
 `;
 
@@ -59,6 +60,8 @@ runMain(async () => {
     writeFileSync(target, file.bytes);
     info(`wrote ${path.relative(process.cwd(), target)}`);
   }
-  info(`site in ${outDir}: index.json, schema/v1.json, ${files.length} sandbox manifest(s)`);
+  info(
+    `site in ${outDir}: index.json, schema/v1.json, ${files.length} published catalog manifest(s)`,
+  );
   return 0;
 });

@@ -56,7 +56,11 @@ runMain(async () => {
         SIGNING_KEY_ID,
       );
       if (decision.action === "not-released") {
-        info(`${decision.slug}: ${decision.tier} tier; built in the user's account, no release`);
+        info(
+          decision.tier === "self-deploying"
+            ? `${decision.slug}: self-deploying tier; its installer runs in the user's account, no release`
+            : `${decision.slug}: ${decision.tier} tier; built in the user's account, no release`,
+        );
       } else if (decision.action === "publish") {
         info(`${decision.tag}: not released yet; publishing`);
         plan.apps[decision.slug] = decision.planned;

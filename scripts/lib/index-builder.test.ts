@@ -3,7 +3,7 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { artifactManifestFixture } from "../fixtures/artifact-manifest.ts";
-import { sandboxFixture } from "../fixtures/sandbox-manifest.ts";
+import { sandboxFixture, selfDeployingFixture } from "../fixtures/sandbox-manifest.ts";
 import { appflareAvailable, testSchema } from "../fixtures/schema.ts";
 import type { AppflareSchema } from "./appflare-schema.ts";
 import { listApps, loadManifest } from "./apps.ts";
@@ -385,23 +385,87 @@ describe("sandbox tier entries", () => {
       buildIndexApps([built], options({ versions: noGit, strictReleases: true })),
     ).toThrow(/commit date/);
   });
+});
 
-  it("leave self-deploying entries out with a warning", () => {
-    const selfDeploying = {
-      ...hello,
-      slug: "seo",
-      install: { ...hello.install, tier: "self-deploying" as const },
-    };
-    expect(buildIndexApps([selfDeploying], options({ releases: throwingReleases }))).toEqual([]);
-    expect(warnings).toEqual([
-      "seo: omitted: self-deploying tier entries are not listed until the manager can install them",
+describe("self-deploying tier entries", () => {
+  const throwingReleases: ReleaseLookup = {
+    byTag: () => {
+      throw new Error("a self-deploying entry has no release to look up");
+    },
+  };
+
+  it("are listed with a build block exactly like sandbox entries", () => {
+    const seo = selfDeployingFixture(hello, schema);
+    const rows = buildIndexApps([seo], options({ releases: throwingReleases }));
+    expect(rows).toEqual([
+      {
+        slug: "seo",
+        name: "Hello",
+        summary: "Fixture app for the catalog scripts' tests.",
+        version: "1.2.3",
+        tier: "self-deploying",
+        plan: "paid",
+        requires: ["r2"],
+        lastVerified: null,
+        maintainers: ["octocat", "@example/maintainers"],
+        build: {
+          pin: PIN,
+          manifest: "https://appflare.github.io/catalog/apps/seo/manifest.json",
+          manifestDigest: sha256Hex(publishedManifestBytes(seo)),
+          expectedMinutes: 15,
+          instanceType: "standard-2",
+        },
+      },
     ]);
+    expect(rows[0]).not.toHaveProperty("artifacts");
+    expect(rows[0]).not.toHaveProperty("digest");
+    expect(warnings).toEqual([]);
+  });
+
+  it("carry the build command when the entry declares one", () => {
+    const seo = selfDeployingFixture(hello, schema);
+    const withBuild = { ...seo, install: { ...seo.install, buildCommand: "pnpm run build" } };
+    const [row] = buildIndexApps([withBuild], options({ releases: throwingReleases }));
+    expect(row?.build?.buildCommand).toBe("pnpm run build");
+  });
+
+  it("carry lastVerified over only while manifestDigest stays the same", () => {
+    const seo = selfDeployingFixture(hello, schema);
+    const [first] = buildIndexApps([seo], options());
+    if (!first) {
+      throw new Error("expected a row");
+    }
+    const verified = { ...first, lastVerified: "2026-09-01T00:00:00.000Z" };
+    const [same] = buildIndexApps([seo], options({ previousApps: [verified] }));
+    expect(same?.lastVerified).toBe("2026-09-01T00:00:00.000Z");
+    const edited = selfDeployingFixture(hello, schema, {
+      tokenPermissions: [
+        { name: "Workers Scripts", scope: "account" },
+        { name: "D1", scope: "account" },
+      ],
+    });
+    const [changed] = buildIndexApps([edited], options({ previousApps: [verified] }));
+    expect(changed?.version).toBe(first.version);
+    expect(changed?.lastVerified).toBeNull();
+  });
+
+  it("leave artifact and sandbox rows as they were", () => {
+    const bytes = writeLocal(artifactManifestFixture({ app: "hello", version: "1.2.3", sha: PIN }));
+    const built = sandboxFixture(hello, schema);
+    const without = buildIndexApps([built, hello], options());
+    const withSeo = buildIndexApps([built, selfDeployingFixture(hello, schema), hello], options());
+    expect(withSeo.map((r) => r.slug)).toEqual(["built", "hello", "seo"]);
+    expect(withSeo.filter((r) => r.slug !== "seo")).toEqual(without);
+    expect(without[1]?.digest).toBe(sha256Hex(bytes));
   });
 });
 
 describe.skipIf(!appflareAvailable)("sandbox rows with the real @appflare/schema", () => {
   it("pass the index schema, keep their key order, and stay idempotent", () => {
-    const rows = buildIndexApps([sandboxFixture(hello, schema)], options());
+    const rows = buildIndexApps(
+      [sandboxFixture(hello, schema), selfDeployingFixture(hello, schema)],
+      options(),
+    );
     const now = new Date("2026-09-22T12:00:00.000Z");
     const index = finalizeIndex(rows, null, now, schema.indexJson);
     expect(index.apps).toEqual(rows);

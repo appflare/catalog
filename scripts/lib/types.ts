@@ -13,6 +13,17 @@ export type InstallTier = "artifact" | "sandbox" | "self-deploying";
 export type Plan = "free" | "paid";
 export type SandboxInstanceType = "standard-1" | "standard-2";
 
+/** `CatalogSelfDeploying`, in full. */
+export interface CatalogSelfDeploying {
+  tool: "alchemy";
+  deployCommand: string[];
+  destroyCommand: string[];
+  stageArg?: string;
+  stateStore: "cloudflare";
+  /** Worker names with `{{stage}}` for the install's stage; the first serves the app. */
+  workers: string[];
+}
+
 /** Subset of `CatalogManifest`. */
 export interface CatalogManifest {
   $schema?: string;
@@ -33,11 +44,15 @@ export interface CatalogManifest {
     version?: string;
     /** One command the packer runs after installing dependencies, before bundling. */
     buildCommand?: string;
-    /** Build settings of a `sandbox` tier entry. */
+    /** How a run in the sandbox Worker is sized (`sandbox` and `self-deploying` tiers). */
     sandbox?: { expectedMinutes?: number; instanceType?: SandboxInstanceType };
+    /** How the sandbox Worker runs the app's own installer (`self-deploying` tier only). */
+    selfDeploying?: CatalogSelfDeploying;
   };
   plan: Plan;
   requires: string[];
+  /** Permissions of the Cloudflare API token the admin creates for the app itself. */
+  tokenPermissions: { name: string; description?: string; scope?: "account" | "zone" | "user" }[];
   /** How the bump bot treats the entry. */
   bump?: { autoMerge: boolean };
 }
@@ -113,7 +128,10 @@ export interface IndexArtifacts {
   sig: string;
 }
 
-/** `IndexBuild`, in full: how a `sandbox` tier entry is built in the user's account. */
+/**
+ * `IndexBuild`, in full: how a `sandbox` or `self-deploying` tier entry runs
+ * in the user's account (its build, or its own installer).
+ */
 export interface IndexBuild {
   /** The commit the build checks out: the manifest's `source.sha`. */
   pin: string;
@@ -128,7 +146,8 @@ export interface IndexBuild {
 
 /**
  * `IndexApp`, in full: the catalog builds it. `artifact` tier rows carry
- * `artifacts` and `digest`; `sandbox` tier rows carry `build` instead.
+ * `artifacts` and `digest`; `sandbox` and `self-deploying` tier rows carry
+ * `build` instead.
  */
 export interface IndexApp {
   slug: string;

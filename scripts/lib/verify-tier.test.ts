@@ -1,6 +1,6 @@
 import path from "node:path";
 import { beforeAll, describe, expect, it } from "vitest";
-import { sandboxFixture } from "../fixtures/sandbox-manifest.ts";
+import { sandboxFixture, selfDeployingFixture } from "../fixtures/sandbox-manifest.ts";
 import { testSchema } from "../fixtures/schema.ts";
 import type { AppflareSchema } from "./appflare-schema.ts";
 import { findApp, loadManifest } from "./apps.ts";
@@ -8,7 +8,13 @@ import type { CfRequest, CfResponse, Probe } from "./ci-install.ts";
 import { artifactUrls } from "./index-builder.ts";
 import { sandboxBuild } from "./sandbox-entry.ts";
 import type { CatalogManifest, IndexApp, IndexJson } from "./types.ts";
-import { manualCheckRow, runManualCheck, workerExists } from "./verify-tier.ts";
+import {
+  checkedWorker,
+  fitsWorkerTemplate,
+  manualCheckRow,
+  runManualCheck,
+  workerExists,
+} from "./verify-tier.ts";
 
 const fixtureApps = path.join(import.meta.dirname, "..", "fixtures", "apps");
 const NOW = Date.parse("2026-09-24T12:00:00.000Z");
@@ -17,11 +23,26 @@ let schema: AppflareSchema;
 let built: CatalogManifest;
 let index: IndexJson;
 let sandboxRow: IndexApp;
+let seo: CatalogManifest;
+let seoRow: IndexApp;
 
 beforeAll(async () => {
   schema = await testSchema();
   const hello = loadManifest(findApp(fixtureApps, "hello"), schema.catalogManifest);
   built = sandboxFixture(hello, schema);
+  seo = selfDeployingFixture(hello, schema);
+  seoRow = {
+    slug: "seo",
+    name: "Hello",
+    summary: "s",
+    version: "1.2.3",
+    tier: "self-deploying",
+    plan: "paid",
+    requires: [],
+    lastVerified: null,
+    maintainers: ["octocat"],
+    build: sandboxBuild(seo, "appflare/catalog", schema.sandboxDefaults),
+  };
   sandboxRow = {
     slug: "built",
     name: "Hello",
@@ -38,6 +59,7 @@ beforeAll(async () => {
     generatedAt: "2026-09-20T00:00:00.000Z",
     apps: [
       sandboxRow,
+      seoRow,
       {
         slug: "hello",
         name: "Hello",
@@ -101,11 +123,60 @@ describe("manualCheckRow", () => {
   });
 
   it("refuses unlisted entries, artifact tier entries, and another version", () => {
-    expect(() => manualCheckRow(index, "seo", "1.0.0")).toThrow(/not listed in index\.json/);
+    expect(() => manualCheckRow(index, "nope", "1.0.0")).toThrow(/not listed in index\.json/);
     expect(() => manualCheckRow(index, "hello", "1.2.3")).toThrow(/nightly workflow/);
     expect(() => manualCheckRow(index, "built", "1.2.2")).toThrow(
       /index\.json lists built 1\.2\.3, not 1\.2\.2/,
     );
+  });
+});
+
+describe("checkedWorker", () => {
+  it("defaults to the manifest's workerName, or takes the one given", () => {
+    expect(checkedWorker(built, undefined)).toBe("built");
+    expect(checkedWorker(built, "built-2")).toBe("built-2");
+  });
+
+  it("needs a self-deploying entry's Worker, named after its first template", () => {
+    expect(() => checkedWorker(seo, undefined)).toThrow(
+      /seo names its Worker after each install's stage \(seo-\{\{stage\}\}\)/,
+    );
+    expect(checkedWorker(seo, "seo-appflare-1a2b3c4d")).toBe("seo-appflare-1a2b3c4d");
+    expect(() => checkedWorker(seo, "seo")).toThrow(/installer names that one seo-\{\{stage\}\}/);
+    expect(() => checkedWorker(seo, "other-appflare-1a2b3c4d")).toThrow(
+      /not the Worker that serves seo/,
+    );
+    // The entry's other Worker fits the first template too, with a wrong stage.
+    expect(() => checkedWorker(seo, "seo-appflare-1a2b3c4d-worker")).toThrow(
+      /not seo-\{\{stage\}\}-worker/,
+    );
+  });
+});
+
+describe("fitsWorkerTemplate", () => {
+  it("matches the template with one stage in place of {{stage}}", () => {
+    expect(fitsWorkerTemplate("open-seo-{{stage}}", "open-seo-selfhost")).toBe(true);
+    expect(fitsWorkerTemplate("open-seo-{{stage}}-audit", "open-seo-appflare-ab12cd34-audit")).toBe(
+      true,
+    );
+    expect(fitsWorkerTemplate("open-seo-{{stage}}", "open-seo-")).toBe(false);
+    expect(fitsWorkerTemplate("open-seo-{{stage}}", "open-seo-Stage")).toBe(false);
+    expect(fitsWorkerTemplate("open-seo-{{stage}}", "open-seo-a-")).toBe(false);
+    expect(fitsWorkerTemplate("open-seo-{{stage}}", `open-seo-${"a".repeat(25)}`)).toBe(false);
+    expect(fitsWorkerTemplate("a.b-{{stage}}", "axb-s")).toBe(false);
+  });
+
+  it("rejects a name that also fits another of the entry's templates", () => {
+    const audit = "open-seo-appflare-ab12cd34-audit";
+    expect(fitsWorkerTemplate("open-seo-{{stage}}", audit)).toBe(true);
+    expect(fitsWorkerTemplate("open-seo-{{stage}}", audit, ["open-seo-{{stage}}-audit"])).toBe(
+      false,
+    );
+    expect(
+      fitsWorkerTemplate("open-seo-{{stage}}", "open-seo-appflare-ab12cd34", [
+        "open-seo-{{stage}}-audit",
+      ]),
+    ).toBe(true);
   });
 });
 
@@ -173,5 +244,37 @@ describe("runManualCheck", () => {
       { worker: "built-2" },
     );
     expect(urls).toEqual(["https://built-2.acme.workers.dev/"]);
+  });
+
+  it("verifies a self-deploying entry at the Worker its installer created", async () => {
+    const urls: string[] = [];
+    const calls: string[] = [];
+    const verified = await check(
+      account(["appflare-sandbox", "seo-appflare-1a2b3c4d"], calls),
+      async (url) => {
+        urls.push(url);
+        return { status: 200, body: "ok" };
+      },
+      { slug: "seo", manifest: seo, worker: "seo-appflare-1a2b3c4d" },
+    );
+    expect(urls).toEqual(["https://seo-appflare-1a2b3c4d.acme.workers.dev/"]);
+    expect(verified).toEqual({
+      seo: {
+        version: "1.2.3",
+        digest: seoRow.build?.manifestDigest,
+        at: "2026-09-24T12:00:00.000Z",
+      },
+    });
+  });
+
+  it("refuses a self-deploying check without the Worker name before calling Cloudflare", async () => {
+    const calls: string[] = [];
+    await expect(
+      check(account(["appflare-sandbox"], calls), async () => ({ status: 200, body: "" }), {
+        slug: "seo",
+        manifest: seo,
+      }),
+    ).rejects.toThrow(/with the stage the manager's app page shows/);
+    expect(calls).toEqual([]);
   });
 });

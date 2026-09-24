@@ -1,16 +1,27 @@
 import { createHash } from "node:crypto";
 import { canonicalize } from "./canonical.ts";
-import type { CatalogManifest, IndexBuild, SandboxInstanceType } from "./types.ts";
+import type { CatalogManifest, IndexBuild, InstallTier, SandboxInstanceType } from "./types.ts";
 
 /**
- * What the catalog publishes for a `sandbox` tier entry. Catalog CI builds no
- * artifact for it; the user's manager asks its sandbox Worker to build the
- * pinned commit instead. For that the manager needs the entry's catalog
- * manifest, which the catalog publishes on GitHub Pages next to `index.json`
- * at `apps/<slug>/manifest.json`. The index row's `build` block points at it
- * and carries the sha256 of its exact bytes, which the manager checks before
- * it trusts the file.
+ * What the catalog publishes for an entry that runs in the user's sandbox
+ * Worker: a `sandbox` tier entry, which the sandbox Worker builds from the
+ * pinned commit, or a `self-deploying` one, whose own installer it runs at
+ * that commit. Catalog CI builds no artifact for either. The user's manager
+ * needs the entry's catalog manifest instead (the build command, or the
+ * installer's commands and Workers, and the install form), which the catalog
+ * publishes on GitHub Pages next to `index.json` at
+ * `apps/<slug>/manifest.json`. The index row's `build` block points at it and
+ * carries the sha256 of its exact bytes, which the manager checks before it
+ * trusts the file.
  */
+
+/** The tiers whose installs and updates run in the user's sandbox Worker. */
+export const SANDBOX_RUN_TIERS: readonly InstallTier[] = ["sandbox", "self-deploying"];
+
+/** Whether installs of a `tier` entry run in the user's sandbox Worker. */
+export function runsInSandbox(tier: InstallTier): boolean {
+  return SANDBOX_RUN_TIERS.includes(tier);
+}
 
 /** Defaults `@appflare/schema` fills in when `install.sandbox` omits a field. */
 export interface SandboxDefaults {
@@ -47,7 +58,10 @@ export function publishedManifestBytes(manifest: CatalogManifest): Buffer {
   return Buffer.from(`${JSON.stringify(canonicalize(manifest), null, 2)}\n`);
 }
 
-/** The `build` block of a sandbox tier entry's index row. */
+/**
+ * The `build` block of the index row of an entry that runs in the sandbox
+ * Worker ({@link runsInSandbox}); both tiers get the same block.
+ */
 export function sandboxBuild(
   manifest: CatalogManifest,
   repo: string,
@@ -66,7 +80,7 @@ export function sandboxBuild(
 }
 
 /**
- * The bytes to publish at a sandbox row's `build.manifest`, from the entry's
+ * The bytes to publish at a row's `build.manifest`, from the entry's
  * current catalog manifest. Throws when they are not what the row promises
  * (another URL, pin, or digest): `index.json` was built from another version
  * of `appflare.jsonc`, and publishing would make every install of the entry

@@ -9,6 +9,7 @@ import {
   workersSubdomain,
 } from "./ci-install.ts";
 import { verifiedDigest } from "./index-builder.ts";
+import { SANDBOX_RUN_TIERS } from "./sandbox-entry.ts";
 import type { CatalogManifest, IndexApp, IndexJson } from "./types.ts";
 
 /**
@@ -26,6 +27,9 @@ import type { CatalogManifest, IndexApp, IndexJson } from "./types.ts";
  *    built there;
  * 3. the app's Worker exists and passes the same health check as the other
  *    install checks, on its `install.healthPath` with its `install.healthMode`.
+ *    For a `self-deploying` entry that is the first of
+ *    `install.selfDeploying.workers`, named after the install's stage, so the
+ *    maintainer passes its name, which must fit that template.
  *
  * It cannot tell which commit the running Worker was built from; the
  * maintainer's install is what vouches for that.
@@ -34,7 +38,7 @@ import type { CatalogManifest, IndexApp, IndexJson } from "./types.ts";
 export const SANDBOX_WORKER_NAME = "appflare-sandbox";
 
 /** Tiers this check is for. Artifact tier entries are checked by nightly.yml. */
-export const MANUAL_TIERS: readonly string[] = ["sandbox", "self-deploying"];
+export const MANUAL_TIERS: readonly string[] = SANDBOX_RUN_TIERS;
 
 /** One passing check, in the shape `record-verified` takes. */
 export type TierVerification = Record<string, { version: string; digest: string; at: string }>;
@@ -50,10 +54,7 @@ export function manualCheckRow(
 ): { row: IndexApp; digest: string } {
   const row = index.apps.find((r) => r.slug === slug);
   if (!row) {
-    throw new Error(
-      `${slug} is not listed in index.json; only listed entries can be verified (self-deploying ` +
-        "entries are not listed until the manager can install them)",
-    );
+    throw new Error(`${slug} is not listed in index.json; only listed entries can be verified`);
   }
   if (!MANUAL_TIERS.includes(row.tier)) {
     throw new Error(
@@ -96,7 +97,10 @@ export interface ManualCheckOptions {
   version: string;
   /** The entry's catalog manifest, schema-parsed. */
   manifest: CatalogManifest;
-  /** The Worker the maintainer installed; the manifest's `install.workerName` when omitted. */
+  /**
+   * The Worker the maintainer installed; the manifest's `install.workerName`
+   * when omitted. Required for a `self-deploying` entry (see {@link checkedWorker}).
+   */
   worker?: string;
   request: CfRequest;
   probe: (url: string) => Promise<Probe>;
@@ -106,9 +110,58 @@ export interface ManualCheckOptions {
   timeoutMs?: number;
 }
 
+/** A stage as the manager names one: lowercase letters, digits and dashes, 1 to 24. */
+const STAGE_PATTERN = "[a-z0-9](?:[a-z0-9-]{0,22}[a-z0-9])?";
+
+/**
+ * Whether `name` is `template` with some stage in place of `{{stage}}`. With
+ * `others`, also that it fits none of them: `open-seo-{{stage}}` alone
+ * accepts the audit Worker `open-seo-x-audit` as stage `x-audit`, so the
+ * entry's other Worker templates are passed to rule that out.
+ */
+export function fitsWorkerTemplate(
+  template: string,
+  name: string,
+  others: readonly string[] = [],
+): boolean {
+  if (others.some((other) => fitsWorkerTemplate(other, name))) {
+    return false;
+  }
+  const [before = "", after = ""] = template.split("{{stage}}");
+  const literal = (text: string) => text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return new RegExp(`^${literal(before)}${STAGE_PATTERN}${literal(after)}$`).test(name);
+}
+
+/**
+ * The Worker whose health the check probes: `worker` when given, else the
+ * manifest's `install.workerName`. A `self-deploying` entry's Worker is named
+ * after the install's stage, which only the maintainer's manager knows, so it
+ * needs `worker`, and `worker` must fit the entry's first Worker template.
+ */
+export function checkedWorker(manifest: CatalogManifest, worker: string | undefined): string {
+  const [template, ...others] = manifest.install.selfDeploying?.workers ?? [];
+  if (manifest.install.tier !== "self-deploying" || template === undefined) {
+    return worker ?? manifest.install.workerName;
+  }
+  if (worker === undefined) {
+    throw new Error(
+      `${manifest.slug} names its Worker after each install's stage (${template}); pass that ` +
+        "name with the stage the manager's app page shows for the install",
+    );
+  }
+  if (!fitsWorkerTemplate(template, worker, others)) {
+    throw new Error(
+      `${worker} is not the Worker that serves ${manifest.slug}; its installer names that one ` +
+        `${template}${others.length > 0 ? `, not ${others.join(" or ")}` : ""}`,
+    );
+  }
+  return worker;
+}
+
 /** Runs the manual check. Resolves with the verification to record; throws when it fails. */
 export async function runManualCheck(options: ManualCheckOptions): Promise<TierVerification> {
   const { row, digest } = manualCheckRow(options.index, options.slug, options.version);
+  const worker = checkedWorker(options.manifest, options.worker);
   if (!(await workerExists(options.request, SANDBOX_WORKER_NAME))) {
     throw new Error(
       `this account has no ${SANDBOX_WORKER_NAME} Worker. Verifying a ${row.tier} tier entry ` +
@@ -117,7 +170,6 @@ export async function runManualCheck(options: ManualCheckOptions): Promise<TierV
     );
   }
   options.log(`${SANDBOX_WORKER_NAME} is present`);
-  const worker = options.worker ?? options.manifest.install.workerName;
   if (!(await workerExists(options.request, worker))) {
     throw new Error(
       `this account has no Worker named ${worker}. Install ${options.slug} ${row.version} with ` +

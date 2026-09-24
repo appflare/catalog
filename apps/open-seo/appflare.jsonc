@@ -1,0 +1,132 @@
+{
+  // OpenSEO deploys itself with an Alchemy stack (alchemy.run.ts): two Workers
+  // (the app and its site-audit Worker), D1, R2, two KV namespaces, Durable
+  // Objects, Workflows, a rate limit, cron triggers, and a Cloudflare Access
+  // application in front of the app. The sandbox Worker runs that stack with a
+  // token the admin creates for it; Appflare records what it made.
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "open-seo",
+  "name": "OpenSEO",
+  "summary": "Self-hosted SEO research: keywords, rankings, backlinks and site audits, on your own Cloudflare account and behind Cloudflare Access.",
+  "homepage": "https://github.com/every-app/open-seo",
+  "repo": "every-app/open-seo",
+  "license": "MIT",
+  "categories": ["marketing", "analytics"],
+  "maintainers": ["MendyLanda"],
+  "source": { "ref": "v0.1.9", "sha": "84e4705503ceaef54d1b284c167de9942563cdae" },
+  "install": {
+    "tier": "self-deploying",
+    "packageManager": "pnpm",
+    // Not read by this tier (the Alchemy stack reads it itself); required by the schema.
+    "wranglerConfig": "wrangler.jsonc",
+    "workerName": "open-seo",
+    // The same build as `pnpm deploy:selfhost`, minus its type check; runs
+    // without credentials before the installer.
+    "buildCommand": "pnpm exec vite build --mode selfhost",
+    // Unauthenticated in the app, but the Access application covers the whole
+    // hostname, so the probe only sees Access's redirect.
+    "healthPath": "/api/health",
+    "healthMode": "status-only",
+    // One installer run: the dependency install, the Vite build of about 7,400
+    // modules, then the deploy. The repository's .npmrc gives Node a 4 GiB
+    // heap because the build needs more than the default, which leaves no
+    // room on standard-1 (4 GiB in all), so it runs on standard-2. The
+    // minutes are an estimate: upstream's preview deploys, which do the same
+    // work, have a 20-minute limit on a GitHub runner. Replace it with a
+    // measured, rounded-up value after the first manual check.
+    "sandbox": { "expectedMinutes": 15, "instanceType": "standard-2" },
+    "selfDeploying": {
+      "tool": "alchemy",
+      // `pnpm alchemy` is the package's script, which adds --experimental-strip-types.
+      // --yes also deploys Alchemy's state store on the first run.
+      "deployCommand": ["pnpm", "alchemy", "deploy", "--yes"],
+      "destroyCommand": ["pnpm", "alchemy", "destroy", "--yes"],
+      "stateStore": "cloudflare",
+      // alchemy.access.ts: workerName(stage) = `open-seo-${stage}`; the audit
+      // Worker is `${workerName(stage)}-audit` (alchemy.run.ts).
+      "workers": ["open-seo-{{stage}}", "open-seo-{{stage}}-audit"]
+    }
+  },
+  // The app itself runs on Workers Free, but its installer runs in the sandbox
+  // Worker's container, which needs Workers Paid.
+  "plan": "paid",
+  "requires": ["r2", "containers"],
+  "secrets": [
+    {
+      "name": "DATAFORSEO_API_KEY",
+      "label": "DataForSEO API key",
+      "help": "The Base64 credentials DataForSEO sends by email (app.dataforseo.com, API Access, Send by email): the Base64 of your DataForSEO email:password. See docs/DATAFORSEO_API_KEY.md in the OpenSEO repository."
+    }
+  ],
+  "vars": [
+    {
+      "name": "ACCESS_ALLOWED_EMAILS",
+      "label": "Allowed emails",
+      "help": "Comma-separated emails Cloudflare Access lets in. The installer puts an Access application with exactly these in front of OpenSEO; dashboard edits to its policy are overwritten on the next update.",
+      "required": true
+    },
+    {
+      "name": "OPENSEO_TELEMETRY_DISABLED",
+      "label": "Disable anonymous telemetry",
+      "help": "Set to 1 to opt out of OpenSEO's anonymized telemetry.",
+      "required": false
+    }
+  ],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "Open {{workerUrl}} and sign in through Cloudflare Access with one of the allowed emails. If the account had no Zero Trust team, the installer created one named after your workers.dev subdomain. {{workerUrl}}/api/health reports OpenSEO's configuration checks once you are signed in."
+    }
+  ],
+  // docs/SELF_HOSTING_CLOUDFLARE.md and docs/PREVIEW_DEPLOYMENTS.md (v0.1.9):
+  // Workers Scripts/KV/D1/R2/Workflows write, Secrets Store and Account Settings
+  // for Alchemy's state store, and Access for the self-host login gate. Their CI
+  // token has Secrets Store read because its store already exists; a fresh
+  // account's first deploy bootstraps it (alchemy 2.0.0-beta.61
+  // src/Cloudflare/StateStore/State.ts), which needs Edit. "Secrets Store" has
+  // no key in Cloudflare's token template docs, so the manager lists it for
+  // the admin to add by hand.
+  "tokenPermissions": [
+    // Also covers the two Workflows: Cloudflare's API accepts Workers Scripts Edit for them, and no Workflows token group exists.
+    {
+      "name": "Workers Scripts",
+      "scope": "account",
+      "description": "Deploy the two Workers, their Durable Objects, cron triggers and workers.dev routes; on a first deploy also Alchemy's alchemy-state-store Worker (with a workers.dev route) and the temporary preview Worker its login uses."
+    },
+    {
+      "name": "Workers KV Storage",
+      "scope": "account",
+      "description": "Create the app's two KV namespaces."
+    },
+    {
+      "name": "D1",
+      "scope": "account",
+      "description": "Create the database and apply its migrations."
+    },
+    {
+      "name": "Workers R2 Storage",
+      "scope": "account",
+      "description": "Create the cache bucket and its lifecycle rule."
+    },
+    {
+      "name": "Secrets Store:Edit",
+      "scope": "account",
+      "description": "Edit, not Read: on an account without Alchemy's state store, the first deploy creates the Secrets Store and puts the state store's token and encryption key in it; later runs read them."
+    },
+    {
+      "name": "Account Settings:Read",
+      "scope": "account",
+      "description": "Alchemy's state-store login reads the account."
+    },
+    {
+      "name": "Access: Apps and Policies",
+      "scope": "account",
+      "description": "Create the Access application and allow policy in front of OpenSEO."
+    },
+    {
+      "name": "Access: Organizations, Identity Providers, and Groups",
+      "scope": "account",
+      "description": "Read the Zero Trust team domain, and create a team if the account has none."
+    }
+  ]
+}
