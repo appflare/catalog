@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-24T17:03:36.540Z",
+  "generatedAt": "2026-09-24T17:57:18.598Z",
   "apps": [
     {
       "slug": "agentic-inbox",
@@ -43,7 +43,18 @@
             "alt": "Agentic Inbox: Inbox with the agent"
           }
         ]
-      }
+      },
+      "services": [
+        "r2",
+        "durable-objects",
+        "workers-ai",
+        "email-routing",
+        "zone"
+      ],
+      "categories": [
+        "email",
+        "ai"
+      ]
     },
     {
       "slug": "chatgpt-telegram-workers",
@@ -79,7 +90,15 @@
             "alt": "ChatGPT Telegram Bot: A chat in telegram"
           }
         ]
-      }
+      },
+      "services": [
+        "kv",
+        "workers-ai"
+      ],
+      "categories": [
+        "ai",
+        "bots"
+      ]
     },
     {
       "slug": "cut",
@@ -111,7 +130,13 @@
           "sha256": "9aeb8bd7cee3770df6d9fc17f9a55537400d678ec9c95d911ab95182a98f6970"
         },
         "screenshots": []
-      }
+      },
+      "services": [
+        "kv"
+      ],
+      "categories": [
+        "utilities"
+      ]
     },
     {
       "slug": "flaremo",
@@ -166,7 +191,19 @@
             "alt": "FlareMo: On a phone"
           }
         ]
-      }
+      },
+      "services": [
+        "d1",
+        "r2",
+        "vectorize",
+        "queues",
+        "cron",
+        "workers-ai"
+      ],
+      "categories": [
+        "productivity",
+        "notes"
+      ]
     },
     {
       "slug": "mail2telegram",
@@ -211,7 +248,19 @@
             "alt": "mail2telegram: Messages in telegram"
           }
         ]
-      }
+      },
+      "services": [
+        "d1",
+        "r2",
+        "cron",
+        "workers-ai",
+        "email-routing",
+        "zone"
+      ],
+      "categories": [
+        "email",
+        "bots"
+      ]
     },
     {
       "slug": "mailflare",
@@ -260,7 +309,20 @@
             "alt": "Mailflare: Mailboxes"
           }
         ]
-      }
+      },
+      "services": [
+        "d1",
+        "r2",
+        "durable-objects",
+        "queues",
+        "cron",
+        "images",
+        "email-routing",
+        "zone"
+      ],
+      "categories": [
+        "email"
+      ]
     },
     {
       "slug": "open-seo",
@@ -309,7 +371,18 @@
             "alt": "OpenSEO: Keyword research"
           }
         ]
-      }
+      },
+      "services": [
+        "kv",
+        "d1",
+        "r2",
+        "containers",
+        "access"
+      ],
+      "categories": [
+        "marketing",
+        "analytics"
+      ]
     },
     {
       "slug": "openai-gemini",
@@ -334,6 +407,10 @@
       ],
       "maintainers": [
         "MendyLanda"
+      ],
+      "services": [],
+      "categories": [
+        "ai"
       ]
     },
     {
@@ -368,6 +445,12 @@
       ],
       "maintainers": [
         "MendyLanda"
+      ],
+      "services": [
+        "r2"
+      ],
+      "categories": [
+        "storage"
       ]
     },
     {
@@ -404,7 +487,18 @@
           "sha256": "bcacfce4a4b7971462264ea1a9491901034a678a165d7436c30c0aa28334b059"
         },
         "screenshots": []
-      }
+      },
+      "services": [
+        "kv",
+        "d1",
+        "vectorize",
+        "cron",
+        "workers-ai"
+      ],
+      "categories": [
+        "ai",
+        "productivity"
+      ]
     },
     {
       "slug": "unifi-ddns",
@@ -430,6 +524,12 @@
       ],
       "maintainers": [
         "MendyLanda"
+      ],
+      "services": [
+        "zone"
+      ],
+      "categories": [
+        "networking"
       ]
     }
   ],
