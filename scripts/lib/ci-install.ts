@@ -400,6 +400,25 @@ export function consumerSettings(consumer: ArtifactQueueConsumer): QueueConsumer
   return settings;
 }
 
+/**
+ * The note for an artifact's cron triggers, which the check does not set: it
+ * proves the Worker deploys and answers, and a schedule adds nothing to that.
+ * Cron triggers also count against a limit for the whole account (5 on the
+ * Workers Free plan) that every Worker there and every check running in
+ * parallel would share, so setting them could fail an unrelated check. Null
+ * when the artifact declares none.
+ */
+export function cronNote(crons: readonly string[]): string | null {
+  if (crons.length === 0) {
+    return null;
+  }
+  const count = crons.length === 1 ? "1 cron trigger" : `${crons.length} cron triggers`;
+  return (
+    `the artifact declares ${count} (${crons.map((c) => `\`${c}\``).join(", ")}); ` +
+    "not set on the CI Worker, so scheduled runs are not exercised"
+  );
+}
+
 /** Placeholder for a required var without a default; the check only needs the Worker to start. */
 export const REQUIRED_VAR_PLACEHOLDER = "ci";
 
@@ -485,6 +504,9 @@ function jsonDefault(name: string, text: string): JsonValue {
  * `{{workerName}}` and `{{workerUrl}}` are filled in with `name` and its
  * workers.dev URL in `subdomain` (kept as written when `subdomain` is not
  * given, which only a plan for cleanup should do).
+ *
+ * The artifact's cron triggers are left out of the config and recorded as a
+ * note (see {@link cronNote}); cleanup never depends on them.
  */
 export function planCiInstall(
   manifest: ArtifactManifest,
@@ -633,6 +655,10 @@ export function planCiInstall(
   }
 
   const queueConsumers = planQueueConsumers(worker, name, resources, queues);
+  const crons = cronNote(worker.crons);
+  if (crons !== null) {
+    notes.push(crons);
+  }
 
   const forms = catalogForms(manifest.catalog);
   for (const v of forms.vars) {
@@ -692,7 +718,8 @@ export function planCiInstall(
     ...(services.length > 0 ? { services } : {}),
     ...singles,
     ...(Object.keys(vars).length > 0 ? { vars } : {}),
-    triggers: { crons: [...worker.crons] },
+    // No `triggers`: without it wrangler leaves the Worker's schedules alone
+    // (a fresh Worker has none), so the deploy makes no cron trigger call at all.
     ...(worker.observability ? { observability: { ...worker.observability } } : {}),
     ...(worker.migrations.length > 0
       ? { migrations: worker.migrations.map((m) => ({ ...m })) }
@@ -770,6 +797,23 @@ function planQueueConsumers(
     });
   }
   return consumers;
+}
+
+/**
+ * The run summary's lines for one check: `PASS` or `FAIL` with the artifact,
+ * the CI Worker, and `detail`, then one line per note of the plan. Written for
+ * a failed deploy too, so the notes are there whatever the outcome.
+ */
+export function summaryLines(
+  manifest: Pick<ArtifactManifest, "app" | "version">,
+  plan: Pick<CiInstallPlan, "name" | "notes">,
+  ok: boolean,
+  detail: string,
+): string[] {
+  return [
+    `${ok ? "PASS" : "FAIL"} ${manifest.app}@${manifest.version} as ${plan.name}: ${detail}`,
+    ...plan.notes.map((note) => `- note: ${note}`),
+  ];
 }
 
 /** Resolves a manifest path under `root`, refusing anything that could escape it. */
