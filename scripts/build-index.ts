@@ -13,9 +13,9 @@ import { createVersionResolver, loadPackerVersioning } from "./lib/versions.ts";
 const USAGE = `Usage: pnpm build-index [--releases-only] [--out <file>]
 
 Validates every apps/<slug>/appflare.jsonc and writes index.json.
-A sandbox tier entry is listed with a build block instead of an artifact: its
-pin, the URL and sha256 of its catalog manifest as build-site publishes it,
-and its build size and time. Self-deploying entries are left out.
+A sandbox or self-deploying tier entry is listed with a build block instead of
+an artifact: its pin, the URL and sha256 of its catalog manifest as build-site
+publishes it, and the size and time of a run in the sandbox Worker.
 Each artifact tier app's version and digest come from dist/<slug>/manifest.json when it was
 built from the current pin, otherwise from the GitHub Release <slug>@<version>
 for the version the current pin packs to (via gh api), provided its manifest
@@ -25,7 +25,7 @@ has the same source.sha; otherwise the app is omitted with a warning.
   --out <file>      output path (default: index.json)
 
 lastVerified carries over from the previous index while an app's version and
-digest (manifestDigest for a sandbox entry) stay the same, and is null for a
+digest (manifestDigest for a sandbox or self-deploying entry) stay the same, and is null for a
 new one.
 `;
 
@@ -82,7 +82,7 @@ runMain(async () => {
     info(
       app.build === undefined
         ? `${app.slug}@${app.version} digest=${app.digest}`
-        : `${app.slug}@${app.version} ${app.tier}: built in the user's account from ${app.build.pin.slice(0, 12)}, manifestDigest=${app.build.manifestDigest}`,
+        : `${app.slug}@${app.version} ${app.tier}: runs in the user's sandbox Worker at ${app.build.pin.slice(0, 12)}, manifestDigest=${app.build.manifestDigest}`,
     );
   }
   return 0;

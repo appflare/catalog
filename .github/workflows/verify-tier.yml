@@ -1,17 +1,20 @@
 name: verify tier
 
 # Manual: record lastVerified for a sandbox or self-deploying tier entry,
-# which neither verify.yml nor nightly.yml installs. A sandbox tier entry is
-# built by the sandbox Worker (appflare-sandbox) in the installing account, on
-# Workers Paid, and only a manager can ask it to build, so CI cannot install
-# one by itself. A maintainer does that part by hand, then runs this workflow:
+# which neither verify.yml nor nightly.yml installs. Both run in the sandbox
+# Worker (appflare-sandbox) of the installing account, on Workers Paid: it
+# builds a sandbox tier entry, and runs a self-deploying entry's own installer
+# with a token the admin creates for the app. Only a manager can ask it to,
+# so CI cannot install either by itself. A maintainer does that part by hand,
+# then runs this workflow:
 #
 #   1. In a Workers Paid account kept for this purpose, enable sandbox builds
 #      (npx @appflare/cli sandbox enable) and install the entry's current
 #      version (the one index.json lists) with the Appflare manager there.
 #   2. Actions > verify tier > Run workflow, with the slug, that version, and
 #      the Worker name it was installed under when it is not the manifest's
-#      install.workerName.
+#      install.workerName. A self-deploying entry always needs it: its
+#      installer names the Worker after the install's stage.
 #   3. Uninstall it again in the manager.
 #
 #   build-packer  APPFLARE_DEPLOY_KEY only; builds the packer bundle
@@ -38,7 +41,7 @@ on:
         type: string
         required: true
       worker:
-        description: The Worker name it was installed under. Empty means the manifest's install.workerName.
+        description: The Worker name it was installed under. Empty means the manifest's install.workerName; required for a self-deploying entry.
         type: string
         required: false
         default: ""

@@ -10,7 +10,14 @@ name: verify
 #   sandbox         validate, pack (proves the pinned commit builds and fits
 #                   the module limit); no install check: the user's account
 #                   builds it, and verify-tier.yml checks it by hand
-#   self-deploying  validate only (the check job validates every manifest)
+#   self-deploying  validate only (the check job validates every manifest):
+#                   the app's own installer runs in the user's sandbox
+#                   Worker with the app's own token, never on the runner;
+#                   verify-tier.yml checks it by hand
+#
+# changed-apps puts self-deploying entries in neither the pack nor the
+# install list, so a pull request that changes only self-deploying entries
+# skips both jobs, which "verify passed" allows because both lists are empty.
 #
 # Secrets: build-packer gets APPFLARE_DEPLOY_KEY; install gets the CI account's
 # CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID in its deploy and cleanup steps

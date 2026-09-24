@@ -16,6 +16,9 @@ Paid account that has sandbox builds enabled first. This then checks that the
 index lists that version, that the account has the appflare-sandbox Worker,
 and that the app's Worker (the manifest's workerName, or --worker) passes the
 health check, and writes the passing check for record-verified to <checks.json>.
+A self-deploying entry's Worker is named after the install's stage, so it
+needs --worker: the first of install.selfDeploying.workers with {{stage}}
+replaced by the stage the manager's app page shows for the install.
 
 Needs CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID of that account (Workers
 Scripts read), and APPFLARE_DIR.

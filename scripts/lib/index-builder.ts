@@ -7,7 +7,7 @@ import {
   type ReleaseArtifact,
   type ReleaseLookup,
 } from "./github-releases.ts";
-import { type SandboxDefaults, sandboxBuild } from "./sandbox-entry.ts";
+import { runsInSandbox, type SandboxDefaults, sandboxBuild } from "./sandbox-entry.ts";
 import type {
   ArtifactManifest,
   CatalogManifest,
@@ -20,13 +20,14 @@ import type { VersionResolver } from "./versions.ts";
 /**
  * Builds the catalog index. Rows depend on the entry's `install.tier`:
  *
- * - `sandbox`: no artifact. The row's `version` is what the current pin packs
- *   to, and its `build` block names the pin and the entry's catalog manifest
- *   as published on GitHub Pages (see `sandbox-entry.ts`), with the sha256
- *   of those bytes, the build command, and the build size and time with the
- *   schema's defaults filled in. The user's manager builds it in its sandbox
- *   Worker.
- * - `self-deploying`: left out with a warning; no manager can install it yet.
+ * - `sandbox` and `self-deploying`: no artifact. The row's `version` is what
+ *   the current pin packs to, and its `build` block names the pin and the
+ *   entry's catalog manifest as published on GitHub Pages (see
+ *   `sandbox-entry.ts`), with the sha256 of those bytes, the build command
+ *   when there is one, and the run's size and time with the schema's
+ *   defaults filled in. The user's manager builds the pin in its sandbox
+ *   Worker (`sandbox`), or runs the app's own installer there
+ *   (`self-deploying`).
  * - `artifact`: as below.
  *
  * Where an `artifact` tier app's `version` and `digest` come from:
@@ -186,8 +187,9 @@ export function resolveArtifact(
 
 /**
  * The digest that identifies what a row installs, which `lastVerified` is
- * about: the artifact manifest's `digest`, or for a sandbox tier row the
- * published catalog manifest's `build.manifestDigest`. Null for neither.
+ * about: the artifact manifest's `digest`, or for a `sandbox` or
+ * `self-deploying` tier row the published catalog manifest's
+ * `build.manifestDigest`. Null for neither.
  */
 export function verifiedDigest(row: Pick<IndexApp, "digest" | "build">): string | null {
   return row.digest ?? row.build?.manifestDigest ?? null;
@@ -233,8 +235,9 @@ export function toIndexApp(
 }
 
 /**
- * The index row of a `sandbox` tier entry, or null (with a warning) when the
- * version its pin packs to cannot be worked out and `strictReleases` is off.
+ * The index row of an entry that runs in the sandbox Worker (`sandbox` or
+ * `self-deploying` tier), or null (with a warning) when the version its pin
+ * packs to cannot be worked out and `strictReleases` is off.
  */
 export function toSandboxIndexApp(
   manifest: CatalogManifest,
@@ -281,18 +284,11 @@ export function buildIndexApps(
   const state = { releasesDisabled: false };
   const rows: IndexApp[] = [];
   for (const manifest of [...manifests].sort((a, b) => a.slug.localeCompare(b.slug))) {
-    const tier = manifest.install.tier;
-    if (tier === "sandbox") {
+    if (runsInSandbox(manifest.install.tier)) {
       const row = toSandboxIndexApp(manifest, options);
       if (row) {
         rows.push(row);
       }
-      continue;
-    }
-    if (tier !== "artifact") {
-      options.warn(
-        `${manifest.slug}: omitted: ${tier} tier entries are not listed until the manager can install them`,
-      );
       continue;
     }
     const artifact = resolveArtifact(manifest, options, state);

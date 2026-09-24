@@ -1,10 +1,12 @@
 name: publish
 
 # main: publish every artifact tier app whose current pin has no GitHub Release
-# yet, and list every sandbox tier app. A sandbox tier entry is built in the
-# user's own account, so it is never packed, signed, or released: the plan
-# leaves it out, build-index lists it with a build block, and the Pages site
-# carries its catalog manifest at apps/<slug>/manifest.json.
+# yet, and list every sandbox and self-deploying tier app. Both run in the
+# user's own account (a sandbox tier entry is built there, a self-deploying
+# one runs its own installer there), so neither is packed, signed, or
+# released: the plan leaves them out, build-index lists them with a build
+# block, and the Pages site carries their catalog manifests at
+# apps/<slug>/manifest.json.
 #
 #   build-packer  APPFLARE_DEPLOY_KEY only; builds the packer bundle, runs no app code
 #   plan          no secrets; lists artifact tier apps whose <slug>@<version> tag does not exist
@@ -14,8 +16,8 @@ name: publish
 #                 whose app, version, source, keyId, and catalog equal the plan
 #   release       contents: write, CATALOG_PUSH_KEY; re-checks against the plan,
 #                 creates the releases, rebuilds and commits index.json
-#   pages         deploys index.json, schema/v1.json, and the sandbox tier
-#                 catalog manifests to GitHub Pages
+#   pages         deploys index.json, schema/v1.json, and the catalog
+#                 manifests of sandbox and self-deploying entries to GitHub Pages
 #
 # The plan is computed from the manifests and existing releases, so any run
 # (including a manual one, or the one after a cancelled run) publishes whatever
@@ -24,7 +26,7 @@ name: publish
 on:
   push:
     branches: [main]
-    # A new .appflare-ref or schema can change how every sandbox tier entry's
+    # A new .appflare-ref or schema can change how every published entry's
     # catalog manifest is parsed, and so its published bytes and digest; the
     # index and Pages are rebuilt even when nothing needs a release.
     paths: ["apps/**", ".appflare-ref", "schema/**"]
@@ -341,7 +343,7 @@ jobs:
           github-token: ${{ github.token }}
           message: "chore: update index.json [skip ci]"
       # index.json, schema/v1.json, and apps/<slug>/manifest.json for each
-      # sandbox tier row, checked against the digest in index.json.
+      # row with a build block, checked against the digest in index.json.
       - name: Assemble the Pages site
         run: pnpm -s build-site --out site
       - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0

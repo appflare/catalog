@@ -8,7 +8,7 @@ import type { VersionResolver } from "./versions.ts";
 /**
  * Which apps publish CI packs. Only `artifact` tier entries get a release:
  * a `sandbox` tier entry is built in the user's account from its pin, and a
- * `self-deploying` one installs itself, so neither is packed, signed, or
+ * `self-deploying` one's own installer runs in the user's account, so neither is packed, signed, or
  * released (`not-released`). For every artifact tier manifest, the version
  * its current pin packs to gives the tag `<slug>@<version>`:
  *

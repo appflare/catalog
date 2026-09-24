@@ -20,7 +20,7 @@ scripts/                       catalog tooling (Node 22, run with pnpm)
 .github/workflows/publish.yml  main: pack, sign, release, index.json, GitHub Pages
 .github/workflows/bump.yml     nightly: open a pull request for each pin that moved upstream
 .github/workflows/nightly.yml  nightly: install check of every release, set lastVerified
-.github/workflows/verify-tier.yml  manual: record lastVerified for a sandbox tier entry
+.github/workflows/verify-tier.yml  manual: record lastVerified for a sandbox or self-deploying entry
 .github/workflows/conventions.yml  every push and PR: commit messages
 ```
 
@@ -160,8 +160,116 @@ another version, or when the app's Worker is missing or fails the health check
 deploys Pages. It cannot tell which commit the running Worker was built from:
 your install through the manager vouches for that.
 
-`self-deploying` entries (apps that ship their own installer) are validated only.
-`build-index` leaves them out of `index.json` until the manager can install them.
+## Self-deploying tier
+
+Some apps cannot be packed into an artifact at all, because they ship their own
+installer instead of a wrangler project Appflare can read: for example an
+[Alchemy](https://alchemy.run) stack that creates several Workers, their storage,
+and a Cloudflare Access application. An entry with `"tier": "self-deploying"`
+installs such an app by running that installer, at the pinned commit, in the
+same place a sandbox entry is built: a container of the user's sandbox Worker
+(`appflare-sandbox`). So, as for the sandbox tier, only users on Workers Paid who
+ran `npx @appflare/cli sandbox enable` can install it, and each install and
+update is billed to their account.
+
+The installer deploys with a Cloudflare API token of the app's own, never with
+the manager's. On the install page the admin creates that token from the entry's
+`tokenPermissions` (the manager prefills the dashboard's token form with every
+permission it can map and lists the rest to add by hand). The manager stores the
+token, and the app's secrets, as secrets **on the sandbox Worker**, keeps no copy
+itself, and passes only their names. The sandbox Worker hands the token to the
+installer's commands and nothing else. For one run it:
+
+1. checks out the pinned commit and installs its dependencies with install
+   scripts disabled;
+2. runs `install.buildCommand`, if the entry has one, without credentials;
+3. runs `install.selfDeploying.deployCommand` with the token, the account id, and
+   the app's settings, followed by the stage option and the install's stage
+   (`appflare-` and 8 characters of the install id), so two installs never share
+   a resource.
+
+An update runs the same steps at the new pin; the installer converges on what it
+deployed before. There is no snapshot, so an update cannot be rolled back.
+Uninstalling runs `install.selfDeploying.destroyCommand` and then deletes the
+token and secrets from the sandbox Worker. After each deploy the manager reads
+the Workers listed in `install.selfDeploying.workers` and records what they bind,
+labelled as managed by the app's installer; Appflare never deletes any of it
+itself.
+
+A self-deploying entry must:
+
+- set `"plan": "paid"`, for the container, even when the app itself would run on
+  the free plan;
+- describe its installer in `install.selfDeploying` (the schema also requires
+  it): the `tool`, the `deployCommand` and `destroyCommand` as argv without the
+  stage option, the `stateStore`, and the `workers` it creates, each with
+  `{{stage}}` for the install's stage. The first Worker serves the app: its
+  workers.dev URL is the install's URL and the health check probes it;
+- list `tokenPermissions`, the permissions of the app's token, each with a
+  `description` of what the installer does with it. Name them as the dashboard's
+  token form does (`Workers Scripts`, `Secrets Store:Edit`) with `"scope"`;
+  without a `:Read` or `:Edit` suffix a permission means Edit;
+- not set `bump.autoMerge`, since CI never installs the entry.
+
+It may set `install.buildCommand` (a build that needs no credentials, run
+before the installer) and `install.sandbox`, which sizes the installer's run and
+feeds the cost the manager shows, exactly as for a sandbox entry:
+
+```jsonc
+"install": {
+  "tier": "self-deploying",
+  // ...
+  "buildCommand": "pnpm exec vite build --mode selfhost",
+  "sandbox": { "expectedMinutes": 15, "instanceType": "standard-2" },
+  "selfDeploying": {
+    "tool": "alchemy",
+    "deployCommand": ["pnpm", "alchemy", "deploy", "--yes"],
+    "destroyCommand": ["pnpm", "alchemy", "destroy", "--yes"],
+    "stateStore": "cloudflare",
+    "workers": ["open-seo-{{stage}}", "open-seo-{{stage}}-audit"]
+  }
+}
+```
+
+The commands run without a terminal, so they must not prompt. Review the pinned
+commit's installer the way you would review a build: it runs with a token that
+can change the user's account, within the permissions the entry lists.
+
+What CI does with a self-deploying entry:
+
+- **Pull requests** (`verify.yml`): validate the manifest (schema, layout, and
+  the rules above). Nothing else: no pack, since there is no wrangler project to
+  pack, and no install check, since the installer runs only in a user's sandbox
+  Worker with the app's own token. `verify passed` still covers it: the `check`
+  job validates every manifest, and `pack` and `install check` are skipped when
+  the pull request changes no entry of their tiers.
+- **Publishing** (`publish.yml`): exactly as for a sandbox entry. No release;
+  `build-index` lists the entry with a `build` block (pin, `expectedMinutes`,
+  `instanceType`, the build command when there is one, and the URL and sha256 of
+  the catalog manifest), and the Pages site serves that manifest at
+  `apps/<slug>/manifest.json`. The manager checks the raw bytes against
+  `manifestDigest` before it runs anything.
+- **Nightly** (`nightly.yml`): skipped.
+
+So `lastVerified` of a self-deploying entry is set only by hand, with
+`verify-tier.yml`, in the Workers Paid account described under "Sandbox tier":
+
+1. Install the version `index.json` lists with the manager there. Create the
+   app's token from the install page, and note the stage the app's page shows
+   and how long the run took; `expectedMinutes` should match it, rounded up.
+2. Run Actions > verify tier > Run workflow with the slug, that version, and the
+   Worker name: the first of `install.selfDeploying.workers` with `{{stage}}`
+   replaced by that stage. The workflow refuses a self-deploying entry without it,
+   or with a name that does not fit that template.
+3. Uninstall the app in the manager, which runs the installer's destroy command,
+   and delete the app's token in the dashboard.
+
+The check is the same as for a sandbox entry: the account must have the
+`appflare-sandbox` Worker, `index.json` must list that version, and the Worker
+must pass the health check (for apps behind Cloudflare Access, set
+`install.healthMode` to `"status-only"`). A pass is recorded against the entry's
+version and catalog manifest digest, so any edit to the entry, not only a new
+pin, clears it until the next manual check.
 
 ## Local tooling
 
@@ -180,7 +288,7 @@ pnpm pack-app <slug> [--out dist/<slug>] [--key-id catalog-2026-09]
 pnpm publish-plan [--out plan.json] [--only cut,...]  # apps whose pin has no release (needs gh)
 node scripts/check-manifest-plan.ts --plan plan.json --root dist (--unsigned | --signed)
 pnpm build-index [--releases-only] [--out index.json]
-pnpm -s build-site --out site       # the Pages site: index.json, schema, sandbox manifests
+pnpm -s build-site --out site       # the Pages site: index.json, schema, published catalog manifests
 pnpm record-verified --verified checks.json          # patch lastVerified only
 pnpm -s bump plan --out <dir> [--only cut,...]    # pins that moved upstream (needs gh)
 pnpm -s bump apply <slug> --ref <ref> --sha <sha>  # edit source, keeping comments
@@ -308,8 +416,8 @@ When the packages are published to npm, drop the pin:
 `publish.yml` runs on every push to `main` that touches `apps/**`, `.appflare-ref`,
 or `schema/**`, and on manual dispatch. A push with nothing to release still
 rebuilds `index.json` and the Pages site, which a new `.appflare-ref` or schema
-can change for sandbox tier entries. It packs, signs, and releases `artifact` tier entries only; see "Sandbox
-tier" for the rest. `bump.yml` also starts it for bumps that merged themselves (see "Who
+can change for sandbox and self-deploying entries. It packs, signs, and releases `artifact` tier entries only; see "Sandbox
+tier" and "Self-deploying tier" for the rest. `bump.yml` also starts it for bumps that merged themselves (see "Who
 merges a bump"). It does not diff commits. `publish-plan` works out, for every app, the tag
 its current pin packs to and publishes the apps whose tag does not exist yet. That
 makes every run idempotent: a re-run, a manual run, or the run after a cancelled
@@ -332,7 +440,7 @@ Each job gets only the secret it needs:
 | `pack` (per app) | none; `contents: read`, no persisted credentials | `pack-app --key-id catalog-2026-09`, which runs the app's install and build; uploads exactly `dist/<slug>` as `unsigned-<slug>` |
 | `sign` (per app) | `APPFLARE_SIGNING_KEY`; `contents: read` to check out the catalog | runs no app code; checks the artifact against the plan, `verify --hashes-only`, `sign`, checks it again and runs `verify --require-signed`; uploads `signed-<slug>` |
 | `release` | `CATALOG_PUSH_KEY`; `contents: write` for the releases | re-checks every planned artifact against the plan, `verify --require-signed`, creates `<slug>@<version>` with the three assets (skips complete existing releases), `build-index --releases-only`, commits `index.json` as `github-actions[bot]` with `[skip ci]` and pushes it with `CATALOG_PUSH_KEY` |
-| `pages` | `pages: write`, `id-token: write` | deploys the site `build-site` assembles: `index.json`, `schema/v1.json`, and each sandbox entry's `apps/<slug>/manifest.json` |
+| `pages` | `pages: write`, `id-token: write` | deploys the site `build-site` assembles: `index.json`, `schema/v1.json`, and each sandbox and self-deploying entry's `apps/<slug>/manifest.json` |
 
 ### What the signing step trusts
 
@@ -542,7 +650,8 @@ next bump pull request.
 `verify.yml` (for each changed artifact tier app, after packing) and `nightly.yml`
 (for the current release of every published artifact tier app) install the
 artifact into a dedicated CI Cloudflare account and delete it again. Sandbox and
-self-deploying entries have no install check in CI (see "Sandbox tier"). The steps:
+self-deploying entries have no install check in CI (see "Sandbox tier" and
+"Self-deploying tier"). The steps:
 
 1. Unpack the artifact's Worker modules, assets, and D1 migrations, checking each
    file's sha256 against `manifest.json`. Nothing from the app's repository runs:

@@ -10,8 +10,10 @@ const USAGE = `Usage: pnpm validate [<slug>...]
 Validates apps/<slug>/appflare.jsonc (every app when no slug is given) with the
 catalog manifest schema from @appflare/schema (APPFLARE_DIR), the catalog's
 layout rules, and its tier rules: a sandbox tier entry must set plan "paid" and
-declare install.buildCommand, and entries CI does not install (sandbox,
-self-deploying) must not set bump.autoMerge.
+declare install.buildCommand; a self-deploying entry must set plan "paid",
+describe its installer in install.selfDeploying, and list tokenPermissions;
+and entries CI does not install (sandbox, self-deploying) must not set
+bump.autoMerge.
 `;
 
 runMain(async () => {

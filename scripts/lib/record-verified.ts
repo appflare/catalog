@@ -4,10 +4,10 @@ import type { IndexJson } from "./types.ts";
 
 /**
  * Records install checks in the published index: the nightly ones of
- * artifact tier apps, and the ones a maintainer runs for sandbox tier apps
- * (verify-tier.yml). It only patches `lastVerified` into rows that match a
- * passing check by slug, version, and digest (a sandbox row's
- * `build.manifestDigest`). It never adds, removes, or rebuilds rows, so a failed or missing
+ * artifact tier apps, and the ones a maintainer runs for sandbox and
+ * self-deploying tier apps (verify-tier.yml). It only patches `lastVerified`
+ * into rows that match a passing check by slug, version, and digest (the
+ * `build.manifestDigest` of a row with a build block). It never adds, removes, or rebuilds rows, so a failed or missing
  * check can never drop an app from the catalog.
  */
 
