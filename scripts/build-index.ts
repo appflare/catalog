@@ -31,8 +31,8 @@ lastVerified carries over from the previous index while an app's version and
 digest (manifestDigest for a sandbox or self-deploying entry) stay the same, and is null for a
 new one.
 
-Every row also lists the entry's images (apps/<slug>/icon.svg|icon.png,
-cover.png, screenshots/*.png) by their Pages URL and sha256. The index carries
+A row with images lists them (apps/<slug>/icon.svg|icon.png, cover.png,
+screenshots/*.png, each optional) by their Pages URL and sha256. The index carries
 the sponsored items of featured.json (always written, even when empty) and the
 URL of stats.json, which the stats workflow publishes next to it.
 `;

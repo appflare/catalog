@@ -3,7 +3,7 @@ import { loadAppflareSchema } from "./lib/appflare-schema.ts";
 import { findApp, listApps, loadManifest } from "./lib/apps.ts";
 import { catalogRepo, info, runMain } from "./lib/cli.ts";
 import { FEATURED_FILE, readFeatured } from "./lib/featured.ts";
-import { requiredMediaProblems } from "./lib/media.ts";
+import { readAppMedia } from "./lib/media.ts";
 import { appsDir, catalogRoot, resolveAppflareDir } from "./lib/paths.ts";
 import { tierProblems } from "./lib/tier-rules.ts";
 
@@ -17,11 +17,11 @@ describe its installer in install.selfDeploying, and list tokenPermissions;
 and entries CI does not install (sandbox, self-deploying) must not set
 bump.autoMerge.
 
-It also checks each entry's images: an icon (icon.svg or icon.png, square)
-and a 1200x630 cover.png are required, screenshots/*.png are optional, SVGs
-may not script or load anything, and MEDIA.md names every image and its
-source (\`pnpm gen-media <slug>\` makes a missing icon or cover). Without
-slugs, featured.json and featured/ are checked too.
+It also checks each entry's images, all of them optional: at most one square
+icon (icon.svg or icon.png), a 1200x630 cover.png, and screenshots/*.png.
+SVGs may not script or load anything, and MEDIA.md must name every image on
+a line that links the upstream file it comes from. Without slugs,
+featured.json and featured/ are checked too.
 `;
 
 runMain(async () => {
@@ -43,7 +43,7 @@ runMain(async () => {
       const manifest = loadManifest(app, schema.catalogManifest);
       const problems = [
         ...tierProblems(manifest),
-        ...requiredMediaProblems(app.dir, manifest.slug, manifest.name, repo),
+        ...readAppMedia(app.dir, manifest.slug, manifest.name, repo).problems.map((p) => `- ${p}`),
       ];
       if (problems.length > 0) {
         throw new Error(`apps/${app.slug} is invalid:\n${problems.join("\n")}`);

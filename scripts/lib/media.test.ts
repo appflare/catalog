@@ -9,7 +9,6 @@ import {
   pngSize,
   publishedMediaFor,
   readAppMedia,
-  requiredMediaProblems,
   sha256Hex,
   svgProblems,
 } from "./media.ts";
@@ -39,7 +38,12 @@ function write(rel: string, bytes: Buffer | string) {
 }
 
 function sources(...files: string[]) {
-  write("MEDIA.md", files.map((f) => `- \`${f}\`: generated.`).join("\n"));
+  write(
+    "MEDIA.md",
+    files
+      .map((f) => `- \`${f}\`: [upstream](https://github.com/o/r/blob/abc/${f}) (MIT).`)
+      .join("\n"),
+  );
 }
 
 describe("image checks", () => {
@@ -119,12 +123,31 @@ describe("readAppMedia", () => {
     expect(text).toMatch(/MEDIA.md: missing/);
   });
 
-  it("requires an icon and a cover for validation, and none for the index", () => {
-    expect(readAppMedia(dir, "demo", "Demo", REPO).media).toBeUndefined();
-    expect(requiredMediaProblems(dir, "demo", "Demo", REPO).join("\n")).toMatch(
-      /no icon.svg or icon.png[\s\S]*no cover.png/,
-    );
+  it("accepts an entry with no images, or with only some of them", () => {
+    expect(readAppMedia(dir, "demo", "Demo", REPO)).toEqual({
+      media: undefined,
+      files: [],
+      problems: [],
+    });
     expect(mediaReader(root, REPO)({ slug: "demo", name: "Demo" })).toBeUndefined();
+    write("screenshots/01-inbox.png", pngHeader(1280, 800));
+    sources("screenshots/01-inbox.png");
+    const read = readAppMedia(dir, "demo", "Demo", REPO);
+    expect(read.problems).toEqual([]);
+    expect(read.media?.icon).toBeUndefined();
+    expect(read.media?.cover).toBeUndefined();
+    expect(read.media?.screenshots).toHaveLength(1);
+  });
+
+  it("requires MEDIA.md to link the upstream source of each image", () => {
+    write("icon.svg", SVG);
+    write("MEDIA.md", "- `icon.svg`: drawn for the catalog.\n");
+    expect(readAppMedia(dir, "demo", "Demo", REPO).problems).toEqual([
+      "apps/demo/MEDIA.md: names `icon.svg` without linking the upstream file it comes from",
+    ]);
+  });
+
+  it("refuses invalid images in the index", () => {
     write("cover.png", pngHeader(10, 10));
     expect(() => mediaReader(root, REPO)({ slug: "demo", name: "Demo" })).toThrow(
       /media is invalid/,

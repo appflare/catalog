@@ -7,17 +7,18 @@ import type { IndexMedia, IndexMediaFile } from "./types.ts";
 /**
  * Catalog media: an entry's images live next to its manifest and are
  * published with the Pages site at the same path, addressed in `index.json`
- * by URL and sha256.
+ * by URL and sha256. Every image is optional; an entry without an icon is
+ * shown with a monogram the manager draws from its name.
  *
- *   apps/<slug>/icon.svg or icon.png   square icon for lists (one of the two)
+ *   apps/<slug>/icon.svg or icon.png   square icon for lists (at most one of the two)
  *   apps/<slug>/cover.png              1200x630 cover, sized for OpenGraph previews
- *   apps/<slug>/screenshots/*.png      optional, in file name order
+ *   apps/<slug>/screenshots/*.png      in file name order
  *   apps/<slug>/MEDIA.md               where each image comes from and its licence
  *
- * A screenshot's alt text comes from its file name: `01-inbox-view.png`
- * reads "Inbox view". Every image must be named in `MEDIA.md`, so each
- * file's source (an upstream file at a pinned commit, or
- * `scripts/gen-media.ts`) is on record.
+ * Images come from the upstream project only, never generated. A
+ * screenshot's alt text comes from its file name: `01-inbox-view.png` reads
+ * "Inbox view". Every image must be named in `MEDIA.md` on a line that links
+ * the upstream file it was taken from, so each file's source is on record.
  */
 
 export const COVER_WIDTH = 1200;
@@ -215,11 +216,17 @@ export function readAppMedia(
     if (sources === null) {
       problems.push(`${base}/${MEDIA_SOURCES_FILE}: missing; record where each image comes from`);
     } else {
+      const lines = sources.split("\n");
       for (const file of files) {
         const relInApp = file.rel.slice(base.length + 1);
-        if (!sources.includes(`\`${relInApp}\``)) {
+        const naming = lines.filter((line) => line.includes(`\`${relInApp}\``));
+        if (naming.length === 0) {
           problems.push(
             `${base}/${MEDIA_SOURCES_FILE}: does not name \`${relInApp}\` and its source`,
+          );
+        } else if (!naming.some((line) => line.includes("https://"))) {
+          problems.push(
+            `${base}/${MEDIA_SOURCES_FILE}: names \`${relInApp}\` without linking the upstream file it comes from`,
           );
         }
       }
@@ -261,27 +268,6 @@ export function publishedMediaFor(
     out.push(match);
   }
   return out;
-}
-
-/**
- * Problems with an entry's images for `pnpm validate`: everything
- * {@link readAppMedia} finds, plus the catalog's rule that every entry has an
- * icon and a cover.
- */
-export function requiredMediaProblems(
-  appDir: string,
-  slug: string,
-  name: string,
-  repo: string,
-): string[] {
-  const read = readAppMedia(appDir, slug, name, repo);
-  const problems = read.problems.map((p) => `- ${p}`);
-  const hint = `(run \`pnpm gen-media ${slug}\` to make one from the name and summary)`;
-  if (read.media?.icon === undefined) {
-    problems.push(`- apps/${slug}: no icon.svg or icon.png ${hint}`);
-  }
-  if (read.media?.cover === undefined) problems.push(`- apps/${slug}: no cover.png ${hint}`);
-  return problems;
 }
 
 /**
