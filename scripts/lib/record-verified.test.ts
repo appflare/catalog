@@ -21,6 +21,8 @@ function row(slug: string, version: string, digest = D): IndexApp {
     lastVerified: null,
     authors: [{ name: "octocat", github: "octocat" }],
     maintainers: ["octocat"],
+    services: [],
+    categories: [],
   };
 }
 
@@ -79,6 +81,8 @@ describe("patchLastVerified for sandbox tier rows", () => {
     lastVerified: null,
     authors: [{ name: "octocat", github: "octocat" }],
     maintainers: ["octocat"],
+    services: [],
+    categories: [],
     build: {
       pin: "0".repeat(40),
       manifest: "https://appflare.github.io/catalog/apps/built/manifest.json",

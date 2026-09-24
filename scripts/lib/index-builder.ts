@@ -1,7 +1,7 @@
 import { createHash } from "node:crypto";
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
-import { type Parser, parseOrThrow } from "./appflare-schema.ts";
+import { type AppServicesOf, type Parser, parseOrThrow } from "./appflare-schema.ts";
 import { indexAuthors } from "./authors.ts";
 import {
   IncompleteReleaseError,
@@ -22,7 +22,9 @@ import type { VersionResolver } from "./versions.ts";
 
 /**
  * Builds the catalog index. Every row lists the app's `authors` from the
- * current manifest, or the owner of its repository (`authors.ts`). Otherwise
+ * current manifest, or the owner of its repository (`authors.ts`), its
+ * `categories`, and the Cloudflare `services` it uses (see `rowFacts`), so a
+ * manager can show all three without reading a manifest. Otherwise
  * rows depend on the entry's `install.tier`:
  *
  * - `sandbox` and `self-deploying`: no artifact. The row's `version` is what
@@ -75,6 +77,8 @@ export interface IndexBuildOptions {
   sandboxDefaults: SandboxDefaults;
   /** The entry's images (see `media.ts`); rows get no `media` block without it. */
   mediaFor?: (manifest: CatalogManifest) => IndexMedia | undefined;
+  /** `appServices` from `@appflare/schema`, which works out each row's `services`. */
+  services: AppServicesOf;
 }
 
 /** Where an app's listed version came from. */
@@ -82,6 +86,8 @@ export interface ResolvedArtifact {
   version: string;
   digest: string;
   from: "local" | "release";
+  /** The artifact manifest behind `digest`, as the schema parsed it. */
+  manifest: ArtifactManifest;
 }
 
 export function sha256Hex(bytes: Uint8Array): string {
@@ -131,7 +137,7 @@ export function resolveArtifact(
               "the manager rejects unsigned artifacts and its release may not exist yet",
           );
         }
-        return { version: local.version, digest: sha256Hex(bytes), from: "local" };
+        return { version: local.version, digest: sha256Hex(bytes), from: "local", manifest: local };
       }
       options.warn(
         `${slug}: ignoring ${localPath}: built from ${local.app}@${local.source.sha}, ` +
@@ -180,7 +186,12 @@ export function resolveArtifact(
         );
         return null;
       }
-      return { version, digest: sha256Hex(release.manifestBytes), from: "release" };
+      return {
+        version,
+        digest: sha256Hex(release.manifestBytes),
+        from: "release",
+        manifest: published,
+      };
     }
     if (tag && !state.releasesDisabled) {
       options.warn(`${slug}: no release ${tag} for the current pin; omitted from index.json`);
@@ -223,16 +234,15 @@ export function lastVerifiedFor(
 export function toIndexApp(
   manifest: CatalogManifest,
   artifact: ResolvedArtifact,
-  repo: string,
+  options: Pick<IndexBuildOptions, "repo" | "services" | "mediaFor">,
   lastVerified: string | null = null,
-  media: IndexMedia | undefined = undefined,
 ): IndexApp {
   return {
     slug: manifest.slug,
     name: manifest.name,
     summary: manifest.summary,
     version: artifact.version,
-    artifacts: artifactUrls(repo, manifest.slug, artifact.version),
+    artifacts: artifactUrls(options.repo, manifest.slug, artifact.version),
     digest: artifact.digest,
     tier: manifest.install.tier,
     plan: manifest.plan,
@@ -240,7 +250,37 @@ export function toIndexApp(
     lastVerified,
     authors: indexAuthors(manifest),
     maintainers: [...manifest.maintainers],
-    ...(media === undefined ? {} : { media }),
+    ...mediaBlock(manifest, options),
+    ...rowFacts(manifest, artifact.manifest, options.services),
+  };
+}
+
+/**
+ * A row's `services`, `keyValueDurableObjects` (only when true) and
+ * `categories`. For an artifact tier entry the services come from the
+ * published artifact manifest: its Worker (bindings, queue consumers, crons,
+ * Durable Object migrations) and the catalog manifest packed into it
+ * (`requires`, `install.emailRouting`, token permissions), with the current
+ * manifest's `requires` added as the row lists them. A `sandbox` or
+ * `self-deploying` entry has no Worker until it runs, so its services are
+ * what its catalog manifest declares. The manager falls back to the same
+ * `appServices` call on the same inputs, so both agree.
+ */
+export function rowFacts(
+  manifest: CatalogManifest,
+  artifact: ArtifactManifest | null,
+  services: AppServicesOf,
+): Pick<IndexApp, "services" | "keyValueDurableObjects" | "categories"> {
+  // Parsed by the real artifact manifest schema, so a full catalog manifest.
+  const catalog = artifact === null ? manifest : (artifact.catalog as CatalogManifest);
+  const found = services(
+    { ...catalog, requires: [...new Set([...manifest.requires, ...catalog.requires])] },
+    artifact?.worker ?? null,
+  );
+  return {
+    services: [...found.ids],
+    ...(found.keyValueDurableObjects ? { keyValueDurableObjects: true as const } : {}),
+    categories: [...manifest.categories],
   };
 }
 
@@ -285,10 +325,14 @@ export function toSandboxIndexApp(
     maintainers: [...manifest.maintainers],
     build,
     ...mediaBlock(manifest, options),
+    ...rowFacts(manifest, null, options.services),
   };
 }
 
-function mediaBlock(manifest: CatalogManifest, options: IndexBuildOptions): { media?: IndexMedia } {
+function mediaBlock(
+  manifest: CatalogManifest,
+  options: Pick<IndexBuildOptions, "mediaFor">,
+): { media?: IndexMedia } {
   const media = options.mediaFor?.(manifest);
   return media === undefined ? {} : { media };
 }
@@ -311,15 +355,7 @@ export function buildIndexApps(
     const artifact = resolveArtifact(manifest, options, state);
     if (artifact) {
       const verifiedAt = lastVerifiedFor(manifest.slug, artifact, options.previousApps ?? []);
-      rows.push(
-        toIndexApp(
-          manifest,
-          artifact,
-          options.repo,
-          verifiedAt,
-          mediaBlock(manifest, options).media,
-        ),
-      );
+      rows.push(toIndexApp(manifest, artifact, options, verifiedAt));
     }
   }
   return rows;

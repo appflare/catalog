@@ -44,6 +44,7 @@ export interface CatalogManifest {
   homepage: string;
   repo: string;
   license: string;
+  categories: string[];
   /** Who wrote the app upstream; the index lists the owner of `repo` when omitted. */
   authors?: CatalogAuthor[];
   maintainers: string[];
@@ -182,6 +183,23 @@ export interface IndexApp {
   build?: IndexBuild;
   /** The entry's images on the Pages site (see `media.ts`); omitted when it has none. */
   media?: IndexMedia;
+  /**
+   * The Cloudflare services the app uses (see `appServices`). The schema keeps
+   * it optional for indexes published before it existed; this catalog always
+   * writes it.
+   */
+  services: string[];
+  /** The app declares key-value backed Durable Objects; written only when true. */
+  keyValueDurableObjects?: true;
+  /** The catalog manifest's `categories`; always written, like `services`. */
+  categories: string[];
+}
+
+/** `AppServices`, in full: what `appServices` returns. */
+export interface AppServices {
+  /** Service ids, in the schema's display order. */
+  ids: string[];
+  keyValueDurableObjects: boolean;
 }
 
 /** `IndexMediaFile`, in full: an image on the Pages site, pinned by the sha256 of its bytes. */

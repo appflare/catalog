@@ -42,6 +42,8 @@ beforeAll(async () => {
     lastVerified: null,
     authors: [{ name: "octocat", github: "octocat" }],
     maintainers: ["octocat"],
+    services: [],
+    categories: [],
     build: sandboxBuild(seo, "appflare/catalog", schema.sandboxDefaults),
   };
   sandboxRow = {
@@ -55,6 +57,8 @@ beforeAll(async () => {
     lastVerified: null,
     authors: [{ name: "octocat", github: "octocat" }],
     maintainers: ["octocat"],
+    services: [],
+    categories: [],
     build: sandboxBuild(built, "appflare/catalog", schema.sandboxDefaults),
   };
   index = {
@@ -76,6 +80,8 @@ beforeAll(async () => {
         lastVerified: null,
         authors: [{ name: "octocat", github: "octocat" }],
         maintainers: ["octocat"],
+        services: [],
+        categories: [],
       },
     ],
   };

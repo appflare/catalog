@@ -31,6 +31,12 @@ lastVerified carries over from the previous index while an app's version and
 digest (manifestDigest for a sandbox or self-deploying entry) stay the same, and is null for a
 new one.
 
+Every row lists the app's categories and the Cloudflare services it uses:
+worked out from the published artifact manifest (its Worker's bindings, queue
+consumers, crons and Durable Object migrations, plus the catalog manifest packed
+into it) for an artifact tier entry, from the catalog manifest's declarations
+for a sandbox or self-deploying one.
+
 A row with images lists them (apps/<slug>/icon.svg|icon.png, cover.png,
 screenshots/*.png, each optional) by their Pages URL and sha256. The index carries
 the sponsored items of featured.json (always written, even when empty) and the
@@ -83,6 +89,7 @@ runMain(async () => {
     previousApps: previousRows(previous),
     sandboxDefaults: schema.sandboxDefaults,
     mediaFor: mediaReader(appsDir, repo),
+    services: schema.appServices,
   });
   const index = finalizeIndex(apps, previous, new Date(), schema.indexJson, {
     featured: readFeatured(catalogRoot, repo, schema.featuredItem).items,
@@ -91,11 +98,11 @@ runMain(async () => {
   writeFileSync(outPath, serializeIndex(index));
   info(`wrote ${outPath}: ${index.apps.length} of ${manifests.length} apps listed`);
   for (const app of index.apps) {
-    info(
+    const where =
       app.build === undefined
         ? `${app.slug}@${app.version} digest=${app.digest}`
-        : `${app.slug}@${app.version} ${app.tier}: runs in the user's sandbox Worker at ${app.build.pin.slice(0, 12)}, manifestDigest=${app.build.manifestDigest}`,
-    );
+        : `${app.slug}@${app.version} ${app.tier}: runs in the user's sandbox Worker at ${app.build.pin.slice(0, 12)}, manifestDigest=${app.build.manifestDigest}`;
+    info(`${where} services=${app.services.join(",") || "(none)"}`);
   }
   return 0;
 });

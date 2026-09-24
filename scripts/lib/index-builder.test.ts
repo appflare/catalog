@@ -5,7 +5,7 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { artifactManifestFixture } from "../fixtures/artifact-manifest.ts";
 import { sandboxFixture, selfDeployingFixture } from "../fixtures/sandbox-manifest.ts";
 import { appflareAvailable, testSchema } from "../fixtures/schema.ts";
-import type { AppflareSchema } from "./appflare-schema.ts";
+import type { AppflareSchema, AppServicesOf } from "./appflare-schema.ts";
 import { listApps, loadManifest } from "./apps.ts";
 import type { ReleaseArtifact, ReleaseLookup } from "./github-releases.ts";
 import {
@@ -81,6 +81,18 @@ function releasesOf(...list: ReleaseArtifact[]): ReleaseLookup & { asked: string
 /** The current pin of the fixture app packs to 1.2.3. */
 const versions: VersionResolver = { versionOf: () => "1.2.3" };
 
+/**
+ * Stands in for `appServices`: names the inputs it was given, so a row shows
+ * whether its services came from an artifact's Worker and which `requires`.
+ */
+const echoServices: AppServicesOf = (catalog, worker) => ({
+  ids: [
+    ...(worker === null ? ["no-worker"] : worker.bindings.map((b) => `binding:${b.type}`)),
+    ...catalog.requires.map((r) => `requires:${r}`),
+  ],
+  keyValueDurableObjects: false,
+});
+
 function options(overrides: Partial<IndexBuildOptions> = {}): IndexBuildOptions {
   return {
     repo: "appflare/catalog",
@@ -91,6 +103,7 @@ function options(overrides: Partial<IndexBuildOptions> = {}): IndexBuildOptions 
     artifactManifest: schema.artifactManifest,
     warn: (m) => warnings.push(m),
     sandboxDefaults: schema.sandboxDefaults,
+    services: echoServices,
     ...overrides,
   };
 }
@@ -128,8 +141,41 @@ describe("buildIndexApps", () => {
       lastVerified: null,
       authors: [{ name: "example", github: "example" }],
       maintainers: ["octocat", "@example/maintainers"],
+      // From the artifact's Worker, with the current manifest's `requires` added
+      // (the fixture artifact's own catalog manifest requires nothing).
+      services: ["binding:kv_namespace", "requires:r2"],
+      categories: ["utilities"],
     });
     expect(warnings.join("\n")).toMatch(/UNSIGNED/);
+  });
+
+  it("works out services from the release's artifact manifest", () => {
+    const published = artifactManifestFixture({
+      app: "hello",
+      version: "1.2.3",
+      sha: PIN,
+      keyId: "catalog-2026-09",
+    });
+    const worker = published.worker as Record<string, unknown>;
+    published.worker = { ...worker, bindings: [{ type: "d1", name: "DB" }] };
+    const release = { tag: "hello@1.2.3", manifestBytes: Buffer.from(JSON.stringify(published)) };
+    const [row] = buildIndexApps(
+      [hello],
+      options({ distDir: null, releases: releasesOf(release) }),
+    );
+    expect(row?.services).toEqual(["binding:d1", "requires:r2"]);
+    expect(row).not.toHaveProperty("keyValueDurableObjects");
+  });
+
+  it("writes keyValueDurableObjects only when the services say so", () => {
+    writeLocal(artifactManifestFixture({ app: "hello", version: "1.2.3", sha: PIN }));
+    const keyValue: AppServicesOf = () => ({
+      ids: ["durable-objects"],
+      keyValueDurableObjects: true,
+    });
+    const [row] = buildIndexApps([hello], options({ services: keyValue }));
+    expect(row?.services).toEqual(["durable-objects"]);
+    expect(row?.keyValueDurableObjects).toBe(true);
   });
 
   it("selects the release for the version the current pin packs to, not the newest one", () => {
@@ -271,6 +317,28 @@ describe.skipIf(!appflareAvailable)("with the real @appflare/schema", () => {
     expect(() => buildIndexApps([hello], options())).toThrow(/worker/);
   });
 
+  it("lists the services @appflare/schema works out, for every tier", () => {
+    writeLocal(artifactManifestFixture({ app: "hello", version: "1.2.3", sha: PIN }));
+    const opts = options({ services: schema.appServices });
+    const edited = selfDeployingFixture(hello, schema, {
+      tokenPermissions: [
+        { name: "Workers Scripts", scope: "account" },
+        { name: "D1", scope: "account" },
+        { name: "Zone.DNS", scope: "zone" },
+      ],
+    });
+    const rows = buildIndexApps([hello, sandboxFixture(hello, schema), edited], opts);
+    expect(rows.map((r) => [r.slug, r.services, r.categories])).toEqual([
+      ["built", ["r2"], ["utilities"]],
+      // The artifact's KV binding, and the manifest's `requires`.
+      ["hello", ["kv", "r2"], ["utilities"]],
+      // A self-deploying entry: what its token may touch.
+      ["seo", ["d1", "r2", "zone"], ["utilities"]],
+    ]);
+    const index = finalizeIndex(rows, null, new Date(), schema.indexJson);
+    expect(index.apps).toEqual(rows);
+  });
+
   it("the committed index.json is schema-valid", () => {
     const text = readFileSync(path.join(import.meta.dirname, "..", "..", "index.json"), "utf8");
     expect(schema.indexJson.safeParse(JSON.parse(text)).success).toBe(true);
@@ -292,6 +360,8 @@ describe("lastVerified", () => {
     lastVerified: "2026-09-01T00:00:00.000Z",
     authors: [{ name: "octocat", github: "octocat" }],
     maintainers: ["octocat"],
+    services: [],
+    categories: [],
     ...over,
   });
 
@@ -340,6 +410,8 @@ describe("sandbox tier entries", () => {
           expectedMinutes: 10,
           instanceType: "standard-1",
         },
+        services: ["no-worker", "requires:r2"],
+        categories: ["utilities"],
       },
     ]);
     expect(rows[0]).not.toHaveProperty("artifacts");
@@ -364,6 +436,8 @@ describe("sandbox tier entries", () => {
       lastVerified: null,
       authors: [{ name: "example", github: "example" }],
       maintainers: ["octocat", "@example/maintainers"],
+      services: ["binding:kv_namespace", "requires:r2"],
+      categories: ["utilities"],
     });
   });
 
@@ -442,6 +516,8 @@ describe("self-deploying tier entries", () => {
           expectedMinutes: 15,
           instanceType: "standard-2",
         },
+        services: ["no-worker", "requires:r2"],
+        categories: ["utilities"],
       },
     ]);
     expect(rows[0]).not.toHaveProperty("artifacts");

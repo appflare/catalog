@@ -2,6 +2,7 @@ import { pathToFileURL } from "node:url";
 import { appflarePaths, assertAppflareBuilt } from "./paths.ts";
 import type { SandboxDefaults } from "./sandbox-entry.ts";
 import type {
+  AppServices,
   ArtifactManifest,
   CatalogManifest,
   CatalogStats,
@@ -41,7 +42,19 @@ export interface AppflareSchema {
   maxWorkerModules: number;
   /** What a sandbox tier entry's `install.sandbox` defaults to. */
   sandboxDefaults: SandboxDefaults;
+  /**
+   * The Cloudflare services an app uses (`appServices`), from its catalog
+   * manifest and, for an artifact tier entry, its artifact's Worker. The
+   * manager works them out with the same function when an index row lacks them.
+   */
+  appServices: AppServicesOf;
 }
+
+/** `appServices` from `@appflare/schema`: the arguments are schema-parsed manifests. */
+export type AppServicesOf = (
+  catalog: CatalogManifest,
+  worker: ArtifactManifest["worker"] | null,
+) => AppServices;
 
 /**
  * Loads `@appflare/schema` from a built appflare checkout
@@ -63,7 +76,21 @@ export async function loadAppflareSchema(appflareDir: string): Promise<AppflareS
       expectedMinutes: pickPositiveInt(mod, "DEFAULT_EXPECTED_BUILD_MINUTES"),
       instanceType: pickInstanceType(mod, "DEFAULT_SANDBOX_INSTANCE_TYPE"),
     },
+    appServices: pickFunction<AppServicesOf>(mod, "appServices"),
   };
+}
+
+function pickFunction<T extends (...args: never[]) => unknown>(
+  mod: unknown,
+  exportName: string,
+): T {
+  const value = (mod as Record<string, unknown> | null)?.[exportName];
+  if (typeof value !== "function") {
+    throw new Error(`@appflare/schema does not export a function named ${exportName}`);
+  }
+  // The runtime check above establishes a function; its signature is the one
+  // @appflare/schema declares, mirrored by T.
+  return value as T;
 }
 
 function pickParser<T>(mod: unknown, exportName: string): Parser<T> {
