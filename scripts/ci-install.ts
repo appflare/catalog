@@ -21,9 +21,11 @@ import {
   createCfRequest,
   createQueues,
   createVectorizeIndexes,
+  type HealthResult,
   healthUrl,
   planCiInstall,
   randomSecret,
+  summaryLines,
   unpackArtifact,
   waitForHealth,
   workersSubdomain,
@@ -46,12 +48,13 @@ deploy   Unpacks the artifact (checking every file's sha256), removes anything
          each rate limit gets a random namespace id; vars as the manager sets
          them, JSON vars kept as JSON and {{workerUrl}} and {{workerName}}
          filled in for the CI Worker; a service binding to the app's own
-         Worker aimed at the CI Worker, any other refused), runs wrangler deploy
-         --strict, attaches the recorded queue consumers through the API,
+         Worker aimed at the CI Worker, any other refused; no cron triggers,
+         which the run summary notes), runs wrangler deploy --strict, attaches the recorded queue consumers through the API,
          applies D1 migrations, sets each catalog secret to a random value,
          and waits up to 60 s for
          https://<worker>.<subdomain>.workers.dev<healthPath> to answer
-         (install.healthPath from the catalog manifest, else /).
+         (install.healthPath from the catalog manifest, else /). A failed
+         deploy may still have uploaded the Worker; cleanup deletes it.
 cleanup  Removes the Worker's queue consumers, deletes the Worker and every
          resource the deploy may have created, and fails unless all of them
          are gone.
@@ -132,11 +135,76 @@ async function cleanup(request: CfRequest, plan: CiInstallPlan): Promise<void> {
   info(`removed ${plan.name} and ${plan.resources.length} resource(s)`);
 }
 
-function summary(line: string): void {
-  process.stdout.write(`${line}\n`);
+function summary(lines: string[]): void {
+  const text = lines.map((line) => `${line}\n`).join("");
+  process.stdout.write(text);
   if (process.env.GITHUB_STEP_SUMMARY) {
-    appendFileSync(process.env.GITHUB_STEP_SUMMARY, `${line}\n`);
+    appendFileSync(process.env.GITHUB_STEP_SUMMARY, text);
   }
+}
+
+function message(err: unknown): string {
+  return err instanceof Error ? err.message : String(err);
+}
+
+/** Deploys the unpacked artifact as the plan's Worker and waits for it to answer. */
+async function deployAndCheck(
+  request: CfRequest,
+  plan: CiInstallPlan,
+  manifest: ArtifactManifest,
+  zipPath: string,
+  bin: string,
+  work: string,
+  subdomain: string,
+): Promise<HealthResult> {
+  unpackArtifact(manifest, zipPath, work);
+  // A re-run reuses the name; start from a clean account.
+  await cleanup(request, plan);
+  // wrangler provisions KV, D1, and R2 from bindings without ids, but not
+  // Vectorize indexes or named queues: those must exist before the deploy
+  // binds them.
+  await createVectorizeIndexes(request, plan);
+  await createQueues(request, plan);
+  writeFileSync(path.join(work, "wrangler.json"), `${JSON.stringify(plan.config, null, 2)}\n`);
+  info(`deploying ${manifest.app}@${manifest.version} as ${plan.name}`);
+  try {
+    wrangler(bin, work, ["deploy", "--strict"]);
+  } catch (err) {
+    // wrangler uploads the script before it updates triggers, so a deploy
+    // that fails there (a trigger configuration "only partially updated")
+    // leaves the Worker in the account. The cleanup command deletes it by
+    // name; CI runs it after every deploy, failed or not.
+    throw new Error(
+      `${message(err)}; ${plan.name} may already be uploaded, and the cleanup command deletes it`,
+    );
+  }
+  // A consumer belongs to the script, so it can only point at a deployed Worker.
+  await attachQueueConsumers(request, plan);
+  for (const database of plan.d1Migrations) {
+    wrangler(bin, work, ["d1", "migrations", "apply", database, "--remote"]);
+  }
+  for (const secret of plan.secrets) {
+    wrangler(bin, work, ["secret", "put", secret, "--name", plan.name], randomSecret());
+  }
+  const url = healthUrl(plan.name, subdomain, plan.healthPath);
+  info(`waiting for ${url}`);
+  return waitForHealth(
+    async () => {
+      try {
+        const res = await fetch(url, { redirect: "manual", signal: AbortSignal.timeout(10_000) });
+        return { status: res.status, body: await res.text() };
+      } catch (err) {
+        return { error: message(err) };
+      }
+    },
+    {
+      timeoutMs: 60_000,
+      intervalMs: 3_000,
+      sleep: (ms) => new Promise((r) => setTimeout(r, ms)),
+      now: () => Date.now(),
+      mode: plan.healthMode,
+    },
+  );
 }
 
 runMain(async () => {
@@ -169,51 +237,14 @@ runMain(async () => {
   const bin = wranglerBin(resolveAppflareDir());
   const work = mkdtempSync(path.join(tmpdir(), `ci-install-${plan.name}-`));
   try {
-    unpackArtifact(manifest, zipPath, work);
-    // A re-run reuses the name; start from a clean account.
-    await cleanup(request, plan);
-    // wrangler provisions KV, D1, and R2 from bindings without ids, but not
-    // Vectorize indexes or named queues: those must exist before the deploy
-    // binds them.
-    await createVectorizeIndexes(request, plan);
-    await createQueues(request, plan);
-    writeFileSync(path.join(work, "wrangler.json"), `${JSON.stringify(plan.config, null, 2)}\n`);
-    info(`deploying ${manifest.app}@${manifest.version} as ${plan.name}`);
-    wrangler(bin, work, ["deploy", "--strict"]);
-    // A consumer belongs to the script, so it can only point at a deployed Worker.
-    await attachQueueConsumers(request, plan);
-    for (const database of plan.d1Migrations) {
-      wrangler(bin, work, ["d1", "migrations", "apply", database, "--remote"]);
-    }
-    for (const secret of plan.secrets) {
-      wrangler(bin, work, ["secret", "put", secret, "--name", plan.name], randomSecret());
-    }
-    const url = healthUrl(plan.name, subdomain, plan.healthPath);
-    info(`waiting for ${url}`);
-    const health = await waitForHealth(
-      async () => {
-        try {
-          const res = await fetch(url, { redirect: "manual", signal: AbortSignal.timeout(10_000) });
-          return { status: res.status, body: await res.text() };
-        } catch (err) {
-          return { error: err instanceof Error ? err.message : String(err) };
-        }
-      },
-      {
-        timeoutMs: 60_000,
-        intervalMs: 3_000,
-        sleep: (ms) => new Promise((r) => setTimeout(r, ms)),
-        now: () => Date.now(),
-        mode: plan.healthMode,
-      },
-    );
-    summary(
-      `${health.ok ? "PASS" : "FAIL"} ${manifest.app}@${manifest.version} as ${plan.name}: ${health.detail}`,
-    );
-    for (const note of plan.notes) {
-      summary(`- note: ${note}`);
-    }
+    const health = await deployAndCheck(request, plan, manifest, zipPath, bin, work, subdomain);
+    summary(summaryLines(manifest, plan, health.ok, health.detail));
     return health.ok ? 0 : 1;
+  } catch (err) {
+    // The notes belong in the summary whatever went wrong; the cleanup step
+    // removes whatever the failed deploy left behind.
+    summary(summaryLines(manifest, plan, false, message(err).split("\n")[0] ?? ""));
+    throw err;
   } finally {
     rmSync(work, { recursive: true, force: true });
   }

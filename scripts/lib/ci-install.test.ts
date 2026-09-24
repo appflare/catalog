@@ -19,6 +19,7 @@ import {
   createCfRequest,
   createQueues,
   createVectorizeIndexes,
+  cronNote,
   healthUrl,
   type JsonValue,
   type Probe,
@@ -27,6 +28,7 @@ import {
   renderJsonPlaceholders,
   renderPlaceholders,
   SELF_SERVICE,
+  summaryLines,
   unpackArtifact,
   waitForHealth,
   workersSubdomain,
@@ -100,9 +102,40 @@ describe("planCiInstall", () => {
       durable_objects: { bindings: [{ name: "ROOMS", class_name: "Room" }] },
       ai: { binding: "AI" },
       vars: { MODE: "prod" },
-      triggers: { crons: [] },
     });
+    expect(plan.config).not.toHaveProperty("triggers");
+    expect(plan.notes).toEqual([]);
     expect(JSON.stringify(plan.config)).not.toMatch(/"id"|database_id|account_id/);
+  });
+
+  it("sets no cron triggers and notes how many the artifact declares", () => {
+    const withCrons = manifest((m) => {
+      worker(m).crons = ["*/5 * * * *", "0 3 * * *"];
+      worker(m).bindings = [{ type: "kv_namespace", name: "CUT_KV" }];
+    });
+    const plan = planCiInstall(withCrons, "ci-hello-nightly", { subdomain: "appflare-ci" });
+    expect(plan.config).not.toHaveProperty("triggers");
+    expect(JSON.stringify(plan.config)).not.toMatch(/cron|\*\/5/);
+    expect(plan.notes).toEqual([
+      "the artifact declares 2 cron triggers (`*/5 * * * *`, `0 3 * * *`); " +
+        "not set on the CI Worker, so scheduled runs are not exercised",
+    ]);
+
+    // Cleanup plans from the same manifest and finds the same things by name.
+    const withoutCrons = manifest((m) => {
+      worker(m).bindings = [{ type: "kv_namespace", name: "CUT_KV" }];
+    });
+    const cleanup = planCiInstall(withCrons, "ci-hello-nightly");
+    expect(cleanup.name).toBe("ci-hello-nightly");
+    expect(cleanup.resources).toEqual(planCiInstall(withoutCrons, "ci-hello-nightly").resources);
+  });
+
+  it("words the cron note for one trigger and for none", () => {
+    expect(cronNote([])).toBeNull();
+    expect(cronNote(["0 0 * * *"])).toBe(
+      "the artifact declares 1 cron trigger (`0 0 * * *`); " +
+        "not set on the CI Worker, so scheduled runs are not exercised",
+    );
   });
 
   it("plans a Vectorize index with the recorded shape, created before the deploy", () => {
@@ -542,6 +575,32 @@ describe("planCiInstall", () => {
   });
 });
 
+describe("summaryLines", () => {
+  const hello = { app: "hello", version: "1.2.3" };
+
+  it("puts the plan's notes under the result line, the cron note included", () => {
+    const plan = planCiInstall(
+      manifest((m) => {
+        worker(m).crons = ["*/15 * * * *"];
+      }),
+      "ci-hello-nightly",
+    );
+    expect(summaryLines(hello, plan, true, "HTTP 200")).toEqual([
+      "PASS hello@1.2.3 as ci-hello-nightly: HTTP 200",
+      "- note: the artifact declares 1 cron trigger (`*/15 * * * *`); " +
+        "not set on the CI Worker, so scheduled runs are not exercised",
+    ]);
+  });
+
+  it("keeps the notes for a failed deploy", () => {
+    const plan = { name: "ci-hello-pr1", notes: ["something not exercised"] };
+    expect(summaryLines(hello, plan, false, "wrangler deploy --strict failed (exit 1)")).toEqual([
+      "FAIL hello@1.2.3 as ci-hello-pr1: wrangler deploy --strict failed (exit 1)",
+      "- note: something not exercised",
+    ]);
+  });
+});
+
 describe("unpackArtifact", () => {
   let dir: string;
   beforeEach(() => {
@@ -679,6 +738,8 @@ describe("health", () => {
 /** A fake Cloudflare account holding named resources. */
 function fakeAccount(state: {
   scripts: Set<string>;
+  /** Cron schedules by script; they go with the script. */
+  schedules?: Map<string, string[]>;
   kv: { id: string; title: string }[];
   d1: { uuid: string; name: string }[];
   r2: Set<string>;
@@ -713,7 +774,10 @@ function fakeAccount(state: {
       const m = script;
       const name = decodeURIComponent(m[1] as string);
       if (!state.scripts.has(name)) return missing;
-      if (method === "DELETE") state.scripts.delete(name);
+      if (method === "DELETE") {
+        state.scripts.delete(name);
+        state.schedules?.delete(name);
+      }
       return ok({});
     }
     if (p.startsWith("/storage/kv/namespaces?")) return ok(state.kv);
@@ -904,6 +968,23 @@ describe("cleanupCiInstall", () => {
       "vectorize ci-hello-pr1-vectors: delete failed: HTTP 409 (10008 bucket not empty)",
       "vectorize ci-hello-pr1-vectors still exists",
     ]);
+  });
+
+  it("deletes a Worker a deploy uploaded before failing on its triggers", async () => {
+    // wrangler uploads the script, then fails on a cron schedule over the
+    // account's limit; the Worker stays with whatever schedules got through.
+    const state = {
+      ...populated(),
+      schedules: new Map([
+        ["ci-hello-pr1", ["*/5 * * * *"]],
+        ["someone-else", ["0 0 * * *"]],
+      ]),
+    };
+    const account = fakeAccount(state);
+    expect(await cleanupCiInstall(account, plan)).toEqual([]);
+    expect([...state.scripts]).toEqual(["someone-else"]);
+    expect([...state.schedules.keys()]).toEqual(["someone-else"]);
+    expect(account.calls).toContain("GET /workers/scripts/ci-hello-pr1/settings");
   });
 
   it("is a no-op on a clean account (a deploy that never got far)", async () => {

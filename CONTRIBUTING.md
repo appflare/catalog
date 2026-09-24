@@ -549,8 +549,8 @@ self-deploying entries have no install check in CI (see "Sandbox tier"). The ste
    only the prebuilt output in the artifact is deployed.
 2. Delete anything left under the same names by an earlier run.
 3. Write a `wrangler.json` from `manifest.json`. It gets the manifest's modules,
-   compatibility settings, assets, crons, vars, and bindings without ids. The
-   Worker is named:
+   compatibility settings, assets, vars, and bindings without ids, but not its
+   cron triggers (see below). The Worker is named:
    - `ci-<slug>-pr<number>` for a pull request;
    - `ci-<slug>-b<hash of the branch>` for a dispatched run on a bump branch;
    - `ci-<slug>-nightly` at night.
@@ -615,6 +615,15 @@ How this differs from installing with the manager:
   (`destination_address`, `allowed_destination_addresses`,
   `allowed_sender_addresses`) the run's summary notes that sending was not
   exercised.
+- **Cron triggers.** The check sets none, so scheduled runs are not exercised;
+  the run's summary notes how many cron triggers the artifact declares. The
+  check proves that the Worker deploys and answers, which a schedule does not
+  add to. Cron triggers also count against a limit for the whole account (5 on
+  the Workers Free plan) that several checks running at once would share, so
+  setting them could fail a check for a reason unrelated to the app. The
+  manager sets an app's cron triggers on a real install. If a deploy fails
+  after wrangler uploaded the Worker (for example on a trigger update), the
+  cleanup step still deletes it.
 
 Fork pull requests get no secrets, so the install job is skipped for them. Pull
 requests from branches of this repository run their own copy of
