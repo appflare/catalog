@@ -1,0 +1,110 @@
+{
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "mailflare",
+  "name": "Mailflare",
+  "summary": "A self-hosted email service for your own domains: mailboxes, forwarding rules, and a web inbox, on Email Routing, D1, R2, Queues, and Durable Objects.",
+  "homepage": "https://github.com/hieunc229/mailflare",
+  "repo": "hieunc229/mailflare",
+  // The LICENSE file is the GNU AGPL version 3 with no "or any later version" grant.
+  "license": "AGPL-3.0-only",
+  "categories": ["email"],
+  "maintainers": ["MendyLanda"],
+  // Upstream has no release tags, so the entry follows the default branch by commit.
+  "source": { "ref": "main", "sha": "1bf70d2ef2771360a546704182752eb7a1ff63f2" },
+  "install": {
+    "tier": "artifact",
+    "packageManager": "npm",
+    "wranglerConfig": "wrangler.jsonc",
+    "workerName": "mailflare",
+    // The app creates its Email Routing rules for the Worker named "mailflare"
+    // (getEmailWorkerName() in src/lib/cloudflare-api-utils.ts returns the
+    // literal), so mail only reaches an install under that name. Its
+    // WORKER_SELF_REFERENCE service binding does not need it: the installer
+    // points that binding at whatever name the Worker has.
+    "fixedWorkerName": true,
+    // Upstream's deploy script: OpenNext runs the app's own `build` script
+    // (bundling the D1 migrations into the app, then `next build`) and writes
+    // .open-next/, which the wrangler config's `main` and `assets` read. The
+    // wrangler config has no build.command.
+    "buildCommand": "opennextjs-cloudflare build",
+    // Unauthenticated, reads D1 (so it also shows the migrations were applied),
+    // and answers 200 before the first admin exists.
+    "healthPath": "/api/setup/status"
+    // No `emailRouting`: the app turns Email Routing on and creates its rules
+    // itself, per domain and mailbox, with CF_TOKEN.
+  },
+  // Receiving mail, D1, R2, Queues, and SQLite Durable Objects have free tiers,
+  // but sending is half of what the app is for, and upstream requires Workers
+  // Paid for it: Email Sending, needed for any address other than the
+  // account's verified destinations, is not offered on the free plan. The
+  // Worker is also about 2.5 MB gzipped, close to the free plan's 3 MB limit.
+  "plan": "paid",
+  "requires": ["zone", "email-routing", "r2"],
+  "secrets": [
+    {
+      "name": "CF_TOKEN",
+      "label": "Cloudflare API token for Mailflare",
+      "help": "A token you create for the app, separate from Appflare's, with the permissions listed below: Zone Read, DNS Edit, Zone Settings Edit, and Email Routing Rules Edit on the zones you will connect, plus the account's Email Sending Edit to send mail. Paste the token secret only, without \"Bearer\"."
+    }
+    // Not asked for: TURNSTILE_SECRET_KEY needs NEXT_PUBLIC_TURNSTILE_SITE_KEY
+    // at build time, which a catalog build does not have, so setting it would
+    // lock everyone out of sign-in. GITHUB_UPDATE_* dispatch upstream's own
+    // update workflow; Appflare updates the app instead. INBOUND_WEBHOOK_SECRET
+    // and the SMTP_* settings belong to the Docker relay mode.
+  ],
+  "vars": [
+    {
+      "name": "APP_URL",
+      "label": "Public URL",
+      "help": "Optional. The address people open the app at, used in password-reset links and JMAP. Leave it empty to use the address of each request.",
+      "required": false
+    }
+  ],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "Open {{workerUrl}}/setup to check the configuration and create the first admin account. The database is already migrated."
+    },
+    {
+      "type": "markdown",
+      "content": "Then add a domain that uses Cloudflare DNS in this account. Mailflare turns on Email Routing for it, sets up the MX and sending records it needs, and routes each mailbox you create to this Worker."
+    },
+    {
+      "type": "markdown",
+      "content": "Sending to arbitrary recipients needs Workers Paid with Email Sending turned on for the domain, and the account's Email Sending Edit on CF_TOKEN."
+    }
+  ],
+  // What the app's own Cloudflare API calls need, by Cloudflare's API schema:
+  // zone lookup (Zone Read), MX and sending records (DNS Edit), turning Email
+  // Routing on for a zone (filed under Zone Settings), routing rules and the
+  // catch-all (Email Routing Rules), and sending subdomains (Email Sending,
+  // an account permission). Upstream's docs also name DNS Settings and Email
+  // Routing Addresses, which the app never calls.
+  "tokenPermissions": [
+    {
+      "name": "Zone.Zone:Read",
+      "description": "Finds the zone of each domain you connect.",
+      "scope": "zone"
+    },
+    {
+      "name": "Zone.DNS:Edit",
+      "description": "Writes the MX and sending records, replacing conflicting MX records after you confirm.",
+      "scope": "zone"
+    },
+    {
+      "name": "Zone.Zone Settings:Edit",
+      "description": "Turns Email Routing on for a connected domain.",
+      "scope": "zone"
+    },
+    {
+      "name": "Zone.Email Routing Rules:Edit",
+      "description": "Routes each mailbox address, or the catch-all, to the Worker.",
+      "scope": "zone"
+    },
+    {
+      "name": "Account.Email Sending:Edit",
+      "description": "Optional, for outbound mail. Sets the domain up for Email Sending.",
+      "scope": "account"
+    }
+  ]
+}
