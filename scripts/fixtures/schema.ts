@@ -30,5 +30,14 @@ export async function testSchema(): Promise<AppflareSchema> {
     // No stand-in for the real derivation: tests that check services inject
     // their own or run only with the real schema.
     appServices: () => ({ ids: [], keyValueDurableObjects: false }),
+    // Accepts every revision: tests that check which revisions are refused
+    // run only with the real schema.
+    revisionProblem: () => null,
+    // No stand-in for signature checks: tests that verify signatures inject
+    // their own keys and run only with the real schema.
+    verifySignature: async () => {
+      throw new Error("no @appflare/schema build to verify signatures with");
+    },
+    signingKeys: [],
   };
 }

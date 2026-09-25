@@ -82,19 +82,92 @@ install. A build that code-splits into many chunks, such as a framework's server
 build or a bundler with dynamic imports, must be configured to emit a single
 Worker module before the app can join the catalog.
 
-### Metadata-only edits fail publish
+### Editing an entry whose version is already released
 
 A release is identified by its version, and the version comes from the pin. Releases
 are immutable, and each artifact carries a signed copy of the `appflare.jsonc` it was
 built from. If you change `appflare.jsonc` but the pin still packs to a version that
-is already released, publish fails and names the fields that changed. To ship the
-change, re-pin `source`: a newer `source.sha` (for branch pins), or a new tag in
-`source.ref` and its `source.sha`.
+is already released, publish fails and names the fields that changed, unless the
+change is one of these:
 
-`authors` is the exception: `index.json` reads it from the current `appflare.jsonc`,
-not from the release, so an edit to `authors` alone publishes with the next
-`index.json` and needs no new release. Images are the same: they are read from
-`apps/<slug>/`, not from the release.
+- **`authors`**, and the images. `index.json` reads `authors` from the current
+  `appflare.jsonc`, not from the release, and the images from `apps/<slug>/`, so an
+  edit to them publishes with the next `index.json` and needs no new release (once
+  the entry has a published revision, an `authors` edit needs the next revision
+  too; see "Revisions").
+- **A revision: the form and copy only.** Raise `revision` by one (it is 1 when
+  omitted) in the same change. A revision may change `name`, `summary`, `homepage`,
+  `license`, `categories`, `authors`, `maintainers`, `secrets`, `vars`,
+  `postInstall` and `bump` (`REVISABLE_CATALOG_FIELDS` in `@appflare/schema`):
+  labels and help text, a var that becomes a `select`, a secret the app already
+  reads but the entry forgot. Nothing is built. The release stays exactly as it
+  is; the revised manifest is signed by the catalog's release key and published
+  next to the index (see "Revisions" below). Managers switch to the new form
+  without an update and without a job.
+
+Anything else (`source`, `install`, `plan`, `requires`, `tokenPermissions`,
+`resources`) changes what gets built, provisioned, or asked of the account. To ship
+it, re-pin `source`: a newer `source.sha` (for branch pins), or a new tag in
+`source.ref` and its `source.sha`. When the release's version comes from
+`install.version`, bump that too.
+
+`publish-plan` tells you which case you are in: with only form and copy changes it
+fails with "or bump revision to N", and it refuses a revision that changes anything
+else, that goes down, or that edits a revision already published without raising it
+again.
+
+### Revisions
+
+A revision is the pair (version, revision): the release built from the pin, and the
+catalog manifest the forms use for it. When an artifact tier entry's `revision` is
+above the one its release was built with:
+
+- `publish-plan` plans it as a revision (`<slug>@<version>: revision N of the
+  released build`) in the plan's `revisions`, with the sha256 of the bytes to
+  publish and the key id the release was signed with, and does not list it for
+  packing;
+- the `sign-revisions` job, which holds `APPFLARE_SIGNING_KEY` and runs no app code
+  (like `sign`), signs exactly those bytes with the release's key and key id, the
+  same scheme as `manifest.sig`, and checks the signature against the keys
+  embedded in `@appflare/schema`
+  (`node scripts/sign-revisions.ts --plan plan.json --out signatures.json
+  --sign-key-env APPFLARE_SIGNING_KEY --key-id catalog-2026-09`);
+- `build-index --revision-signatures signatures.json` writes the row as before
+  (same `version`, `artifacts` and `digest`, so `lastVerified` is kept: the Worker
+  the install check ran is unchanged), with `revision` and `catalogManifest`: the
+  URL, sha256, key id and signature of the revised manifest. Later rebuilds keep
+  the signature while the bytes stay the same; a revision no signature covers is
+  refused;
+- `build-site` verifies the signature with the embedded keys, then publishes the
+  revised manifest at `apps/<slug>/manifest.json`, in the same bytes as a sandbox
+  entry's (schema-parsed, keys sorted), and its signature at
+  `apps/<slug>/manifest.json.sig`. It refuses bytes that do not match the digest
+  in `index.json` or a signature that does not verify.
+
+A published revision never changes: managers refuse other bytes under a revision
+they already hold. Any later edit of the entry, `authors` included, needs the next
+revision (`publish-plan` says so), and so does a new `.appflare-ref` that changes
+how the manifest parses.
+
+Which copy is authoritative: the `manifest.json` inside the release is the
+artifact's and never changes. It alone decides the Worker and every field a
+revision may not change. For the install and settings forms and the copy, managers
+use the revised manifest the row lists. A revision may change only form fields and
+copy, but those do reach the Worker: var defaults become its vars, and generated
+secrets its secrets. That is why the revised file is signed by the catalog's
+release key, and why managers use it only after checking its sha256 against the
+index, its signature under the release's key id, and its fields against the signed
+`manifest.json` (same app, only revisable fields changed, vars that suit the signed
+Worker); without a revision they use the release's own copy. A manager records each
+revision it verified for the release, with its digest and signature, so apps
+already installed from that release show the new Settings form too, and a revision
+never moves backwards. While a release lists a revision, installs and updates to it
+need the revised file: if the Pages site cannot serve it, or it does not verify,
+they fail rather than fall back to the older form.
+
+Every row carries `revision` (1 when the entry never set one). Sandbox and
+self-deploying entries have no release to revise: every edit already publishes
+their current catalog manifest in the row's `build` block.
 
 ### Images
 
@@ -398,8 +471,9 @@ pnpm install
 pnpm check                          # typecheck, lint, test
 pnpm validate [<slug>...]           # validate manifests
 pnpm pack-app <slug> [--out dist/<slug>] [--key-id catalog-2026-09]
-pnpm publish-plan [--out plan.json] [--only cut,...]  # apps whose pin has no release (needs gh)
+pnpm publish-plan [--out plan.json] [--only cut,...]  # apps whose pin has no release, and revisions (needs gh)
 node scripts/check-manifest-plan.ts --plan plan.json --root dist (--unsigned | --signed)
+node scripts/sign-revisions.ts --plan plan.json --out signatures.json --sign-key-env VAR --key-id catalog-2026-09
 pnpm build-index [--releases-only] [--out index.json]
 pnpm -s build-site --out site [--stats stats.json | --live-stats]  # the Pages site: index.json, schema, manifests, images, stats
 pnpm -s build-stats --out stats.json [--previous <file>]  # GITHUB_TOKEN, POSTHOG_PERSONAL_API_KEY
@@ -465,7 +539,8 @@ record-verified`. That script only patches `lastVerified` into existing rows tha
 match a passing check by slug, version, and digest. It never adds, removes, or
 rebuilds rows, so a failed check can never drop an app. Every rebuild by
 `build-index` carries the value over while the version and digest stay the
-same. A new version starts at `null` until its first nightly run.
+same, which a revision does not change. A new version starts at `null` until its
+first nightly run.
 
 ## How CI gets @appflare/pack
 
@@ -550,11 +625,12 @@ Each job gets only the secret it needs:
 | Job | Secrets and permissions | What it does |
 |---|---|---|
 | `build-packer` | `APPFLARE_DEPLOY_KEY`, `contents: read` | builds the packer bundle; runs no app code |
-| `plan` | none; `contents: read` token for `gh api` | `publish-plan --out`; fails on a metadata-only edit or a broken release |
+| `plan` | none; `contents: read` token for `gh api` | `publish-plan --out`; fails on a metadata-only edit without a valid revision or on a broken release; a revision is reported and never packed |
 | `pack` (per app) | none; `contents: read`, no persisted credentials | `pack-app --key-id catalog-2026-09`, which runs the app's install and build; uploads exactly `dist/<slug>` as `unsigned-<slug>` |
 | `sign` (per app) | `APPFLARE_SIGNING_KEY`; `contents: read` to check out the catalog | runs no app code; checks the artifact against the plan, `verify --hashes-only`, `sign`, checks it again and runs `verify --require-signed`; uploads `signed-<slug>` |
-| `release` | `CATALOG_PUSH_KEY`; `contents: write` for the releases | re-checks every planned artifact against the plan, `verify --require-signed`, creates `<slug>@<version>` with the three assets (skips complete existing releases), `build-index --releases-only`, commits `index.json` as `github-actions[bot]` with `[skip ci]` and pushes it with `CATALOG_PUSH_KEY` |
-| `pages` | `pages: write`, `id-token: write` | deploys the site `build-site` assembles: `index.json`, `schema/v1.json`, and each sandbox and self-deploying entry's `apps/<slug>/manifest.json` |
+| `sign-revisions` | `APPFLARE_SIGNING_KEY`; `contents: read` to check out the catalog | runs no app code; signs each planned revised catalog manifest (only the planned bytes, with its release's key id), checks each signature with the embedded keys; uploads `revision-signatures` |
+| `release` | `CATALOG_PUSH_KEY`; `contents: write` for the releases | re-checks every planned artifact against the plan, `verify --require-signed`, creates `<slug>@<version>` with the three assets (skips complete existing releases), `build-index --releases-only` (with the `revision-signatures` when there are revisions), commits `index.json` as `github-actions[bot]` with `[skip ci]` and pushes it with `CATALOG_PUSH_KEY` |
+| `pages` | `pages: write`, `id-token: write` | deploys the site `build-site` assembles: `index.json`, `schema/v1.json`, and the `apps/<slug>/manifest.json` of each sandbox and self-deploying entry and of each revised artifact tier entry (with its `manifest.json.sig`) |
 
 ### What the signing step trusts
 
@@ -594,7 +670,7 @@ Secrets:
 | Secret | Used by | What it is |
 |---|---|---|
 | `APPFLARE_DEPLOY_KEY` | `build-packer` only | Private half of a read-only SSH deploy key registered on `appflare/appflare` |
-| `APPFLARE_SIGNING_KEY` | `publish.yml` `sign` job only | Base64 PKCS#8 Ed25519 private key, key id `catalog-2026-09` |
+| `APPFLARE_SIGNING_KEY` | `publish.yml` `sign` and `sign-revisions` jobs only | Base64 PKCS#8 Ed25519 private key, key id `catalog-2026-09` |
 | `CATALOG_PUSH_KEY` | `publish.yml` `release` and `nightly.yml` `record results` only | Private half (OpenSSH, Ed25519) of a deploy key with write access registered on this repository; pushes the `index.json` commit to `main` |
 
 The `sign` job fails with an explicit error while `APPFLARE_SIGNING_KEY` is unset.
@@ -757,7 +833,7 @@ retried once a night until it is fixed.
 Adding `bump` to an entry changes its `appflare.jsonc`, so for a version that is
 already released it is a metadata-only edit and publish fails (see above). Add it
 together with a move of `source`, for example as an extra commit on the entry's
-next bump pull request.
+next bump pull request, or raise `revision` by one with it.
 
 ## Install checks
 

@@ -21,6 +21,13 @@ inputs:
     description: JSON of install checks that passed; switches to patching lastVerified only.
     required: false
     default: ""
+  revision-signatures:
+    description: >
+      JSON of revised catalog manifest signatures (sign-revisions --out), passed
+      to build-index; without it a revised row keeps its previous signature while
+      its bytes are the same.
+    required: false
+    default: ""
 runs:
   using: composite
   steps:
@@ -31,6 +38,7 @@ runs:
         GH_TOKEN: ${{ inputs.github-token }}
         MESSAGE: ${{ inputs.message }}
         VERIFIED_FILE: ${{ inputs.verified-file }}
+        REVISION_SIGNATURES: ${{ inputs.revision-signatures }}
       run: |
         set -euo pipefail
         origin="$(git remote get-url origin)"
@@ -44,6 +52,9 @@ runs:
           update=(record-verified --verified "${VERIFIED_FILE}")
         else
           update=(build-index --releases-only)
+          if [ -n "${REVISION_SIGNATURES}" ]; then
+            update+=(--revision-signatures "${REVISION_SIGNATURES}")
+          fi
         fi
         for attempt in 1 2 3; do
           git fetch --quiet origin main

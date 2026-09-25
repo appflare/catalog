@@ -10,14 +10,21 @@ name: publish
 #
 #   build-packer  APPFLARE_DEPLOY_KEY only; builds the packer bundle, runs no app code
 #   plan          no secrets; lists artifact tier apps whose <slug>@<version> tag does not exist
+#                 (a revision of a released version is planned apart, never packed)
+#   sign-revisions APPFLARE_SIGNING_KEY only; runs no app code; signs each planned
+#                 revised catalog manifest (the planned bytes only) with the key id
+#                 of its release, and checks the signature with the embedded keys
 #   pack          no secrets; packs each app (runs its install and build code)
 #                 into an unsigned intermediate with keyId catalog-2026-09
 #   sign          APPFLARE_SIGNING_KEY only; runs no app code; signs only a manifest.json
 #                 whose app, version, source, keyId, and catalog equal the plan
 #   release       contents: write, CATALOG_PUSH_KEY; re-checks against the plan,
-#                 creates the releases, rebuilds and commits index.json
+#                 creates the releases, rebuilds and commits index.json (with the
+#                 revision signatures), and assembles the site, where build-site
+#                 verifies each revised manifest's signature before publishing it
 #   pages         deploys index.json, schema/v1.json, the catalog manifests of
-#                 sandbox and self-deploying entries, every entry's images, the
+#                 sandbox and self-deploying entries and of artifact tier entries
+#                 whose revision is above their release's, every entry's images, the
 #                 featured images, and the live stats.json to GitHub Pages (the
 #                 site is also kept as the "catalog-site" artifact, which the
 #                 stats workflow redeploys with new numbers)
@@ -86,6 +93,7 @@ jobs:
       contents: read
     outputs:
       apps: ${{ steps.plan.outputs.apps }}
+      revisions: ${{ steps.plan.outputs.revisions }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -107,6 +115,9 @@ jobs:
           apps="$(pnpm -s publish-plan --out "${RUNNER_TEMP}/publish-plan.json" "${only[@]}")"
           echo "apps to publish: ${apps}"
           echo "apps=${apps}" >> "${GITHUB_OUTPUT}"
+          revisions="$(jq -c '.revisions // {} | keys' "${RUNNER_TEMP}/publish-plan.json")"
+          echo "revisions to sign: ${revisions}"
+          echo "revisions=${revisions}" >> "${GITHUB_OUTPUT}"
       # What sign and release hold every artifact to: app, version, source,
       # keyId, and the canonical catalog block per slug.
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
@@ -232,9 +243,77 @@ jobs:
           if-no-files-found: error
           retention-days: 7
 
+  sign-revisions:
+    name: sign revisions
+    needs: [build-packer, plan]
+    if: needs.plan.outputs.revisions != '[]'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    # Holds the signing key, like sign, which runs per packed app and is skipped
+    # when nothing is packed (a revision packs nothing). Runs no app code: the
+    # catalog's own scripts and the packer bundle's @appflare/schema, with
+    # plain node and nothing installed. Signs only the bytes of
+    # apps/<slug>/manifest.json whose revision and sha256 the plan approved,
+    # with the key id the release was signed with.
+    permissions:
+      contents: read
+    steps:
+      - name: Require APPFLARE_SIGNING_KEY
+        working-directory: .
+        env:
+          APPFLARE_SIGNING_KEY: ${{ secrets.APPFLARE_SIGNING_KEY }}
+        run: |
+          if [ -z "${APPFLARE_SIGNING_KEY}" ]; then
+            echo "::error title=APPFLARE_SIGNING_KEY is not set::Publishing signs every revised catalog manifest. Add the catalog signing key (base64 PKCS#8 Ed25519, key id catalog-2026-09) as the APPFLARE_SIGNING_KEY secret of the appflare org or this repository, then re-run this workflow."
+            exit 1
+          fi
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          path: catalog
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: catalog/.node-version
+      - name: Download the packer bundle
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: appflare-packer
+          path: ${{ runner.temp }}/appflare-packer
+      - name: Download the publish plan
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: publish-plan
+          path: ${{ runner.temp }}/plan
+      - name: Check against the plan, sign, and verify with the embedded keys
+        env:
+          APPFLARE_SIGNING_KEY: ${{ secrets.APPFLARE_SIGNING_KEY }}
+          EXPECTED_PACKER_SHA256: ${{ needs.build-packer.outputs.packer-sha256 }}
+        run: |
+          set -euo pipefail
+          bundle="${RUNNER_TEMP}/appflare-packer/appflare-packer.tgz"
+          actual="$(sha256sum "${bundle}" | cut -d' ' -f1)"
+          if ! [[ "${EXPECTED_PACKER_SHA256}" =~ ^[0-9a-f]{64}$ ]] || [ "${actual}" != "${EXPECTED_PACKER_SHA256}" ]; then
+            echo "::error title=Packer bundle mismatch::appflare-packer.tgz has sha256 ${actual}, but build-packer produced ${EXPECTED_PACKER_SHA256:-(nothing)}. Refusing to run it."
+            exit 1
+          fi
+          mkdir -p "${RUNNER_TEMP}/appflare"
+          tar -xzf "${bundle}" -C "${RUNNER_TEMP}/appflare"
+          mkdir -p revision-signatures
+          APPFLARE_DIR="${RUNNER_TEMP}/appflare" node scripts/sign-revisions.ts \
+            --plan "${RUNNER_TEMP}/plan/publish-plan.json" \
+            --out revision-signatures/revision-signatures.json \
+            --sign-key-env APPFLARE_SIGNING_KEY --key-id "${KEY_ID}"
+      - name: Upload the signatures
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: revision-signatures
+          path: catalog/revision-signatures/revision-signatures.json
+          if-no-files-found: error
+          retention-days: 7
+
   release:
     name: release and index
-    needs: [build-packer, plan, pack, sign]
+    needs: [build-packer, plan, pack, sign, sign-revisions]
     # Runs when sign succeeded or was skipped (nothing to publish), never after a failure.
     if: ${{ !cancelled() && !failure() }}
     runs-on: ubuntu-24.04
@@ -338,6 +417,12 @@ jobs:
               --title "${tag}" \
               --notes "Built from ${source}. manifest.json sha256: ${local_sha}."
           done
+      - name: Download the revision signatures
+        if: needs.plan.outputs.revisions != '[]'
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: revision-signatures
+          path: ${{ runner.temp }}/revision-signatures
       # A deploy key's push starts push workflows (conventions runs on every
       # push to main); [skip ci] in the message keeps it from doing so.
       - name: Rebuild and commit index.json
@@ -345,6 +430,7 @@ jobs:
         with:
           github-token: ${{ github.token }}
           message: "chore: update index.json [skip ci]"
+          revision-signatures: ${{ needs.plan.outputs.revisions != '[]' && format('{0}/revision-signatures/revision-signatures.json', runner.temp) || '' }}
       # index.json, schema/v1.json, apps/<slug>/manifest.json for each row
       # with a build block, and every entry's images and featured image, all
       # checked against the digests in index.json. stats.json is the one

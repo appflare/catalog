@@ -1,6 +1,7 @@
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import path from "node:path";
 import { canonicalize, canonicalJson, changedFields } from "./canonical.ts";
+import type { PlannedRevision } from "./revision.ts";
 
 /**
  * The publish plan: for each app publish CI will pack, what its artifact
@@ -25,6 +26,11 @@ export interface PlannedArtifact {
 export interface PublishPlan {
   format: 1;
   apps: Record<string, PlannedArtifact>;
+  /**
+   * Revisions of released versions, by slug: nothing to pack, only the
+   * revised catalog manifest to sign (`sign-revisions`) and list.
+   */
+  revisions?: Record<string, PlannedRevision>;
 }
 
 /** The fields of an artifact manifest checked against the plan. */
@@ -68,6 +74,24 @@ export function parsePlan(json: unknown): PublishPlan {
       isRecord(e.catalog);
     if (!ok) {
       throw new Error(`publish plan: entry "${slug}" is malformed`);
+    }
+  }
+  if (json.revisions !== undefined) {
+    if (!isRecord(json.revisions)) {
+      throw new Error("publish plan: revisions must be { <slug>: { ... } }");
+    }
+    for (const [slug, entry] of Object.entries(json.revisions)) {
+      const e = entry as Partial<PlannedRevision> | undefined;
+      const ok =
+        isRecord(e) &&
+        typeof e.version === "string" &&
+        Number.isInteger(e.revision) &&
+        typeof e.sha256 === "string" &&
+        /^[0-9a-f]{64}$/.test(e.sha256) &&
+        typeof e.keyId === "string";
+      if (!ok) {
+        throw new Error(`publish plan: revision "${slug}" is malformed`);
+      }
     }
   }
   return json as unknown as PublishPlan;

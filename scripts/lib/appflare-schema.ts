@@ -48,7 +48,42 @@ export interface AppflareSchema {
    * manager works them out with the same function when an index row lacks them.
    */
   appServices: AppServicesOf;
+  /**
+   * Why a catalog manifest cannot stand in for the one inside a release as a
+   * revision (`revisedArtifactProblem`), or null when it can: its revision is
+   * above the release's, and it changes only the fields a revision may change.
+   * The manager holds a revised catalog manifest to the same function.
+   */
+  revisionProblem: RevisionProblemOf;
+  /**
+   * `verifySignature` from `@appflare/schema`: the Ed25519 check the manager
+   * runs on a revised catalog manifest, over the exact bytes with a key id.
+   */
+  verifySignature: VerifySignatureOf;
+  /** The trusted signing keys embedded in `@appflare/schema` (the ones managers trust). */
+  signingKeys: readonly SigningKey[];
 }
+
+/** A trusted signing key: its id and base64 raw Ed25519 public key. */
+export interface SigningKey {
+  keyId: string;
+  publicKeyBase64: string;
+}
+
+/** `verifySignature` from `@appflare/schema`; rejects when the signature does not verify. */
+export type VerifySignatureOf = (
+  bytes: Uint8Array,
+  signatureBase64: string,
+  keyId: string,
+  keys: readonly SigningKey[],
+  labels?: { signature: string; subject: string },
+) => Promise<void>;
+
+/** `revisedArtifactProblem` from `@appflare/schema`: the arguments are schema-parsed manifests. */
+export type RevisionProblemOf = (
+  artifact: Pick<ArtifactManifest, "catalog" | "worker">,
+  revised: CatalogManifest,
+) => string | null;
 
 /** `appServices` from `@appflare/schema`: the arguments are schema-parsed manifests. */
 export type AppServicesOf = (
@@ -77,6 +112,9 @@ export async function loadAppflareSchema(appflareDir: string): Promise<AppflareS
       instanceType: pickInstanceType(mod, "DEFAULT_SANDBOX_INSTANCE_TYPE"),
     },
     appServices: pickFunction<AppServicesOf>(mod, "appServices"),
+    revisionProblem: pickFunction<RevisionProblemOf>(mod, "revisedArtifactProblem"),
+    verifySignature: pickFunction<VerifySignatureOf>(mod, "verifySignature"),
+    signingKeys: pickSigningKeys(mod, "signingKeys"),
   };
 }
 
@@ -91,6 +129,22 @@ function pickFunction<T extends (...args: never[]) => unknown>(
   // The runtime check above establishes a function; its signature is the one
   // @appflare/schema declares, mirrored by T.
   return value as T;
+}
+
+function pickSigningKeys(mod: unknown, exportName: string): readonly SigningKey[] {
+  const value = (mod as Record<string, unknown> | null)?.[exportName];
+  const ok =
+    Array.isArray(value) &&
+    value.length > 0 &&
+    value.every(
+      (k) =>
+        typeof (k as SigningKey | null)?.keyId === "string" &&
+        typeof (k as SigningKey | null)?.publicKeyBase64 === "string",
+    );
+  if (!ok) {
+    throw new Error(`@appflare/schema does not export signing keys named ${exportName}`);
+  }
+  return value as SigningKey[];
 }
 
 function pickParser<T>(mod: unknown, exportName: string): Parser<T> {

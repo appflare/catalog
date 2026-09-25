@@ -66,6 +66,26 @@ describe("patchLastVerified", () => {
     expect(result.unmatched).toEqual(["ghost"]);
     expect(patchLastVerified(index, {}, NOW).index).toEqual(index);
   });
+
+  it("matches a revised row by its release: a revision does not change what was checked", () => {
+    const revised: IndexApp = {
+      ...row("cut", "0.1.0"),
+      revision: 2,
+      catalogManifest: {
+        url: "https://appflare.github.io/catalog/apps/cut/manifest.json",
+        sha256: "f".repeat(64),
+        keyId: "catalog-2026-09",
+        signature: "c2ln",
+      },
+    };
+    const result = patchLastVerified(
+      { ...index, apps: [revised] },
+      { cut: { version: "0.1.0", digest: D, at: "2026-09-24T02:59:00.000Z" } },
+      NOW,
+    );
+    expect(result.updated).toEqual(["cut"]);
+    expect(result.index.apps[0]).toEqual({ ...revised, lastVerified: "2026-09-24T02:59:00.000Z" });
+  });
 });
 
 describe("patchLastVerified for sandbox tier rows", () => {

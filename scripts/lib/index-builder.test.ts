@@ -104,6 +104,7 @@ function options(overrides: Partial<IndexBuildOptions> = {}): IndexBuildOptions 
     warn: (m) => warnings.push(m),
     sandboxDefaults: schema.sandboxDefaults,
     services: echoServices,
+    revisionProblem: schema.revisionProblem,
     ...overrides,
   };
 }
@@ -145,6 +146,7 @@ describe("buildIndexApps", () => {
       // (the fixture artifact's own catalog manifest requires nothing).
       services: ["binding:kv_namespace", "requires:r2"],
       categories: ["utilities"],
+      revision: 1,
     });
     expect(warnings.join("\n")).toMatch(/UNSIGNED/);
   });
@@ -412,6 +414,7 @@ describe("sandbox tier entries", () => {
         },
         services: ["no-worker", "requires:r2"],
         categories: ["utilities"],
+        revision: 1,
       },
     ]);
     expect(rows[0]).not.toHaveProperty("artifacts");
@@ -438,6 +441,7 @@ describe("sandbox tier entries", () => {
       maintainers: ["octocat", "@example/maintainers"],
       services: ["binding:kv_namespace", "requires:r2"],
       categories: ["utilities"],
+      revision: 1,
     });
   });
 
@@ -518,6 +522,7 @@ describe("self-deploying tier entries", () => {
         },
         services: ["no-worker", "requires:r2"],
         categories: ["utilities"],
+        revision: 1,
       },
     ]);
     expect(rows[0]).not.toHaveProperty("artifacts");
@@ -575,5 +580,151 @@ describe.skipIf(!appflareAvailable)("sandbox rows with the real @appflare/schema
     expect(Object.keys(index.apps[0] ?? {})).toEqual(Object.keys(rows[0] ?? {}));
     const again = finalizeIndex(rows, serializeIndex(index), new Date(), schema.indexJson);
     expect(again.generatedAt).toBe(now.toISOString());
+  });
+});
+
+describe("revisions of artifact tier entries", () => {
+  const selectVar = {
+    name: "MODE",
+    label: "Mode",
+    required: false,
+    type: "select",
+    options: [
+      { value: "a", label: "First" },
+      { value: "b", label: "Second" },
+    ],
+  };
+
+  /** The release of hello@1.2.3, built with `catalog`. */
+  function releasedWith(catalog: CatalogManifest): ReleaseArtifact {
+    const manifest = artifactManifestFixture({
+      app: "hello",
+      version: "1.2.3",
+      sha: PIN,
+      keyId: "catalog-2026-09",
+    });
+    manifest.catalog = catalog;
+    return { tag: "hello@1.2.3", manifestBytes: Buffer.from(JSON.stringify(manifest)) };
+  }
+
+  /** What sign-revisions wrote for `manifest` (the signature is opaque here). */
+  const signed = (manifest: CatalogManifest, keyId = "catalog-2026-09") => ({
+    hello: {
+      sha256: sha256Hex(publishedManifestBytes(manifest)),
+      keyId,
+      signature: "c2lnbmVk",
+    },
+  });
+
+  it("list a signed revision above the release's, keeping the release and lastVerified", () => {
+    const release = releasedWith(hello);
+    const revised: CatalogManifest = { ...hello, vars: [selectVar], revision: 2 };
+    const before = buildIndexApps(
+      [hello],
+      options({ distDir: null, releases: releasesOf(release) }),
+    );
+    expect(before[0]?.revision).toBe(1);
+    expect(before[0]).not.toHaveProperty("catalogManifest");
+    const verified = { ...before[0], lastVerified: "2026-09-01T00:00:00.000Z" } as IndexApp;
+    const [row] = buildIndexApps(
+      [revised],
+      options({
+        distDir: null,
+        releases: releasesOf(release),
+        previousApps: [verified],
+        revisionSignatures: signed(revised),
+      }),
+    );
+    expect(row).toMatchObject({
+      version: "1.2.3",
+      digest: sha256Hex(release.manifestBytes),
+      artifacts: artifactUrls("appflare/catalog", "hello", "1.2.3"),
+      revision: 2,
+      catalogManifest: {
+        url: "https://appflare.github.io/catalog/apps/hello/manifest.json",
+        sha256: sha256Hex(publishedManifestBytes(revised)),
+        keyId: "catalog-2026-09",
+        signature: "c2lnbmVk",
+      },
+      lastVerified: "2026-09-01T00:00:00.000Z",
+    });
+    expect(warnings).toEqual([]);
+    // A rebuild keeps the signature while the bytes are the same.
+    const [again] = buildIndexApps(
+      [revised],
+      options({ distDir: null, releases: releasesOf(release), previousApps: [row as IndexApp] }),
+    );
+    expect(again?.catalogManifest).toEqual(row?.catalogManifest);
+  });
+
+  it("omit a revision no signature covers, or one signed with another key; fail when strict", () => {
+    const release = releasedWith(hello);
+    const revised: CatalogManifest = { ...hello, vars: [selectVar], revision: 2 };
+    const stale = signed({ ...revised, summary: "Other bytes." });
+    for (const revisionSignatures of [{}, stale, signed(revised, "appflare-2026-09")]) {
+      warnings = [];
+      const rows = buildIndexApps(
+        [revised],
+        options({ distDir: null, releases: releasesOf(release), revisionSignatures }),
+      );
+      expect(rows).toEqual([]);
+      expect(warnings.join("\n")).toMatch(
+        /hello: omitted: .*revision 2 of hello@1\.2\.3, but (no signature is known|it is signed with key "appflare-2026-09")/,
+      );
+    }
+    expect(() =>
+      buildIndexApps(
+        [revised],
+        options({ distDir: null, releases: releasesOf(release), strictReleases: true }),
+      ),
+    ).toThrow(/no signature is known for its bytes/);
+  });
+
+  it("list no revised manifest while the revision is the release's own", () => {
+    const release = releasedWith({ ...hello, revision: 2 });
+    const [row] = buildIndexApps(
+      [{ ...hello, revision: 2 }],
+      options({ distDir: null, releases: releasesOf(release) }),
+    );
+    expect(row?.revision).toBe(2);
+    expect(row).not.toHaveProperty("catalogManifest");
+  });
+
+  it.skipIf(!appflareAvailable)(
+    "omit an entry whose revision changes what only a new build can, or fail when strict",
+    () => {
+      const release = releasedWith(hello);
+      const moved: CatalogManifest = { ...hello, requires: [], revision: 2 };
+      const rows = buildIndexApps(
+        [moved],
+        options({ distDir: null, releases: releasesOf(release) }),
+      );
+      expect(rows).toEqual([]);
+      expect(warnings.join("\n")).toMatch(
+        /hello: omitted: .*revision 2 of hello@1\.2\.3, but it changes requires, which only a new build can change/,
+      );
+      expect(() =>
+        buildIndexApps(
+          [moved],
+          options({ distDir: null, releases: releasesOf(release), strictReleases: true }),
+        ),
+      ).toThrow(/it changes requires/);
+    },
+  );
+
+  it.skipIf(!appflareAvailable)("pass the index schema with the real @appflare/schema", () => {
+    const release = releasedWith(hello);
+    const revised: CatalogManifest = { ...hello, vars: [selectVar], revision: 2 };
+    const rows = buildIndexApps(
+      [revised],
+      options({
+        distDir: null,
+        releases: releasesOf(release),
+        revisionSignatures: signed(revised),
+      }),
+    );
+    expect(rows).toHaveLength(1);
+    const index = finalizeIndex(rows, null, new Date(), schema.indexJson);
+    expect(index.apps).toEqual(rows);
   });
 });

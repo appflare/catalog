@@ -12,6 +12,7 @@ import { catalogRepo, info, runMain, warn } from "./lib/cli.ts";
 import { publishedFeaturedFor, readFeatured } from "./lib/featured.ts";
 import { publishedMediaFor, readAppMedia } from "./lib/media.ts";
 import { appsDir, catalogRoot, indexFile, resolveAppflareDir, schemaFile } from "./lib/paths.ts";
+import { revisedManifestFor } from "./lib/revision.ts";
 import { pagesBaseUrl, publishedManifestFor, publishedManifestPath } from "./lib/sandbox-entry.ts";
 
 const USAGE = `Usage: pnpm -s build-site --out <dir> [--index index.json] [--stats <file> | --live-stats]
@@ -20,13 +21,17 @@ Assembles the GitHub Pages site in <dir> (emptied first):
   index.json                  the catalog index, byte for byte
   schema/v1.json              the catalog manifest JSON Schema
   apps/<slug>/manifest.json   the catalog manifest of each row with a build
-                              block (sandbox and self-deploying tiers),
-                              written as build-index hashed it
+                              block (sandbox and self-deploying tiers) or a
+                              revised catalog manifest (artifact tier rows
+                              whose revision is above their release's),
+                              written as build-index hashed it; a revised one
+                              also gets manifest.json.sig, its signature, which
+                              must verify with the keys in @appflare/schema
   apps/<slug>/<image>         each row's icon, cover and screenshots
   featured/<id>.png           each featured item's image
   stats.json                  from --stats or --live-stats, when valid
 
-Fails when a row's build block or images, or a featured item's image, do not
+Fails when a row's build block, revised catalog manifest or images, or a featured item's image, do not
 match the current files (rebuild index.json first). Missing or invalid stats
 are left out with a warning, so the popularity numbers can never block a
 publish. Needs APPFLARE_DIR.
@@ -67,6 +72,20 @@ runMain(async () => {
         rel: publishedManifestPath(row.slug),
         bytes: publishedManifestFor(row, manifest, repo),
       });
+    } else if (row.catalogManifest !== undefined) {
+      const manifest = loadManifest(app, schema.catalogManifest);
+      // Checked against the row and its signature against the embedded keys first.
+      const revised = await revisedManifestFor(row, manifest, repo, {
+        verifySignature: schema.verifySignature,
+        keys: schema.signingKeys,
+      });
+      files.push(
+        { rel: publishedManifestPath(row.slug), bytes: revised.bytes },
+        {
+          rel: `${publishedManifestPath(row.slug)}.sig`,
+          bytes: Buffer.from(`${revised.signature}\n`),
+        },
+      );
     }
     files.push(...publishedMediaFor(row, readAppMedia(app.dir, row.slug, row.name, repo)));
   }

@@ -65,10 +65,15 @@ export interface CatalogManifest {
   };
   plan: Plan;
   requires: string[];
+  /** The install form: secrets and vars, as the schema parses them. */
+  secrets: Record<string, unknown>[];
+  vars: Record<string, unknown>[];
   /** Permissions of the Cloudflare API token the admin creates for the app itself. */
   tokenPermissions: { name: string; description?: string; scope?: "account" | "zone" | "user" }[];
   /** How the bump bot treats the entry. */
   bump?: { autoMerge: boolean };
+  /** Which edit of the entry's form and copy this is for its build; omitted means 1. */
+  revision?: number;
 }
 
 /** A file stored in the artifact zip, addressed by byte range. */
@@ -193,6 +198,27 @@ export interface IndexApp {
   keyValueDurableObjects?: true;
   /** The catalog manifest's `categories`; always written, like `services`. */
   categories: string[];
+  /**
+   * The catalog manifest's revision (see `revision.ts`); omitted means 1. The
+   * schema keeps it optional for indexes published before it existed;
+   * `build-index` always writes it.
+   */
+  revision?: number;
+  /**
+   * An `artifact` tier row whose revision is above its release's: the revised
+   * catalog manifest on the Pages site, signed with the release's key, which
+   * managers use in place of the release's copy for the forms and copy.
+   */
+  catalogManifest?: IndexCatalogManifest;
+}
+
+/** `IndexCatalogManifest`, in full: a signed revised catalog manifest on the Pages site. */
+export interface IndexCatalogManifest extends IndexMediaFile, RevisionSignature {}
+
+/** The signature of a revised catalog manifest: the release's key id and a base64 Ed25519 signature. */
+export interface RevisionSignature {
+  keyId: string;
+  signature: string;
 }
 
 /** `AppServices`, in full: what `appServices` returns. */

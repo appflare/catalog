@@ -31,8 +31,15 @@
     {
       "name": "HOME_PAGE",
       "label": "Home page",
-      "help": "default, 404, or admin",
-      "required": false
+      "help": "What / shows. Short links and /admin work the same either way.",
+      "required": false,
+      "type": "select",
+      "options": [
+        { "value": "default", "label": "Show the landing page" },
+        { "value": "404", "label": "Return an empty 404 response" },
+        { "value": "admin", "label": "Redirect to /admin" }
+      ],
+      "default": "default"
     }
   ],
   "postInstall": [
@@ -41,5 +48,8 @@
       "content": "Open {{workerUrl}}/admin and sign in with the admin password to create your first link."
     }
   ],
-  "tokenPermissions": []
+  "tokenPermissions": [],
+  // The HOME_PAGE select is a form change for the build v0.1.0 already
+  // released, so it is published as a revision rather than a new build.
+  "revision": 2
 }

@@ -1,13 +1,24 @@
 import { createHash } from "node:crypto";
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
-import { type AppServicesOf, type Parser, parseOrThrow } from "./appflare-schema.ts";
+import {
+  type AppServicesOf,
+  type Parser,
+  parseOrThrow,
+  type RevisionProblemOf,
+} from "./appflare-schema.ts";
 import { indexAuthors } from "./authors.ts";
 import {
   IncompleteReleaseError,
   type ReleaseArtifact,
   type ReleaseLookup,
 } from "./github-releases.ts";
+import {
+  type RevisionSignatures,
+  revisionOf,
+  revisionSignatureLookup,
+  rowRevision,
+} from "./revision.ts";
 import { runsInSandbox, type SandboxDefaults, sandboxBuild } from "./sandbox-entry.ts";
 import type {
   ArtifactManifest,
@@ -79,6 +90,17 @@ export interface IndexBuildOptions {
   mediaFor?: (manifest: CatalogManifest) => IndexMedia | undefined;
   /** `appServices` from `@appflare/schema`, which works out each row's `services`. */
   services: AppServicesOf;
+  /**
+   * `revisedArtifactProblem` from `@appflare/schema`, which decides whether an
+   * artifact tier row may list its manifest as a revision of its release.
+   */
+  revisionProblem: RevisionProblemOf;
+  /**
+   * Signatures `sign-revisions` made in this run, by slug. A revised row
+   * otherwise keeps the signature of its previous row while its bytes are the
+   * same, and without either it is refused (see `rowRevision`).
+   */
+  revisionSignatures?: RevisionSignatures;
 }
 
 /** Where an app's listed version came from. */
@@ -230,13 +252,30 @@ export function lastVerifiedFor(
     : null;
 }
 
-/** One index row from a catalog manifest and its resolved artifact. */
+/**
+ * One index row from a catalog manifest and its resolved artifact. The row
+ * carries the manifest's `revision`, and lists it as the revised catalog
+ * manifest of the release when its revision is above the release's (see
+ * `revision.ts`); throws when that revision changes what only a new build can.
+ * The digest, and so `lastVerified`, stay the release's: a revision does not
+ * change the Worker the install check ran.
+ */
 export function toIndexApp(
   manifest: CatalogManifest,
   artifact: ResolvedArtifact,
-  options: Pick<IndexBuildOptions, "repo" | "services" | "mediaFor">,
+  options: Pick<
+    IndexBuildOptions,
+    "repo" | "services" | "mediaFor" | "revisionProblem" | "revisionSignatures" | "previousApps"
+  >,
   lastVerified: string | null = null,
 ): IndexApp {
+  const revision = rowRevision(
+    manifest,
+    artifact.manifest,
+    options.repo,
+    options.revisionProblem,
+    revisionSignatureLookup(options.revisionSignatures ?? {}, options.previousApps ?? []),
+  );
   return {
     slug: manifest.slug,
     name: manifest.name,
@@ -252,6 +291,7 @@ export function toIndexApp(
     maintainers: [...manifest.maintainers],
     ...mediaBlock(manifest, options),
     ...rowFacts(manifest, artifact.manifest, options.services),
+    ...revision,
   };
 }
 
@@ -326,6 +366,8 @@ export function toSandboxIndexApp(
     build,
     ...mediaBlock(manifest, options),
     ...rowFacts(manifest, null, options.services),
+    // No release to revise: every edit publishes the current manifest in `build`.
+    revision: revisionOf(manifest),
   };
 }
 
@@ -355,10 +397,35 @@ export function buildIndexApps(
     const artifact = resolveArtifact(manifest, options, state);
     if (artifact) {
       const verifiedAt = lastVerifiedFor(manifest.slug, artifact, options.previousApps ?? []);
-      rows.push(toIndexApp(manifest, artifact, options, verifiedAt));
+      let row: IndexApp;
+      try {
+        row = toIndexApp(manifest, artifact, options, verifiedAt);
+      } catch (err) {
+        if (options.strictReleases) {
+          throw err;
+        }
+        options.warn(
+          `${manifest.slug}: omitted: ${err instanceof Error ? err.message : String(err)}`,
+        );
+        continue;
+      }
+      rows.push(row);
     }
   }
   return rows;
+}
+
+/** Rows of the index being replaced; none if it is missing or unreadable. */
+export function previousRows(text: string | null): IndexApp[] {
+  if (text === null) {
+    return [];
+  }
+  try {
+    const apps = (JSON.parse(text) as { apps?: unknown }).apps;
+    return Array.isArray(apps) ? (apps as IndexApp[]) : [];
+  } catch {
+    return [];
+  }
 }
 
 /** What `index.json` carries besides its rows. */
