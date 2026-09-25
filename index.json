@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-25T09:08:24.156Z",
+  "generatedAt": "2026-09-25T10:07:57.529Z",
   "apps": [
     {
       "slug": "agentic-inbox",
@@ -54,7 +54,8 @@
       "categories": [
         "email",
         "ai"
-      ]
+      ],
+      "revision": 1
     },
     {
       "slug": "chatgpt-telegram-workers",
@@ -98,7 +99,8 @@
       "categories": [
         "ai",
         "bots"
-      ]
+      ],
+      "revision": 1
     },
     {
       "slug": "cut",
@@ -136,7 +138,14 @@
       ],
       "categories": [
         "utilities"
-      ]
+      ],
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/cut/manifest.json",
+        "sha256": "b0492a05c74b1f6f92c51a9a2c0b7b952e1c9d6622214a057d15d5f7b55fe695",
+        "keyId": "catalog-2026-09",
+        "signature": "PGUEDWDpX9OXeiK3cTvjLVHdaLJzab+mkNFaSYAp/TYkoRMVM9slKTXBFaGzNCieVRRi5YGUg6yKgXDKPKKLDw=="
+      }
     },
     {
       "slug": "flaremo",
@@ -203,7 +212,8 @@
       "categories": [
         "productivity",
         "notes"
-      ]
+      ],
+      "revision": 1
     },
     {
       "slug": "mail2telegram",
@@ -260,7 +270,8 @@
       "categories": [
         "email",
         "bots"
-      ]
+      ],
+      "revision": 1
     },
     {
       "slug": "mailflare",
@@ -322,7 +333,8 @@
       ],
       "categories": [
         "email"
-      ]
+      ],
+      "revision": 1
     },
     {
       "slug": "open-seo",
@@ -382,7 +394,8 @@
       "categories": [
         "marketing",
         "analytics"
-      ]
+      ],
+      "revision": 1
     },
     {
       "slug": "openai-gemini",
@@ -411,7 +424,8 @@
       "services": [],
       "categories": [
         "ai"
-      ]
+      ],
+      "revision": 1
     },
     {
       "slug": "r2-explorer",
@@ -451,7 +465,8 @@
       ],
       "categories": [
         "storage"
-      ]
+      ],
+      "revision": 1
     },
     {
       "slug": "second-brain-cloudflare",
@@ -498,7 +513,8 @@
       "categories": [
         "ai",
         "productivity"
-      ]
+      ],
+      "revision": 1
     },
     {
       "slug": "unifi-ddns",
@@ -530,7 +546,8 @@
       ],
       "categories": [
         "networking"
-      ]
+      ],
+      "revision": 1
     }
   ],
   "featured": [],
