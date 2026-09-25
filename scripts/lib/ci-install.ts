@@ -154,10 +154,21 @@ function optionalStr(binding: ArtifactBinding, field: string): Record<string, st
 
 interface CatalogForms {
   secrets: string[];
-  vars: { name: string; default?: string; required: boolean }[];
+  vars: { name: string; default?: string; required: boolean; firstOption?: string }[];
 }
 
-/** Secret names and var defaults from the catalog manifest embedded in the artifact. */
+/** The first value of a `type: "select"` var's options, if it has any. */
+function firstOption(v: { type?: unknown; options?: unknown }): Record<string, string> {
+  if (v.type !== "select" || !Array.isArray(v.options)) return {};
+  const value = (v.options[0] as { value?: unknown } | undefined)?.value;
+  return typeof value === "string" ? { firstOption: value } : {};
+}
+
+/**
+ * Secret names and var defaults from the catalog manifest embedded in the
+ * artifact. Optional secrets are set too, so the check covers the app with
+ * every feature its secrets turn on.
+ */
 export function catalogForms(catalog: unknown): CatalogForms {
   const c = (catalog ?? {}) as { secrets?: unknown; vars?: unknown };
   const secrets = Array.isArray(c.secrets)
@@ -167,15 +178,32 @@ export function catalogForms(catalog: unknown): CatalogForms {
     : [];
   const vars = Array.isArray(c.vars)
     ? c.vars
-        .map((v) => v as { name?: unknown; default?: unknown; required?: unknown })
+        .map(
+          (v) =>
+            v as {
+              name?: unknown;
+              default?: unknown;
+              required?: unknown;
+              type?: unknown;
+              options?: unknown;
+            },
+        )
         .filter(
-          (v): v is { name: string; default?: unknown; required?: unknown } =>
-            typeof v.name === "string",
+          (
+            v,
+          ): v is {
+            name: string;
+            default?: unknown;
+            required?: unknown;
+            type?: unknown;
+            options?: unknown;
+          } => typeof v.name === "string",
         )
         .map((v) => ({
           name: v.name,
           ...(typeof v.default === "string" ? { default: v.default } : {}),
           required: v.required === true,
+          ...firstOption(v),
         }))
     : [];
   return { secrets, vars };
@@ -665,7 +693,14 @@ export function planCiInstall(
     if (v.default !== undefined) {
       vars[v.name] = jsonVars.has(v.name) ? jsonDefault(v.name, v.default) : v.default;
     } else if (v.required && vars[v.name] === undefined) {
-      vars[v.name] = REQUIRED_VAR_PLACEHOLDER;
+      // A required choice without a default gets its first option, the only
+      // kind of value the app accepts for it.
+      vars[v.name] =
+        v.firstOption === undefined
+          ? REQUIRED_VAR_PLACEHOLDER
+          : jsonVars.has(v.name)
+            ? jsonDefault(v.name, v.firstOption)
+            : v.firstOption;
     }
   }
   for (const [varName, value] of Object.entries(vars)) {

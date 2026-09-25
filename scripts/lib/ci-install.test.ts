@@ -199,6 +199,30 @@ describe("planCiInstall", () => {
     expect(plan.config.vars).toEqual({ REGION: "eu", API_URL: "ci" });
   });
 
+  it("sets optional secrets too, and gives a required choice without a default its first option", () => {
+    const options = [
+      { value: "default", label: "Landing page" },
+      { value: "404", label: "Empty 404" },
+    ];
+    const plan = planCiInstall(
+      manifest((m) => {
+        const catalog = m.catalog as Record<string, unknown>;
+        catalog.secrets = [
+          { name: "ADMIN_PASSWORD", label: "Admin", generate: true },
+          { name: "SMTP_PASSWORD", label: "SMTP", optional: true },
+        ];
+        catalog.vars = [
+          { name: "HOME_PAGE", label: "Home", required: true, type: "select", options },
+          { name: "MODE", label: "Mode", required: false, type: "select", options },
+          { name: "SIZE", label: "Size", default: "404", type: "select", options },
+        ];
+      }),
+      "ci-hello-pr1",
+    );
+    expect(plan.secrets).toEqual(["ADMIN_PASSWORD", "SMTP_PASSWORD"]);
+    expect(plan.config.vars).toEqual({ HOME_PAGE: "default", SIZE: "404" });
+  });
+
   it("keeps JSON vars typed and parses a JSON var's catalog default", () => {
     const plan = planCiInstall(
       manifest((m) => {
