@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-26T20:23:54.411Z",
+  "generatedAt": "2026-09-26T22:35:43.472Z",
   "apps": [
     {
       "slug": "2fa",
@@ -210,6 +210,55 @@
       "revision": 1
     },
     {
+      "slug": "counterscale",
+      "name": "Counterscale",
+      "summary": "Privacy-friendly web analytics you host yourself: a tracking script, a dashboard, and long-term rollups in R2, on Workers Analytics Engine.",
+      "version": "3.4.1",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/counterscale@3.4.1/counterscale-3.4.1.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/counterscale@3.4.1/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/counterscale@3.4.1/manifest.sig"
+      },
+      "digest": "0b1c1c322c992c79d9d3721d1be148f2fe5a2822d354f9814af896e50d173541",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "r2"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Ben Vinegar",
+          "url": "https://benv.ca",
+          "github": "benvinegar",
+          "x": "bentlegen"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/counterscale/icon.png",
+          "sha256": "468783f6d63e05ea644f4229f383b5522f5a98ad120912509b54b313b5f80b42"
+        },
+        "cover": {
+          "url": "https://appflare.github.io/catalog/apps/counterscale/cover.png",
+          "sha256": "ee7b5c4e5179f489cf65fc8a8fdde9f5e7a66cdeaf48029d85afb007fa757d94"
+        },
+        "screenshots": []
+      },
+      "services": [
+        "r2",
+        "analytics-engine",
+        "cron"
+      ],
+      "categories": [
+        "analytics"
+      ],
+      "revision": 1
+    },
+    {
       "slug": "cut",
       "name": "Cut",
       "summary": "Self-hosted link shortener on Workers + KV.",
@@ -319,6 +368,47 @@
       "categories": [
         "productivity",
         "notes"
+      ],
+      "revision": 1
+    },
+    {
+      "slug": "glance",
+      "name": "Glance",
+      "summary": "Share what your coding agents build: publish HTML, Markdown and files as private sites your team opens, comments on, and annotates. An open-source alternative to Claude Artifacts.",
+      "version": "0.14.0",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/glance@0.14.0/glance-0.14.0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/glance@0.14.0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/glance@0.14.0/manifest.sig"
+      },
+      "digest": "3176680ba1dceacbf7b9d9c64fbbe21c1400e41cb3bbb9beb57d4ea505af370e",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "r2",
+        "workers-ai"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Plivo",
+          "url": "https://www.plivo.com",
+          "github": "plivo-labs"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "services": [
+        "kv",
+        "d1",
+        "r2",
+        "durable-objects",
+        "cron",
+        "workers-ai"
+      ],
+      "categories": [
+        "developer-tools"
       ],
       "revision": 1
     },
@@ -808,6 +898,60 @@
       "revision": 1
     },
     {
+      "slug": "sink",
+      "name": "Sink",
+      "summary": "Link shortener with visit analytics: custom slugs, expiring links, QR codes, AI slug suggestions and a realtime globe, all on Cloudflare.",
+      "version": "0.3.0",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/sink@0.3.0/sink-0.3.0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/sink@0.3.0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/sink@0.3.0/manifest.sig"
+      },
+      "digest": "0b3200dc94f88c600190da570e507fa3a18aecc43d46c3c982fa070517a7c2f7",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "r2",
+        "workers-ai"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "miantiao",
+          "url": "https://miantiao.me",
+          "github": "miantiao-me",
+          "x": "miantiao_me"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/sink/icon.png",
+          "sha256": "07eb308b47d29f08f2d629285c20b138741630e0bbe6562c0b437ec5415ba5e4"
+        },
+        "cover": {
+          "url": "https://appflare.github.io/catalog/apps/sink/cover.png",
+          "sha256": "fb266928b6a876616d0f76bc01dc2d53939352f1cdd8861edae089feaf9610fd"
+        },
+        "screenshots": []
+      },
+      "services": [
+        "kv",
+        "d1",
+        "r2",
+        "analytics-engine",
+        "cron",
+        "workers-ai"
+      ],
+      "categories": [
+        "utilities",
+        "analytics"
+      ],
+      "revision": 1
+    },
+    {
       "slug": "unifi-ddns",
       "name": "UniFi DDNS",
       "summary": "Dynamic DNS for UniFi gateways: keeps Cloudflare A/AAAA records on your current IP.",
@@ -837,6 +981,44 @@
       ],
       "categories": [
         "networking"
+      ],
+      "revision": 1
+    },
+    {
+      "slug": "yaos",
+      "name": "YAOS",
+      "summary": "Real-time sync for Obsidian vaults: edits merge live across devices as CRDTs, with attachments and snapshots in R2, through a Worker you own.",
+      "version": "2.1.1",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/yaos@2.1.1/yaos-2.1.1.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/yaos@2.1.1/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/yaos@2.1.1/manifest.sig"
+      },
+      "digest": "c815bfdc6a5e6f7e3f376401d6cd6ea4cd5d5f038a5e22d828e7503c195eec1a",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "r2"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Kavin",
+          "url": "https://kavinsood.com",
+          "github": "kavinsood",
+          "x": "kavinsoodd"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "services": [
+        "r2",
+        "durable-objects"
+      ],
+      "categories": [
+        "notes",
+        "sync"
       ],
       "revision": 1
     }
