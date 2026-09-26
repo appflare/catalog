@@ -1,0 +1,98 @@
+{
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "pastebin-worker",
+  "name": "Pastebin Worker",
+  "summary": "A pastebin and file sharer with short links, syntax highlighting, rendered Markdown, client-side encryption, a URL shortener, and a curl-friendly API, on KV and R2.",
+  "homepage": "https://github.com/SharzyL/pastebin-worker",
+  "repo": "SharzyL/pastebin-worker",
+  "license": "MIT",
+  "categories": ["files", "sharing"],
+  "authors": [{ "name": "Sharzy", "url": "https://sharzy.in", "github": "SharzyL" }],
+  "maintainers": ["MendyLanda"],
+  // Upstream has no release tags; the pin tracks the default branch, goshujin.
+  "source": { "ref": "goshujin", "sha": "0835cac4ab8f974035d31845f5c2b93b0c85b5c6" },
+  "install": {
+    "tier": "artifact",
+    "packageManager": "pnpm",
+    // Upstream's own deployment (a custom-domain route, a KV id, and a bucket
+    // name) lives in this config; Appflare takes only the Worker and its
+    // bindings from it and creates its own namespace and bucket.
+    "wranglerConfig": "wrangler.toml",
+    "workerName": "pastebin",
+    // The config serves dist/frontend but has no build.command; upstream's
+    // deploy steps build the web page with this (Vite).
+    "buildCommand": "pnpm build:frontend"
+  },
+  // KV (1,000 writes a day, so about 1,000 uploads) and R2 (10 GB for pastes
+  // over 20 KB) fit the free plan for personal use.
+  "plan": "free",
+  // Large pastes are stored in R2, which has to be enabled on the account first.
+  "requires": ["r2"],
+  "secrets": [],
+  // Cache ages, the R2 size limits, and the MIME types served as plain text keep
+  // upstream's values.
+  "vars": [
+    {
+      "name": "DEPLOY_URL",
+      "label": "Public URL",
+      "help": "The address pastes are shared at, without a trailing slash: the Worker's workers.dev address, or your custom domain. Every link the pastebin prints is built from it.",
+      // Newer managers fill in the Worker's workers.dev address here; older ones
+      // show the placeholder as is, and it must be replaced by hand.
+      "default": "{{workerUrl}}",
+      "required": true
+    },
+    {
+      "name": "INDEX_PAGE_TITLE",
+      "label": "Page title",
+      "help": "Shown at the top of the home page and in the browser tab.",
+      "default": "Pastebin Worker",
+      "required": false
+    },
+    {
+      "name": "TOS_MAINTAINER",
+      "label": "Operator name",
+      "help": "Who runs this pastebin, as the terms of service page names them.",
+      "required": true
+    },
+    {
+      "name": "TOS_MAIL",
+      "label": "Contact email",
+      "help": "Shown on the terms of service page for abuse reports and takedown requests.",
+      "required": true
+    },
+    {
+      "name": "DEFAULT_EXPIRATION",
+      "label": "Default expiration",
+      "help": "How long a paste lives when the uploader does not say, for example 7d, 12h, or 30m.",
+      "default": "7d",
+      "required": false
+    },
+    {
+      "name": "MAX_EXPIRATION",
+      "label": "Longest expiration",
+      "help": "The longest lifetime an uploader can ask for, in the same form.",
+      "default": "90d",
+      "required": false
+    },
+    {
+      "name": "BASIC_AUTH",
+      "label": "Uploaders",
+      "help": "Leave {} for a public pastebin. To let only some people upload, list user names and bcrypt password hashes as JSON, for example {\"alice\": \"$2b$08$...\"}; upstream's scripts/bcrypt.js makes a hash. Reading a paste never needs a password.",
+      // The wrangler config gives BASIC_AUTH an object, so the Worker receives
+      // this value as JSON.
+      "default": "{}",
+      "required": false
+    }
+  ],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "Open {{workerUrl}} to paste text or upload a file, or use the API: `curl -Fc=@file {{workerUrl}}`. The API and the command-line client are described at {{workerUrl}}/doc/api and {{workerUrl}}/doc/curl."
+    },
+    {
+      "type": "markdown",
+      "content": "Without uploaders set, anyone who finds the address can upload to your account. Set Uploaders in the app's settings to keep it private."
+    }
+  ],
+  "tokenPermissions": []
+}

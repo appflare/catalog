@@ -1,0 +1,175 @@
+{
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "punctual",
+  "name": "Punctual",
+  "summary": "Scheduling links for you and your team, a Calendly alternative: booking pages, Google and Microsoft 365 calendar sync, round-robin and collective events, reminders, and webhooks.",
+  "homepage": "https://punctual.sh",
+  "repo": "CCCrafts/punctual",
+  "license": "MIT",
+  "categories": ["business", "scheduling"],
+  "authors": [
+    {
+      "name": "Creative Content Crafts",
+      "url": "https://cccrafts.ai",
+      "github": "CCCrafts",
+      "x": "cccraftsai"
+    }
+  ],
+  "maintainers": ["MendyLanda"],
+  "source": { "ref": "v0.3.0", "sha": "6b75c2efa52c7fd74f1168191cf6da7787b0b0fe" },
+  "install": {
+    "tier": "artifact",
+    "packageManager": "npm",
+    // The self-hosting template. Its database and KV ids are placeholders for
+    // wrangler users; Appflare creates its own database, namespace, bucket,
+    // and queues and applies the D1 migrations.
+    "wranglerConfig": "wrangler.toml",
+    "workerName": "punctual",
+    // Runs Worker code and needs no sign-in; it also reports whether email is
+    // actually delivered.
+    "healthPath": "/health"
+  },
+  // D1, KV, R2, SQLite-backed Durable Objects, and Queues (10,000 operations a
+  // day) all have free tiers; upstream sizes a team of ten well inside them.
+  "plan": "free",
+  // Host avatars and team logos are stored in R2, which has to be enabled on
+  // the account first.
+  "requires": ["r2"],
+  "secrets": [
+    {
+      "name": "ENCRYPTION_KEY_V1",
+      "label": "Calendar token key",
+      "help": "Encrypts connected calendars' tokens at rest (AES-GCM). Copy it now and keep it: without it every host has to reconnect their calendar.",
+      // Upstream suggests 32 random bytes in base64. The generated value is 32
+      // base64 characters, which decode to a 24-byte (AES-192) key; Workers
+      // accept AES keys of 128, 192, or 256 bits.
+      "generate": true
+    },
+    {
+      "name": "SIGNING_KEY",
+      "label": "Link signing key",
+      "help": "Signs the reschedule and cancel links in booking emails. Changing it later invalidates links already sent.",
+      "generate": true
+    },
+    {
+      "name": "RESEND_API_KEY",
+      "label": "Resend API key",
+      "help": "Sends sign-in links, confirmations, and reminders through Resend. Without Resend or Brevo, email is written to the Worker's logs instead of being sent.",
+      "generate": false,
+      "optional": true
+    },
+    {
+      "name": "BREVO_API_KEY",
+      "label": "Brevo API key",
+      "help": "The other email provider. Resend is used when both are set.",
+      "generate": false,
+      "optional": true
+    },
+    {
+      "name": "GOOGLE_CLIENT_ID",
+      "label": "Google OAuth client ID",
+      "help": "Your own Google Cloud OAuth client (web application) with the Google Calendar API enabled. Register <public URL>/auth/google/callback?purpose=identity and <public URL>/auth/google/callback?purpose=calendar as its redirect URIs.",
+      "generate": false,
+      "optional": true
+    },
+    {
+      "name": "GOOGLE_CLIENT_SECRET",
+      "label": "Google OAuth client secret",
+      "generate": false,
+      "optional": true
+    },
+    {
+      "name": "MICROSOFT_CLIENT_ID",
+      "label": "Microsoft app client ID",
+      "help": "Your own Entra ID app registration for Microsoft 365 calendars, with <public URL>/auth/microsoft/callback/identity and <public URL>/auth/microsoft/callback/calendar as its redirect URIs.",
+      "generate": false,
+      "optional": true
+    },
+    {
+      "name": "MICROSOFT_CLIENT_SECRET",
+      "label": "Microsoft app client secret",
+      "generate": false,
+      "optional": true
+    }
+  ],
+  // The sign-up policy (SIGNUPS) is left to the dashboard's Admin page, where
+  // upstream manages it by default.
+  "vars": [
+    {
+      "name": "BASE_URL",
+      "label": "Public URL",
+      "help": "The address people open booking pages at, without a trailing slash: the Worker's workers.dev address, or your custom domain. Every link in emails, calendar invites, and OAuth callbacks is built from it.",
+      // Newer managers fill in the Worker's workers.dev address here; older ones
+      // show the placeholder as is, and it must be replaced by hand.
+      "default": "{{workerUrl}}",
+      "required": true
+    },
+    {
+      "name": "BRAND_NAME",
+      "label": "Product name",
+      "help": "Shown in page footers and emails.",
+      "default": "Punctual",
+      "required": false
+    },
+    {
+      "name": "LEGAL_OPERATOR",
+      "label": "Legal operator",
+      "help": "The company named as data controller on /privacy and /terms. Defaults to the product name; set it before people outside your team book.",
+      "required": false
+    },
+    {
+      "name": "FROM_EMAIL",
+      "label": "Sender address",
+      "help": "The address emails come from, on a domain you verified with Resend or Brevo.",
+      "required": false
+    },
+    {
+      "name": "FROM_NAME",
+      "label": "Sender name",
+      "default": "Punctual",
+      "required": false
+    },
+    {
+      "name": "SUPPORT_EMAIL",
+      "label": "Reply-to address",
+      "help": "Where replies to booking emails go.",
+      "required": false
+    },
+    {
+      "name": "DEMO_BOOKING_PATH",
+      "label": "Landing page demo",
+      "help": "A booking page of this install to embed on the home page, for example /you/30min. Leave empty for none.",
+      "required": false
+    },
+    {
+      "name": "TELEMETRY_ENABLED",
+      "label": "Usage ping",
+      "help": "Once a day: a random instance id, the version, and counts of users, event types, and bookings. Nothing else.",
+      "required": false,
+      "type": "select",
+      "options": [
+        { "value": "0", "label": "Off" },
+        { "value": "1", "label": "Send the daily ping" }
+      ],
+      "default": "0"
+    }
+  ],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "Sign in at {{workerUrl}}/login right away: the first account becomes the admin, and the Admin page in the dashboard decides who else may sign up."
+    },
+    {
+      "type": "markdown",
+      "content": "Sign-in links are emailed. Until a Resend or Brevo key is set, nothing is sent: open the Worker's logs in the Cloudflare dashboard (Workers & Pages, the Worker, Logs) to find the link. The dashboard and {{workerUrl}}/health keep warning until email is set up."
+    },
+    {
+      "type": "markdown",
+      "content": "Connect Google Calendar or Microsoft 365 with your own OAuth app, registering the redirect URIs the Google and Microsoft settings describe, then create an event type and share its booking link."
+    }
+  ],
+  "tokenPermissions": [],
+  // Upstream tags releases with a changelog and ships forward-only, additive
+  // migrations; the install check runs each release before it merges.
+  "bump": { "autoMerge": true }
+}

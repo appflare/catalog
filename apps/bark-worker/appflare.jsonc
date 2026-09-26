@@ -1,0 +1,84 @@
+{
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "bark-worker",
+  "name": "Bark Worker",
+  "summary": "Your own push server for Bark, the iOS notification app: send notifications to your iPhone from scripts and services with a simple HTTP call, with devices stored in D1.",
+  "homepage": "https://github.com/cwxiaos/bark-worker",
+  "repo": "cwxiaos/bark-worker",
+  "license": "GPL-3.0-only",
+  "categories": ["notifications"],
+  "authors": [{ "name": "cwxia0s", "github": "cwxiaos" }],
+  "maintainers": ["MendyLanda"],
+  "source": { "ref": "v2.2.6", "sha": "03ba2fe92c28dbe47bcdb5472fb8d8fe6fc888cd" },
+  "install": {
+    "tier": "artifact",
+    // Upstream commits no lockfile and has no runtime dependencies: the Worker
+    // is one plain JavaScript file, and wrangler, its only dev dependency, is
+    // not used (the packer bundles with its own). Classic yarn's frozen install
+    // is the one that accepts a missing lockfile, so it stands in here.
+    "packageManager": "yarn",
+    "wranglerConfig": "wrangler.json",
+    "workerName": "bark-worker",
+    // Runs Worker code and reads D1 (the device count). With a basic auth
+    // secret set it answers 401, which the check also counts as healthy.
+    "healthPath": "/info"
+  },
+  "plan": "free",
+  "requires": [],
+  "secrets": [
+    {
+      "name": "BASIC_AUTH",
+      "label": "Push credentials",
+      "help": "As user:password. When set, pushes and /info need HTTP basic auth with these credentials; registering devices and /ping do not.",
+      "generate": false,
+      "optional": true
+    }
+  ],
+  "vars": [
+    {
+      "name": "ALLOW_NEW_DEVICE",
+      "label": "New devices",
+      "help": "Leave registration open until your devices are added in the Bark app, then close it in the app's settings.",
+      "required": false,
+      "type": "select",
+      "options": [
+        { "value": "true", "label": "Allow new devices to register" },
+        { "value": "false", "label": "Only devices already registered" }
+      ],
+      "default": "true"
+    },
+    {
+      "name": "ALLOW_QUERY_NUMS",
+      "label": "Device count",
+      "help": "Whether /info reports how many devices are registered.",
+      "required": false,
+      "type": "select",
+      "options": [
+        { "value": "true", "label": "Report it" },
+        { "value": "false", "label": "Hide it" }
+      ],
+      "default": "true"
+    },
+    {
+      "name": "ROOT_PATH",
+      "label": "Root path",
+      "help": "Serve the API under a path instead of /, for example /bark/, when the Worker shares a domain through a route. Must start and end with /.",
+      "default": "/",
+      "required": false
+    }
+  ],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "In the Bark app on your iPhone, add a server with the address {{workerUrl}}. The app registers the device and shows the push URL to use from scripts, for example {{workerUrl}}/<device key>/Hello."
+    },
+    {
+      "type": "markdown",
+      "content": "Once every device is added, set New devices to \"Only devices already registered\" in the app's settings so no one else can register with your server."
+    }
+  ],
+  "tokenPermissions": [],
+  // Upstream releases under semver tags; the install check runs each one before
+  // it merges.
+  "bump": { "autoMerge": true }
+}
