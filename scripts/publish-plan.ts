@@ -7,9 +7,9 @@ import { catalogRepo, info, runMain } from "./lib/cli.ts";
 import { createGhReleaseLookup } from "./lib/github-releases.ts";
 import { previousRows } from "./lib/index-builder.ts";
 import type { PublishPlan } from "./lib/manifest-plan.ts";
-import { SIGNING_KEY_ID } from "./lib/pack-env.ts";
 import { appsDir, indexFile, resolveAppflareDir } from "./lib/paths.ts";
 import { decide } from "./lib/publish-plan.ts";
+import { catalogKey, PUBLIC_KEY_ENV } from "./lib/signing-key.ts";
 import { createVersionResolver, loadPackerVersioning } from "./lib/versions.ts";
 
 const USAGE = `Usage: pnpm -s publish-plan [--out <plan.json>] [--only <slug,...>]
@@ -25,7 +25,8 @@ Fails when a release exists for the pin but appflare.jsonc changed since
 without a revision that may publish the change, when a revision goes down or
 changes after it was published, or when the release for the tag is a draft, a
 prerelease, or incomplete. Needs gh (read-only) and APPFLARE_DIR; reads
-index.json for the revisions it publishes already.
+index.json for the revisions it publishes already. New releases are planned
+with the catalog's key id (${PUBLIC_KEY_ENV}; see scripts/signing-key.ts).
 
   --out <file>   also write the plan (expected app, version, source, keyId, and
                  catalog per slug, and each revision's version, revision,
@@ -46,6 +47,7 @@ runMain(async () => {
     process.stdout.write(USAGE);
     return 0;
   }
+  const { keyId } = catalogKey();
   const appflareDir = resolveAppflareDir();
   const schema = await loadAppflareSchema(appflareDir);
   const versions = createVersionResolver(await loadPackerVersioning(appflareDir));
@@ -58,17 +60,10 @@ runMain(async () => {
   for (const app of apps) {
     const manifest = loadManifest(app, schema.catalogManifest);
     try {
-      const decision = await decide(
-        manifest,
-        versions,
-        releases,
-        schema.artifactManifest,
-        SIGNING_KEY_ID,
-        {
-          previous: previous.find((row) => row.slug === app.slug),
-          revisionProblem: schema.revisionProblem,
-        },
-      );
+      const decision = await decide(manifest, versions, releases, schema.artifactManifest, keyId, {
+        previous: previous.find((row) => row.slug === app.slug),
+        revisionProblem: schema.revisionProblem,
+      });
       if (decision.action === "not-released") {
         info(
           decision.tier === "self-deploying"

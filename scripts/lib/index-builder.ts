@@ -3,9 +3,11 @@ import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import {
   type AppServicesOf,
+  oneWorkerFacts,
   type Parser,
   parseOrThrow,
   type RevisionProblemOf,
+  type WorkerFactsOf,
 } from "./appflare-schema.ts";
 import { indexAuthors } from "./authors.ts";
 import {
@@ -90,6 +92,13 @@ export interface IndexBuildOptions {
   mediaFor?: (manifest: CatalogManifest) => IndexMedia | undefined;
   /** `appServices` from `@appflare/schema`, which works out each row's `services`. */
   services: AppServicesOf;
+  /**
+   * `combinedWorkerFacts` from `@appflare/schema` (the schema's
+   * `appWorkerFacts`): what `services` reads of an artifact, every Worker of
+   * an app of several together. Omitted, an artifact of several Workers is
+   * refused.
+   */
+  workerFacts?: WorkerFactsOf;
   /**
    * `revisedArtifactProblem` from `@appflare/schema`, which decides whether an
    * artifact tier row may list its manifest as a revision of its release.
@@ -265,7 +274,13 @@ export function toIndexApp(
   artifact: ResolvedArtifact,
   options: Pick<
     IndexBuildOptions,
-    "repo" | "services" | "mediaFor" | "revisionProblem" | "revisionSignatures" | "previousApps"
+    | "repo"
+    | "services"
+    | "workerFacts"
+    | "mediaFor"
+    | "revisionProblem"
+    | "revisionSignatures"
+    | "previousApps"
   >,
   lastVerified: string | null = null,
 ): IndexApp {
@@ -290,7 +305,7 @@ export function toIndexApp(
     authors: indexAuthors(manifest),
     maintainers: [...manifest.maintainers],
     ...mediaBlock(manifest, options),
-    ...rowFacts(manifest, artifact.manifest, options.services),
+    ...rowFacts(manifest, artifact.manifest, options.services, options.workerFacts),
     ...revision,
   };
 }
@@ -298,8 +313,9 @@ export function toIndexApp(
 /**
  * A row's `services`, `keyValueDurableObjects` (only when true) and
  * `categories`. For an artifact tier entry the services come from the
- * published artifact manifest: its Worker (bindings, queue consumers, crons,
- * Durable Object migrations) and the catalog manifest packed into it
+ * published artifact manifest: its Workers (bindings, queue consumers, crons,
+ * Durable Object migrations of every Worker of the app together, from
+ * `workerFacts`) and the catalog manifest packed into it
  * (`requires`, `install.emailRouting`, token permissions), with the current
  * manifest's `requires` added as the row lists them. A `sandbox` or
  * `self-deploying` entry has no Worker until it runs, so its services are
@@ -310,12 +326,13 @@ export function rowFacts(
   manifest: CatalogManifest,
   artifact: ArtifactManifest | null,
   services: AppServicesOf,
+  workerFacts: WorkerFactsOf = oneWorkerFacts,
 ): Pick<IndexApp, "services" | "keyValueDurableObjects" | "categories"> {
   // Parsed by the real artifact manifest schema, so a full catalog manifest.
   const catalog = artifact === null ? manifest : (artifact.catalog as CatalogManifest);
   const found = services(
     { ...catalog, requires: [...new Set([...manifest.requires, ...catalog.requires])] },
-    artifact?.worker ?? null,
+    artifact === null ? null : workerFacts(artifact),
   );
   return {
     services: [...found.ids],

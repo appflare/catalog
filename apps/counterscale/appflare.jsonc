@@ -1,0 +1,104 @@
+{
+  // Counterscale writes every pageview to the Analytics Engine dataset
+  // `metricsDataset` and its dashboard queries that name in SQL
+  // (app/analytics/query.ts), so the dataset keeps its upstream name. Dataset
+  // names are account-wide: a second install in the same account would write
+  // to, and show, the same data. Install it once per account; one install
+  // tracks any number of sites, each under its own site id.
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "counterscale",
+  "name": "Counterscale",
+  "summary": "Privacy-friendly web analytics you host yourself: a tracking script, a dashboard, and long-term rollups in R2, on Workers Analytics Engine.",
+  "homepage": "https://counterscale.dev",
+  "repo": "benvinegar/counterscale",
+  "license": "MIT",
+  "categories": ["analytics"],
+  "authors": [
+    { "name": "Ben Vinegar", "url": "https://benv.ca", "github": "benvinegar", "x": "bentlegen" }
+  ],
+  "maintainers": ["MendyLanda"],
+  "source": { "ref": "v3.4.1", "sha": "a04818f7d1c2adf6d3b141230e234cfdb06741e1" },
+  "install": {
+    "tier": "artifact",
+    "packageManager": "pnpm",
+    // The server package of the pnpm monorepo, as upstream's installer deploys it.
+    "wranglerConfig": "packages/server/wrangler.json",
+    "workerName": "counterscale",
+    // Upstream builds through turbo: the tracker package first, then its
+    // `copytracker` script puts the tracker bundle in the server's public/
+    // (served as /tracker.js), then the React Router build.
+    "buildCommand": [
+      "pnpm --filter @counterscale/tracker build",
+      "pnpm --filter @counterscale/server copytracker",
+      "pnpm --filter @counterscale/server build"
+    ]
+  },
+  // Workers, Analytics Engine and R2 all fit the free plan at small volumes.
+  "plan": "free",
+  // The daily rollups go to an R2 bucket.
+  "requires": ["r2"],
+  // Upstream's installer sets the same values: CF_ACCOUNT_ID and CF_BEARER_TOKEN
+  // for the Analytics Engine SQL API, and CF_PASSWORD_HASH (bcrypt, checked
+  // with bcryptjs.compare) with CF_JWT_SECRET for the dashboard sign-in. With
+  // both of those set, sign-in is on without CF_AUTH_ENABLED.
+  "secrets": [
+    {
+      "name": "CF_BEARER_TOKEN",
+      "label": "Analytics API token",
+      "help": "A Cloudflare API token with Account Analytics Read on this account. The dashboard reads your pageviews with it through the Analytics Engine SQL API, and the nightly job copies them to R2."
+    },
+    {
+      "name": "CF_PASSWORD",
+      "label": "Dashboard password",
+      "help": "Sign in to the dashboard with it. Counterscale keeps only its hash: Appflare computes CF_PASSWORD_HASH from it on install and whenever you change it here."
+    },
+    {
+      "name": "CF_PASSWORD_HASH",
+      "label": "Dashboard password hash",
+      "derive": { "from": "CF_PASSWORD", "method": "bcrypt" }
+    },
+    {
+      "name": "CF_JWT_SECRET",
+      "label": "Session signing key",
+      "help": "Signs the dashboard's 30-day session cookie. Setting a new value signs everyone out.",
+      "generate": true
+    }
+  ],
+  "vars": [
+    {
+      "name": "CF_ACCOUNT_ID",
+      "label": "Cloudflare account ID",
+      "help": "The account whose Analytics Engine data the dashboard reads: this one. Filled in on every install and update.",
+      "default": "{{accountId}}",
+      "required": true
+    },
+    {
+      "name": "CF_TRACKER_SCRIPT_NAME",
+      "label": "Tracker script name",
+      "help": "Optional second name for the tracking script, without .js (for example stats serves /stats.js), for sites where blockers catch /tracker.js."
+    }
+  ],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "Open {{workerUrl}} and sign in with the dashboard password. Pageviews can take a few minutes to show up."
+    },
+    {
+      "type": "markdown",
+      "content": "Add this to every page you want to track, with a site id of your choice per site:\n\n```html\n<script id=\"counterscale-script\" data-site-id=\"your-site-id\" src=\"{{workerUrl}}/tracker.js\" defer></script>\n```\n\nOr use the `@counterscale/tracker` package with `reporterUrl` set to `{{workerUrl}}/collect`."
+    },
+    {
+      "type": "markdown",
+      "content": "Counterscale stores pageviews in the Analytics Engine dataset `metricsDataset`, whose name is shared by the whole account, so install it only once per account. Analytics Engine keeps 90 days; a nightly job copies each day to the R2 bucket as Apache Arrow files."
+    }
+  ],
+  "tokenPermissions": [
+    {
+      "name": "Account.Account Analytics:Read",
+      "scope": "account",
+      "description": "Query pageviews through the Analytics Engine SQL API (CF_BEARER_TOKEN)."
+    }
+  ],
+  // The install check deploys each new tag before it merges.
+  "bump": { "autoMerge": true }
+}

@@ -11,27 +11,41 @@ import { createRequire } from "node:module";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { parseArgs } from "node:util";
-import { loadAppflareSchema, parseOrThrow } from "./lib/appflare-schema.ts";
+import { loadAppflareSchema, loadEntryWorkerHelpers, parseOrThrow } from "./lib/appflare-schema.ts";
 import {
+  analyticsEngineSkip,
+  analyticsEngineState,
+  appSecretValues,
+  appSummaryLines,
   attachQueueConsumers,
   type CfRequest,
-  type CiInstallPlan,
+  type CiAppPlan,
+  type CiEntryHelpers,
+  type CiWorkerResult,
   ciWorkerName,
-  cleanupCiInstall,
+  cleanupCiApp,
   createCfRequest,
+  createHyperdriveConfigs,
+  createKvNamespaces,
   createQueues,
   createVectorizeIndexes,
+  type HealthMode,
   type HealthResult,
+  HYPERDRIVE_TEST_URL,
   healthUrl,
-  planCiInstall,
-  randomSecret,
-  summaryLines,
+  hyperdriveSkip,
+  OTHER_WORKER_PROBE,
+  planCiApp,
+  skippedSummaryLines,
   unpackArtifact,
   waitForHealth,
+  withHyperdriveIds,
+  withKvIds,
   workersSubdomain,
 } from "./lib/ci-install.ts";
 import { info, runMain } from "./lib/cli.ts";
 import { packerEnv } from "./lib/pack-env.ts";
+import { loadPackerSecrets } from "./lib/packer-lib.ts";
 import { appflarePaths, resolveAppflareDir } from "./lib/paths.ts";
 import type { ArtifactManifest } from "./lib/types.ts";
 
@@ -46,18 +60,39 @@ deploy   Unpacks the artifact (checking every file's sha256), removes anything
          from manifest.json (bindings without ids, so wrangler provisions them;
          Vectorize indexes and queues are created first through the API, and
          each rate limit gets a random namespace id; vars as the manager sets
-         them, JSON vars kept as JSON and {{workerUrl}} and {{workerName}}
-         filled in for the CI Worker; a service binding to the app's own
+         them, JSON vars kept as JSON and {{workerUrl}}, {{workerName}} and
+         {{accountId}} filled in for the CI Worker; a service binding to the app's own
          Worker aimed at the CI Worker, any other refused; no cron triggers,
          which the run summary notes), runs wrangler deploy --strict, attaches the recorded queue consumers through the API,
-         applies D1 migrations, sets each catalog secret to a random value,
+         applies D1 migrations, sets each catalog secret to a random value
+         (a derived one to the value the manager computes from its source's),
          and waits up to 60 s for
          https://<worker>.<subdomain>.workers.dev<healthPath> to answer
          (install.healthPath from the catalog manifest, else /). A failed
          deploy may still have uploaded the Worker; cleanup deletes it.
-cleanup  Removes the Worker's queue consumers, deletes the Worker and every
-         resource the deploy may have created, and fails unless all of them
-         are gone.
+
+         An app of several Workers (install.workers) is deployed Worker by
+         Worker, each after the Workers it binds to: the primary one as
+         ci-<slug>-<suffix>, every other one as ci-<slug>-<suffix>-<name>.
+         Resources are shared by binding name (KV namespaces created through
+         the API first, so every Worker binds the same one); bindings and
+         {{workerUrl:<name>}}/{{workerName:<name>}} naming another Worker
+         point at its CI Worker; each secret and var goes to the Workers the
+         catalog manifest names, a shared secret with one value; D1
+         migrations run once. After the primary's health check, every other
+         Worker must answer at / within 30 s.
+
+         When a Worker binds an Analytics Engine dataset and the account has
+         Analytics Engine off, nothing is deployed: the run summary says
+         "skipped: Analytics Engine not enabled" and the command succeeds.
+         A Worker that binds Hyperdrive gets a Hyperdrive configuration
+         created through the API from HYPERDRIVE_TEST_URL, a connection string
+         to a throwaway test database of the protocol the catalog manifest
+         declares; without it (or with one of another protocol) nothing is
+         deployed, the run summary says why, and the command succeeds.
+cleanup  Removes the queue consumers of every Worker, deletes every Worker
+         and every resource the deploy may have created, and fails unless
+         all of them are gone.
 
 Needs CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID, and APPFLARE_DIR (the
 packer bundle, for @appflare/schema and wrangler). Runs only the artifact's
@@ -125,14 +160,20 @@ async function loadArtifact(dir: string): Promise<{ manifest: ArtifactManifest; 
   return { manifest, zipPath };
 }
 
-async function cleanup(request: CfRequest, plan: CiInstallPlan): Promise<void> {
-  const problems = await cleanupCiInstall(request, plan);
+async function cleanup(request: CfRequest, app: CiAppPlan): Promise<void> {
+  const problems = await cleanupCiApp(request, app);
   if (problems.length > 0) {
     throw new Error(
-      `cleanup of ${plan.name} left things behind:\n${problems.map((p) => `- ${p}`).join("\n")}`,
+      `cleanup of ${app.name} left things behind:\n${problems.map((p) => `- ${p}`).join("\n")}`,
     );
   }
-  info(`removed ${plan.name} and ${plan.resources.length} resource(s)`);
+  const workers = app.workers.map((w) => w.plan.name).join(", ");
+  info(`removed ${workers} and ${app.resources.length} resource(s)`);
+}
+
+/** The functions for an app of several Workers, loaded only for one. */
+async function entryHelpers(manifest: ArtifactManifest): Promise<CiEntryHelpers | undefined> {
+  return manifest.format === 2 ? loadEntryWorkerHelpers(resolveAppflareDir()) : undefined;
 }
 
 function summary(lines: string[]): void {
@@ -147,46 +188,8 @@ function message(err: unknown): string {
   return err instanceof Error ? err.message : String(err);
 }
 
-/** Deploys the unpacked artifact as the plan's Worker and waits for it to answer. */
-async function deployAndCheck(
-  request: CfRequest,
-  plan: CiInstallPlan,
-  manifest: ArtifactManifest,
-  zipPath: string,
-  bin: string,
-  work: string,
-  subdomain: string,
-): Promise<HealthResult> {
-  unpackArtifact(manifest, zipPath, work);
-  // A re-run reuses the name; start from a clean account.
-  await cleanup(request, plan);
-  // wrangler provisions KV, D1, and R2 from bindings without ids, but not
-  // Vectorize indexes or named queues: those must exist before the deploy
-  // binds them.
-  await createVectorizeIndexes(request, plan);
-  await createQueues(request, plan);
-  writeFileSync(path.join(work, "wrangler.json"), `${JSON.stringify(plan.config, null, 2)}\n`);
-  info(`deploying ${manifest.app}@${manifest.version} as ${plan.name}`);
-  try {
-    wrangler(bin, work, ["deploy", "--strict"]);
-  } catch (err) {
-    // wrangler uploads the script before it updates triggers, so a deploy
-    // that fails there (a trigger configuration "only partially updated")
-    // leaves the Worker in the account. The cleanup command deletes it by
-    // name; CI runs it after every deploy, failed or not.
-    throw new Error(
-      `${message(err)}; ${plan.name} may already be uploaded, and the cleanup command deletes it`,
-    );
-  }
-  // A consumer belongs to the script, so it can only point at a deployed Worker.
-  await attachQueueConsumers(request, plan);
-  for (const database of plan.d1Migrations) {
-    wrangler(bin, work, ["d1", "migrations", "apply", database, "--remote"]);
-  }
-  for (const secret of plan.secrets) {
-    wrangler(bin, work, ["secret", "put", secret, "--name", plan.name], randomSecret());
-  }
-  const url = healthUrl(plan.name, subdomain, plan.healthPath);
+/** Polls `url` until it answers (see `waitForHealth`) for up to `timeoutMs`. */
+function probe(url: string, timeoutMs: number, mode: HealthMode): Promise<HealthResult> {
   info(`waiting for ${url}`);
   return waitForHealth(
     async () => {
@@ -198,13 +201,129 @@ async function deployAndCheck(
       }
     },
     {
-      timeoutMs: 60_000,
+      timeoutMs,
       intervalMs: 3_000,
       sleep: (ms) => new Promise((r) => setTimeout(r, ms)),
       now: () => Date.now(),
-      mode: plan.healthMode,
+      mode,
     },
   );
+}
+
+/** Where each Worker is unpacked and deployed from: `work` itself for an app of one Worker. */
+function workDirs(app: CiAppPlan, work: string): string[] {
+  return app.workers.length === 1
+    ? [work]
+    : app.workers.map((w, i) => path.join(work, `${i}-${w.entryName ?? "worker"}`));
+}
+
+interface CheckOutcome {
+  ok: boolean;
+  detail: string;
+  results: CiWorkerResult[];
+}
+
+/**
+ * Deploys every Worker of the unpacked artifact in the plan's order and waits
+ * for them to answer: the primary one at its health path, every other one at
+ * `/` (see `OTHER_WORKER_PROBE`).
+ */
+async function deployAndCheck(
+  request: CfRequest,
+  app: CiAppPlan,
+  zipPath: string,
+  bin: string,
+  work: string,
+  subdomain: string,
+  /** The test database's URL, for the Hyperdrive configurations; never printed. */
+  testDatabase: string | undefined,
+): Promise<CheckOutcome> {
+  const dirs = workDirs(app, work);
+  app.workers.forEach((w, i) => {
+    unpackArtifact(w.manifest, zipPath, dirs[i] as string);
+  });
+  const dirOf = (name: string): string => {
+    const i = app.workers.findIndex((w) => w.plan.name === name);
+    if (i < 0) throw new Error(`the plan has no Worker ${name}`);
+    return dirs[i] as string;
+  };
+  // A re-run reuses the names; start from a clean account.
+  await cleanup(request, app);
+  // wrangler provisions KV, D1, and R2 from bindings without ids, but not
+  // Vectorize indexes or named queues: those must exist before the deploy
+  // binds them. So must the KV namespaces Workers of one app share.
+  await createVectorizeIndexes(request, app);
+  await createQueues(request, app);
+  const kvIds = await createKvNamespaces(request, app);
+  // Hyperdrive configurations too, each pointed at the test database.
+  const hyperdriveIds =
+    app.hyperdriveConfigs.length > 0 && testDatabase !== undefined
+      ? await createHyperdriveConfigs(request, app, testDatabase)
+      : {};
+  for (const [i, w] of app.workers.entries()) {
+    const dir = dirs[i] as string;
+    const withKv = app.kvNamespaces.length > 0 ? withKvIds(w.plan.config, kvIds) : w.plan.config;
+    const config =
+      w.plan.hyperdriveConfigs.length > 0 ? withHyperdriveIds(withKv, hyperdriveIds) : withKv;
+    writeFileSync(path.join(dir, "wrangler.json"), `${JSON.stringify(config, null, 2)}\n`);
+    info(`deploying ${w.manifest.app}@${w.manifest.version} as ${w.plan.name}`);
+    try {
+      wrangler(bin, dir, ["deploy", "--strict"]);
+    } catch (err) {
+      // wrangler uploads the script before it updates triggers, so a deploy
+      // that fails there (a trigger configuration "only partially updated")
+      // leaves the Worker in the account. The cleanup command deletes it by
+      // name; CI runs it after every deploy, failed or not.
+      throw new Error(
+        `${message(err)}; ${w.plan.name} may already be uploaded, and the cleanup command deletes it`,
+      );
+    }
+  }
+  // A consumer belongs to the script, so it can only point at a deployed Worker.
+  for (const w of app.workers) {
+    await attachQueueConsumers(request, w.plan);
+  }
+  for (const { database, worker } of app.d1Migrations) {
+    wrangler(bin, dirOf(worker), ["d1", "migrations", "apply", database, "--remote"]);
+  }
+  const derived = app.workers.some((w) => w.plan.derivedSecrets.length > 0)
+    ? (await loadPackerSecrets(resolveAppflareDir())).deriveSecretValue
+    : null;
+  const values = appSecretValues(app, derived);
+  for (const [i, w] of app.workers.entries()) {
+    for (const secret of [...w.plan.secrets, ...w.plan.derivedSecrets.map((s) => s.name)]) {
+      const value = values.get(secret);
+      if (value === undefined) {
+        throw new Error(`the check has no value for the secret ${secret}`);
+      }
+      wrangler(bin, dirs[i] as string, ["secret", "put", secret, "--name", w.plan.name], value);
+    }
+  }
+  const results: CiWorkerResult[] = [];
+  for (const w of app.workers.filter((x) => x.primary)) {
+    const url = healthUrl(w.plan.name, subdomain, app.healthPath);
+    results.push({ worker: w, health: await probe(url, 60_000, app.healthMode) });
+  }
+  for (const w of app.workers.filter((x) => !x.primary)) {
+    const url = healthUrl(w.plan.name, subdomain, OTHER_WORKER_PROBE.path);
+    results.push({
+      worker: w,
+      health: await probe(url, OTHER_WORKER_PROBE.timeoutMs, app.healthMode),
+    });
+  }
+  const failed = results.filter((r) => !r.health.ok);
+  if (app.workers.length === 1) {
+    const only = results[0]?.health ?? { ok: false, detail: "not checked" };
+    return { ok: only.ok, detail: only.detail, results };
+  }
+  return {
+    ok: failed.length === 0,
+    detail:
+      failed.length === 0
+        ? "every Worker answered"
+        : `${failed.map((r) => r.worker.plan.name).join(", ")} did not answer`,
+    results,
+  };
 }
 
 runMain(async () => {
@@ -222,9 +341,10 @@ runMain(async () => {
   const { manifest, zipPath } = await loadArtifact(path.resolve(dir));
   const name = ciWorkerName(manifest.app, values.suffix);
 
+  const helpers = await entryHelpers(manifest);
   if (command === "cleanup") {
     // Cleanup finds everything by name; var values do not matter here.
-    await cleanup(request, planCiInstall(manifest, name));
+    await cleanup(request, planCiApp(manifest, name, { ...(helpers ? { helpers } : {}) }));
     return 0;
   }
   if (command !== "deploy") {
@@ -232,18 +352,40 @@ runMain(async () => {
   }
   // Var values may hold {{workerUrl}}, which needs the account's subdomain.
   const subdomain = await workersSubdomain(request);
-  const plan = planCiInstall(manifest, name, { subdomain });
+  const app = planCiApp(manifest, name, {
+    subdomain,
+    accountId,
+    ...(helpers ? { helpers } : {}),
+  });
+  // Cloudflare refuses every deploy that binds a dataset while Analytics
+  // Engine is off on the account; that says nothing about the app.
+  const skip = await analyticsEngineSkip(
+    app.workers.map((w) => w.plan),
+    () => analyticsEngineState(token, accountId),
+  );
+  if (skip !== null) {
+    summary(skippedSummaryLines(manifest, app.name, skip));
+    return 0;
+  }
+  // A Hyperdrive binding needs a database; the CI account has none of the
+  // app's own, only the test database the secret names, when it is set.
+  const testDatabase = process.env[HYPERDRIVE_TEST_URL];
+  const noDatabase = hyperdriveSkip(app, testDatabase);
+  if (noDatabase !== null) {
+    summary(skippedSummaryLines(manifest, app.name, noDatabase));
+    return 0;
+  }
 
   const bin = wranglerBin(resolveAppflareDir());
-  const work = mkdtempSync(path.join(tmpdir(), `ci-install-${plan.name}-`));
+  const work = mkdtempSync(path.join(tmpdir(), `ci-install-${app.name}-`));
   try {
-    const health = await deployAndCheck(request, plan, manifest, zipPath, bin, work, subdomain);
-    summary(summaryLines(manifest, plan, health.ok, health.detail));
-    return health.ok ? 0 : 1;
+    const outcome = await deployAndCheck(request, app, zipPath, bin, work, subdomain, testDatabase);
+    summary(appSummaryLines(manifest, app, outcome.ok, outcome.detail, outcome.results));
+    return outcome.ok ? 0 : 1;
   } catch (err) {
     // The notes belong in the summary whatever went wrong; the cleanup step
     // removes whatever the failed deploy left behind.
-    summary(summaryLines(manifest, plan, false, message(err).split("\n")[0] ?? ""));
+    summary(appSummaryLines(manifest, app, false, message(err).split("\n")[0] ?? ""));
     throw err;
   } finally {
     rmSync(work, { recursive: true, force: true });

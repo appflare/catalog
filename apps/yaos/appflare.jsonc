@@ -1,0 +1,48 @@
+{
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "yaos",
+  "name": "YAOS",
+  "summary": "Real-time sync for Obsidian vaults: edits merge live across devices as CRDTs, with attachments and snapshots in R2, through a Worker you own.",
+  "homepage": "https://yaos.dev",
+  "repo": "kavinsood/yaos",
+  "license": "0BSD",
+  "categories": ["notes", "sync"],
+  "authors": [
+    { "name": "Kavin", "url": "https://kavinsood.com", "github": "kavinsood", "x": "kavinsoodd" }
+  ],
+  "maintainers": ["MendyLanda"],
+  // Upstream tags releases without a "v" prefix (2.1.1); the packer reads both forms.
+  "source": { "ref": "2.1.1", "sha": "2174eb89538ce7e213e9e33a0e75ecaf1a3f1f58" },
+  "install": {
+    "tier": "artifact",
+    "packageManager": "npm",
+    // The server that upstream's Deploy button installs. The repository root
+    // is the Obsidian plugin, whose lockfile also carries every package the
+    // server imports.
+    "wranglerConfig": "server/wrangler.toml",
+    "workerName": "yaos"
+  },
+  // SQLite-backed Durable Objects and R2 (10 GB) have free tiers.
+  "plan": "free",
+  // Attachments and snapshots are stored in R2, which has to be enabled on the
+  // account first.
+  "requires": ["r2"],
+  // The server is claimed in the browser on first visit, which creates its
+  // sync token, so none is set here.
+  "secrets": [],
+  "vars": [],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "Open {{workerUrl}} now and click Claim: the first visitor to claim the server owns it. The claim page then shows a setup link and a QR code for the YAOS plugin in Obsidian."
+    },
+    {
+      "type": "markdown",
+      "content": "Install the YAOS plugin from Obsidian's community plugins on each device and open the setup link there. Keep the plugin and the server on matching releases: they refuse to sync across a schema change."
+    }
+  ],
+  "tokenPermissions": [],
+  // Upstream publishes the plugin and the server together under semver tags;
+  // the install check runs each one before it merges.
+  "bump": { "autoMerge": true }
+}

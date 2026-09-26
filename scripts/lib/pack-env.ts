@@ -7,7 +7,6 @@
  * (`appflare-pack sign`) that runs no app code.
  */
 export const SIGNING_KEY_ENV = "APPFLARE_SIGNING_KEY";
-export const SIGNING_KEY_ID = "catalog-2026-09";
 
 const SECRET_VARS = [
   SIGNING_KEY_ENV,

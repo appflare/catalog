@@ -73,7 +73,13 @@ export function sandboxBuild(
     pin: manifest.source.sha,
     manifest: publishedManifestUrl(repo, manifest.slug),
     manifestDigest: createHash("sha256").update(bytes).digest("hex"),
-    ...(buildCommand === undefined ? {} : { buildCommand }),
+    // One line for display, as `buildCommandText` in @appflare/schema writes a
+    // list: the index field is a string for every manager that reads it.
+    ...(buildCommand === undefined
+      ? {}
+      : {
+          buildCommand: typeof buildCommand === "string" ? buildCommand : buildCommand.join(" && "),
+        }),
     expectedMinutes: sandbox?.expectedMinutes ?? defaults.expectedMinutes,
     instanceType: sandbox?.instanceType ?? defaults.instanceType,
   };

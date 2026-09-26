@@ -25,7 +25,8 @@
     "publish-plan": "node scripts/publish-plan.ts",
     "bump": "node scripts/bump.ts",
     "record-verified": "node scripts/record-verified.ts",
-    "max-modules": "node scripts/max-modules.ts"
+    "max-modules": "node scripts/max-modules.ts",
+    "signing-key": "node scripts/signing-key.ts"
   },
   "dependencies": {
     "zod": "4.6.5"

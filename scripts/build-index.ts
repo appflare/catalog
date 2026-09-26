@@ -94,6 +94,7 @@ runMain(async () => {
     sandboxDefaults: schema.sandboxDefaults,
     mediaFor: mediaReader(appsDir, repo),
     services: schema.appServices,
+    workerFacts: schema.appWorkerFacts,
     revisionProblem: schema.revisionProblem,
     ...(values["revision-signatures"] === undefined
       ? {}

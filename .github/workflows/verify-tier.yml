@@ -57,6 +57,12 @@ defaults:
     shell: bash
     working-directory: catalog
 
+env:
+  # build-site checks revised catalog manifests with the catalog's own key when
+  # it has one, and with the keys embedded in @appflare/schema when this is unset
+  # (see publish.yml).
+  APPFLARE_PUBLIC_KEY: ${{ vars.APPFLARE_PUBLIC_KEY }}
+
 jobs:
   build-packer:
     name: build packer

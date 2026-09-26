@@ -67,3 +67,93 @@ export function artifactManifestFixture(opts: {
     },
   };
 }
+
+/**
+ * A schema-valid artifact `manifest.json` of an app of two Workers (format
+ * 2), shaped like the packer's output for its two-Worker fixture: the primary
+ * Worker `web` binds the `jobs` Worker (a service binding with an entrypoint
+ * and a Durable Object class it implements), sends to a queue `jobs`
+ * consumes, and both share a D1 database, a KV namespace and a rate limit.
+ */
+export function duoArtifactManifestFixture(opts: { sha: string }): Record<string, unknown> {
+  const m = artifactManifestFixture({ app: "duo", version: "0.2.0", sha: opts.sha });
+  const hex64 = "a".repeat(64);
+  const file = (path: string, offset: number) => ({ path, size: 1, sha256: hex64, offset });
+  const worker = (name: string, modulePath: string, offset: number) => ({
+    name,
+    mainModule: "index.js",
+    compatibilityDate: "2024-12-30",
+    compatibilityFlags: [],
+    modules: [{ name: "index.js", type: "esm", ...file(modulePath, offset) }],
+    migrations: [],
+    crons: [],
+    observability: null,
+    placement: null,
+    limits: null,
+  });
+  const shared = [
+    { type: "d1", name: "DB" },
+    { type: "kv_namespace", name: "CACHE" },
+    { type: "ratelimit", name: "LIMIT", namespace_id: "1001", simple: { limit: 10, period: 60 } },
+  ];
+  m.format = 2;
+  m.worker = {
+    ...worker("duo-web", "worker/index.js", 0),
+    bindings: [
+      ...shared,
+      { type: "queue", name: "TASKS" },
+      { type: "service", name: "JOBS", service: "{{workerName:jobs}}", entrypoint: "Jobs" },
+      { type: "service", name: "SELF", service: "self" },
+      {
+        type: "durable_object_namespace",
+        name: "COUNTER",
+        class_name: "Counter",
+        script_name: "{{workerName:jobs}}",
+      },
+      { type: "plain_text", name: "JOBS_URL", text: "https://duo-jobs.example.workers.dev" },
+    ],
+  };
+  m.assets = {
+    config: {},
+    binding: "ASSETS",
+    files: [{ route: "/index.html", hash: "b".repeat(32), ...file("assets/index.html", 1) }],
+  };
+  m.workers = [
+    {
+      name: "jobs",
+      worker: {
+        ...worker("duo-jobs", "workers/jobs/worker/index.js", 2),
+        bindings: [
+          ...shared,
+          { type: "durable_object_namespace", name: "COUNTER", class_name: "Counter" },
+        ],
+        migrations: [{ tag: "v1", new_sqlite_classes: ["Counter"] }],
+        crons: ["*/30 * * * *"],
+        queueConsumers: [{ queue: { binding: "TASKS" }, max_retries: 3 }],
+      },
+      assets: { config: {}, binding: null, files: [] },
+    },
+  ];
+  m.d1Migrations = { DB: [{ name: "0001_init.sql", ...file("d1/DB/0001_init.sql", 3) }] };
+  const catalog = m.catalog as Record<string, unknown>;
+  m.catalog = {
+    ...catalog,
+    install: {
+      ...(catalog.install as Record<string, unknown>),
+      wranglerConfig: "web/wrangler.jsonc",
+      workers: [
+        { name: "web", wranglerConfig: "web/wrangler.jsonc", primary: true },
+        { name: "jobs", wranglerConfig: "jobs/wrangler.jsonc" },
+      ],
+    },
+    secrets: [
+      { name: "SESSION_SECRET", label: "Session secret", generate: true, workers: ["web"] },
+      { name: "SHARED_KEY", label: "Shared key", generate: true },
+    ],
+    vars: [
+      { name: "JOBS_URL", label: "Jobs URL", default: "{{workerUrl:jobs}}" },
+      { name: "APP_URL", label: "App URL", default: "{{workerUrl}}", workers: ["jobs"] },
+    ],
+  };
+  return m;
+}

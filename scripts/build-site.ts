@@ -14,6 +14,7 @@ import { publishedMediaFor, readAppMedia } from "./lib/media.ts";
 import { appsDir, catalogRoot, indexFile, resolveAppflareDir, schemaFile } from "./lib/paths.ts";
 import { revisedManifestFor } from "./lib/revision.ts";
 import { pagesBaseUrl, publishedManifestFor, publishedManifestPath } from "./lib/sandbox-entry.ts";
+import { catalogKey, trustedKeys } from "./lib/signing-key.ts";
 
 const USAGE = `Usage: pnpm -s build-site --out <dir> [--index index.json] [--stats <file> | --live-stats]
 
@@ -27,6 +28,8 @@ Assembles the GitHub Pages site in <dir> (emptied first):
                               written as build-index hashed it; a revised one
                               also gets manifest.json.sig, its signature, which
                               must verify with the keys in @appflare/schema
+                              (or with the catalog's own key alone when
+                              APPFLARE_PUBLIC_KEY is set)
   apps/<slug>/<image>         each row's icon, cover and screenshots
   featured/<id>.png           each featured item's image
   stats.json                  from --stats or --live-stats, when valid
@@ -62,6 +65,7 @@ runMain(async () => {
   const indexBytes = readFileSync(indexPath);
   const index = parseOrThrow(schema.indexJson, JSON.parse(indexBytes.toString("utf8")), indexPath);
   const repo = catalogRepo();
+  const keys = trustedKeys(catalogKey(), schema.signingKeys);
 
   const files: { rel: string; bytes: Buffer }[] = [];
   for (const row of index.apps) {
@@ -74,10 +78,10 @@ runMain(async () => {
       });
     } else if (row.catalogManifest !== undefined) {
       const manifest = loadManifest(app, schema.catalogManifest);
-      // Checked against the row and its signature against the embedded keys first.
+      // Checked against the row and its signature against the trusted keys first.
       const revised = await revisedManifestFor(row, manifest, repo, {
         verifySignature: schema.verifySignature,
-        keys: schema.signingKeys,
+        keys,
       });
       files.push(
         { rel: publishedManifestPath(row.slug), bytes: revised.bytes },

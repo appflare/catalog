@@ -6,8 +6,10 @@
 /apps/bark-worker/ @MendyLanda
 /apps/chatgpt-telegram-workers/ @MendyLanda
 /apps/cloudssh/ @MendyLanda
+/apps/counterscale/ @MendyLanda
 /apps/cut/ @MendyLanda
 /apps/flaremo/ @MendyLanda
+/apps/glance/ @MendyLanda
 /apps/mail2telegram/ @MendyLanda
 /apps/mailflare/ @MendyLanda
 /apps/nodecrypt/ @MendyLanda
@@ -18,7 +20,9 @@
 /apps/punctual/ @MendyLanda
 /apps/r2-explorer/ @MendyLanda
 /apps/second-brain-cloudflare/ @MendyLanda
+/apps/sink/ @MendyLanda
 /apps/unifi-ddns/ @MendyLanda
+/apps/yaos/ @MendyLanda
 
 /featured.json @MendyLanda
 /featured/ @MendyLanda

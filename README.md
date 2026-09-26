@@ -14,3 +14,9 @@ Appflare is an independent open-source project and is not affiliated with, endor
 or sponsored by Cloudflare, Inc.
 
 License: Apache-2.0.
+
+## Run your own catalog
+
+Use this repository as a template to publish a catalog of your own, signed with
+your own key, that Appflare admins add under **Settings > Catalogs**. See
+[TEMPLATE.md](TEMPLATE.md).

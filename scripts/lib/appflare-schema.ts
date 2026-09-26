@@ -3,12 +3,14 @@ import { appflarePaths, assertAppflareBuilt } from "./paths.ts";
 import type { SandboxDefaults } from "./sandbox-entry.ts";
 import type {
   AppServices,
+  AppWorker,
   ArtifactManifest,
   CatalogManifest,
   CatalogStats,
   FeaturedItem,
   IndexJson,
   SandboxInstanceType,
+  WorkerFacts,
 } from "./types.ts";
 
 /** One validation problem, in the shape zod 4 reports it. */
@@ -49,6 +51,13 @@ export interface AppflareSchema {
    */
   appServices: AppServicesOf;
   /**
+   * What `appServices` reads of an artifact: the bindings, Durable Object
+   * migrations, crons and queue consumers of every Worker of the app together
+   * (`combinedWorkerFacts`), so an app of several Workers lists what each of
+   * them uses.
+   */
+  appWorkerFacts: WorkerFactsOf;
+  /**
    * Why a catalog manifest cannot stand in for the one inside a release as a
    * revision (`revisedArtifactProblem`), or null when it can: its revision is
    * above the release's, and it changes only the fields a revision may change.
@@ -86,10 +95,87 @@ export type RevisionProblemOf = (
 ) => string | null;
 
 /** `appServices` from `@appflare/schema`: the arguments are schema-parsed manifests. */
-export type AppServicesOf = (
-  catalog: CatalogManifest,
-  worker: ArtifactManifest["worker"] | null,
-) => AppServices;
+export type AppServicesOf = (catalog: CatalogManifest, worker: WorkerFacts | null) => AppServices;
+
+/** `combinedWorkerFacts` from `@appflare/schema`: the argument is a schema-parsed manifest. */
+export type WorkerFactsOf = (manifest: ArtifactManifest) => WorkerFacts;
+
+/**
+ * The `@appflare/schema` functions for apps of several Workers (a catalog
+ * entry's `install.workers`, an artifact manifest of format 2), so the
+ * install check deploys them as the manager does. Every argument is a
+ * schema-parsed manifest.
+ */
+export interface EntryWorkerHelpers {
+  /** Every Worker of the app, each after the Workers it binds to, the primary one as late as it can be. */
+  appWorkersInDeployOrder(manifest: ArtifactManifest): AppWorker[];
+  /** The manifest as one Worker sees it: its own worker and assets, and the secrets and vars that go to it. */
+  workerManifest(manifest: ArtifactManifest, worker: AppWorker): ArtifactManifest;
+  /** The Worker name an entry Worker runs under: the install's for the primary, `<install>-<name>` otherwise. */
+  entryScriptName(installWorkerName: string, name: string, primary: boolean): string;
+  /** The entry Worker `{{workerName:<name>}}` names, or null. */
+  entryWorkerRefName(value: unknown): string | null;
+  /** `text` with `{{workerUrl:<name>}}` and `{{workerName:<name>}}` filled in. */
+  renderEntryWorkerPlaceholders(
+    text: string,
+    workers: Readonly<Record<string, { workerName: string; workerUrl: string | null }>>,
+  ): string;
+}
+
+const ENTRY_WORKER_HELPERS = [
+  "appWorkersInDeployOrder",
+  "workerManifest",
+  "entryScriptName",
+  "entryWorkerRefName",
+  "renderEntryWorkerPlaceholders",
+] as const;
+
+/**
+ * The functions for apps of several Workers from `@appflare/schema` in
+ * `appflareDir`. Loaded apart from {@link loadAppflareSchema}, only for an
+ * artifact of several Workers, so every other script keeps working with a
+ * build that predates them; throws, naming what is missing, with such a build.
+ */
+export async function loadEntryWorkerHelpers(appflareDir: string): Promise<EntryWorkerHelpers> {
+  assertAppflareBuilt(appflareDir);
+  const mod: unknown = await import(pathToFileURL(appflarePaths(appflareDir).schemaDist).href);
+  for (const name of ENTRY_WORKER_HELPERS) {
+    if (typeof (mod as Record<string, unknown> | null)?.[name] !== "function") {
+      throw new Error(
+        `@appflare/schema in ${appflareDir} does not export ${name}(); build a newer appflare checkout`,
+      );
+    }
+  }
+  // Checked above: each is a function; the signatures are the ones
+  // @appflare/schema declares, mirrored by EntryWorkerHelpers.
+  return mod as EntryWorkerHelpers;
+}
+
+/**
+ * `combinedWorkerFacts` when the schema build has it. A build that predates
+ * it cannot parse an artifact of several Workers at all, so every manifest
+ * it hands over is of one Worker, whose own facts are all the app's; a
+ * format 2 manifest here means the parser and this function disagree.
+ */
+function workerFactsOf(mod: unknown): WorkerFactsOf {
+  const value = (mod as Record<string, unknown> | null)?.combinedWorkerFacts;
+  // A function; its signature is the one @appflare/schema declares.
+  return typeof value === "function" ? (value as WorkerFactsOf) : oneWorkerFacts;
+}
+
+/**
+ * The facts of an app of one Worker: its Worker's own. Throws for an artifact
+ * of several Workers, whose facts only `combinedWorkerFacts` works out.
+ */
+export const oneWorkerFacts: WorkerFactsOf = (manifest) => {
+  if (manifest.format !== 1) {
+    throw new Error(
+      `${manifest.app}@${manifest.version} has several Workers, and this @appflare/schema build ` +
+        "does not export combinedWorkerFacts(); build a newer appflare checkout",
+    );
+  }
+  return manifest.worker;
+};
 
 /**
  * Loads `@appflare/schema` from a built appflare checkout
@@ -112,6 +198,7 @@ export async function loadAppflareSchema(appflareDir: string): Promise<AppflareS
       instanceType: pickInstanceType(mod, "DEFAULT_SANDBOX_INSTANCE_TYPE"),
     },
     appServices: pickFunction<AppServicesOf>(mod, "appServices"),
+    appWorkerFacts: workerFactsOf(mod),
     revisionProblem: pickFunction<RevisionProblemOf>(mod, "revisedArtifactProblem"),
     verifySignature: pickFunction<VerifySignatureOf>(mod, "verifySignature"),
     signingKeys: pickSigningKeys(mod, "signingKeys"),

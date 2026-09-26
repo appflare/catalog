@@ -4,25 +4,35 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { artifactManifestFixture } from "../fixtures/artifact-manifest.ts";
-import { appflareAvailable, appflareDir } from "../fixtures/schema.ts";
 import {
+  artifactManifestFixture,
+  duoArtifactManifestFixture,
+} from "../fixtures/artifact-manifest.ts";
+import { appflareAvailable, appflareDir } from "../fixtures/schema.ts";
+import { loadAppflareSchema, loadEntryWorkerHelpers, parseOrThrow } from "./appflare-schema.ts";
+import {
+  appSecretValues,
+  appSummaryLines,
   attachQueueConsumers,
   type CfRequest,
   type CfResponse,
+  type CiAppPlan,
   type CiInstallPlan,
   catalogHealthMode,
   catalogHealthPath,
   ciWorkerName,
   classifyProbe,
+  cleanupCiApp,
   cleanupCiInstall,
   createCfRequest,
+  createKvNamespaces,
   createQueues,
   createVectorizeIndexes,
   cronNote,
   healthUrl,
   type JsonValue,
   type Probe,
+  planCiApp,
   planCiInstall,
   randomNamespaceId,
   renderJsonPlaceholders,
@@ -31,6 +41,7 @@ import {
   summaryLines,
   unpackArtifact,
   waitForHealth,
+  withKvIds,
   workersSubdomain,
 } from "./ci-install.ts";
 import { appflarePaths } from "./paths.ts";
@@ -302,6 +313,51 @@ describe("planCiInstall", () => {
     });
   });
 
+  it("fills in {{accountId}} with the CI account, and keeps it without one", () => {
+    const account = "0123456789abcdef0123456789abcdef";
+    const edit = (m: Record<string, unknown>) => {
+      worker(m).bindings = [
+        { type: "plain_text", name: "CF_ACCOUNT_ID", text: "{{accountId}}" },
+        { type: "json", name: "ANALYTICS", json: { account: "{{ accountId }}" } },
+      ];
+      (m.catalog as Record<string, unknown>).vars = [
+        { name: "NUXT_CF_ACCOUNT_ID", label: "Account", default: "{{accountId}}" },
+      ];
+    };
+    expect(
+      planCiInstall(manifest(edit), "ci-hello-pr1", { subdomain: "acme", accountId: account })
+        .config.vars,
+    ).toEqual({
+      CF_ACCOUNT_ID: account,
+      ANALYTICS: { account },
+      NUXT_CF_ACCOUNT_ID: account,
+    });
+    expect(planCiInstall(manifest(edit), "ci-hello-pr1").config.vars).toMatchObject({
+      CF_ACCOUNT_ID: "{{accountId}}",
+    });
+  });
+
+  it("lists derived secrets apart, with the secret they are computed from", () => {
+    const plan = planCiInstall(
+      manifest((m) => {
+        (m.catalog as Record<string, unknown>).secrets = [
+          { name: "CF_PASSWORD", label: "Admin password" },
+          {
+            name: "CF_PASSWORD_HASH",
+            label: "Admin password hash",
+            derive: { from: "CF_PASSWORD", method: "bcrypt" },
+          },
+          { name: "CF_JWT_SECRET", label: "Session key", generate: true },
+        ];
+      }),
+      "ci-hello-pr1",
+    );
+    expect(plan.secrets).toEqual(["CF_PASSWORD", "CF_JWT_SECRET"]);
+    expect(plan.derivedSecrets).toEqual([
+      { name: "CF_PASSWORD_HASH", from: "CF_PASSWORD", method: "bcrypt" },
+    ]);
+  });
+
   it("probes the catalog's install.healthPath, else /", () => {
     expect(planCiInstall(manifest(), "ci-hello-pr1").healthPath).toBe("/");
     const plan = planCiInstall(
@@ -351,11 +407,11 @@ describe("planCiInstall", () => {
     expect(() =>
       planCiInstall(
         manifest((m) => {
-          worker(m).bindings = [{ type: "hyperdrive", name: "HYPERDRIVE" }];
+          worker(m).bindings = [{ type: "mtls_certificate", name: "CERT" }];
         }),
         "ci-hello-pr1",
       ),
-    ).toThrow(/cannot create a hyperdrive binding \(HYPERDRIVE\)/);
+    ).toThrow(/cannot create a mtls_certificate binding \(CERT\)/);
   });
 
   it("plans queues for producers and consumers, dead-letter queues included", () => {
@@ -901,8 +957,10 @@ describe("cleanupCiInstall", () => {
     name: "ci-hello-pr1",
     config: {},
     secrets: [],
+    derivedSecrets: [],
     d1Migrations: [],
     vectorizeIndexes: [{ name: "ci-hello-pr1-vectors", dimensions: 384, metric: "cosine" }],
+    hyperdriveConfigs: [],
     queues: ["ci-hello-pr1-tasks", "ci-hello-pr1-dlq"],
     queueConsumers: [
       { queue: "ci-hello-pr1-tasks", deadLetterQueue: "ci-hello-pr1-dlq", settings: {} },
@@ -1256,9 +1314,17 @@ describe.skipIf(!appflareAvailable)("placeholders match @appflare/schema", () =>
       "{{workerName}}",
       7,
     ];
+    texts.push("{{accountId}}/{{ accountId }}", "{{accountid}}");
+    jsons.push({ a: ["{{accountId}}"] });
     for (const values of [
       { workerUrl: "https://w.acme.workers.dev", workerName: "w" },
       { workerUrl: null, workerName: "w" },
+      {
+        workerUrl: "https://w.acme.workers.dev",
+        workerName: "w",
+        accountId: "0123456789abcdef0123456789abcdef",
+      },
+      { workerUrl: null, workerName: "w", accountId: null },
     ]) {
       for (const text of texts) {
         expect(renderPlaceholders(text, values)).toBe(schema.renderPlaceholders(text, values));
@@ -1302,5 +1368,321 @@ describe.skipIf(!appflareAvailable)("service bindings match @appflare/schema", (
         expect(plan).toThrow(/an app may bind only to its own Worker/);
       }
     }
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Apps of several Workers
+
+describe("planCiApp for an app of one Worker", () => {
+  it("is planCiInstall's plan, deployed alone, with wrangler provisioning its KV", () => {
+    const m = manifest((m) => {
+      worker(m).bindings = [
+        { type: "kv_namespace", name: "CUT_KV" },
+        { type: "d1", name: "DB" },
+        { type: "ratelimit", name: "LIMIT", simple: { limit: 1, period: 10 } },
+      ];
+      m.d1Migrations = {
+        DB: [
+          { name: "0001.sql", path: "d1/DB/0001.sql", size: 1, sha256: "a".repeat(64), offset: 0 },
+        ],
+      };
+    });
+    const options = { subdomain: "acme", accountId: "abc", namespaceId: () => "7" };
+    const app = planCiApp(m, "ci-hello-pr1", options);
+    const plan = planCiInstall(m, "ci-hello-pr1", options);
+    expect(app.workers).toEqual([{ entryName: null, primary: true, plan, manifest: m }]);
+    expect(app.resources).toEqual(plan.resources);
+    expect(app.kvNamespaces).toEqual([]);
+    expect(app.d1Migrations).toEqual([{ database: "ci-hello-pr1-db", worker: "ci-hello-pr1" }]);
+  });
+
+  it("refuses an artifact of several Workers without the schema's functions for them", () => {
+    const duo = duoArtifactManifestFixture({ sha: PIN }) as unknown as ArtifactManifest;
+    expect(() => planCiApp(duo, "ci-duo-pr1")).toThrow(/has several Workers/);
+  });
+});
+
+describe("appSummaryLines", () => {
+  const duo = { app: "duo", version: "0.2.0" };
+  const jobs = {
+    entryName: "jobs",
+    primary: false,
+    plan: { name: "ci-duo-pr1-jobs", notes: ["Worker jobs: a note"] },
+  };
+  const web = { entryName: "web", primary: true, plan: { name: "ci-duo-pr1", notes: [] } };
+
+  it("is summaryLines for an app of one Worker", () => {
+    const plan = { name: "ci-hello-pr1", notes: ["n"] };
+    const app = { name: plan.name, workers: [{ entryName: null, primary: true, plan }] };
+    expect(appSummaryLines(duo, app, true, "HTTP 200")).toEqual(
+      summaryLines(duo, plan, true, "HTTP 200"),
+    );
+  });
+
+  it("names every Worker with what it answered, then every note", () => {
+    const app = { name: "ci-duo-pr1", workers: [jobs, web] };
+    const lines = appSummaryLines(duo, app, false, "ci-duo-pr1-jobs did not answer", [
+      { worker: web, health: { ok: true, detail: "HTTP 200" } },
+      { worker: jobs, health: { ok: false, detail: "HTTP 500: boom" } },
+    ]);
+    expect(lines).toEqual([
+      "FAIL duo@0.2.0 as ci-duo-pr1 (2 Workers): ci-duo-pr1-jobs did not answer",
+      "- Worker jobs as ci-duo-pr1-jobs: FAIL HTTP 500: boom",
+      "- Worker web (primary) as ci-duo-pr1: HTTP 200",
+      "- note: Worker jobs: a note",
+    ]);
+  });
+
+  it("marks Workers a failed deploy never got to", () => {
+    const app = { name: "ci-duo-pr1", workers: [jobs, web] };
+    expect(appSummaryLines(duo, app, false, "wrangler deploy --strict failed (exit 1)")).toEqual([
+      "FAIL duo@0.2.0 as ci-duo-pr1 (2 Workers): wrangler deploy --strict failed (exit 1)",
+      "- Worker jobs as ci-duo-pr1-jobs: not checked",
+      "- Worker web (primary) as ci-duo-pr1: not checked",
+      "- note: Worker jobs: a note",
+    ]);
+  });
+});
+
+describe("appSecretValues", () => {
+  const worker = (
+    name: string,
+    secrets: string[],
+    derivedSecrets: CiInstallPlan["derivedSecrets"],
+  ) => ({
+    plan: { name, secrets, derivedSecrets } as CiInstallPlan,
+    entryName: name,
+    primary: false,
+    manifest: {} as ArtifactManifest,
+  });
+
+  it("gives a secret several Workers get one value, and derives from it once", () => {
+    let n = 0;
+    const app = {
+      workers: [
+        worker("a", ["SHARED", "A_ONLY"], []),
+        worker("b", ["SHARED"], [{ name: "HASH", from: "SHARED", method: "bcrypt" }]),
+        worker("c", [], [{ name: "HASH", from: "SHARED", method: "bcrypt" }]),
+      ],
+    };
+    const derive = (method: string, value: string) => `${method}(${value})`;
+    const values = appSecretValues(app, derive, () => `v${++n}`);
+    expect([...values]).toEqual([
+      ["SHARED", "v1"],
+      ["A_ONLY", "v2"],
+      ["HASH", "bcrypt(v1)"],
+    ]);
+  });
+
+  it("refuses a derived secret whose source no Worker gets", () => {
+    const app = { workers: [worker("a", [], [{ name: "HASH", from: "PW", method: "bcrypt" }])] };
+    expect(() => appSecretValues(app, (_m, v) => v)).toThrow(/derives from PW/);
+  });
+});
+
+describe("withKvIds and createKvNamespaces", () => {
+  it("writes each KV binding's namespace id into a config, and refuses one without", () => {
+    const config = { name: "w", kv_namespaces: [{ binding: "CACHE" }] };
+    expect(withKvIds(config, { CACHE: "id1" })).toEqual({
+      name: "w",
+      kv_namespaces: [{ binding: "CACHE", id: "id1" }],
+    });
+    expect(withKvIds({ name: "w" }, {})).toEqual({ name: "w" });
+    expect(() => withKvIds(config, {})).toThrow(
+      /no KV namespace was created for the binding CACHE/,
+    );
+  });
+
+  it("creates each namespace by title and returns the ids by binding", async () => {
+    const calls: unknown[] = [];
+    const request: CfRequest = async (method, p, body) => {
+      calls.push([method, p, body]);
+      return { status: 200, body: { success: true, result: { id: "kv-1", title: "t" } } };
+    };
+    const ids = await createKvNamespaces(request, {
+      kvNamespaces: [{ type: "kv", name: "ci-duo-pr1-cache", binding: "CACHE" }],
+    });
+    expect(ids).toEqual({ CACHE: "kv-1" });
+    expect(calls).toEqual([["POST", "/storage/kv/namespaces", { title: "ci-duo-pr1-cache" }]]);
+    const refused: CfRequest = async () => ({
+      status: 400,
+      body: { success: false, errors: [{ code: 10014, message: "exists" }] },
+    });
+    await expect(
+      createKvNamespaces(refused, {
+        kvNamespaces: [{ type: "kv", name: "x", binding: "X" }],
+      }),
+    ).rejects.toThrow(/creating KV namespace x failed: HTTP 400 \(10014 exists\)/);
+  });
+});
+
+describe("cleanupCiApp", () => {
+  it("deletes every Worker, the last deployed first, and every shared resource once", async () => {
+    const state = {
+      scripts: new Set(["ci-duo-pr1", "ci-duo-pr1-jobs", "someone-else"]),
+      kv: [{ id: "kv1", title: "ci-duo-pr1-cache" }],
+      d1: [{ uuid: "db1", name: "ci-duo-pr1-db" }],
+      r2: new Set<string>(),
+      workflows: new Set<string>(),
+      queues: new Map([
+        [
+          "ci-duo-pr1-tasks",
+          { id: "q1", consumers: [{ consumer_id: "c1", script: "ci-duo-pr1-jobs" }] },
+        ],
+      ]),
+    };
+    const account = fakeAccount(state);
+    const app = {
+      workers: [{ plan: { name: "ci-duo-pr1-jobs" } }, { plan: { name: "ci-duo-pr1" } }],
+      resources: [
+        { type: "d1" as const, name: "ci-duo-pr1-db", binding: "DB" },
+        { type: "kv" as const, name: "ci-duo-pr1-cache", binding: "CACHE" },
+        { type: "queue" as const, name: "ci-duo-pr1-tasks", binding: "TASKS" },
+      ],
+    };
+    expect(await cleanupCiApp(account, app)).toEqual([]);
+    expect([...state.scripts]).toEqual(["someone-else"]);
+    expect(state.kv).toEqual([]);
+    expect(state.d1).toEqual([]);
+    expect(state.queues.size).toBe(0);
+    const deletes = account.calls.filter((c) => c.startsWith("DELETE /workers/scripts/"));
+    expect(deletes).toEqual([
+      "DELETE /workers/scripts/ci-duo-pr1?force=true",
+      "DELETE /workers/scripts/ci-duo-pr1-jobs?force=true",
+    ]);
+  });
+
+  it("reports a Worker of the app that is still there", async () => {
+    const state = {
+      scripts: new Set(["ci-duo-pr1-jobs"]),
+      kv: [],
+      d1: [],
+      r2: new Set<string>(),
+      workflows: new Set<string>(),
+      failDelete: "ci-duo-pr1-jobs",
+    };
+    const app = {
+      workers: [{ plan: { name: "ci-duo-pr1-jobs" } }, { plan: { name: "ci-duo-pr1" } }],
+      resources: [],
+    };
+    const problems = await cleanupCiApp(fakeAccount(state), app);
+    expect(problems).toEqual([
+      "Worker ci-duo-pr1-jobs: delete failed: HTTP 409 (10008 bucket not empty)",
+      expect.stringMatching(/^Worker ci-duo-pr1-jobs still exists/),
+    ]);
+  });
+});
+
+// The functions for apps of several Workers come from @appflare/schema; these
+// tests run with a build that has them.
+const entryHelpers = appflareAvailable
+  ? await loadEntryWorkerHelpers(appflareDir).catch(() => null)
+  : null;
+
+describe.skipIf(entryHelpers === null)("planCiApp for an app of several Workers", () => {
+  async function duoPlan(): Promise<CiAppPlan> {
+    const schema = await loadAppflareSchema(appflareDir);
+    const parsed = parseOrThrow(
+      schema.artifactManifest,
+      duoArtifactManifestFixture({ sha: PIN }),
+      "duo",
+    );
+    return planCiApp(parsed, "ci-duo-pr1", {
+      subdomain: "acme",
+      accountId: "abc",
+      namespaceId: (binding) => `id-${binding}`,
+      ...(entryHelpers === null ? {} : { helpers: entryHelpers }),
+    });
+  }
+
+  it("deploys each Worker after the Workers it binds to, under the manager's names", async () => {
+    const app = await duoPlan();
+    expect(app.workers.map((w) => [w.entryName, w.primary, w.plan.name])).toEqual([
+      ["jobs", false, "ci-duo-pr1-jobs"],
+      ["web", true, "ci-duo-pr1"],
+    ]);
+    expect(app.workers.map((w) => w.plan.config.name)).toEqual(["ci-duo-pr1-jobs", "ci-duo-pr1"]);
+  });
+
+  it("points bindings between the Workers at the CI Workers, and self at itself", async () => {
+    const web = (await duoPlan()).workers[1]?.plan.config;
+    expect(web?.services).toEqual([
+      { binding: "JOBS", service: "ci-duo-pr1-jobs", entrypoint: "Jobs" },
+      { binding: "SELF", service: "ci-duo-pr1" },
+    ]);
+    expect(web?.durable_objects).toEqual({
+      bindings: [{ name: "COUNTER", class_name: "Counter", script_name: "ci-duo-pr1-jobs" }],
+    });
+  });
+
+  it("shares resources by binding name, named after the primary Worker", async () => {
+    const app = await duoPlan();
+    const [jobs, web] = app.workers.map((w) => w.plan.config);
+    for (const config of [jobs, web]) {
+      expect(config?.d1_databases).toEqual([
+        { binding: "DB", database_name: "ci-duo-pr1-db", migrations_dir: "d1/DB" },
+      ]);
+      expect(config?.kv_namespaces).toEqual([{ binding: "CACHE" }]);
+      // One rate limit namespace for the app, not one per Worker.
+      expect(config?.ratelimits).toEqual([
+        { name: "LIMIT", namespace_id: "id-LIMIT", simple: { limit: 10, period: 60 } },
+      ]);
+    }
+    expect(app.resources).toEqual([
+      { type: "d1", name: "ci-duo-pr1-db", binding: "DB" },
+      { type: "kv", name: "ci-duo-pr1-cache", binding: "CACHE" },
+      { type: "queue", name: "ci-duo-pr1-tasks", binding: "TASKS" },
+    ]);
+    expect(app.kvNamespaces).toEqual([{ type: "kv", name: "ci-duo-pr1-cache", binding: "CACHE" }]);
+    expect(app.queues).toEqual(["ci-duo-pr1-tasks"]);
+    // Once, from the first Worker deployed that binds the database.
+    expect(app.d1Migrations).toEqual([{ database: "ci-duo-pr1-db", worker: "ci-duo-pr1-jobs" }]);
+  });
+
+  it("attaches a queue one Worker sends to and another consumes to the consumer, once", async () => {
+    const [jobs, web] = (await duoPlan()).workers;
+    expect(jobs?.plan.queueConsumers).toEqual([
+      { queue: "ci-duo-pr1-tasks", deadLetterQueue: null, settings: { max_retries: 3 } },
+    ]);
+    expect(jobs?.plan.config.queues).toBeUndefined();
+    expect(web?.plan.config.queues).toEqual({
+      producers: [{ binding: "TASKS", queue: "ci-duo-pr1-tasks" }],
+    });
+    expect(web?.plan.queueConsumers).toEqual([]);
+  });
+
+  it("gives each Worker the secrets and vars that go to it, placeholders filled in", async () => {
+    const [jobs, web] = (await duoPlan()).workers;
+    expect(web?.plan.secrets).toEqual(["SESSION_SECRET", "SHARED_KEY"]);
+    expect(jobs?.plan.secrets).toEqual(["SHARED_KEY"]);
+    // JOBS_URL goes to the Worker whose config declares it; APP_URL to the one named.
+    expect(web?.plan.config.vars).toEqual({ JOBS_URL: "https://ci-duo-pr1-jobs.acme.workers.dev" });
+    expect(jobs?.plan.config.vars).toEqual({ APP_URL: "https://ci-duo-pr1.acme.workers.dev" });
+  });
+
+  it("names the Worker in each note, and unpacks each Worker's own files", async () => {
+    const [jobs, web] = (await duoPlan()).workers;
+    expect(jobs?.plan.notes).toEqual([
+      "Worker jobs: the artifact declares 1 cron trigger (`*/30 * * * *`); " +
+        "not set on the CI Worker, so scheduled runs are not exercised",
+    ]);
+    expect(jobs?.manifest.worker.modules[0]?.path).toBe("workers/jobs/worker/index.js");
+    expect(jobs?.manifest.assets.files).toEqual([]);
+    expect(web?.manifest.assets.files.map((f) => f.route)).toEqual(["/index.html"]);
+  });
+
+  it("refuses a CI Worker name longer than 63 characters", async () => {
+    const schema = await loadAppflareSchema(appflareDir);
+    const parsed = parseOrThrow(
+      schema.artifactManifest,
+      duoArtifactManifestFixture({ sha: PIN }),
+      "duo",
+    );
+    expect(() =>
+      planCiApp(parsed, `ci-${"d".repeat(55)}`, {
+        ...(entryHelpers === null ? {} : { helpers: entryHelpers }),
+      }),
+    ).toThrow(/longer than 63 characters/);
   });
 });

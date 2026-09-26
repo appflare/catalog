@@ -1,0 +1,109 @@
+{
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "glance",
+  "name": "Glance",
+  "summary": "Share what your coding agents build: publish HTML, Markdown and files as private sites your team opens, comments on, and annotates. An open-source alternative to Claude Artifacts.",
+  "homepage": "https://github.com/plivo-labs/glance",
+  "repo": "plivo-labs/glance",
+  "license": "MIT",
+  "categories": ["developer-tools"],
+  "authors": [{ "name": "Plivo", "url": "https://www.plivo.com", "github": "plivo-labs" }],
+  "maintainers": ["MendyLanda"],
+  "source": { "ref": "v0.14.0", "sha": "caaed8f60a5365a652a9d519f77bfcb489016585" },
+  "install": {
+    "tier": "artifact",
+    "packageManager": "bun",
+    // The app Worker serves the web app (built below) and the API; the content
+    // Worker serves uploaded files from its own origin, so a published page
+    // can never read the app's cookies.
+    "wranglerConfig": "packages/api/wrangler.jsonc",
+    "workerName": "glance",
+    // The React front end the app Worker serves as static assets.
+    "buildCommand": "bun run build:web",
+    "workers": [
+      { "name": "app", "wranglerConfig": "packages/api/wrangler.jsonc", "primary": true },
+      { "name": "content", "wranglerConfig": "packages/api/wrangler.content.jsonc" }
+    ],
+    // Answers without a sign-in, from the Worker's own code.
+    "healthPath": "/api/health"
+  },
+  // D1, KV, R2, a SQLite-backed Durable Object, rate limits and Workers AI
+  // (voice-comment transcription) all have free tiers.
+  "plan": "free",
+  "requires": ["r2", "workers-ai"],
+  "secrets": [
+    {
+      "name": "SESSION_SECRET",
+      "label": "Session secret",
+      "help": "Signs the app's sign-in sessions.",
+      "generate": true,
+      "workers": ["app"]
+    },
+    {
+      "name": "CONTENT_TOKEN_SECRET",
+      "label": "Content token secret",
+      "help": "Signs the short-lived links the app hands out for private files. Both Workers check it.",
+      "generate": true
+    },
+    {
+      "name": "BOOTSTRAP_TOKEN",
+      "label": "First sign-in token",
+      "help": "Paste it on the sign-in page to claim the first admin account (the admin email below). It stops working once an admin exists.",
+      "workers": ["app"]
+    },
+    {
+      "name": "DATA_TOKEN_SECRET",
+      "label": "Data token secret",
+      "help": "Turns on the shared data backend for published sites (glance.db). Any long random value.",
+      "optional": true,
+      "workers": ["app"]
+    },
+    {
+      "name": "GOOGLE_CLIENT_ID",
+      "label": "Google OAuth client ID",
+      "help": "For Google Workspace sign-in, with the client secret below. Leave both unset to sign in with the first sign-in token alone; the Google button then stays hidden.",
+      "optional": true,
+      "workers": ["app"]
+    },
+    {
+      "name": "GOOGLE_CLIENT_SECRET",
+      "label": "Google OAuth client secret",
+      "help": "The secret of the Google OAuth client above.",
+      "optional": true,
+      "workers": ["app"]
+    }
+  ],
+  "vars": [
+    {
+      "name": "APP_URL",
+      "label": "App URL",
+      "help": "Where people open Glance. Both Workers use it.",
+      "default": "{{workerUrl}}"
+    },
+    {
+      "name": "CONTENT_URL",
+      "label": "Content URL",
+      "help": "The content Worker's address, which serves uploaded files.",
+      "default": "{{workerUrl:content}}"
+    },
+    {
+      "name": "ALLOWED_HD",
+      "label": "Allowed Google Workspace domain",
+      "help": "Only accounts of this domain may sign in with Google, for example example.com.",
+      "required": true
+    },
+    {
+      "name": "SUPERADMIN_EMAIL",
+      "label": "Admin email",
+      "help": "The first sign-in token makes this address the first admin.",
+      "required": true
+    }
+  ],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "Open {{workerUrl}}/login and paste the first sign-in token under **Complete setup** to become the admin. Published files are served from {{workerUrl:content}}."
+    }
+  ],
+  "tokenPermissions": []
+}

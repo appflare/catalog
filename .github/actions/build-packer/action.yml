@@ -1,7 +1,9 @@
 name: Build the packer bundle
 description: >
   Checks out appflare/appflare at the SHA in .appflare-ref (over SSH with the
-  read-only deploy key in the APPFLARE_DEPLOY_KEY secret), builds it, and uploads a self-contained bundle of
+  read-only deploy key in the APPFLARE_DEPLOY_KEY secret when it is set, which
+  a private appflare/appflare needs; anonymously over HTTPS otherwise, which a
+  public one allows), builds it, and uploads a self-contained bundle of
   @appflare/pack and @appflare/schema (each with its production node_modules,
   made with `pnpm deploy`) as the workflow artifact "appflare-packer". No app
   code runs here. Expects the catalog checked out at ./catalog.
@@ -10,8 +12,10 @@ inputs:
     description: >
       Private half of the read-only deploy key registered on appflare/appflare
       (the APPFLARE_DEPLOY_KEY secret). Composite actions cannot read secrets,
-      so each workflow passes it in.
-    required: true
+      so each workflow passes it in. Empty: check out anonymously, which works
+      only while appflare/appflare is public.
+    required: false
+    default: ""
 outputs:
   sha256:
     description: >
@@ -22,14 +26,13 @@ outputs:
 runs:
   using: composite
   steps:
-    - name: Require APPFLARE_DEPLOY_KEY
+    - name: Note an anonymous checkout
       shell: bash
       env:
         APPFLARE_DEPLOY_KEY: ${{ inputs.appflare-deploy-key }}
       run: |
         if [ -z "${APPFLARE_DEPLOY_KEY}" ]; then
-          echo "::error title=APPFLARE_DEPLOY_KEY is not set::The catalog builds @appflare/pack from a pinned checkout of appflare/appflare, which is private. Add the private half of the read-only deploy key registered on appflare/appflare as the APPFLARE_DEPLOY_KEY secret of this repository (see CONTRIBUTING.md). Pull requests from forks do not receive secrets and fail here until appflare/appflare is public."
-          exit 1
+          echo "::notice::APPFLARE_DEPLOY_KEY is not set; checking out appflare/appflare anonymously."
         fi
 
     - name: Read .appflare-ref
@@ -45,6 +48,7 @@ runs:
         echo "sha=${sha}" >> "${GITHUB_OUTPUT}"
 
     - name: Check out appflare/appflare at the pinned SHA
+      id: checkout
       uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       with:
         repository: appflare/appflare
@@ -52,6 +56,13 @@ runs:
         ssh-key: ${{ inputs.appflare-deploy-key }}
         path: appflare-src
         persist-credentials: false
+
+    - name: Explain a failed anonymous checkout
+      if: failure() && steps.checkout.outcome == 'failure' && inputs.appflare-deploy-key == ''
+      shell: bash
+      run: |
+        echo "::error title=APPFLARE_DEPLOY_KEY is not set::The catalog builds @appflare/pack from a pinned checkout of appflare/appflare, and could not check it out without a key. While appflare/appflare is private, add the private half of a read-only deploy key registered on it as the APPFLARE_DEPLOY_KEY secret of this repository (see CONTRIBUTING.md). Pull requests from forks do not receive secrets."
+        exit 1
 
     - name: Set up pnpm
       uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0

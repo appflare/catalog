@@ -13,9 +13,9 @@ name: publish
 #                 (a revision of a released version is planned apart, never packed)
 #   sign-revisions APPFLARE_SIGNING_KEY only; runs no app code; signs each planned
 #                 revised catalog manifest (the planned bytes only) with the key id
-#                 of its release, and checks the signature with the embedded keys
+#                 of its release, and checks the signature with the trusted keys
 #   pack          no secrets; packs each app (runs its install and build code)
-#                 into an unsigned intermediate with keyId catalog-2026-09
+#                 into an unsigned intermediate with the catalog's key id
 #   sign          APPFLARE_SIGNING_KEY only; runs no app code; signs only a manifest.json
 #                 whose app, version, source, keyId, and catalog equal the plan
 #   release       contents: write, CATALOG_PUSH_KEY; re-checks against the plan,
@@ -62,7 +62,13 @@ defaults:
     working-directory: catalog
 
 env:
-  KEY_ID: catalog-2026-09
+  # Unset for the official catalog: it signs with key id catalog-2026-09, and
+  # every check trusts the keys embedded in @appflare/schema, as managers do. A
+  # catalog run from a copy of this repository sets the repository variable to
+  # its own public key line ({"keyId":"...","publicKeyBase64":"..."}); it then
+  # signs with that key id and its checks trust that key alone.
+  # scripts/signing-key.ts reads it.
+  APPFLARE_PUBLIC_KEY: ${{ vars.APPFLARE_PUBLIC_KEY }}
 
 jobs:
   build-packer:
@@ -152,7 +158,10 @@ jobs:
       - name: Pack an unsigned intermediate, verify hashes and the module limit
         env:
           APP: ${{ matrix.app }}
-        run: pnpm pack-app "${APP}" --out "dist/${APP}" --key-id "${KEY_ID}"
+        run: |
+          set -euo pipefail
+          key_id="$(node scripts/signing-key.ts key-id)"
+          pnpm pack-app "${APP}" --out "dist/${APP}" --key-id "${key_id}"
       - name: Upload exactly dist/<slug>
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
@@ -183,7 +192,7 @@ jobs:
           APPFLARE_SIGNING_KEY: ${{ secrets.APPFLARE_SIGNING_KEY }}
         run: |
           if [ -z "${APPFLARE_SIGNING_KEY}" ]; then
-            echo "::error title=APPFLARE_SIGNING_KEY is not set::Publishing signs every artifact. Add the catalog signing key (base64 PKCS#8 Ed25519, key id catalog-2026-09) as the APPFLARE_SIGNING_KEY secret of the appflare org or this repository, then re-run this workflow."
+            echo "::error title=APPFLARE_SIGNING_KEY is not set::Publishing signs every artifact. Add the catalog signing key (base64 PKCS#8 Ed25519; key id catalog-2026-09, or the keyId in the APPFLARE_PUBLIC_KEY variable) as the APPFLARE_SIGNING_KEY secret of this repository or its organization, then re-run this workflow."
             exit 1
           fi
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -229,12 +238,19 @@ jobs:
           plan="${RUNNER_TEMP}/plan/publish-plan.json"
           # The most Worker modules the manager can install, from @appflare/schema.
           max_modules="$(APPFLARE_DIR="${RUNNER_TEMP}/appflare" node scripts/max-modules.ts)"
+          key_id="$(node scripts/signing-key.ts key-id)"
+          public_key="$(node scripts/signing-key.ts public-key)"
+          trusted=()
+          if [ -n "${public_key}" ]; then
+            trusted=(--public-key "${public_key}")
+          fi
           node scripts/check-manifest-plan.ts --plan "${plan}" --root dist --slug "${APP}" --unsigned
           node "${pack}" verify "dist/${APP}" --hashes-only --max-modules "${max_modules}"
-          node "${pack}" sign "dist/${APP}" --sign-key-env APPFLARE_SIGNING_KEY --key-id "${KEY_ID}"
+          node "${pack}" sign "dist/${APP}" --sign-key-env APPFLARE_SIGNING_KEY --key-id "${key_id}"
           node scripts/check-manifest-plan.ts --plan "${plan}" --root dist --slug "${APP}" --signed
-          # Against the keys embedded in @appflare/schema at .appflare-ref, as the manager verifies.
-          node "${pack}" verify "dist/${APP}" --require-signed --max-modules "${max_modules}"
+          # Against the keys embedded in @appflare/schema at .appflare-ref, as the
+          # manager verifies, or against the catalog's own key when it has one.
+          node "${pack}" verify "dist/${APP}" --require-signed --max-modules "${max_modules}" "${trusted[@]}"
       - name: Upload exactly signed-<slug>
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
@@ -264,7 +280,7 @@ jobs:
           APPFLARE_SIGNING_KEY: ${{ secrets.APPFLARE_SIGNING_KEY }}
         run: |
           if [ -z "${APPFLARE_SIGNING_KEY}" ]; then
-            echo "::error title=APPFLARE_SIGNING_KEY is not set::Publishing signs every revised catalog manifest. Add the catalog signing key (base64 PKCS#8 Ed25519, key id catalog-2026-09) as the APPFLARE_SIGNING_KEY secret of the appflare org or this repository, then re-run this workflow."
+            echo "::error title=APPFLARE_SIGNING_KEY is not set::Publishing signs every revised catalog manifest. Add the catalog signing key (base64 PKCS#8 Ed25519; key id catalog-2026-09, or the keyId in the APPFLARE_PUBLIC_KEY variable) as the APPFLARE_SIGNING_KEY secret of this repository or its organization, then re-run this workflow."
             exit 1
           fi
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -284,7 +300,7 @@ jobs:
         with:
           name: publish-plan
           path: ${{ runner.temp }}/plan
-      - name: Check against the plan, sign, and verify with the embedded keys
+      - name: Check against the plan, sign, and verify with the trusted keys
         env:
           APPFLARE_SIGNING_KEY: ${{ secrets.APPFLARE_SIGNING_KEY }}
           EXPECTED_PACKER_SHA256: ${{ needs.build-packer.outputs.packer-sha256 }}
@@ -299,10 +315,11 @@ jobs:
           mkdir -p "${RUNNER_TEMP}/appflare"
           tar -xzf "${bundle}" -C "${RUNNER_TEMP}/appflare"
           mkdir -p revision-signatures
+          key_id="$(node scripts/signing-key.ts key-id)"
           APPFLARE_DIR="${RUNNER_TEMP}/appflare" node scripts/sign-revisions.ts \
             --plan "${RUNNER_TEMP}/plan/publish-plan.json" \
             --out revision-signatures/revision-signatures.json \
-            --sign-key-env APPFLARE_SIGNING_KEY --key-id "${KEY_ID}"
+            --sign-key-env APPFLARE_SIGNING_KEY --key-id "${key_id}"
       - name: Upload the signatures
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
@@ -377,6 +394,11 @@ jobs:
           pack="${APPFLARE_DIR}/packages/pack/bin/appflare-pack.js"
           plan="${RUNNER_TEMP}/plan/publish-plan.json"
           max_modules="$(node scripts/max-modules.ts)"
+          public_key="$(node scripts/signing-key.ts public-key)"
+          trusted=()
+          if [ -n "${public_key}" ]; then
+            trusted=(--public-key "${public_key}")
+          fi
           # Every planned slug present as dist/signed-<slug>, nothing else, each matching the plan.
           node scripts/check-manifest-plan.ts --plan "${plan}" --root dist --prefix signed- --signed
           mapfile -t slugs < <(jq -r '.[]' <<< "${PLANNED_APPS}")
@@ -391,7 +413,7 @@ jobs:
               echo "::error::${dir}/manifest.json is not ${slug}@${version}"
               exit 1
             fi
-            node "${pack}" verify "${dir}" --require-signed --max-modules "${max_modules}"
+            node "${pack}" verify "${dir}" --require-signed --max-modules "${max_modules}" "${trusted[@]}"
             tag="${slug}@${version}"
             local_sha="$(sha256sum "${dir}/manifest.json" | cut -d' ' -f1)"
             if state="$(gh release view "${tag}" --json isDraft,isPrerelease,assets --jq '[(.isDraft | tostring), (.isPrerelease | tostring), ([.assets[].name] | sort | join(","))] | join(" ")' 2> /dev/null)"; then

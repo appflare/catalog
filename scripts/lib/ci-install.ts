@@ -1,6 +1,7 @@
 import { createHash, randomBytes } from "node:crypto";
 import { closeSync, mkdirSync, openSync, readSync, statSync, writeFileSync } from "node:fs";
 import path from "node:path";
+import type { EntryWorkerHelpers } from "./appflare-schema.ts";
 import type {
   ArtifactBinding,
   ArtifactFile,
@@ -15,12 +16,25 @@ import type {
  *
  * This is not the manager's install path. The manager creates each resource
  * through the API and records it; here `wrangler deploy` provisions the
- * resources from bindings without ids. Vectorize indexes and queues are the
+ * resources from bindings without ids. Vectorize indexes, queues and
+ * Hyperdrive configurations (pointed at the test database in
+ * `HYPERDRIVE_TEST_URL`) are the
  * exceptions: wrangler cannot provision them, so the check creates each
  * through the API before the deploy, and attaches the artifact's queue
  * consumers through the API after it, as the manager does. All of them use the
  * same names, `<worker>-<binding, lowercased, "_" -> "-">`, so the CI Worker's
  * resources can be found and deleted by name afterwards without any records.
+ *
+ * An app of several Workers (an artifact manifest of format 2) is deployed as
+ * the manager deploys it: every Worker, each after the Workers it binds to,
+ * the primary one as `ci-<slug>-<suffix>` and every other one as
+ * `ci-<slug>-<suffix>-<name>`. Resources belong to the app and are shared by
+ * binding name, so they are named after the primary Worker whichever Worker
+ * binds them. wrangler shares D1 databases and R2 buckets by the name the
+ * config gives them (the second deploy finds the first one's), but has no
+ * name to give a KV namespace and would create one per Worker, so for an app
+ * of several Workers the check creates KV namespaces through the API too and
+ * writes their ids into every Worker's config.
  */
 
 export const WORKER_DIR = "worker";
@@ -50,7 +64,7 @@ export function resourceName(workerName: string, bindingName: string): string {
   return `${workerName}-${bindingName.toLowerCase().replaceAll("_", "-")}`;
 }
 
-export type CiResourceType = "kv" | "d1" | "r2" | "workflow" | "vectorize" | "queue";
+export type CiResourceType = "kv" | "d1" | "r2" | "workflow" | "vectorize" | "queue" | "hyperdrive";
 
 export interface CiResource {
   type: CiResourceType;
@@ -104,10 +118,21 @@ export interface CiInstallPlan {
   resources: CiResource[];
   /** Secret names from the catalog manifest; each gets a random value. */
   secrets: string[];
+  /**
+   * Secrets the catalog manifest derives from another (`derive`): each gets
+   * the value the manager would compute from its source's random value.
+   */
+  derivedSecrets: CiDerivedSecret[];
   /** D1 databases with migrations to apply, by database name. */
   d1Migrations: string[];
   /** Vectorize indexes to create before the deploy (wrangler cannot provision them). */
   vectorizeIndexes: CiVectorizeIndex[];
+  /**
+   * Hyperdrive configurations to create before the deploy, from
+   * `HYPERDRIVE_TEST_URL` (see {@link hyperdriveSkip}); their ids go into
+   * the config with {@link withHyperdriveIds}.
+   */
+  hyperdriveConfigs: CiHyperdriveConfig[];
   /** Queues to create before the deploy (wrangler cannot provision them), by name. */
   queues: string[];
   /** Consumers to attach once the Worker is deployed. */
@@ -152,9 +177,28 @@ function optionalStr(binding: ArtifactBinding, field: string): Record<string, st
   return typeof value === "string" && value.length > 0 ? { [field]: value } : {};
 }
 
+/** A secret the catalog manifest derives from another: `method` applied to `from`'s value. */
+export interface CiDerivedSecret {
+  name: string;
+  from: string;
+  method: string;
+}
+
 interface CatalogForms {
   secrets: string[];
+  derivedSecrets: CiDerivedSecret[];
   vars: { name: string; default?: string; required: boolean; firstOption?: string }[];
+}
+
+/** The `derive` block of a catalog secret, when it has a usable one. */
+function deriveOf(secret: unknown): { from: string; method: string } | null {
+  const derive = (secret as { derive?: unknown }).derive as
+    | { from?: unknown; method?: unknown }
+    | undefined;
+  if (derive === undefined || derive === null || typeof derive !== "object") return null;
+  return typeof derive.from === "string" && typeof derive.method === "string"
+    ? { from: derive.from, method: derive.method }
+    : null;
 }
 
 /** The first value of a `type: "select"` var's options, if it has any. */
@@ -167,15 +211,20 @@ function firstOption(v: { type?: unknown; options?: unknown }): Record<string, s
 /**
  * Secret names and var defaults from the catalog manifest embedded in the
  * artifact. Optional secrets are set too, so the check covers the app with
- * every feature its secrets turn on.
+ * every feature its secrets turn on. A derived secret (`derive`) is listed
+ * apart, with its source: it is computed, never random.
  */
 export function catalogForms(catalog: unknown): CatalogForms {
   const c = (catalog ?? {}) as { secrets?: unknown; vars?: unknown };
-  const secrets = Array.isArray(c.secrets)
-    ? c.secrets
-        .map((s) => (s as { name?: unknown }).name)
-        .filter((n): n is string => typeof n === "string")
-    : [];
+  const secrets: string[] = [];
+  const derivedSecrets: CiDerivedSecret[] = [];
+  for (const s of Array.isArray(c.secrets) ? c.secrets : []) {
+    const name = (s as { name?: unknown }).name;
+    if (typeof name !== "string") continue;
+    const derive = deriveOf(s);
+    if (derive === null) secrets.push(name);
+    else derivedSecrets.push({ name, ...derive });
+  }
   const vars = Array.isArray(c.vars)
     ? c.vars
         .map(
@@ -206,7 +255,7 @@ export function catalogForms(catalog: unknown): CatalogForms {
           ...firstOption(v),
         }))
     : [];
-  return { secrets, vars };
+  return { secrets, derivedSecrets, vars };
 }
 
 /**
@@ -370,6 +419,36 @@ export const SELF_SERVICE = "self";
 const SELF_SERVICE_FIELDS: readonly string[] = ["type", "name", "service", "entrypoint"];
 
 /**
+ * What planning one Worker of an app of several needs besides its own view of
+ * the manifest (see {@link planCiApp}).
+ */
+export interface EntryPlanContext {
+  /** The primary CI Worker's name: resources and `{{workerName}}` are the app's, named after it. */
+  installName: string;
+  /** Each Worker's name within the entry to its CI Worker name. */
+  scriptNames: Readonly<Record<string, string>>;
+  /** The binding names of every Worker of the app. */
+  bindingNames: ReadonlySet<string>;
+  /** The queue producer bindings of every Worker: a consumer may name another Worker's queue. */
+  queueBindings: ReadonlySet<string>;
+  /** `entryWorkerRefName` from `@appflare/schema`: the entry Worker `{{workerName:<name>}}` names. */
+  refName: (value: unknown) => string | null;
+  /** Fills in `{{workerUrl:<name>}}` and `{{workerName:<name>}}` (`renderEntryWorkerPlaceholders`). */
+  render: (text: string) => string;
+}
+
+/** The CI Worker a binding's `{{workerName:<ref>}}` names; throws when the entry has no such Worker. */
+function entryTarget(entry: EntryPlanContext, ref: string, binding: ArtifactBinding): string {
+  const target = Object.hasOwn(entry.scriptNames, ref) ? entry.scriptNames[ref] : undefined;
+  if (target === undefined) {
+    throw new Error(
+      `binding ${binding.name} (${binding.type}) names the Worker "${ref}", which the entry does not have`,
+    );
+  }
+  return target;
+}
+
+/**
  * A service binding as wrangler's config writes it, aimed at Worker `name`:
  * the only service binding an artifact may hold is one to the app's own
  * Worker, `{ type: "service", name, service: "self", entrypoint? }` and
@@ -380,11 +459,24 @@ const SELF_SERVICE_FIELDS: readonly string[] = ["type", "name", "service", "entr
  * accepts a binding to the Worker the deploy creates), so the CI Worker needs
  * no earlier upload for this.
  */
-function selfServiceBinding(binding: ArtifactBinding, name: string): Record<string, string> {
+function selfServiceBinding(
+  binding: ArtifactBinding,
+  name: string,
+  entry?: EntryPlanContext,
+): Record<string, string> {
   const extra = Object.keys(binding).filter((key) => !SELF_SERVICE_FIELDS.includes(key));
   const { service, entrypoint } = binding;
   const entrypointOk =
     entrypoint === undefined || (typeof entrypoint === "string" && entrypoint.length > 0);
+  // Another Worker of the app's own entry, recorded as `{{workerName:<name>}}`.
+  const ref = entry?.refName(service) ?? null;
+  if (ref !== null && entry !== undefined && entrypointOk && extra.length === 0) {
+    return {
+      binding: binding.name,
+      service: entryTarget(entry, ref, binding),
+      ...(typeof entrypoint === "string" ? { entrypoint } : {}),
+    };
+  }
   if (service !== SELF_SERVICE || !entrypointOk || extra.length > 0) {
     const target = typeof service === "string" ? `the Worker "${service}"` : "no Worker";
     const why =
@@ -451,14 +543,16 @@ export function cronNote(crons: readonly string[]): string | null {
 export const REQUIRED_VAR_PLACEHOLDER = "ci";
 
 /**
- * What the manager fills in for `{{workerUrl}}` and `{{workerName}}` in var
- * values: the wrangler config's own vars (strings, and strings inside JSON
- * values) and the catalog's var defaults.
+ * What the manager fills in for `{{workerUrl}}`, `{{workerName}}` and
+ * `{{accountId}}` in var values: the wrangler config's own vars (strings, and
+ * strings inside JSON values) and the catalog's var defaults.
  */
 export interface PlaceholderValues {
   /** `https://<worker>.<subdomain>.workers.dev`; null keeps `{{workerUrl}}` as written. */
   workerUrl: string | null;
   workerName: string;
+  /** The account's id; absent or null keeps `{{accountId}}` as written. */
+  accountId?: string | null;
 }
 
 /** A JSON value: what a `json` var holds. */
@@ -473,26 +567,32 @@ export type JsonValue =
 // The manager's rules, from @appflare/schema: whitespace inside the braces is
 // allowed, and anything else in double braces is left as written. A test
 // checks these copies against the schema package's own functions.
-const PLACEHOLDER_PATTERN = /\{\{\s*(workerUrl|workerName)\s*\}\}/g;
+const PLACEHOLDER_PATTERN = /\{\{\s*(workerUrl|workerName|accountId)\s*\}\}/g;
 
-/** `text` with `{{workerUrl}}` and `{{workerName}}` filled in, as the manager does. */
+/** `text` with `{{workerUrl}}`, `{{workerName}}` and `{{accountId}}` filled in, as the manager does. */
 export function renderPlaceholders(text: string, values: PlaceholderValues): string {
   return text.replace(PLACEHOLDER_PATTERN, (match, key: string) => {
     if (key === "workerName") return values.workerName;
+    if (key === "accountId") return values.accountId ?? match;
     return values.workerUrl ?? match;
   });
 }
 
 /** `value` with placeholders filled in inside every string it holds (keys excepted). */
 export function renderJsonPlaceholders(value: JsonValue, values: PlaceholderValues): JsonValue {
-  if (typeof value === "string") return renderPlaceholders(value, values);
-  if (Array.isArray(value)) return value.map((item) => renderJsonPlaceholders(item, values));
+  return mapJsonStrings(value, (text) => renderPlaceholders(text, values));
+}
+
+/** `value` with `fn` applied to every string it holds (keys excepted). */
+export function mapJsonStrings(value: JsonValue, fn: (text: string) => string): JsonValue {
+  if (typeof value === "string") return fn(value);
+  if (Array.isArray(value)) return value.map((item) => mapJsonStrings(item, fn));
   if (value !== null && typeof value === "object") {
     const out: { [key: string]: JsonValue } = {};
     for (const [key, item] of Object.entries(value)) {
       // Plain assignment of `__proto__` would set the prototype instead.
       Object.defineProperty(out, key, {
-        value: renderJsonPlaceholders(item, values),
+        value: mapJsonStrings(item, fn),
         enumerable: true,
         writable: true,
         configurable: true,
@@ -529,23 +629,38 @@ function jsonDefault(name: string, text: string): JsonValue {
  *
  * Vars follow the manager: a catalog default overrides the wrangler config's
  * value, a `json` var's default is parsed and stays JSON, and
- * `{{workerName}}` and `{{workerUrl}}` are filled in with `name` and its
- * workers.dev URL in `subdomain` (kept as written when `subdomain` is not
- * given, which only a plan for cleanup should do).
+ * `{{workerName}}`, `{{workerUrl}}` and `{{accountId}}` are filled in with
+ * `name`, its workers.dev URL in `subdomain`, and `accountId` (each kept as
+ * written when not given, which only a plan for cleanup should do).
  *
  * The artifact's cron triggers are left out of the config and recorded as a
  * note (see {@link cronNote}); cleanup never depends on them.
+ *
+ * With `entry`, `manifest` is one Worker's view of an app of several
+ * (`workerManifest`) and `name` that Worker's CI name: resources and
+ * `{{workerName}}`/`{{workerUrl}}` are the app's (`entry.installName`),
+ * bindings that name another Worker of the entry point at its CI Worker, and
+ * vars get `{{workerUrl:<name>}}`/`{{workerName:<name>}}` filled in.
  */
 export function planCiInstall(
   manifest: ArtifactManifest,
   name: string,
-  options: { namespaceId?: () => string; subdomain?: string } = {},
+  options: {
+    /** A rate limit namespace id for the binding; random by default. */
+    namespaceId?: (binding: string) => string;
+    subdomain?: string;
+    accountId?: string;
+    entry?: EntryPlanContext;
+  } = {},
 ): CiInstallPlan {
   const { worker } = manifest;
+  const { entry } = options;
   const namespaceId = options.namespaceId ?? randomNamespaceId;
+  const appName = entry?.installName ?? name;
   const placeholders: PlaceholderValues = {
-    workerName: name,
-    workerUrl: options.subdomain === undefined ? null : healthUrl(name, options.subdomain, ""),
+    workerName: appName,
+    workerUrl: options.subdomain === undefined ? null : healthUrl(appName, options.subdomain, ""),
+    accountId: options.accountId ?? null,
   };
   const resources: CiResource[] = [];
   const kv: Record<string, string>[] = [];
@@ -556,6 +671,8 @@ export function planCiInstall(
   const analytics: Record<string, string>[] = [];
   const vectorize: Record<string, string>[] = [];
   const vectorizeIndexes: CiVectorizeIndex[] = [];
+  const hyperdrive: Record<string, string>[] = [];
+  const hyperdriveConfigs: CiHyperdriveConfig[] = [];
   const producers: Record<string, unknown>[] = [];
   const queues: string[] = [];
   const ratelimits: Record<string, unknown>[] = [];
@@ -568,7 +685,7 @@ export function planCiInstall(
   const d1Migrations: string[] = [];
 
   for (const binding of worker.bindings) {
-    const resource = resourceName(name, binding.name);
+    const resource = resourceName(appName, binding.name);
     switch (binding.type) {
       case "kv_namespace":
         // No name field: wrangler titles it `<worker>-<binding>` itself.
@@ -592,13 +709,18 @@ export function planCiInstall(
         r2.push({ binding: binding.name, bucket_name: resource });
         resources.push({ type: "r2", name: resource, binding: binding.name });
         break;
-      case "durable_object_namespace":
+      case "durable_object_namespace": {
+        // A class in another Worker of the entry: that Worker's CI name.
+        const ref = entry?.refName(binding.script_name) ?? null;
         durableObjects.push({
           name: binding.name,
           class_name: str(binding, "class_name"),
-          ...optionalStr(binding, "script_name"),
+          ...(ref !== null && entry !== undefined
+            ? { script_name: entryTarget(entry, ref, binding) }
+            : optionalStr(binding, "script_name")),
         });
         break;
+      }
       case "workflow":
         // Workflow names are account-wide; a per-install name keeps CI runs apart.
         workflows.push({
@@ -631,7 +753,7 @@ export function planCiInstall(
       case "ratelimit":
         ratelimits.push({
           name: binding.name,
-          namespace_id: namespaceId(),
+          namespace_id: namespaceId(binding.name),
           simple: rateLimitSimple(binding),
         });
         break;
@@ -644,8 +766,9 @@ export function planCiInstall(
         break;
       }
       case "service":
-        // Aimed at the CI Worker itself, as the manager aims it at the install's Worker.
-        services.push(selfServiceBinding(binding, name));
+        // Aimed at the CI Worker itself, as the manager aims it at the install's
+        // Worker, or at the CI Worker of the entry Worker it names.
+        services.push(selfServiceBinding(binding, name, entry));
         break;
       case "analytics_engine":
         analytics.push({ binding: binding.name, ...optionalStr(binding, "dataset") });
@@ -673,8 +796,19 @@ export function planCiInstall(
         break;
       case "assets":
         break;
+      case "hyperdrive":
+        // Created through the API from HYPERDRIVE_TEST_URL before the deploy
+        // (wrangler cannot provision one); its id is filled in then.
+        hyperdrive.push({ binding: binding.name, id: "" });
+        hyperdriveConfigs.push({
+          name: resource,
+          binding: binding.name,
+          protocol: declaredProtocol(manifest.catalog, binding.name),
+        });
+        resources.push({ type: "hyperdrive", name: resource, binding: binding.name });
+        break;
       default:
-        // TODO: Hyperdrive and mTLS certificates need resources this check
+        // TODO: mTLS certificates need resources this check
         // does not create and clean up yet.
         throw new Error(
           `the CI install check cannot create a ${binding.type} binding (${binding.name}) yet`,
@@ -682,7 +816,7 @@ export function planCiInstall(
     }
   }
 
-  const queueConsumers = planQueueConsumers(worker, name, resources, queues);
+  const queueConsumers = planQueueConsumers(worker, appName, resources, queues, entry);
   const crons = cronNote(worker.crons);
   if (crons !== null) {
     notes.push(crons);
@@ -704,7 +838,8 @@ export function planCiInstall(
     }
   }
   for (const [varName, value] of Object.entries(vars)) {
-    vars[varName] = renderJsonPlaceholders(value, placeholders);
+    const rendered = renderJsonPlaceholders(value, placeholders);
+    vars[varName] = entry === undefined ? rendered : mapJsonStrings(rendered, entry.render);
   }
 
   const rules = new Map<WranglerRule, string[]>();
@@ -746,6 +881,7 @@ export function planCiInstall(
     ...(workflows.length > 0 ? { workflows } : {}),
     ...(analytics.length > 0 ? { analytics_engine_datasets: analytics } : {}),
     ...(vectorize.length > 0 ? { vectorize } : {}),
+    ...(hyperdrive.length > 0 ? { hyperdrive } : {}),
     // Consumers are attached through the API after the deploy, as the manager does.
     ...(producers.length > 0 ? { queues: { producers } } : {}),
     ...(ratelimits.length > 0 ? { ratelimits } : {}),
@@ -767,8 +903,10 @@ export function planCiInstall(
     config,
     resources,
     secrets: forms.secrets,
+    derivedSecrets: forms.derivedSecrets,
     d1Migrations,
     vectorizeIndexes,
+    hyperdriveConfigs,
     queues,
     queueConsumers,
     notes,
@@ -785,17 +923,22 @@ export function planCiInstall(
  * Throws for a consumer the manager would refuse: a binding reference to no
  * queue binding, an upstream name that collides with a binding's resource, or
  * a queue consumed twice.
+ *
+ * In an app of several Workers (`entry`) a queue is the app's: a consumer may
+ * name another Worker's producer binding, and upstream names may not collide
+ * with any Worker's binding.
  */
 function planQueueConsumers(
   worker: ArtifactManifest["worker"],
   name: string,
   resources: CiResource[],
   queues: string[],
+  entry?: EntryPlanContext,
 ): CiQueueConsumer[] {
-  const queueBindings = new Set(
-    worker.bindings.filter((b) => b.type === "queue").map((b) => b.name),
-  );
-  const bindingNames = new Set(worker.bindings.map((b) => b.name));
+  const queueBindings =
+    entry?.queueBindings ??
+    new Set(worker.bindings.filter((b) => b.type === "queue").map((b) => b.name));
+  const bindingNames = entry?.bindingNames ?? new Set(worker.bindings.map((b) => b.name));
   const bound = new Set(resources.map((r) => r.name));
   const queueOf = (ref: QueueRef): string => {
     if ("binding" in ref) {
@@ -848,6 +991,339 @@ export function summaryLines(
   return [
     `${ok ? "PASS" : "FAIL"} ${manifest.app}@${manifest.version} as ${plan.name}: ${detail}`,
     ...plan.notes.map((note) => `- note: ${note}`),
+  ];
+}
+
+// ---------------------------------------------------------------------------
+// Apps of several Workers
+
+/** One Worker of the app as the check deploys it. */
+export interface CiAppWorker {
+  /** Its name within the entry (`install.workers[].name`); null for an app of one Worker. */
+  entryName: string | null;
+  primary: boolean;
+  /** Its plan: CI Worker name, wrangler config, secrets and queue consumers. */
+  plan: CiInstallPlan;
+  /** The manifest as this Worker sees it (`workerManifest`): its files are unpacked from it. */
+  manifest: ArtifactManifest;
+}
+
+/**
+ * The CI install of a whole app: every Worker in deploy order, and what they
+ * share. An app of one Worker is one Worker whose plan is
+ * {@link planCiInstall}'s, deployed exactly as before.
+ */
+export interface CiAppPlan {
+  /** The primary CI Worker's name, `ci-<slug>-<suffix>`. */
+  name: string;
+  /** Every Worker, each after the Workers it binds to (`appWorkersInDeployOrder`). */
+  workers: CiAppWorker[];
+  /** Everything the deploys may create besides the Workers, each once. */
+  resources: CiResource[];
+  vectorizeIndexes: CiVectorizeIndex[];
+  /** Hyperdrive configurations the Workers bind, each once. */
+  hyperdriveConfigs: CiHyperdriveConfig[];
+  queues: string[];
+  /**
+   * KV namespaces the check creates through the API before the deploys and
+   * writes into every Worker's config by id (see {@link withKvIds}): empty for
+   * an app of one Worker, whose deploy provisions its own.
+   */
+  kvNamespaces: CiResource[];
+  /** D1 databases with migrations, each applied once, from the work dir of the Worker named. */
+  d1Migrations: { database: string; worker: string }[];
+  healthPath: string;
+  healthMode: HealthMode;
+}
+
+/** A Worker name is a DNS label on workers.dev: at most 63 characters. */
+const MAX_SCRIPT_NAME = 63;
+
+/**
+ * The `@appflare/schema` functions {@link planCiApp} needs for an app of
+ * several Workers (see `loadEntryWorkerHelpers`).
+ */
+export type CiEntryHelpers = Pick<
+  EntryWorkerHelpers,
+  | "appWorkersInDeployOrder"
+  | "workerManifest"
+  | "entryScriptName"
+  | "entryWorkerRefName"
+  | "renderEntryWorkerPlaceholders"
+>;
+
+/**
+ * Plans the CI install of every Worker of `manifest` under the install name
+ * `name`, as the manager installs them: in `appWorkersInDeployOrder`'s order,
+ * each Worker planned from its own view of the manifest (`workerManifest`:
+ * its bindings, assets, and the secrets and vars that go to it) under
+ * `entryScriptName`, with resources shared by binding name. A rate limit
+ * binding gets one namespace id for every Worker that binds it. Needs
+ * `helpers` for an artifact of several Workers.
+ */
+export function planCiApp(
+  manifest: ArtifactManifest,
+  name: string,
+  options: {
+    namespaceId?: (binding: string) => string;
+    subdomain?: string;
+    accountId?: string;
+    helpers?: CiEntryHelpers;
+  } = {},
+): CiAppPlan {
+  const { helpers, ...planOptions } = options;
+  if (manifest.format === 1) {
+    const plan = planCiInstall(manifest, name, planOptions);
+    return {
+      name,
+      workers: [{ entryName: null, primary: true, plan, manifest }],
+      resources: plan.resources,
+      vectorizeIndexes: plan.vectorizeIndexes,
+      hyperdriveConfigs: plan.hyperdriveConfigs,
+      queues: plan.queues,
+      kvNamespaces: [],
+      d1Migrations: plan.d1Migrations.map((database) => ({ database, worker: name })),
+      healthPath: plan.healthPath,
+      healthMode: plan.healthMode,
+    };
+  }
+  if (helpers === undefined) {
+    throw new Error(
+      `${manifest.app}@${manifest.version} has several Workers; planning it needs @appflare/schema's functions for them`,
+    );
+  }
+  const ordered = helpers.appWorkersInDeployOrder(manifest);
+  const scriptNames: Record<string, string> = {};
+  const entryNames: string[] = [];
+  for (const w of ordered) {
+    if (w.name === null) {
+      throw new Error(`a Worker of ${manifest.app}@${manifest.version} has no name in the entry`);
+    }
+    const scriptName = helpers.entryScriptName(name, w.name, w.primary);
+    if (scriptName.length > MAX_SCRIPT_NAME) {
+      throw new Error(
+        `the CI Worker name "${scriptName}" is longer than ${MAX_SCRIPT_NAME} characters; use a shorter suffix`,
+      );
+    }
+    scriptNames[w.name] = scriptName;
+    entryNames.push(w.name);
+  }
+  const placeholders = Object.fromEntries(
+    Object.entries(scriptNames).map(([entryName, scriptName]) => [
+      entryName,
+      {
+        workerName: scriptName,
+        workerUrl:
+          options.subdomain === undefined ? null : healthUrl(scriptName, options.subdomain, ""),
+      },
+    ]),
+  );
+  const bindings = ordered.flatMap((w) => w.worker.bindings);
+  const entry: EntryPlanContext = {
+    installName: name,
+    scriptNames,
+    bindingNames: new Set(bindings.map((b) => b.name)),
+    queueBindings: new Set(bindings.filter((b) => b.type === "queue").map((b) => b.name)),
+    refName: helpers.entryWorkerRefName,
+    render: (text) => helpers.renderEntryWorkerPlaceholders(text, placeholders),
+  };
+  // Bindings of one name share one resource; a rate limit shares its counters.
+  const namespaceIds = new Map<string, string>();
+  const namespaceId = (binding: string): string => {
+    const id = namespaceIds.get(binding) ?? (options.namespaceId ?? randomNamespaceId)(binding);
+    namespaceIds.set(binding, id);
+    return id;
+  };
+  const workers: CiAppWorker[] = ordered.map((w, i) => {
+    const view = helpers.workerManifest(manifest, w);
+    const entryName = entryNames[i] as string;
+    const plan = planCiInstall(view, scriptNames[entryName] as string, {
+      ...planOptions,
+      namespaceId,
+      entry,
+    });
+    return {
+      entryName,
+      primary: w.primary,
+      plan: { ...plan, notes: plan.notes.map((note) => `Worker ${entryName}: ${note}`) },
+      manifest: view,
+    };
+  });
+  const consumed = new Map<string, string>();
+  for (const w of workers) {
+    for (const consumer of w.plan.queueConsumers) {
+      const other = consumed.get(consumer.queue);
+      if (other !== undefined) {
+        throw new Error(
+          `the queue ${consumer.queue} is consumed by both ${other} and ${w.plan.name}; a queue has one consumer`,
+        );
+      }
+      consumed.set(consumer.queue, w.plan.name);
+    }
+  }
+  const plans = workers.map((w) => w.plan);
+  const resources = uniqueBy(
+    plans.flatMap((p) => p.resources),
+    (r) => `${r.type}:${r.name}`,
+  );
+  const d1Migrations = uniqueBy(
+    plans.flatMap((p) => p.d1Migrations.map((database) => ({ database, worker: p.name }))),
+    (m) => m.database,
+  );
+  const primary = workers.find((w) => w.primary)?.plan ?? plans[0];
+  return {
+    name,
+    workers,
+    resources,
+    vectorizeIndexes: uniqueBy(
+      plans.flatMap((p) => p.vectorizeIndexes),
+      (v) => v.name,
+    ),
+    hyperdriveConfigs: uniqueBy(
+      plans.flatMap((p) => p.hyperdriveConfigs),
+      (h) => h.name,
+    ),
+    queues: [...new Set(plans.flatMap((p) => p.queues))],
+    kvNamespaces: resources.filter((r) => r.type === "kv"),
+    d1Migrations,
+    healthPath: primary?.healthPath ?? "/",
+    healthMode: primary?.healthMode ?? "default",
+  };
+}
+
+/** `items` without later ones whose key an earlier one has. */
+function uniqueBy<T>(items: readonly T[], key: (item: T) => string): T[] {
+  const seen = new Set<string>();
+  return items.filter((item) => {
+    const k = key(item);
+    if (seen.has(k)) return false;
+    seen.add(k);
+    return true;
+  });
+}
+
+/** `config` with each KV binding given the id of the namespace created for it. */
+export function withKvIds(
+  config: Record<string, unknown>,
+  ids: Readonly<Record<string, string>>,
+): Record<string, unknown> {
+  const kv = config.kv_namespaces as Record<string, string>[] | undefined;
+  if (kv === undefined) return config;
+  return {
+    ...config,
+    kv_namespaces: kv.map((ns) => {
+      const id = Object.hasOwn(ids, ns.binding as string) ? ids[ns.binding as string] : undefined;
+      if (id === undefined) {
+        throw new Error(`no KV namespace was created for the binding ${ns.binding}`);
+      }
+      return { ...ns, id };
+    }),
+  };
+}
+
+/**
+ * Creates each KV namespace an app of several Workers shares, with
+ * `POST /storage/kv/namespaces` and `{ title }`, and returns their ids by
+ * binding name. Run after the cleanup of an earlier run, like the queues.
+ */
+export async function createKvNamespaces(
+  request: CfRequest,
+  app: Pick<CiAppPlan, "kvNamespaces">,
+): Promise<Record<string, string>> {
+  const ids: Record<string, string> = {};
+  for (const ns of app.kvNamespaces) {
+    const res = await request("POST", "/storage/kv/namespaces", { title: ns.name });
+    const id = (res.body?.result as { id?: unknown } | undefined)?.id;
+    if (!created(res) || typeof id !== "string") {
+      throw new Error(`creating KV namespace ${ns.name} failed: ${describe(res)}`);
+    }
+    ids[ns.binding] = id;
+  }
+  return ids;
+}
+
+/**
+ * The value of every secret any Worker of the app gets, by name: a random
+ * one for each, and for a derived secret the value `derive` computes from its
+ * source's. A secret that goes to several Workers has one value for all of
+ * them, as the install form gives it one. Never printed.
+ */
+export function appSecretValues(
+  app: Pick<CiAppPlan, "workers">,
+  derive: ((method: string, value: string) => string) | null,
+  random: () => string = randomSecret,
+): Map<string, string> {
+  const values = new Map<string, string>();
+  for (const w of app.workers) {
+    for (const secret of w.plan.secrets) {
+      if (!values.has(secret)) values.set(secret, random());
+    }
+  }
+  for (const w of app.workers) {
+    for (const secret of w.plan.derivedSecrets) {
+      if (values.has(secret.name)) continue;
+      const source = values.get(secret.from);
+      if (source === undefined) {
+        throw new Error(`${secret.name} derives from ${secret.from}, which the check did not set`);
+      }
+      if (derive === null) {
+        throw new Error(`${secret.name} is derived, and no derivation was loaded`);
+      }
+      values.set(secret.name, derive(secret.method, source));
+    }
+  }
+  return values;
+}
+
+/**
+ * How the check probes a Worker of the app other than the primary one: its
+ * root, until it answers, by the entry's health mode. Such a Worker has no
+ * health path of its own, and the manager checks only the primary, but an
+ * app whose other Worker does not run is broken all the same (the primary
+ * calls it through a binding, or sends people to its address). So no answer,
+ * only Cloudflare's own error pages (1042, 1101), or under `default` a
+ * persistent 5xx fails the check; any other answer, a 404 included, passes.
+ * It runs after the primary's check, so its route has had time to go live.
+ */
+export const OTHER_WORKER_PROBE = { path: "/", timeoutMs: 30_000 } as const;
+
+/** What the check found for one Worker of the app. */
+export interface CiWorkerResult {
+  worker: Pick<CiAppWorker, "entryName" | "primary"> & { plan: Pick<CiInstallPlan, "name"> };
+  health: HealthResult;
+}
+
+/**
+ * The run summary's lines for the whole app. An app of one Worker gets
+ * {@link summaryLines} with its health check's detail. An app of several
+ * gets a result line, one line per Worker naming it with what it answered
+ * (when the check got that far), then every Worker's notes.
+ */
+export function appSummaryLines(
+  manifest: Pick<ArtifactManifest, "app" | "version">,
+  app: Pick<CiAppPlan, "name"> & {
+    workers: (Pick<CiAppWorker, "entryName" | "primary"> & {
+      plan: Pick<CiInstallPlan, "name" | "notes">;
+    })[];
+  },
+  ok: boolean,
+  detail: string,
+  results: readonly CiWorkerResult[] = [],
+): string[] {
+  const [only] = app.workers;
+  if (app.workers.length === 1 && only !== undefined) {
+    return summaryLines(manifest, only.plan, ok, detail);
+  }
+  return [
+    `${ok ? "PASS" : "FAIL"} ${manifest.app}@${manifest.version} as ${app.name} (${app.workers.length} Workers): ${detail}`,
+    ...app.workers.map((w) => {
+      const result = results.find((r) => r.worker.plan.name === w.plan.name);
+      const label = `- Worker ${w.entryName}${w.primary ? " (primary)" : ""} as ${w.plan.name}`;
+      return result === undefined
+        ? `${label}: not checked`
+        : `${label}: ${result.health.ok ? "" : "FAIL "}${result.health.detail}`;
+    }),
+    ...app.workers.flatMap((w) => w.plan.notes.map((note) => `- note: ${note}`)),
   ];
 }
 
@@ -1120,6 +1596,23 @@ async function findResource(request: CfRequest, resource: CiResource): Promise<s
       const hit = (res.body.result as { name?: unknown }[]).find((i) => i.name === resource.name);
       return hit ? resource.name : null;
     }
+    case "hyperdrive": {
+      for (let page = 1; page <= 50; page++) {
+        const res = await request("GET", `/hyperdrive/configs?per_page=100&page=${page}`);
+        if (res.status !== 200 || !Array.isArray(res.body?.result)) {
+          throw new Error(`listing Hyperdrive configurations failed: ${describe(res)}`);
+        }
+        const list = res.body.result as { id?: unknown; name?: unknown }[];
+        const hit = list.find((c) => c.name === resource.name);
+        if (hit !== undefined && typeof hit.id === "string") {
+          return hit.id;
+        }
+        if (list.length < 100) {
+          return null;
+        }
+      }
+      throw new Error("too many Hyperdrive configurations to search");
+    }
     case "r2":
     case "workflow": {
       const base = resource.type === "r2" ? "/r2/buckets/" : "/workflows/";
@@ -1187,6 +1680,8 @@ function deletePath(resource: CiResource, id: string): string {
       return `/vectorize/v2/indexes/${encodeURIComponent(id)}`;
     case "queue":
       return `/queues/${encodeURIComponent(id)}`;
+    case "hyperdrive":
+      return `/hyperdrive/configs/${encodeURIComponent(id)}`;
   }
 }
 
@@ -1272,14 +1767,18 @@ interface ListedConsumer {
 }
 
 /**
- * Removes the Worker's consumer from each of the plan's queues that still
- * exists, so neither the Worker nor the queue is held by it. The API names
- * the Worker in `script_name`, `script`, or `service`, depending on the
- * consumer's age; any of them counts. Returns every problem.
+ * Removes the consumers of the Workers `names` from each of the queues in
+ * `resources` that still exists, so neither a Worker nor the queue is held by
+ * them. The API names the Worker in `script_name`, `script`, or `service`,
+ * depending on the consumer's age; any of them counts. Returns every problem.
  */
-async function removeQueueConsumers(request: CfRequest, plan: CiInstallPlan): Promise<string[]> {
+async function removeQueueConsumers(
+  request: CfRequest,
+  names: readonly string[],
+  resources: readonly CiResource[],
+): Promise<string[]> {
   const problems: string[] = [];
-  for (const resource of plan.resources) {
+  for (const resource of resources) {
     if (resource.type !== "queue") {
       continue;
     }
@@ -1297,7 +1796,9 @@ async function removeQueueConsumers(request: CfRequest, plan: CiInstallPlan): Pr
         (c) =>
           (c.type === undefined || c.type === "worker") &&
           typeof c.consumer_id === "string" &&
-          [c.script_name, c.script, c.service].includes(plan.name),
+          [c.script_name, c.script, c.service].some(
+            (n) => typeof n === "string" && names.includes(n),
+          ),
       );
       for (const consumer of ours) {
         const del = await request(
@@ -1326,13 +1827,36 @@ async function removeQueueConsumers(request: CfRequest, plan: CiInstallPlan): Pr
  * every problem; empty means the account is clean.
  */
 export async function cleanupCiInstall(request: CfRequest, plan: CiInstallPlan): Promise<string[]> {
-  const problems = await removeQueueConsumers(request, plan);
-  const script = `/workers/scripts/${encodeURIComponent(plan.name)}`;
-  const del = await request("DELETE", `${script}?force=true`);
-  if (del.status !== 200 && del.status !== 404) {
-    problems.push(`Worker ${plan.name}: delete failed: ${describe(del)}`);
+  return cleanupWorkers(request, [plan.name], plan.resources);
+}
+
+/**
+ * {@link cleanupCiInstall} for a whole app: the consumers of every Worker,
+ * then every Worker (the primary included, the one deployed last deleted
+ * first, so no Worker goes while another still binds to it), then every
+ * shared resource, and checks that all of them are gone.
+ */
+export async function cleanupCiApp(
+  request: CfRequest,
+  app: Pick<CiAppPlan, "resources"> & { workers: { plan: Pick<CiInstallPlan, "name"> }[] },
+): Promise<string[]> {
+  return cleanupWorkers(request, app.workers.map((w) => w.plan.name).reverse(), app.resources);
+}
+
+async function cleanupWorkers(
+  request: CfRequest,
+  names: readonly string[],
+  resources: readonly CiResource[],
+): Promise<string[]> {
+  const problems = await removeQueueConsumers(request, names, resources);
+  const scriptPath = (name: string) => `/workers/scripts/${encodeURIComponent(name)}`;
+  for (const name of names) {
+    const del = await request("DELETE", `${scriptPath(name)}?force=true`);
+    if (del.status !== 200 && del.status !== 404) {
+      problems.push(`Worker ${name}: delete failed: ${describe(del)}`);
+    }
   }
-  for (const resource of plan.resources) {
+  for (const resource of resources) {
     try {
       const id = await findResource(request, resource);
       if (id === null) {
@@ -1352,11 +1876,13 @@ export async function cleanupCiInstall(request: CfRequest, plan: CiInstallPlan):
     }
   }
   // Confirm, rather than trust the delete responses.
-  const gone = await request("GET", `${script}/settings`);
-  if (gone.status !== 404) {
-    problems.push(`Worker ${plan.name} still exists (${describe(gone)})`);
+  for (const name of names) {
+    const gone = await request("GET", `${scriptPath(name)}/settings`);
+    if (gone.status !== 404) {
+      problems.push(`Worker ${name} still exists (${describe(gone)})`);
+    }
   }
-  for (const resource of plan.resources) {
+  for (const resource of resources) {
     try {
       if ((await findResource(request, resource)) !== null) {
         problems.push(`${resource.type} ${resource.name} still exists`);
@@ -1368,4 +1894,253 @@ export async function cleanupCiInstall(request: CfRequest, plan: CiInstallPlan):
     }
   }
   return [...new Set(problems)];
+}
+
+// ---------------------------------------------------------------------------
+// Analytics Engine
+
+/**
+ * Whether Analytics Engine is on for the CI account. It is off on an account
+ * until someone opens its page in the dashboard once, and until then
+ * Cloudflare refuses every deploy of a Worker that binds a dataset (code
+ * 10089, `workers.api.error.no_access_to_analytics_engine`).
+ */
+export type AnalyticsEngineState = "enabled" | "not-enabled" | "unknown";
+
+/** The run summary's word for a deploy the account cannot take. */
+export const ANALYTICS_ENGINE_SKIP = "skipped: Analytics Engine not enabled";
+
+/** Whether any of the Worker configs binds an Analytics Engine dataset. */
+export function needsAnalyticsEngine(plans: ReadonlyArray<Pick<CiInstallPlan, "config">>): boolean {
+  return plans.some((plan) => {
+    const datasets = plan.config.analytics_engine_datasets;
+    return Array.isArray(datasets) && datasets.length > 0;
+  });
+}
+
+/**
+ * Reads the state with the SQL API's `SHOW TABLES` (changes nothing): an
+ * answer means on; the SQL service's own plain-text 403 ("Authorization
+ * error") means never turned on. A JSON refusal is the API refusing the
+ * token, and anything else is not a clear answer, so both are `unknown` and
+ * the deploy goes ahead (and fails loudly if Analytics Engine is off).
+ */
+export async function analyticsEngineState(
+  token: string,
+  accountId: string,
+  fetchFn: typeof fetch = fetch,
+): Promise<AnalyticsEngineState> {
+  let res: Response;
+  try {
+    res = await fetchFn(
+      `https://api.cloudflare.com/client/v4/accounts/${accountId}/analytics_engine/sql`,
+      {
+        method: "POST",
+        headers: { authorization: `Bearer ${token}`, "content-type": "text/plain" },
+        body: "SHOW TABLES",
+      },
+    );
+  } catch {
+    return "unknown";
+  }
+  if (res.ok) return "enabled";
+  if (res.status !== 403) return "unknown";
+  const text = await res.text().catch(() => "");
+  try {
+    JSON.parse(text);
+    return "unknown";
+  } catch {
+    return "not-enabled";
+  }
+}
+
+/**
+ * {@link ANALYTICS_ENGINE_SKIP} when the Workers bind a dataset and the
+ * account has Analytics Engine off, else null. `state` is read only when a
+ * Worker needs it.
+ */
+export async function analyticsEngineSkip(
+  plans: ReadonlyArray<Pick<CiInstallPlan, "config">>,
+  state: () => Promise<AnalyticsEngineState>,
+): Promise<string | null> {
+  if (!needsAnalyticsEngine(plans)) return null;
+  return (await state()) === "not-enabled" ? ANALYTICS_ENGINE_SKIP : null;
+}
+
+/** The run summary for a deploy that was skipped rather than run. */
+export function skippedSummaryLines(
+  manifest: Pick<ArtifactManifest, "app" | "version">,
+  name: string,
+  reason: string,
+): string[] {
+  return [`SKIP ${manifest.app}@${manifest.version} as ${name}: ${reason}`];
+}
+
+// ---------------------------------------------------------------------------
+// Hyperdrive
+
+/**
+ * The database protocol behind a Hyperdrive binding. An app with a database
+ * outside Cloudflare declares each binding under `resources.hyperdrive` in its
+ * catalog manifest, with the database it speaks; the manager asks the admin
+ * for its connection string. The CI account has no database of the app's own,
+ * so the check connects the Workers to a throwaway test database instead.
+ */
+export type HyperdriveProtocol = "postgres" | "mysql";
+
+/** A Hyperdrive configuration to create before the deploy, named like any resource. */
+export interface CiHyperdriveConfig {
+  name: string;
+  binding: string;
+  protocol: HyperdriveProtocol;
+}
+
+/** The environment variable (a repository secret in CI) naming the test database. */
+export const HYPERDRIVE_TEST_URL = "HYPERDRIVE_TEST_URL";
+
+/** The run summary's word for a Hyperdrive app the check has no database for. */
+export const HYPERDRIVE_SKIP = `skipped: Hyperdrive binding and no ${HYPERDRIVE_TEST_URL}`;
+
+const PROTOCOL_NAMES: Record<HyperdriveProtocol, string> = {
+  postgres: "PostgreSQL",
+  mysql: "MySQL",
+};
+
+const PROTOCOL_SCHEMES: Record<HyperdriveProtocol, readonly string[]> = {
+  postgres: ["postgres", "postgresql"],
+  mysql: ["mysql"],
+};
+
+const DEFAULT_PORTS: Record<HyperdriveProtocol, number> = { postgres: 5432, mysql: 3306 };
+
+/** The protocol the catalog manifest declares for a binding; PostgreSQL when it says none. */
+export function declaredProtocol(catalog: unknown, binding: string): HyperdriveProtocol {
+  const declared = (catalog as { resources?: { hyperdrive?: unknown } } | null)?.resources
+    ?.hyperdrive;
+  if (!Array.isArray(declared)) return "postgres";
+  for (const d of declared as { binding?: unknown; protocol?: unknown }[]) {
+    if (d.binding === binding && d.protocol === "mysql") return "mysql";
+  }
+  return "postgres";
+}
+
+/** The origin `POST /hyperdrive/configs` takes for a database on the public internet. */
+export interface HyperdriveOrigin {
+  scheme: string;
+  host: string;
+  port: number;
+  database: string;
+  user: string;
+  password: string;
+}
+
+/**
+ * `url` as a Hyperdrive origin for `protocol`, or the reason it cannot be
+ * one. The reason never repeats any part of the URL: it holds a password.
+ */
+export function testDatabaseOrigin(
+  url: string,
+  protocol: HyperdriveProtocol,
+): { ok: true; origin: HyperdriveOrigin } | { ok: false; reason: string } {
+  let parsed: URL;
+  try {
+    parsed = new URL(url.trim());
+  } catch {
+    return { ok: false, reason: `${HYPERDRIVE_TEST_URL} is not a URL` };
+  }
+  const scheme = parsed.protocol.replace(/:$/, "").toLowerCase();
+  if (!PROTOCOL_SCHEMES[protocol].includes(scheme)) {
+    return {
+      ok: false,
+      reason: `${HYPERDRIVE_TEST_URL} is not a ${PROTOCOL_NAMES[protocol]} database`,
+    };
+  }
+  let user: string;
+  let password: string;
+  let database: string;
+  try {
+    user = decodeURIComponent(parsed.username);
+    password = decodeURIComponent(parsed.password);
+    database = decodeURIComponent(parsed.pathname.replace(/^\//, ""));
+  } catch {
+    return { ok: false, reason: `${HYPERDRIVE_TEST_URL} has a malformed %-escape` };
+  }
+  const host = parsed.hostname.replace(/^\[(.*)\]$/, "$1");
+  if (host === "" || user === "" || password === "" || database === "" || database.includes("/")) {
+    return {
+      ok: false,
+      reason: `${HYPERDRIVE_TEST_URL} needs a host, user, password and database`,
+    };
+  }
+  const port = parsed.port === "" ? DEFAULT_PORTS[protocol] : Number(parsed.port);
+  return { ok: true, origin: { scheme, host, port, database, user, password } };
+}
+
+/**
+ * Why the check skips an app with Hyperdrive bindings, or null when it can
+ * run: without `testUrl` (the `HYPERDRIVE_TEST_URL` secret is not set) there
+ * is no database to connect them to, and a test database of the wrong
+ * protocol cannot stand in for the app's. The app is not at fault, so the
+ * command succeeds with a SKIP line, as for Analytics Engine.
+ */
+export function hyperdriveSkip(
+  app: Pick<CiAppPlan, "hyperdriveConfigs">,
+  testUrl: string | undefined,
+): string | null {
+  if (app.hyperdriveConfigs.length === 0) return null;
+  if (testUrl === undefined || testUrl.trim() === "") return HYPERDRIVE_SKIP;
+  for (const config of app.hyperdriveConfigs) {
+    const origin = testDatabaseOrigin(testUrl, config.protocol);
+    if (!origin.ok) return `skipped: ${origin.reason}`;
+  }
+  return null;
+}
+
+/**
+ * Creates each Hyperdrive configuration the app binds with
+ * `POST /hyperdrive/configs` and `{ name, origin }`, all pointing at the test
+ * database, and returns their ids by binding name. Run after the cleanup of
+ * an earlier run, so every name is free. Cloudflare connects to the database
+ * before it answers, so an unreachable test database fails here.
+ */
+export async function createHyperdriveConfigs(
+  request: CfRequest,
+  app: Pick<CiAppPlan, "hyperdriveConfigs">,
+  testUrl: string,
+): Promise<Record<string, string>> {
+  const ids: Record<string, string> = {};
+  for (const config of app.hyperdriveConfigs) {
+    const origin = testDatabaseOrigin(testUrl, config.protocol);
+    if (!origin.ok) throw new Error(origin.reason);
+    const res = await request("POST", "/hyperdrive/configs", {
+      name: config.name,
+      origin: origin.origin,
+    });
+    const id = (res.body?.result as { id?: unknown } | undefined)?.id;
+    if (!created(res) || typeof id !== "string") {
+      throw new Error(`creating Hyperdrive configuration ${config.name} failed: ${describe(res)}`);
+    }
+    ids[config.binding] = id;
+  }
+  return ids;
+}
+
+/** `config` with each Hyperdrive binding given the id of the configuration created for it. */
+export function withHyperdriveIds(
+  config: Record<string, unknown>,
+  ids: Readonly<Record<string, string>>,
+): Record<string, unknown> {
+  const bindings = config.hyperdrive as Record<string, string>[] | undefined;
+  if (bindings === undefined) return config;
+  return {
+    ...config,
+    hyperdrive: bindings.map((h) => {
+      const binding = h.binding as string;
+      const id = Object.hasOwn(ids, binding) ? ids[binding] : undefined;
+      if (id === undefined) {
+        throw new Error(`no Hyperdrive configuration was created for the binding ${binding}`);
+      }
+      return { ...h, id };
+    }),
+  };
 }

@@ -24,6 +24,11 @@ defaults:
     shell: bash
     working-directory: catalog
 
+env:
+  # The catalog's own public key line, or unset for the official catalog, whose
+  # releases verify with the keys embedded in @appflare/schema (see publish.yml).
+  APPFLARE_PUBLIC_KEY: ${{ vars.APPFLARE_PUBLIC_KEY }}
+
 jobs:
   build-packer:
     name: build packer
@@ -104,12 +109,20 @@ jobs:
           rm -rf "${dir}"
           gh release download "${SLUG}@${VERSION}" --dir "${dir}"
           max_modules="$(node scripts/max-modules.ts)"
+          public_key="$(node scripts/signing-key.ts public-key)"
+          trusted=()
+          if [ -n "${public_key}" ]; then
+            trusted=(--public-key "${public_key}")
+          fi
           node "${APPFLARE_DIR}/packages/pack/bin/appflare-pack.js" verify "${dir}" --require-signed \
-            --max-modules "${max_modules}"
+            --max-modules "${max_modules}" "${trusted[@]}"
       - name: Deploy to the CI account and health-check
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          # Optional: a throwaway test database for apps that bind Hyperdrive;
+          # without it such an app is skipped.
+          HYPERDRIVE_TEST_URL: ${{ secrets.HYPERDRIVE_TEST_URL }}
         run: node scripts/ci-install.ts deploy "dist/${SLUG}" --suffix nightly
       - name: Delete the CI Worker and its resources
         id: cleanup

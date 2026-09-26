@@ -8,8 +8,11 @@ import { findApp, loadManifest } from "./lib/apps.ts";
 import { info, runMain } from "./lib/cli.ts";
 import { sha256Hex } from "./lib/index-builder.ts";
 import { clearArtifactDir } from "./lib/out-dir.ts";
-import { packerEnv, SIGNING_KEY_ENV, SIGNING_KEY_ID } from "./lib/pack-env.ts";
+import { packerEnv, SIGNING_KEY_ENV } from "./lib/pack-env.ts";
+import { workerSummaryLines } from "./lib/pack-summary.ts";
+import { loadPackerWorkerSize } from "./lib/packer-lib.ts";
 import { appflarePaths, appsDir, catalogRoot, resolveAppflareDir } from "./lib/paths.ts";
+import type { ArtifactWorker } from "./lib/types.ts";
 import { createVersionResolver, loadPackerVersioning } from "./lib/versions.ts";
 
 const USAGE = `Usage: pnpm pack-app <slug> [--out <dir>] [--key-id <id>]
@@ -23,12 +26,13 @@ APPFLARE_DIR points at a built appflare checkout or packer bundle.
 
   --out <dir>      output directory (default: dist/<slug>)
   --key-id <id>    record this key id in manifest.json, producing an unsigned
-                   intermediate for \`appflare-pack sign\` (publish CI uses
-                   ${SIGNING_KEY_ID}); without it the artifact is keyId "unsigned"
+                   intermediate for \`appflare-pack sign\` (publish CI uses the
+                   catalog's key id, which \`node scripts/signing-key.ts key-id\`
+                   prints); without it the artifact is keyId "unsigned"
 
 Sign an intermediate afterwards, in a step that runs no app code:
   node $APPFLARE_DIR/packages/pack/bin/appflare-pack.js sign <dir> \\
-    --sign-key-env ${SIGNING_KEY_ENV} --key-id ${SIGNING_KEY_ID}
+    --sign-key-env ${SIGNING_KEY_ENV} --key-id <the same key id>
 `;
 
 const childEnv = { ...packerEnv(process.env), GIT_TERMINAL_PROMPT: "0" };
@@ -140,18 +144,19 @@ runMain(async () => {
   }
   const zipPath = path.join(outDir, `${slug}-${artifact.version}.zip`);
   const migrations = Object.values(artifact.d1Migrations).reduce((n, l) => n + l.length, 0);
-  const configs = artifact.worker.wranglerConfig;
+  const sizes = await loadPackerWorkerSize(appflareDir);
+  // Each Worker is measured on its own: the limits are per Worker.
+  const sizeLine = (worker: ArtifactWorker): string =>
+    sizes.workerSizeLine(
+      sizes.artifactWorkerSize(zipPath, worker.modules),
+      worker.modules.length,
+      schema.maxWorkerModules,
+    );
   process.stdout.write(
     [
       `${slug}@${artifact.version} (keyId=${artifact.keyId}, not signed)`,
       `  source:     ${artifact.source.repo}@${artifact.source.sha} (${artifact.source.ref})`,
-      ...(configs === undefined
-        ? []
-        : [
-            `  config:     ${configs.effective}${configs.effective === configs.declared ? "" : ` (redirected from ${configs.declared})`}`,
-          ]),
-      `  modules:    ${artifact.worker.modules.length} (the manager installs at most ${schema.maxWorkerModules})`,
-      `  assets:     ${artifact.assets.files.length}`,
+      ...workerSummaryLines(artifact, sizeLine),
       `  migrations: ${migrations}`,
       `  zip:        ${zipPath} (${statSync(zipPath).size} bytes)`,
       `  digest:     ${sha256Hex(manifestBytes)} (sha256 of manifest.json)`,

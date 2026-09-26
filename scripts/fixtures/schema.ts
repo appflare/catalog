@@ -30,6 +30,9 @@ export async function testSchema(): Promise<AppflareSchema> {
     // No stand-in for the real derivation: tests that check services inject
     // their own or run only with the real schema.
     appServices: () => ({ ids: [], keyValueDurableObjects: false }),
+    // The primary Worker only: tests of apps of several Workers run only
+    // with the real schema.
+    appWorkerFacts: (manifest) => manifest.worker,
     // Accepts every revision: tests that check which revisions are refused
     // run only with the real schema.
     revisionProblem: () => null,

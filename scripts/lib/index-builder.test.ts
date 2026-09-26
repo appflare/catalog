@@ -2,10 +2,18 @@ import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "nod
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
-import { artifactManifestFixture } from "../fixtures/artifact-manifest.ts";
+import {
+  artifactManifestFixture,
+  duoArtifactManifestFixture,
+} from "../fixtures/artifact-manifest.ts";
 import { sandboxFixture, selfDeployingFixture } from "../fixtures/sandbox-manifest.ts";
 import { appflareAvailable, testSchema } from "../fixtures/schema.ts";
-import type { AppflareSchema, AppServicesOf } from "./appflare-schema.ts";
+import {
+  type AppflareSchema,
+  type AppServicesOf,
+  oneWorkerFacts,
+  parseOrThrow,
+} from "./appflare-schema.ts";
 import { listApps, loadManifest } from "./apps.ts";
 import type { ReleaseArtifact, ReleaseLookup } from "./github-releases.ts";
 import {
@@ -14,12 +22,13 @@ import {
   finalizeIndex,
   type IndexBuildOptions,
   lastVerifiedFor,
+  rowFacts,
   serializeIndex,
   sha256Hex,
   verifiedDigest,
 } from "./index-builder.ts";
 import { publishedManifestBytes } from "./sandbox-entry.ts";
-import type { CatalogManifest, IndexApp } from "./types.ts";
+import type { ArtifactManifest, CatalogManifest, IndexApp } from "./types.ts";
 import type { VersionResolver } from "./versions.ts";
 
 const fixtureApps = path.join(import.meta.dirname, "..", "fixtures", "apps");
@@ -726,5 +735,34 @@ describe("revisions of artifact tier entries", () => {
     expect(rows).toHaveLength(1);
     const index = finalizeIndex(rows, null, new Date(), schema.indexJson);
     expect(index.apps).toEqual(rows);
+  });
+});
+
+describe("rowFacts for an app of several Workers", () => {
+  const duo = () => duoArtifactManifestFixture({ sha: PIN }) as unknown as ArtifactManifest;
+
+  it("reads every Worker's bindings through workerFacts", () => {
+    const facts = rowFacts(hello, duo(), echoServices, (m) => ({
+      ...m.worker,
+      bindings: [m.worker, ...(m.workers ?? []).map((w) => w.worker)].flatMap((w) => w.bindings),
+    }));
+    // The jobs Worker's own Durable Object binding is listed too.
+    expect(facts.services.filter((s) => s === "binding:durable_object_namespace")).toHaveLength(2);
+  });
+
+  it("refuses to read only the primary Worker without combinedWorkerFacts", () => {
+    expect(() => rowFacts(hello, duo(), echoServices)).toThrow(
+      /duo@0\.2\.0 has several Workers.*build a newer appflare checkout/,
+    );
+  });
+
+  it("lists what the other Workers use with @appflare/schema's functions", (ctx) => {
+    if (!appflareAvailable || schema.appWorkerFacts === oneWorkerFacts) ctx.skip();
+    const parsed = parseOrThrow(schema.artifactManifest, duo(), "duo");
+    const primaryOnly = schema.appServices(parsed.catalog as CatalogManifest, parsed.worker).ids;
+    const facts = rowFacts(hello, parsed, schema.appServices, schema.appWorkerFacts);
+    // The jobs Worker's cron trigger and queue consumer, beyond the primary's own.
+    expect(primaryOnly).not.toContain("cron");
+    expect(facts.services).toEqual(expect.arrayContaining(["cron", "queues", "d1", "kv"]));
   });
 });

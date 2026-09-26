@@ -35,6 +35,18 @@ export interface CatalogAuthor {
   x?: string;
 }
 
+/**
+ * `CatalogEntryWorker`, in full: one Worker of an entry that installs as
+ * several. The primary one runs under the install's Worker name, every other
+ * one as `<install Worker name>-<name>`.
+ */
+export interface CatalogEntryWorker {
+  name: string;
+  wranglerConfig: string;
+  buildCommand?: string | string[];
+  primary?: true;
+}
+
 /** Subset of `CatalogManifest`. */
 export interface CatalogManifest {
   $schema?: string;
@@ -56,18 +68,26 @@ export interface CatalogManifest {
     workerName: string;
     /** The app's version when the repository's tags do not describe it (monorepos). */
     version?: string;
-    /** One command the packer runs after installing dependencies, before bundling. */
-    buildCommand?: string;
+    /**
+     * The command, or the commands in order, the packer runs after installing
+     * dependencies, before bundling.
+     */
+    buildCommand?: string | string[];
     /** How a run in the sandbox Worker is sized (`sandbox` and `self-deploying` tiers). */
     sandbox?: { expectedMinutes?: number; instanceType?: SandboxInstanceType };
     /** How the sandbox Worker runs the app's own installer (`self-deploying` tier only). */
     selfDeploying?: CatalogSelfDeploying;
+    /** The Workers of an app that installs as several (artifact tier only). */
+    workers?: CatalogEntryWorker[];
   };
   plan: Plan;
   requires: string[];
-  /** The install form: secrets and vars, as the schema parses them. */
-  secrets: Record<string, unknown>[];
-  vars: Record<string, unknown>[];
+  /**
+   * The install form: secrets and vars, as the schema parses them. On an entry
+   * with `install.workers`, `workers` names the Workers that get the value.
+   */
+  secrets: (Record<string, unknown> & { workers?: string[] })[];
+  vars: (Record<string, unknown> & { workers?: string[] })[];
   /** Permissions of the Cloudflare API token the admin creates for the app itself. */
   tokenPermissions: { name: string; description?: string; scope?: "account" | "zone" | "user" }[];
   /** How the bump bot treats the entry. */
@@ -101,9 +121,44 @@ export interface ArtifactQueueConsumer {
   retry_delay?: number;
 }
 
-/** Subset of `ArtifactManifest`. */
+/** One Worker's section of an artifact manifest (subset of `ArtifactWorker`). */
+export type ArtifactWorker = ArtifactManifest["worker"];
+
+/** One Worker's static assets (subset of `ArtifactAssets`). */
+export type ArtifactAssets = ArtifactManifest["assets"];
+
+/** `AppWorker`, in full: one Worker of an app, whatever the manifest's format. */
+export interface AppWorker {
+  /** Its name within the entry (`install.workers[].name`); null for an app of one Worker. */
+  name: string | null;
+  primary: boolean;
+  worker: ArtifactWorker;
+  assets: ArtifactAssets;
+}
+
+/** What `appServices` reads of a Worker, or of every Worker of an app together. */
+export type WorkerFacts = Pick<
+  ArtifactWorker,
+  "bindings" | "migrations" | "crons" | "queueConsumers"
+>;
+
+/**
+ * `ArtifactEntryWorker`: a Worker of an app of several other than the
+ * primary one. Its files sit under `workers/<name>/` in the zip.
+ */
+export interface ArtifactEntryWorker {
+  name: string;
+  worker: ArtifactWorker;
+  assets: ArtifactAssets;
+}
+
+/**
+ * Subset of `ArtifactManifest`. Format 1 is an app of one Worker. Format 2 is
+ * an app of several: `worker` and `assets` are the primary Worker's, and
+ * `workers` lists the others in the catalog entry's order.
+ */
 export interface ArtifactManifest {
-  format: 1;
+  format: 1 | 2;
   app: string;
   version: string;
   keyId: string;
@@ -135,7 +190,10 @@ export interface ArtifactManifest {
     binding: string | null;
     files: (ArtifactFile & { route: string })[];
   };
+  /** Every D1 migration of the app, by binding; shared by the Workers that bind it. */
   d1Migrations: Record<string, (ArtifactFile & { name: string })[]>;
+  /** Format 2 only: every Worker but the primary one. */
+  workers?: ArtifactEntryWorker[];
   /** The catalog manifest the artifact was packed from, as parsed by the schema. */
   catalog: unknown;
 }
@@ -158,6 +216,7 @@ export interface IndexBuild {
   manifest: string;
   /** sha256 of the exact bytes at `manifest`. */
   manifestDigest: string;
+  /** The entry's build command for display; a list of commands on one line. */
   buildCommand?: string;
   expectedMinutes?: number;
   instanceType?: SandboxInstanceType;

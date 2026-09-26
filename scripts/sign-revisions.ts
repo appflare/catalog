@@ -7,6 +7,7 @@ import { info, runMain } from "./lib/cli.ts";
 import { parsePlan } from "./lib/manifest-plan.ts";
 import { appsDir, resolveAppflareDir } from "./lib/paths.ts";
 import { signRevisions } from "./lib/revision.ts";
+import { catalogKey, trustedKeys } from "./lib/signing-key.ts";
 
 const USAGE = `Usage: node scripts/sign-revisions.ts --plan <plan.json> --out <signatures.json>
          --sign-key-env <VAR> --key-id <id>
@@ -14,8 +15,10 @@ const USAGE = `Usage: node scripts/sign-revisions.ts --plan <plan.json> --out <s
 Signs the revised catalog manifest of every revision in the publish plan's
 "revisions": the bytes build-site publishes at apps/<slug>/manifest.json, which
 must still have the planned revision and sha256. The key id must be the one the
-revised release was signed with. Each signature is checked against the keys
-embedded in @appflare/schema before it is written. Runs no app code; needs
+revised release was signed with. Each signature is checked before it is
+written, against the keys embedded in @appflare/schema or, when
+APPFLARE_PUBLIC_KEY is set, against the catalog's own key alone (see
+scripts/signing-key.ts). Runs no app code; needs
 APPFLARE_DIR (the packer bundle) and the base64 PKCS#8 Ed25519 key in <VAR>.
 Writes { "<slug>": { sha256, keyId, signature } } for build-index
 --revision-signatures.
@@ -48,7 +51,7 @@ runMain(async () => {
       keyBase64,
       keyId: values["key-id"],
       verifySignature: schema.verifySignature,
-      keys: schema.signingKeys,
+      keys: trustedKeys(catalogKey(), schema.signingKeys),
     },
   );
   writeFileSync(path.resolve(values.out), `${JSON.stringify(signatures, null, 2)}\n`);
