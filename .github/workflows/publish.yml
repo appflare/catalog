@@ -155,6 +155,16 @@ jobs:
       - uses: ./catalog/.github/actions/use-packer
         with:
           sha256: ${{ needs.build-packer.outputs.packer-sha256 }}
+      # Entries whose packageManager is bun (glance) install and build with it,
+      # and the runner image has no bun. 1.3.12 is the bun the sandbox build
+      # image carries, so an entry packs with the same bun in either place.
+      # No cache: this job runs the app's own install and build code, which
+      # must not be able to replace a bun binary later jobs would restore.
+      - name: Set up bun
+        uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version: 1.3.12
+          no-cache: true
       - name: Pack an unsigned intermediate, verify hashes and the module limit
         env:
           APP: ${{ matrix.app }}
