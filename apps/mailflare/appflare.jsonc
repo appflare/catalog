@@ -11,7 +11,7 @@
   "authors": [{ "name": "Hieu Nguyen", "github": "hieunc229", "x": "hieuSSR" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags, so the entry follows the default branch by commit.
-  "source": { "ref": "main", "sha": "1bf70d2ef2771360a546704182752eb7a1ff63f2" },
+  "source": { "ref": "main", "sha": "eca1e143bfca96e7b4e8edeeb2f8f0b7b6950157" },
   "install": {
     "tier": "artifact",
     "packageManager": "npm",
