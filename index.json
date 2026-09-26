@@ -1,6 +1,40 @@
 {
-  "generatedAt": "2026-09-26T08:52:11.617Z",
+  "generatedAt": "2026-09-26T20:23:54.411Z",
   "apps": [
+    {
+      "slug": "2fa",
+      "name": "2FA",
+      "summary": "A two-factor code manager for TOTP and HOTP keys: scan or import from Google Authenticator, Aegis, 2FAS, and Bitwarden, encrypted in KV, with backups to WebDAV, S3, OneDrive, or Google Drive.",
+      "version": "1.9.0",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/2fa@1.9.0/2fa-1.9.0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/2fa@1.9.0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/2fa@1.9.0/manifest.sig"
+      },
+      "digest": "2cff0e8de6c29b33ca3da41b5a372757e72bb0b0cad6398c50e1b39726aa4b64",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "wuzf",
+          "github": "wuzf"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "services": [
+        "kv",
+        "cron"
+      ],
+      "categories": [
+        "security",
+        "utilities"
+      ],
+      "revision": 1
+    },
     {
       "slug": "agentic-inbox",
       "name": "Agentic Inbox",
@@ -58,6 +92,38 @@
       "revision": 1
     },
     {
+      "slug": "bark-worker",
+      "name": "Bark Worker",
+      "summary": "Your own push server for Bark, the iOS notification app: send notifications to your iPhone from scripts and services with a simple HTTP call, with devices stored in D1.",
+      "version": "2.2.6",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/bark-worker@2.2.6/bark-worker-2.2.6.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/bark-worker@2.2.6/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/bark-worker@2.2.6/manifest.sig"
+      },
+      "digest": "fee4a99284fd3cb1b5557594460f4d37b7cf372f8814ad862187a8b8d326027d",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "cwxia0s",
+          "github": "cwxiaos"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "services": [
+        "d1"
+      ],
+      "categories": [
+        "notifications"
+      ],
+      "revision": 1
+    },
+    {
       "slug": "chatgpt-telegram-workers",
       "name": "ChatGPT Telegram Bot",
       "summary": "Your own AI chat bot on Telegram, backed by OpenAI, Anthropic, Workers AI, or any OpenAI-compatible API.",
@@ -99,6 +165,47 @@
       "categories": [
         "ai",
         "bots"
+      ],
+      "revision": 1
+    },
+    {
+      "slug": "cloudssh",
+      "name": "CloudSSH",
+      "summary": "A web SSH terminal on Workers: connect to your servers from the browser with multiple sessions, SFTP file management, jump hosts, saved servers, and a bring-your-own-key AI assistant.",
+      "version": "0.0.0-20260924.25852ca",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20260924.25852ca/cloudssh-0.0.0-20260924.25852ca.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20260924.25852ca/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20260924.25852ca/manifest.sig"
+      },
+      "digest": "381d38f68c6f9fa40a27586cc4152b48771e0e1e0971f8b580fbafc10097b6e7",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "TanXin",
+          "url": "https://tanxin.me",
+          "github": "newbietan"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/cloudssh/icon.svg",
+          "sha256": "7798d8bc82566ea4bf5ad4f7088a9b3c0135dae4ad9fa83a1b52b8340db3daf3"
+        },
+        "screenshots": []
+      },
+      "services": [
+        "durable-objects"
+      ],
+      "categories": [
+        "remote-access",
+        "developer-tools"
       ],
       "revision": 1
     },
@@ -337,6 +444,93 @@
       "revision": 1
     },
     {
+      "slug": "nodecrypt",
+      "name": "NodeCrypt",
+      "summary": "End-to-end encrypted chat rooms in the browser: no accounts and no stored history, with private messages, images, and files, relayed by a Durable Object that never sees plaintext.",
+      "version": "0.0.0-20260817.54ed049",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/nodecrypt@0.0.0-20260817.54ed049/nodecrypt-0.0.0-20260817.54ed049.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/nodecrypt@0.0.0-20260817.54ed049/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/nodecrypt@0.0.0-20260817.54ed049/manifest.sig"
+      },
+      "digest": "10f72cc3c4836a216c77fdd95f309233c12b62d680791117e6aee6d17573998d",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Shuai",
+          "url": "https://shuai.plus",
+          "github": "shuaiplus"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/nodecrypt/icon.svg",
+          "sha256": "8db4eaea8273e3ae789c91cdfbc74bff674649b5045aac7c33695fb51e6692a4"
+        },
+        "screenshots": []
+      },
+      "services": [
+        "durable-objects"
+      ],
+      "categories": [
+        "chat",
+        "privacy"
+      ],
+      "revision": 1
+    },
+    {
+      "slug": "nodewarden",
+      "name": "NodeWarden",
+      "summary": "A Bitwarden-compatible password manager server: the official Bitwarden apps and browser extensions sync to it, with a web vault, attachments, Send, and passkey sign-in, on D1 and R2.",
+      "version": "1.8.0",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/nodewarden@1.8.0/nodewarden-1.8.0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/nodewarden@1.8.0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/nodewarden@1.8.0/manifest.sig"
+      },
+      "digest": "9ed578e583d44438433b60797f119f6fa312814153e7483aca687b2b063e8167",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "r2"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Shuai",
+          "url": "https://shuai.plus",
+          "github": "shuaiplus"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/nodewarden/icon.png",
+          "sha256": "88641ef4cf25005932a80d875a072512040be381f9afb470a77e7f4fc0aa6b2a"
+        },
+        "screenshots": []
+      },
+      "services": [
+        "d1",
+        "r2",
+        "durable-objects",
+        "cron"
+      ],
+      "categories": [
+        "security",
+        "passwords"
+      ],
+      "revision": 1
+    },
+    {
       "slug": "open-seo",
       "name": "OpenSEO",
       "summary": "Self-hosted SEO research: keywords, rankings, backlinks and site audits, on your own Cloudflare account and behind Cloudflare Access.",
@@ -424,6 +618,103 @@
       "services": [],
       "categories": [
         "ai"
+      ],
+      "revision": 1
+    },
+    {
+      "slug": "pastebin-worker",
+      "name": "Pastebin Worker",
+      "summary": "A pastebin and file sharer with short links, syntax highlighting, rendered Markdown, client-side encryption, a URL shortener, and a curl-friendly API, on KV and R2.",
+      "version": "0.0.0-20260717.0835cac",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/pastebin-worker@0.0.0-20260717.0835cac/pastebin-worker-0.0.0-20260717.0835cac.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/pastebin-worker@0.0.0-20260717.0835cac/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/pastebin-worker@0.0.0-20260717.0835cac/manifest.sig"
+      },
+      "digest": "91dac52e31f516c55d25df8e9613d2601813f7e68c2e36106af4916dc3987553",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "r2"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Sharzy",
+          "url": "https://sharzy.in",
+          "github": "SharzyL"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "services": [
+        "kv",
+        "r2",
+        "cron"
+      ],
+      "categories": [
+        "files",
+        "sharing"
+      ],
+      "revision": 1
+    },
+    {
+      "slug": "punctual",
+      "name": "Punctual",
+      "summary": "Scheduling links for you and your team, a Calendly alternative: booking pages, Google and Microsoft 365 calendar sync, round-robin and collective events, reminders, and webhooks.",
+      "version": "0.3.0",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/punctual@0.3.0/punctual-0.3.0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/punctual@0.3.0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/punctual@0.3.0/manifest.sig"
+      },
+      "digest": "26dc2069226bbf23a9254fff60a3bf506ab98e3183552ff25385e916a4861585",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "r2"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Creative Content Crafts",
+          "url": "https://cccrafts.ai",
+          "github": "CCCrafts",
+          "x": "cccraftsai"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/punctual/icon.png",
+          "sha256": "563f53e8a4064b1db9832705c8ec00aaacef2a270ad0be012564fae946a071ff"
+        },
+        "cover": {
+          "url": "https://appflare.github.io/catalog/apps/punctual/cover.png",
+          "sha256": "7e99df4403146a4f256d748a6dcede71d4adfc5248319450834d8620fb5c0029"
+        },
+        "screenshots": [
+          {
+            "url": "https://appflare.github.io/catalog/apps/punctual/screenshots/01-booking-page.png",
+            "sha256": "f1188e3ace15d9f218544f82c2c3f3650fec5cac882d9b7cbd47f4be99d65191",
+            "alt": "Punctual: Booking page"
+          }
+        ]
+      },
+      "services": [
+        "kv",
+        "d1",
+        "r2",
+        "durable-objects",
+        "queues",
+        "cron"
+      ],
+      "categories": [
+        "business",
+        "scheduling"
       ],
       "revision": 1
     },
