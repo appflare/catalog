@@ -7,6 +7,7 @@
   "slug": "token-monitor",
   "name": "Token Monitor Hub",
   "summary": "Your own sync hub for Token Monitor: combine the token use, costs and plan limits of Claude Code, Codex, Cursor and 40 more AI coding tools across all your machines, live in every widget.",
+  "tagline": "Sync your AI coding usage across all your devices",
   "homepage": "https://javis-ai.com/token-monitor/",
   "repo": "Javis603/token-monitor",
   "license": "MIT",

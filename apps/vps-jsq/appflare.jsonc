@@ -7,6 +7,7 @@
   "slug": "vps-jsq",
   "name": "VPS-JSQ",
   "summary": "A VPS remaining-value calculator: enter the renewal price, currency, billing cycle and dates to see the value left and a suggested resale price, with live exchange rates and a shareable image card. Chinese interface.",
+  "tagline": "See what the unused time on a prepaid server is worth",
   "homepage": "https://jsq.xiaoge.org",
   "repo": "verkyer/vps-jsq",
   "license": "Apache-2.0",

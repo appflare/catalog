@@ -6,6 +6,7 @@
   "slug": "xiadd-pastebin",
   "name": "xiadd Pastebin",
   "summary": "A pastebin with syntax highlighting, Markdown, password-protected pastes, expiry times and file uploads up to 25 MB, on D1 and R2, with a JSON API.",
+  "tagline": "Share text and files with links that can expire or use a password",
   "homepage": "https://github.com/xiadd/pastebin-worker",
   "repo": "xiadd/pastebin-worker",
   "license": "MIT",

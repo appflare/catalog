@@ -5,6 +5,7 @@
   "slug": "rsshub-never-die",
   "name": "RSSHub Never Die",
   "summary": "A stable RSSHub address for your feed reader: requests go to a pool of public RSSHub instances, by load balancing, failover to the next instance, or the fastest of several.",
+  "tagline": "One address for your feed reader that switches servers when one fails",
   "homepage": "https://github.com/CaoMeiYouRen/rsshub-never-die",
   "repo": "CaoMeiYouRen/rsshub-never-die",
   "license": "MIT",

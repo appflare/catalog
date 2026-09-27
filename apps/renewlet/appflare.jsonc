@@ -3,6 +3,7 @@
   "slug": "renewlet",
   "name": "Renewlet",
   "summary": "Track recurring subscriptions and renewals: timezone-aware reminders over ten notification channels, calendar feeds, budgets, cost sharing and spending statistics, on D1, R2 and a queue.",
+  "tagline": "Track subscriptions and get reminders before they renew",
   "homepage": "https://renewlet.cc",
   "repo": "zhiyingzzhou/renewlet",
   "license": "MIT",

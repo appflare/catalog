@@ -3,6 +3,7 @@
   "slug": "unifi-ddns",
   "name": "UniFi DDNS",
   "summary": "Dynamic DNS for UniFi gateways: keeps Cloudflare A/AAAA records on your current IP.",
+  "tagline": "Keep your domain pointed at your current IP address",
   "homepage": "https://github.com/willswire/unifi-ddns",
   "repo": "willswire/unifi-ddns",
   "license": "MIT",

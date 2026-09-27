@@ -3,6 +3,7 @@
   "slug": "feedlog",
   "name": "FeedLog",
   "summary": "Feedback boards, a public roadmap and an AI-assisted changelog for your product, with an embeddable widget. Runs on Workers with R2 for uploads and your own Postgres through Hyperdrive.",
+  "tagline": "Collect feedback, share your roadmap and announce updates",
   "homepage": "https://feedlog.ai",
   "repo": "linkcraftstudio/feedlog",
   "license": "MIT",

@@ -3,6 +3,7 @@
   "slug": "sveltia-cms-auth",
   "name": "Sveltia CMS Authenticator",
   "summary": "The OAuth helper that lets people sign in to Sveltia CMS (or Decap CMS) with GitHub or GitLab, for sites whose editors should not have to create access tokens.",
+  "tagline": "Let site editors sign in with GitHub without making access tokens",
   "homepage": "https://github.com/sveltia/sveltia-cms-auth",
   "repo": "sveltia/sveltia-cms-auth",
   "license": "MIT",

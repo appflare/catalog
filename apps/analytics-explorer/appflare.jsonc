@@ -11,6 +11,7 @@
   "slug": "analytics-explorer",
   "name": "Cloudflare Analytics Explorer",
   "summary": "Build dashboards over your Workers Analytics Engine datasets: line, bar, area and pie charts, tables and stat cards from SQL queries, with filters and drag-and-drop layouts.",
+  "tagline": "Build charts and dashboards from your Workers analytics data",
   "homepage": "https://github.com/rohanprasadofficial/visual-ae-cloudflare",
   "repo": "rohanprasadofficial/visual-ae-cloudflare",
   "license": "MIT",

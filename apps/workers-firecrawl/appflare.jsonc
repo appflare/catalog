@@ -3,6 +3,7 @@
   "slug": "workers-firecrawl",
   "name": "Workers Firecrawl",
   "summary": "A Firecrawl-compatible search, scrape and map API on Browser Rendering: point the Firecrawl SDKs at your own Worker and get pages as Markdown, HTML, links or screenshots.",
+  "tagline": "Search the web and turn pages into readable text",
   "homepage": "https://github.com/G4brym/workers-firecrawl",
   "repo": "G4brym/workers-firecrawl",
   "license": "MIT",

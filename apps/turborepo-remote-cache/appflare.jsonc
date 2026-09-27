@@ -3,6 +3,7 @@
   "slug": "turborepo-remote-cache",
   "name": "Turborepo Remote Cache",
   "summary": "A Turborepo remote cache server on Workers and R2: point turbo at it and share build outputs between your machines and CI, without Vercel.",
+  "tagline": "Speed up builds by sharing cached results across your machines",
   "homepage": "https://adirishi.github.io/turborepo-remote-cache-cloudflare/",
   "repo": "AdiRishi/turborepo-remote-cache-cloudflare",
   "license": "MIT",

@@ -3,6 +3,7 @@
   "slug": "rssworker",
   "name": "RSSWorker",
   "summary": "A small RSS feed generator: RSS and Atom feeds for Bilibili dynamics and videos, Telegram channels, Weibo users and Xiaohongshu users, one URL per feed.",
+  "tagline": "RSS feeds for Bilibili, Telegram, Weibo and Xiaohongshu updates",
   "homepage": "https://github.com/yllhwa/RSSWorker",
   "repo": "yllhwa/RSSWorker",
   "license": "MIT",

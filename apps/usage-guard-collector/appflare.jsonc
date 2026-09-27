@@ -3,6 +3,7 @@
   "slug": "usage-guard-collector",
   "name": "Usage Guard Collector",
   "summary": "Usage surge alerts for your Cloudflare account: reads daily Workers, D1, Durable Objects, KV, R2 and Queues counts into D1 and pings Discord or Slack when a meter jumps.",
+  "tagline": "Get alerts when your Cloudflare usage suddenly jumps",
   "homepage": "https://github.com/HowardZlh/usage-guard-collector",
   "repo": "HowardZlh/usage-guard-collector",
   "license": "MIT",

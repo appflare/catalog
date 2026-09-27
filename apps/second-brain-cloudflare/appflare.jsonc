@@ -3,6 +3,7 @@
   "slug": "second-brain-cloudflare",
   "name": "Second Brain",
   "summary": "A personal memory for your AI assistants: an MCP server that stores notes in D1 and recalls them by meaning with Vectorize and Workers AI.",
+  "tagline": "Save notes once and recall them across your AI tools",
   "homepage": "https://github.com/rahilp/second-brain-cloudflare",
   "repo": "rahilp/second-brain-cloudflare",
   "license": "MIT",

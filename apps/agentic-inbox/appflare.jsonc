@@ -3,6 +3,7 @@
   "slug": "agentic-inbox",
   "name": "Agentic Inbox",
   "summary": "A self-hosted email client with an AI agent that reads, searches, and drafts replies, on Email Routing, Durable Objects, R2, and Workers AI.",
+  "tagline": "Your own email inbox with an AI assistant that drafts replies",
   "homepage": "https://github.com/cloudflare/agentic-inbox",
   "repo": "cloudflare/agentic-inbox",
   "license": "Apache-2.0",

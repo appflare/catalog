@@ -3,6 +3,7 @@
   "slug": "r2-explorer",
   "name": "R2 Explorer",
   "summary": "A Google Drive-like file browser for an R2 bucket, on Workers + R2.",
+  "tagline": "Browse and preview files in your Cloudflare storage",
   "homepage": "https://github.com/cloudflare/templates/tree/main/r2-explorer-template",
   "repo": "cloudflare/templates",
   "license": "MIT",

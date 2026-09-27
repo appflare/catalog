@@ -6,6 +6,7 @@
   "slug": "reminal",
   "name": "Reminal",
   "summary": "Your own relay for reminal: reach the terminals, app windows and desktops of your machines from any browser, end-to-end encrypted, with nothing listening on the machines.",
+  "tagline": "Reach your computers' windows and terminals from any browser",
   "homepage": "https://reminal.app",
   "repo": "harshalgajjar/Reminal",
   "license": "AGPL-3.0",

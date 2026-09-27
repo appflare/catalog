@@ -3,6 +3,7 @@
   "slug": "resolvehq",
   "name": "ResolveHQ",
   "summary": "A self-hosted helpdesk: a shared inbox fed by Email Routing, threaded tickets, SLAs and snoozes, a help center and knowledge base, customer ratings, reports, a scoped API and outbound webhooks, on D1, R2 and Queues.",
+  "tagline": "Manage customer emails and support tickets in your own account",
   "homepage": "https://getresolvehq.com",
   "repo": "mirza-rizvi/ResolveHQ",
   // The LICENSE file is the author's own "ResolveHQ Source-Available License":

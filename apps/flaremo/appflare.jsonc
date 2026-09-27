@@ -3,6 +3,7 @@
   "slug": "flaremo",
   "name": "FlareMo",
   "summary": "A Memos-compatible notes app for quick capture: timeline, tags, attachments, semantic search, and an MCP server, on D1, R2, and Vectorize.",
+  "tagline": "Capture notes and find them when you need them",
   "homepage": "https://github.com/realchendahuang/FlareMo",
   "repo": "realchendahuang/FlareMo",
   "license": "AGPL-3.0-only",

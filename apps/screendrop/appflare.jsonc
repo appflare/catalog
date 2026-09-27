@@ -7,6 +7,7 @@
   "slug": "screendrop",
   "name": "Screendrop Cloud",
   "summary": "The upload and sharing backend for the Screendrop macOS app: screenshots and screen recordings stored in R2, with share pages, transcripts, comments and likes.",
+  "tagline": "Share screenshots and screen recordings with your own links",
   "homepage": "https://github.com/fayazara/screendrop-worker",
   "repo": "fayazara/screendrop-worker",
   // The repository has no LICENSE file; its README's License section says MIT.

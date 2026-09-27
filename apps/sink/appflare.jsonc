@@ -8,6 +8,7 @@
   "slug": "sink",
   "name": "Sink",
   "summary": "Link shortener with visit analytics: custom slugs, expiring links, QR codes, AI slug suggestions and a realtime globe, all on Cloudflare.",
+  "tagline": "Create short links and track their visits",
   "homepage": "https://sink.cool",
   "repo": "miantiao-me/Sink",
   "license": "AGPL-3.0",

@@ -3,6 +3,7 @@
   "slug": "wx2md",
   "name": "wx2md",
   "summary": "Turns WeChat Official Account articles, and any other web page, into clean Markdown or a readable HTML view: swap the article link's host for your Worker's, on Workers AI Markdown conversion.",
+  "tagline": "Turn WeChat articles and web pages into Markdown",
   "homepage": "https://github.com/loadchange/wx2md-worker",
   "repo": "loadchange/wx2md-worker",
   "license": "MIT",

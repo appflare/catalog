@@ -7,6 +7,7 @@
   "slug": "quickinbox",
   "name": "Quickinbox",
   "summary": "Email for your own domain: a web mail client with threads, attachments, several users and domains, plus a REST API, CLI and MCP server.",
+  "tagline": "Email for your own domain, with a web inbox you control",
   "homepage": "https://quickmail.divinprince.com",
   "repo": "DivinPrince/quickinbox",
   "license": "MIT",

@@ -7,6 +7,7 @@
   "slug": "seeder",
   "name": "Seeder",
   "summary": "A project manager for small teams: kanban tasks, client requests, a public client board, a daily planner and a built-in MCP server.",
+  "tagline": "Manage team projects, tasks, and client requests in one place",
   "homepage": "https://seederpm.xyz",
   "repo": "danielsyauqi/Seeder",
   "license": "MIT",

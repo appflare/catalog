@@ -7,6 +7,7 @@
   "slug": "veet",
   "name": "Veet",
   "summary": "Video calls in the browser: share a meeting link and talk face to face, with chat, device settings and peer-to-peer media for small groups.",
+  "tagline": "Share a link and talk face to face in your browser",
   "homepage": "https://github.com/megaconfidence/veet",
   "repo": "megaconfidence/veet",
   // The repository has no LICENSE file and states no licence in its README or

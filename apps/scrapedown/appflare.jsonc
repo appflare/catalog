@@ -6,6 +6,7 @@
   "slug": "scrapedown",
   "name": "scrapedown",
   "summary": "Turn any web page into clean Markdown: one GET with a URL returns the article's text in reader mode, with its title, byline, excerpt and language.",
+  "tagline": "Turn web pages into clean, readable text",
   "homepage": "https://github.com/ozanvos/scrapedown",
   "repo": "ozanvos/scrapedown",
   "license": "MIT",

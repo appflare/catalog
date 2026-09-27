@@ -8,6 +8,7 @@
   "slug": "skland-attendance",
   "name": "Skland Daily Attendance",
   "summary": "Claims the daily Skland sign-in rewards for your Arknights and Arknights: Endfield accounts on a schedule, with optional notifications of each run.",
+  "tagline": "Automatically claim daily rewards for Arknights and Endfield",
   "homepage": "https://github.com/AEtherside/skland-daily-attendance",
   "repo": "AEtherside/skland-daily-attendance",
   // The repository has no LICENSE file; package.json and the README's

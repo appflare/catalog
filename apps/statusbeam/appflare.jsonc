@@ -8,6 +8,7 @@
   "slug": "statusbeam",
   "name": "StatusBeam",
   "summary": "A status page served from Cloudflare's edge cache, with a checker that probes your sites, Statuspage and incident.io pages, and Sentry monitors every five minutes.",
+  "tagline": "Monitor your services and share a public status page",
   "homepage": "https://docs.statusbeam.dev",
   "repo": "pleaseai/statusbeam",
   "license": "MIT",

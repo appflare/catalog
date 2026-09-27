@@ -3,6 +3,7 @@
   "slug": "shotsync",
   "name": "ShotSync",
   "summary": "A private image and text pool shared across your devices: drop a screenshot or snippet on one, grab it on another, from an installable web app backed by R2.",
+  "tagline": "Share pictures and text between your devices, privately",
   "homepage": "https://github.com/Defiabell/shotsync",
   "repo": "Defiabell/shotsync",
   "license": "MIT",

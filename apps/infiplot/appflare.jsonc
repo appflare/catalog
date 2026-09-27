@@ -10,6 +10,7 @@
   "slug": "infiplot",
   "name": "InfiPlot",
   "summary": "An interactive story game generated in real time: AI writes the plot, paints every scene and voices the characters as you play, with the text, image and speech providers you choose.",
+  "tagline": "Play stories that AI writes and illustrates as you go",
   "homepage": "https://infiplot.com",
   "repo": "zonghaoyuan/infiplot",
   "license": "AGPL-3.0-only",
