@@ -48,10 +48,26 @@ branch locally.
 
 ## Catalog policy
 
-Every app needs a public repository and a license. No proxies, tunnels, or
-circumvention tools. If an app works with Cloudflare's Deploy button, it should work
-with Appflare: bindings, compatibility settings, assets, and crons come from the
-app's own wrangler config, so the manifest does not repeat them.
+Every app needs a public repository. If an app works with Cloudflare's Deploy
+button, it should work with Appflare: bindings, compatibility settings, assets, and
+crons come from the app's own wrangler config, so the manifest does not repeat them.
+
+Any license is accepted: open source, source-available, or none at all. The catalog
+never leaves an app out for its license; managers show the license as the
+repository declares it, and `NONE` as **No license**. Write `license` as the app's
+own repository declares it:
+
+- an SPDX license expression: `MIT`, `Apache-2.0`, `MIT OR Apache-2.0`, or a
+  source-available license such as `BUSL-1.1`, `FSL-1.1-MIT` or `Elastic-2.0`;
+- `NONE` when the repository publishes no license;
+- `SEE LICENSE IN <file>`, with a path in the repository, for a license that has no
+  SPDX id.
+
+Add `licenseNote`, one short line of at most 160 characters such as
+`"Source-available: production use restricted; see the license"`, when the id does
+not say what matters; managers mark an app with a note as source-available.
+`pnpm validate` warns about a `license` in none of these forms (managers then show
+the text as it is written), but does not fail on it.
 
 ## Adding or updating an app
 
@@ -74,9 +90,15 @@ app's own wrangler config, so the manifest does not repeat them.
    `{ "name", "url"?, "github"?, "x"? }`: an https website, and GitHub and X handles
    without `@`. Catalog cards show the names; the app's page adds the links. When
    `authors` is omitted, `index.json` lists the owner of `repo`.
-5. Optionally, add images the upstream project publishes (see "Images" below): its
+5. Add a `tagline`: what the app does, in one line of at most 80 characters with
+   no trailing period, such as `"Short links on your own domain"`. Managers show
+   it under the app's name on catalog tiles, so write it in plain words for someone
+   who is not a developer: what they get, not how it is built. It is optional
+   (without it, tiles shorten `summary`), but every entry should have one. Adding
+   or changing it on a released entry needs no new pin and no revision.
+6. Optionally, add images the upstream project publishes (see "Images" below): its
    icon, its cover, screenshots, and `MEDIA.md` saying where each one comes from.
-6. Run the checks below, then open a pull request.
+7. Run the checks below, then open a pull request.
 
 ### The Worker upload budget
 
@@ -463,6 +485,64 @@ reaches each install only once its Appflare is updated.
 
 The install check runs all of it (see "Install checks").
 
+### A full schema file with migrations for older databases
+
+Some apps keep their whole current schema in one file (plain `CREATE TABLE`, default
+rows), and their migrations only bring databases made by older versions up to date,
+so the migrations fail on an empty database. Name that file as the binding's
+`baseline`:
+
+```jsonc
+"resources": { "d1": { "DB": { "baseline": "db/schema.sql" } } }
+```
+
+On install, the baseline runs once on the new database, before the migrations, and
+every migration and post-deploy migration of that version is recorded in
+`d1_migrations` as applied, so none of them runs there. The baseline runs only on an
+empty database, so updates never run it on a database an install already has; they
+apply only the migrations added after the installed version, as for any app. A
+database an update creates for a new binding gets its baseline, since it starts
+empty.
+
+- The baseline need not be safe to run twice, but it may not `ATTACH`, `DETACH` or
+  `DROP DATABASE`, set a `PRAGMA` (`PRAGMA defer_foreign_keys` is allowed), open or
+  end a transaction, or name `d1_migrations` or a `sqlite_` or `_cf_` table, and it
+  must create at least one table that is not temporary.
+- A binding has a baseline or `schema` files, not both.
+- It works only while upstream keeps the baseline in step with its migrations: an
+  install gets the baseline as it is at the pinned commit and never runs that
+  commit's migrations, so a column a migration adds must also be in the baseline.
+  Check that when you add the entry and every time you move its pin.
+
+An entry with a baseline publishes as artifact format 5; managers too old to read it
+refuse it instead of running the migrations on an empty database. The install check
+runs the baseline with `wrangler d1 execute --remote --file`, then records every
+migration and post-deploy migration in `d1_migrations` without running them, as the
+manager does (see "Install checks").
+
+### Static sites without Worker code
+
+A wrangler config with `assets` and no `main` is a Worker that only serves its
+static assets. Appflare installs it the way `wrangler deploy` uploads one: the
+artifact carries the assets and no Worker modules, and the manager uploads the
+Worker with its assets and compatibility settings alone. A build that writes the
+asset directory runs as usual, from the config's `build.command` or
+`install.buildCommand`; a repository without a `package.json` sets
+`"installDirs": []` so nothing is installed.
+
+Such a Worker has no code to use anything else, so the pack fails when it has
+bindings (`vars` included), catalog `secrets` or `vars`, Durable Objects, cron
+triggers, queue consumers, an `assets.binding`, or `assets.run_worker_first`.
+Observability, placement, limits and `cache` settings are left out, as wrangler
+leaves them out. The health check requests `healthPath` (default `/`) as for any
+app, so the site should answer there. When the asset directory is the repository
+root, add an `.assetsignore` that leaves out everything that is not part of the site
+(`.git`, `.wrangler`, the wrangler config), as `wrangler deploy` would upload it too.
+
+Such an artifact is format 5, which managers too old to read it refuse. The install
+check deploys it with a `wrangler.json` that has the assets and compatibility
+settings and no `main`.
+
 ### Seeding a first admin
 
 Some apps store their users in D1 and only let an existing admin create others, so
@@ -565,15 +645,16 @@ built from. If you change `appflare.jsonc` but the pin still packs to a version 
 is already released, publish fails and names the fields that changed, unless the
 change is one of these:
 
-- **`authors`**, and the images. `index.json` reads `authors` from the current
-  `appflare.jsonc`, not from the release, and the images from `apps/<slug>/`, so an
-  edit to them publishes with the next `index.json` and needs no new release (once
-  the entry has a published revision, an `authors` edit needs the next revision
-  too; see "Revisions").
+- **`authors`, `tagline`, `licenseNote`**, and the images. `index.json` reads these
+  fields from the current `appflare.jsonc`, not from the release, and the images
+  from `apps/<slug>/`, so an edit to them publishes with the next `index.json` and
+  needs no new release and no revision (once the entry has a published revision,
+  an edit to any of them needs the next revision too, since a published revision
+  never changes; see "Revisions").
 - **A revision: the form and copy only.** Raise `revision` by one (it is 1 when
   omitted) in the same change. A revision may change `name`, `summary`, `homepage`,
-  `license`, `categories`, `authors`, `maintainers`, `secrets`, `vars`,
-  `postInstall` and `bump` (`REVISABLE_CATALOG_FIELDS` in `@appflare/schema`):
+  `license`, `categories`, `maintainers`, `secrets`, `vars`, `postInstall` and
+  `bump`, as well as the fields above (`REVISABLE_CATALOG_FIELDS` in `@appflare/schema`):
   labels and help text, a var that becomes a `select`, a secret the app already
   reads but the entry forgot. Nothing is built. The release stays exactly as it
   is; the revised manifest is signed by the catalog's release key and published
@@ -966,7 +1047,8 @@ Tests that need the real schema skip themselves when `APPFLARE_DIR` has no build
 CI always has one.
 
 `pack-app` clones the app's repository without blobs into a temp dir, checks out
-`source.sha`, and runs `appflare-pack`. The packer installs dependencies with
+`source.sha` and the repository's git submodules at the commits it records (some apps
+keep their frontend in one), and runs `appflare-pack`. The packer installs dependencies with
 `--ignore-scripts` and runs `wrangler deploy --dry-run` with every `CLOUDFLARE_*` and
 `WRANGLER_*` variable removed. `pack-app` also removes GitHub tokens and the signing
 key from the packer's environment. It never signs. Then `appflare-pack verify
@@ -1016,6 +1098,14 @@ rebuilds rows, so a failed check can never drop an app. Every rebuild by
 `build-index` carries the value over while the version and digest stay the
 same, which a revision does not change. A new version starts at `null` until its
 first nightly run.
+
+Every row also carries the entry's `license`, and its `licenseNote` and `tagline`
+when it has them, from the current `appflare.jsonc`, and `addedAt`: the committer
+time of the oldest commit that added `apps/<slug>/appflare.jsonc` (a renamed slug
+counts from its new path), which managers use for "New this week". That needs the
+catalog's whole git history, so the publish job checks it out with `fetch-depth: 0`,
+and `build-index --releases-only` fails in a shallow clone. A local `pnpm
+build-index` in a shallow clone keeps the previous index's `addedAt`, with a warning.
 
 ## How CI gets @appflare/pack
 
@@ -1327,8 +1417,9 @@ artifact into a dedicated CI Cloudflare account and delete it again. Sandbox and
 self-deploying entries have no install check in CI (see "Sandbox tier" and
 "Self-deploying tier"). The steps:
 
-1. Unpack the artifact's Worker modules, assets, and D1 SQL (migrations, schema
-   files and post-deploy migrations), checking each
+1. Unpack the artifact's Worker modules (none for a Worker of static assets
+   only), assets, and D1 SQL (migrations, schema files, post-deploy migrations
+   and baselines), checking each
    file's sha256 against `manifest.json`. Nothing from the app's repository runs:
    only the prebuilt output in the artifact is deployed.
 2. Delete anything left under the same names by an earlier run.
@@ -1357,7 +1448,10 @@ self-deploying entries have no install check in CI (see "Sandbox tier" and
    `wrangler d1 execute --remote --file`; then, for every database, its
    post-deploy migrations with `wrangler d1 migrations apply --remote` against a
    second config whose `migrations_dir` is their folder, so `d1_migrations`
-   records them beside the others; then every seed. A seed with
+   records them beside the others; then every seed. A database with a
+   `baseline` instead runs it with `wrangler d1 execute --remote --file`, then
+   records every migration and post-deploy migration of the version in
+   `d1_migrations` without running them. A seed with
    `beforeSchema` runs right after its database's migrations instead. Seeds go
    through the D1 API, one `/query` call per statement with its values as
    params (wrangler cannot bind params), after the statement is checked again

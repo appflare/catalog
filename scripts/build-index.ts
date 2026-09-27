@@ -1,6 +1,7 @@
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { parseArgs } from "node:util";
+import { gitIn, previousAddedTimes, readAddedTimes } from "./lib/added-at.ts";
 import { loadAppflareSchema } from "./lib/appflare-schema.ts";
 import { listApps, loadManifest } from "./lib/apps.ts";
 import { catalogRepo, info, runMain, warn } from "./lib/cli.ts";
@@ -30,7 +31,8 @@ built from the current pin, otherwise from the GitHub Release <slug>@<version>
 for the version the current pin packs to (via gh api), provided its manifest
 has the same source.sha; otherwise the app is omitted with a warning.
 
-  --releases-only   ignore dist/; fail if the release lookup fails (publish CI)
+  --releases-only   ignore dist/; fail if the release lookup fails or the
+                    catalog's git history is shallow (publish CI)
   --out <file>      output path (default: index.json)
   --revision-signatures <file>
                     signatures of revised catalog manifests (sign-revisions --out)
@@ -52,6 +54,12 @@ worked out from the published artifact manifest (its Worker's bindings, queue
 consumers, crons and Durable Object migrations, plus the catalog manifest packed
 into it) for an artifact tier entry, from the catalog manifest's declarations
 for a sandbox or self-deploying one.
+
+Every row lists the entry's license, and its licenseNote and tagline when it
+has them, from the current appflare.jsonc, and addedAt: the committer time of
+the oldest commit that added apps/<slug>/appflare.jsonc. That needs the whole
+git history; in a shallow clone the rows keep the addedAt of the previous
+index, with a warning (fatal with --releases-only).
 
 A row with images lists them (apps/<slug>/icon.svg|icon.png, cover.png,
 screenshots/*.png, each optional) by their Pages URL and sha256. The index carries
@@ -81,6 +89,17 @@ runMain(async () => {
   const manifests = listApps(appsDir).map((app) => loadManifest(app, schema.catalogManifest));
   const repo = catalogRepo();
   const previous = existsSync(outPath) ? readFileSync(outPath, "utf8") : null;
+  const previousApps = previousRows(previous);
+  let addedAt: Map<string, string>;
+  try {
+    addedAt = readAddedTimes(gitIn(catalogRoot));
+  } catch (err) {
+    if (releasesOnly) throw err;
+    warn(
+      `keeping the previous index's addedAt: ${err instanceof Error ? err.message : String(err)}`,
+    );
+    addedAt = previousAddedTimes(previousApps);
+  }
 
   const apps = buildIndexApps(manifests, {
     repo,
@@ -90,7 +109,8 @@ runMain(async () => {
     strictReleases: releasesOnly,
     artifactManifest: schema.artifactManifest,
     warn,
-    previousApps: previousRows(previous),
+    previousApps,
+    addedAt,
     sandboxDefaults: schema.sandboxDefaults,
     mediaFor: mediaReader(appsDir, repo),
     services: schema.appServices,

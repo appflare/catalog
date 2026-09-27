@@ -40,5 +40,7 @@ export async function testSchema(): Promise<AppflareSchema> {
       throw new Error("no @appflare/schema build to verify signatures with");
     },
     signingKeys: [],
+    // Places every license: tests of the warning run only with the real schema.
+    licenseWarning: () => null,
   };
 }

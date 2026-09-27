@@ -36,9 +36,11 @@ import type { VersionResolver } from "./versions.ts";
 /**
  * Builds the catalog index. Every row lists the app's `authors` from the
  * current manifest, or the owner of its repository (`authors.ts`), its
- * `categories`, and the Cloudflare `services` it uses (see `rowFacts`), so a
- * manager can show all three without reading a manifest. Otherwise
- * rows depend on the entry's `install.tier`:
+ * `categories`, `license` (and `licenseNote` and `tagline` when it has them),
+ * and the Cloudflare `services` it uses (see `rowFacts`), so a manager can
+ * show them without reading a manifest, and `addedAt`, when the entry first
+ * appeared in the catalog (`added-at.ts`). Otherwise rows depend on the
+ * entry's `install.tier`:
  *
  * - `sandbox` and `self-deploying`: no artifact. The row's `version` is what
  *   the current pin packs to, and its `build` block names the pin and the
@@ -90,6 +92,11 @@ export interface IndexBuildOptions {
   sandboxDefaults: SandboxDefaults;
   /** The entry's images (see `media.ts`); rows get no `media` block without it. */
   mediaFor?: (manifest: CatalogManifest) => IndexMedia | undefined;
+  /**
+   * When each entry first appeared in the catalog, by slug (see
+   * `added-at.ts`); a row without a time gets no `addedAt`.
+   */
+  addedAt?: ReadonlyMap<string, string>;
   /** `appServices` from `@appflare/schema`, which works out each row's `services`. */
   services: AppServicesOf;
   /**
@@ -278,6 +285,7 @@ export function toIndexApp(
     | "services"
     | "workerFacts"
     | "mediaFor"
+    | "addedAt"
     | "revisionProblem"
     | "revisionSignatures"
     | "previousApps"
@@ -295,6 +303,7 @@ export function toIndexApp(
     slug: manifest.slug,
     name: manifest.name,
     summary: manifest.summary,
+    ...addedAtOf(manifest, options),
     version: artifact.version,
     artifacts: artifactUrls(options.repo, manifest.slug, artifact.version),
     digest: artifact.digest,
@@ -311,8 +320,11 @@ export function toIndexApp(
 }
 
 /**
- * A row's `services`, `keyValueDurableObjects` (only when true) and
- * `categories`. For an artifact tier entry the services come from the
+ * A row's `services`, `keyValueDurableObjects` (only when true),
+ * `categories`, `license`, and `licenseNote` and `tagline` when the current
+ * catalog manifest has them. `licenseNote` and `tagline` are index-only
+ * (`INDEX_ONLY_FIELDS` in `publish-plan.ts`): an edit to them publishes with
+ * the next index and no release. For an artifact tier entry the services come from the
  * published artifact manifest: its Workers (bindings, queue consumers, crons,
  * Durable Object migrations of every Worker of the app together, from
  * `workerFacts`) and the catalog manifest packed into it
@@ -327,7 +339,10 @@ export function rowFacts(
   artifact: ArtifactManifest | null,
   services: AppServicesOf,
   workerFacts: WorkerFactsOf = oneWorkerFacts,
-): Pick<IndexApp, "services" | "keyValueDurableObjects" | "categories"> {
+): Pick<
+  IndexApp,
+  "services" | "keyValueDurableObjects" | "categories" | "license" | "licenseNote" | "tagline"
+> {
   // Parsed by the real artifact manifest schema, so a full catalog manifest.
   const catalog = artifact === null ? manifest : (artifact.catalog as CatalogManifest);
   const found = services(
@@ -338,7 +353,19 @@ export function rowFacts(
     services: [...found.ids],
     ...(found.keyValueDurableObjects ? { keyValueDurableObjects: true as const } : {}),
     categories: [...manifest.categories],
+    license: manifest.license,
+    ...(manifest.licenseNote === undefined ? {} : { licenseNote: manifest.licenseNote }),
+    ...(manifest.tagline === undefined ? {} : { tagline: manifest.tagline }),
   };
+}
+
+/** A row's `addedAt`, when the entry's first commit is known. */
+function addedAtOf(
+  manifest: CatalogManifest,
+  options: Pick<IndexBuildOptions, "addedAt">,
+): { addedAt?: string } {
+  const time = options.addedAt?.get(manifest.slug);
+  return time === undefined ? {} : { addedAt: time };
 }
 
 /**
@@ -369,6 +396,7 @@ export function toSandboxIndexApp(
     slug: manifest.slug,
     name: manifest.name,
     summary: manifest.summary,
+    ...addedAtOf(manifest, options),
     version,
     tier: manifest.install.tier,
     plan: manifest.plan,

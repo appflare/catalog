@@ -1,7 +1,8 @@
 import { parseArgs } from "node:util";
 import { loadAppflareSchema } from "./lib/appflare-schema.ts";
 import { findApp, listApps, loadManifest } from "./lib/apps.ts";
-import { catalogRepo, info, runMain } from "./lib/cli.ts";
+import { catalogRepo, info, runMain, warn } from "./lib/cli.ts";
+import { entryWarnings } from "./lib/entry-warnings.ts";
 import { FEATURED_FILE, readFeatured } from "./lib/featured.ts";
 import { readAppMedia } from "./lib/media.ts";
 import { appsDir, catalogRoot, resolveAppflareDir } from "./lib/paths.ts";
@@ -22,6 +23,10 @@ icon (icon.svg or icon.png), a 1200x630 cover.png, and screenshots/*.png.
 SVGs may not script or load anything, and MEDIA.md must name every image on
 a line that links the upstream file it comes from. Without slugs,
 featured.json and featured/ are checked too.
+
+A license that is not an SPDX expression, NONE or SEE LICENSE IN <file> is a
+warning, not an error: any license is accepted, and managers show such text
+as it is written.
 `;
 
 runMain(async () => {
@@ -47,6 +52,9 @@ runMain(async () => {
       ];
       if (problems.length > 0) {
         throw new Error(`apps/${app.slug} is invalid:\n${problems.join("\n")}`);
+      }
+      for (const warning of entryWarnings(manifest, schema.licenseWarning)) {
+        warn(`apps/${app.slug}: ${warning}`);
       }
       info(`${manifest.slug}: ok (${manifest.repo}@${manifest.source.sha.slice(0, 7)})`);
     } catch (err) {

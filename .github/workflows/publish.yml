@@ -398,11 +398,14 @@ jobs:
       # With ssh-key, origin is the SSH URL and core.sshCommand points at the
       # key until the job ends, which is what persist-credentials keeps. Every
       # later step can read the key, so this job runs no app code: only the
-      # catalog's own scripts, the packer bundle, and gh.
+      # catalog's own scripts, the packer bundle, and gh. The whole history
+      # (fetch-depth: 0): build-index dates each row's addedAt by the commit
+      # that added its appflare.jsonc, and refuses a shallow clone.
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           path: catalog
           ref: main
+          fetch-depth: 0
           ssh-key: ${{ secrets.CATALOG_PUSH_KEY }}
           persist-credentials: true
       - uses: ./catalog/.github/actions/use-packer

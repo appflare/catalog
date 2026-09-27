@@ -127,6 +127,36 @@ describe("decide", () => {
     expect((await plan({ ...hello, authors }, other)).action).toBe("skip");
   });
 
+  it("skips an edit to tagline or licenseNote alone: nothing to pack or revise", async () => {
+    const released = releasedWith("hello@1.2.3", hello);
+    const edited = {
+      ...hello,
+      tagline: "Short links on your own domain",
+      licenseNote: "Source-available: production use restricted; see the license",
+    };
+    // "skip" adds nothing to the plan's apps or revisions: the plan stays empty.
+    expect(await plan(edited, released)).toEqual({
+      slug: "hello",
+      tag: "hello@1.2.3",
+      action: "skip",
+    });
+    const retagged = releasedWith("hello@1.2.3", { ...hello, tagline: "An older tagline" });
+    expect(await plan({ ...hello, tagline: "A newer tagline" }, retagged)).toEqual({
+      slug: "hello",
+      tag: "hello@1.2.3",
+      action: "skip",
+    });
+    expect((await plan(hello, retagged)).action).toBe("skip");
+  });
+
+  it("still fails when a tagline changes together with a field the artifact carries", async () => {
+    const releases = releasedWith("hello@1.2.3", { ...hello, summary: "Old summary." });
+    const decision = await plan({ ...hello, tagline: "Short links on your own domain" }, releases);
+    expect(decision.action === "error" && decision.message).toMatch(
+      /appflare\.jsonc changed \(summary\)/,
+    );
+  });
+
   it("still fails when authors change together with a field the artifact carries", async () => {
     const releases = releasedWith("hello@1.2.3", { ...hello, summary: "Old summary." });
     const edited = { ...hello, authors: [{ name: "Ada Lovelace" }] };

@@ -55,9 +55,14 @@ export interface CatalogManifest {
   slug: string;
   name: string;
   summary: string;
+  /** One plain line for catalog tiles; managers shorten `summary` when it is omitted. */
+  tagline?: string;
   homepage: string;
   repo: string;
+  /** Any text; `licenseWarning` in `@appflare/schema` says when it is not an SPDX expression. */
   license: string;
+  /** One short line shown next to the license. */
+  licenseNote?: string;
   categories: string[];
   /** Who wrote the app upstream; the index lists the owner of `repo` when omitted. */
   authors?: CatalogAuthor[];
@@ -170,11 +175,14 @@ export interface ArtifactEntryWorker {
  * 2 refuse. Format 4 is either shape too, and its catalog manifest keeps a
  * Worker off workers.dev (`install.workers[].workersDev: false`) or seeds a
  * D1 database (`resources.d1[binding].seed`), which managers that read only
- * formats 1 to 3 refuse. Whether an artifact has several Workers is whether
- * it has `workers`, whatever its format.
+ * formats 1 to 3 refuse. Format 5 is either shape too, and carries a D1
+ * baseline (`d1Baseline`) or a Worker of static assets only (no modules and
+ * no `mainModule`), which managers that read only formats 1 to 4 refuse.
+ * Whether an artifact has several Workers is whether it has `workers`,
+ * whatever its format.
  */
 export interface ArtifactManifest {
-  format: 1 | 2 | 3 | 4;
+  format: 1 | 2 | 3 | 4 | 5;
   app: string;
   version: string;
   keyId: string;
@@ -188,7 +196,11 @@ export interface ArtifactManifest {
      * packers that predate it.
      */
     wranglerConfig?: { declared: string; effective: string };
-    mainModule: string;
+    /**
+     * The module the Worker starts from. Omitted, with `modules` empty, for a
+     * Worker that serves its static assets only (format 5).
+     */
+    mainModule?: string;
     compatibilityDate: string;
     compatibilityFlags: string[];
     modules: (ArtifactFile & { name: string; type: string })[];
@@ -229,7 +241,14 @@ export interface ArtifactManifest {
    * (`resources.d1[binding].postDeployMigrationsDir`). Formats 3 and 4.
    */
   d1PostDeploy?: Record<string, (ArtifactFile & { name: string })[]>;
-  /** Formats 2 to 4, for an app of several Workers: every Worker but the primary one. */
+  /**
+   * One SQL file per binding with the database's whole current schema
+   * (`resources.d1[binding].baseline`), run once on a new database before
+   * the migrations, which are then recorded in `d1_migrations` without
+   * running. Format 5; omitted when there is none.
+   */
+  d1Baseline?: Record<string, (ArtifactFile & { name: string })[]>;
+  /** Formats 2 to 5, for an app of several Workers: every Worker but the primary one. */
   workers?: ArtifactEntryWorker[];
   /** The catalog manifest the artifact was packed from, as parsed by the schema. */
   catalog: unknown;
@@ -268,6 +287,14 @@ export interface IndexApp {
   slug: string;
   name: string;
   summary: string;
+  /** The catalog manifest's `tagline`; omitted when it has none. */
+  tagline?: string;
+  /**
+   * When the entry first appeared in the catalog: the committer time of the
+   * commit that added its `appflare.jsonc` (see `added-at.ts`). Omitted when
+   * that is unknown.
+   */
+  addedAt?: string;
   version: string;
   artifacts?: IndexArtifacts;
   digest?: string;
@@ -294,6 +321,13 @@ export interface IndexApp {
   keyValueDurableObjects?: true;
   /** The catalog manifest's `categories`; always written, like `services`. */
   categories: string[];
+  /**
+   * The catalog manifest's `license`. The schema keeps it optional for
+   * indexes published before it existed; `build-index` always writes it.
+   */
+  license?: string;
+  /** The catalog manifest's `licenseNote`; omitted when it has none. */
+  licenseNote?: string;
   /**
    * The catalog manifest's revision (see `revision.ts`); omitted means 1. The
    * schema keeps it optional for indexes published before it existed;

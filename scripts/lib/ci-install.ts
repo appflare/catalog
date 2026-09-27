@@ -33,11 +33,20 @@ import type {
  * `wrangler d1 execute --file`, unrecorded; then, for every database, its
  * post-deploy migrations with `wrangler d1 migrations apply` against a second
  * config whose `migrations_dir` is their folder, so they are recorded in
- * `d1_migrations` beside the others. A database's seed
+ * `d1_migrations` beside the others. A database with a baseline
+ * (`resources.d1[binding].baseline`) instead runs it with `wrangler d1
+ * execute --file`, then records every migration and post-deploy migration
+ * of the version in `d1_migrations` without running them, as the manager
+ * does on a new database. A database's seed
  * (`resources.d1[binding].seed`) runs last, or right after its migrations
  * when it says `beforeSchema`, through the D1 API rather than wrangler,
  * which cannot bind params (see {@link runSeed}). Seed-only secrets and vars
  * get values for the seeds and are never set on a Worker.
+ *
+ * A Worker of static assets only (no modules and no `mainModule`, artifact
+ * format 5) is deployed as `wrangler deploy` deploys a config with `assets`
+ * and no `main`: the config names no entry module, no module rules and no
+ * bundling settings, and nothing is unpacked under `worker/`.
  *
  * An app of several Workers (an artifact manifest with `workers`) is deployed as
  * the manager deploys it: every Worker, each after the Workers it binds to,
@@ -60,6 +69,10 @@ export const D1_DIR = "d1";
 export const D1_SCHEMA_DIR = "d1-schema";
 /** Where each D1 binding's post-deploy migrations are unpacked. */
 export const D1_POST_DEPLOY_DIR = "d1-post-deploy";
+/** Where each D1 baseline is unpacked, under `<binding>/<name>`. */
+export const D1_BASELINE_DIR = "d1-baseline";
+/** Where the SQL that records a baseline database's migrations is written, as `<binding>.sql`. */
+export const D1_BASELINE_RECORD_DIR = "d1-baseline-record";
 /** The config the post-deploy migrations are applied with (see {@link postDeployConfig}). */
 export const POST_DEPLOY_CONFIG = "wrangler.post-deploy.json";
 /** The config every Worker is deployed with. */
@@ -147,6 +160,13 @@ export interface CiD1Database {
   postDeploy: string[];
   /** The rows it gets once, at install (`resources.d1[binding].seed`); omitted when none. */
   seed?: CatalogD1Seed;
+  /**
+   * Its baseline (`resources.d1[binding].baseline`): the file, relative to
+   * the work dir, and the names of every migration and post-deploy migration
+   * the version ships, recorded in `d1_migrations` after it without running.
+   * Omitted when it has none.
+   */
+  baseline?: { file: string; recorded: string[] };
 }
 
 export interface CiInstallPlan {
@@ -833,6 +853,7 @@ export function planCiInstall(
           ),
         });
         resources.push({ type: "d1", name: resource, binding: binding.name });
+        const baseline = files.baseline[0];
         const database: CiD1Database = {
           database: resource,
           binding: binding.name,
@@ -840,12 +861,21 @@ export function planCiInstall(
           schema: files.schema.map((f) => `${D1_SCHEMA_DIR}/${binding.name}/${f.name}`),
           postDeploy: files.postDeploy.map((f) => f.name),
           ...(seed === null ? {} : { seed }),
+          ...(baseline === undefined
+            ? {}
+            : {
+                baseline: {
+                  file: `${D1_BASELINE_DIR}/${binding.name}/${baseline.name}`,
+                  recorded: [...files.migrations, ...files.postDeploy].map((f) => f.name),
+                },
+              }),
         };
         if (
           database.migrations ||
           database.schema.length > 0 ||
           database.postDeploy.length > 0 ||
-          seed !== null
+          seed !== null ||
+          baseline !== undefined
         ) {
           d1Databases.push(database);
         }
@@ -1012,16 +1042,32 @@ export function planCiInstall(
   }
 
   const hasAssets = manifest.assets.files.length > 0 || manifest.assets.binding !== null;
+  // A Worker of static assets only: wrangler uploads it without a module.
+  const assetsOnly = worker.mainModule === undefined;
+  if (assetsOnly) {
+    if (worker.modules.length > 0) {
+      throw new Error(`the Worker ${worker.name} has modules but no main module`);
+    }
+    notes.push("static assets only: deployed without Worker code");
+  }
   const config: Record<string, unknown> = {
     name,
-    main: `${WORKER_DIR}/${worker.mainModule}`,
+    ...(assetsOnly
+      ? {}
+      : {
+          main: `${WORKER_DIR}/${worker.mainModule}`,
+        }),
     compatibility_date: worker.compatibilityDate,
     compatibility_flags: [...worker.compatibilityFlags],
     // The modules are wrangler's own build output; upload them unchanged.
-    no_bundle: true,
-    find_additional_modules: true,
-    base_dir: WORKER_DIR,
-    rules: [...rules].map(([type, globs]) => ({ type, globs })),
+    ...(assetsOnly
+      ? {}
+      : {
+          no_bundle: true,
+          find_additional_modules: true,
+          base_dir: WORKER_DIR,
+          rules: [...rules].map(([type, globs]) => ({ type, globs })),
+        }),
     // Off for a Worker the entry keeps off workers.dev, as the manager keeps it.
     workers_dev: workersDev,
     preview_urls: false,
@@ -1637,10 +1683,11 @@ export function safeJoin(root: string, relative: string): string {
 }
 
 /**
- * Writes the Worker modules to `<outDir>/worker/`, the assets to
- * `<outDir>/assets/`, and each D1 binding's migrations, schema files and
- * post-deploy migrations to `<outDir>/d1/<binding>/`,
- * `<outDir>/d1-schema/<binding>/` and `<outDir>/d1-post-deploy/<binding>/`,
+ * Writes the Worker modules to `<outDir>/worker/` (a Worker of static assets
+ * only has none, and gets no such folder), the assets to `<outDir>/assets/`,
+ * and each D1 binding's migrations, schema files, post-deploy migrations and
+ * baseline to `<outDir>/d1/<binding>/`, `<outDir>/d1-schema/<binding>/`,
+ * `<outDir>/d1-post-deploy/<binding>/` and `<outDir>/d1-baseline/<binding>/`,
  * each under its name, reading each as its byte range of the STORE zip and
  * checking size and sha256 before anything is written.
  */
@@ -1679,6 +1726,7 @@ export function unpackArtifact(manifest: ArtifactManifest, zipPath: string, outD
       [D1_DIR, manifest.d1Migrations],
       [D1_SCHEMA_DIR, manifest.d1Schema ?? {}],
       [D1_POST_DEPLOY_DIR, manifest.d1PostDeploy ?? {}],
+      [D1_BASELINE_DIR, manifest.d1Baseline ?? {}],
     ] as const;
     for (const [dir, byBinding] of d1Lists) {
       for (const [binding, files] of Object.entries(byBinding)) {
@@ -1693,7 +1741,9 @@ export function unpackArtifact(manifest: ArtifactManifest, zipPath: string, outD
   } finally {
     closeSync(fd);
   }
-  mkdirSync(path.join(outDir, WORKER_DIR), { recursive: true });
+  if (manifest.worker.modules.length > 0) {
+    mkdirSync(path.join(outDir, WORKER_DIR), { recursive: true });
+  }
   mkdirSync(path.join(outDir, ASSETS_DIR), { recursive: true });
   for (const { target, data } of writes) {
     mkdirSync(path.dirname(target), { recursive: true });
@@ -1719,17 +1769,18 @@ export function randomBase64Key32(): string {
 
 type D1File = ArtifactManifest["d1Migrations"][string][number];
 
-/** One D1 binding's migrations, schema files and post-deploy migrations, as the artifact records them. */
+/** One D1 binding's migrations, schema files, post-deploy migrations and baseline, as the artifact records them. */
 function d1FilesOf(
   manifest: ArtifactManifest,
   binding: string,
-): { migrations: D1File[]; schema: D1File[]; postDeploy: D1File[] } {
+): { migrations: D1File[]; schema: D1File[]; postDeploy: D1File[]; baseline: D1File[] } {
   const of = (lists: Record<string, D1File[]> | undefined): D1File[] =>
     lists !== undefined && Object.hasOwn(lists, binding) ? (lists[binding] ?? []) : [];
   return {
     migrations: of(manifest.d1Migrations),
     schema: of(manifest.d1Schema),
     postDeploy: of(manifest.d1PostDeploy),
+    baseline: of(manifest.d1Baseline),
   };
 }
 
@@ -1776,9 +1827,7 @@ export function postDeployConfig(
   config: Record<string, unknown>,
   databases: readonly CiD1Database[],
 ): Record<string, unknown> | null {
-  const post = new Map(
-    databases.filter((d) => d.postDeploy.length > 0).map((d) => [d.binding, d.postDeploy]),
-  );
+  const post = new Map(databases.filter(appliesPostDeploy).map((d) => [d.binding, d.postDeploy]));
   if (post.size === 0) return null;
   const entries = Array.isArray(config.d1_databases)
     ? (config.d1_databases as Record<string, unknown>[])
@@ -1794,11 +1843,43 @@ export function postDeployConfig(
   };
 }
 
-/** One wrangler command of the D1 steps: its arguments, the config, and the Worker whose work dir it runs in. */
+/**
+ * Whether a database's post-deploy migrations run with `wrangler d1
+ * migrations apply`: it has some, and no baseline, after which they are
+ * recorded without running.
+ */
+function appliesPostDeploy(d: CiD1Database): boolean {
+  return d.postDeploy.length > 0 && d.baseline === undefined;
+}
+
+/**
+ * The SQL that records `names` in `d1_migrations` as applied, without
+ * running them: the table as `wrangler d1 migrations apply` creates it
+ * (verbatim from wrangler 4, as the manager has it), then one row per name.
+ * Names already recorded stay.
+ */
+export function recordMigrationsSql(names: readonly string[]): string {
+  const rows = names.map((name) => `('${name.replace(/'/g, "''")}')`).join(",\n");
+  return `CREATE TABLE IF NOT EXISTS "d1_migrations"(
+\t\tid         INTEGER PRIMARY KEY AUTOINCREMENT,
+\t\tname       TEXT UNIQUE,
+\t\tapplied_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+INSERT OR IGNORE INTO "d1_migrations" (name)
+values ${rows};
+`;
+}
+
+/**
+ * One wrangler command of the D1 steps: its arguments, the config, the
+ * Worker whose work dir it runs in, and a file to write there first (the
+ * SQL that records a baseline database's migrations), relative to it.
+ */
 export interface CiWranglerStep {
   worker: string;
   config: string;
   args: string[];
+  write?: { file: string; text: string };
 }
 
 /** One database's seed, run through the D1 API (see {@link runSeed}). */
@@ -1818,9 +1899,11 @@ export function isSeedStep(step: CiD1Step): step is CiSeedStep {
 
 /**
  * The steps that run the app's D1 SQL once every Worker is deployed, in the
- * manager's order: for each database its migrations, then its seed when it
- * says `beforeSchema`, then its schema files one by one (unrecorded; the
- * packer accepts only files that are safe to run again); then every
+ * manager's order: for each database its migrations (or, with a baseline,
+ * the baseline and then the rows that record every migration and
+ * post-deploy migration as applied, none of which then runs), then its seed
+ * when it says `beforeSchema`, then its schema files one by one (unrecorded;
+ * the packer accepts only files that are safe to run again); then every
  * database's post-deploy migrations; then every other seed.
  */
 export function d1Steps(databases: readonly CiAppD1Database[]): CiD1Step[] {
@@ -1832,7 +1915,22 @@ export function d1Steps(databases: readonly CiAppD1Database[]): CiD1Step[] {
     seed,
   });
   for (const d of databases) {
-    if (d.migrations) {
+    if (d.baseline !== undefined) {
+      steps.push({
+        worker: d.worker,
+        config: DEPLOY_CONFIG,
+        args: ["d1", "execute", d.database, "--remote", "--yes", "--file", d.baseline.file],
+      });
+      if (d.baseline.recorded.length > 0) {
+        const file = `${D1_BASELINE_RECORD_DIR}/${d.binding}.sql`;
+        steps.push({
+          worker: d.worker,
+          config: DEPLOY_CONFIG,
+          args: ["d1", "execute", d.database, "--remote", "--yes", "--file", file],
+          write: { file, text: recordMigrationsSql(d.baseline.recorded) },
+        });
+      }
+    } else if (d.migrations) {
       steps.push({
         worker: d.worker,
         config: DEPLOY_CONFIG,
@@ -1848,7 +1946,7 @@ export function d1Steps(databases: readonly CiAppD1Database[]): CiD1Step[] {
       });
     }
   }
-  for (const d of databases.filter((x) => x.postDeploy.length > 0)) {
+  for (const d of databases.filter(appliesPostDeploy)) {
     steps.push({
       worker: d.worker,
       config: POST_DEPLOY_CONFIG,

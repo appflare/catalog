@@ -6,7 +6,9 @@ description: >
   --releases-only); with one it only patches lastVerified into the existing rows
   (record-verified), never adding or removing apps. Expects the catalog checked
   out at ./catalog by actions/checkout with ssh-key set to the CATALOG_PUSH_KEY
-  secret and persist-credentials true, and APPFLARE_DIR set (use-packer). git
+  secret and persist-credentials true, and APPFLARE_DIR set (use-packer); to
+  rebuild, with fetch-depth 0 as well, since build-index reads each entry's
+  addedAt from the whole history and refuses a shallow clone. git
   fetches and pushes over SSH with that key, never with the workflow token:
   main's ruleset requires status checks on every push and lets only repository
   admins and deploy keys bypass them.

@@ -341,3 +341,73 @@ export function privateDuoArtifactManifestFixture(opts: { sha: string }): Record
   };
   return m;
 }
+
+/**
+ * A schema-valid artifact `manifest.json` of format 5 whose D1 binding `DB`
+ * has a baseline (`db/schema.sql`), two migrations and a post-deploy
+ * migration: on a new database the baseline runs and the three are recorded
+ * in `d1_migrations` without running.
+ */
+export function baselineArtifactManifestFixture(opts: { sha: string }): Record<string, unknown> {
+  const m = artifactManifestFixture({ app: "notes", version: "2.0.0", sha: opts.sha });
+  const hex64 = "a".repeat(64);
+  let offset = 1;
+  const file = (dir: string, name: string) => ({
+    name,
+    path: `${dir}/DB/${name}`,
+    size: 1,
+    sha256: hex64,
+    offset: offset++,
+  });
+  m.format = 5;
+  (m.worker as Record<string, unknown>).bindings = [{ type: "d1", name: "DB" }];
+  m.d1Migrations = {
+    DB: [file("d1", "0001_init.sql"), file("d1", "0002_add_o'clock.sql")],
+  };
+  m.d1PostDeploy = { DB: [file("d1-post-deploy", "0100_cleanup.sql")] };
+  m.d1Baseline = { DB: [file("d1-baseline", "db/schema.sql")] };
+  m.catalog = {
+    ...(m.catalog as Record<string, unknown>),
+    resources: {
+      d1: { DB: { baseline: "db/schema.sql", postDeployMigrationsDir: "db/post-deploy" } },
+    },
+  };
+  return m;
+}
+
+/**
+ * A schema-valid artifact `manifest.json` of format 5 for a Worker of static
+ * assets only: a wrangler config with `assets` and no `main`, so no modules,
+ * no `mainModule`, no bindings, and two asset files.
+ */
+export function assetsOnlyArtifactManifestFixture(opts: { sha: string }): Record<string, unknown> {
+  const m = artifactManifestFixture({ app: "site", version: "1.0.0", sha: opts.sha });
+  const hex64 = "a".repeat(64);
+  const worker = { ...(m.worker as Record<string, unknown>) };
+  delete worker.mainModule;
+  m.format = 5;
+  m.worker = { ...worker, modules: [], bindings: [] };
+  m.assets = {
+    config: { not_found_handling: "single-page-application" },
+    binding: null,
+    files: [
+      {
+        path: "assets/index.html",
+        route: "/index.html",
+        hash: "b".repeat(32),
+        size: 1,
+        sha256: hex64,
+        offset: 0,
+      },
+      {
+        path: "assets/app.css",
+        route: "/app.css",
+        hash: "c".repeat(32),
+        size: 1,
+        sha256: hex64,
+        offset: 1,
+      },
+    ],
+  };
+  return m;
+}

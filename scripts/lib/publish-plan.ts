@@ -52,8 +52,16 @@ import type { VersionResolver } from "./versions.ts";
  * artifact installs. The index is built from the current manifest, so an edit
  * to these alone is published by regenerating `index.json` and needs no new
  * release; releases packed after the edit carry the new value anyway.
+ *
+ * - `authors`: the catalog card and app page.
+ * - `tagline`: the line under the name on a catalog tile. Managers read it
+ *   from the index row only; nothing about an installed app uses it.
+ * - `licenseNote`: shown next to the license. Managers read it from the index
+ *   row, which always carries `license`; they read the release's copy only
+ *   for a row without `license` (an index written before rows had it), and
+ *   an installed app does not use it.
  */
-export const INDEX_ONLY_FIELDS: readonly string[] = ["authors"];
+export const INDEX_ONLY_FIELDS: readonly string[] = ["authors", "tagline", "licenseNote"];
 
 export type PlanDecision =
   | { slug: string; action: "not-released"; tier: InstallTier }

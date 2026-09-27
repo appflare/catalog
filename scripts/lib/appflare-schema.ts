@@ -68,7 +68,16 @@ export interface AppflareSchema {
   verifySignature: VerifySignatureOf;
   /** The trusted signing keys embedded in `@appflare/schema` (the ones managers trust). */
   signingKeys: readonly SigningKey[];
+  /**
+   * `licenseWarning` from `@appflare/schema`: the packer's warning for a
+   * `license` that is not an SPDX expression, `NONE` or `SEE LICENSE IN
+   * <file>`, or null. Any text parses; this only says it cannot be placed.
+   */
+  licenseWarning: LicenseWarningOf;
 }
+
+/** `licenseWarning` from `@appflare/schema`. */
+export type LicenseWarningOf = (license: string) => string | null;
 
 /** A trusted signing key: its id and base64 raw Ed25519 public key. */
 export interface SigningKey {
@@ -248,6 +257,7 @@ export async function loadAppflareSchema(appflareDir: string): Promise<AppflareS
     revisionProblem: pickFunction<RevisionProblemOf>(mod, "revisedArtifactProblem"),
     verifySignature: pickFunction<VerifySignatureOf>(mod, "verifySignature"),
     signingKeys: pickSigningKeys(mod, "signingKeys"),
+    licenseWarning: pickFunction<LicenseWarningOf>(mod, "licenseWarning"),
   };
 }
 

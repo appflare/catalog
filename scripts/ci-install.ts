@@ -2,6 +2,7 @@ import { spawnSync } from "node:child_process";
 import {
   appendFileSync,
   existsSync,
+  mkdirSync,
   mkdtempSync,
   readFileSync,
   rmSync,
@@ -87,6 +88,9 @@ deploy   Unpacks the artifact (checking every file's sha256), removes anything
          --file; then its post-deploy migrations with wrangler d1
          migrations apply against wrangler.post-deploy.json, whose
          migrations_dir is their folder, so d1_migrations records them;
+         a database with a baseline instead runs the baseline with wrangler
+         d1 execute --file, then records every migration and post-deploy
+         migration in d1_migrations without running them;
          then each seed through the D1 API, one /query call per statement
          with its values as params, where it says beforeSchema before the
          schema files instead; each statement must add exactly one row),
@@ -101,6 +105,10 @@ deploy   Unpacks the artifact (checking every file's sha256), removes anything
          https://<worker>.<subdomain>.workers.dev<healthPath> to answer
          (install.healthPath from the catalog manifest, else /). A failed
          deploy may still have uploaded the Worker; cleanup deletes it.
+
+         A Worker of static assets only (format 5: no modules and no main
+         module) is deployed with its assets and compatibility settings
+         alone: the config names no main, and no module rules.
 
          An app of several Workers (install.workers) is deployed Worker by
          Worker, each after the Workers it binds to: the primary one as
@@ -344,7 +352,13 @@ async function deployAndCheck(
   );
   for (const step of d1Steps(app.d1)) {
     if (!isSeedStep(step)) {
-      wrangler(bin, dirOf(step.worker), step.args, undefined, step.config);
+      const dir = dirOf(step.worker);
+      if (step.write !== undefined) {
+        const target = path.join(dir, step.write.file);
+        mkdirSync(path.dirname(target), { recursive: true });
+        writeFileSync(target, step.write.text);
+      }
+      wrangler(bin, dir, step.args, undefined, step.config);
     } else if (seeds === null) {
       throw new Error(`${step.database} has a seed, and no seed functions were loaded`);
     } else {

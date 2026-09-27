@@ -20,6 +20,20 @@
       "type": "string",
       "minLength": 1
     },
+    "tagline": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80,
+      "allOf": [
+        {
+          "pattern": "^\\S(?:[^\\r\\n]*\\S)?$"
+        },
+        {
+          "pattern": "[^.]$"
+        }
+      ],
+      "description": "What the app does, as one plain sentence of at most 80 characters, without a trailing period, such as \"Short links on your own domain\". Shown under the app's name on catalog tiles; when omitted, the catalog shortens `summary` instead."
+    },
     "homepage": {
       "type": "string",
       "pattern": "^https:\\/\\/"
@@ -30,7 +44,15 @@
     },
     "license": {
       "type": "string",
-      "minLength": 1
+      "minLength": 1,
+      "description": "The license the app's own repository declares, as an SPDX license expression: `MIT`, `Apache-2.0`, `MIT OR Apache-2.0`, or a source-available license such as `BUSL-1.1`, `FSL-1.1-MIT` or `Elastic-2.0`. Use `NONE` when the repository publishes no license, and `SEE LICENSE IN <file>` (a path in the repository) for a license with no SPDX id. The catalog shows the license on the app's card and page; it never decides whether an app is listed."
+    },
+    "licenseNote": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160,
+      "pattern": "^\\S(?:[^\\r\\n]*\\S)?$",
+      "description": "One short line shown next to the license, for what its id does not say, such as \"Source-available: production use restricted; see the license\". An app with a note is shown as source-available."
     },
     "categories": {
       "type": "array",
@@ -165,7 +187,6 @@
           "description": "The command the packer runs at the root of the checkout after installing dependencies (with install scripts disabled) and before bundling, for example `pnpm --filter @scope/web build`, or a list of such commands run in order, for example `[\"pnpm run build:sphere\", \"pnpm run build\"]`; the build stops at the first that fails. Use it when the wrangler config has no `build.command`. Each runs as a plain command without a shell, with no credentials in its environment and the checkout's `node_modules/.bin` on its PATH, so pipes, redirects, quotes, variables, and environment assignments are not allowed. pnpm and npm run no pre or post hooks of package scripts there (`pnpm run build` skips `prebuild`), so list such a step as a command of its own. At most 8 commands of at most 256 characters each."
         },
         "installDirs": {
-          "minItems": 1,
           "maxItems": 8,
           "type": "array",
           "items": {
@@ -200,7 +221,7 @@
             ],
             "additionalProperties": false
           },
-          "description": "The directories whose dependencies the packer installs, in order, each with install scripts disabled, before any build command. Omitted means `[{ \"path\": \".\" }]`, the root of the checkout; list `.` as well when the root still needs its install. Use it when the Worker's `package.json` sits in a directory of its own (a template repository), or for a second install beside the root one. At most 8 directories. An entry of several Workers lists them once for all its Workers."
+          "description": "The directories whose dependencies the packer installs, in order, each with install scripts disabled, before any build command. Omitted means `[{ \"path\": \".\" }]`, the root of the checkout; list `.` as well when the root still needs its install. Use it when the Worker's `package.json` sits in a directory of its own (a template repository), or for a second install beside the root one. At most 8 directories. An empty list installs nothing, for a repository without a `package.json`: wrangler bundles the entry and its relative imports, and any build command runs with no dependencies installed. An entry of several Workers lists them once for all its Workers."
         },
         "version": {
           "type": "string",
@@ -249,6 +270,16 @@
               }
             }
           ]
+        },
+        "wildcardHostname": {
+          "type": "boolean",
+          "description": "`true` when the app needs every name under one hostname (`*.<base>`) rather than one exact hostname, for example a tunnel that gives each session a name of its own. The admin assigns the base (`tunnels.example.com`) in one of the account's domains; the manager then serves the primary Worker on the base and every name under it (a proxied wildcard DNS record and Workers routes). Needs `wildcardReason`. Not for the self-deploying tier."
+        },
+        "wildcardReason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200,
+          "description": "One short sentence, shown where the admin assigns the hostname, on why the app needs every name under it, for example \"Each tunnel gets its own address under this hostname.\" Required with `wildcardHostname: true`, not allowed otherwise. At most 200 characters."
         },
         "sandbox": {
           "type": "object",
@@ -575,7 +606,7 @@
         },
         "workers": {
           "minItems": 2,
-          "maxItems": 5,
+          "maxItems": 24,
           "type": "array",
           "items": {
             "type": "object",
@@ -856,7 +887,7 @@
             "additionalProperties": false,
             "description": "One Worker of an entry that installs as several Workers."
           },
-          "description": "For an app that installs as several Workers deployed together (for example an API and a web front end): each Worker's name, wrangler config and optional build command. Exactly one is `primary`: it answers the app's address and health check, and its `wranglerConfig` is `install.wranglerConfig`. Service bindings between these Workers, and Durable Object bindings to a class in another of them, are pointed at the installed Workers; bindings of the same name share one resource. Artifact tier only."
+          "description": "For an app that installs as several Workers deployed together (for example an API and a web front end), 2 to 24 of them: each Worker's name, wrangler config and optional build command. Exactly one is `primary`: it answers the app's address and health check, and its `wranglerConfig` is `install.wranglerConfig`. Service bindings between these Workers, and Durable Object bindings to a class in another of them, are pointed at the installed Workers; bindings of the same name share one resource. Artifact tier only. On Workers Free the manager installs at most three Workers per app, so an entry of more must set `\"plan\": \"paid\"`."
         }
       },
       "required": [
@@ -1016,6 +1047,38 @@
               }
             }
           ]
+        },
+        {
+          "anyOf": [
+            {
+              "required": [
+                "wildcardHostname",
+                "wildcardReason"
+              ],
+              "properties": {
+                "wildcardHostname": {
+                  "const": true
+                },
+                "tier": {
+                  "not": {
+                    "const": "self-deploying"
+                  }
+                }
+              }
+            },
+            {
+              "not": {
+                "required": [
+                  "wildcardReason"
+                ]
+              },
+              "properties": {
+                "wildcardHostname": {
+                  "const": false
+                }
+              }
+            }
+          ]
         }
       ]
     },
@@ -1115,6 +1178,10 @@
           "seedOnly": {
             "type": "boolean",
             "description": "The secret exists only for `resources.d1[binding].seed`: the install form asks for it once, the seed uses it (as a param or the source of a hash), and it is never set on the Worker, stored, or asked for again by updates or settings. For a first admin's password, so the plaintext never sits in the app's environment. Not allowed with `optional`, `derive` or `workers`, nor on self-deploying entries."
+          },
+          "multiline": {
+            "type": "boolean",
+            "description": "The value spans several lines, such as a PEM private key: the install, update and settings forms ask for it in a multi-line field that keeps every line break, and the Worker gets the value as entered (Windows line endings become `\\n`, and spaces or tabs at the end of the last line are dropped). Not allowed with `generate` or `derive`."
           }
         },
         "required": [
@@ -1124,6 +1191,34 @@
         ],
         "additionalProperties": false,
         "allOf": [
+          {
+            "anyOf": [
+              {
+                "not": {
+                  "required": [
+                    "multiline"
+                  ],
+                  "properties": {
+                    "multiline": {
+                      "const": true
+                    }
+                  }
+                }
+              },
+              {
+                "not": {
+                  "required": [
+                    "derive"
+                  ]
+                },
+                "properties": {
+                  "generate": {
+                    "const": false
+                  }
+                }
+              }
+            ]
+          },
           {
             "anyOf": [
               {
@@ -1207,7 +1302,7 @@
           },
           "default": {
             "type": "string",
-            "description": "Value the form starts with. `{{workerUrl}}` becomes the install's workers.dev URL (`https://<worker name>.<account subdomain>.workers.dev`, no trailing slash) and `{{workerName}}` its Worker name, and `{{accountId}}` the id of the Cloudflare account it is installed in, filled in on every install, update and settings change. `{{workerUrl}}` is always the workers.dev address, even when a custom domain is attached. When the app's wrangler config gives this var a value that is not a string (an array, object, number, or boolean), the var reaches the Worker as JSON and `default` must be JSON text, for example `[\"{{workerUrl}}\"]`. Without `default`, the form starts with the wrangler config's value. For a `type: \"select\"` var, `default` must be one of the `options` values."
+            "description": "Value the form starts with. `{{workerUrl}}` becomes the install's workers.dev URL (`https://<worker name>.<account subdomain>.workers.dev`, no trailing slash) and `{{workerName}}` its Worker name, and `{{accountId}}` the id of the Cloudflare account it is installed in, filled in on every install, update and settings change. `{{workerUrl}}` is always the workers.dev address, even when a custom domain is attached. `{{wildcardHostname}}` becomes the hostname of the app's wildcard domain (for an entry with `install.wildcardHostname`), empty until one is assigned, and follows it when it is assigned or removed. When the app's wrangler config gives this var a value that is not a string (an array, object, number, or boolean), the var reaches the Worker as JSON and `default` must be JSON text, for example `[\"{{workerUrl}}\"]`. Without `default`, the form starts with the wrangler config's value. For a `type: \"select\"` var, `default` must be one of the `options` values."
           },
           "required": {
             "default": false,
@@ -1481,6 +1576,167 @@
           },
           "description": "The Hyperdrive bindings of the wrangler config, each with the database it connects to (`postgres` or `mysql`). The database runs outside Cloudflare: the install form asks for its connection string, and Appflare creates a Hyperdrive configuration of the install's own from it. Every Hyperdrive binding must be listed, each once. Not allowed on self-deploying entries."
         },
+        "pipelines": {
+          "type": "object",
+          "propertyNames": {
+            "type": "string",
+            "pattern": "^[A-Za-z_$][A-Za-z0-9_$]*$"
+          },
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "fields": {
+                    "minItems": 1,
+                    "maxItems": 256,
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 128,
+                          "description": "The field's name in each event."
+                        },
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "int32",
+                            "int64",
+                            "float32",
+                            "float64",
+                            "bool",
+                            "string",
+                            "binary",
+                            "timestamp",
+                            "json"
+                          ],
+                          "description": "The field's type."
+                        },
+                        "required": {
+                          "type": "boolean",
+                          "description": "Every event carries the field. Cloudflare drops an event that lacks it."
+                        },
+                        "unit": {
+                          "type": "string",
+                          "enum": [
+                            "second",
+                            "millisecond",
+                            "microsecond",
+                            "nanosecond"
+                          ],
+                          "description": "For a `timestamp` field sent as a number: what the number counts."
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "type"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "description": "The fields of each event, in order. Pipelines adds `__ingest_ts` itself; do not list it."
+                  }
+                },
+                "required": [
+                  "fields"
+                ],
+                "additionalProperties": false,
+                "description": "The stream's schema. Cloudflare drops events that do not match it. Omitted: the stream is unstructured and every event lands in one `value` column."
+              },
+              "sink": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "const": "r2_data_catalog",
+                    "description": "An Apache Iceberg table in R2 Data Catalog, the only sink Appflare sets up."
+                  },
+                  "bucket": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z_][A-Za-z0-9_]*$",
+                    "description": "The bucket the table lives in. The name of an R2 binding of the app's wrangler config uses that binding's bucket; any other name gets a bucket of the install's own, named `<worker name>-<name lowercased, _ as ->` like every resource Appflare creates, which no Worker binds (the app reaches it through R2 SQL, for example)."
+                  },
+                  "namespace": {
+                    "type": "string",
+                    "maxLength": 128,
+                    "pattern": "^[A-Za-z_][A-Za-z0-9_]*$",
+                    "description": "The table's namespace in the bucket's catalog."
+                  },
+                  "table": {
+                    "type": "string",
+                    "maxLength": 128,
+                    "pattern": "^[A-Za-z_][A-Za-z0-9_]*$",
+                    "description": "The table's name in the namespace."
+                  },
+                  "tokenSecret": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "The catalog secret that holds a Cloudflare API token with R2 Data Catalog and R2 Storage write access (the dashboard's R2 token with Admin Read & Write). Cloudflare keeps it as the sink's credential, and as the catalog's for table maintenance; Appflare's own token never leaves the manager. The secret must be asked for (no `generate`, `optional`, `derive` or `seedOnly`)."
+                  },
+                  "rollIntervalSeconds": {
+                    "type": "integer",
+                    "minimum": 60,
+                    "maximum": 86400,
+                    "description": "How often the sink writes a file, in seconds: at least 60 for a catalog sink. Cloudflare's default is 300."
+                  },
+                  "compression": {
+                    "type": "string",
+                    "enum": [
+                      "zstd",
+                      "snappy",
+                      "gzip",
+                      "lz4",
+                      "uncompressed"
+                    ],
+                    "description": "The Parquet compression. Cloudflare's default is zstd."
+                  },
+                  "compaction": {
+                    "type": "boolean",
+                    "description": "Turn on the catalog's automatic compaction, which merges the sink's small files."
+                  },
+                  "snapshotExpiration": {
+                    "type": "object",
+                    "properties": {
+                      "maxAge": {
+                        "type": "string",
+                        "pattern": "^\\d+[dhms]$",
+                        "description": "Snapshots older than this are expired, such as `\"30d\"` (d, h, m or s)."
+                      },
+                      "minSnapshotsToKeep": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 9007199254740991,
+                        "description": "Snapshots kept however old they are."
+                      }
+                    },
+                    "required": [
+                      "maxAge"
+                    ],
+                    "additionalProperties": false,
+                    "description": "Turn on the catalog's snapshot expiration, which deletes old snapshots' files."
+                  }
+                },
+                "required": [
+                  "type",
+                  "bucket",
+                  "namespace",
+                  "table",
+                  "tokenSecret"
+                ],
+                "additionalProperties": false,
+                "description": "Where the stream's events land: an Iceberg table in an R2 bucket's Data Catalog, written with the API token the admin enters for the app."
+              }
+            },
+            "required": [
+              "sink"
+            ],
+            "additionalProperties": false
+          },
+          "description": "The Pipelines bindings of the wrangler config, keyed by binding name: each stream's schema and the Iceberg table its events land in. Appflare creates the stream, an R2 Data Catalog sink and a pass-through pipeline for each, and binds the stream. Needs `plan: \"paid\"` (Pipelines is on Workers Paid only). Not allowed on self-deploying entries."
+        },
         "d1": {
           "type": "object",
           "propertyNames": {
@@ -1724,18 +1980,36 @@
                 ],
                 "additionalProperties": false,
                 "description": "Rows the app needs before anyone can sign in (a first admin account), added once at install with values from the install form, bound as D1 parameters. Not allowed on self-deploying entries."
+              },
+              "baseline": {
+                "type": "string",
+                "maxLength": 256,
+                "pattern": "^(?!(?:.*\\/)?\\.{1,2}(?:\\/|$))[0-9A-Za-z.@+_-]+(?:\\/[0-9A-Za-z.@+_-]+)*$",
+                "description": "One SQL file with the binding's whole current schema, for apps whose migrations only bring older databases up to date. It runs once, on the new database, before the migrations (at install, or in the update that adds the binding); every migration the version ships is then recorded in `d1_migrations` as applied without running, and updates run only migrations added later. It may create without IF NOT EXISTS and insert rows, but not ATTACH or DETACH a database, set a PRAGMA, open or end a transaction, or name `d1_migrations` or a `sqlite_` or `_cf_` table. Not together with `schema`."
               }
             },
             "additionalProperties": false,
-            "not": {
-              "required": [
-                "migrationsDir",
-                "migrations"
-              ]
-            },
+            "allOf": [
+              {
+                "not": {
+                  "required": [
+                    "migrationsDir",
+                    "migrations"
+                  ]
+                }
+              },
+              {
+                "not": {
+                  "required": [
+                    "baseline",
+                    "schema"
+                  ]
+                }
+              }
+            ],
             "minProperties": 1
           },
-          "description": "Where each D1 binding's SQL lives when the wrangler config's migrations folder does not describe it, keyed by the binding's name: a migrations folder or glob, schema files that run on every install and update, and migrations that run after the new version serves. Paths are relative to the checkout's root. Not allowed on self-deploying entries."
+          "description": "Where each D1 binding's SQL lives when the wrangler config's migrations folder does not describe it, keyed by the binding's name: a migrations folder or glob, schema files that run on every install and update, migrations that run after the new version serves, seed statements, and a baseline schema that runs once on a new database. Paths are relative to the checkout's root. Not allowed on self-deploying entries."
         }
       },
       "additionalProperties": false
@@ -1758,7 +2032,7 @@
       "type": "integer",
       "minimum": 1,
       "maximum": 1000000,
-      "description": "Which edit of this entry's form and copy the catalog publishes for the build its `source` already released, starting at 1 (the default when omitted). Raise it by one to publish a change to `name`, `summary`, `homepage`, `license`, `categories`, `authors`, `maintainers`, `secrets`, `vars`, `postInstall` or `bump` without moving `source`: the released artifact stays as it is, and managers show the new form without an update. Anything else needs a new build, so move `source` instead."
+      "description": "Which edit of this entry's form and copy the catalog publishes for the build its `source` already released, starting at 1 (the default when omitted). Raise it by one to publish a change to `name`, `summary`, `tagline`, `homepage`, `license`, `licenseNote`, `categories`, `authors`, `maintainers`, `secrets`, `vars`, `postInstall` or `bump` without moving `source`: the released artifact stays as it is, and managers show the new form without an update. Anything else needs a new build, so move `source` instead."
     }
   },
   "required": [
@@ -1781,6 +2055,56 @@
   ],
   "additionalProperties": false,
   "allOf": [
+    {
+      "anyOf": [
+        {
+          "properties": {
+            "install": {
+              "properties": {
+                "tier": {
+                  "not": {
+                    "const": "self-deploying"
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "properties": {
+            "resources": {
+              "not": {
+                "required": [
+                  "pipelines"
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "anyOf": [
+        {
+          "properties": {
+            "plan": {
+              "const": "paid"
+            }
+          }
+        },
+        {
+          "properties": {
+            "resources": {
+              "not": {
+                "required": [
+                  "pipelines"
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
     {
       "anyOf": [
         {

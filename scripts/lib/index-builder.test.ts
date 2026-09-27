@@ -155,6 +155,7 @@ describe("buildIndexApps", () => {
       // (the fixture artifact's own catalog manifest requires nothing).
       services: ["binding:kv_namespace", "requires:r2"],
       categories: ["utilities"],
+      license: "MIT",
       revision: 1,
     });
     expect(warnings.join("\n")).toMatch(/UNSIGNED/);
@@ -423,6 +424,7 @@ describe("sandbox tier entries", () => {
         },
         services: ["no-worker", "requires:r2"],
         categories: ["utilities"],
+        license: "MIT",
         revision: 1,
       },
     ]);
@@ -450,6 +452,7 @@ describe("sandbox tier entries", () => {
       maintainers: ["octocat", "@example/maintainers"],
       services: ["binding:kv_namespace", "requires:r2"],
       categories: ["utilities"],
+      license: "MIT",
       revision: 1,
     });
   });
@@ -531,6 +534,7 @@ describe("self-deploying tier entries", () => {
         },
         services: ["no-worker", "requires:r2"],
         categories: ["utilities"],
+        license: "MIT",
         revision: 1,
       },
     ]);
@@ -764,5 +768,61 @@ describe("rowFacts for an app of several Workers", () => {
     // The jobs Worker's cron trigger and queue consumer, beyond the primary's own.
     expect(primaryOnly).not.toContain("cron");
     expect(facts.services).toEqual(expect.arrayContaining(["cron", "queues", "d1", "kv"]));
+  });
+});
+
+describe("license, tagline and addedAt", () => {
+  const noted = (): CatalogManifest => ({
+    ...hello,
+    license: "BUSL-1.1",
+    licenseNote: "Source-available: production use restricted; see the license",
+    tagline: "Short links on your own domain",
+  });
+
+  it("carries license, licenseNote and tagline from the current catalog manifest", () => {
+    // The artifact's own catalog manifest says MIT; the row follows the current one.
+    writeLocal(artifactManifestFixture({ app: "hello", version: "1.2.3", sha: PIN }));
+    const [row] = buildIndexApps([noted()], options());
+    expect(row).toMatchObject({
+      license: "BUSL-1.1",
+      licenseNote: "Source-available: production use restricted; see the license",
+      tagline: "Short links on your own domain",
+    });
+    const [sandboxRow] = buildIndexApps([sandboxFixture(noted(), schema)], options());
+    expect(sandboxRow).toMatchObject({ license: "BUSL-1.1", tagline: expect.any(String) });
+  });
+
+  it("writes license alone when the entry has no note or tagline", () => {
+    writeLocal(artifactManifestFixture({ app: "hello", version: "1.2.3", sha: PIN }));
+    const [row] = buildIndexApps([hello], options());
+    expect(row?.license).toBe("MIT");
+    expect(row).not.toHaveProperty("licenseNote");
+    expect(row).not.toHaveProperty("tagline");
+  });
+
+  it("keeps a license that is no SPDX expression as it is written", () => {
+    writeLocal(artifactManifestFixture({ app: "hello", version: "1.2.3", sha: PIN }));
+    const [row] = buildIndexApps([{ ...hello, license: "Custom terms" }], options());
+    expect(row?.license).toBe("Custom terms");
+  });
+
+  it("writes addedAt for the entries whose first commit is known", () => {
+    writeLocal(artifactManifestFixture({ app: "hello", version: "1.2.3", sha: PIN }));
+    const addedAt = new Map([["built", "2026-09-01T10:00:00+02:00"]]);
+    const rows = buildIndexApps([hello, sandboxFixture(hello, schema)], options({ addedAt }));
+    expect(rows.find((r) => r.slug === "built")?.addedAt).toBe("2026-09-01T10:00:00+02:00");
+    expect(rows.find((r) => r.slug === "hello")).not.toHaveProperty("addedAt");
+  });
+
+  it("passes the index schema with every new field", () => {
+    writeLocal(artifactManifestFixture({ app: "hello", version: "1.2.3", sha: PIN }));
+    const addedAt = new Map([["hello", "2026-09-20T08:30:00Z"]]);
+    const rows = buildIndexApps([noted()], options({ addedAt }));
+    const index = finalizeIndex(rows, null, new Date(), schema.indexJson);
+    expect(index.apps[0]).toMatchObject({
+      addedAt: "2026-09-20T08:30:00Z",
+      license: "BUSL-1.1",
+      tagline: "Short links on your own domain",
+    });
   });
 });
