@@ -3,6 +3,7 @@
   "slug": "projektor",
   "name": "Projektor",
   "summary": "An issue tracker and wiki for teams and their AI coding agents: issues, boards, sprints and pages in the browser, and the same actions over MCP.",
+  "tagline": "Track team issues and keep a wiki alongside AI coding agents",
   "homepage": "https://tajd.github.io/projektor/",
   "repo": "TAJD/projektor",
   "license": "MIT",

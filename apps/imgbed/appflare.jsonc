@@ -3,6 +3,7 @@
   "slug": "imgbed",
   "name": "CloudFlare ImgBed",
   "summary": "Self-hosted image and file hosting with an admin panel: uploads to R2, Telegram, Discord, S3, Hugging Face or WebDAV, file management, access control, a public gallery, a REST API and WebDAV, on D1.",
+  "tagline": "Store and share images and files on your own site",
   "homepage": "https://cfbed.sanyue.de",
   "repo": "MarSeventh/CloudFlare-ImgBed",
   "license": "MIT",

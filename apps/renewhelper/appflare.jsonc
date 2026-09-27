@@ -3,6 +3,7 @@
   "slug": "renewhelper",
   "name": "RenewHelper",
   "summary": "Keep track of subscriptions, domain renewals, server expiry dates and birthdays: solar and lunar cycles, reminders through Telegram, email, webhooks and a dozen other channels, a calendar with an iCal feed, and a spending dashboard, on Workers KV.",
+  "tagline": "Track renewals and important dates with timely reminders",
   "homepage": "https://github.com/ieax/renewhelper",
   "repo": "ieax/renewhelper",
   "license": "MIT",

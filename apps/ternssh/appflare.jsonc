@@ -3,6 +3,7 @@
   "slug": "ternssh",
   "name": "ternssh",
   "summary": "An SSH workspace in the browser: a draggable dashboard of terminals, SFTP file management, server status and process monitors, saved servers and keys, and an AI command helper.",
+  "tagline": "Manage SSH servers and files from your browser",
   "homepage": "https://ternssh.com",
   "repo": "haradakashiwa/ternssh",
   "license": "GPL-3.0",

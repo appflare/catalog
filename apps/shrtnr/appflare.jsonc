@@ -3,6 +3,7 @@
   "slug": "shrtnr",
   "name": "shrtnr",
   "summary": "A URL shortener you drive from code and AI assistants: a REST API with typed SDKs, an MCP server, per-user links behind Cloudflare Access, bundles and click analytics, on D1 and KV.",
+  "tagline": "Create short links and track clicks in one place",
   "homepage": "https://oddbit.id/en/projects/shrtnr",
   "repo": "oddbit/shrtnr",
   "license": "Apache-2.0",

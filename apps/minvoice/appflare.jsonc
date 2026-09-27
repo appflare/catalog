@@ -3,6 +3,7 @@
   "slug": "minvoice",
   "name": "Minvoice",
   "summary": "Invoicing for one business: invoices with PDF attachments, pay links through Stripe and PayPal, payment reminders, reports and CSV export, on D1.",
+  "tagline": "Create invoices with pay links and payment reminders",
   "homepage": "https://minvoice.dev",
   "repo": "ddyy/minvoice",
   "license": "MIT",

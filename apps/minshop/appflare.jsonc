@@ -3,6 +3,7 @@
   "slug": "minshop",
   "name": "minshop",
   "summary": "A small, server-rendered online store with a full admin: Stripe checkout for people, Lightning invoices and a JSON API that agents can pay through, on D1 and R2.",
+  "tagline": "Run your own online store with card and Lightning payments",
   "homepage": "https://minshop.dev",
   "repo": "ddyy/minshop",
   "license": "MIT",

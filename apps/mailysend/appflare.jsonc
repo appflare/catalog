@@ -3,6 +3,7 @@
   "slug": "mailysend",
   "name": "MailySend",
   "summary": "A Resend-compatible email platform in your own account: transactional sending, broadcasts, automations, inbound mail and deliverability analytics, over Cloudflare Email Service, Amazon SES, Resend or SMTP.",
+  "tagline": "Send emails and campaigns from your own Cloudflare account",
   "homepage": "https://mailysend.com",
   "repo": "GagnDeep/mailysend",
   "license": "MIT",

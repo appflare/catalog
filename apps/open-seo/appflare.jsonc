@@ -8,6 +8,7 @@
   "slug": "open-seo",
   "name": "OpenSEO",
   "summary": "Self-hosted SEO research: keywords, rankings, backlinks and site audits, on your own Cloudflare account and behind Cloudflare Access.",
+  "tagline": "Find search terms, track rankings, and check your site's health",
   "homepage": "https://github.com/every-app/open-seo",
   "repo": "every-app/open-seo",
   "license": "MIT",

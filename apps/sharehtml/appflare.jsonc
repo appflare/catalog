@@ -3,6 +3,7 @@
   "slug": "sharehtml",
   "name": "ShareHTML",
   "summary": "Publish HTML, Markdown, and code files from the command line and get a shareable link with live comments, reactions, and presence. Sign-in through Cloudflare Access.",
+  "tagline": "Publish web pages and documents by link and gather comments",
   "homepage": "https://github.com/jonesphillip/sharehtml",
   "repo": "jonesphillip/sharehtml",
   "license": "Apache-2.0",

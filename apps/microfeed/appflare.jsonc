@@ -10,6 +10,7 @@
   "slug": "microfeed",
   "name": "microfeed",
   "summary": "A lightweight CMS for audio, video, photos, documents, blog posts and links, published as a website, RSS and JSON feed, with an admin dashboard and an API for agents.",
+  "tagline": "Publish podcasts, photos, videos and posts on your own site",
   "homepage": "https://www.microfeed.org",
   "repo": "microfeed/microfeed",
   "license": "AGPL-3.0-only",

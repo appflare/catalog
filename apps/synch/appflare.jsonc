@@ -3,6 +3,7 @@
   "slug": "synch",
   "name": "Synch",
   "summary": "Your own server for Synch, end-to-end encrypted real-time sync for Obsidian vaults: notes are encrypted on each device, and the Worker relays and stores only ciphertext in a Durable Object, D1 and R2.",
+  "tagline": "Keep your Obsidian notes in sync on your own server",
   "homepage": "https://synch.run",
   "repo": "hjinco/synch",
   "license": "MIT",

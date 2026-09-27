@@ -3,6 +3,7 @@
   "slug": "punctual",
   "name": "Punctual",
   "summary": "Scheduling links for you and your team, a Calendly alternative: booking pages, Google and Microsoft 365 calendar sync, round-robin and collective events, reminders, and webhooks.",
+  "tagline": "Let people book time with you or your team",
   "homepage": "https://punctual.sh",
   "repo": "CCCrafts/punctual",
   "license": "MIT",
