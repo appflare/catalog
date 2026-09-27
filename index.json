@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-27T02:23:54.001Z",
+  "generatedAt": "2026-09-27T02:30:07.571Z",
   "apps": [
     {
       "slug": "2fa",
@@ -957,6 +957,45 @@
       "revision": 1
     },
     {
+      "slug": "kukuroo",
+      "name": "Kukuroo",
+      "summary": "Your own Web Push service in one Worker: send notifications to your iPhone, iPad or Mac with a single authenticated POST, no vendor and no native app.",
+      "version": "0.1.3",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/kukuroo@0.1.3/kukuroo-0.1.3.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/kukuroo@0.1.3/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/kukuroo@0.1.3/manifest.sig"
+      },
+      "digest": "ae6a16d697decfba9dcf5f4f217c9a04777f98226e296fe220600b91b7b19a25",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Saiday",
+          "github": "saiday"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "cover": {
+          "url": "https://appflare.github.io/catalog/apps/kukuroo/cover.png",
+          "sha256": "0b24816bdcd711f21ab9db937cd0eadbb227d03d47cb080c8dbbbf926931591e"
+        },
+        "screenshots": []
+      },
+      "services": [
+        "kv"
+      ],
+      "categories": [
+        "notifications"
+      ],
+      "revision": 1
+    },
+    {
       "slug": "mail2telegram",
       "name": "mail2telegram",
       "summary": "Receive your domain's email in Telegram: a push for every message and a Mini App inbox with attachments, filters, and AI summaries.",
@@ -1772,6 +1811,50 @@
       "revision": 1
     },
     {
+      "slug": "reminal",
+      "name": "Reminal",
+      "summary": "Your own relay for reminal: reach the terminals, app windows and desktops of your machines from any browser, end-to-end encrypted, with nothing listening on the machines.",
+      "version": "3.14.19",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/reminal@3.14.19/reminal-3.14.19.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/reminal@3.14.19/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/reminal@3.14.19/manifest.sig"
+      },
+      "digest": "01de37233cd55b89853c5c29a5504fa6a2c4d003f45d69a0ad958f5f94458364",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Harshal Gajjar",
+          "github": "harshalgajjar"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/reminal/icon.png",
+          "sha256": "97653908683f2bfe7bf4302b8a5e29c2839decd0fc37724b8a9c97c91f1968ed"
+        },
+        "cover": {
+          "url": "https://appflare.github.io/catalog/apps/reminal/cover.png",
+          "sha256": "90ed2f7be942e37e6e1ca09d92de076f542168c5b800fc622768fde7e87507b7"
+        },
+        "screenshots": []
+      },
+      "services": [
+        "durable-objects"
+      ],
+      "categories": [
+        "remote-access",
+        "developer-tools"
+      ],
+      "revision": 1
+    },
+    {
       "slug": "second-brain-cloudflare",
       "name": "Second Brain",
       "summary": "A personal memory for your AI assistants: an MCP server that stores notes in D1 and recalls them by meaning with Vectorize and Workers AI.",
@@ -2105,6 +2188,54 @@
       "categories": [
         "notes",
         "sync"
+      ],
+      "revision": 1
+    },
+    {
+      "slug": "ternssh",
+      "name": "ternssh",
+      "summary": "An SSH workspace in the browser: a draggable dashboard of terminals, SFTP file management, server status and process monitors, saved servers and keys, and an AI command helper.",
+      "version": "0.0.13",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/ternssh@0.0.13/ternssh-0.0.13.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/ternssh@0.0.13/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/ternssh@0.0.13/manifest.sig"
+      },
+      "digest": "298197d145ae4f6cedd5fa8cbc9a3fc8358399d29f9279a31faaef8b2218f4c6",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "haradakashiwa",
+          "url": "https://ternssh.com",
+          "github": "haradakashiwa"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/ternssh/icon.png",
+          "sha256": "379cd5975494658ce9eec2a40799ebd65c71105cd92265b31f289e4df6024e6c"
+        },
+        "screenshots": [
+          {
+            "url": "https://appflare.github.io/catalog/apps/ternssh/screenshots/01-dashboard.png",
+            "sha256": "31769bbcd1184aec3f81ef9e1d436e365736e5e631b00dbe5c0c1f35489f6b3b",
+            "alt": "ternssh: Dashboard"
+          }
+        ]
+      },
+      "services": [
+        "d1",
+        "durable-objects"
+      ],
+      "categories": [
+        "remote-access",
+        "developer-tools"
       ],
       "revision": 1
     },
