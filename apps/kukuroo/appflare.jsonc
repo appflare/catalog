@@ -1,0 +1,97 @@
+{
+  // The Worker is upstream's standalone template (templates/standalone), which
+  // imports the `kukuroo` package from npm at `^0.1.0` rather than from this
+  // checkout. The template ships no lockfile, so the packer resolves it at pack
+  // time and the pack log records the sha256 of the package-lock.json it wrote
+  // (v0.1.3, 2026-09-27: 14a1bb06ff22c1605bcd74d696d0e2cb8ce52d6f623df2dc5be3b0f46d2d7dd1).
+  // The range resolved to kukuroo 0.1.3, the release this pin is.
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "kukuroo",
+  "name": "Kukuroo",
+  "summary": "Your own Web Push service in one Worker: send notifications to your iPhone, iPad or Mac with a single authenticated POST, no vendor and no native app.",
+  "homepage": "https://github.com/saiday/kukuroo",
+  "repo": "saiday/kukuroo",
+  "license": "MIT",
+  "categories": ["notifications"],
+  "authors": [{ "name": "Saiday", "github": "saiday" }],
+  "maintainers": ["MendyLanda"],
+  "source": { "ref": "v0.1.3", "sha": "c5c27007f5041773b4c9e5c846e06f8a3719d991" },
+  "install": {
+    "tier": "artifact",
+    "packageManager": "npm",
+    "wranglerConfig": "templates/standalone/wrangler.jsonc",
+    "workerName": "kukuroo",
+    "installDirs": [{ "path": "templates/standalone", "lockfile": "none" }],
+    // Answers without a sign-in, and only when the VAPID key pair is usable.
+    "healthPath": "/push/public-key"
+  },
+  // One KV namespace. A send fans out in one invocation, so on the free plan
+  // one send reaches at most 50 devices (upstream's own measurement).
+  "plan": "free",
+  "requires": [],
+  "secrets": [
+    {
+      "name": "KUKUROO_VAPID_PRIVATE",
+      "label": "Push private key",
+      "help": "The VAPID private key that signs every notification. Never change it once a device has enrolled: devices enrolled under the old key stop receiving, silently. Keep a copy somewhere safe.",
+      "generate": "vapid-private-key"
+    },
+    {
+      "name": "KUKUROO_SEND_TOKEN",
+      "label": "Send token",
+      "help": "The bearer token for POST /push/send. Anything holding it can notify every enrolled device; keep it on servers, never in a web page.",
+      "generate": true
+    },
+    {
+      "name": "KUKUROO_INVITE_CODE",
+      "label": "Invite code",
+      "help": "Asked for on the enrollment page, so a stranger who finds the address cannot enroll a device and read your notifications.",
+      "generate": true
+    }
+  ],
+  "vars": [
+    {
+      "name": "KUKUROO_VAPID_PUBLIC",
+      "label": "Push public key",
+      "help": "The public half of the push private key, handed to browsers at /push/public-key.",
+      "derive": { "from": "KUKUROO_VAPID_PRIVATE", "method": "vapid-public-key" },
+      "required": false
+    },
+    {
+      // The template's value is its placeholder `https://push.example.com`.
+      // Empty, a standalone deployment uses the origin the request came to.
+      "name": "KUKUROO_NAVIGATE_ORIGIN",
+      "label": "Notification origin",
+      "help": "Every notification's navigate URL must be on this origin, for example https://push.example.com. Leave it empty to use the address devices enroll on.",
+      "default": "",
+      "required": false
+    },
+    {
+      "name": "KUKUROO_ALLOWED_ORIGINS",
+      "label": "Allowed origins",
+      "help": "Comma-separated exact origins of your own pages that call /push/subscribe and /push/public-key from the browser. Leave it empty when devices enroll on this Worker's own page.",
+      "required": false
+    },
+    {
+      "name": "KUKUROO_VAPID_SUBJECT",
+      "label": "Contact for push services",
+      "help": "A mailto: or https: address push services can use to reach you about your traffic. Empty, it defaults to the push service's own origin, which Apple accepts.",
+      "required": false
+    }
+  ],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "Choose where devices enroll before the first one does: the address is fixed once a device has enrolled. To use a domain of your own, attach it now and enroll only there."
+    },
+    {
+      "type": "markdown",
+      "content": "On an iPhone or iPad (iOS 18.4 or later) open {{workerUrl}}/push/enroll in Safari, **Add to Home Screen**, open it from the icon, and enter the invite code. Chrome, Firefox and Android cannot enroll."
+    },
+    {
+      "type": "markdown",
+      "content": "Send a notification with the send token:\n\n```sh\ncurl -X POST {{workerUrl}}/push/send \\\n  -H \"authorization: Bearer $SEND_TOKEN\" \\\n  -H 'content-type: application/json' \\\n  -d '{\"notification\":{\"title\":\"hello\",\"navigate\":\"{{workerUrl}}/\"}}'\n```"
+    }
+  ],
+  "tokenPermissions": []
+}

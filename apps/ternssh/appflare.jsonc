@@ -1,0 +1,56 @@
+{
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "ternssh",
+  "name": "ternssh",
+  "summary": "An SSH workspace in the browser: a draggable dashboard of terminals, SFTP file management, server status and process monitors, saved servers and keys, and an AI command helper.",
+  "homepage": "https://ternssh.com",
+  "repo": "haradakashiwa/ternssh",
+  "license": "GPL-3.0",
+  "categories": ["remote-access", "developer-tools"],
+  "authors": [{ "name": "haradakashiwa", "url": "https://ternssh.com", "github": "haradakashiwa" }],
+  "maintainers": ["MendyLanda"],
+  "source": { "ref": "v0.0.13", "sha": "b3d2b6c7c0ad00496d79e07c36532d549cd5e73a" },
+  "install": {
+    "tier": "artifact",
+    "packageManager": "npm",
+    "wranglerConfig": "wrangler.jsonc",
+    "workerName": "ternssh",
+    // Upstream's root postinstall installs web/ and server/, each from its own
+    // lockfile; install scripts do not run here, so both are listed. The root
+    // holds only wrangler, which the packer brings itself.
+    "installDirs": [{ "path": "web" }, { "path": "server" }],
+    // The React front end, built into server/public, which the Worker serves.
+    "buildCommand": "npm run build:web",
+    "healthPath": "/api/health"
+  },
+  // D1, one SQLite-backed Durable Object class per SSH session, and outbound
+  // TCP sockets all work on the free plan.
+  "plan": "free",
+  "requires": [],
+  "secrets": [],
+  "vars": [
+    {
+      "name": "ACCESS_TEAM_DOMAIN",
+      "label": "Cloudflare Access team domain",
+      "help": "With the audience tag below, ternssh signs people in through Cloudflare Access instead of its own username and password, for example your-team.cloudflareaccess.com.",
+      "required": false
+    },
+    {
+      "name": "ACCESS_AUD",
+      "label": "Cloudflare Access audience tag",
+      "help": "The Application Audience (AUD) tag of the Access application in front of this Worker.",
+      "required": false
+    }
+  ],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "Open {{workerUrl}} right away and choose the username and password: until someone does, the first visitor sets them. After that every request needs them, and three failed attempts lock that IP address out for an hour."
+    },
+    {
+      "type": "markdown",
+      "content": "To sign in through Cloudflare Access instead, put an Access application in front of the Worker and set its team domain and audience tag in the app's settings."
+    }
+  ],
+  "tokenPermissions": []
+}

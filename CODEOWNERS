@@ -21,6 +21,7 @@
 /apps/flaremo/ @MendyLanda
 /apps/glance/ @MendyLanda
 /apps/insightflare/ @MendyLanda
+/apps/kukuroo/ @MendyLanda
 /apps/mail2telegram/ @MendyLanda
 /apps/mailflare/ @MendyLanda
 /apps/mailysend/ @MendyLanda
@@ -37,12 +38,14 @@
 /apps/quickinbox/ @MendyLanda
 /apps/r2-explorer/ @MendyLanda
 /apps/rdyrct/ @MendyLanda
+/apps/reminal/ @MendyLanda
 /apps/second-brain-cloudflare/ @MendyLanda
 /apps/sharehtml/ @MendyLanda
 /apps/shotsync/ @MendyLanda
 /apps/shrtnr/ @MendyLanda
 /apps/sink/ @MendyLanda
 /apps/synch/ @MendyLanda
+/apps/ternssh/ @MendyLanda
 /apps/turborepo-remote-cache/ @MendyLanda
 /apps/unifi-ddns/ @MendyLanda
 /apps/usage-guard-collector/ @MendyLanda
