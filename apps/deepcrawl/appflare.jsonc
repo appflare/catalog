@@ -15,7 +15,7 @@
   // version comes from install.version, and the bump bot, which reads no
   // deepcrawl@ prefix as a version, cannot move this pin: move source to the
   // newest deepcrawl@ tag and install.version with it by hand.
-  "source": { "ref": "deepcrawl@0.5.5", "sha": "c40e8e567b7d85b36bf45aa6b5d828249e1831ba" },
+  "source": { "ref": "main", "sha": "964de4b1fac95e28094c5e865047abf1ba00b876" },
   "install": {
     "tier": "artifact",
     "packageManager": "pnpm",
