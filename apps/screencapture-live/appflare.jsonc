@@ -14,6 +14,9 @@
   "repo": "itschip/screencapture",
   "license": "AGPL-3.0",
   "categories": ["games", "media"],
+  // The category was renamed after this release was published; the revision
+  // publishes that change without a new build.
+  "revision": 2,
   "authors": [{ "name": "Christopher", "github": "itschip" }],
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v0.17.2", "sha": "8fb1021330052eba49c9f9378026bd76203edc21" },
