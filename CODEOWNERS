@@ -12,6 +12,7 @@
 /apps/glance/ @MendyLanda
 /apps/mail2telegram/ @MendyLanda
 /apps/mailflare/ @MendyLanda
+/apps/minvoice/ @MendyLanda
 /apps/nodecrypt/ @MendyLanda
 /apps/nodewarden/ @MendyLanda
 /apps/open-seo/ @MendyLanda
@@ -22,6 +23,7 @@
 /apps/second-brain-cloudflare/ @MendyLanda
 /apps/sink/ @MendyLanda
 /apps/unifi-ddns/ @MendyLanda
+/apps/usage-guard-collector/ @MendyLanda
 /apps/yaos/ @MendyLanda
 
 /featured.json @MendyLanda

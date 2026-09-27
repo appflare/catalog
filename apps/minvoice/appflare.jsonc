@@ -1,0 +1,117 @@
+{
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "minvoice",
+  "name": "Minvoice",
+  "summary": "Invoicing for one business: invoices with PDF attachments, pay links through Stripe and PayPal, payment reminders, reports and CSV export, on D1.",
+  "homepage": "https://minvoice.dev",
+  "repo": "ddyy/minvoice",
+  "license": "MIT",
+  "categories": ["business", "finance"],
+  "authors": [{ "name": "Daniel Yang", "url": "https://daniel-yang.com", "github": "ddyy" }],
+  "maintainers": ["MendyLanda"],
+  // Upstream has no release tags; the pin tracks the default branch, main.
+  "source": { "ref": "main", "sha": "99563a5a4d8e90481e76d2440c719c909a67f243" },
+  "install": {
+    "tier": "artifact",
+    "packageManager": "npm",
+    // The zero-config starter the Deploy button uses: the Worker, its D1
+    // database, static assets and a daily cron. Upstream's production
+    // template (wrangler.jsonc.example) cannot be used, since the packer
+    // refuses a template next to a different wrangler.jsonc; without its
+    // send_email binding, Resend is the app's email provider.
+    "wranglerConfig": "wrangler.jsonc",
+    "workerName": "minvoice",
+    // Answers without a sign-in and checks the database.
+    "healthPath": "/health"
+  },
+  // D1 and one daily cron fit the free plan, and so does sending with Resend.
+  "plan": "free",
+  "requires": [],
+  // Seeded from upstream's .dev.vars.example. Every payment and email key can
+  // also be entered later in the app's Settings page, which stores it in D1
+  // encrypted with SETTINGS_MASTER_KEY; a secret set here wins over that.
+  "secrets": [
+    {
+      "name": "ADMIN_PASSWORD",
+      "label": "Admin password",
+      "help": "Signs you in at /admin. Pick something long. Setting up Cloudflare Access (below) turns the password sign-in off."
+    },
+    {
+      "name": "SETTINGS_MASTER_KEY",
+      "label": "Settings encryption key",
+      "help": "Encrypts the API keys you enter in Settings before they are stored in D1. Changing it makes those stored keys unreadable, so they must be entered again.",
+      "generate": true
+    },
+    {
+      "name": "STRIPE_SECRET_KEY",
+      "label": "Stripe secret key",
+      "help": "For card payments through Stripe Checkout (sk_live_... or sk_test_...). Can also be entered in Settings.",
+      "optional": true
+    },
+    {
+      "name": "STRIPE_WEBHOOK_SECRET",
+      "label": "Stripe webhook signing secret",
+      "help": "The whsec_... secret of a Stripe webhook endpoint pointing at /webhooks/stripe on this app.",
+      "optional": true
+    },
+    {
+      "name": "PAYPAL_CLIENT_ID",
+      "label": "PayPal client ID",
+      "help": "For PayPal payments, from a PayPal Business app. Can also be entered in Settings.",
+      "optional": true
+    },
+    {
+      "name": "PAYPAL_CLIENT_SECRET",
+      "label": "PayPal client secret",
+      "help": "The secret of the PayPal app above.",
+      "optional": true
+    },
+    {
+      "name": "PAYPAL_WEBHOOK_ID",
+      "label": "PayPal webhook ID",
+      "help": "The id of a PayPal webhook pointing at /webhooks/paypal on this app.",
+      "optional": true
+    },
+    {
+      "name": "RESEND_API_KEY",
+      "label": "Resend API key",
+      "help": "To send invoices and reminders through Resend, with your domain verified there. Can also be entered in Settings.",
+      "optional": true
+    }
+  ],
+  // None of these is in the starter config; each reaches the Worker only
+  // when it is given a value.
+  "vars": [
+    {
+      "name": "APP_BASE_URL",
+      "label": "Public URL",
+      "help": "The address pay links and emails point to, without a trailing slash, for example https://invoice.example.com. Leave empty to use the address each request arrives at."
+    },
+    {
+      "name": "ACCESS_TEAM_DOMAIN",
+      "label": "Cloudflare Access team domain",
+      "help": "To protect /admin with Cloudflare Access instead of the password: your team domain, such as yourteam.cloudflareaccess.com. Access needs a custom domain on the Worker. Set it together with the audience tag; the password sign-in then stops working."
+    },
+    {
+      "name": "ACCESS_AUD",
+      "label": "Cloudflare Access audience tag",
+      "help": "The Application Audience (AUD) tag of the Access application that covers /admin, 64 hexadecimal characters."
+    },
+    {
+      "name": "PAYPAL_API_BASE",
+      "label": "PayPal API address",
+      "help": "Leave empty to choose live or sandbox in Settings. Setting it (https://api-m.paypal.com or https://api-m.sandbox.paypal.com) fixes the choice."
+    }
+  ],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "Open {{workerUrl}}/admin and sign in with the admin password. The first visit runs a setup wizard for your business details."
+    },
+    {
+      "type": "markdown",
+      "content": "Connect payments and email under Settings. For Stripe, add a webhook endpoint at `{{workerUrl}}/webhooks/stripe`; for PayPal, one at `{{workerUrl}}/webhooks/paypal`. Payment reminders are off until you turn them on under Settings, Email; a daily cron at 15:00 UTC sends them."
+    }
+  ],
+  "tokenPermissions": []
+}
