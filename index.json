@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-26T22:35:43.472Z",
+  "generatedAt": "2026-09-27T01:25:07.475Z",
   "apps": [
     {
       "slug": "2fa",
@@ -124,6 +124,100 @@
       "revision": 1
     },
     {
+      "slug": "binthere",
+      "name": "BinThere",
+      "summary": "A zero-knowledge pastebin for one-time notes: encrypted in the browser with AES-256-GCM, burned on first read by a Durable Object, and gone after 24 hours.",
+      "version": "0.0.0-20260919.63e5544",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/binthere@0.0.0-20260919.63e5544/binthere-0.0.0-20260919.63e5544.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/binthere@0.0.0-20260919.63e5544/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/binthere@0.0.0-20260919.63e5544/manifest.sig"
+      },
+      "digest": "01ddcdbcac3362b2dd9804011abd807266852d609ea31ba13ad2d2ee533c2fd1",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Gaurav",
+          "url": "https://gaury.dev",
+          "github": "nxfu"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/binthere/icon.svg",
+          "sha256": "af943153557907a8b083a4e4ba99280b938b71b9e74508c51df8fb4cf105daa1"
+        },
+        "cover": {
+          "url": "https://appflare.github.io/catalog/apps/binthere/cover.png",
+          "sha256": "2897a9ca636b69902dc6b131f196fa26d089063f9be51606a687a398272215ad"
+        },
+        "screenshots": []
+      },
+      "services": [
+        "kv",
+        "durable-objects"
+      ],
+      "categories": [
+        "sharing",
+        "privacy"
+      ],
+      "revision": 1
+    },
+    {
+      "slug": "cattopic",
+      "name": "CattoPic",
+      "summary": "A self-hosted image host: upload, tag, and browse images, with WebP and AVIF copies, expiry, and a public random-image API, on R2, D1, KV, Queues, and Cloudflare Images.",
+      "version": "1.0.0",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/cattopic@1.0.0/cattopic-1.0.0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/cattopic@1.0.0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/cattopic@1.0.0/manifest.sig"
+      },
+      "digest": "a41b4caf0d7334ed02b98eb4a232a61cdccaad406ef01cf32f9682c16af2b27b",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "r2"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Firefly",
+          "url": "https://catcat.blog",
+          "github": "Yuri-NagaSaki"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/cattopic/icon.svg",
+          "sha256": "9a341cf8e73d50632860b17fc818826c35ae7e3993a1a0ed7574b8b3c8be8cf2"
+        },
+        "screenshots": []
+      },
+      "services": [
+        "kv",
+        "d1",
+        "r2",
+        "queues",
+        "cron",
+        "images"
+      ],
+      "categories": [
+        "files",
+        "storage"
+      ],
+      "revision": 1
+    },
+    {
       "slug": "chatgpt-telegram-workers",
       "name": "ChatGPT Telegram Bot",
       "summary": "Your own AI chat bot on Telegram, backed by OpenAI, Anthropic, Workers AI, or any OpenAI-compatible API.",
@@ -165,6 +259,51 @@
       "categories": [
         "ai",
         "bots"
+      ],
+      "revision": 1
+    },
+    {
+      "slug": "cloudmark",
+      "name": "Cloudmark",
+      "summary": "Bookmarks without an account: create a collection with a write token, save pages with a bookmarklet or the Chrome extension, and open them from any device. On D1.",
+      "version": "0.0.0-20260810.7a3ee47",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/cloudmark@0.0.0-20260810.7a3ee47/cloudmark-0.0.0-20260810.7a3ee47.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/cloudmark@0.0.0-20260810.7a3ee47/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/cloudmark@0.0.0-20260810.7a3ee47/manifest.sig"
+      },
+      "digest": "56a8b857077fd4873279469dc92856dee299aaff60454947a138b0e68f97b86f",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Wesley Yang",
+          "url": "https://wesleyel.github.io",
+          "github": "wesleyel"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/cloudmark/icon.png",
+          "sha256": "541b6dcc527bff65ea33b4f6f45452b8b74c3efc0f4122eff8e99a5b2c573d1e"
+        },
+        "cover": {
+          "url": "https://appflare.github.io/catalog/apps/cloudmark/cover.png",
+          "sha256": "2209794b4a38a69d0a79aa22c67981b8d6502b9304560ece5be61d19b8c3d92d"
+        },
+        "screenshots": []
+      },
+      "services": [
+        "d1"
+      ],
+      "categories": [
+        "productivity",
+        "utilities"
       ],
       "revision": 1
     },
@@ -302,6 +441,42 @@
         "keyId": "catalog-2026-09",
         "signature": "PGUEDWDpX9OXeiK3cTvjLVHdaLJzab+mkNFaSYAp/TYkoRMVM9slKTXBFaGzNCieVRRi5YGUg6yKgXDKPKKLDw=="
       }
+    },
+    {
+      "slug": "durable-git",
+      "name": "dgit",
+      "summary": "A git host on Durable Objects: push and clone over HTTPS with a stock git client and browse with a cgit-style web interface, one Durable Object per repository.",
+      "version": "0.0.8",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/durable-git@0.0.8/durable-git-0.0.8.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/durable-git@0.0.8/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/durable-git@0.0.8/manifest.sig"
+      },
+      "digest": "316745b32193ba5a8d8063e63729c6869956cb8b0a62ee0c77c775a650d85313",
+      "tier": "artifact",
+      "plan": "paid",
+      "requires": [
+        "r2"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Divy Srivastava",
+          "url": "https://littledivy.com",
+          "github": "littledivy"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "services": [
+        "r2",
+        "durable-objects"
+      ],
+      "categories": [
+        "developer-tools"
+      ],
+      "revision": 1
     },
     {
       "slug": "flaremo",
@@ -534,6 +709,74 @@
       "revision": 1
     },
     {
+      "slug": "minvoice",
+      "name": "Minvoice",
+      "summary": "Invoicing for one business: invoices with PDF attachments, pay links through Stripe and PayPal, payment reminders, reports and CSV export, on D1.",
+      "version": "0.0.0-20260720.99563a5",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/minvoice@0.0.0-20260720.99563a5/minvoice-0.0.0-20260720.99563a5.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/minvoice@0.0.0-20260720.99563a5/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/minvoice@0.0.0-20260720.99563a5/manifest.sig"
+      },
+      "digest": "8430c08a7082085410d1632b33992f77d8ace093acfc1a0dfeed9d926e232ddc",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Daniel Yang",
+          "url": "https://daniel-yang.com",
+          "github": "ddyy"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/minvoice/icon.svg",
+          "sha256": "b2c9d0f4ba33955d2013f989e6aa09f764f3097e69591d89f082c88750720ab3"
+        },
+        "screenshots": [
+          {
+            "url": "https://appflare.github.io/catalog/apps/minvoice/screenshots/01-dashboard.png",
+            "sha256": "038214ae56e29c9b64d1c753f0d264c0082373d88a8fa07edd9426ee1feae76c",
+            "alt": "Minvoice: Dashboard"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/minvoice/screenshots/02-invoice-detail.png",
+            "sha256": "f211e6ab4b9067d4ae994dc67d712def0d47ac5a89b604c9267d187e5b5d6792",
+            "alt": "Minvoice: Invoice detail"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/minvoice/screenshots/03-pay-page.png",
+            "sha256": "b5f848571a71f1f18d1bd80031ff5728874b4a16b32111ee710a814757f3c1c5",
+            "alt": "Minvoice: Pay page"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/minvoice/screenshots/04-payments-history.png",
+            "sha256": "ac3f02bdcf36c37771b5925c49922551296cc7ae5a0cec3b21c4a68fb72a95f6",
+            "alt": "Minvoice: Payments history"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/minvoice/screenshots/05-print-view.png",
+            "sha256": "0d9750b1604104ec14982e4aa008c1b7f1c50a20cfeba60d34e9248ea0faa000",
+            "alt": "Minvoice: Print view"
+          }
+        ]
+      },
+      "services": [
+        "d1",
+        "cron"
+      ],
+      "categories": [
+        "business",
+        "finance"
+      ],
+      "revision": 1
+    },
+    {
       "slug": "nodecrypt",
       "name": "NodeCrypt",
       "summary": "End-to-end encrypted chat rooms in the browser: no accounts and no stored history, with private messages, images, and files, relayed by a Durable Object that never sees plaintext.",
@@ -617,6 +860,49 @@
       "categories": [
         "security",
         "passwords"
+      ],
+      "revision": 1
+    },
+    {
+      "slug": "open-artifacts",
+      "name": "Open Artifacts",
+      "summary": "Let coding agents publish HTML and Markdown pages to shareable links, with client-side password protection, version history, and updates in place when the project changes, on D1 and R2.",
+      "version": "0.0.0-20260827.4f8b54b",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/open-artifacts@0.0.0-20260827.4f8b54b/open-artifacts-0.0.0-20260827.4f8b54b.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/open-artifacts@0.0.0-20260827.4f8b54b/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/open-artifacts@0.0.0-20260827.4f8b54b/manifest.sig"
+      },
+      "digest": "fcc36aa3560cb15c0132d581d29cc6cc1073fa6a56dbfa899948e3e8fc1fd8b6",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "r2"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Frad Lee",
+          "url": "https://frad.me",
+          "github": "FradSer",
+          "x": "FradSer"
+        },
+        {
+          "name": "code0",
+          "url": "https://coda0.com",
+          "github": "coda0HQ"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "services": [
+        "d1",
+        "r2"
+      ],
+      "categories": [
+        "developer-tools",
+        "sharing"
       ],
       "revision": 1
     },
@@ -746,6 +1032,55 @@
       "categories": [
         "files",
         "sharing"
+      ],
+      "revision": 1
+    },
+    {
+      "slug": "placeholders-dev",
+      "name": "placeholders.dev",
+      "summary": "Placeholder images generated on the fly: SVGs of any size, text, font and colours, described entirely by the URL, with light and dark variants.",
+      "version": "0.0.0-20260917.3197644",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/placeholders-dev@0.0.0-20260917.3197644/placeholders-dev-0.0.0-20260917.3197644.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/placeholders-dev@0.0.0-20260917.3197644/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/placeholders-dev@0.0.0-20260917.3197644/manifest.sig"
+      },
+      "digest": "dedd8a18627a6359ca6ec216f78ecda5bb7e0f9a28f73d5996f26ac22f4f5ef7",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "James Ross",
+          "url": "https://jross.me",
+          "github": "Cherry",
+          "x": "CherryJimbo"
+        },
+        {
+          "name": "Cloud Four",
+          "url": "https://cloudfour.com",
+          "github": "cloudfour"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/placeholders-dev/icon.png",
+          "sha256": "76ce0fe3fe007069827a3e8e8da020ca6d9edad2eb4b57797322e30130ddbf60"
+        },
+        "cover": {
+          "url": "https://appflare.github.io/catalog/apps/placeholders-dev/cover.png",
+          "sha256": "c3262f454aea6e6c50371cac53db7e7e4fef6a9de060c3b12baaf4f1fbb6c0a9"
+        },
+        "screenshots": []
+      },
+      "services": [],
+      "categories": [
+        "developer-tools",
+        "utilities"
       ],
       "revision": 1
     },
@@ -898,6 +1233,176 @@
       "revision": 1
     },
     {
+      "slug": "sharehtml",
+      "name": "ShareHTML",
+      "summary": "Publish HTML, Markdown, and code files from the command line and get a shareable link with live comments, reactions, and presence. Sign-in through Cloudflare Access.",
+      "version": "0.0.0-20260407.27ddaaf",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/sharehtml@0.0.0-20260407.27ddaaf/sharehtml-0.0.0-20260407.27ddaaf.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/sharehtml@0.0.0-20260407.27ddaaf/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/sharehtml@0.0.0-20260407.27ddaaf/manifest.sig"
+      },
+      "digest": "85f9744265fd4c854208b27baf410ebe346d3455aea3c4c190d1a77acc8afa34",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "r2"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Phillip Jones",
+          "github": "jonesphillip",
+          "x": "akaphill"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/sharehtml/icon.svg",
+          "sha256": "a4db9cb9fe8d5449c3ed7abeabef5a18593e6f7225a3747ec68caed0b29b0285"
+        },
+        "screenshots": [
+          {
+            "url": "https://appflare.github.io/catalog/apps/sharehtml/screenshots/01-document-with-comments.png",
+            "sha256": "ac6c5ab5fddc7b596f8bcad4a5a74c5acacb8ac383f36b21ca88ad06e01f1150",
+            "alt": "ShareHTML: Document with comments"
+          }
+        ]
+      },
+      "services": [
+        "r2",
+        "durable-objects"
+      ],
+      "categories": [
+        "files",
+        "sharing"
+      ],
+      "revision": 1
+    },
+    {
+      "slug": "shotsync",
+      "name": "ShotSync",
+      "summary": "A private image and text pool shared across your devices: drop a screenshot or snippet on one, grab it on another, from an installable web app backed by R2.",
+      "version": "1.0.0",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/shotsync@1.0.0/shotsync-1.0.0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/shotsync@1.0.0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/shotsync@1.0.0/manifest.sig"
+      },
+      "digest": "7ad7873c33a4b3b855d2707c635fde530e9198efe933c8ca66ed70cf35cca2a2",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "r2"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Jinkun Sun",
+          "github": "Defiabell"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "cover": {
+          "url": "https://appflare.github.io/catalog/apps/shotsync/cover.png",
+          "sha256": "300978dd58fc6f349794fa27bc08302133001072488c13dbaadc0a423d8c955b"
+        },
+        "screenshots": [
+          {
+            "url": "https://appflare.github.io/catalog/apps/shotsync/screenshots/01-gallery.png",
+            "sha256": "651945e00058ce1b9fb80cd306b59cfb0e346522745e0979aa29bcab61795a41",
+            "alt": "ShotSync: Gallery"
+          }
+        ]
+      },
+      "services": [
+        "r2"
+      ],
+      "categories": [
+        "files",
+        "sharing"
+      ],
+      "revision": 1
+    },
+    {
+      "slug": "shrtnr",
+      "name": "shrtnr",
+      "summary": "A URL shortener you drive from code and AI assistants: a REST API with typed SDKs, an MCP server, per-user links behind Cloudflare Access, bundles and click analytics, on D1 and KV.",
+      "version": "0.42.1",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/shrtnr@0.42.1/shrtnr-0.42.1.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/shrtnr@0.42.1/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/shrtnr@0.42.1/manifest.sig"
+      },
+      "digest": "221e5201c43a6003627d08571a8e31f23622b7a872c6609aa3dd9c389d8c1241",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Oddbit",
+          "url": "https://oddbit.id",
+          "github": "oddbit",
+          "x": "evenbit"
+        },
+        {
+          "name": "Dennis Alund",
+          "url": "https://dennis.alund.me",
+          "github": "DennisAlund",
+          "x": "DennisAlund"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "screenshots": [
+          {
+            "url": "https://appflare.github.io/catalog/apps/shrtnr/screenshots/01-dashboard.png",
+            "sha256": "0901b28a4672fa51c3baa09d5c3cd44933a7e41d10338c8f49fb892861a16a1a",
+            "alt": "shrtnr: Dashboard"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/shrtnr/screenshots/02-link-analytics.png",
+            "sha256": "25d3060b7909990753e8069b74644f372730546579c96cd3a4f36d819c78759c",
+            "alt": "shrtnr: Link analytics"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/shrtnr/screenshots/03-bundle-analytics.png",
+            "sha256": "d016dc404a713f2f4bb53f4fa31b2ccf0b6da122a3c6a45de787adf2c3e41570",
+            "alt": "shrtnr: Bundle analytics"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/shrtnr/screenshots/04-bundles.png",
+            "sha256": "23ea8ae471e2c82914b65945b8339dca18f8cb9c7c98b9e8ad85405528919c90",
+            "alt": "shrtnr: Bundles"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/shrtnr/screenshots/05-api-keys.png",
+            "sha256": "a80f72012362b10fb83bc92d5c45b5be732ca50b8e6edb9bf5233f9bc1a492ee",
+            "alt": "shrtnr: Api keys"
+          }
+        ]
+      },
+      "services": [
+        "kv",
+        "d1",
+        "durable-objects"
+      ],
+      "categories": [
+        "utilities",
+        "analytics"
+      ],
+      "revision": 1
+    },
+    {
       "slug": "sink",
       "name": "Sink",
       "summary": "Link shortener with visit analytics: custom slugs, expiring links, QR codes, AI slug suggestions and a realtime globe, all on Cloudflare.",
@@ -952,6 +1457,50 @@
       "revision": 1
     },
     {
+      "slug": "turborepo-remote-cache",
+      "name": "Turborepo Remote Cache",
+      "summary": "A Turborepo remote cache server on Workers and R2: point turbo at it and share build outputs between your machines and CI, without Vercel.",
+      "version": "0.0.0-20260615.b0aaab5",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/turborepo-remote-cache@0.0.0-20260615.b0aaab5/turborepo-remote-cache-0.0.0-20260615.b0aaab5.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/turborepo-remote-cache@0.0.0-20260615.b0aaab5/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/turborepo-remote-cache@0.0.0-20260615.b0aaab5/manifest.sig"
+      },
+      "digest": "5c57d68673e1e9c4f61a72d956dc91c4e17b06c1ae6073129cb2fadc1f981bd4",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "r2"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Adishwar Rishi",
+          "url": "https://www.adishwar-rishi.com",
+          "github": "AdiRishi",
+          "x": "AdishwarR"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/turborepo-remote-cache/icon.png",
+          "sha256": "03c1ff0859ddfd4869a968e4142a2ff872c4776a224df92685e92ce3fe9b654f"
+        },
+        "screenshots": []
+      },
+      "services": [
+        "r2",
+        "cron"
+      ],
+      "categories": [
+        "developer-tools"
+      ],
+      "revision": 1
+    },
+    {
       "slug": "unifi-ddns",
       "name": "UniFi DDNS",
       "summary": "Dynamic DNS for UniFi gateways: keeps Cloudflare A/AAAA records on your current IP.",
@@ -981,6 +1530,78 @@
       ],
       "categories": [
         "networking"
+      ],
+      "revision": 1
+    },
+    {
+      "slug": "usage-guard-collector",
+      "name": "Usage Guard Collector",
+      "summary": "Usage surge alerts for your Cloudflare account: reads daily Workers, D1, Durable Objects, KV, R2 and Queues counts into D1 and pings Discord or Slack when a meter jumps.",
+      "version": "0.0.0-20260926.c5f9e9d",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/usage-guard-collector@0.0.0-20260926.c5f9e9d/usage-guard-collector-0.0.0-20260926.c5f9e9d.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/usage-guard-collector@0.0.0-20260926.c5f9e9d/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/usage-guard-collector@0.0.0-20260926.c5f9e9d/manifest.sig"
+      },
+      "digest": "dc4e4f625dbe8cd317e5e48e4d31e3143278429ba2e3184f7593e399d4232a7e",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Howard",
+          "url": "https://www.guushu.com",
+          "github": "HowardZlh"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "services": [
+        "d1",
+        "cron"
+      ],
+      "categories": [
+        "monitoring",
+        "utilities"
+      ],
+      "revision": 1
+    },
+    {
+      "slug": "workers-firecrawl",
+      "name": "Workers Firecrawl",
+      "summary": "A Firecrawl-compatible search, scrape and map API on Browser Rendering: point the Firecrawl SDKs at your own Worker and get pages as Markdown, HTML, links or screenshots.",
+      "version": "0.0.0-20260313.f53a0dc",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/workers-firecrawl@0.0.0-20260313.f53a0dc/workers-firecrawl-0.0.0-20260313.f53a0dc.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/workers-firecrawl@0.0.0-20260313.f53a0dc/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/workers-firecrawl@0.0.0-20260313.f53a0dc/manifest.sig"
+      },
+      "digest": "d42348f44e49aa89307fa5d09ec385aad2387f773eed979720047b007966405a",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "browser-rendering"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Gabriel Massadas",
+          "url": "https://massadas.com",
+          "github": "G4brym",
+          "x": "G4brym"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "services": [
+        "browser-rendering"
+      ],
+      "categories": [
+        "developer-tools",
+        "ai"
       ],
       "revision": 1
     },
