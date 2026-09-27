@@ -1,10 +1,11 @@
 {
-  "generatedAt": "2026-09-27T13:39:31.462Z",
+  "generatedAt": "2026-09-27T13:58:59.756Z",
   "apps": [
     {
       "slug": "2fa",
       "name": "2FA",
       "summary": "A two-factor code manager for TOTP and HOTP keys: scan or import from Google Authenticator, Aegis, 2FAS, and Bitwarden, encrypted in KV, with backups to WebDAV, S3, OneDrive, or Google Drive.",
+      "tagline": "Store your two-factor codes with automatic backups",
       "addedAt": "2026-09-26T23:19:31+03:00",
       "version": "1.9.0",
       "artifacts": {
@@ -26,6 +27,13 @@
       "maintainers": [
         "MendyLanda"
       ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/2fa/icon.svg",
+          "sha256": "5c9a0c9e7d2f58ed9a0cbfed6588423bdac4c67028b0bb561978c84c94d1b485"
+        },
+        "screenshots": []
+      },
       "services": [
         "kv",
         "cron"
@@ -41,6 +49,7 @@
       "slug": "888wiki",
       "name": "888wiki",
       "summary": "A Markdown-first notepad and wiki: write in Markdown, Block, Canvas or Whiteboard, publish password-protected or timed shares, and present notes as slides or books.",
+      "tagline": "Write notes and share them with passwords or time limits",
       "addedAt": "2026-09-27T06:02:01+03:00",
       "version": "0.0.0-20260923.acf210e",
       "artifacts": {
@@ -80,6 +89,11 @@
             "url": "https://appflare.github.io/catalog/apps/888wiki/screenshots/03-slide-presentation.png",
             "sha256": "1e00a0c4cec2f7f10659703fca2bad1bf49545be44616cb9686230c66b0786b9",
             "alt": "888wiki: Slide presentation"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/888wiki/screenshots/04-seal-settings.png",
+            "sha256": "5634e55c85b74f02bfc23d4b7cf1f52ece35444c54104929d996e4e47704fce9",
+            "alt": "888wiki: Seal settings"
           }
         ]
       },
@@ -158,6 +172,7 @@
       "slug": "alle",
       "name": "Alle",
       "summary": "One inbox for all your mail: forward your Gmail, Outlook and other accounts to your domain and read them together, with attachments, plus throwaway addresses on the same domain.",
+      "tagline": "Read mail from all your accounts in one inbox",
       "addedAt": "2026-09-27T10:46:59+03:00",
       "version": "0.0.0-20260605.9fce68a",
       "artifacts": {
@@ -249,6 +264,7 @@
       "slug": "atalaya",
       "name": "Atalaya",
       "summary": "Uptime monitoring and a status page on one Worker: HTTP, TCP and DNS checks every minute, optionally from chosen Cloudflare regions, webhook alerts, and 90 days of history in D1.",
+      "tagline": "Check if your sites are up and share a status page",
       "addedAt": "2026-09-27T04:47:37+03:00",
       "version": "0.0.0-20260926.5437d1c",
       "artifacts": {
@@ -295,6 +311,7 @@
       "slug": "auth-inbox",
       "name": "Auth Inbox",
       "summary": "An inbox for sign-up and verification mail: Email Routing delivers it, an AI model of your choice pulls out codes and links and sorts each mail, and a dashboard, per-user grants and a remote MCP server let people and agents read them.",
+      "tagline": "Get sign-up codes and links in one private inbox",
       "addedAt": "2026-09-27T06:14:13+03:00",
       "version": "0.0.0-20260709.83927b8",
       "artifacts": {
@@ -398,6 +415,7 @@
       "slug": "bark-worker",
       "name": "Bark Worker",
       "summary": "Your own push server for Bark, the iOS notification app: send notifications to your iPhone from scripts and services with a simple HTTP call, with devices stored in D1.",
+      "tagline": "Send notifications to your iPhone from your own server",
       "addedAt": "2026-09-26T23:19:31+03:00",
       "version": "2.2.6",
       "artifacts": {
@@ -432,6 +450,7 @@
       "slug": "bashupload",
       "name": "bashupload",
       "summary": "Upload a file from the terminal with curl or from a browser and get a link that works for one download or until it expires, with an optional password, on R2.",
+      "tagline": "Share files from your browser or terminal with expiring links",
       "addedAt": "2026-09-27T11:44:15+03:00",
       "version": "0.0.0-20260801.1049015",
       "artifacts": {
@@ -471,6 +490,7 @@
       "slug": "binthere",
       "name": "BinThere",
       "summary": "A zero-knowledge pastebin for one-time notes: encrypted in the browser with AES-256-GCM, burned on first read by a Durable Object, and gone after 24 hours.",
+      "tagline": "Share private notes that disappear after one read",
       "addedAt": "2026-09-27T04:19:23+03:00",
       "version": "0.0.0-20260919.63e5544",
       "artifacts": {
@@ -519,6 +539,7 @@
       "slug": "blobatar",
       "name": "blobatar API",
       "summary": "Your own avatar endpoint: GET /avatar/<name> returns a deterministic geometric blobatar SVG for any username, email or id, with Gravatar-compatible URLs.",
+      "tagline": "Generate an avatar for any name or email address",
       "addedAt": "2026-09-27T11:42:03+03:00",
       "version": "2.7.0",
       "artifacts": {
@@ -546,7 +567,18 @@
           "url": "https://appflare.github.io/catalog/apps/blobatar/cover.png",
           "sha256": "d2c30b4cc8d10606ea0bfb10d8af1ef9e02b2e5e52c6c351b190820499861bcf"
         },
-        "screenshots": []
+        "screenshots": [
+          {
+            "url": "https://appflare.github.io/catalog/apps/blobatar/screenshots/01-avatar-gallery.png",
+            "sha256": "ea82546f56af512604a8ea55795e3f534e8fe3ae4111d5a79e221bfb2969b809",
+            "alt": "blobatar API: Avatar gallery"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/blobatar/screenshots/02-avatar-options.png",
+            "sha256": "e1b469d8bffaea6360b0ac340bf32d6c8be27b83452dd4cf96767852d3d5538f",
+            "alt": "blobatar API: Avatar options"
+          }
+        ]
       },
       "services": [],
       "categories": [
@@ -621,6 +653,7 @@
       "slug": "browser-relay",
       "name": "Browser Relay Hub",
       "summary": "Your own relay for Browser Relay: let AI agents on other machines drive the Chrome you are signed in to, through a hub in your account instead of the hosted one.",
+      "tagline": "Connect AI assistants on other devices to your signed-in Chrome",
       "addedAt": "2026-09-27T11:42:03+03:00",
       "version": "1.5.4",
       "artifacts": {
@@ -663,6 +696,7 @@
       "slug": "cap-worker",
       "name": "Cap Worker",
       "summary": "A self-hosted backend for Cap, the privacy-friendly proof-of-work CAPTCHA: your sites get challenges and verify tokens against your own Worker, with no tracking.",
+      "tagline": "Protect your site from bots without tracking visitors",
       "addedAt": "2026-09-27T10:43:47+03:00",
       "version": "0.0.0-20250915.39eb690",
       "artifacts": {
@@ -698,6 +732,7 @@
       "slug": "cattopic",
       "name": "CattoPic",
       "summary": "A self-hosted image host: upload, tag, and browse images, with WebP and AVIF copies, expiry, and a public random-image API, on R2, D1, KV, Queues, and Cloudflare Images.",
+      "tagline": "Upload and organize images on your own image host",
       "addedAt": "2026-09-27T04:19:23+03:00",
       "version": "1.0.0",
       "artifacts": {
@@ -748,6 +783,7 @@
       "slug": "cf-nav",
       "name": "cf-nav",
       "summary": "A card-style start page: your links in categories with a search box, public and private links, drag-and-drop ordering, and JSON export and import, stored in KV.",
+      "tagline": "Organize your favorite links on a searchable start page",
       "addedAt": "2026-09-27T12:13:25+03:00",
       "version": "0.0.0-20260111.6e83733",
       "artifacts": {
@@ -769,6 +805,13 @@
       "maintainers": [
         "MendyLanda"
       ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/cf-nav/icon.svg",
+          "sha256": "dd066d6fca943dfd8200d03f191838444873a8b254140271942844a70f7f2b3a"
+        },
+        "screenshots": []
+      },
       "services": [
         "kv"
       ],
@@ -783,6 +826,7 @@
       "slug": "cf-server-monitor",
       "name": "CF Server Monitor",
       "summary": "Monitor your servers from a Worker: live CPU, memory, disk, traffic and latency from a small agent on each machine, with history, a map, offline and threshold alerts, and expiry reminders.",
+      "tagline": "Track your servers live and get alerts when they need attention",
       "addedAt": "2026-09-27T10:46:59+03:00",
       "version": "0.0.0-20260927.dfb9bf1",
       "artifacts": {
@@ -805,6 +849,35 @@
       "maintainers": [
         "MendyLanda"
       ],
+      "media": {
+        "screenshots": [
+          {
+            "url": "https://appflare.github.io/catalog/apps/cf-server-monitor/screenshots/01-server-overview.png",
+            "sha256": "4e782e5892fdcce1f7ef041519805d9dac41c69722d29d53b05e160c6745774e",
+            "alt": "CF Server Monitor: Server overview"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/cf-server-monitor/screenshots/02-server-detail.png",
+            "sha256": "b04b2931d5178d73f6cda008ddb2b51945c2451dbc7e9201ca69f64db4598464",
+            "alt": "CF Server Monitor: Server detail"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/cf-server-monitor/screenshots/03-admin-dashboard.png",
+            "sha256": "213d9bf13241c1ca6a1026af6325e4c528242b78d61b7fed54c8e5f82766da8d",
+            "alt": "CF Server Monitor: Admin dashboard"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/cf-server-monitor/screenshots/04-server-settings.png",
+            "sha256": "663606375222de8d3c0f8df90007371070df64ecd36383955ecffc1cd373b4da",
+            "alt": "CF Server Monitor: Server settings"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/cf-server-monitor/screenshots/05-display-alert-settings.png",
+            "sha256": "3ffe351698c4ff9eead17369b0951acee7cd0bd92498061c37ba172bcaa181af",
+            "alt": "CF Server Monitor: Display alert settings"
+          }
+        ]
+      },
       "services": [
         "d1",
         "durable-objects",
@@ -821,6 +894,7 @@
       "slug": "cftgsx",
       "name": "cftgsx",
       "summary": "A two-way Telegram contact bot: messages to the bot reach your admin chat, your replies go back to the sender, with broadcasts, bans and one forum topic per user.",
+      "tagline": "Answer messages to your Telegram bot from one chat",
       "addedAt": "2026-09-27T12:13:25+03:00",
       "version": "0.0.0-20251121.3ee8aed",
       "artifacts": {
@@ -903,6 +977,7 @@
       "slug": "civideo",
       "name": "child-video",
       "summary": "A private, ad-free video and audiobook library for children: you upload to your own R2 bucket, and upstream's native apps play only what you put there, with daily limits and allowed hours.",
+      "tagline": "Your own ad-free video and audiobook library for children",
       "addedAt": "2026-09-27T05:56:12+03:00",
       "version": "0.2.0",
       "artifacts": {
@@ -948,6 +1023,7 @@
       "slug": "clist",
       "name": "CList",
       "summary": "A file browser and WebDAV server over your S3, WebDAV, OneDrive and Google Drive storage, with previews, share links and audit logs.",
+      "tagline": "Browse and share files from all your storage in one place",
       "addedAt": "2026-09-27T06:14:13+03:00",
       "version": "0.0.0-20260924.cb7cc24",
       "artifacts": {
@@ -991,6 +1067,7 @@
       "slug": "cloudflare-prometheus-exporter",
       "name": "Cloudflare Prometheus Exporter",
       "summary": "Export Cloudflare analytics as Prometheus metrics: requests, bandwidth, threats, Workers, load balancers, certificates, Magic Transit and more, for every account and zone your API token can read, refreshed each minute by Durable Objects.",
+      "tagline": "Send Cloudflare traffic and security metrics to Prometheus",
       "addedAt": "2026-09-27T11:44:57+03:00",
       "version": "0.0.1-beta.15",
       "artifacts": {
@@ -1013,6 +1090,15 @@
       "maintainers": [
         "MendyLanda"
       ],
+      "media": {
+        "screenshots": [
+          {
+            "url": "https://appflare.github.io/catalog/apps/cloudflare-prometheus-exporter/screenshots/01-landing-page.png",
+            "sha256": "794d5655deb9aacaa309a5c790c3b5482235dc5f4e76057cacf601fbb49b0b19",
+            "alt": "Cloudflare Prometheus Exporter: Landing page"
+          }
+        ]
+      },
       "services": [
         "kv",
         "durable-objects",
@@ -1030,6 +1116,7 @@
       "slug": "cloudflarebase",
       "name": "Cloudflarebase",
       "summary": "An open-source Firebase alternative on Cloudflare: auth, JSON collections and SQL tables with live queries, remote config and file storage, each project in Durable Objects of its own, run from one console. App hosting needs Workers for Platforms, which Appflare does not set up yet; the rest works.",
+      "tagline": "Add sign-in, live data, and file storage to your app",
       "addedAt": "2026-09-27T10:14:04+03:00",
       "version": "0.0.0-20260827.adfd1b3",
       "artifacts": {
@@ -1086,6 +1173,7 @@
       "slug": "cloudmark",
       "name": "Cloudmark",
       "summary": "Bookmarks without an account: create a collection with a write token, save pages with a bookmarklet or the Chrome extension, and open them from any device. On D1.",
+      "tagline": "Save bookmarks and open them from any device",
       "addedAt": "2026-09-27T04:19:23+03:00",
       "version": "0.0.0-20260810.7a3ee47",
       "artifacts": {
@@ -1392,6 +1480,7 @@
       "slug": "dispoflare",
       "name": "Dispoflare",
       "summary": "Disposable email addresses on your own domains: create a random or chosen address that forwards to your inbox until the date you pick, on Email Routing.",
+      "tagline": "Disposable email addresses on your own domains",
       "addedAt": "2026-09-27T11:50:07+03:00",
       "version": "2.0.1",
       "artifacts": {
@@ -3840,6 +3929,7 @@
       "slug": "nodecrypt",
       "name": "NodeCrypt",
       "summary": "End-to-end encrypted chat rooms in the browser: no accounts and no stored history, with private messages, images, and files, relayed by a Durable Object that never sees plaintext.",
+      "tagline": "Private chat rooms without accounts or message history",
       "addedAt": "2026-09-26T23:19:31+03:00",
       "version": "0.0.0-20260817.54ed049",
       "artifacts": {
@@ -6310,6 +6400,7 @@
       "slug": "yaos",
       "name": "YAOS",
       "summary": "Real-time sync for Obsidian vaults: edits merge live across devices as CRDTs, with attachments and snapshots in R2, through a Worker you own.",
+      "tagline": "Keep your Obsidian notes in sync across devices",
       "addedAt": "2026-09-27T01:13:10+03:00",
       "version": "2.1.1",
       "artifacts": {
@@ -6335,6 +6426,24 @@
       "maintainers": [
         "MendyLanda"
       ],
+      "media": {
+        "cover": {
+          "url": "https://appflare.github.io/catalog/apps/yaos/cover.png",
+          "sha256": "67cb6636f9dc075ea10130af8de6449385d6444e1076ee4a37ea43530b0234e2"
+        },
+        "screenshots": [
+          {
+            "url": "https://appflare.github.io/catalog/apps/yaos/screenshots/01-desktop-note-sync.png",
+            "sha256": "6dd8bf6b6ff19c9722e5954121f85d045c8d1743555c1092a1d20249f66da306",
+            "alt": "YAOS: Desktop note sync"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/yaos/screenshots/02-mobile-note-sync.png",
+            "sha256": "c0d32e71d1a1b9a16d03aeb70214f6ea51a2df3cd0ea8b52013d16b7fdbb3f1b",
+            "alt": "YAOS: Mobile note sync"
+          }
+        ]
+      },
       "services": [
         "r2",
         "durable-objects"
