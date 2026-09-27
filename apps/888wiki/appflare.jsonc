@@ -1,0 +1,102 @@
+{
+  // A Markdown-first notepad and wiki: anyone who opens the Worker can start a
+  // note at a random short path, protect it with a password, and publish it as
+  // a share. Notes and shares live in KV, note history, view counts and
+  // paragraph annotations in D1, uploaded images in R2.
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "888wiki",
+  "name": "888wiki",
+  "summary": "A Markdown-first notepad and wiki: write in Markdown, Block, Canvas or Whiteboard, publish password-protected or timed shares, and present notes as slides or books.",
+  "homepage": "https://github.com/tbdavid2019/888wiki",
+  "repo": "tbdavid2019/888wiki",
+  "license": "AGPL-3.0",
+  "categories": ["notes", "productivity"],
+  "authors": [{ "name": "DAVID888", "github": "tbdavid2019" }],
+  "maintainers": ["MendyLanda"],
+  // 888wiki publishes no release tags; the pin tracks main.
+  "source": { "ref": "main", "sha": "acf210e734e45d53e156bddb3a84114676baaf28" },
+  "install": {
+    "tier": "artifact",
+    "packageManager": "npm",
+    "wranglerConfig": "wrangler.toml",
+    "workerName": "888wiki",
+    // Upstream's `predeploy` script, one step each (npm runs no pre hooks
+    // here): the agent skill module the Worker imports, then the four browser
+    // bundles in static/js that the editors load.
+    "buildCommand": [
+      "npm run prepare:skill-doc",
+      "npm run build:block-editor",
+      "npm run build:canvas-editor",
+      "npm run build:whiteboard-editor",
+      "npm run build:ocr"
+    ]
+  },
+  // KV, D1, R2 and one daily cron trigger all have free tiers.
+  "plan": "free",
+  // Uploaded images go to an R2 bucket.
+  "requires": ["r2"],
+  "secrets": [
+    {
+      "name": "SCN_ADMIN_PW",
+      "label": "Admin password",
+      "help": "Signs you in to the admin dashboard, at /admin unless you change the admin path below.",
+      "generate": true
+    },
+    {
+      "name": "SCN_SALT",
+      "label": "Password salt",
+      "help": "Salts the hashes of note and share passwords. Setting a new value makes every existing note password stop working.",
+      "generate": true
+    },
+    {
+      "name": "SCN_SECRET",
+      "label": "Session secret",
+      "help": "Signs sessions and access tokens. Setting a new value signs everyone out.",
+      "generate": true
+    },
+    {
+      "name": "GROQ_API_KEY",
+      "label": "Groq API key",
+      "help": "Turns on AI writing (format, rewrite, translate) and audio transcription through Groq. Leave it unset to go without them.",
+      "optional": true
+    }
+  ],
+  "vars": [
+    {
+      "name": "SCN_APP_NAME",
+      "label": "App name",
+      "help": "Shown in the interface.",
+      "default": "888wiki"
+    },
+    {
+      "name": "SCN_ADMIN_PATH",
+      "label": "Admin path",
+      "help": "Where the admin dashboard lives. A less predictable path keeps it out of sight.",
+      "default": "/admin",
+      "required": true
+    }
+  ],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "Open {{workerUrl}} to start a note. Anyone who can reach the address can create notes; set a password on a note to keep it private. The admin dashboard is at {{workerUrl}}/admin (or the admin path you chose) and takes the admin password."
+    }
+  ],
+  "tokenPermissions": [],
+  "resources": {
+    "d1": {
+      // Upstream keeps its tables in schema/ and creates them with
+      // `wrangler d1 execute` on every deploy (`npm run db:init`); every
+      // statement is CREATE ... IF NOT EXISTS. schema/notes_d1.sql, the
+      // optional D1 copy of the notes themselves, is left out as upstream's
+      // deploy leaves it out: notes stay in KV.
+      "NOTE_HISTORY_DB": {
+        "schema": [
+          "schema/note_history.sql",
+          "schema/note_stats.sql",
+          "schema/note_annotations.sql"
+        ]
+      }
+    }
+  }
+}

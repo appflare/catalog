@@ -1,0 +1,79 @@
+{
+  // A shared email workspace for teams: shared mailboxes, drafts, labels and
+  // audit history on D1 and R2, receiving through Email Routing and sending
+  // through Cloudflare Email Service. HQBase's own first-run page connects the
+  // domains: it signs in to Cloudflare through HQBase's OAuth app, points the
+  // zone's Email Routing catch-all at this Worker, sets up Email Sending, and
+  // can attach a hostname for the workspace. So the entry sets no
+  // install.emailRouting of its own.
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "hqbase",
+  "name": "HQBase",
+  "summary": "Your team's email workspace in your own account: shared mailboxes, drafts, labels, contacts and audit history, with a remote MCP server for agents.",
+  "homepage": "https://hqbase.io",
+  "repo": "HQBase/hqbase",
+  "license": "AGPL-3.0-only",
+  "categories": ["email", "productivity"],
+  "authors": [{ "name": "HQBase", "url": "https://hqbase.io", "github": "HQBase" }],
+  "maintainers": ["MendyLanda"],
+  "source": { "ref": "v1.4.2", "sha": "a1161f1cebf67c147ec5ab934504f79a3bcfe807" },
+  "install": {
+    "tier": "artifact",
+    "packageManager": "pnpm",
+    "wranglerConfig": "wrangler.jsonc",
+    "workerName": "hqbase",
+    // Upstream's build: checks the Worker config, builds the React app into
+    // dist/ (served as static assets), then the offline service worker.
+    "buildCommand": "pnpm run build",
+    // Answers without a sign-in.
+    "healthPath": "/api/health"
+  },
+  // D1, R2, Queues, a SQLite-backed Durable Object, one daily cron trigger
+  // and receiving through Email Routing all fit the free plan, but HQBase
+  // sends only through Cloudflare Email Service, and sending to any
+  // recipient there needs Workers Paid (developers.cloudflare.com/
+  // email-service/platform/pricing). A team mail workspace that cannot reply
+  // is not one, so the entry is paid.
+  "plan": "paid",
+  "requires": ["zone", "email-routing", "r2"],
+  "secrets": [
+    {
+      "name": "BETTER_AUTH_SECRET",
+      "label": "Session secret",
+      "help": "Signs sign-in sessions and the tokens HQBase issues. Setting a new value signs everyone out.",
+      "generate": true
+    }
+  ],
+  "vars": [
+    {
+      // Upstream's deploy script sets it; the first-run page and domain
+      // checks use it to point Email Routing at this Worker.
+      "name": "HQBASE_WORKER_NAME",
+      "label": "Worker name",
+      "help": "The name HQBase gives Cloudflare when it points your domains' mail at this Worker. Filled in on every install and update.",
+      "default": "{{workerName}}",
+      "required": true
+    }
+  ],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "Open {{workerUrl}}/setup right away: the first person to finish it becomes the owner. It asks you to authorize HQBase in Cloudflare so it can connect your email domains to this Worker."
+    },
+    {
+      "type": "markdown",
+      "content": "Update HQBase through Appflare. Its own **Updates** settings follow HQBase's release channel through Workers Builds, which an Appflare install does not use, so they show the update as unavailable."
+    }
+  ],
+  "tokenPermissions": [],
+  "resources": {
+    "d1": {
+      // Upstream's deploy applies migrations-after-deploy/ once the new
+      // version is live (scripts/d1-migrations.mjs): they drop the columns
+      // and tables the previous version still reads. Upstream records them
+      // in a table of their own, d1_migrations_after_deploy; Appflare records
+      // them in d1_migrations beside the others, under their own file names.
+      "DB": { "postDeployMigrationsDir": "migrations-after-deploy" }
+    }
+  }
+}

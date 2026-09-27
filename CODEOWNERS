@@ -2,6 +2,7 @@
 # Do not edit by hand: run `pnpm gen-codeowners`.
 
 /apps/2fa/ @MendyLanda
+/apps/888wiki/ @MendyLanda
 /apps/agentic-inbox/ @MendyLanda
 /apps/atalaya/ @MendyLanda
 /apps/bark-worker/ @MendyLanda
@@ -20,9 +21,11 @@
 /apps/email-explorer/ @MendyLanda
 /apps/feedlog/ @MendyLanda
 /apps/flaremo/ @MendyLanda
+/apps/formzero/ @MendyLanda
 /apps/garrul/ @MendyLanda
 /apps/git-on-cloudflare/ @MendyLanda
 /apps/glance/ @MendyLanda
+/apps/hqbase/ @MendyLanda
 /apps/inkstone/ @MendyLanda
 /apps/insightflare/ @MendyLanda
 /apps/kukuroo/ @MendyLanda

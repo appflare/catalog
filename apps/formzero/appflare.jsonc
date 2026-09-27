@@ -1,0 +1,50 @@
+{
+  // A form backend for static sites: point a form's action (or a fetch call)
+  // at the app and every submission lands in D1, with a dashboard, charts and
+  // CSV export. One account only: the first person to sign up owns it, and
+  // sign-up closes after that.
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "formzero",
+  "name": "FormZero",
+  "summary": "A form backend for static sites: send HTML forms or JSON to your own endpoint and browse, chart and export the submissions from a dashboard.",
+  "homepage": "https://github.com/BohdanPetryshyn/formzero",
+  "repo": "BohdanPetryshyn/formzero",
+  "license": "MIT",
+  "categories": ["business", "utilities"],
+  "authors": [{ "name": "Bohdan Petryshyn", "github": "BohdanPetryshyn" }],
+  "maintainers": ["MendyLanda"],
+  // FormZero publishes no release tags; the pin tracks main, and upstream
+  // ships updates from main through its Deploy button.
+  "source": { "ref": "main", "sha": "a4ddde255457d1e6ddf55b5f24b51809d18501f3" },
+  "install": {
+    "tier": "artifact",
+    "packageManager": "npm",
+    "wranglerConfig": "wrangler.jsonc",
+    "workerName": "formzero",
+    // React Router through the Cloudflare Vite plugin, which writes the
+    // Worker and the config wrangler deploys from to build/server/. The D1
+    // migrations stay in migrations/, beside wrangler.jsonc, where upstream's
+    // `wrangler d1 migrations apply` reads them.
+    "buildCommand": "npm run build"
+  },
+  // D1 and Workers both fit the free plan; upstream sizes it at about 100,000
+  // submissions a day.
+  "plan": "free",
+  "requires": [],
+  "secrets": [
+    {
+      "name": "BETTER_AUTH_SECRET",
+      "label": "Session secret",
+      "help": "Signs the dashboard's sign-in sessions. Setting a new value signs you out.",
+      "generate": true
+    }
+  ],
+  "vars": [],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "Open {{workerUrl}} now and create your account: FormZero has a single account, and sign-up closes as soon as it exists. Then create a form and copy its endpoint into your site's form `action`."
+    }
+  ],
+  "tokenPermissions": []
+}
