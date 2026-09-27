@@ -8,6 +8,7 @@
 /apps/atalaya/ @MendyLanda
 /apps/auth-inbox/ @MendyLanda
 /apps/bark-worker/ @MendyLanda
+/apps/bashupload/ @MendyLanda
 /apps/binthere/ @MendyLanda
 /apps/blobatar/ @MendyLanda
 /apps/bookshelf/ @MendyLanda
@@ -37,6 +38,7 @@
 /apps/flaremo/ @MendyLanda
 /apps/folia/ @MendyLanda
 /apps/formzero/ @MendyLanda
+/apps/freemail/ @MendyLanda
 /apps/fxtiktok/ @MendyLanda
 /apps/garrul/ @MendyLanda
 /apps/git-on-cloudflare/ @MendyLanda
@@ -77,6 +79,7 @@
 /apps/punctual/ @MendyLanda
 /apps/quickinbox/ @MendyLanda
 /apps/r2-explorer/ @MendyLanda
+/apps/r2-webdav/ @MendyLanda
 /apps/rdyrct/ @MendyLanda
 /apps/relay/ @MendyLanda
 /apps/reminal/ @MendyLanda

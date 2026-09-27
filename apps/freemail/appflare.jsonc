@@ -1,0 +1,132 @@
+{
+  // A temporary and domain mail service: Email Routing hands every message
+  // sent to the zone to the Worker, which keeps the headers and a preview in
+  // D1 and the raw message in R2. The admin creates addresses, users and
+  // per-mailbox logins in a web app; sending goes through Resend, SendFlare
+  // or Cyberpersons with the admin's own keys.
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "freemail",
+  "name": "Freemail",
+  "summary": "Temporary and domain mailboxes on your own domain: create addresses in the browser, read what Email Routing delivers, share mailboxes with users, and send through Resend or SendFlare, on D1 and R2.",
+  "homepage": "https://github.com/idinging/freemail",
+  "repo": "idinging/freemail",
+  "license": "Apache-2.0",
+  "categories": ["email", "privacy"],
+  "authors": [{ "name": "iding", "url": "https://blog.iding.qzz.io", "github": "idinging" }],
+  "maintainers": ["MendyLanda"],
+  // The newest release tag, not the default branch: every commit after it on
+  // master rejects each incoming message that has no forwarding target, so
+  // senders get a bounce while the mail is still stored. The bump bot moves
+  // the pin with the next tag.
+  "source": { "ref": "v5.3.1", "sha": "a95c1710e7eeb9f2c74a49ef962f4f43a36695b3" },
+  "install": {
+    "tier": "artifact",
+    "packageManager": "npm",
+    // Plain JavaScript and static files: no build step. The config's D1 id is
+    // upstream's own and is dropped when packing.
+    "wranglerConfig": "wrangler.toml",
+    "workerName": "freemail",
+    // Worker code on every request: 401 until you sign in.
+    "healthPath": "/api/session",
+    // Upstream's setup binds the zone's catch-all to the Worker, so any
+    // address of the domain can be created in the app and receive mail.
+    "emailRouting": { "catchAll": true }
+  },
+  // Receiving mail, D1 and R2 fit the free plan. No cron triggers.
+  "plan": "free",
+  "requires": ["r2", "zone", "email-routing"],
+  // The wrangler config ships placeholders for the passwords, the JWT key
+  // and the sending keys in [vars]; as secrets here, those vars are left out
+  // of the artifact. Its JWT_TOKENGUEST_PASSWORD var is read by no code and
+  // stays as upstream wrote it.
+  "secrets": [
+    {
+      "name": "ADMIN_PASSWORD",
+      "label": "Admin password",
+      "help": "Sign in as the admin user name below with this password.",
+      "generate": true
+    },
+    {
+      "name": "JWT_TOKEN",
+      "label": "Session key and root API token",
+      "help": "Signs sign-in sessions, and is also a full admin token for the API (Authorization: Bearer). Setting a new value signs everyone out.",
+      "generate": true
+    },
+    {
+      "name": "GUEST_PASSWORD",
+      "label": "Guest password",
+      "help": "Optional. Lets anyone sign in as the user name guest with this password to try the interface on demo data; guests never see real mail.",
+      "optional": true
+    },
+    {
+      "name": "RESEND_API_KEY",
+      "label": "Resend API key",
+      "help": "Optional, for sending. One key for every domain, or domain=key pairs separated by commas (example.com=re_1,example.org=re_2).",
+      "optional": true
+    },
+    {
+      "name": "SENDFLARE_API_KEY",
+      "label": "SendFlare API key",
+      "help": "Optional, for sending through SendFlare, in the same formats as the Resend key.",
+      "optional": true
+    },
+    {
+      "name": "CYBERPERSONS_API_KEY",
+      "label": "Cyberpersons API key",
+      "help": "Optional, for sending through Cyberpersons, in the same formats as the Resend key.",
+      "optional": true
+    }
+  ],
+  "vars": [
+    {
+      "name": "MAIL_DOMAIN",
+      "label": "Mail domains",
+      "help": "The domain addresses are made in, the zone you pick for Email Routing, for example example.com. Several are allowed, comma separated.",
+      // The wrangler config's value is upstream's placeholder; an empty
+      // default makes the form ask for the real domain.
+      "default": "",
+      "required": true
+    },
+    {
+      "name": "ADMIN_NAME",
+      "label": "Admin user name",
+      "help": "The user name that signs in with the admin password.",
+      "default": "admin",
+      "required": true
+    },
+    {
+      "name": "SESSION_EXPIRE_DAYS",
+      "label": "Session length (days)",
+      "help": "How long a sign-in lasts.",
+      "default": "365"
+    },
+    {
+      "name": "FORWARD_RULES",
+      "label": "Forwarding rules",
+      "help": "Optional. Forward mail by the address's local part to verified Email Routing destination addresses, for example vip=a@example.com,*=b@example.com. Mailboxes can also set their own forwarding address in the app."
+    }
+  ],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "Open {{workerUrl}} and sign in with the admin user name and password. Create an address, or let the app generate one, and mail sent to it shows up in its inbox."
+    },
+    {
+      "type": "markdown",
+      "content": "Every address of the zone you picked now reaches the app: mail to an address nobody created gets a mailbox of its own when it arrives, and only the admin sees those. Use a domain kept for this app, not one that receives mail you read elsewhere."
+    },
+    {
+      "type": "markdown",
+      "content": "The API accepts the session key as a bearer token (`Authorization: Bearer <JWT_TOKEN>`) with full admin rights, so keep it as private as the admin password. Upstream's API reference is docs/api.md in its repository."
+    }
+  ],
+  "tokenPermissions": [],
+  "resources": {
+    "d1": {
+      // Upstream applies this file by hand (wrangler d1 execute); every
+      // statement creates only what is missing. The Worker adds columns it
+      // needs on first start itself.
+      "TEMP_MAIL_DB": { "schema": ["d1-init.sql"] }
+    }
+  }
+}
