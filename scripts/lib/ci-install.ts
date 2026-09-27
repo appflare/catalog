@@ -25,7 +25,15 @@ import type {
  * same names, `<worker>-<binding, lowercased, "_" -> "-">`, so the CI Worker's
  * resources can be found and deleted by name afterwards without any records.
  *
- * An app of several Workers (an artifact manifest of format 2) is deployed as
+ * D1 SQL runs as the manager runs it, once every Worker is deployed: each
+ * database's migrations with `wrangler d1 migrations apply` (named and ordered
+ * as the artifact records them), then its schema files in order with
+ * `wrangler d1 execute --file`, unrecorded; then, for every database, its
+ * post-deploy migrations with `wrangler d1 migrations apply` against a second
+ * config whose `migrations_dir` is their folder, so they are recorded in
+ * `d1_migrations` beside the others.
+ *
+ * An app of several Workers (an artifact manifest with `workers`) is deployed as
  * the manager deploys it: every Worker, each after the Workers it binds to,
  * the primary one as `ci-<slug>-<suffix>` and every other one as
  * `ci-<slug>-<suffix>-<name>`. Resources belong to the app and are shared by
@@ -40,6 +48,14 @@ import type {
 export const WORKER_DIR = "worker";
 export const ASSETS_DIR = "assets";
 export const D1_DIR = "d1";
+/** Where each D1 binding's schema files are unpacked: `<dir>/<binding>/<name>`. */
+export const D1_SCHEMA_DIR = "d1-schema";
+/** Where each D1 binding's post-deploy migrations are unpacked. */
+export const D1_POST_DEPLOY_DIR = "d1-post-deploy";
+/** The config the post-deploy migrations are applied with (see {@link postDeployConfig}). */
+export const POST_DEPLOY_CONFIG = "wrangler.post-deploy.json";
+/** The config every Worker is deployed with. */
+export const DEPLOY_CONFIG = "wrangler.json";
 
 /**
  * Worker names: lowercase letters, digits, inner dashes, at most 58 characters,
@@ -110,6 +126,19 @@ export interface CiQueueConsumer {
   settings: QueueConsumerSettings;
 }
 
+/** The SQL the check runs against one D1 database once the Workers are deployed. */
+export interface CiD1Database {
+  /** The database's name, as the config gives it (`database_name`). */
+  database: string;
+  binding: string;
+  /** Whether it has migrations, applied from `d1/<binding>/` by the deploy config. */
+  migrations: boolean;
+  /** Its schema files, relative to the work dir, in the order they run. */
+  schema: string[];
+  /** Its post-deploy migrations' names, applied from `d1-post-deploy/<binding>/`. */
+  postDeploy: string[];
+}
+
 export interface CiInstallPlan {
   name: string;
   /** The generated `wrangler.json`. */
@@ -134,8 +163,8 @@ export interface CiInstallPlan {
    * values ({@link derivedVarValues}).
    */
   derivedVars: CiDerivedSecret[];
-  /** D1 databases with migrations to apply, by database name. */
-  d1Migrations: string[];
+  /** D1 databases with SQL to run once the Worker is deployed, in binding order. */
+  d1: CiD1Database[];
   /** Vectorize indexes to create before the deploy (wrangler cannot provision them). */
   vectorizeIndexes: CiVectorizeIndex[];
   /**
@@ -703,11 +732,12 @@ export function planCiInstall(
   const ratelimits: Record<string, unknown>[] = [];
   const sendEmail: Record<string, unknown>[] = [];
   const services: Record<string, string>[] = [];
+  const workerLoaders: Record<string, string>[] = [];
   const notes: string[] = [];
   const singles: Record<string, { binding: string }> = {};
   const vars: Record<string, JsonValue> = {};
   const jsonVars = new Set<string>();
-  const d1Migrations: string[] = [];
+  const d1Databases: CiD1Database[] = [];
 
   for (const binding of worker.bindings) {
     const resource = resourceName(appName, binding.name);
@@ -718,15 +748,25 @@ export function planCiInstall(
         resources.push({ type: "kv", name: resource, binding: binding.name });
         break;
       case "d1": {
-        const migrations = manifest.d1Migrations[binding.name] ?? [];
+        const files = d1FilesOf(manifest, binding.name);
         d1.push({
           binding: binding.name,
           database_name: resource,
-          ...(migrations.length > 0 ? { migrations_dir: `${D1_DIR}/${binding.name}` } : {}),
+          ...migrationsLayout(
+            `${D1_DIR}/${binding.name}`,
+            files.migrations.map((f) => f.name),
+          ),
         });
         resources.push({ type: "d1", name: resource, binding: binding.name });
-        if (migrations.length > 0) {
-          d1Migrations.push(resource);
+        const database: CiD1Database = {
+          database: resource,
+          binding: binding.name,
+          migrations: files.migrations.length > 0,
+          schema: files.schema.map((f) => `${D1_SCHEMA_DIR}/${binding.name}/${f.name}`),
+          postDeploy: files.postDeploy.map((f) => f.name),
+        };
+        if (database.migrations || database.schema.length > 0 || database.postDeploy.length > 0) {
+          d1Databases.push(database);
         }
         break;
       }
@@ -794,6 +834,10 @@ export function planCiInstall(
         // Aimed at the CI Worker itself, as the manager aims it at the install's
         // Worker, or at the CI Worker of the entry Worker it names.
         services.push(selfServiceBinding(binding, name, entry));
+        break;
+      case "worker_loader":
+        // `{ binding }` is all wrangler's `worker_loaders` takes. Workers Paid only.
+        workerLoaders.push({ binding: binding.name });
         break;
       case "analytics_engine":
         analytics.push({ binding: binding.name, ...optionalStr(binding, "dataset") });
@@ -912,6 +956,7 @@ export function planCiInstall(
     ...(ratelimits.length > 0 ? { ratelimits } : {}),
     ...(sendEmail.length > 0 ? { send_email: sendEmail } : {}),
     ...(services.length > 0 ? { services } : {}),
+    ...(workerLoaders.length > 0 ? { worker_loaders: workerLoaders } : {}),
     ...singles,
     ...(Object.keys(vars).length > 0 ? { vars } : {}),
     // No `triggers`: without it wrangler leaves the Worker's schedules alone
@@ -920,6 +965,13 @@ export function planCiInstall(
     ...(worker.migrations.length > 0
       ? { migrations: worker.migrations.map((m) => ({ ...m })) }
       : {}),
+    // Recorded as the app's config declared them. With a Durable Object
+    // export, wrangler uploads the exports and no migrations, as the manager does.
+    ...(worker.exports !== undefined && Object.keys(worker.exports).length > 0
+      ? { exports: structuredClone(worker.exports) }
+      : {}),
+    // wrangler's `cache` block, uploaded as the script's `cache_options`.
+    ...(worker.cacheOptions !== undefined ? { cache: { ...worker.cacheOptions } } : {}),
     ...(worker.placement ? { placement: { ...worker.placement } } : {}),
     ...(worker.limits ? { limits: { ...worker.limits } } : {}),
   };
@@ -931,7 +983,7 @@ export function planCiInstall(
     vapidPrivateKeys: forms.vapidPrivateKeys,
     derivedSecrets: forms.derivedSecrets,
     derivedVars: forms.derivedVars,
-    d1Migrations,
+    d1: d1Databases,
     vectorizeIndexes,
     hyperdriveConfigs,
     queues,
@@ -1040,6 +1092,9 @@ export interface CiAppWorker {
  * share. An app of one Worker is one Worker whose plan is
  * {@link planCiInstall}'s, deployed exactly as before.
  */
+/** A D1 database of the app and the Worker whose work dir its SQL runs from. */
+export type CiAppD1Database = CiD1Database & { worker: string };
+
 export interface CiAppPlan {
   /** The primary CI Worker's name, `ci-<slug>-<suffix>`. */
   name: string;
@@ -1057,8 +1112,11 @@ export interface CiAppPlan {
    * an app of one Worker, whose deploy provisions its own.
    */
   kvNamespaces: CiResource[];
-  /** D1 databases with migrations, each applied once, from the work dir of the Worker named. */
-  d1Migrations: { database: string; worker: string }[];
+  /**
+   * D1 databases with SQL to run, each once, from the work dir of the Worker
+   * named (the first in deploy order that binds it).
+   */
+  d1: CiAppD1Database[];
   healthPath: string;
   healthMode: HealthMode;
 }
@@ -1099,7 +1157,7 @@ export function planCiApp(
   } = {},
 ): CiAppPlan {
   const { helpers, ...planOptions } = options;
-  if (manifest.format === 1) {
+  if (manifest.workers === undefined) {
     const plan = planCiInstall(manifest, name, planOptions);
     return {
       name,
@@ -1109,7 +1167,7 @@ export function planCiApp(
       hyperdriveConfigs: plan.hyperdriveConfigs,
       queues: plan.queues,
       kvNamespaces: [],
-      d1Migrations: plan.d1Migrations.map((database) => ({ database, worker: name })),
+      d1: plan.d1.map((database) => ({ ...database, worker: name })),
       healthPath: plan.healthPath,
       healthMode: plan.healthMode,
     };
@@ -1193,8 +1251,8 @@ export function planCiApp(
     plans.flatMap((p) => p.resources),
     (r) => `${r.type}:${r.name}`,
   );
-  const d1Migrations = uniqueBy(
-    plans.flatMap((p) => p.d1Migrations.map((database) => ({ database, worker: p.name }))),
+  const d1 = uniqueBy(
+    plans.flatMap((p) => p.d1.map((database) => ({ ...database, worker: p.name }))),
     (m) => m.database,
   );
   const primary = workers.find((w) => w.primary)?.plan ?? plans[0];
@@ -1212,7 +1270,7 @@ export function planCiApp(
     ),
     queues: [...new Set(plans.flatMap((p) => p.queues))],
     kvNamespaces: resources.filter((r) => r.type === "kv"),
-    d1Migrations,
+    d1,
     healthPath: primary?.healthPath ?? "/",
     healthMode: primary?.healthMode ?? "default",
   };
@@ -1432,9 +1490,11 @@ export function safeJoin(root: string, relative: string): string {
 
 /**
  * Writes the Worker modules to `<outDir>/worker/`, the assets to
- * `<outDir>/assets/`, and D1 migrations to `<outDir>/d1/<binding>/`, reading
- * each as its byte range of the STORE zip and checking size and sha256 before
- * anything is written.
+ * `<outDir>/assets/`, and each D1 binding's migrations, schema files and
+ * post-deploy migrations to `<outDir>/d1/<binding>/`,
+ * `<outDir>/d1-schema/<binding>/` and `<outDir>/d1-post-deploy/<binding>/`,
+ * each under its name, reading each as its byte range of the STORE zip and
+ * checking size and sha256 before anything is written.
  */
 export function unpackArtifact(manifest: ArtifactManifest, zipPath: string, outDir: string): void {
   const zipSize = statSync(zipPath).size;
@@ -1467,12 +1527,19 @@ export function unpackArtifact(manifest: ArtifactManifest, zipPath: string, outD
         data: read(a),
       });
     }
-    for (const [binding, files] of Object.entries(manifest.d1Migrations)) {
-      for (const f of files) {
-        writes.push({
-          target: safeJoin(path.join(outDir, D1_DIR), `${binding}/${f.name}`),
-          data: read(f),
-        });
+    const d1Lists = [
+      [D1_DIR, manifest.d1Migrations],
+      [D1_SCHEMA_DIR, manifest.d1Schema ?? {}],
+      [D1_POST_DEPLOY_DIR, manifest.d1PostDeploy ?? {}],
+    ] as const;
+    for (const [dir, byBinding] of d1Lists) {
+      for (const [binding, files] of Object.entries(byBinding)) {
+        for (const f of files) {
+          writes.push({
+            target: safeJoin(path.join(outDir, dir), `${binding}/${f.name}`),
+            data: read(f),
+          });
+        }
       }
     }
   } finally {
@@ -1489,6 +1556,115 @@ export function unpackArtifact(manifest: ArtifactManifest, zipPath: string, outD
 /** A random secret value; never printed. */
 export function randomSecret(): string {
   return randomBytes(24).toString("base64url");
+}
+
+// ---------------------------------------------------------------------------
+// D1
+
+type D1File = ArtifactManifest["d1Migrations"][string][number];
+
+/** One D1 binding's migrations, schema files and post-deploy migrations, as the artifact records them. */
+function d1FilesOf(
+  manifest: ArtifactManifest,
+  binding: string,
+): { migrations: D1File[]; schema: D1File[]; postDeploy: D1File[] } {
+  const of = (lists: Record<string, D1File[]> | undefined): D1File[] =>
+    lists !== undefined && Object.hasOwn(lists, binding) ? (lists[binding] ?? []) : [];
+  return {
+    migrations: of(manifest.d1Migrations),
+    schema: of(manifest.d1Schema),
+    postDeploy: of(manifest.d1PostDeploy),
+  };
+}
+
+/**
+ * The `migrations_dir`, and `migrations_pattern` when it is needed, that make
+ * `wrangler d1 migrations apply` find exactly the migrations `names` unpacked
+ * under `dir`, under those names. wrangler's default pattern, `<dir>/*.sql`,
+ * finds only `.sql` files directly in the folder. A migration named by a path
+ * (`20240101_init/migration.sql`, from a migrations glob or an upstream
+ * `migrations_pattern`) needs `<dir>/**`, every file under the folder, which
+ * holds only what the artifact records. wrangler names each file by its path
+ * from `dir` and sorts them as the packer does, so `d1_migrations` records
+ * the artifact's names in the artifact's order.
+ */
+export function migrationsLayout(
+  dir: string,
+  names: readonly string[],
+): { migrations_dir?: string; migrations_pattern?: string } {
+  if (names.length === 0) return {};
+  const flat = names.every((n) => !n.includes("/") && !n.startsWith(".") && n.endsWith(".sql"));
+  return flat ? { migrations_dir: dir } : { migrations_dir: dir, migrations_pattern: `${dir}/**` };
+}
+
+/**
+ * The config the post-deploy migrations are applied with: the deploy config
+ * with each such database's `migrations_dir` pointed at
+ * `d1-post-deploy/<binding>`, so `wrangler d1 migrations apply` runs the ones
+ * `d1_migrations` does not record yet and records them beside the others, as
+ * the manager does. Null when no database has any.
+ */
+export function postDeployConfig(
+  config: Record<string, unknown>,
+  databases: readonly CiD1Database[],
+): Record<string, unknown> | null {
+  const post = new Map(
+    databases.filter((d) => d.postDeploy.length > 0).map((d) => [d.binding, d.postDeploy]),
+  );
+  if (post.size === 0) return null;
+  const entries = Array.isArray(config.d1_databases)
+    ? (config.d1_databases as Record<string, unknown>[])
+    : [];
+  return {
+    ...config,
+    d1_databases: entries.map((entry) => {
+      const names = typeof entry.binding === "string" ? post.get(entry.binding) : undefined;
+      if (names === undefined) return entry;
+      const { migrations_dir: _dir, migrations_pattern: _pattern, ...rest } = entry;
+      return { ...rest, ...migrationsLayout(`${D1_POST_DEPLOY_DIR}/${entry.binding}`, names) };
+    }),
+  };
+}
+
+/** One wrangler command of the D1 steps: its arguments, the config, and the Worker whose work dir it runs in. */
+export interface CiWranglerStep {
+  worker: string;
+  config: string;
+  args: string[];
+}
+
+/**
+ * The wrangler commands that run the app's D1 SQL once every Worker is
+ * deployed, in the manager's order: for each database its migrations, then
+ * its schema files one by one (unrecorded; the packer accepts only files that
+ * are safe to run again); then every database's post-deploy migrations.
+ */
+export function d1Steps(databases: readonly CiAppD1Database[]): CiWranglerStep[] {
+  const steps: CiWranglerStep[] = [];
+  for (const d of databases) {
+    if (d.migrations) {
+      steps.push({
+        worker: d.worker,
+        config: DEPLOY_CONFIG,
+        args: ["d1", "migrations", "apply", d.database, "--remote"],
+      });
+    }
+    for (const file of d.schema) {
+      steps.push({
+        worker: d.worker,
+        config: DEPLOY_CONFIG,
+        args: ["d1", "execute", d.database, "--remote", "--yes", "--file", file],
+      });
+    }
+  }
+  for (const d of databases.filter((x) => x.postDeploy.length > 0)) {
+    steps.push({
+      worker: d.worker,
+      config: POST_DEPLOY_CONFIG,
+      args: ["d1", "migrations", "apply", d.database, "--remote"],
+    });
+  }
+  return steps;
 }
 
 // ---------------------------------------------------------------------------

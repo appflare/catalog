@@ -97,7 +97,7 @@ export type WorkerFactsOf = (manifest: ArtifactManifest) => WorkerFacts;
 
 /**
  * The `@appflare/schema` functions for apps of several Workers (a catalog
- * entry's `install.workers`, an artifact manifest of format 2), so the
+ * entry's `install.workers`, an artifact manifest with `workers`), so the
  * install check deploys them as the manager does. Every argument is a
  * schema-parsed manifest.
  */
@@ -150,7 +150,7 @@ export async function loadEntryWorkerHelpers(appflareDir: string): Promise<Entry
  * `combinedWorkerFacts` when the schema build has it. A build that predates
  * it cannot parse an artifact of several Workers at all, so every manifest
  * it hands over is of one Worker, whose own facts are all the app's; a
- * format 2 manifest here means the parser and this function disagree.
+ * manifest with `workers` here means the parser and this function disagree.
  */
 function workerFactsOf(mod: unknown): WorkerFactsOf {
   const value = (mod as Record<string, unknown> | null)?.combinedWorkerFacts;
@@ -163,7 +163,7 @@ function workerFactsOf(mod: unknown): WorkerFactsOf {
  * of several Workers, whose facts only `combinedWorkerFacts` works out.
  */
 export const oneWorkerFacts: WorkerFactsOf = (manifest) => {
-  if (manifest.format !== 1) {
+  if (manifest.workers !== undefined) {
     throw new Error(
       `${manifest.app}@${manifest.version} has several Workers, and this @appflare/schema build ` +
         "does not export combinedWorkerFacts(); build a newer appflare checkout",

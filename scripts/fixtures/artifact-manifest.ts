@@ -157,3 +157,65 @@ export function duoArtifactManifestFixture(opts: { sha: string }): Record<string
   };
   return m;
 }
+
+/**
+ * A schema-valid artifact `manifest.json` of format 3 whose D1 bindings cover
+ * every layout the catalog manifest's `resources.d1` can declare: `DB` has
+ * migrations from a glob (named by their path from the glob's folder, as
+ * wrangler names them), a schema file and a post-deploy migration; `LOGS`
+ * has a `migrationsDir`; `SEEDS` only schema files; `AUDIT` only a
+ * post-deploy migration.
+ */
+export function d1ArtifactManifestFixture(opts: { sha: string }): Record<string, unknown> {
+  const m = artifactManifestFixture({ app: "ledger", version: "1.0.0", sha: opts.sha });
+  const hex64 = "a".repeat(64);
+  let offset = 1;
+  const file = (dir: string, binding: string, name: string) => ({
+    name,
+    path: `${dir}/${binding}/${name}`,
+    size: 1,
+    sha256: hex64,
+    offset: offset++,
+  });
+  m.format = 3;
+  (m.worker as Record<string, unknown>).bindings = [
+    { type: "d1", name: "DB" },
+    { type: "d1", name: "LOGS" },
+    { type: "d1", name: "SEEDS" },
+    { type: "d1", name: "AUDIT" },
+  ];
+  // The packer records every D1 binding's migrations, an empty list included.
+  m.d1Migrations = {
+    DB: [
+      file("d1", "DB", "20240101_init/migration.sql"),
+      file("d1", "DB", "20240302_tags/migration.sql"),
+    ],
+    LOGS: [file("d1", "LOGS", "0001_logs.sql")],
+    SEEDS: [],
+    AUDIT: [],
+  };
+  m.d1Schema = {
+    DB: [file("d1-schema", "DB", "db/views.sql")],
+    SEEDS: [file("d1-schema", "SEEDS", "db/seed.sql"), file("d1-schema", "SEEDS", "db/more.sql")],
+  };
+  m.d1PostDeploy = {
+    DB: [file("d1-post-deploy", "DB", "0100_drop_legacy.sql")],
+    AUDIT: [file("d1-post-deploy", "AUDIT", "0001_audit.sql")],
+  };
+  m.catalog = {
+    ...(m.catalog as Record<string, unknown>),
+    resources: {
+      d1: {
+        DB: {
+          migrations: "prisma/migrations/*/migration.sql",
+          schema: ["db/views.sql"],
+          postDeployMigrationsDir: "db/post-deploy",
+        },
+        LOGS: { migrationsDir: "db/logs" },
+        SEEDS: { schema: ["db/seed.sql", "db/more.sql"] },
+        AUDIT: { postDeployMigrationsDir: "db/audit" },
+      },
+    },
+  };
+  return m;
+}

@@ -264,6 +264,66 @@ written, but the manager refuses to install it. The install check deploys every 
 and every other Worker answers at `/` without a 5xx or a Cloudflare error page, and
 removes all of them and every shared resource afterwards.
 
+### Databases beyond wrangler migrations
+
+The packer reads each D1 binding's `migrations_dir` and `migrations_pattern` from the
+wrangler config you name in `install.wranglerConfig`, as `wrangler d1 migrations
+apply` does. When an app keeps its SQL somewhere else, say where under
+`resources.d1`, keyed by the D1 binding. Every path is relative to the repository's
+root and must stay inside it.
+
+```jsonc
+"resources": {
+  "d1": {
+    "DB": {
+      "migrations": "prisma/migrations/*/migration.sql",
+      "schema": ["src/db/views.sql"],
+      "postDeployMigrationsDir": "src/db/post-deploy"
+    }
+  }
+}
+```
+
+- **`migrationsDir`.** Another folder of migrations, in place of the wrangler
+  config's `migrations_dir`. Its `.sql` files run in wrangler's order and are
+  recorded in `d1_migrations`.
+- **`migrations`.** A glob, for tools that write one folder per migration (Prisma,
+  Drizzle). It works as wrangler's `migrations_dir` plus `migrations_pattern`: the
+  folder is everything before the first segment with a `*`, and each file is named
+  by its path from there (`20240101_init/migration.sql`), exactly as wrangler names
+  it, so a database migrated with wrangler and one migrated by Appflare record the
+  same names. They run in wrangler's order: segment by segment, by the number before
+  the first `_` (`9_b` before `10_a`), then by name. Give either `migrationsDir` or
+  `migrations`, not both. When upstream already sets `migrations_pattern`, prefer
+  that.
+- **`schema`.** SQL files that run, in the order listed, on every install and update
+  after the migrations, and are never recorded in `d1_migrations`. Each must be safe
+  to run again, and the packer refuses one that is not:
+  - every `CREATE TABLE`, `INDEX`, `TRIGGER` and `VIEW` says `IF NOT EXISTS`;
+  - rows are only added when missing, with `INSERT OR IGNORE` or
+    `INSERT ... ON CONFLICT DO NOTHING`;
+  - `PRAGMA` and `SELECT` are fine;
+  - no `DROP`, `ALTER`, `UPDATE`, `DELETE`, `REPLACE` or other `INSERT`.
+
+  A schema file creates what is missing and nothing more. `CREATE TABLE IF NOT
+  EXISTS` never adds a column to a table that already exists, so when upstream
+  changes a table in its schema file, installs made before the change keep the old
+  table. Changing an existing table needs a migration.
+- **`postDeployMigrationsDir`.** A folder of migrations that run only once the new
+  version serves all traffic, for changes the previous version's code would break
+  on, such as dropping a column only it reads. They are recorded in `d1_migrations`
+  beside the migrations, so their file names must differ from the migrations'.
+  Rolling back does not revert them: a rollback redeploys the previous Worker and
+  leaves the database as it is, as it does after every migration.
+
+An entry with `schema` files or post-deploy migrations publishes as artifact format
+3. A manager too old to read format 3 refuses to install it or update to it, rather
+than install it without its SQL; newer managers say to update Appflare in Settings
+when they meet a format they cannot read. So a release that starts using them
+reaches each install only once its Appflare is updated.
+
+The install check runs all of it (see "Install checks").
+
 ### Editing an entry whose version is already released
 
 A release is identified by its version, and the version comes from the pin. Releases
@@ -1033,12 +1093,14 @@ artifact into a dedicated CI Cloudflare account and delete it again. Sandbox and
 self-deploying entries have no install check in CI (see "Sandbox tier" and
 "Self-deploying tier"). The steps:
 
-1. Unpack the artifact's Worker modules, assets, and D1 migrations, checking each
+1. Unpack the artifact's Worker modules, assets, and D1 SQL (migrations, schema
+   files and post-deploy migrations), checking each
    file's sha256 against `manifest.json`. Nothing from the app's repository runs:
    only the prebuilt output in the artifact is deployed.
 2. Delete anything left under the same names by an earlier run.
 3. Write a `wrangler.json` from `manifest.json`. It gets the manifest's modules,
-   compatibility settings, assets, vars, and bindings without ids, but not its
+   compatibility settings, assets, vars, bindings without ids, and the Worker's
+   `exports`, `cache` block and Worker Loaders when it records them, but not its
    cron triggers (see below). The Worker is named:
    - `ci-<slug>-pr<number>` for a pull request;
    - `ci-<slug>-b<hash of the branch>` for a dispatched run on a bump branch;
@@ -1054,8 +1116,14 @@ self-deploying entries have no install check in CI (see "Sandbox tier" and
    counters across every Worker in the account that binds the same id. After
    the deploy, each queue consumer the artifact records is attached to the
    Worker through the API, with its settings and dead-letter queue, as the
-   manager does. `wrangler d1 migrations apply --remote` runs for each database
-   with migrations.
+   manager does. Then each database's SQL runs, as the manager runs it:
+   `wrangler d1 migrations apply --remote` for its migrations, named as the
+   artifact records them (a `migrations_pattern` covers migrations named by a
+   path), then each schema file in order with
+   `wrangler d1 execute --remote --file`; then, for every database, its
+   post-deploy migrations with `wrangler d1 migrations apply --remote` against a
+   second config whose `migrations_dir` is their folder, so `d1_migrations`
+   records them beside the others.
    Every secret in the catalog manifest is set to a random value, and each var
    gets its default. A required var without a default gets the placeholder `ci`.
 5. Wait up to 60 seconds for `https://<worker>.<subdomain>.workers.dev/` to answer.
@@ -1084,8 +1152,9 @@ How this differs from installing with the manager:
   one exception is a Workflow, which the CI install names that way to keep runs
   apart.
 - **Uploads and migrations.** The manager uploads the modules and assets itself
-  and applies D1 migrations itself, in the same `d1_migrations` table format
-  wrangler uses. Here wrangler does both from the unpacked files.
+  and applies D1 migrations, schema files and post-deploy migrations itself, in
+  the same `d1_migrations` table format wrangler uses. Here wrangler does both
+  from the unpacked files.
 - **Inputs.** A real install uses the values the user entered. Here secrets are
   random and vars use their defaults, so this checks that the Worker deploys and
   starts, not that the app is fully configured.

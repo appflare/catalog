@@ -29,6 +29,8 @@ import {
   createKvNamespaces,
   createQueues,
   createVectorizeIndexes,
+  DEPLOY_CONFIG,
+  d1Steps,
   derivedVarValues,
   type HealthMode,
   type HealthResult,
@@ -37,7 +39,9 @@ import {
   hyperdriveSkip,
   needsPackerSecrets,
   OTHER_WORKER_PROBE,
+  POST_DEPLOY_CONFIG,
   planCiApp,
+  postDeployConfig,
   skippedSummaryLines,
   unpackArtifact,
   waitForHealth,
@@ -60,14 +64,21 @@ The Worker is named ci-<slug>-<suffix> (for example ci-cut-pr12).
 
 deploy   Unpacks the artifact (checking every file's sha256), removes anything
          left from an earlier run under the same name, writes a wrangler.json
-         from manifest.json (bindings without ids, so wrangler provisions them;
+         from manifest.json (bindings without ids, so wrangler provisions them,
+         and the Worker's exports, cache block and Worker Loaders as recorded;
          Vectorize indexes and queues are created first through the API, and
          each rate limit gets a random namespace id; vars as the manager sets
          them, JSON vars kept as JSON and {{workerUrl}}, {{workerName}} and
          {{accountId}} filled in for the CI Worker; a service binding to the app's own
          Worker aimed at the CI Worker, any other refused; no cron triggers,
          which the run summary notes), runs wrangler deploy --strict, attaches the recorded queue consumers through the API,
-         applies D1 migrations, sets each catalog secret to a random value
+         runs each D1 database's SQL as the manager does (its migrations
+         with wrangler d1 migrations apply, named as the artifact records
+         them; then its schema files in order with wrangler d1 execute
+         --file; then its post-deploy migrations with wrangler d1
+         migrations apply against wrangler.post-deploy.json, whose
+         migrations_dir is their folder, so d1_migrations records them),
+         sets each catalog secret to a random value
          (a new VAPID private key for generate: "vapid-private-key", and a
          derived one to the value the manager computes from its source's; a
          derived var, such as a VAPID public key, goes into the config),
@@ -83,8 +94,8 @@ deploy   Unpacks the artifact (checking every file's sha256), removes anything
          the API first, so every Worker binds the same one); bindings and
          {{workerUrl:<name>}}/{{workerName:<name>}} naming another Worker
          point at its CI Worker; each secret and var goes to the Workers the
-         catalog manifest names, a shared secret with one value; D1
-         migrations run once. After the primary's health check, every other
+         catalog manifest names, a shared secret with one value; each D1
+         database's SQL runs once. After the primary's health check, every other
          Worker must answer at / within 30 s.
 
          When a Worker binds an Analytics Engine dataset and the account has
@@ -131,17 +142,19 @@ function wranglerBin(appflareDir: string): string {
   return path.join(path.dirname(pkgPath), rel);
 }
 
-function wrangler(bin: string, cwd: string, args: string[], stdin?: string): void {
-  const res = spawnSync(
-    process.execPath,
-    [bin, ...args, "--config", path.join(cwd, "wrangler.json")],
-    {
-      cwd,
-      env: { ...packerEnv(process.env), CI: "1", WRANGLER_SEND_METRICS: "false" },
-      input: stdin,
-      stdio: [stdin === undefined ? "ignore" : "pipe", "inherit", "inherit"],
-    },
-  );
+function wrangler(
+  bin: string,
+  cwd: string,
+  args: string[],
+  stdin?: string,
+  config: string = DEPLOY_CONFIG,
+): void {
+  const res = spawnSync(process.execPath, [bin, ...args, "--config", path.join(cwd, config)], {
+    cwd,
+    env: { ...packerEnv(process.env), CI: "1", WRANGLER_SEND_METRICS: "false" },
+    input: stdin,
+    stdio: [stdin === undefined ? "ignore" : "pipe", "inherit", "inherit"],
+  });
   if (res.error || res.status !== 0) {
     // args never contain secret values; those go through stdin.
     throw new Error(
@@ -178,7 +191,7 @@ async function cleanup(request: CfRequest, app: CiAppPlan): Promise<void> {
 
 /** The functions for an app of several Workers, loaded only for one. */
 async function entryHelpers(manifest: ArtifactManifest): Promise<CiEntryHelpers | undefined> {
-  return manifest.format === 2 ? loadEntryWorkerHelpers(resolveAppflareDir()) : undefined;
+  return manifest.workers !== undefined ? loadEntryWorkerHelpers(resolveAppflareDir()) : undefined;
 }
 
 function summary(lines: string[]): void {
@@ -280,7 +293,11 @@ async function deployAndCheck(
       withHyperdrive,
       derivedVarValues(w.plan, values, packer.deriveSecretValue),
     );
-    writeFileSync(path.join(dir, "wrangler.json"), `${JSON.stringify(config, null, 2)}\n`);
+    writeFileSync(path.join(dir, DEPLOY_CONFIG), `${JSON.stringify(config, null, 2)}\n`);
+    const postDeploy = postDeployConfig(config, w.plan.d1);
+    if (postDeploy !== null) {
+      writeFileSync(path.join(dir, POST_DEPLOY_CONFIG), `${JSON.stringify(postDeploy, null, 2)}\n`);
+    }
     info(`deploying ${w.manifest.app}@${w.manifest.version} as ${w.plan.name}`);
     try {
       wrangler(bin, dir, ["deploy", "--strict"]);
@@ -298,8 +315,8 @@ async function deployAndCheck(
   for (const w of app.workers) {
     await attachQueueConsumers(request, w.plan);
   }
-  for (const { database, worker } of app.d1Migrations) {
-    wrangler(bin, dirOf(worker), ["d1", "migrations", "apply", database, "--remote"]);
+  for (const step of d1Steps(app.d1)) {
+    wrangler(bin, dirOf(step.worker), step.args, undefined, step.config);
   }
   for (const [i, w] of app.workers.entries()) {
     for (const secret of [...w.plan.secrets, ...w.plan.derivedSecrets.map((s) => s.name)]) {

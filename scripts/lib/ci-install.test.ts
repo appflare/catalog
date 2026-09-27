@@ -103,7 +103,9 @@ describe("planCiInstall", () => {
       { type: "r2", name: "ci-hello-pr1-media-bucket", binding: "MEDIA_BUCKET" },
       { type: "workflow", name: "ci-hello-pr1-jobs", binding: "JOBS" },
     ]);
-    expect(plan.d1Migrations).toEqual(["ci-hello-pr1-db"]);
+    expect(plan.d1).toEqual([
+      { database: "ci-hello-pr1-db", binding: "DB", migrations: true, schema: [], postDeploy: [] },
+    ]);
     expect(plan.config).toMatchObject({
       name: "ci-hello-pr1",
       main: "worker/index.js",
@@ -991,7 +993,7 @@ describe("cleanupCiInstall", () => {
     vapidPrivateKeys: [],
     derivedSecrets: [],
     derivedVars: [],
-    d1Migrations: [],
+    d1: [],
     vectorizeIndexes: [{ name: "ci-hello-pr1-vectors", dimensions: 384, metric: "cosine" }],
     hyperdriveConfigs: [],
     queues: ["ci-hello-pr1-tasks", "ci-hello-pr1-dlq"],
@@ -1427,7 +1429,7 @@ describe("planCiApp for an app of one Worker", () => {
     expect(app.workers).toEqual([{ entryName: null, primary: true, plan, manifest: m }]);
     expect(app.resources).toEqual(plan.resources);
     expect(app.kvNamespaces).toEqual([]);
-    expect(app.d1Migrations).toEqual([{ database: "ci-hello-pr1-db", worker: "ci-hello-pr1" }]);
+    expect(app.d1).toEqual([{ ...plan.d1[0], worker: "ci-hello-pr1" }]);
   });
 
   it("refuses an artifact of several Workers without the schema's functions for them", () => {
@@ -1718,7 +1720,16 @@ describe.skipIf(entryHelpers === null)("planCiApp for an app of several Workers"
     expect(app.kvNamespaces).toEqual([{ type: "kv", name: "ci-duo-pr1-cache", binding: "CACHE" }]);
     expect(app.queues).toEqual(["ci-duo-pr1-tasks"]);
     // Once, from the first Worker deployed that binds the database.
-    expect(app.d1Migrations).toEqual([{ database: "ci-duo-pr1-db", worker: "ci-duo-pr1-jobs" }]);
+    expect(app.d1).toEqual([
+      {
+        database: "ci-duo-pr1-db",
+        binding: "DB",
+        migrations: true,
+        schema: [],
+        postDeploy: [],
+        worker: "ci-duo-pr1-jobs",
+      },
+    ]);
   });
 
   it("attaches a queue one Worker sends to and another consumes to the consumer, once", async () => {

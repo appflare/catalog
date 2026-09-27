@@ -136,7 +136,15 @@ runMain(async () => {
     );
   }
   const zipPath = path.join(outDir, `${slug}-${artifact.version}.zip`);
-  const migrations = Object.values(artifact.d1Migrations).reduce((n, l) => n + l.length, 0);
+  const count = (lists: Record<string, unknown[]> | undefined): number =>
+    Object.values(lists ?? {}).reduce((n, l) => n + l.length, 0);
+  const schemaFiles = count(artifact.d1Schema);
+  const postDeploy = count(artifact.d1PostDeploy);
+  const migrations = [
+    String(count(artifact.d1Migrations)),
+    ...(schemaFiles > 0 ? [`${schemaFiles} schema file(s)`] : []),
+    ...(postDeploy > 0 ? [`${postDeploy} post-deploy`] : []),
+  ].join(", ");
   const sizes = await loadPackerWorkerSize(appflareDir);
   // Each Worker is measured on its own: every Worker is its own upload.
   const sizeLine = (worker: ArtifactWorker): string =>

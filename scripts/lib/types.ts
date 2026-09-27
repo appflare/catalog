@@ -155,10 +155,14 @@ export interface ArtifactEntryWorker {
 /**
  * Subset of `ArtifactManifest`. Format 1 is an app of one Worker. Format 2 is
  * an app of several: `worker` and `assets` are the primary Worker's, and
- * `workers` lists the others in the catalog entry's order.
+ * `workers` lists the others in the catalog entry's order. Format 3 is either
+ * shape, and carries D1 schema files or post-deploy migrations
+ * (`d1Schema`, `d1PostDeploy`), which managers that read only formats 1 and
+ * 2 refuse. Whether an artifact has several Workers is whether it has
+ * `workers`, whatever its format.
  */
 export interface ArtifactManifest {
-  format: 1 | 2;
+  format: 1 | 2 | 3;
   app: string;
   version: string;
   keyId: string;
@@ -184,6 +188,14 @@ export interface ArtifactManifest {
     observability: Record<string, unknown> | null;
     placement: Record<string, unknown> | null;
     limits: Record<string, unknown> | null;
+    /**
+     * Declarative Durable Object and entrypoint exports, keyed by name, as the
+     * wrangler config's `exports` block has them (entries of type
+     * `durable-object` or `worker` only). Omitted when there are none.
+     */
+    exports?: Record<string, { type: string; [key: string]: unknown }>;
+    /** The wrangler config's `cache` block. Omitted when unset. */
+    cacheOptions?: { enabled: boolean; [key: string]: unknown };
   };
   assets: {
     config: Record<string, unknown>;
@@ -192,7 +204,20 @@ export interface ArtifactManifest {
   };
   /** Every D1 migration of the app, by binding; shared by the Workers that bind it. */
   d1Migrations: Record<string, (ArtifactFile & { name: string })[]>;
-  /** Format 2 only: every Worker but the primary one. */
+  /**
+   * SQL files run on every install and update after the migrations, never
+   * recorded in `d1_migrations`, by binding, in the catalog manifest's order
+   * (`resources.d1[binding].schema`); each is named by its path in the
+   * app's repository. Format 3 only; omitted when there are none.
+   */
+  d1Schema?: Record<string, (ArtifactFile & { name: string })[]>;
+  /**
+   * Migrations run once the new version serves all traffic, recorded in
+   * `d1_migrations` like the others, by binding
+   * (`resources.d1[binding].postDeployMigrationsDir`). Format 3 only.
+   */
+  d1PostDeploy?: Record<string, (ArtifactFile & { name: string })[]>;
+  /** Formats 2 and 3, for an app of several Workers: every Worker but the primary one. */
   workers?: ArtifactEntryWorker[];
   /** The catalog manifest the artifact was packed from, as parsed by the schema. */
   catalog: unknown;

@@ -11,18 +11,19 @@ export interface PackedWorkerSummary {
 
 /**
  * Every Worker of an artifact, the primary one first and the others in the
- * catalog entry's order (the order of `workers`). Format 1 has one, unnamed.
+ * catalog entry's order (the order of `workers`). An artifact without
+ * `workers` has one, unnamed.
  */
 export function packedWorkers(artifact: ArtifactManifest): PackedWorkerSummary[] {
   // Parsed by the real artifact manifest schema, so a full catalog manifest.
   const declared = (artifact.catalog as CatalogManifest).install.workers;
   const primary: PackedWorkerSummary = {
-    name: artifact.format === 2 ? (declared?.find((w) => w.primary)?.name ?? null) : null,
+    name: artifact.workers !== undefined ? (declared?.find((w) => w.primary)?.name ?? null) : null,
     primary: true,
     worker: artifact.worker,
     assetCount: artifact.assets.files.length,
   };
-  const others = artifact.format === 2 ? (artifact.workers ?? []) : [];
+  const others = artifact.workers ?? [];
   return [
     primary,
     ...others.map((w) => ({
