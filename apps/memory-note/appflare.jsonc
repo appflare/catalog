@@ -3,6 +3,7 @@
   "slug": "memory-note",
   "name": "Memory Note",
   "summary": "A small notes and to-do API behind one token: push, list, edit, move and delete notes over REST from Siri Shortcuts, Alfred, a home screen widget or any script, stored in Workers KV or a Notion database.",
+  "tagline": "Notes and to-dos you can reach from shortcuts, widgets and scripts",
   "homepage": "https://github.com/azu/memory-note",
   "repo": "azu/memory-note",
   "license": "MIT",

@@ -3,6 +3,7 @@
   "slug": "mailflare",
   "name": "Mailflare",
   "summary": "A self-hosted email service for your own domains: mailboxes, forwarding rules, and a web inbox, on Email Routing, D1, R2, Queues, and Durable Objects.",
+  "tagline": "Email and shared inboxes for your own domain",
   "homepage": "https://github.com/hieunc229/mailflare",
   "repo": "hieunc229/mailflare",
   // The LICENSE file is the GNU AGPL version 3 with no "or any later version" grant.

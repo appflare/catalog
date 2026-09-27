@@ -3,6 +3,7 @@
   "slug": "larafeed",
   "name": "Larafeed",
   "summary": "A private feed reader with passkey-only sign-in: RSS and Atom subscriptions refreshed on a schedule through Queues, OPML import and export, full-article extraction, favicons, and reader-client APIs, on D1, KV and Queues.",
+  "tagline": "Keep up with your favorite websites in one private feed",
   "homepage": "https://github.com/angristan/larafeed",
   "repo": "angristan/larafeed",
   "license": "MIT",

@@ -10,6 +10,7 @@
   "slug": "isupmap",
   "name": "isupmap",
   "summary": "A live up/down heatmap for 40+ popular internet services, polled every five minutes, with history and community outage reports.",
+  "tagline": "See which popular online services are up or down",
   "homepage": "https://isupmap.com",
   "repo": "Jaironlanda/isupmap",
   "license": "MIT",

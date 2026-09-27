@@ -3,6 +3,7 @@
   "slug": "glance",
   "name": "Glance",
   "summary": "Share what your coding agents build: publish HTML, Markdown and files as private sites your team opens, comments on, and annotates. An open-source alternative to Claude Artifacts.",
+  "tagline": "Share your coding agent's work as pages your team can review",
   "homepage": "https://github.com/plivo-labs/glance",
   "repo": "plivo-labs/glance",
   "license": "MIT",

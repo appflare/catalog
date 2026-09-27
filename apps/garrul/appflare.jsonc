@@ -6,6 +6,7 @@
   "slug": "garrul",
   "name": "Garrul",
   "summary": "Self-hosted comments for static sites and blogs: an embeddable widget with threads, reactions and votes, OAuth or anonymous posting behind Turnstile, a moderation queue, and reply emails.",
+  "tagline": "Comments and reactions for your website, hosted in your account",
   "homepage": "https://garrul.com",
   "repo": "KingPin/Garrul",
   "license": "Apache-2.0",

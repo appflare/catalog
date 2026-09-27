@@ -13,6 +13,7 @@
   "slug": "inkstone",
   "name": "Inkstone",
   "summary": "A self-hosted Markdown notebook with live preview, backlinks, full-text and semantic search, offline editing, multi-device sync, public sharing, MCP access and scheduled backups.",
+  "tagline": "A private notebook for writing, finding, and syncing notes",
   "homepage": "https://github.com/shuaiplus/inkstone",
   "repo": "shuaiplus/inkstone",
   // The LICENSE file holds the LGPL-3.0 text followed by the GPL-3.0 text it

@@ -3,6 +3,7 @@
   "slug": "mail2telegram",
   "name": "mail2telegram",
   "summary": "Receive your domain's email in Telegram: a push for every message and a Mini App inbox with attachments, filters, and AI summaries.",
+  "tagline": "Get your email in Telegram, with a full inbox",
   "homepage": "https://github.com/TBXark/mail2telegram",
   "repo": "TBXark/mail2telegram",
   "license": "MIT",

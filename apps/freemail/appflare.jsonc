@@ -8,6 +8,7 @@
   "slug": "freemail",
   "name": "Freemail",
   "summary": "Temporary and domain mailboxes on your own domain: create addresses in the browser, read what Email Routing delivers, share mailboxes with users, and send through Resend or SendFlare, on D1 and R2.",
+  "tagline": "Create mailboxes and read mail on your own domain",
   "homepage": "https://github.com/idinging/freemail",
   "repo": "idinging/freemail",
   "license": "Apache-2.0",

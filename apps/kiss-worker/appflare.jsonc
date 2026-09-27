@@ -8,6 +8,7 @@
   "slug": "kiss-worker",
   "name": "KISS Worker",
   "summary": "Your own sync server for KISS Translator: keeps the extension's settings, rules and vocabulary in step across browsers and serves shared rule sets.",
+  "tagline": "Sync your translation settings and vocabulary across browsers",
   "homepage": "https://github.com/fishjar/kiss-worker",
   "repo": "fishjar/kiss-worker",
   "license": "MIT",

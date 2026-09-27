@@ -10,6 +10,7 @@
   "slug": "hqbase",
   "name": "HQBase",
   "summary": "Your team's email workspace in your own account: shared mailboxes, drafts, labels, contacts and audit history, with a remote MCP server for agents.",
+  "tagline": "Shared email for your team in your own Cloudflare account",
   "homepage": "https://hqbase.io",
   "repo": "HQBase/hqbase",
   "license": "AGPL-3.0-only",

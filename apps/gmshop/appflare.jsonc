@@ -3,6 +3,7 @@
   "slug": "gmshop",
   "name": "GMShop Edge",
   "summary": "A single-tenant digital-goods shop: stock items such as licence keys delivered on payment, private downloads from R2, entitlements, coupons and refunds, guest or account checkout, and an admin console with roles, on D1, KV, R2 and Queues.",
+  "tagline": "Sell digital goods with automatic delivery from your own shop",
   "homepage": "https://github.com/GMWalletApp/gmshop-edge",
   "repo": "GMWalletApp/gmshop-edge",
   // The LICENSE file is the GNU GPL version 3; package.json grants "or any

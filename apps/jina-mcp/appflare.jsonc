@@ -3,6 +3,7 @@
   "slug": "jina-mcp",
   "name": "Jina AI MCP Server",
   "summary": "Jina AI's remote MCP server on your own Worker: read pages and PDFs as Markdown, take screenshots, search the web, arXiv and SSRN, and rerank or deduplicate text with Jina's Reader, Search, Embeddings and Reranker APIs.",
+  "tagline": "Let your AI assistant read pages, search the web, and compare text",
   "homepage": "https://github.com/jina-ai/MCP",
   "repo": "jina-ai/MCP",
   "license": "Apache-2.0",

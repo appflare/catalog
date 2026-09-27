@@ -9,6 +9,7 @@
   "slug": "hashpay",
   "name": "HashPay",
   "summary": "A crypto payment gateway run from your own Telegram bot: take USDT, USDC and native coins on eight chains or through Binance, OKX and OKPay, with a signed order API, merchant callbacks and an admin console.",
+  "tagline": "Accept crypto payments through your Telegram bot",
   "homepage": "https://github.com/TGDash/HashPay",
   "repo": "TGDash/HashPay",
   "license": "Apache-2.0",

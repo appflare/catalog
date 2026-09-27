@@ -3,6 +3,7 @@
   "slug": "md-page",
   "name": "md.page",
   "summary": "Turn Markdown into a shareable web page with one request: an API, an MCP server for coding agents, and pages that expire after 24 hours, on Workers KV.",
+  "tagline": "Turn your Markdown into a web page you can share",
   "homepage": "https://md.page",
   "repo": "maypaz/md.page",
   "license": "MIT",

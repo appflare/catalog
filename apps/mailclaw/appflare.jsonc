@@ -3,6 +3,7 @@
   "slug": "mailclaw",
   "name": "MailClaw",
   "summary": "A catch-all inbox for your domain with a token-protected API for AI agents: every address receives into D1 and R2, with search, filters, export, sending through Resend or Cloudflare, and a web dashboard.",
+  "tagline": "One searchable inbox for every address on your domain",
   "homepage": "https://mailclaw.me",
   "repo": "missuo/mailclaw",
   // The repository has no LICENSE file; its README's License section

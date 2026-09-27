@@ -11,6 +11,7 @@
   "slug": "jant",
   "name": "Jant",
   "summary": "A personal microblog as smooth as Threads and Tumblr: notes, links and quotes in threads and collections, media on R2, full-text search, RSS, an API and an MCP endpoint for agents, on D1.",
+  "tagline": "Your own blog for notes, links, quotes, and threads",
   "homepage": "https://jant.me",
   "repo": "jant-me/jant-starter",
   "license": "AGPL-3.0-or-later",
