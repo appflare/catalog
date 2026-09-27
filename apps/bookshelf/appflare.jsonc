@@ -1,0 +1,72 @@
+{
+  // An ebook library read from an R2 bucket, with EPUB and PDF readers in the
+  // browser, reading profiles, and an OPDS catalog for e-readers. There is no
+  // database: books are published into the bucket from your own machine with
+  // upstream's sync tool, which builds the library and uploads it.
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "bookshelf",
+  "name": "Bookshelf",
+  "summary": "A library for the ebooks you own: read EPUBs and PDFs in the browser or on a Kobo over OPDS, served from your own R2 bucket.",
+  "homepage": "https://murerkinn.github.io/bookshelf/",
+  "repo": "murerkinn/bookshelf",
+  "license": "MIT",
+  "categories": ["files", "productivity"],
+  "authors": [
+    {
+      "name": "Murat Erkin Cicek",
+      "url": "https://erkin.space",
+      "github": "murerkinn",
+      "x": "murerkinn"
+    }
+  ],
+  "maintainers": ["MendyLanda"],
+  // Bookshelf publishes no release tags; the pin tracks main.
+  "source": { "ref": "main", "sha": "8888795162ff76285f246957cc34cc9988253a60" },
+  "install": {
+    "tier": "artifact",
+    "packageManager": "npm",
+    // The app package of the npm workspace. Upstream's EU jurisdiction on the
+    // bucket is not carried over: the bucket is created in the default
+    // location, and the Worker's own workers.dev setting is left to Appflare.
+    "wranglerConfig": "apps/bookshelf/wrangler.jsonc",
+    "workerName": "bookshelf",
+    // Upstream's `bundle` pipeline: turbo builds the workspace packages and
+    // copies pdf.js's assets, then OpenNext builds the Next.js app into
+    // .open-next/. The Worker binds itself (WORKER_SELF_REFERENCE) for
+    // OpenNext's cache.
+    "buildCommand": "npm run bundle"
+  },
+  // R2 and rate limits fit the free plan for a personal library.
+  "plan": "free",
+  "requires": ["r2"],
+  "secrets": [],
+  "vars": [
+    {
+      "name": "BOOKSHELF_READ_ONLY",
+      "label": "Read only",
+      "help": "Read only keeps serving books but refuses every change: profiles cannot be added, renamed or deleted, and reading positions stay in each browser.",
+      "type": "select",
+      "options": [
+        { "value": "0", "label": "Allow changes" },
+        { "value": "1", "label": "Read only" }
+      ],
+      "default": "0"
+    },
+    {
+      "name": "BOOKSHELF_SITE_URL",
+      "label": "Public address",
+      "help": "Used for link previews and canonical URLs. Leave empty to use the address each request arrives on."
+    }
+  ],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "**There is no sign-in.** Anyone who can reach {{workerUrl}} can download every book and pick any profile. Put the app behind Cloudflare Access, or turn off its workers.dev address and serve it only where you trust the network."
+    },
+    {
+      "type": "markdown",
+      "content": "Publish books from a checkout of the repository: put them in `books/`, set `storage.bucket` in `bookshelf.config.json` to `{{workerName}}-books` and delete `storage.jurisdiction`, set the `r2_buckets` entry in `apps/bookshelf/wrangler.jsonc` to the same bucket, then run `npx wrangler login` and `npm run sync`. The shelf at {{workerUrl}} shows them right away."
+    }
+  ],
+  "tokenPermissions": []
+}
