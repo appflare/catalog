@@ -1,0 +1,62 @@
+{
+  // The sync hub of Token Monitor, the desktop widget that tracks token use,
+  // costs and plan limits of AI coding tools. Each machine's widget or
+  // headless agent posts its usage summary here, and every widget reads the
+  // combined numbers back. The widget itself runs on people's own machines.
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "token-monitor",
+  "name": "Token Monitor Hub",
+  "summary": "Your own sync hub for Token Monitor: combine the token use, costs and plan limits of Claude Code, Codex, Cursor and 40 more AI coding tools across all your machines, live in every widget.",
+  "homepage": "https://javis-ai.com/token-monitor/",
+  "repo": "Javis603/token-monitor",
+  "license": "MIT",
+  "categories": ["ai", "monitoring"],
+  "authors": [{ "name": "Javis", "url": "https://javis-ai.com", "github": "Javis603" }],
+  "maintainers": ["MendyLanda"],
+  "source": { "ref": "v0.63.0", "sha": "f756d1d0fdbf415c1cd4a7178f3fe5d7a026fc90" },
+  "install": {
+    "tier": "artifact",
+    "packageManager": "npm",
+    // The hub is its own npm project in worker/, with its own lockfile,
+    // beside the Electron widget at the root. Plain JavaScript: no build step.
+    "installDirs": [{ "path": "worker" }],
+    "wranglerConfig": "worker/wrangler.toml",
+    "workerName": "token-monitor-hub",
+    // Answers without the secret.
+    "healthPath": "/api/health"
+  },
+  // One SQLite-backed Durable Object holds every device's record; a few
+  // devices posting once a minute stay far inside the free plan.
+  "plan": "free",
+  "requires": [],
+  "secrets": [
+    {
+      // Upstream answers 503 on every data route while it is unset.
+      "name": "TOKEN_MONITOR_SECRET",
+      "label": "Hub secret",
+      "help": "Every widget and agent sends it to post or read your usage. Enter the same value in each widget's Multi-device Sync settings and as TOKEN_MONITOR_SECRET for headless agents. Changing it disconnects them until they get the new one.",
+      "generate": true
+    }
+  ],
+  "vars": [
+    {
+      "name": "PUBLIC_STATS_ENABLED",
+      "label": "Public stats",
+      "help": "Serves combined totals without the secret at /api/public/stats, for public dashboards. Per-device records and account identifiers are left out.",
+      "type": "select",
+      "options": [{ "value": "0", "label": "Off" }, { "value": "1", "label": "On" }],
+      "default": "0"
+    }
+  ],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "In each Token Monitor widget, open Settings, Multi-device Sync, and enter the hub URL {{workerUrl}} and the hub secret from this app's settings. The status pill turns from Local to Live once it connects."
+    },
+    {
+      "type": "markdown",
+      "content": "For a headless agent, set `TOKEN_MONITOR_HUB_URL={{workerUrl}}` and `TOKEN_MONITOR_SECRET` to the hub secret in its `.env`. iOS widgets (Widgy, Scriptable) can read `{{workerUrl}}/api/stats` with the secret as a Bearer header."
+    }
+  ],
+  "tokenPermissions": []
+}

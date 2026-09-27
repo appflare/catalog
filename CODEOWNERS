@@ -9,7 +9,9 @@
 /apps/auth-inbox/ @MendyLanda
 /apps/bark-worker/ @MendyLanda
 /apps/binthere/ @MendyLanda
+/apps/blobatar/ @MendyLanda
 /apps/bookshelf/ @MendyLanda
+/apps/browser-relay/ @MendyLanda
 /apps/cap-worker/ @MendyLanda
 /apps/cattopic/ @MendyLanda
 /apps/cf-server-monitor/ @MendyLanda
@@ -70,6 +72,7 @@
 /apps/openshortlink/ @MendyLanda
 /apps/pastebin-worker/ @MendyLanda
 /apps/placeholders-dev/ @MendyLanda
+/apps/playwright-mcp/ @MendyLanda
 /apps/projektor/ @MendyLanda
 /apps/punctual/ @MendyLanda
 /apps/quickinbox/ @MendyLanda
@@ -78,6 +81,7 @@
 /apps/relay/ @MendyLanda
 /apps/reminal/ @MendyLanda
 /apps/rssworker/ @MendyLanda
+/apps/screencapture-live/ @MendyLanda
 /apps/second-brain-cloudflare/ @MendyLanda
 /apps/seeder/ @MendyLanda
 /apps/sharehtml/ @MendyLanda
@@ -89,10 +93,12 @@
 /apps/synch/ @MendyLanda
 /apps/tempik/ @MendyLanda
 /apps/ternssh/ @MendyLanda
+/apps/token-monitor/ @MendyLanda
 /apps/turborepo-remote-cache/ @MendyLanda
 /apps/unifi-ddns/ @MendyLanda
 /apps/usage-guard-collector/ @MendyLanda
 /apps/veet/ @MendyLanda
+/apps/webrtc-turn/ @MendyLanda
 /apps/workers-firecrawl/ @MendyLanda
 /apps/yaos/ @MendyLanda
 

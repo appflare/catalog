@@ -1,0 +1,47 @@
+{
+  // The blobatar avatar endpoint on its own Worker: GET /avatar/<name> renders
+  // the same geometric SVG avatar for the same string every time. No storage
+  // and no bindings; the repository's other apps (the blobatar.dev site, the
+  // demos) are not installed.
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "blobatar",
+  "name": "blobatar API",
+  "summary": "Your own avatar endpoint: GET /avatar/<name> returns a deterministic geometric blobatar SVG for any username, email or id, with Gravatar-compatible URLs.",
+  "homepage": "https://blobatar.dev",
+  "repo": "Alain00/blobatar",
+  "license": "MIT",
+  "categories": ["developer-tools", "utilities"],
+  "authors": [{ "name": "Alain", "url": "https://blobatar.dev", "github": "Alain00" }],
+  "maintainers": ["MendyLanda"],
+  "source": { "ref": "v2.7.0", "sha": "ebb7ea4808b1263629fc8fa65e2398b9cbdb6f6b" },
+  "install": {
+    "tier": "artifact",
+    "packageManager": "bun",
+    // The endpoint is apps/api of a bun workspace, and it imports the blobatar
+    // library of the same workspace. The root bun.lock at this tag still
+    // records the workspace packages at 2.6.0, so a frozen install refuses it.
+    // apps/api ships no lockfile of its own; installing there resolves the
+    // whole workspace from the root lockfile, and only those version fields
+    // (and the @types/bun that "latest" names) move. The pack log records
+    // the resulting lockfile's hash.
+    "installDirs": [{ "path": "apps/api", "lockfile": "none" }],
+    // The endpoint resolves the library through its package exports, which
+    // point at built files the repository does not hold.
+    "buildCommand": "bun --filter blobatar build",
+    "wranglerConfig": "apps/api/wrangler.jsonc",
+    "workerName": "blobatar-api"
+  },
+  // One stateless Worker; each avatar renders in microseconds, and responses
+  // carry long cache headers.
+  "plan": "free",
+  "requires": [],
+  "secrets": [],
+  "vars": [],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "Point avatar URLs at {{workerUrl}}/avatar/<name>, for example `<img src=\"{{workerUrl}}/avatar/alice?size=64\">`. {{workerUrl}}/avatar/ lists every parameter, and {{workerUrl}}/openapi.json describes the endpoint. To serve a Gravatar URL, keep its path and query and change only the host."
+    }
+  ],
+  "tokenPermissions": []
+}

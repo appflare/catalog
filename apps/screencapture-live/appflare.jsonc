@@ -1,0 +1,58 @@
+{
+  // The live-streaming Worker of screencapture, a FiveM resource that
+  // captures a player's game view. The Worker coordinates WebRTC sessions on
+  // Cloudflare Realtime SFU: the player's game publishes one stream, and
+  // admins' browsers watch it with one-time viewer grants. One SQLite-backed
+  // Durable Object per stream holds its state. The FiveM resource itself
+  // runs on the game server.
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "screencapture-live",
+  "name": "screencapture Live",
+  "summary": "The live-streaming relay for screencapture on FiveM: stream a player's game view to admins' browsers through Cloudflare Realtime, with one-time viewer grants and a visible indicator for the player.",
+  "homepage": "https://screencapture.projecterror.dev/live-streaming/",
+  "repo": "itschip/screencapture",
+  "license": "AGPL-3.0",
+  "categories": ["gaming", "media"],
+  "authors": [{ "name": "Christopher", "github": "itschip" }],
+  "maintainers": ["MendyLanda"],
+  "source": { "ref": "v0.17.2", "sha": "8fb1021330052eba49c9f9378026bd76203edc21" },
+  "install": {
+    "tier": "artifact",
+    "packageManager": "pnpm",
+    // workers/live belongs to a pnpm workspace whose one lockfile is at the
+    // root, so the default root install covers it. No build step: wrangler
+    // bundles the TypeScript. The config declares the Durable Object class
+    // with an `exports` block (SQLite storage) instead of `migrations`.
+    "wranglerConfig": "workers/live/wrangler.jsonc",
+    "workerName": "screencapture-live"
+  },
+  // The Worker, its Durable Objects and its rate limit fit the free plan.
+  // Video goes through Cloudflare Realtime, whose first 1,000 GB of egress
+  // each month is free and which bills $0.05 per GB beyond that.
+  "plan": "free",
+  "requires": [],
+  "secrets": [
+    {
+      "name": "CALLS_APP_ID",
+      "label": "Realtime app ID",
+      "help": "The App ID of a Realtime SFU app you create in the Cloudflare dashboard under Realtime, Serverless SFU."
+    },
+    {
+      "name": "CALLS_APP_SECRET",
+      "label": "Realtime app secret",
+      "help": "The App Secret of the same Realtime SFU app. The Worker uses it to open sessions; it never reaches the game server or the players."
+    }
+  ],
+  "vars": [],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "Add the Worker to your FiveM `server.cfg` before starting the screencapture resource:\n\n```cfg\nset screencapture_live_endpoint \"{{workerUrl}}\"\n```"
+    },
+    {
+      "type": "markdown",
+      "content": "Anyone can create streams at this address, limited to 10 a minute per IP address and Cloudflare location. For a public server, add WAF rules and a Realtime budget alert in the Cloudflare dashboard."
+    }
+  ],
+  "tokenPermissions": []
+}

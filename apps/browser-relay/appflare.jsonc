@@ -1,0 +1,48 @@
+{
+  // Only the relay hub (hub/) is installed. Browser Relay itself is a Chrome
+  // extension and a CLI that let AI agents use the browser you are already
+  // signed in to; with Remote Relay on, the extension dials out to a hub, and
+  // remote CLIs reach the browser through it. This entry is that hub, in
+  // place of upstream's hosted one. One Durable Object per device holds its
+  // WebSocket.
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "browser-relay",
+  "name": "Browser Relay Hub",
+  "summary": "Your own relay for Browser Relay: let AI agents on other machines drive the Chrome you are signed in to, through a hub in your account instead of the hosted one.",
+  "homepage": "https://github.com/reliefeai/browser-relay",
+  "repo": "reliefeai/browser-relay",
+  "license": "MIT",
+  "categories": ["ai", "remote-access"],
+  "authors": [{ "name": "reliefe", "github": "reliefeai" }],
+  "maintainers": ["MendyLanda"],
+  "source": { "ref": "v1.5.4", "sha": "973434bc6b339dd56d831b1ebd089a8465850844" },
+  "install": {
+    "tier": "artifact",
+    "packageManager": "npm",
+    // hub/ has no lockfile and imports the extension's protocol module from
+    // outside its directory, so the whole checkout is used and dependencies
+    // come from the root lockfile (the default). Install scripts do not run,
+    // so the root postinstall that registers the agent skill is skipped. No
+    // build step.
+    "wranglerConfig": "hub/wrangler.toml",
+    "workerName": "browser-relay-hub",
+    "healthPath": "/v1/health"
+  },
+  // A SQLite-backed Durable Object per connected device fits the free plan;
+  // each command is a few small WebSocket messages.
+  "plan": "free",
+  "requires": [],
+  "secrets": [],
+  "vars": [],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "In the Browser Relay extension, open Options, Remote Relay, enter {{workerUrl}} in the Public relay field, and turn Remote Relay on. On the machines that send commands, set `BROWSER_RELAY_REMOTE_HOST={{workerUrl}}` and pass the Device ID the extension shows with `--remote-device-id`."
+    },
+    {
+      "type": "markdown",
+      "content": "The hub has no accounts: the Device ID is the only key to your browser while Remote Relay is on. Treat it like a password."
+    }
+  ],
+  "tokenPermissions": []
+}
