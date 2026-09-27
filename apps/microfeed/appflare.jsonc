@@ -1,0 +1,121 @@
+{
+  // microfeed's own installer (`yarn manage`) writes a wrangler config per
+  // installation from wrangler.template.jsonc. This entry packs the committed
+  // wrangler.jsonc instead, which declares the same D1, R2, queue and cron,
+  // and sets the installer's vars that the Worker reads below. The first
+  // admin comes from the three MICROFEED_SETUP_ADMIN_* secrets through the
+  // Worker's own bootstrap endpoint (src/server/auth/bootstrap.ts), which
+  // refuses once an owner exists.
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "microfeed",
+  "name": "microfeed",
+  "summary": "A lightweight CMS for audio, video, photos, documents, blog posts and links, published as a website, RSS and JSON feed, with an admin dashboard and an API for agents.",
+  "homepage": "https://www.microfeed.org",
+  "repo": "microfeed/microfeed",
+  "license": "AGPL-3.0-only",
+  "categories": ["cms", "media"],
+  "authors": [
+    { "name": "Listen Notes", "url": "https://www.listennotes.com", "github": "microfeed" }
+  ],
+  "maintainers": ["MendyLanda"],
+  "source": { "ref": "v1.0.13", "sha": "45096852f90fd617b34b368b93f339ab383ea248" },
+  "install": {
+    "tier": "artifact",
+    // Yarn 4, pinned in package.json's packageManager.
+    "packageManager": "yarn",
+    "wranglerConfig": "wrangler.jsonc",
+    "workerName": "microfeed",
+    // Upstream's `build` script is `yarn types && astro build`; the type
+    // generation only feeds the type checker, so the build runs Astro
+    // directly. The Cloudflare adapter builds the Worker and leaves a
+    // redirect to the config it generated.
+    "buildCommand": "astro build"
+  },
+  // D1, R2, a queue for outgoing webhooks, Workers Cache and one hourly cron
+  // trigger fit the free plan.
+  "plan": "free",
+  "requires": ["r2"],
+  "secrets": [
+    {
+      "name": "MICROFEED_SETUP_ADMIN_EMAIL",
+      "label": "Owner email",
+      "help": "The email you sign in to the admin dashboard with. It does not need to match your Cloudflare account."
+    },
+    {
+      "name": "MICROFEED_SETUP_ADMIN_PASSWORD",
+      "label": "Owner password",
+      "help": "The dashboard password, 12 to 128 characters. It is used once, to create the owner account."
+    },
+    {
+      "name": "MICROFEED_SETUP_ADMIN_PASSWORD_CONFIRMATION",
+      "label": "Owner password again",
+      "help": "The same password once more. microfeed refuses to create the owner when the two differ."
+    },
+    {
+      "name": "BETTER_AUTH_SECRET",
+      "label": "Session secret",
+      "help": "Signs dashboard sessions. Setting a new value signs everyone out.",
+      "generate": true
+    },
+    {
+      "name": "UPLOAD_SIGNING_KEY",
+      "label": "Upload signing key",
+      "help": "Signs the short-lived links the dashboard uploads media through.",
+      "generate": true
+    },
+    {
+      "name": "WEBHOOK_SECRET_KEY",
+      "label": "Webhook signing key",
+      "help": "Encrypts the signing secret of each webhook endpoint you add in the dashboard. Setting a new value makes those stored secrets unreadable.",
+      "generate": true
+    }
+  ],
+  "vars": [
+    {
+      "name": "MICROFEED_ADMIN_PATH",
+      "label": "Admin path",
+      "help": "Where the admin dashboard lives, without slashes: admin serves it at /admin/.",
+      "default": "admin",
+      "required": true
+    },
+    {
+      "name": "DEPLOYMENT_ENVIRONMENT",
+      "label": "Deployment environment",
+      "type": "select",
+      "options": [
+        { "value": "production", "label": "Production" },
+        { "value": "preview", "label": "Preview" }
+      ],
+      "default": "production"
+    },
+    {
+      "name": "MICROFEED_CLOUDFLARE_ACCOUNT_ID",
+      "label": "Cloudflare account ID",
+      "help": "The dashboard's setup checklist links into this account's Cloudflare dashboard with it. Filled in on every install and update.",
+      "default": "{{accountId}}"
+    },
+    {
+      "name": "MICROFEED_WORKER_NAME",
+      "label": "Worker name",
+      "help": "Used for the checklist's link to this Worker's domain settings.",
+      "default": "{{workerName}}"
+    },
+    {
+      "name": "MICROFEED_R2_BUCKET_NAME",
+      "label": "Media bucket name",
+      "help": "The R2 bucket Appflare created for media, named after the Worker. The checklist links to it to set up a public media domain.",
+      "default": "{{workerName}}-media-bucket"
+    }
+  ],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "Create the owner account from the email and password you entered, once:\n\n```sh\ncurl -X POST {{workerUrl}}/.well-known/microfeed/bootstrap-admin/\n```\n\nIt answers `{\"status\":\"created\"}`, and `already_initialized` from then on. Then sign in at {{workerUrl}}/admin/ (or the admin path you chose)."
+    },
+    {
+      "type": "markdown",
+      "content": "Media is served from the R2 bucket `{{workerName}}-media-bucket`: give it a public custom domain in the Cloudflare dashboard and enter that URL under **Settings > Media file storage**, as the dashboard's checklist shows."
+    }
+  ],
+  "tokenPermissions": []
+}

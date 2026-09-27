@@ -1,0 +1,98 @@
+{
+  // One web interface and one WebDAV endpoint over storage you already have:
+  // S3-compatible buckets (R2 included), WebDAV servers, OneDrive, Google
+  // Drive, Aliyun Drive and Baidu Netdisk. Storage connections are added in
+  // the admin panel and kept in D1. The app creates every table it uses on
+  // its first request (initDatabase in app/lib/storage.ts), so the database
+  // needs no migration files: the artifact carries none, since the build
+  // moves the config wrangler deploys from to build/server/.
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "clist",
+  "name": "CList",
+  "summary": "A file browser and WebDAV server over your S3, WebDAV, OneDrive and Google Drive storage, with previews, share links and audit logs.",
+  "homepage": "https://github.com/ooyyh/Cloudflare-Clist",
+  "repo": "ooyyh/Cloudflare-Clist",
+  "license": "MIT",
+  "categories": ["files", "storage"],
+  "authors": [{ "name": "ooyyh", "url": "https://blog.ooyyh.top", "github": "ooyyh" }],
+  "maintainers": ["MendyLanda"],
+  // Pinned to master: the latest tag, v1.2.0, predates the repository's
+  // LICENSE file and the wrangler.jsonc.example this entry builds from.
+  "source": { "ref": "master", "sha": "cb7cc248c5adc6ebb4241204ff7f162d01ee1c51" },
+  "install": {
+    "tier": "artifact",
+    "packageManager": "npm",
+    // Upstream keeps its config only as an example to copy.
+    "wranglerConfig": "wrangler.jsonc.example",
+    "workerName": "clist",
+    // React Router through the Cloudflare Vite plugin.
+    "buildCommand": "npm run build"
+  },
+  "plan": "free",
+  "requires": [],
+  // The app's wrangler config declares both passwords as vars with the
+  // example value "changeme"; as secrets here, those vars are left out of the
+  // artifact.
+  "secrets": [
+    {
+      "name": "ADMIN_PASSWORD",
+      "label": "Admin password",
+      "help": "Sign in to the admin panel with it, together with the admin user name.",
+      "generate": true
+    },
+    {
+      "name": "WEBDAV_PASSWORD",
+      "label": "WebDAV password",
+      "help": "Leave empty to use the admin password for WebDAV too.",
+      "optional": true
+    }
+  ],
+  "vars": [
+    {
+      "name": "ADMIN_USERNAME",
+      "label": "Admin user name",
+      "help": "Sign in to the admin panel with it.",
+      "default": "admin",
+      "required": true
+    },
+    {
+      "name": "SITE_TITLE",
+      "label": "Site title",
+      "help": "Shown at the top of every page.",
+      "default": "CList"
+    },
+    {
+      "name": "SITE_ANNOUNCEMENT",
+      "label": "Announcement",
+      "help": "Text shown to every visitor on the home page. Leave empty for none.",
+      "default": ""
+    },
+    {
+      "name": "CHUNK_SIZE_MB",
+      "label": "Upload chunk size in MB",
+      "help": "Browser uploads are sent in parts of this size.",
+      "default": "10"
+    },
+    {
+      "name": "WEBDAV_ENABLED",
+      "label": "WebDAV server",
+      "help": "Serve every storage over WebDAV at /dav/0/ (all storages) and /dav/<storage id>/.",
+      "type": "select",
+      "options": [{ "value": "false", "label": "Off" }, { "value": "true", "label": "On" }],
+      "default": "false"
+    },
+    {
+      "name": "WEBDAV_USERNAME",
+      "label": "WebDAV user name",
+      "help": "Leave empty to use the admin user name.",
+      "default": ""
+    }
+  ],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "Open {{workerUrl}}, sign in with the admin user name and password, and add a storage. With WebDAV on, point a client at {{workerUrl}}/dav/0/ (keep the trailing slash)."
+    }
+  ],
+  "tokenPermissions": []
+}

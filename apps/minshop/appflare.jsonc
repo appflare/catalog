@@ -1,0 +1,56 @@
+{
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "minshop",
+  "name": "minshop",
+  "summary": "A small, server-rendered online store with a full admin: Stripe checkout for people, Lightning invoices and a JSON API that agents can pay through, on D1 and R2.",
+  "homepage": "https://minshop.dev",
+  "repo": "ddyy/minshop",
+  "license": "MIT",
+  "categories": ["business", "finance"],
+  "authors": [{ "name": "Daniel Yang", "url": "https://daniel-yang.com", "github": "ddyy" }],
+  "maintainers": ["MendyLanda"],
+  "source": { "ref": "v0.2.0", "sha": "e906890bef17bb514e7e7eabbd09c5501991857c" },
+  "install": {
+    "tier": "artifact",
+    "packageManager": "npm",
+    // The committed config the Deploy button reads. It has no `main`: the
+    // Astro Cloudflare adapter builds the Worker entry and leaves a redirect
+    // to its generated config. Its disabled `cache` block is not carried over.
+    "wranglerConfig": "wrangler.jsonc",
+    "workerName": "minshop",
+    "buildCommand": "astro build"
+  },
+  // D1, R2 and rate limits fit the free plan. Images, Workers AI with
+  // Vectorize, and Cloudflare Email are optional upstream and commented out of
+  // this config; the store runs without them.
+  "plan": "free",
+  "requires": ["r2"],
+  // Upstream's only two Worker secrets. Payment, email and Turnstile keys are
+  // pasted in the admin and kept encrypted in D1 under SECRETS_KEK.
+  "secrets": [
+    {
+      "name": "SECRETS_KEK",
+      "label": "Key-encryption key",
+      "help": "Encrypts the payment and email provider keys you paste in the admin. Changing it makes those saved keys unreadable.",
+      "generate": true
+    },
+    {
+      "name": "AUTH_SECRET",
+      "label": "Session signing key",
+      "help": "Signs admin and customer sessions and magic-link sign-in tokens. Changing it signs everyone out.",
+      "generate": true
+    }
+  ],
+  "vars": [],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "Open {{workerUrl}}/admin/setup right away and set the store name, time zone and admin password. Until a password is set the setup page is open to anyone who finds it."
+    },
+    {
+      "type": "markdown",
+      "content": "Add payment keys (Stripe, OpenNode, Lightning) and email under **Admin > Settings**. For Stripe, point a webhook at `{{workerUrl}}/api/webhook/stripe` and paste its signing secret in the same card."
+    }
+  ],
+  "tokenPermissions": []
+}

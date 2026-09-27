@@ -1,0 +1,96 @@
+{
+  // A project manager for small teams: kanban boards, client requests, a
+  // token-gated public client board, a daily planner, and a built-in MCP
+  // server at /api/mcp. The first account can only be created with the owner
+  // email below; after that, people join by invite.
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "seeder",
+  "name": "Seeder",
+  "summary": "A project manager for small teams: kanban tasks, client requests, a public client board, a daily planner and a built-in MCP server.",
+  "homepage": "https://seederpm.xyz",
+  "repo": "danielsyauqi/Seeder",
+  "license": "MIT",
+  "categories": ["productivity", "business"],
+  "authors": [
+    { "name": "Daniel Syauqi", "url": "https://danielsyauqi.site", "github": "danielsyauqi" },
+    { "name": "Thaqif Rosdi", "github": "takippu" }
+  ],
+  "maintainers": ["MendyLanda"],
+  "source": { "ref": "v2.1.0", "sha": "0268c44dd565257f4ff5074e03bb9b3ac285ef5f" },
+  "install": {
+    "tier": "artifact",
+    "packageManager": "npm",
+    "wranglerConfig": "wrangler.jsonc",
+    "workerName": "seeder",
+    // Next.js through OpenNext, which runs `next build` itself and writes
+    // the Worker and its static assets to .open-next/.
+    "buildCommand": "opennextjs-cloudflare build"
+  },
+  // Upstream documents the free plan as enough. The wrangler config also sets
+  // `limits.cpu_ms` to 30000, the paid plan's default CPU ceiling, which the
+  // artifact records as it is.
+  "plan": "free",
+  // Images and file uploads go to an R2 bucket.
+  "requires": ["r2"],
+  "secrets": [
+    {
+      "name": "BETTER_AUTH_SECRET",
+      "label": "Session secret",
+      "help": "Signs sign-in sessions. Setting a new value signs everyone out.",
+      "generate": true
+    },
+    {
+      "name": "VCS_ENCRYPTION_KEY",
+      "label": "Git integration encryption key",
+      "help": "Encrypts GitHub and GitLab tokens and webhook secrets at rest. The app will not start without it. It must be 32 random bytes in base64: run `openssl rand -base64 32` and paste the output. Changing it later makes stored integration tokens unreadable."
+    },
+    {
+      "name": "GOOGLE_CLIENT_ID",
+      "label": "Google OAuth client ID",
+      "help": "Adds Google sign-in when set together with the client secret. Redirect URI: <app URL>/api/auth/callback/google.",
+      "optional": true
+    },
+    {
+      "name": "GOOGLE_CLIENT_SECRET",
+      "label": "Google OAuth client secret",
+      "help": "The secret of the Google OAuth client above.",
+      "optional": true
+    }
+  ],
+  "vars": [
+    {
+      "name": "OWNER_EMAIL",
+      "label": "Owner email",
+      "help": "The only address that can create the first account, which becomes the owner. After that, sign-up is by invite only.",
+      "required": true
+    },
+    {
+      "name": "BETTER_AUTH_URL",
+      "label": "App URL",
+      "help": "Where people open Seeder, without a trailing slash. Change it when you add a custom domain.",
+      "default": "{{workerUrl}}",
+      "required": true
+    },
+    {
+      "name": "BETTER_AUTH_TRUSTED_ORIGINS",
+      "label": "Other allowed origins",
+      "help": "Further addresses the app is reachable at, separated by commas (for example the workers.dev address after moving to a custom domain), so sign-in from them is not refused."
+    },
+    {
+      "name": "MCP_ALLOWED_ORIGINS",
+      "label": "MCP allowed origins",
+      "help": "Origins of browser-based MCP clients allowed to call /api/mcp, separated by commas, for example https://claude.ai. Empty allows any origin; a personal access token is always required."
+    }
+  ],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "Open {{workerUrl}}/sign-in and create the owner account with the owner email. Invite the rest of the team from the admin pages."
+    },
+    {
+      "type": "markdown",
+      "content": "Connect an AI assistant: create a token under **Settings > API tokens**, then add `{{workerUrl}}/api/mcp` to the client with the token as a Bearer header."
+    }
+  ],
+  "tokenPermissions": []
+}

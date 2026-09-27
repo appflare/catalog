@@ -1,0 +1,69 @@
+{
+  // One Worker: a cron polls every service every five minutes, a queue
+  // batches community reports into their own D1, and each upstream fetch is
+  // written to the Analytics Engine dataset `isupmap_fetches` for the
+  // operator to query. Dataset names are account-wide, so a second install in
+  // the same account writes to the same dataset. The wrangler config's
+  // VOTE_SALT var is empty; as a secret here, that var is left out of the
+  // artifact.
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "isupmap",
+  "name": "isupmap",
+  "summary": "A live up/down heatmap for 40+ popular internet services, polled every five minutes, with history and community outage reports.",
+  "homepage": "https://isupmap.com",
+  "repo": "Jaironlanda/isupmap",
+  "license": "MIT",
+  "categories": ["monitoring"],
+  "authors": [
+    { "name": "Jairon Landa", "url": "https://jaironlanda.com", "github": "Jaironlanda" }
+  ],
+  "maintainers": ["MendyLanda"],
+  "source": { "ref": "main", "sha": "17bb6884b4d4fabfd4cecfb4bf8254b155cb6dea" },
+  "install": {
+    "tier": "artifact",
+    "packageManager": "npm",
+    "wranglerConfig": "wrangler.jsonc",
+    "workerName": "isupmap"
+  },
+  // D1, KV, a queue, rate limits, Analytics Engine and one cron trigger fit
+  // the free plan. Each poll round spends one subrequest per service.
+  "plan": "free",
+  "requires": ["analytics-engine"],
+  "secrets": [
+    {
+      "name": "VOTE_SALT",
+      "label": "Report IP hash salt",
+      "help": "Salts the hash of each reporter's IP. Community reports are refused without it.",
+      "generate": true
+    }
+  ],
+  "vars": [
+    {
+      "name": "PROTOMAPS_KEY",
+      "label": "Protomaps API key",
+      "help": "Shows a world map of where reports come from on each service's page. Free keys at protomaps.com. The key is sent to visitors' browsers, which load the map tiles with it."
+    },
+    {
+      "name": "GA_ID",
+      "label": "Google Analytics measurement ID",
+      "help": "A GA4 measurement ID (G-...) to count visitors with Google Analytics. Leave empty to load no analytics."
+    }
+  ],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "Open {{workerUrl}}. Services show as pending until the first poll, which runs within five minutes."
+    },
+    {
+      "type": "markdown",
+      "content": "isupmap writes every upstream fetch to the Analytics Engine dataset `isupmap_fetches`, whose name is shared by the whole account: a second install in this account writes to the same dataset."
+    }
+  ],
+  "tokenPermissions": [],
+  "resources": {
+    "d1": {
+      "DB": { "schema": ["schema.sql"] },
+      "REPORTS_DB": { "schema": ["schema-reports.sql"] }
+    }
+  }
+}

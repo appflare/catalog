@@ -1,0 +1,49 @@
+{
+  // EmDash's Cloudflare blog template, the project its README's Deploy button
+  // deploys. EmDash itself (emdash-cms/emdash) is MIT; the templates repository
+  // has no LICENSE file of its own, and EmDash's maintainers intend the
+  // templates to be used under the same MIT licence.
+  //
+  // The template directory ships without a lockfile, so its dependencies are
+  // resolved at pack time (installDirs, lockfile "none") within the ranges its
+  // package.json allows. Lockfile the pack resolved: sha256 7ef3a65c7f24dbd650285184edb8d41518e695d2f32d280a94ed5fd17de2d88a.
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "emdash",
+  "name": "EmDash",
+  "summary": "A full-stack TypeScript CMS built on Astro, the spiritual successor to WordPress: this is its blog template, with posts, pages, categories and tags, search, RSS and an admin editor, on D1 and R2.",
+  "homepage": "https://emdashcms.com",
+  "repo": "emdash-cms/templates",
+  "license": "MIT",
+  "categories": ["cms", "blogging"],
+  "authors": [{ "name": "EmDash", "url": "https://emdashcms.com", "github": "emdash-cms" }],
+  "maintainers": ["MendyLanda"],
+  // The templates repository has no tags; the pin tracks main.
+  "source": { "ref": "main", "sha": "e3b39ac4e205e05f01410bd8f3e27680cba189a0" },
+  "install": {
+    "tier": "artifact",
+    "packageManager": "pnpm",
+    // The template is a project of its own with no package.json at the root
+    // of the repository, so only its directory is installed.
+    "installDirs": [{ "path": "blog-cloudflare", "lockfile": "none" }],
+    "wranglerConfig": "blog-cloudflare/wrangler.jsonc",
+    "workerName": "emdash",
+    // The Astro build; the Cloudflare adapter builds the Worker and leaves a
+    // redirect to the config it generated.
+    "buildCommand": "pnpm --dir blog-cloudflare run build"
+  },
+  // D1 and R2 fit the free plan. The Worker Loader binding for sandboxed
+  // plugins (Workers Paid) is commented out upstream. EmDash applies its own
+  // database migrations on the first request. One cron trigger, every minute,
+  // for scheduled publishing and maintenance.
+  "plan": "free",
+  "requires": ["r2"],
+  "secrets": [],
+  "vars": [],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "Open {{workerUrl}}/_emdash/admin right away to run the setup wizard and create the admin account; until then anyone who opens it can. The site itself is at {{workerUrl}}."
+    }
+  ],
+  "tokenPermissions": []
+}

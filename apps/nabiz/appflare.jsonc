@@ -1,0 +1,107 @@
+{
+  // A status page and its prober in one Worker: Astro renders the page, a cron
+  // trigger probes every monitor once a minute, and D1 keeps the history.
+  // Monitors are rows in D1 that the operator adds, never settings.
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "nabiz",
+  "name": "nabiz",
+  "summary": "A status page that probes your services every minute from Cloudflare's edge, with 90-day uptime bars, operator notices, and Telegram or webhook alerts.",
+  "homepage": "https://github.com/productdevbook/nabiz",
+  "repo": "productdevbook/nabiz",
+  "license": "MIT",
+  "categories": ["monitoring", "utilities"],
+  "authors": [
+    {
+      "name": "Wind",
+      "url": "https://productdevbook.com",
+      "github": "productdevbook",
+      "x": "productdevbook"
+    }
+  ],
+  "maintainers": ["MendyLanda"],
+  "source": { "ref": "v3.12.1", "sha": "eebc8acce25c5db5001398b483ba7a8016c3c5aa" },
+  "install": {
+    "tier": "artifact",
+    "packageManager": "bun",
+    // The Astro build writes the deployable config under dist/server and
+    // points wrangler at it; wrangler.toml is the source of its settings.
+    "wranglerConfig": "wrangler.toml",
+    "workerName": "nabiz",
+    "buildCommand": "bun run build",
+    // Answers without a sign-in, from the Worker's own code.
+    "healthPath": "/health"
+  },
+  // One Worker, one cron trigger and D1, inside the free tier. A probe round
+  // spends one subrequest per monitor plus a few for the database, so the
+  // free plan's 50 per invocation caps an install at about 43 monitors.
+  "plan": "free",
+  "requires": [],
+  "resources": {
+    "d1": {
+      // Upstream ships one schema file instead of migrations. Every statement
+      // in it is CREATE ... IF NOT EXISTS, so it runs on every install and
+      // update and creates only what is missing.
+      "DB": { "schema": ["schema.sql"] }
+    }
+  },
+  "secrets": [
+    {
+      "name": "ADMIN_TOKEN",
+      "label": "Admin token",
+      "help": "Lets you write and resolve notices on the page (press n, or open /#notice). Without it every write is refused.",
+      "generate": true
+    },
+    {
+      "name": "TELEGRAM_BOT_TOKEN",
+      "label": "Telegram bot token",
+      "help": "With the chat id below, sends a Telegram message whenever a monitor goes down or recovers.",
+      "optional": true
+    },
+    {
+      "name": "TELEGRAM_CHAT_ID",
+      "label": "Telegram chat id",
+      "help": "The chat the bot above writes to.",
+      "optional": true
+    },
+    {
+      "name": "ALERT_WEBHOOK_URL",
+      "label": "Alert webhook URL",
+      "help": "Receives the same state changes as JSON in a POST. The payload names grouped monitors too, so point it somewhere private.",
+      "optional": true
+    }
+  ],
+  "vars": [
+    {
+      "name": "TITLE",
+      "label": "Page title",
+      "default": "nabiz",
+      "required": true
+    },
+    {
+      "name": "LANG",
+      "label": "Default language",
+      "help": "Visitors can switch language on the page.",
+      "type": "select",
+      "options": [
+        { "value": "en", "label": "English" },
+        { "value": "tr", "label": "Turkish" },
+        { "value": "de", "label": "German" },
+        { "value": "es", "label": "Spanish" },
+        { "value": "fr", "label": "French" },
+        { "value": "zh-CN", "label": "Chinese (Simplified)" }
+      ],
+      "default": "en"
+    }
+  ],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "The page at {{workerUrl}} starts empty: monitors are rows in the database. In the Cloudflare dashboard open Storage & Databases, D1, the database named `{{workerName}}-db`, then Console, and add them:\n\n```sql\nINSERT INTO monitors (slug, name, url, position) VALUES\n  ('api', 'API', 'https://api.example.com/health', 1);\n```\n\nEach one shows up at the next probe round, within a minute. Upstream's docs/monitors.md lists every column."
+    },
+    {
+      "type": "markdown",
+      "content": "Attach a custom domain to the Worker for real traffic: the page's edge cache does nothing on a workers.dev address."
+    }
+  ],
+  "tokenPermissions": []
+}

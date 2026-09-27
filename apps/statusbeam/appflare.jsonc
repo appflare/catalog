@@ -1,0 +1,86 @@
+{
+  // Two Workers from upstream's monorepo: the status page (Astro, behind
+  // Workers Cache) and the checker, which probes every site on a cron and
+  // writes the history to D1 and the current snapshot to KV. Both bind the
+  // same D1 database and KV namespace. The list of sites is a YAML file the
+  // operator puts in the KV namespace under the key `config`.
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "statusbeam",
+  "name": "StatusBeam",
+  "summary": "A status page served from Cloudflare's edge cache, with a checker that probes your sites, Statuspage and incident.io pages, and Sentry monitors every five minutes.",
+  "homepage": "https://docs.statusbeam.dev",
+  "repo": "pleaseai/statusbeam",
+  "license": "MIT",
+  "categories": ["monitoring", "utilities"],
+  "authors": [{ "name": "pleaseai", "url": "https://pleaseai.dev", "github": "pleaseai" }],
+  "maintainers": ["MendyLanda"],
+  // The monorepo tags each package on its own (web-v0.1.1, worker-v0.1.1,
+  // both on this commit), so the version is set here.
+  "source": { "ref": "web-v0.1.1", "sha": "4473885671aa0227c21ac4e08d69d5023c7c0879" },
+  "install": {
+    "tier": "artifact",
+    "packageManager": "bun",
+    "wranglerConfig": "apps/web/wrangler.jsonc",
+    "workerName": "statusbeam",
+    "version": "0.1.1",
+    // The shared core package first, then the Astro status page. The checker
+    // is bundled by wrangler from its sources.
+    "buildCommand": [
+      "bun run --filter @statusbeam/core build",
+      "bun run --filter @statusbeam/web build"
+    ],
+    "workers": [
+      { "name": "web", "wranglerConfig": "apps/web/wrangler.jsonc", "primary": true },
+      { "name": "checker", "wranglerConfig": "apps/worker/wrangler.jsonc" }
+    ]
+  },
+  // Workers, D1, KV, Workers Cache and one cron trigger fit the free plan.
+  "plan": "free",
+  "requires": [],
+  "resources": {
+    "d1": {
+      // Upstream ships one schema file instead of migrations. Every statement
+      // in it is CREATE ... IF NOT EXISTS, so it runs on every install and
+      // update and creates only what is missing.
+      "DB": { "schema": ["apps/worker/schema.sql"] }
+    }
+  },
+  "secrets": [
+    {
+      "name": "WEBHOOK_SECRET",
+      "label": "Webhook secret",
+      "help": "Authenticates Statuspage and Sentry webhooks sent to the checker. Without it the webhook endpoint refuses every request and only the cron updates status.",
+      "generate": true,
+      "workers": ["checker"]
+    },
+    {
+      "name": "SENTRY_AUTH_TOKEN",
+      "label": "Sentry auth token",
+      "help": "Read access to Sentry issues, so sites with a sentry block are also polled on each cron run.",
+      "optional": true,
+      "workers": ["checker"]
+    },
+    {
+      "name": "CF_API_TOKEN",
+      "label": "Cache purge token",
+      "help": "A Cloudflare API token with Cache Purge on the zone that serves the page. With the zone id below, a status change shows at once instead of within the cache's 60 seconds.",
+      "optional": true,
+      "workers": ["checker"]
+    },
+    {
+      "name": "CF_ZONE_ID",
+      "label": "Zone id",
+      "help": "The zone of the custom domain that serves the page.",
+      "optional": true,
+      "workers": ["checker"]
+    }
+  ],
+  "vars": [],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "Write your list of sites as upstream's `status.config.example.yml` shows, then in the Cloudflare dashboard open Storage & Databases, Workers KV, the namespace named `{{workerName}}-status-kv`, and add it as the value of the key `config`. The checker's next run, within five minutes, fills {{workerUrl}}."
+    }
+  ],
+  "tokenPermissions": []
+}
