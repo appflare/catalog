@@ -19,6 +19,7 @@
 /apps/chatgpt-telegram-workers/ @MendyLanda
 /apps/civideo/ @MendyLanda
 /apps/clist/ @MendyLanda
+/apps/cloudflare-prometheus-exporter/ @MendyLanda
 /apps/cloudflarebase/ @MendyLanda
 /apps/cloudmark/ @MendyLanda
 /apps/cloudssh/ @MendyLanda
@@ -36,6 +37,7 @@
 /apps/exception-notify/ @MendyLanda
 /apps/feedlog/ @MendyLanda
 /apps/flaremo/ @MendyLanda
+/apps/fodi/ @MendyLanda
 /apps/folia/ @MendyLanda
 /apps/formzero/ @MendyLanda
 /apps/freemail/ @MendyLanda
@@ -58,6 +60,7 @@
 /apps/mailflare/ @MendyLanda
 /apps/mailysend/ @MendyLanda
 /apps/md-page/ @MendyLanda
+/apps/memory-note/ @MendyLanda
 /apps/microfeed/ @MendyLanda
 /apps/minshop/ @MendyLanda
 /apps/minvoice/ @MendyLanda
@@ -83,6 +86,7 @@
 /apps/rdyrct/ @MendyLanda
 /apps/relay/ @MendyLanda
 /apps/reminal/ @MendyLanda
+/apps/renewhelper/ @MendyLanda
 /apps/rssworker/ @MendyLanda
 /apps/screencapture-live/ @MendyLanda
 /apps/second-brain-cloudflare/ @MendyLanda

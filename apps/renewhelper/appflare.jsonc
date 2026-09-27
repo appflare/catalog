@@ -1,0 +1,60 @@
+{
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "renewhelper",
+  "name": "RenewHelper",
+  "summary": "Keep track of subscriptions, domain renewals, server expiry dates and birthdays: solar and lunar cycles, reminders through Telegram, email, webhooks and a dozen other channels, a calendar with an iCal feed, and a spending dashboard, on Workers KV.",
+  "homepage": "https://github.com/ieax/renewhelper",
+  "repo": "ieax/renewhelper",
+  "license": "MIT",
+  "categories": ["productivity", "finance", "notifications"],
+  "authors": [{ "name": "LOSTFREE", "github": "ieax" }],
+  "maintainers": ["MendyLanda"],
+  "source": { "ref": "v3.8.4", "sha": "53a7d55edf1629789601eea17b63fe5cb6dce703" },
+  "install": {
+    "tier": "artifact",
+    // Upstream commits the built Worker, _worker.js (the Vue front end inlined
+    // into the server code by scripts/build.js), and the wrangler config's main
+    // already names it, so nothing is built. Upstream ships no lockfile; the
+    // install only has to succeed, since the bundle imports no package. The
+    // pack log records the sha256 of the package-lock.json it wrote
+    // (v3.8.4, 2026-09-27: e8966d02f2d3fa736cd3474b9e6a4185dc3ae76617cb48df8e5b0d98632d57bf).
+    "packageManager": "npm",
+    "wranglerConfig": "wrangler.toml",
+    "workerName": "renewhelper",
+    "installDirs": [{ "path": ".", "lockfile": "none" }],
+    // The config leaves the KV namespace id as an empty string for the
+    // self-hoster to fill in, and wrangler refuses an empty one. Leaving it out
+    // lets the install create the namespace. No upstream pull request yet.
+    "configPatch": {
+      "kv_namespaces": [{ "binding": "RENEW_KV", "preview_id": "" }]
+    }
+  },
+  // Workers KV and one cron trigger, every 30 minutes, which checks due dates
+  // and sends reminders. The free plan allows 5 cron triggers per account.
+  "plan": "free",
+  "requires": [],
+  "secrets": [
+    {
+      // The wrangler config sets it as a var, "admin"; as a secret the var is
+      // left out, and the app falls back to "admin" only when it is unset.
+      "name": "AUTH_PASSWORD",
+      "label": "Sign-in password",
+      "help": "The password for the web interface. Sessions are signed with a key the app generates and keeps in KV.",
+      "generate": true
+    }
+  ],
+  // Notification channels, reminder times, currencies and the iCal feed are
+  // set in the app's settings and kept in KV.
+  "vars": [],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "Open {{workerUrl}} and sign in with the password from this app's settings. Add notification channels under **Config**, then add the services, domains or dates to track."
+    },
+    {
+      "type": "markdown",
+      "content": "Reminders go out from the cron trigger, which runs every 30 minutes; each item's reminder time (08:00 unless you change it) picks the run that sends its reminder."
+    }
+  ],
+  "tokenPermissions": []
+}
