@@ -1,0 +1,74 @@
+{
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "semanticsearch",
+  "name": "Semantic Search",
+  "summary": "A semantic search API on Vectorize and Workers AI: add documents with metadata over HTTP, then search them by meaning, with writer and read-only API keys and Swagger docs.",
+  "homepage": "https://semanticsearch.ai",
+  // Formerly SemanticSearch-ai/api.semanticsearch.ai, the address its Deploy
+  // button still uses; GitHub redirects the old name.
+  "repo": "SemanticSearch-ai/semanticsearch",
+  // The repository has no LICENSE file. Its README declares the Apache License
+  // 2.0 and adds that a product built on it must link to
+  // https://semanticsearch.ai/ (see README.md beside this file).
+  "license": "Apache-2.0",
+  "categories": ["developer-tools", "ai"],
+  "authors": [
+    {
+      "name": "SemanticSearch.ai",
+      "url": "https://semanticsearch.ai",
+      "github": "SemanticSearch-ai"
+    }
+  ],
+  "maintainers": ["MendyLanda"],
+  // Upstream publishes no tags; the pin is the head of main.
+  "source": { "ref": "main", "sha": "baa959e2fdf5d712bc756dd45dde884ff7e4cdef" },
+  "install": {
+    "tier": "artifact",
+    "packageManager": "pnpm",
+    "wranglerConfig": "wrangler.toml",
+    "workerName": "semanticsearch"
+  },
+  // Workers AI (10,000 Neurons a day) and Vectorize (5 million stored
+  // dimensions, about 19,500 documents at 256 each) both have free
+  // allowances; a larger collection needs Workers Paid.
+  "plan": "free",
+  "requires": ["workers-ai"],
+  "secrets": [
+    {
+      "name": "API_KEY_WRITER",
+      "label": "Writer API key",
+      "help": "Sent as `Authorization: Bearer <key>`. Adds, reads, deletes and searches documents. Several keys may be given, separated by commas. Copy it now.",
+      "generate": true
+    },
+    {
+      "name": "API_KEY_READER",
+      "label": "Reader API key",
+      "help": "Optional keys that may only read and search, safe to embed in a public client. Several keys may be given, separated by commas.",
+      "optional": true
+    }
+  ],
+  // EMBEDDING_MODEL and EMBEDDING_DIM are left unset, so the Worker uses its
+  // defaults, which match the index declared below. Changing either would
+  // need a new index.
+  "vars": [],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "Add a document with `POST {{workerUrl}}/v1/documents` and a JSON body `{ \"text\": \"…\", \"id\": \"optional-id\", \"metadata\": { … } }`, then search with `POST {{workerUrl}}/v1/search` and `{ \"query\": \"…\", \"limit\": 10 }`. Every `/v1` route needs `Authorization: Bearer <key>`; adding and deleting need the writer key."
+    },
+    {
+      "type": "markdown",
+      "content": "The Swagger UI at {{workerUrl}} lists every endpoint; it is public, the API behind it is not. Each document's text is stored with its vector, so keep documents under about 10 KB."
+    }
+  ],
+  "tokenPermissions": [],
+  // The Vectorize index is created before the Worker is uploaded, and its
+  // shape cannot change later. Without EMBEDDING_MODEL and EMBEDDING_DIM the
+  // Worker embeds with @cf/google/embeddinggemma-300m and keeps the first 256
+  // of its 768 dimensions; upstream creates the index with cosine distance.
+  "resources": {
+    "vectorize": {
+      "VECTORIZE": { "dimensions": 256, "metric": "cosine" }
+    }
+  }
+}
