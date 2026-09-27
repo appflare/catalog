@@ -1,0 +1,108 @@
+{
+  // A reverse proxy in front of a site you already run: paths you list cost
+  // a stablecoin payment through the Machine Payments Protocol (on Tempo),
+  // everything else passes straight through to your origin.
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "mpp-proxy",
+  "name": "MPP Payment-Gated Proxy",
+  "summary": "Charge AI agents and other clients per request for paths of your own site: a reverse proxy that answers 402 with a Machine Payments Protocol challenge, verifies the payment on Tempo, and then passes the request to your origin.",
+  "homepage": "https://github.com/cloudflare/mpp-proxy",
+  "repo": "cloudflare/mpp-proxy",
+  "license": "Apache-2.0",
+  "categories": ["finance", "developer-tools"],
+  "authors": [
+    {
+      "name": "Cloudflare",
+      "url": "https://www.cloudflare.com",
+      "github": "cloudflare",
+      "x": "Cloudflare"
+    }
+  ],
+  "maintainers": ["MendyLanda"],
+  // Upstream has no release tags; the pin is the head of main.
+  "source": { "ref": "main", "sha": "0e4dd80f136c8a42ed844374543c7fef02e17092" },
+  "install": {
+    "tier": "artifact",
+    "packageManager": "npm",
+    // No build: wrangler bundles src/index.ts. The config's routes and the
+    // ORIGIN_SERVICE binding are commented out upstream, so an install
+    // answers on workers.dev and reaches the origin through ORIGIN_URL.
+    "wranglerConfig": "wrangler.jsonc",
+    "workerName": "mpp-proxy",
+    // Every other path is proxied to the origin; this one answers from the
+    // Worker itself.
+    "healthPath": "/__mpp/health"
+  },
+  // One stateless Worker: payment challenges and the one-hour access cookie
+  // are signed, so nothing is stored.
+  "plan": "free",
+  "requires": [],
+  "secrets": [
+    {
+      "name": "MPP_SECRET_KEY",
+      "label": "Payment challenge key",
+      "help": "Signs the payment challenges the proxy hands out, so it can check a payment without storing anything.",
+      "generate": true
+    },
+    {
+      "name": "JWT_SECRET",
+      "label": "Access cookie key",
+      "help": "Signs the cookie that lets a client that paid back in for an hour without paying again. Changing it ends every such hour early.",
+      "generate": true
+    },
+    {
+      "name": "TEMPO_RPC_URL",
+      "label": "Tempo RPC URL",
+      "help": "Optional. An authenticated Tempo RPC endpoint (https://user:pass@…) used to verify and broadcast payments; without it the proxy uses the network's default RPC.",
+      "optional": true
+    }
+  ],
+  "vars": [
+    {
+      "name": "ORIGIN_URL",
+      "label": "Origin URL",
+      "help": "The site this proxy fronts, for example https://api.example.com. Only its scheme, host and port are used: a request for /premium/report goes to https://api.example.com/premium/report. Redirects from the origin are rewritten to point back at the proxy.",
+      "required": true
+    },
+    {
+      "name": "PAY_TO",
+      "label": "Wallet that receives payments",
+      "help": "Your Tempo (EVM) address, 0x followed by 40 hex characters. Upstream's example is the burn address 0x…dEaD, where payments are lost, so it is left empty here.",
+      "required": true,
+      "default": ""
+    },
+    {
+      "name": "PROTECTED_PATTERNS",
+      "label": "Paid paths",
+      "help": "JSON list of the paths that cost a payment, each {\"pattern\": \"/premium/*\", \"amount\": \"0.01\", \"description\": \"…\"}. A pattern ending in /* covers everything under it; amount is in the payment currency. One payment opens every paid path for an hour. /__mpp/protected is always paid, for testing.",
+      "required": true
+    },
+    {
+      "name": "TEMPO_TESTNET",
+      "label": "Network",
+      "type": "select",
+      "options": [
+        { "value": "false", "label": "Tempo mainnet" },
+        { "value": "true", "label": "Tempo testnet" }
+      ],
+      "default": "false"
+    },
+    {
+      "name": "PAYMENT_CURRENCY",
+      "label": "Payment currency",
+      "help": "The token address clients pay in. The default is USDC on Tempo mainnet; on testnet use 0x20c0000000000000000000000000000000000000.",
+      "required": true
+    }
+  ],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "{{workerUrl}}/__mpp/config shows the paid paths and the network. {{workerUrl}}/__mpp/protected answers 402 with a payment challenge; `tempo request -X GET {{workerUrl}}/__mpp/protected` from the Tempo CLI pays it and shows the receipt."
+    },
+    {
+      "type": "markdown",
+      "content": "The proxy only charges for requests that reach it. If the origin is also reachable at its own address, clients can skip the payment there: put the proxy on a custom domain for your site, or have the origin accept traffic from the proxy alone."
+    }
+  ],
+  "tokenPermissions": []
+}

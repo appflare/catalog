@@ -1,0 +1,80 @@
+{
+  // One RSSHub address for your feed reader that spreads requests over
+  // several public RSSHub instances and falls back to another when one fails.
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "rsshub-never-die",
+  "name": "RSSHub Never Die",
+  "summary": "A stable RSSHub address for your feed reader: requests go to a pool of public RSSHub instances, by load balancing, failover to the next instance, or the fastest of several.",
+  "homepage": "https://github.com/CaoMeiYouRen/rsshub-never-die",
+  "repo": "CaoMeiYouRen/rsshub-never-die",
+  "license": "MIT",
+  "categories": ["utilities", "networking"],
+  "authors": [{ "name": "CaoMeiYouRen", "url": "https://blog.cmyr.ltd", "github": "CaoMeiYouRen" }],
+  "maintainers": ["MendyLanda"],
+  // The newest release tag. The commits after it on master bump
+  // dependencies and CI tooling; the one the Worker bundles, hono 4.12.25 to
+  // 4.12.32, fixes nothing this Worker uses.
+  "source": { "ref": "v1.4.2", "sha": "989f97b083bb22faa0c63a8d66dd432987dbaba6" },
+  "install": {
+    "tier": "artifact",
+    "packageManager": "pnpm",
+    // The wrangler config points at dist/app.mjs, which tsup writes. This is
+    // upstream's `pnpm run build` (cross-env NODE_ENV=production tsup); it
+    // also writes the Node.js entry points, which the Worker does not use.
+    "buildCommand": "pnpm run build",
+    "wranglerConfig": "wrangler.toml",
+    "workerName": "rsshub-never-die"
+  },
+  // One stateless Worker. Every feed request costs one to six subrequests,
+  // depending on the mode.
+  "plan": "free",
+  "requires": [],
+  // The wrangler config sets AUTH_KEY in [vars] to an empty string; as a
+  // secret here, that var is left out of the artifact.
+  "secrets": [
+    {
+      "name": "AUTH_KEY",
+      "label": "Access key",
+      "help": "Optional, and not RSSHub's own ACCESS_KEY. When set, every request needs ?authKey=<this key>, or ?authCode= with the hex HMAC-SHA256 of the path keyed with it. Without it anyone who finds the address can use your Worker's requests.",
+      "optional": true
+    }
+  ],
+  "vars": [
+    {
+      "name": "RSSHUB_NODE_URLS",
+      "label": "RSSHub instances",
+      "help": "Comma-separated instance URLs; add |weight=N after one to pick it more often (default 1). https://rsshub.app is always in the pool. Put your own instance here if you run one."
+    },
+    {
+      "name": "MODE",
+      "label": "Mode",
+      "type": "select",
+      "options": [
+        { "value": "loadbalance", "label": "Load balancing: one instance per request" },
+        { "value": "failover", "label": "Failover: try instances in turn until one answers" },
+        {
+          "value": "quickresponse",
+          "label": "Fastest: ask several at once, return the first answer"
+        }
+      ],
+      "default": "loadbalance"
+    },
+    {
+      "name": "MAX_NODE_NUM",
+      "label": "Instances per request",
+      "help": "The most instances failover and fastest mode try for one request. Workers allow six fetches at a time, so keep it at 6 or less for the fastest mode."
+    },
+    {
+      "name": "CACHE_MAX_AGE",
+      "label": "Cache time (seconds)",
+      "help": "How long a feed stays cached. The cache works only on a custom domain; on workers.dev every request goes to an instance."
+    }
+  ],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "Use {{workerUrl}} wherever a feed reader or RSSHub Radar asks for an RSSHub address: {{workerUrl}}/github/issue/DIYgod/RSSHub, say, is answered by one of the instances in the pool."
+    }
+  ],
+  "tokenPermissions": []
+}

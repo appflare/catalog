@@ -17,7 +17,9 @@
 /apps/browser-relay/ @MendyLanda
 /apps/cap-worker/ @MendyLanda
 /apps/cattopic/ @MendyLanda
+/apps/cf-nav/ @MendyLanda
 /apps/cf-server-monitor/ @MendyLanda
+/apps/cftgsx/ @MendyLanda
 /apps/chatgpt-telegram-workers/ @MendyLanda
 /apps/civideo/ @MendyLanda
 /apps/clist/ @MendyLanda
@@ -74,6 +76,7 @@
 /apps/microfeed/ @MendyLanda
 /apps/minshop/ @MendyLanda
 /apps/minvoice/ @MendyLanda
+/apps/mpp-proxy/ @MendyLanda
 /apps/nabiz/ @MendyLanda
 /apps/neriplayer-listen-together/ @MendyLanda
 /apps/nodecrypt/ @MendyLanda
@@ -100,6 +103,7 @@
 /apps/renewhelper/ @MendyLanda
 /apps/renewlet/ @MendyLanda
 /apps/resolvehq/ @MendyLanda
+/apps/rsshub-never-die/ @MendyLanda
 /apps/rssworker/ @MendyLanda
 /apps/scrapedown/ @MendyLanda
 /apps/screencapture-live/ @MendyLanda
