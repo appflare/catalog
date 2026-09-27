@@ -30,6 +30,7 @@
 /apps/feedlog/ @MendyLanda
 /apps/flaremo/ @MendyLanda
 /apps/formzero/ @MendyLanda
+/apps/fxtiktok/ @MendyLanda
 /apps/garrul/ @MendyLanda
 /apps/git-on-cloudflare/ @MendyLanda
 /apps/glance/ @MendyLanda
@@ -38,7 +39,9 @@
 /apps/inkstone/ @MendyLanda
 /apps/insightflare/ @MendyLanda
 /apps/isupmap/ @MendyLanda
+/apps/jina-mcp/ @MendyLanda
 /apps/kukuroo/ @MendyLanda
+/apps/lastfm-recently-played/ @MendyLanda
 /apps/mail2telegram/ @MendyLanda
 /apps/mailflare/ @MendyLanda
 /apps/mailysend/ @MendyLanda
@@ -64,6 +67,7 @@
 /apps/rdyrct/ @MendyLanda
 /apps/relay/ @MendyLanda
 /apps/reminal/ @MendyLanda
+/apps/rssworker/ @MendyLanda
 /apps/second-brain-cloudflare/ @MendyLanda
 /apps/seeder/ @MendyLanda
 /apps/sharehtml/ @MendyLanda
@@ -71,6 +75,7 @@
 /apps/shrtnr/ @MendyLanda
 /apps/sink/ @MendyLanda
 /apps/statusbeam/ @MendyLanda
+/apps/sveltia-cms-auth/ @MendyLanda
 /apps/synch/ @MendyLanda
 /apps/tempik/ @MendyLanda
 /apps/ternssh/ @MendyLanda

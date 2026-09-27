@@ -1,0 +1,45 @@
+{
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "jina-mcp",
+  "name": "Jina AI MCP Server",
+  "summary": "Jina AI's remote MCP server on your own Worker: read pages and PDFs as Markdown, take screenshots, search the web, arXiv and SSRN, and rerank or deduplicate text with Jina's Reader, Search, Embeddings and Reranker APIs.",
+  "homepage": "https://github.com/jina-ai/MCP",
+  "repo": "jina-ai/MCP",
+  "license": "Apache-2.0",
+  "categories": ["ai", "developer-tools"],
+  "authors": [{ "name": "Jina AI", "url": "https://jina.ai", "github": "jina-ai", "x": "JinaAI_" }],
+  "maintainers": ["MendyLanda"],
+  // Upstream has no release tags; the pin is the head of main.
+  "source": { "ref": "main", "sha": "5d6eb191a75d8e67b6e01ce427f0cc5c05c800aa" },
+  "install": {
+    "tier": "artifact",
+    "packageManager": "npm",
+    // The config also routes upstream's own mcp.jina.ai custom domain; the
+    // packer leaves routes out, so an install answers on workers.dev.
+    "wranglerConfig": "wrangler.jsonc",
+    "workerName": "jina-mcp"
+  },
+  // One stateless Worker; the Jina APIs it calls are billed by Jina.
+  "plan": "free",
+  "requires": [],
+  "secrets": [
+    {
+      "name": "JINA_API_KEY",
+      "label": "Jina API key",
+      "help": "Used for every call that sends no Authorization header of its own. Anyone who knows this Worker's address can then spend it, so leave it unset and have each client send its own key unless the address stays private. Free keys at https://jina.ai.",
+      "optional": true
+    }
+  ],
+  "vars": [],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "Add the server to an MCP client with the URL {{workerUrl}}/v1 and the header `Authorization: Bearer <your Jina API key>`, for example `claude mcp add --transport http jina {{workerUrl}}/v1 --header \"Authorization: Bearer <key>\"`. Reading pages and the date and primer tools work without a key, at Jina's lower rate limits."
+    },
+    {
+      "type": "markdown",
+      "content": "The `search_jina_blog` tool needs a key for Jina's own blog that only Jina's hosted server has; leave it out with {{workerUrl}}/v1?exclude_tools=search_jina_blog."
+    }
+  ],
+  "tokenPermissions": []
+}

@@ -1,0 +1,43 @@
+{
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "rssworker",
+  "name": "RSSWorker",
+  "summary": "A small RSS feed generator: RSS and Atom feeds for Bilibili dynamics and videos, Telegram channels, Weibo users and Xiaohongshu users, one URL per feed.",
+  "homepage": "https://github.com/yllhwa/RSSWorker",
+  "repo": "yllhwa/RSSWorker",
+  "license": "MIT",
+  "categories": ["utilities"],
+  "authors": [{ "name": "hwa", "url": "https://blog.yllhwa.com", "github": "yllhwa" }],
+  "maintainers": ["MendyLanda"],
+  // Upstream has no release tags; the pin is the head of main.
+  "source": { "ref": "main", "sha": "b4057baefdbc8ecab951cd51d6e0f5e72109b8c9" },
+  "install": {
+    "tier": "artifact",
+    "packageManager": "npm",
+    "wranglerConfig": "wrangler.toml",
+    "workerName": "rss-worker",
+    // Upstream patches node-forge (an HTTP/2 ALPN extension the Bilibili
+    // client needs) in its postinstall script, which installs without scripts
+    // skip; this applies patches/ the same way.
+    "buildCommand": "patch-package"
+  },
+  // One Worker without storage.
+  "plan": "free",
+  "requires": [],
+  "secrets": [
+    {
+      "name": "WEIBO_COOKIE",
+      "label": "Weibo cookie",
+      "help": "The Cookie header of a signed-in m.weibo.cn request. Weibo feeds need it; the other feeds do not.",
+      "optional": true
+    }
+  ],
+  "vars": [],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "Feeds are under {{workerUrl}}/rss/, for example {{workerUrl}}/rss/bilibili/user/video/<uid>, {{workerUrl}}/rss/telegram/channel/<username>, {{workerUrl}}/rss/weibo/user/<uid> and {{workerUrl}}/rss/xiaohongshu/user/<user id>. The page at {{workerUrl}} lists every route."
+    }
+  ],
+  "tokenPermissions": []
+}
