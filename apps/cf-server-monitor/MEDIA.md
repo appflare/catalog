@@ -1,0 +1,15 @@
+# Media for CF Server Monitor
+
+Upstream: [`huilang-me/CF-Server-Monitor`](https://github.com/huilang-me/CF-Server-Monitor) at commit [`dfb9bf19c23479398c3835c5f96328364e194c85`](https://github.com/huilang-me/CF-Server-Monitor/tree/dfb9bf19c23479398c3835c5f96328364e194c85), licensed [MIT](https://github.com/huilang-me/CF-Server-Monitor/blob/dfb9bf19c23479398c3835c5f96328364e194c85/LICENSE).
+
+No icon: `public/files/logo.svg` is the Cloudflare logo; the site's 64 px favicon repeats it.
+
+Screenshots published in the upstream README:
+
+- `screenshots/01-server-overview.png`: [`README.md:661`](https://github.com/huilang-me/CF-Server-Monitor/blob/dfb9bf19c23479398c3835c5f96328364e194c85/README.md#L661) references [`https://github.com/user-attachments/assets/4e6a5db4-65d3-4d40-91b9-9e46ee140d0d`](https://github.com/user-attachments/assets/4e6a5db4-65d3-4d40-91b9-9e46ee140d0d), server overview with status cards. Unchanged.
+- `screenshots/02-server-detail.png`: [`README.md:663`](https://github.com/huilang-me/CF-Server-Monitor/blob/dfb9bf19c23479398c3835c5f96328364e194c85/README.md#L663) references [`https://github.com/user-attachments/assets/a9c1aefd-42f7-4805-aa42-bbe9e58aed59`](https://github.com/user-attachments/assets/a9c1aefd-42f7-4805-aa42-bbe9e58aed59), server detail and history charts. Scaled from 3588x3328 to 2560x2374.
+- `screenshots/03-admin-dashboard.png`: [`README.md:664`](https://github.com/huilang-me/CF-Server-Monitor/blob/dfb9bf19c23479398c3835c5f96328364e194c85/README.md#L664) references [`https://github.com/user-attachments/assets/527bcf04-3124-4f1c-b052-451bccae961d`](https://github.com/user-attachments/assets/527bcf04-3124-4f1c-b052-451bccae961d), admin dashboard and server list. Scaled from 3588x2301 to 2560x1642.
+- `screenshots/04-server-settings.png`: [`README.md:665`](https://github.com/huilang-me/CF-Server-Monitor/blob/dfb9bf19c23479398c3835c5f96328364e194c85/README.md#L665) references [`https://github.com/user-attachments/assets/ac6f6fbb-b9fb-45cd-93e5-ca08bbad9ecb`](https://github.com/user-attachments/assets/ac6f6fbb-b9fb-45cd-93e5-ca08bbad9ecb), server settings dialog. Scaled from 3805x1555 to 2560x1046.
+- `screenshots/05-display-alert-settings.png`: [`README.md:667`](https://github.com/huilang-me/CF-Server-Monitor/blob/dfb9bf19c23479398c3835c5f96328364e194c85/README.md#L667) references [`https://github.com/user-attachments/assets/ba0d3605-ef64-4be1-884b-9506f20277a8`](https://github.com/user-attachments/assets/ba0d3605-ef64-4be1-884b-9506f20277a8), display and alert settings panel. Scaled from 3800x1578 to 2560x1063.
+
+Left out: the matching light-theme screenshots duplicate these views. README line 666 is a small dialog over the admin panel and adds little beyond the admin screenshot. [`README.md:662`](https://github.com/user-attachments/assets/c10a1376-3d4c-4a58-8d3b-dc904b30f174) shows the same page as the overview in another view mode. [`README.md:668`](https://github.com/user-attachments/assets/197767cc-028b-4ec1-b41f-5cadc2b25629) is a narrow strip showing only two database buttons. No cover: upstream publishes no suitable social preview or banner.

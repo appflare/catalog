@@ -3,6 +3,7 @@
   "slug": "cloudmark",
   "name": "Cloudmark",
   "summary": "Bookmarks without an account: create a collection with a write token, save pages with a bookmarklet or the Chrome extension, and open them from any device. On D1.",
+  "tagline": "Save bookmarks and open them from any device",
   "homepage": "https://cloudmark.site",
   "repo": "wesleyel/cloudmark",
   // The LICENSE file is the GNU AGPL version 3 with no "or any later version" grant.

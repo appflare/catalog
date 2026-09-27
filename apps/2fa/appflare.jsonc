@@ -3,6 +3,7 @@
   "slug": "2fa",
   "name": "2FA",
   "summary": "A two-factor code manager for TOTP and HOTP keys: scan or import from Google Authenticator, Aegis, 2FAS, and Bitwarden, encrypted in KV, with backups to WebDAV, S3, OneDrive, or Google Drive.",
+  "tagline": "Store your two-factor codes with automatic backups",
   "homepage": "https://github.com/wuzf/2fa",
   "repo": "wuzf/2fa",
   "license": "MIT",

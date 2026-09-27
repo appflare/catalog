@@ -3,6 +3,7 @@
   "slug": "atalaya",
   "name": "Atalaya",
   "summary": "Uptime monitoring and a status page on one Worker: HTTP, TCP and DNS checks every minute, optionally from chosen Cloudflare regions, webhook alerts, and 90 days of history in D1.",
+  "tagline": "Check if your sites are up and share a status page",
   "homepage": "https://atalaya-docs.dcarrillo.es",
   "repo": "dcarrillo/atalaya",
   "license": "Apache-2.0",

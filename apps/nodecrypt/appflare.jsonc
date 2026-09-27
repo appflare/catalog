@@ -3,6 +3,7 @@
   "slug": "nodecrypt",
   "name": "NodeCrypt",
   "summary": "End-to-end encrypted chat rooms in the browser: no accounts and no stored history, with private messages, images, and files, relayed by a Durable Object that never sees plaintext.",
+  "tagline": "Private chat rooms without accounts or message history",
   "homepage": "https://github.com/shuaiplus/nodecrypt",
   "repo": "shuaiplus/nodecrypt",
   "license": "ISC",

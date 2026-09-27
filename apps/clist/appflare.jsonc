@@ -10,6 +10,7 @@
   "slug": "clist",
   "name": "CList",
   "summary": "A file browser and WebDAV server over your S3, WebDAV, OneDrive and Google Drive storage, with previews, share links and audit logs.",
+  "tagline": "Browse and share files from all your storage in one place",
   "homepage": "https://github.com/ooyyh/Cloudflare-Clist",
   "repo": "ooyyh/Cloudflare-Clist",
   "license": "MIT",

@@ -1,0 +1,5 @@
+# Media for Dispoflare
+
+Upstream: [`LeoColomb/dispoflare`](https://github.com/LeoColomb/dispoflare) at commit [`03e646046a2de2225cae55bfa43f3f75ca55bb0b`](https://github.com/LeoColomb/dispoflare/tree/03e646046a2de2225cae55bfa43f3f75ca55bb0b), licensed [MIT](https://github.com/LeoColomb/dispoflare/blob/03e646046a2de2225cae55bfa43f3f75ca55bb0b/LICENSE).
+
+Left out: [`public/favicon.svg`](https://github.com/LeoColomb/dispoflare/blob/03e646046a2de2225cae55bfa43f3f75ca55bb0b/public/favicon.svg) combines Cloudflare product icons, so it is not a standalone app logo. [`public/favicon.ico`](https://github.com/LeoColomb/dispoflare/blob/03e646046a2de2225cae55bfa43f3f75ca55bb0b/public/favicon.ico) is the same favicon. [`.design/illustration.svg`](https://github.com/LeoColomb/dispoflare/blob/03e646046a2de2225cae55bfa43f3f75ca55bb0b/.design/illustration.svg), referenced on [README line 1](https://github.com/LeoColomb/dispoflare/blob/03e646046a2de2225cae55bfa43f3f75ca55bb0b/README.md#L1), also contains Cloudflare product icons. The README publishes no app screenshots. No cover: the only upstream banner is that illustration.

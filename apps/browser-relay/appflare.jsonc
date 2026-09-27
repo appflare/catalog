@@ -9,6 +9,7 @@
   "slug": "browser-relay",
   "name": "Browser Relay Hub",
   "summary": "Your own relay for Browser Relay: let AI agents on other machines drive the Chrome you are signed in to, through a hub in your account instead of the hosted one.",
+  "tagline": "Connect AI assistants on other devices to your signed-in Chrome",
   "homepage": "https://github.com/reliefeai/browser-relay",
   "repo": "reliefeai/browser-relay",
   "license": "MIT",

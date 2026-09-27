@@ -6,6 +6,7 @@
   "slug": "cap-worker",
   "name": "Cap Worker",
   "summary": "A self-hosted backend for Cap, the privacy-friendly proof-of-work CAPTCHA: your sites get challenges and verify tokens against your own Worker, with no tracking.",
+  "tagline": "Protect your site from bots without tracking visitors",
   "homepage": "https://github.com/xyTom/cap-worker",
   "repo": "xyTom/cap-worker",
   // The repository has no LICENSE file; its README states "This project is

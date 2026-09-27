@@ -3,6 +3,7 @@
   "slug": "cattopic",
   "name": "CattoPic",
   "summary": "A self-hosted image host: upload, tag, and browse images, with WebP and AVIF copies, expiry, and a public random-image API, on R2, D1, KV, Queues, and Cloudflare Images.",
+  "tagline": "Upload and organize images on your own image host",
   "homepage": "https://github.com/Yuri-NagaSaki/CattoPic",
   "repo": "Yuri-NagaSaki/CattoPic",
   // The LICENSE file is the GNU GPL version 3 with no "or any later version" grant.

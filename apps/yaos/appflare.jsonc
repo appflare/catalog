@@ -3,6 +3,7 @@
   "slug": "yaos",
   "name": "YAOS",
   "summary": "Real-time sync for Obsidian vaults: edits merge live across devices as CRDTs, with attachments and snapshots in R2, through a Worker you own.",
+  "tagline": "Keep your Obsidian notes in sync across devices",
   "homepage": "https://yaos.dev",
   "repo": "kavinsood/yaos",
   "license": "0BSD",

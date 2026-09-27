@@ -3,6 +3,7 @@
   "slug": "auth-inbox",
   "name": "Auth Inbox",
   "summary": "An inbox for sign-up and verification mail: Email Routing delivers it, an AI model of your choice pulls out codes and links and sorts each mail, and a dashboard, per-user grants and a remote MCP server let people and agents read them.",
+  "tagline": "Get sign-up codes and links in one private inbox",
   "homepage": "https://github.com/TooonyChen/AuthInbox",
   "repo": "TooonyChen/AuthInbox",
   "license": "MIT",

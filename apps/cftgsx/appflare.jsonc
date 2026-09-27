@@ -6,6 +6,7 @@
   "slug": "cftgsx",
   "name": "cftgsx",
   "summary": "A two-way Telegram contact bot: messages to the bot reach your admin chat, your replies go back to the sender, with broadcasts, bans and one forum topic per user.",
+  "tagline": "Answer messages to your Telegram bot from one chat",
   "homepage": "https://github.com/SCSHIRKER/cftgsx",
   "repo": "SCSHIRKER/cftgsx",
   "license": "MIT",

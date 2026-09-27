@@ -7,6 +7,7 @@
   "slug": "888wiki",
   "name": "888wiki",
   "summary": "A Markdown-first notepad and wiki: write in Markdown, Block, Canvas or Whiteboard, publish password-protected or timed shares, and present notes as slides or books.",
+  "tagline": "Write notes and share them with passwords or time limits",
   "homepage": "https://github.com/tbdavid2019/888wiki",
   "repo": "tbdavid2019/888wiki",
   "license": "AGPL-3.0",

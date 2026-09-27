@@ -8,6 +8,7 @@
   "slug": "alle",
   "name": "Alle",
   "summary": "One inbox for all your mail: forward your Gmail, Outlook and other accounts to your domain and read them together, with attachments, plus throwaway addresses on the same domain.",
+  "tagline": "Read mail from all your accounts in one inbox",
   "homepage": "https://github.com/bestruirui/Alle",
   "repo": "bestruirui/Alle",
   // The repository has no LICENSE file and declares no licence anywhere, so

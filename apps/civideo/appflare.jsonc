@@ -8,6 +8,7 @@
   "slug": "civideo",
   "name": "child-video",
   "summary": "A private, ad-free video and audiobook library for children: you upload to your own R2 bucket, and upstream's native apps play only what you put there, with daily limits and allowed hours.",
+  "tagline": "Your own ad-free video and audiobook library for children",
   "homepage": "https://github.com/bitoceango/civideo",
   "repo": "bitoceango/civideo",
   "license": "MIT",

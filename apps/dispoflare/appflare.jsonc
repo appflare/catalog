@@ -9,6 +9,7 @@
   "slug": "dispoflare",
   "name": "Dispoflare",
   "summary": "Disposable email addresses on your own domains: create a random or chosen address that forwards to your inbox until the date you pick, on Email Routing.",
+  "tagline": "Disposable email addresses on your own domains",
   "homepage": "https://github.com/LeoColomb/dispoflare",
   "repo": "LeoColomb/dispoflare",
   "license": "MIT",

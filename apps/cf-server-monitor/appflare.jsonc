@@ -7,6 +7,7 @@
   "slug": "cf-server-monitor",
   "name": "CF Server Monitor",
   "summary": "Monitor your servers from a Worker: live CPU, memory, disk, traffic and latency from a small agent on each machine, with history, a map, offline and threshold alerts, and expiry reminders.",
+  "tagline": "Track your servers live and get alerts when they need attention",
   "homepage": "https://github.com/huilang-me/CF-Server-Monitor",
   "repo": "huilang-me/CF-Server-Monitor",
   "license": "MIT",

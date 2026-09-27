@@ -1,7 +1,7 @@
-# Image sources
+# Media for CattoPic
 
-From Yuri-NagaSaki/CattoPic at commit 7861a54 (v1.0.0), licensed GPL-3.0 (the repository's licence covers this file; its text is at https://github.com/Yuri-NagaSaki/CattoPic/blob/7861a5477016717f05e53ea32fe63f5fd74739ca/LICENSE).
+Upstream: [`Yuri-NagaSaki/CattoPic`](https://github.com/Yuri-NagaSaki/CattoPic) at commit [`e50fcb291073fe64df3da149057d6513a778b74e`](https://github.com/Yuri-NagaSaki/CattoPic/tree/e50fcb291073fe64df3da149057d6513a778b74e), licensed [GPL-3.0-only](https://github.com/Yuri-NagaSaki/CattoPic/blob/e50fcb291073fe64df3da149057d6513a778b74e/LICENSE).
 
-- `icon.svg`: [`public/static/favicon.svg`](https://github.com/Yuri-NagaSaki/CattoPic/blob/7861a5477016717f05e53ea32fe63f5fd74739ca/public/static/favicon.svg), the app's favicon. Unchanged.
+- `icon.svg`: [`public/static/favicon.svg`](https://github.com/Yuri-NagaSaki/CattoPic/blob/e50fcb291073fe64df3da149057d6513a778b74e/public/static/favicon.svg), the app's favicon. Unchanged.
 
-No cover or screenshots: the repository publishes none of the app.
+No screenshots: upstream publishes no pictures of the app's interface or output. No cover: upstream publishes no social preview or banner suitable for 1200x630.

@@ -5,6 +5,7 @@
   "slug": "cf-nav",
   "name": "cf-nav",
   "summary": "A card-style start page: your links in categories with a search box, public and private links, drag-and-drop ordering, and JSON export and import, stored in KV.",
+  "tagline": "Organize your favorite links on a searchable start page",
   "homepage": "https://github.com/djkyc/cf-nav",
   "repo": "djkyc/cf-nav",
   // The repository has no LICENSE file and declares no licence anywhere, so
