@@ -1,0 +1,155 @@
+{
+  // One OpenAI-compatible endpoint in front of the model providers whose keys
+  // you store on the Worker. Each provider turns on when its settings are
+  // set; every request needs the proxy's own API key.
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "llm-api-proxy",
+  "name": "LLM API Proxy",
+  "summary": "One OpenAI-compatible (and Ollama-compatible) API in front of OpenAI, Anthropic, Gemini, DeepSeek, Groq, Grok, OpenRouter, Azure OpenAI and more, using your own provider keys behind a key of its own.",
+  "homepage": "https://github.com/rxliuli/llm-api-proxy",
+  "repo": "rxliuli/llm-api-proxy",
+  "license": "GPL-3.0",
+  "categories": ["ai", "developer-tools"],
+  "authors": [{ "name": "rxliuli", "url": "https://rxliuli.com", "github": "rxliuli" }],
+  "maintainers": ["MendyLanda"],
+  // Upstream has no release tags; the pin is the head of main.
+  "source": { "ref": "main", "sha": "43db1c01feaf4daee11a9552cd606cbbff2ab079" },
+  "install": {
+    "tier": "artifact",
+    "packageManager": "pnpm",
+    "wranglerConfig": "wrangler.jsonc",
+    "workerName": "llm-api-proxy",
+    // "/" answers 404. Without the proxy key this route answers 401 from the
+    // Worker itself, before any call to a provider.
+    "healthPath": "/v1/models"
+  },
+  // One stateless Worker; the providers bill their own usage.
+  "plan": "free",
+  "requires": [],
+  "secrets": [
+    {
+      "name": "API_KEY",
+      "label": "Proxy API key",
+      "help": "Clients send it as `Authorization: Bearer <key>`; the Ollama API takes it in the path. Without it the proxy refuses every request.",
+      "generate": true
+    },
+    { "name": "OPENAI_API_KEY", "label": "OpenAI API key", "optional": true },
+    {
+      "name": "ANTROPIC_API_KEY",
+      "label": "Anthropic API key",
+      "help": "Upstream spells the setting's name without the second H.",
+      "optional": true
+    },
+    { "name": "GOOGLE_GEN_AI_API_KEY", "label": "Google Gemini API key", "optional": true },
+    { "name": "DEEPSEEK_API_KEY", "label": "DeepSeek API key", "optional": true },
+    { "name": "GROQ_API_KEY", "label": "Groq API key", "optional": true },
+    { "name": "GROK_API_KEY", "label": "xAI Grok API key", "optional": true },
+    {
+      "name": "OPENROUTER_API_KEY",
+      "label": "OpenRouter API key",
+      "help": "Serves the models in OpenRouter models, or upstream's default list.",
+      "optional": true
+    },
+    {
+      "name": "CEREBRAS_API_KEY",
+      "label": "Cerebras API key",
+      "help": "Also set Cerebras models.",
+      "optional": true
+    },
+    {
+      "name": "AZURE_OPENAI_API_KEY",
+      "label": "Azure OpenAI API key",
+      "help": "Also set the Azure OpenAI endpoint, API version and deployments.",
+      "optional": true
+    },
+    { "name": "COHERE_API_KEY", "label": "Cohere API key", "optional": true },
+    {
+      "name": "ALIYUN_BAILIAN_API_KEY",
+      "label": "Alibaba Cloud Bailian API key",
+      "help": "Serves the models in Bailian models, or `qwen-max`.",
+      "optional": true
+    },
+    { "name": "MOONSHOT_API_KEY", "label": "Moonshot API key", "optional": true },
+    { "name": "LINGYIWANWU_API_KEY", "label": "01.AI (Lingyiwanwu) API key", "optional": true },
+    {
+      "name": "VERTEX_ANTROPIC_GOOGLE_SA_PRIVATE_KEY",
+      "label": "Vertex AI service account private key",
+      "help": "The `private_key` of a Google Cloud service account allowed to call Claude on Vertex AI. Also set the Vertex AI client email, region and project ID.",
+      "optional": true
+    }
+  ],
+  // Each of these is left unset until you give it a value: upstream turns a
+  // provider on when all of its settings exist, even empty ones.
+  "vars": [
+    {
+      "name": "CORS_ORIGIN",
+      "label": "Allowed browser origin",
+      "help": "The one origin allowed to call the proxy from a browser, for example `https://example.com`. Leave empty for server-side clients only."
+    },
+    {
+      "name": "OPENROUTER_MODELS",
+      "label": "OpenRouter models",
+      "help": "Comma-separated OpenRouter model ids, for example `openai/gpt-4o-mini,anthropic/claude-sonnet-4.5`. Leave empty for upstream's list."
+    },
+    {
+      "name": "CEREBRAS_MODELS",
+      "label": "Cerebras models",
+      "help": "Comma-separated Cerebras model ids, for example `llama-3.1-8b`."
+    },
+    {
+      "name": "AZURE_OPENAI_ENDPOINT",
+      "label": "Azure OpenAI endpoint",
+      "help": "For example `https://<resource>.openai.azure.com`."
+    },
+    {
+      "name": "AZURE_API_VERSION",
+      "label": "Azure OpenAI API version",
+      "help": "For example `2024-10-21`."
+    },
+    {
+      "name": "AZURE_DEPLOYMENT_MODELS",
+      "label": "Azure OpenAI deployments",
+      "help": "Comma-separated `model:deployment` pairs, for example `gpt-4o-mini:gpt-4o-mini-dev,gpt-35-turbo:gpt-35-dev`."
+    },
+    {
+      "name": "ALIYUN_BAILIAN_MODELS",
+      "label": "Bailian models",
+      "help": "Comma-separated model ids, for example `qwen-max,qwen-7b-chat`. Leave empty for `qwen-max`."
+    },
+    {
+      "name": "OLLAMA_BASE_URL",
+      "label": "Ollama base URL",
+      "help": "The OpenAI-compatible URL of an Ollama server the Worker can reach over the internet, for example `https://ollama.example.com/v1`. Setting it turns the Ollama provider on."
+    },
+    {
+      "name": "OLLAMA_MODELS",
+      "label": "Ollama models",
+      "help": "Comma-separated models of that server, for example `llama3.3:70b,phi4:latest`. Clients ask for them as `ollama/<model>`."
+    },
+    {
+      "name": "VERTEX_ANTROPIC_GOOGLE_SA_CLIENT_EMAIL",
+      "label": "Vertex AI service account email",
+      "help": "The `client_email` of the service account."
+    },
+    {
+      "name": "VERTEX_ANTROPIC_REGION",
+      "label": "Vertex AI region",
+      "help": "For example `us-east5`."
+    },
+    {
+      "name": "VERTEX_ANTROPIC_PROJECTID",
+      "label": "Vertex AI project ID"
+    }
+  ],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "Point an OpenAI client at {{workerUrl}}/v1 with the proxy API key from this app's settings as its API key. {{workerUrl}}/v1/models lists the models of every provider you configured; ask for any of them by name."
+    },
+    {
+      "type": "markdown",
+      "content": "Clients that only speak the Ollama API use {{workerUrl}}/ollama/<proxy API key>/v1. That address carries the key in its path, so it shows up in request logs."
+    }
+  ],
+  "tokenPermissions": []
+}

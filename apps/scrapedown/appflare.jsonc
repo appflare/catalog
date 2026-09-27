@@ -1,0 +1,43 @@
+{
+  // Reader mode as an API: GET /?url=<page> fetches the page, keeps the
+  // article with Mozilla Readability and returns it as Markdown with its
+  // title, byline and excerpt. No storage, no bindings.
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "scrapedown",
+  "name": "scrapedown",
+  "summary": "Turn any web page into clean Markdown: one GET with a URL returns the article's text in reader mode, with its title, byline, excerpt and language.",
+  "homepage": "https://github.com/ozanvos/scrapedown",
+  "repo": "ozanvos/scrapedown",
+  "license": "MIT",
+  "categories": ["developer-tools", "utilities"],
+  "authors": [
+    { "name": "Ozan Şener", "url": "https://getairefs.com", "github": "ozanvos", "x": "ozanvos" }
+  ],
+  "maintainers": ["MendyLanda"],
+  // Upstream has no release tags; the pin is the head of main, unchanged
+  // since January 2024.
+  "source": { "ref": "main", "sha": "807d685b3efe4438deace2429bf01c9c0f76ca43" },
+  "install": {
+    "tier": "artifact",
+    "packageManager": "npm",
+    "wranglerConfig": "wrangler.toml",
+    "workerName": "scrapedown"
+  },
+  // One stateless Worker: one outbound fetch per request.
+  "plan": "free",
+  "requires": [],
+  // Upstream has no access key: anyone who knows the address can use it.
+  "secrets": [],
+  "vars": [],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "Request {{workerUrl}}/?url=https://example.com for the page as Markdown in `page.textContent`, or add `&markdown=false` for cleaned HTML and plain text instead."
+    },
+    {
+      "type": "markdown",
+      "content": "The endpoint has no key: anyone who learns this address can have your Worker fetch pages, within your Workers request allowance. Keep the address to yourself, or put the Worker behind Cloudflare Access."
+    }
+  ],
+  "tokenPermissions": []
+}

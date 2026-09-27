@@ -7,6 +7,7 @@
 /apps/alle/ @MendyLanda
 /apps/atalaya/ @MendyLanda
 /apps/auth-inbox/ @MendyLanda
+/apps/auto-reaction-bot/ @MendyLanda
 /apps/bark-worker/ @MendyLanda
 /apps/bashupload/ @MendyLanda
 /apps/binthere/ @MendyLanda
@@ -62,6 +63,7 @@
 /apps/kukuroo/ @MendyLanda
 /apps/larafeed/ @MendyLanda
 /apps/lastfm-recently-played/ @MendyLanda
+/apps/llm-api-proxy/ @MendyLanda
 /apps/mail2telegram/ @MendyLanda
 /apps/mailclaw/ @MendyLanda
 /apps/mailflare/ @MendyLanda
@@ -98,6 +100,7 @@
 /apps/renewlet/ @MendyLanda
 /apps/resolvehq/ @MendyLanda
 /apps/rssworker/ @MendyLanda
+/apps/scrapedown/ @MendyLanda
 /apps/screencapture-live/ @MendyLanda
 /apps/screendrop/ @MendyLanda
 /apps/second-brain-cloudflare/ @MendyLanda
