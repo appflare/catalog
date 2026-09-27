@@ -5,6 +5,7 @@
 /apps/888wiki/ @MendyLanda
 /apps/agentic-inbox/ @MendyLanda
 /apps/alle/ @MendyLanda
+/apps/analytics-explorer/ @MendyLanda
 /apps/atalaya/ @MendyLanda
 /apps/auth-inbox/ @MendyLanda
 /apps/auto-reaction-bot/ @MendyLanda
@@ -121,6 +122,7 @@
 /apps/unifi-ddns/ @MendyLanda
 /apps/usage-guard-collector/ @MendyLanda
 /apps/veet/ @MendyLanda
+/apps/vps-jsq/ @MendyLanda
 /apps/webrtc-turn/ @MendyLanda
 /apps/workers-firecrawl/ @MendyLanda
 /apps/wx2md/ @MendyLanda
