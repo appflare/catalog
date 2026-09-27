@@ -21,7 +21,7 @@
   // repository, so the version comes from install.version. The bump bot reads
   // neither prefix as a version: move source to the newest app-v tag and
   // install.version with it by hand.
-  "source": { "ref": "app-v0.42.1", "sha": "bf99dafaf7f164800f9327a341d160c7862b51f7" },
+  "source": { "ref": "main", "sha": "745fc5cd586550ca203b900a7718ce61ef064efb" },
   "install": {
     "tier": "artifact",
     // Classic yarn (packageManager yarn@1.22.22).
