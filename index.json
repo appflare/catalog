@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-27T01:25:07.475Z",
+  "generatedAt": "2026-09-27T01:52:27.418Z",
   "apps": [
     {
       "slug": "2fa",
@@ -166,6 +166,65 @@
       "categories": [
         "sharing",
         "privacy"
+      ],
+      "revision": 1
+    },
+    {
+      "slug": "bookshelf",
+      "name": "Bookshelf",
+      "summary": "A library for the ebooks you own: read EPUBs and PDFs in the browser or on a Kobo over OPDS, served from your own R2 bucket.",
+      "version": "0.0.0-20260826.8888795",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/bookshelf@0.0.0-20260826.8888795/bookshelf-0.0.0-20260826.8888795.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/bookshelf@0.0.0-20260826.8888795/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/bookshelf@0.0.0-20260826.8888795/manifest.sig"
+      },
+      "digest": "25d2f44d63a24bc7055350bc7376119d655b859369bc62f366fd380c28a2255c",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "r2"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Murat Erkin Cicek",
+          "url": "https://erkin.space",
+          "github": "murerkinn",
+          "x": "murerkinn"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/bookshelf/icon.png",
+          "sha256": "2d89dc9405c40b7abce4a32a9eb8ee017592c0e35ab8c2f1730c12d8dca38788"
+        },
+        "cover": {
+          "url": "https://appflare.github.io/catalog/apps/bookshelf/cover.png",
+          "sha256": "2079c2d86dabb25e3ae3fa1748572becb0a99fd0fefc3412a7d92390f3632b69"
+        },
+        "screenshots": [
+          {
+            "url": "https://appflare.github.io/catalog/apps/bookshelf/screenshots/01-shelf.png",
+            "sha256": "656a95db569bc5efaf9760209e535cd087abb3102d94cb49d5b408ca89553677",
+            "alt": "Bookshelf: Shelf"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/bookshelf/screenshots/02-reader.png",
+            "sha256": "b31ecb134f7ada295e4541ddbe72a37b0f44f5310b89b5c290e2d7c04dbac12b",
+            "alt": "Bookshelf: Reader"
+          }
+        ]
+      },
+      "services": [
+        "r2"
+      ],
+      "categories": [
+        "files",
+        "productivity"
       ],
       "revision": 1
     },
@@ -1140,6 +1199,50 @@
       "categories": [
         "business",
         "scheduling"
+      ],
+      "revision": 1
+    },
+    {
+      "slug": "quickinbox",
+      "name": "Quickinbox",
+      "summary": "Email for your own domain: a web mail client with threads, attachments, several users and domains, plus a REST API, CLI and MCP server.",
+      "version": "1.1.0",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/quickinbox@1.1.0/quickinbox-1.1.0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/quickinbox@1.1.0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/quickinbox@1.1.0/manifest.sig"
+      },
+      "digest": "b86acdb9ce67f974f852d4a0b92a5c803761fbc9287f05386834369d7794ac03",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "r2"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Irasubiza Divin Prince",
+          "url": "https://divinprince.com",
+          "github": "DivinPrince"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/quickinbox/icon.png",
+          "sha256": "abf92c43e66e63cbed96cc41b47665af71b29c8aeed40919c71cebf40d8134c5"
+        },
+        "screenshots": []
+      },
+      "services": [
+        "d1",
+        "r2",
+        "email-routing"
+      ],
+      "categories": [
+        "email"
       ],
       "revision": 1
     },
