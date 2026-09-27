@@ -1,0 +1,76 @@
+{
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "firefly-iii-mcp",
+  "name": "Firefly III MCP",
+  "summary": "A remote MCP server for Firefly III: lets AI assistants read and record accounts, transactions, bills, budgets and more in your own Firefly III, each connection with its own personal access token.",
+  "homepage": "https://github.com/etnperlong/firefly-iii-mcp",
+  "repo": "etnperlong/firefly-iii-mcp",
+  "license": "MIT",
+  "categories": ["finance", "ai"],
+  "authors": [{ "name": "Mike Evans", "github": "etnperlong" }],
+  "maintainers": ["MendyLanda"],
+  "source": { "ref": "v1.4.0", "sha": "cc48511591e14a633942b6cc22f407ada5faa5be" },
+  "install": {
+    "tier": "artifact",
+    // A bun workspace: the Worker in packages/cloudflare-worker imports the
+    // shared tools from packages/core, installed together from the root
+    // lockfile.
+    "packageManager": "bun",
+    "wranglerConfig": "packages/cloudflare-worker/wrangler.jsonc",
+    "workerName": "firefly-iii-mcp",
+    // Compiles packages/core to dist/, which the Worker imports. Its
+    // prebuild step regenerates src/tools.ts from Firefly III's published
+    // OpenAPI document; the generated file is committed, so it is skipped.
+    "buildCommand": "bun x tsc -p packages/core"
+  },
+  // One SQLite-backed Durable Object class (the agents SDK's MCP session).
+  "plan": "free",
+  "requires": [],
+  // Upstream also reads FIREFLY_III_PAT as a fallback token. It is left out
+  // on purpose: /mcp takes no sign-in, so with a stored token anyone who
+  // finds the address could use it, and a request may name its own Firefly
+  // address (?baseUrl= or X-Firefly-III-Url), to which the stored token would
+  // be sent. Each MCP client sends its own token instead.
+  "secrets": [],
+  "vars": [
+    {
+      "name": "FIREFLY_III_BASE_URL",
+      "label": "Firefly III address",
+      "help": "Your Firefly III, for example https://firefly.example.com, used when a client does not name one. Clients can also send it in the X-Firefly-III-Url header.",
+      "required": false
+    },
+    {
+      "name": "FIREFLY_III_PRESET",
+      "label": "Tool preset",
+      "help": "Which Firefly III tools the server offers: default (accounts, bills, categories, tags, transactions, search, summary), full, basic, budget, reporting, admin or automation.",
+      "type": "select",
+      "options": [
+        { "value": "default", "label": "default" },
+        { "value": "full", "label": "full" },
+        { "value": "basic", "label": "basic" },
+        { "value": "budget", "label": "budget" },
+        { "value": "reporting", "label": "reporting" },
+        { "value": "admin", "label": "admin" },
+        { "value": "automation", "label": "automation" }
+      ],
+      "default": "default"
+    },
+    {
+      "name": "FIREFLY_III_TOOLS",
+      "label": "Tool tags",
+      "help": "Optional. A comma-separated list of Firefly III API tags (accounts, transactions, budgets, ...) that replaces the preset.",
+      "required": false
+    }
+  ],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "Add `{{workerUrl}}/mcp` (Streamable HTTP) or `{{workerUrl}}/sse` to your MCP client, with a Firefly III personal access token in the `Authorization: Bearer <token>` header. Create the token in Firefly III under **Options > Profile > OAuth > Personal Access Tokens**."
+    },
+    {
+      "type": "markdown",
+      "content": "The server has no sign-in of its own: every request acts with the token its client sends, and nothing works without one."
+    }
+  ],
+  "tokenPermissions": []
+}

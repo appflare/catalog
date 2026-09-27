@@ -1,0 +1,85 @@
+{
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "mailclaw",
+  "name": "MailClaw",
+  "summary": "A catch-all inbox for your domain with a token-protected API for AI agents: every address receives into D1 and R2, with search, filters, export, sending through Resend or Cloudflare, and a web dashboard.",
+  "homepage": "https://mailclaw.me",
+  "repo": "missuo/mailclaw",
+  // The repository has no LICENSE file; its README's License section
+  // declares MIT.
+  "license": "MIT",
+  "categories": ["email", "ai"],
+  "authors": [
+    { "name": "Vincent Yang", "url": "https://missuo.me", "github": "missuo", "x": "m1ssuo" }
+  ],
+  "maintainers": ["MendyLanda"],
+  // The last tag, v1.0.2, predates the web dashboard; the pin follows the
+  // default branch until upstream tags again.
+  "source": { "ref": "main", "sha": "f13f82addd88a4cfe2f371763c6051e4a8dd87ad" },
+  "install": {
+    "tier": "artifact",
+    "packageManager": "bun",
+    "wranglerConfig": "wrangler.jsonc",
+    "workerName": "mailclaw",
+    // The Worker at the root and the React dashboard in dashboard/, each
+    // with its own bun.lock.
+    "installDirs": [{ "path": "." }, { "path": "dashboard" }],
+    // Upstream's build:dashboard without its nested `bun install`: the
+    // dashboard the Worker serves from dashboard/dist.
+    "buildCommand": "bun run --cwd dashboard build",
+    // Answers without the API token.
+    "healthPath": "/api/health",
+    // Upstream's setup sends every address of the domain to the Worker
+    // through the zone's catch-all rule.
+    "emailRouting": { "catchAll": true }
+  },
+  // Receiving mail, D1 and R2 fit the free plan.
+  "plan": "free",
+  "requires": ["zone", "email-routing", "r2"],
+  "resources": {
+    "d1": {
+      // Upstream creates its tables with two SQL files instead of
+      // migrations. Every statement is CREATE ... IF NOT EXISTS, so they run
+      // on every install and update and create only what is missing.
+      "D1": { "schema": ["sql/schema.sql", "sql/indexes.sql"] }
+    }
+  },
+  "secrets": [
+    {
+      "name": "API_TOKEN",
+      "label": "API token",
+      "help": "Sent as `Authorization: Bearer <token>` by agents, scripts and the dashboard to read, search, delete and send mail.",
+      "generate": true
+    },
+    {
+      "name": "RESEND_API_KEY",
+      "label": "Resend API key",
+      "help": "To send mail through Resend, with the sending domain verified there.",
+      "optional": true
+    }
+  ],
+  "vars": [
+    {
+      "name": "EMAIL_PROVIDER",
+      "label": "Sending provider",
+      "help": "Resend needs the key above. Cloudflare uses the Worker's send_email binding; sending to any address needs Cloudflare Email Sending on the domain (Workers Paid), otherwise only to verified destination addresses of the account.",
+      "type": "select",
+      "options": [
+        { "value": "resend", "label": "Resend" },
+        { "value": "cloudflare", "label": "Cloudflare" }
+      ],
+      "default": "resend"
+    }
+  ],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "Mail to any address of the domain you chose now lands in the inbox. Open {{workerUrl}}, enter the address and the API token, and read it there, or call `{{workerUrl}}/api/emails` with `Authorization: Bearer <token>`."
+    },
+    {
+      "type": "markdown",
+      "content": "Upstream's agent skill in `skills/` and its command-line client in `rust-cli/` take the same address and token."
+    }
+  ],
+  "tokenPermissions": []
+}

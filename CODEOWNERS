@@ -39,6 +39,7 @@
 /apps/emdash/ @MendyLanda
 /apps/exception-notify/ @MendyLanda
 /apps/feedlog/ @MendyLanda
+/apps/firefly-iii-mcp/ @MendyLanda
 /apps/flaremo/ @MendyLanda
 /apps/fodi/ @MendyLanda
 /apps/folia/ @MendyLanda
@@ -60,6 +61,7 @@
 /apps/kukuroo/ @MendyLanda
 /apps/lastfm-recently-played/ @MendyLanda
 /apps/mail2telegram/ @MendyLanda
+/apps/mailclaw/ @MendyLanda
 /apps/mailflare/ @MendyLanda
 /apps/mailysend/ @MendyLanda
 /apps/md-page/ @MendyLanda
@@ -90,6 +92,7 @@
 /apps/relay/ @MendyLanda
 /apps/reminal/ @MendyLanda
 /apps/renewhelper/ @MendyLanda
+/apps/renewlet/ @MendyLanda
 /apps/rssworker/ @MendyLanda
 /apps/screencapture-live/ @MendyLanda
 /apps/screendrop/ @MendyLanda
