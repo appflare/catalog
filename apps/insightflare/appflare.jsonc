@@ -1,0 +1,72 @@
+{
+  // InsightFlare writes to three Analytics Engine datasets named in its
+  // wrangler config (insightflare_request_events, insightflare_traffic_events,
+  // insightflare_event_facts). Dataset names are account-wide, so a second
+  // install in the same account would share them. Install it once per
+  // account; one install tracks any number of sites.
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "insightflare",
+  "name": "InsightFlare",
+  "summary": "Privacy-friendly web analytics that runs entirely on Cloudflare: a tracking script, a realtime dashboard with maps and funnels, and an API for AI agents, on D1, a Durable Object and Analytics Engine.",
+  "homepage": "https://github.com/RavelloH/InsightFlare",
+  "repo": "RavelloH/InsightFlare",
+  "license": "MIT",
+  "categories": ["analytics"],
+  "authors": [
+    { "name": "RavelloH", "url": "https://ravelloh.com", "github": "RavelloH", "x": "ravellohh" }
+  ],
+  "maintainers": ["MendyLanda"],
+  "source": { "ref": "v0.7.1", "sha": "1c9d2058381d5627ad9ece041761ba960b102809" },
+  "install": {
+    "tier": "artifact",
+    "packageManager": "npm",
+    "wranglerConfig": "wrangler.toml",
+    "workerName": "insightflare",
+    // Upstream's `npm run build` wraps these steps with a D1 migration against
+    // the account and a check of its generated skills file. The migration is
+    // Appflare's job at install, so the build runs the three steps that make
+    // the bundle: the tracker script served as /script.js, the TanStack Start
+    // build through the Cloudflare Vite plugin, and the removal of server
+    // chunks nothing imports.
+    "buildCommand": [
+      "tsx scripts/build-tracker-sdk.ts",
+      "vite build --mode production",
+      "tsx scripts/prune-server-output.ts"
+    ],
+    // Answers without a sign-in.
+    "healthPath": "/healthz"
+  },
+  // D1, KV, a SQLite-backed Durable Object and Analytics Engine all have free
+  // tiers. One cron trigger, every 30 minutes. The R2 cold archive is off, as
+  // in upstream's default config.
+  "plan": "free",
+  "requires": ["analytics-engine"],
+  // As upstream's Deploy button asks for them. DAILY_SALT_SECRET is a legacy
+  // fallback for MAIN_SECRET and is not asked for.
+  "secrets": [
+    {
+      "name": "MAIN_SECRET",
+      "label": "Main secret",
+      "help": "The root secret InsightFlare derives visitor privacy salts, session signing keys and API key hashes from. Changing it signs everyone out and invalidates API keys.",
+      "generate": true
+    },
+    {
+      "name": "BOOTSTRAP_ADMIN_PASSWORD",
+      "label": "Admin password",
+      "help": "The first password of the admin account, whose username is admin. Change both later in the dashboard's personal settings.",
+      "generate": true
+    }
+  ],
+  "vars": [],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "Open {{workerUrl}} and sign in as **admin** with the admin password from this app's settings, then add a site to get its tracking snippet."
+    },
+    {
+      "type": "markdown",
+      "content": "The Request Observation page reads Analytics Engine through the Cloudflare API: enter this account's id and an API token with Account Analytics Read under the dashboard's system settings. The datasets are shared by the whole account, so install InsightFlare only once per account."
+    }
+  ],
+  "tokenPermissions": []
+}
