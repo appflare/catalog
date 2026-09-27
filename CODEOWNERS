@@ -49,6 +49,7 @@
 /apps/garrul/ @MendyLanda
 /apps/git-on-cloudflare/ @MendyLanda
 /apps/glance/ @MendyLanda
+/apps/gmshop/ @MendyLanda
 /apps/hashpay/ @MendyLanda
 /apps/hqbase/ @MendyLanda
 /apps/imgbed/ @MendyLanda
@@ -59,6 +60,7 @@
 /apps/jina-mcp/ @MendyLanda
 /apps/kiss-worker/ @MendyLanda
 /apps/kukuroo/ @MendyLanda
+/apps/larafeed/ @MendyLanda
 /apps/lastfm-recently-played/ @MendyLanda
 /apps/mail2telegram/ @MendyLanda
 /apps/mailclaw/ @MendyLanda
@@ -80,6 +82,7 @@
 /apps/open-seo/ @MendyLanda
 /apps/openai-gemini/ @MendyLanda
 /apps/openshortlink/ @MendyLanda
+/apps/openstory/ @MendyLanda
 /apps/pastebin-worker/ @MendyLanda
 /apps/placeholders-dev/ @MendyLanda
 /apps/playwright-mcp/ @MendyLanda
@@ -93,6 +96,7 @@
 /apps/reminal/ @MendyLanda
 /apps/renewhelper/ @MendyLanda
 /apps/renewlet/ @MendyLanda
+/apps/resolvehq/ @MendyLanda
 /apps/rssworker/ @MendyLanda
 /apps/screencapture-live/ @MendyLanda
 /apps/screendrop/ @MendyLanda

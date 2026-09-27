@@ -1,0 +1,110 @@
+{
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "resolvehq",
+  "name": "ResolveHQ",
+  "summary": "A self-hosted helpdesk: a shared inbox fed by Email Routing, threaded tickets, SLAs and snoozes, a help center and knowledge base, customer ratings, reports, a scoped API and outbound webhooks, on D1, R2 and Queues.",
+  "homepage": "https://getresolvehq.com",
+  "repo": "mirza-rizvi/ResolveHQ",
+  // The LICENSE file is the author's own "ResolveHQ Source-Available License":
+  // personal or internal deployment is allowed; selling it, offering it as a
+  // hosted service, and redistributing copies need the author's written
+  // permission. It has no SPDX id.
+  "license": "LicenseRef-ResolveHQ-Source-Available",
+  "categories": ["business", "email"],
+  "authors": [{ "name": "Rizvi", "github": "mirza-rizvi", "x": "mirza_rizvi" }],
+  "maintainers": ["MendyLanda"],
+  "source": { "ref": "v0.3.3", "sha": "1750133fd4b5f2a078c4dd71ce82ec9f85fddd24" },
+  "install": {
+    "tier": "artifact",
+    "packageManager": "npm",
+    "wranglerConfig": "wrangler.jsonc",
+    "workerName": "resolvehq",
+    // Upstream's `build` script: a TypeScript project check, then Vite with
+    // the Cloudflare plugin builds the React app and the Worker together.
+    "buildCommand": "npm run build",
+    // Answers without a sign-in and fails with 503 until every table the
+    // Worker expects exists, so it also proves the migrations ran.
+    "healthPath": "/api/ready",
+    // Customer mail arrives through Email Routing. support@<zone> goes to the
+    // Worker; use that address as the support email when you sign up.
+    "emailRouting": { "rules": ["support"] }
+  },
+  // D1, R2, Queues (three work queues, each with a dead-letter queue that the
+  // Worker also consumes), two rate limits, one cron trigger every five
+  // minutes and receiving mail all fit the free plan. Upstream measured a
+  // sign-up at about 29 ms of CPU against the free plan's 10 ms per request,
+  // which Cloudflare tolerates now and then; it recommends Workers Paid
+  // before real volume. Cloudflare Email Sending is commented out in the
+  // pinned config, so replies go out through Resend.
+  "plan": "free",
+  "requires": ["zone", "email-routing", "r2"],
+  "secrets": [
+    {
+      "name": "SESSION_PEPPER",
+      "label": "Session pepper",
+      "help": "Mixed into every password hash and session. At least 32 characters. Setting a new value signs everyone out and makes existing passwords stop working.",
+      "generate": true
+    },
+    {
+      "name": "RESEND_API_KEY",
+      "label": "Resend API key",
+      "help": "Optional. From resend.com. Replies, password resets and invitations are sent through Resend; without a key they show as failed.",
+      "optional": true
+    },
+    {
+      "name": "RESEND_WEBHOOK_SECRET",
+      "label": "Resend webhook secret",
+      "help": "Optional. Signing secret of a Resend webhook pointed at this app, so delivery and bounce events reach tickets.",
+      "optional": true
+    },
+    {
+      "name": "OPENAI_API_KEY",
+      "label": "OpenAI API key",
+      "help": "Optional. Turns on AI assistance and translation with OpenAI. Each workspace still opts in under Settings > AI assistance.",
+      "optional": true
+    },
+    {
+      "name": "TURNSTILE_SECRET_KEY",
+      "label": "Turnstile secret key",
+      "help": "Optional, together with the Turnstile site key below: a Turnstile challenge on sign-in, sign-up and password reset.",
+      "optional": true
+    }
+  ],
+  "vars": [
+    {
+      "name": "APP_URL",
+      "label": "App URL",
+      "help": "Optional. The address your agents use, without a trailing slash, for links in outgoing mail and for sign-in checks. Leave it empty to use the address each request arrives on; set it when you serve the app on a custom domain.",
+      "default": ""
+    },
+    {
+      "name": "SYSTEM_MAIL_FROM",
+      "label": "Sender address",
+      "help": "Optional. The From of password reset and invitation emails, at a domain verified in Resend, for example no-reply@support.example.com.",
+      "default": ""
+    },
+    {
+      "name": "TURNSTILE_SITE_KEY",
+      "label": "Turnstile site key",
+      "help": "Optional. The public key of a Managed Turnstile widget for this app's hostname; set it together with the Turnstile secret key.",
+      "default": ""
+    },
+    {
+      "name": "TICKET_RETENTION_DAYS",
+      "label": "Ticket retention (days)",
+      "help": "Optional. A whole number from 1 to 3650: the cron permanently deletes resolved and closed tickets older than that, with their attachments. Leave it empty to keep everything.",
+      "default": ""
+    }
+  ],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "Open {{workerUrl}} and sign up: your name, email, a workspace, and support@ at the zone you chose as the support email. That address becomes the default inbox, and mail sent to it arrives as tickets."
+    },
+    {
+      "type": "markdown",
+      "content": "Open {{workerUrl}}/setup for a checklist of the deployment's configuration and your mail domain's MX, SPF, DKIM and DMARC records. Replies go out once a Resend API key and a sender address are set in this app's settings."
+    }
+  ],
+  "tokenPermissions": []
+}
