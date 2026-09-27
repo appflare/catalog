@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-27T04:16:46.542Z",
+  "generatedAt": "2026-09-27T07:22:05.286Z",
   "apps": [
     {
       "slug": "2fa",
@@ -555,6 +555,60 @@
       ],
       "categories": [
         "files",
+        "storage"
+      ],
+      "revision": 1
+    },
+    {
+      "slug": "cloudflarebase",
+      "name": "Cloudflarebase",
+      "summary": "An open-source Firebase alternative on Cloudflare: auth, JSON collections and SQL tables with live queries, remote config and file storage, each project in Durable Objects of its own, run from one console. App hosting needs Workers for Platforms, which Appflare does not set up yet; the rest works.",
+      "version": "0.0.0-20260827.adfd1b3",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/cloudflarebase@0.0.0-20260827.adfd1b3/cloudflarebase-0.0.0-20260827.adfd1b3.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/cloudflarebase@0.0.0-20260827.adfd1b3/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/cloudflarebase@0.0.0-20260827.adfd1b3/manifest.sig"
+      },
+      "digest": "296bad4d7a31037098dd799a05dc2c51eb4bb7d869938fad82d6919c101c7bd1",
+      "tier": "artifact",
+      "plan": "paid",
+      "requires": [
+        "r2",
+        "workers-ai",
+        "analytics-engine"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "The Cloudflarebase Authors",
+          "url": "https://cloudflarebase.com",
+          "github": "cloudflarebase"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/cloudflarebase/icon.svg",
+          "sha256": "3597c9373649c7d95eedef6fd5fa71886675ac86188ea8b1c2258a6a35cd85b4"
+        },
+        "cover": {
+          "url": "https://appflare.github.io/catalog/apps/cloudflarebase/cover.png",
+          "sha256": "708e67f5eb24ccf64fd1f572f62b22d01767e98780c6d9c64cb4d71a48407fff"
+        },
+        "screenshots": []
+      },
+      "services": [
+        "d1",
+        "r2",
+        "durable-objects",
+        "analytics-engine",
+        "workers-ai",
+        "email-routing"
+      ],
+      "categories": [
+        "developer-tools",
         "storage"
       ],
       "revision": 1
