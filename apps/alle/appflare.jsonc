@@ -1,0 +1,62 @@
+{
+  // A personal inbox that gathers mail from other accounts: set each
+  // mailbox (Gmail, Outlook and others) to forward to an address on your
+  // domain, and Email Routing delivers it to the Worker, which files it by
+  // the forwarding address, keeps it in D1 and attachments in R2, and shows
+  // everything in one React app behind a single password.
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "alle",
+  "name": "Alle",
+  "summary": "One inbox for all your mail: forward your Gmail, Outlook and other accounts to your domain and read them together, with attachments, plus throwaway addresses on the same domain.",
+  "homepage": "https://github.com/bestruirui/Alle",
+  "repo": "bestruirui/Alle",
+  // The repository has no LICENSE file and declares no licence anywhere, so
+  // the catalog shows it as unlicensed.
+  "license": "NONE",
+  "categories": ["email", "productivity"],
+  "authors": [{ "name": "BESTRUI", "url": "https://bestrui.com", "github": "bestruirui" }],
+  "maintainers": ["MendyLanda"],
+  // Upstream has no release tags, so the entry follows its default branch,
+  // v2, by commit.
+  "source": { "ref": "v2", "sha": "9fce68a40d4a886523c93caa73ca4c22fd73bad7" },
+  "install": {
+    "tier": "artifact",
+    "packageManager": "pnpm",
+    // Cloudflare's Vite plugin writes the bundled Worker and its deploy
+    // config under dist/ and points wrangler at it; the packer follows that
+    // redirect. The D1 migrations stay in migrations/, beside wrangler.jsonc,
+    // where upstream's `wrangler d1 migrations apply` reads them. The
+    // config's database id is upstream's own and is dropped when packing.
+    "wranglerConfig": "wrangler.jsonc",
+    "workerName": "alle",
+    // Upstream's build script (tsc -b, then vite build).
+    "buildCommand": "pnpm run build",
+    // Worker code that answers at once: 401 until you sign in. (/ is the
+    // static app.)
+    "healthPath": "/api/auth",
+    // Every address of the chosen zone goes to the app: the forwarding
+    // addresses you give your other mailboxes, and any throwaway address.
+    "emailRouting": { "catchAll": true }
+  },
+  // Receiving mail, D1 and R2 fit the free plan. No cron triggers.
+  "plan": "free",
+  // Attachments go to R2; mail arrives through Email Routing on a zone of
+  // the account.
+  "requires": ["r2", "zone", "email-routing"],
+  "secrets": [
+    {
+      "name": "SECRET",
+      "label": "Sign-in password",
+      "help": "The only password of the app, and the key that signs its sign-in cookie. Copy it now: you sign in with it. Setting a new value signs you out everywhere.",
+      "generate": true
+    }
+  ],
+  "vars": [],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "Open {{workerUrl}} and sign in with the password. Then, in each mailbox you want to read here, turn on automatic forwarding to an address on the zone you chose, for example `gmail@<your domain>`. Alle files each message under the account it was forwarded from, and creates that account on its first message. Mail sent straight to any other address of the zone shows up too."
+    }
+  ],
+  "tokenPermissions": []
+}

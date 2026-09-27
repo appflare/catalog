@@ -1,0 +1,73 @@
+{
+  // Server monitoring: a small agent on each server reports CPU, memory,
+  // disk, network and latency to the Worker, which keeps the history in D1,
+  // pushes live updates through a Durable Object, and alerts when a server
+  // goes offline, crosses a threshold, or nears its expiry date.
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "cf-server-monitor",
+  "name": "CF Server Monitor",
+  "summary": "Monitor your servers from a Worker: live CPU, memory, disk, traffic and latency from a small agent on each machine, with history, a map, offline and threshold alerts, and expiry reminders.",
+  "homepage": "https://github.com/huilang-me/CF-Server-Monitor",
+  "repo": "huilang-me/CF-Server-Monitor",
+  "license": "MIT",
+  "categories": ["monitoring", "developer-tools"],
+  "authors": [{ "name": "huilang-me", "url": "https://demo.huilang.me", "github": "huilang-me" }],
+  "maintainers": ["MendyLanda"],
+  // Upstream has no release tags, so the entry follows the default branch by commit.
+  "source": { "ref": "main", "sha": "dfb9bf19c23479398c3835c5f96328364e194c85" },
+  "install": {
+    "tier": "artifact",
+    "packageManager": "npm",
+    // The config upstream's Deploy button reads. Its D1 binding names no
+    // database id, so the install provisions one. Upstream's own deploy
+    // workflow writes an equivalent config with the auth values in vars;
+    // here they are a secret and vars of the form below.
+    "wranglerConfig": "wrangler.toml",
+    "workerName": "cf-server-monitor",
+    // Upstream's build:frontend, as its Deploy button instructions say: the
+    // Vite build of the dashboard plus the agent install scripts in public/.
+    "buildCommand": "npm run build:frontend",
+    // The tables are created by the Worker's own code (CREATE TABLE IF NOT
+    // EXISTS in src/database/schema.js), on the first request to
+    // /api/config, which answers without signing in. Probing it creates them
+    // before the first cron run.
+    "healthPath": "/api/config"
+  },
+  // D1, a SQLite-backed Durable Object and two cron triggers, one every
+  // minute (offline and threshold alerts) and one hourly (table rotation,
+  // cleanup, expiry reminders), fit the free plan. The account's free
+  // allowance is 5 cron triggers in total.
+  "plan": "free",
+  "requires": [],
+  "secrets": [
+    {
+      "name": "API_SECRET",
+      "label": "Agent secret and first admin password",
+      "help": "The agents sign their reports with it, and it is the admin password until you set another one in the admin panel. Copy it now: you sign in with it after installing. Changing it later means reinstalling the agent on every server.",
+      "generate": true
+    }
+  ],
+  "vars": [
+    {
+      "name": "API_USER_NAME",
+      "label": "Admin user name",
+      "help": "The user name for the first sign-in. You can change it in the admin panel.",
+      "default": "admin",
+      "required": true
+    },
+    {
+      "name": "CORS_ALLOWED_ORIGINS",
+      "label": "Allowed origins",
+      "help": "Optional. Other sites allowed to call the API, comma-separated, for example a dashboard on GitHub Pages that aggregates several monitors.",
+      "default": "",
+      "required": false
+    }
+  ],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "Open {{workerUrl}}/admin#/admin and sign in with the admin user name and the agent secret as the password. Change the password there, then add a server and run the install command the panel generates on it."
+    }
+  ],
+  "tokenPermissions": []
+}

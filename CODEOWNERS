@@ -4,6 +4,7 @@
 /apps/2fa/ @MendyLanda
 /apps/888wiki/ @MendyLanda
 /apps/agentic-inbox/ @MendyLanda
+/apps/alle/ @MendyLanda
 /apps/atalaya/ @MendyLanda
 /apps/auth-inbox/ @MendyLanda
 /apps/bark-worker/ @MendyLanda
@@ -11,6 +12,7 @@
 /apps/bookshelf/ @MendyLanda
 /apps/cap-worker/ @MendyLanda
 /apps/cattopic/ @MendyLanda
+/apps/cf-server-monitor/ @MendyLanda
 /apps/chatgpt-telegram-workers/ @MendyLanda
 /apps/civideo/ @MendyLanda
 /apps/clist/ @MendyLanda
@@ -30,11 +32,13 @@
 /apps/emdash/ @MendyLanda
 /apps/feedlog/ @MendyLanda
 /apps/flaremo/ @MendyLanda
+/apps/folia/ @MendyLanda
 /apps/formzero/ @MendyLanda
 /apps/fxtiktok/ @MendyLanda
 /apps/garrul/ @MendyLanda
 /apps/git-on-cloudflare/ @MendyLanda
 /apps/glance/ @MendyLanda
+/apps/hashpay/ @MendyLanda
 /apps/hqbase/ @MendyLanda
 /apps/imgbed/ @MendyLanda
 /apps/inkstone/ @MendyLanda
@@ -57,6 +61,7 @@
 /apps/nodewarden/ @MendyLanda
 /apps/nodrix/ @MendyLanda
 /apps/omnimail/ @MendyLanda
+/apps/one-ip/ @MendyLanda
 /apps/open-artifacts/ @MendyLanda
 /apps/open-seo/ @MendyLanda
 /apps/openai-gemini/ @MendyLanda
