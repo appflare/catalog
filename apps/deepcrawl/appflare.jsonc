@@ -1,0 +1,127 @@
+{
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "deepcrawl",
+  "name": "Deepcrawl",
+  "summary": "An open-source Firecrawl alternative: an API that turns any web page into clean Markdown, metadata and a tree of its links for AI agents, cached in KV with request logs in D1.",
+  "homepage": "https://deepcrawl.dev",
+  "repo": "lumpinif/deepcrawl",
+  "license": "MIT",
+  "categories": ["developer-tools", "ai"],
+  "authors": [{ "name": "Felix Lu", "github": "lumpinif", "x": "felixlu1018" }],
+  "maintainers": ["MendyLanda"],
+  // Upstream's release tags (deepcrawl@X.Y.Z) version the project's
+  // TypeScript SDK, the package named deepcrawl, which is released together
+  // with the API Worker; the Worker's own package carries no version. So the
+  // version comes from install.version, and the bump bot, which reads no
+  // deepcrawl@ prefix as a version, cannot move this pin: move source to the
+  // newest deepcrawl@ tag and install.version with it by hand.
+  "source": { "ref": "deepcrawl@0.5.5", "sha": "c40e8e567b7d85b36bf45aa6b5d828249e1831ba" },
+  "install": {
+    "tier": "artifact",
+    "packageManager": "pnpm",
+    // The API Worker alone. Upstream's full platform adds a Better Auth Worker
+    // and a Next.js dashboard with a Postgres database; the API also runs
+    // without them, checking a signed token on each request (AUTH_MODE jwt),
+    // which is how this entry installs it.
+    "wranglerConfig": "apps/workers/v0/wrangler.jsonc",
+    "workerName": "deepcrawl",
+    "version": "0.5.5",
+    // No build: wrangler bundles src/index.ts and the workspace packages it
+    // imports, which ship as TypeScript source.
+    // The config binds upstream's Better Auth Worker (AUTH_WORKER), which is
+    // not part of this entry; the API treats the binding as optional and
+    // reads it only with AUTH_MODE better-auth. The vars left out point at
+    // upstream's dashboard and auth origins on localhost and name upstream's
+    // own GitHub and Google OAuth clients; the API reads the first two only to
+    // allow cookie sessions from them, and the OAuth client ids not at all.
+    // No upstream pull request yet.
+    "configPatch": {
+      "services": null,
+      "vars": {
+        "NEXT_PUBLIC_APP_URL": null,
+        "BETTER_AUTH_URL": null,
+        "GITHUB_CLIENT_ID": null,
+        "NEXT_PUBLIC_GOOGLE_CLIENT_ID": null
+      }
+    }
+    // Every path, / included, answers 401 without a token in jwt mode, which
+    // the health check counts as the Worker answering.
+  },
+  // Two KV namespaces (the read and links caches) and a D1 database (request
+  // logs), all with free tiers. Pages are fetched with plain fetch: no Browser
+  // Rendering or Workers AI.
+  "plan": "free",
+  "requires": [],
+  "secrets": [
+    {
+      "name": "JWT_SECRET",
+      "label": "Token signing secret",
+      "help": "Clients sign their API tokens with it (HS256). Setting a new value makes every token issued so far invalid.",
+      "generate": true
+    },
+    {
+      "name": "UPSTASH_REDIS_REST_URL",
+      "label": "Upstash Redis REST URL",
+      "help": "Turns on per-client rate limiting of the API, with the token below. Without both, requests are not rate limited.",
+      "optional": true
+    },
+    {
+      "name": "UPSTASH_REDIS_REST_TOKEN",
+      "label": "Upstash Redis REST token",
+      "help": "The REST token of the Upstash database above.",
+      "optional": true
+    }
+  ],
+  "vars": [
+    {
+      // Upstream's config sets AUTH_MODE to better-auth, which needs the auth
+      // Worker this entry leaves out, and a patch may not change a var, so the
+      // entry sets jwt here.
+      "name": "AUTH_MODE",
+      "label": "Authentication mode",
+      "help": "Keep jwt: the API then accepts only tokens signed with the token signing secret. The other modes need upstream's auth Worker or leave the API open to anyone.",
+      "default": "jwt",
+      "required": true
+    },
+    {
+      "name": "JWT_ISSUER",
+      "label": "Token issuer",
+      "help": "When set, a token's iss claim must equal it. Leave empty to accept any issuer.",
+      "default": ""
+    },
+    {
+      "name": "JWT_AUDIENCE",
+      "label": "Token audience",
+      "help": "When set, a token's aud claim must include it. Leave empty to accept any audience.",
+      "default": ""
+    },
+    {
+      "name": "API_URL",
+      "label": "API URL",
+      "help": "Where clients reach the API, shown as the server in the OpenAPI document.",
+      "default": "{{workerUrl}}"
+    },
+    {
+      "name": "WORKER_NODE_ENV",
+      "label": "Runtime mode",
+      "help": "Development writes debug logs and returns detailed errors to callers; keep production unless you are debugging.",
+      "type": "select",
+      "options": [
+        { "value": "production", "label": "Production" },
+        { "value": "development", "label": "Development" }
+      ],
+      "default": "production"
+    }
+  ],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "Every request needs `Authorization: Bearer <token>`: a JWT signed with HS256 and the **Token signing secret** from this app's settings. It must carry a `sub` claim (any id for the caller) and should carry an `exp`; with a token issuer or audience set, `iss` and `aud` must match. There is no sign-in page and no dashboard: whoever holds the secret mints tokens, with any JWT library or with upstream's script from a checkout of the repository:\n\n```sh\npnpm jwt:mint -- --secret <token signing secret> --sub me --expires-in 24\n```"
+    },
+    {
+      "type": "markdown",
+      "content": "Then read a page as Markdown:\n\n```sh\ncurl '{{workerUrl}}/read?url=https://example.com' -H 'Authorization: Bearer <token>'\n```\n\n`POST /read` returns the full result with metadata, and `/links` the page's link tree. The API reference is at {{workerUrl}}/docs and the OpenAPI document at {{workerUrl}}/openapi, both behind the same token. Point the `deepcrawl` SDK at {{workerUrl}} with the token as its API key."
+    }
+  ],
+  "tokenPermissions": []
+}

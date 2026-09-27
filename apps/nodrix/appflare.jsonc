@@ -1,0 +1,72 @@
+{
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "nodrix",
+  "name": "nodrix",
+  "summary": "A self-hosted IoT platform: devices send telemetry over HTTPS or WebSocket, variables appear on their own, and you build realtime dashboards, controls and automations on top, with a read API and an MCP server, on Durable Objects, D1 and R2. Sends anonymous usage statistics to upstream daily, with no opt-out.",
+  "homepage": "https://nodrix.live",
+  "repo": "decoded-cipher/nodrix",
+  "license": "MIT",
+  "categories": ["monitoring", "developer-tools"],
+  "authors": [
+    {
+      "name": "Arjun Krishna",
+      "url": "https://arjunkrishna.dev",
+      "github": "decoded-cipher",
+      "x": "Decoded_Cipher"
+    }
+  ],
+  "maintainers": ["MendyLanda"],
+  "source": { "ref": "v1.0.1", "sha": "1b8af9175cd68fe097f548a6adbfd735237ce103" },
+  "install": {
+    "tier": "artifact",
+    "packageManager": "bun",
+    "wranglerConfig": "wrangler.toml",
+    "workerName": "nodrix",
+    // Upstream commits no lockfile (bun.lock is gitignored), so the packer
+    // resolves the workspace's version ranges at pack time; the pack log
+    // records the sha256 of the bun.lock it wrote
+    // (v1.0.1, 2026-09-27: b0aa787b344f1fab34c0a99f411e80d0e737fa9c44780ae8730481661ce2f8dc).
+    "installDirs": [{ "path": ".", "lockfile": "none" }],
+    // The steps of scripts/build-from-upstream.sh outside Cloudflare's Workers
+    // Builds, after the install: write worker/src/version.gen.ts (version and
+    // commit, which the root postinstall would otherwise write), bundle the D1
+    // migrations into worker/src/platform/db/migrations.gen.ts for the Worker's
+    // own migrator, and build the Vue front end into web/dist. The script
+    // fetches upstream's latest release over the checkout only when it runs
+    // under Workers Builds, which the pack does not.
+    "buildCommand": [
+      "bun scripts/gen-version.ts",
+      "bun scripts/gen-migrations.ts",
+      "bun run --filter @nodrix/web build"
+    ],
+    // The config's build runs scripts/build-from-upstream.sh through a shell,
+    // and that script runs `bun install` with install scripts. The build
+    // commands above take its place. No upstream pull request yet.
+    "configPatch": { "build": null }
+  },
+  // D1, KV, R2, four SQLite-backed Durable Objects and a Workflow all have
+  // free tiers. One cron trigger, daily at midnight UTC.
+  "plan": "free",
+  "requires": ["r2"],
+  // nodrix needs no secrets: it generates its session signing secret on first
+  // start and keeps it in D1, and sign-in providers are set up in its
+  // settings. NODRIX_UPSTREAM_REPO keeps the value in the wrangler config,
+  // the repository the update check polls.
+  "secrets": [],
+  "vars": [],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "Open {{workerUrl}} right away: the first account created there becomes the owner, and sign-up closes after it. Invite other people from **Users**."
+    },
+    {
+      "type": "markdown",
+      "content": "Create a project, mint a project token, and send telemetry to `{{workerUrl}}/v1/telemetry` with the token as a Bearer header. Google and GitHub sign-in are set up under **Settings > Sign-in providers**."
+    },
+    {
+      "type": "markdown",
+      "content": "nodrix sends anonymous usage statistics (an instance id, version, counts and feature flags) to upstream's collector once at setup and daily from its cron trigger. It has no setting to turn this off."
+    }
+  ],
+  "tokenPermissions": []
+}

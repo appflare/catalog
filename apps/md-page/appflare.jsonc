@@ -1,0 +1,63 @@
+{
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "md-page",
+  "name": "md.page",
+  "summary": "Turn Markdown into a shareable web page with one request: an API, an MCP server for coding agents, and pages that expire after 24 hours, on Workers KV.",
+  "homepage": "https://md.page",
+  "repo": "maypaz/md.page",
+  "license": "MIT",
+  "categories": ["sharing", "developer-tools"],
+  "authors": [
+    { "name": "Or May-Paz", "github": "maypaz" },
+    { "name": "Matan Lachmish", "url": "https://www.thebigfatninja.xyz", "github": "mlachmish" }
+  ],
+  "maintainers": ["MendyLanda"],
+  // Upstream has no release tags, so the entry follows the default branch by commit.
+  "source": { "ref": "main", "sha": "54bbbd18b8a18197b02d87712ad0dcae7e7614da" },
+  "install": {
+    "tier": "artifact",
+    "packageManager": "npm",
+    // Upstream keeps only a template config; its self-hosting guide copies it
+    // to wrangler.toml. Its route to upstream's own domain is not part of the
+    // artifact, so the app answers at its workers.dev address.
+    "wranglerConfig": "wrangler.toml.example",
+    "workerName": "md-page",
+    // No build: wrangler bundles src/index.ts directly.
+    // The template leaves the KV namespace id and the R2 bucket name as empty
+    // strings for the self-hoster to fill in, and wrangler refuses an empty
+    // one. Leaving both out lets the install create them. No upstream pull
+    // request yet.
+    "configPatch": {
+      "kv_namespaces": [{ "binding": "PAGES" }],
+      "r2_buckets": [{ "binding": "ASSETS_BUCKET" }]
+    }
+  },
+  // Workers KV, Analytics Engine and R2 all have free tiers. Every publish is
+  // one KV write, and the free plan allows 1,000 KV writes a day.
+  "plan": "free",
+  // The template binds an Analytics Engine dataset (publish and view events)
+  // and an R2 bucket (the landing page's demo video). The Worker runs without
+  // either, but Cloudflare refuses to deploy a Worker whose bindings the
+  // account cannot provide.
+  "requires": ["analytics-engine", "r2"],
+  // The self-hosted engine reads no secrets or vars: anonymous publishing
+  // needs none, and accounts, API keys and permanent pages belong to
+  // upstream's hosted service.
+  "secrets": [],
+  "vars": [],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "Open {{workerUrl}} and paste Markdown, or publish from a script:\n\n```sh\ncurl -X POST {{workerUrl}}/api/publish -H 'Content-Type: application/json' -d '{\"markdown\": \"# Hello\"}'\n```\n\nPages expire after 24 hours. The API is described at {{workerUrl}}/openapi.json, and MCP clients connect to {{workerUrl}}/mcp."
+    },
+    {
+      "type": "markdown",
+      "content": "Publishing needs no sign-in: anyone who knows the address can publish pages to this Worker. Accounts, permanent pages, and API keys are features of the hosted md.page and answer with a pointer to it here."
+    },
+    {
+      "type": "markdown",
+      "content": "Events go to the Analytics Engine dataset `md_page_events`, whose name is shared by the whole account, so two installs in one account write to the same dataset. The landing page's demo video is read from the R2 bucket as `lp.mp4`; the page works without it."
+    }
+  ],
+  "tokenPermissions": []
+}

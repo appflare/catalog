@@ -1,0 +1,104 @@
+{
+  // OpenShort.link writes every click to the Analytics Engine dataset
+  // `openshortlink-analytics` and queries it by name through the SQL API.
+  // Dataset names are account-wide: a second install in the same account would
+  // write to, and show, the same click data. Install it once per account; one
+  // install serves any number of domains.
+  //
+  // Upstream ships no lockfile, so the packer resolves the dependencies at pack
+  // time; the pack log records the sha256 of the pnpm-lock.yaml it wrote
+  // (v0.10.0, 2026-09-27: 18b1f30aaacdaf59ea0a37238fdcc81885d493d9b018d390eeee414d739504d6).
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "openshortlink",
+  "name": "OpenShort.link",
+  "summary": "Link shortener and link management for your own domains: geo and device redirects, QR codes, tags, teams with roles, API keys, and click analytics on Analytics Engine.",
+  "homepage": "https://openshort.link",
+  "repo": "idhamsy/openshortlink",
+  "license": "AGPL-3.0-only",
+  "categories": ["utilities", "analytics"],
+  "authors": [
+    { "name": "OpenShort.link contributors", "url": "https://openshort.link", "github": "idhamsy" }
+  ],
+  "maintainers": ["MendyLanda"],
+  "source": { "ref": "v0.10.0", "sha": "bd337fcf45f237087373e9a837bb884d02e7eb4f" },
+  "install": {
+    "tier": "artifact",
+    // Upstream documents npm, but its unpinned ranges no longer resolve with
+    // npm's strict peer checks (today's wrangler wants @cloudflare/workers-types
+    // 5 as an optional peer, the package pins 4), so a fresh `npm install`
+    // fails. pnpm resolves the same ranges and warns about the peer instead.
+    "packageManager": "pnpm",
+    "wranglerConfig": "wrangler.toml",
+    "workerName": "openshortlink",
+    "installDirs": [{ "path": ".", "lockfile": "none" }],
+    // The committed config leaves the D1 database id and the KV namespace id
+    // as empty strings for the self-hoster to fill in, and wrangler refuses an
+    // empty one. Leaving both out lets the install create them. No upstream
+    // pull request yet.
+    "configPatch": {
+      "d1_databases": [{ "binding": "DB", "database_name": "openshortlink-db" }],
+      "kv_namespaces": [{ "binding": "CACHE", "preview_id": "" }]
+    },
+    // Answers without a sign-in; every other path is a short link or the dashboard.
+    "healthPath": "/dashboard/health"
+  },
+  // D1, KV, Analytics Engine and two cron triggers fit the free plan, whose
+  // accounts have five cron triggers in all.
+  "plan": "free",
+  // Clicks are written to an Analytics Engine dataset.
+  "requires": ["analytics-engine"],
+  "secrets": [
+    {
+      "name": "SETUP_TOKEN",
+      "label": "Setup token",
+      "help": "Enter it once on /dashboard/setup to create the owner account. It is not checked again after that.",
+      "generate": true
+    },
+    {
+      "name": "CLOUDFLARE_API_TOKEN",
+      "label": "Analytics API token",
+      "help": "A Cloudflare API token with Account Analytics Read on this account. The dashboard reads recent clicks with it through the Analytics Engine SQL API. Without it short links still redirect and daily totals are kept, but the detailed charts stay empty.",
+      "optional": true
+    }
+  ],
+  "vars": [
+    {
+      "name": "CLOUDFLARE_ACCOUNT_ID",
+      "label": "Cloudflare account ID",
+      "help": "The account whose Analytics Engine data the dashboard reads: this one. Filled in on every install and update.",
+      "default": "{{accountId}}",
+      "required": true
+    },
+    {
+      // The code falls back to a dataset called `link-clicks` when this is
+      // unset, while its wrangler config writes to `openshortlink-analytics`,
+      // so the queries would read an empty dataset without it.
+      "name": "ANALYTICS_DATASET_NAME",
+      "label": "Analytics Engine dataset",
+      "help": "The dataset the dashboard queries. Keep it the same as the dataset the Worker writes clicks to.",
+      "default": "openshortlink-analytics",
+      "required": true
+    }
+  ],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "Open {{workerUrl}}/dashboard/setup, enter the setup token, and create the owner account. Then add your domain under **Domains** with the routes the dashboard shows."
+    },
+    {
+      "type": "markdown",
+      "content": "Short links answer on the domains you add, not on the workers.dev address. In the Cloudflare dashboard, add Worker routes for each domain (for example `example.com/go/*`) under Workers & Pages › {{workerName}} › Settings › Domains & Routes, and pick paths that do not clash with your site."
+    },
+    {
+      "type": "markdown",
+      "content": "Clicks go to the Analytics Engine dataset `openshortlink-analytics`, whose name is shared by the whole account, so install OpenShort.link only once per account."
+    }
+  ],
+  "tokenPermissions": [
+    {
+      "name": "Account.Account Analytics:Read",
+      "scope": "account",
+      "description": "Query clicks through the Analytics Engine SQL API (CLOUDFLARE_API_TOKEN)."
+    }
+  ]
+}

@@ -1,0 +1,109 @@
+{
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "imgbed",
+  "name": "CloudFlare ImgBed",
+  "summary": "Self-hosted image and file hosting with an admin panel: uploads to R2, Telegram, Discord, S3, Hugging Face or WebDAV, file management, access control, a public gallery, a REST API and WebDAV, on D1.",
+  "homepage": "https://cfbed.sanyue.de",
+  "repo": "MarSeventh/CloudFlare-ImgBed",
+  "license": "MIT",
+  "categories": ["files", "sharing"],
+  "authors": [{ "name": "MarSeventh", "url": "https://home.sanyue.site", "github": "MarSeventh" }],
+  "maintainers": ["MendyLanda"],
+  "source": { "ref": "v2.7.6", "sha": "bf9d8211ce6daa3af7b5b60685250bebcb2f681a" },
+  "install": {
+    "tier": "artifact",
+    "packageManager": "npm",
+    // Upstream's Workers deployment. The Worker wraps the Pages Functions in
+    // functions/ and serves the prebuilt front end committed in frontend-dist.
+    "wranglerConfig": "deploy/worker/wrangler.toml",
+    "workerName": "imgbed",
+    // Upstream's deploy script regenerates the route table from functions/
+    // before every deploy. The committed table matches the pinned functions;
+    // regenerating keeps it so on later pins.
+    "buildCommand": "node deploy/worker/generate-routes.js",
+    // The committed config leaves its storage bindings commented out: upstream's
+    // deploy script (deploy/worker/generate-toml.js) writes them from the ids a
+    // self-hoster supplies. These are the D1 and R2 bindings it writes, without
+    // ids, so the install creates both. Its KV binding is left out on purpose:
+    // the app uses KV in place of D1 whenever both are bound, and D1's free tier
+    // allows far more writes. No upstream pull request yet.
+    "configPatch": {
+      "d1_databases": [{ "binding": "img_d1", "database_name": "img_d1" }],
+      "r2_buckets": [{ "binding": "img_r2" }]
+    }
+  },
+  "resources": {
+    "d1": {
+      // Upstream creates the tables by running database/init.sql once by hand.
+      // Every statement in it is IF NOT EXISTS, so it runs on each install and
+      // update. database/migrations only upgrades databases created before the
+      // tags column, which init.sql already has.
+      "img_d1": { "schema": ["database/init.sql"] }
+    }
+  },
+  // D1, R2 and the Images binding all have free tiers.
+  "plan": "free",
+  "requires": ["r2"],
+  // Storage channels, moderation and most other settings live in the admin
+  // panel, which upstream recommends over environment variables. The entry
+  // asks only for what keeps a new install closed and recoverable, plus the
+  // Telegram channel as an option.
+  "secrets": [
+    {
+      "name": "BASIC_PASS",
+      "label": "Admin password",
+      "help": "Signs in to the admin panel at /adminLogin. Without it the admin panel is open to anyone. A password saved later under System Settings > Security Settings takes precedence over this one.",
+      "generate": true
+    },
+    {
+      "name": "AUTH_CODE",
+      "label": "Upload password",
+      "help": "What visitors enter on the login page before they can upload. Without it anyone can upload. A password saved later under System Settings > Security Settings takes precedence over this one.",
+      "generate": true
+    },
+    {
+      "name": "RESET_KEY",
+      "label": "Sign-in reset key",
+      "help": "Opening /api/auth/resetAuth?key=<this key> clears the passwords saved in the admin panel and signs everyone out, so the admin and upload passwords above apply again. Leave unset unless you need it.",
+      "optional": true
+    },
+    {
+      "name": "TG_BOT_TOKEN",
+      "label": "Telegram bot token",
+      "help": "Adds a Telegram storage channel. Channels can also be added in the admin panel instead.",
+      "optional": true
+    }
+  ],
+  "vars": [
+    {
+      "name": "BASIC_USER",
+      "label": "Admin username",
+      "help": "The username for the admin panel.",
+      "default": "admin"
+    },
+    {
+      "name": "TG_CHAT_ID",
+      "label": "Telegram chat id",
+      "help": "The channel or chat the Telegram bot stores files in, for example -1001234567890. Used only with a Telegram bot token."
+    },
+    {
+      "name": "disable_telemetry",
+      "label": "Error reporting to upstream",
+      "help": "Upstream reports errors and a sample of requests, with their headers and location, to its Sentry project unless this is turned off. It can also be changed later under System Settings > Other Settings.",
+      "type": "select",
+      "options": [{ "value": "true", "label": "Off" }, { "value": "false", "label": "On" }],
+      "default": "true"
+    }
+  ],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "Open {{workerUrl}}/adminLogin and sign in with the admin username and password from this app's settings. The R2 bucket is already set up as a storage channel, so {{workerUrl}} accepts uploads once you enter the upload password there."
+    },
+    {
+      "type": "markdown",
+      "content": "Add more storage channels (Telegram, Discord, S3, Hugging Face, WebDAV) under System Settings > Upload Settings. Files are served from {{workerUrl}}/file/…; to serve R2 files from a public bucket domain instead, set its address on the R2 channel."
+    }
+  ],
+  "tokenPermissions": []
+}
