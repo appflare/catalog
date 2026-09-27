@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-27T02:49:45.574Z",
+  "generatedAt": "2026-09-27T03:03:42.903Z",
   "apps": [
     {
       "slug": "2fa",
@@ -362,6 +362,49 @@
       "categories": [
         "ai",
         "bots"
+      ],
+      "revision": 1
+    },
+    {
+      "slug": "civideo",
+      "name": "child-video",
+      "summary": "A private, ad-free video and audiobook library for children: you upload to your own R2 bucket, and upstream's native apps play only what you put there, with daily limits and allowed hours.",
+      "version": "0.2.0",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/civideo@0.2.0/civideo-0.2.0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/civideo@0.2.0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/civideo@0.2.0/manifest.sig"
+      },
+      "digest": "bd8454ec22246b15f0b082f9f0cabdf25384be7c3852b71c942341a58ab2a2e0",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "r2"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "bitoceango",
+          "github": "bitoceango"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/civideo/icon.png",
+          "sha256": "323dde98aed0706a7e1982c161d9ca367ac07d6874ba277fdafff6884c823b4c"
+        },
+        "screenshots": []
+      },
+      "services": [
+        "d1",
+        "r2"
+      ],
+      "categories": [
+        "media",
+        "family"
       ],
       "revision": 1
     },
@@ -863,6 +906,102 @@
       "revision": 1
     },
     {
+      "slug": "garrul",
+      "name": "Garrul",
+      "summary": "Self-hosted comments for static sites and blogs: an embeddable widget with threads, reactions and votes, OAuth or anonymous posting behind Turnstile, a moderation queue, and reply emails.",
+      "version": "2.29.0",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/garrul@2.29.0/garrul-2.29.0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/garrul@2.29.0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/garrul@2.29.0/manifest.sig"
+      },
+      "digest": "4b783c700518a5156f17d07b0894f571124daac619f94ec6877fe394680b9580",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "analytics-engine"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "KingPin",
+          "url": "https://sumguy.com",
+          "github": "KingPin"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "screenshots": [
+          {
+            "url": "https://appflare.github.io/catalog/apps/garrul/screenshots/01-comment-widget.png",
+            "sha256": "ab81387782fbc7b45d31a3ceab33db4b0bb163e9b38b2d61cd02c91429efde37",
+            "alt": "Garrul: Comment widget"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/garrul/screenshots/02-admin-dashboard.png",
+            "sha256": "55ba18e439c63f839230fe6379f5fc779c1d0c581b380140143dc7fbae7b0e04",
+            "alt": "Garrul: Admin dashboard"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/garrul/screenshots/03-moderation-queue.png",
+            "sha256": "08e2b19ea6e83ba1ef2c28f27d180b546341b1ac7366d11056679e3bbf09fb7e",
+            "alt": "Garrul: Moderation queue"
+          }
+        ]
+      },
+      "services": [
+        "kv",
+        "d1",
+        "analytics-engine",
+        "cron"
+      ],
+      "categories": [
+        "community"
+      ],
+      "revision": 1
+    },
+    {
+      "slug": "git-on-cloudflare",
+      "name": "git-on-cloudflare",
+      "summary": "A git server on Workers: push and clone over HTTPS, browse code in a web interface, with repositories in Durable Objects and R2.",
+      "version": "0.0.0-20260513.007a96e",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/git-on-cloudflare@0.0.0-20260513.007a96e/git-on-cloudflare-0.0.0-20260513.007a96e.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/git-on-cloudflare@0.0.0-20260513.007a96e/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/git-on-cloudflare@0.0.0-20260513.007a96e/manifest.sig"
+      },
+      "digest": "47c4dd2a0104fff6aad567cf9d5db7ee76f69ee7b8bef958edf234b415608dbb",
+      "tier": "artifact",
+      "plan": "paid",
+      "requires": [
+        "r2"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Rachel Chen",
+          "url": "https://limic.dev",
+          "github": "zllovesuki"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "services": [
+        "kv",
+        "d1",
+        "r2",
+        "durable-objects",
+        "queues"
+      ],
+      "categories": [
+        "developer-tools"
+      ],
+      "revision": 1
+    },
+    {
       "slug": "glance",
       "name": "Glance",
       "summary": "Share what your coding agents build: publish HTML, Markdown and files as private sites your team opens, comments on, and annotates. An open-source alternative to Claude Artifacts.",
@@ -900,6 +1039,55 @@
       ],
       "categories": [
         "developer-tools"
+      ],
+      "revision": 1
+    },
+    {
+      "slug": "inkstone",
+      "name": "Inkstone",
+      "summary": "A self-hosted Markdown notebook with live preview, backlinks, full-text and semantic search, offline editing, multi-device sync, public sharing, MCP access and scheduled backups.",
+      "version": "0.8.0",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/inkstone@0.8.0/inkstone-0.8.0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/inkstone@0.8.0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/inkstone@0.8.0/manifest.sig"
+      },
+      "digest": "9769e1759b239a1b05f53e89e5b53607743d21e8415ffe2f811804a0239ac78b",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "r2",
+        "workers-ai"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Shuai",
+          "url": "https://shuai.plus",
+          "github": "shuaiplus"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/inkstone/icon.svg",
+          "sha256": "f950e978d67abc47464ea98fb0a562dda86f002e877e2e1af63bdd44ecc037c3"
+        },
+        "screenshots": []
+      },
+      "services": [
+        "kv",
+        "d1",
+        "r2",
+        "durable-objects",
+        "cron",
+        "workers-ai"
+      ],
+      "categories": [
+        "notes",
+        "productivity"
       ],
       "revision": 1
     },
@@ -1811,6 +1999,39 @@
       "revision": 1
     },
     {
+      "slug": "relay",
+      "name": "Relay",
+      "summary": "A link shortener with cookieless click and conversion analytics: A/B splits, device and country routing, per-channel suffixes, retargeting pixels, QR codes and CSV export, on D1.",
+      "version": "0.0.0-20260624.7fb2f44",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/relay@0.0.0-20260624.7fb2f44/relay-0.0.0-20260624.7fb2f44.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/relay@0.0.0-20260624.7fb2f44/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/relay@0.0.0-20260624.7fb2f44/manifest.sig"
+      },
+      "digest": "6aa28a770a4f972e99d856d22743a5dafb72007fead1ef4510ddaa8940b0a467",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Yuri",
+          "github": "YuriCrystal"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "services": [
+        "d1"
+      ],
+      "categories": [
+        "utilities",
+        "analytics"
+      ],
+      "revision": 1
+    },
+    {
       "slug": "reminal",
       "name": "Reminal",
       "summary": "Your own relay for reminal: reach the terminals, app windows and desktops of your machines from any browser, end-to-end encrypted, with nothing listening on the machines.",
@@ -2188,6 +2409,44 @@
       "categories": [
         "notes",
         "sync"
+      ],
+      "revision": 1
+    },
+    {
+      "slug": "tempik",
+      "name": "Tempik",
+      "summary": "A disposable email service on your own domain: pick or generate an address in the browser and read the mail sent to it, received by Email Routing and kept in D1.",
+      "version": "0.0.0-20260627.36d05ed",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/tempik@0.0.0-20260627.36d05ed/tempik-0.0.0-20260627.36d05ed.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/tempik@0.0.0-20260627.36d05ed/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/tempik@0.0.0-20260627.36d05ed/manifest.sig"
+      },
+      "digest": "78b69e71f110360f4d4c0da035f4cccf5ef6cf4e8d037ffda97e97408b4eeae0",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "zone",
+        "email-routing"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Hiroto Masato",
+          "github": "hirotomasato"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "services": [
+        "d1",
+        "email-routing",
+        "zone"
+      ],
+      "categories": [
+        "email",
+        "privacy"
       ],
       "revision": 1
     },
