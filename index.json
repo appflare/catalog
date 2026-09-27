@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-27T03:23:54.396Z",
+  "generatedAt": "2026-09-27T04:16:46.542Z",
   "apps": [
     {
       "slug": "2fa",
@@ -818,6 +818,62 @@
       "revision": 1
     },
     {
+      "slug": "edgechat",
+      "name": "EdgeChat",
+      "summary": "Team chat on Cloudflare: public and private groups, direct messages, realtime delivery, voice messages, messages and files encrypted at rest, a Telegram bridge and an admin dashboard.",
+      "version": "2.1.2",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/edgechat@2.1.2/edgechat-2.1.2.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/edgechat@2.1.2/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/edgechat@2.1.2/manifest.sig"
+      },
+      "digest": "3e74f9c9bb25494b1f45882113d6b9c9571a63c85168dedb0b5f24c3d3fc1258",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "r2"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "aozorae",
+          "github": "aozorae"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/edgechat/icon.svg",
+          "sha256": "646634deec9f7f4bd9a1fd5f77513e85aacd6bacfe14ac0d43691eea279418eb"
+        },
+        "screenshots": [
+          {
+            "url": "https://appflare.github.io/catalog/apps/edgechat/screenshots/01-chat.png",
+            "sha256": "d97362c266f62f293cfc59e7db6889750400901cdc04686cf3fae0ff5e9fb5c0",
+            "alt": "EdgeChat: Chat"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/edgechat/screenshots/02-admin-dashboard.png",
+            "sha256": "0f0e6dd7ed85ee1ba7020c29f21b1217a8284ec6f49c86fcd803579daee1b5a2",
+            "alt": "EdgeChat: Admin dashboard"
+          }
+        ]
+      },
+      "services": [
+        "kv",
+        "d1",
+        "r2",
+        "durable-objects",
+        "cron"
+      ],
+      "categories": [
+        "chat"
+      ],
+      "revision": 1
+    },
+    {
       "slug": "edgeever",
       "name": "EdgeEver",
       "summary": "An Evernote-style notes and knowledge base with a three-pane layout, full-text search, public note sharing, AI features and a built-in MCP server, on D1 and R2.",
@@ -858,6 +914,47 @@
       "categories": [
         "notes",
         "productivity"
+      ],
+      "revision": 1
+    },
+    {
+      "slug": "edgekey",
+      "name": "EdgeKey",
+      "summary": "A shop for digital goods: sell card keys and codes, take payment through USDT, Epay, Alipay or Stripe, and deliver each order automatically by page and email.",
+      "version": "0.0.0-20260817.fa69913",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/edgekey@0.0.0-20260817.fa69913/edgekey-0.0.0-20260817.fa69913.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/edgekey@0.0.0-20260817.fa69913/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/edgekey@0.0.0-20260817.fa69913/manifest.sig"
+      },
+      "digest": "c6628b60090bb7620890228262dc05533c5c6b633740ad4c0fcafd9d54c3032e",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "ggyy",
+          "github": "34892002"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/edgekey/icon.png",
+          "sha256": "2b9854d3d27c83ecfd2007c1e87a71480d3aa747409e1c753c026ab95f4b69d3"
+        },
+        "screenshots": []
+      },
+      "services": [
+        "d1",
+        "cron"
+      ],
+      "categories": [
+        "business",
+        "ecommerce"
       ],
       "revision": 1
     },
