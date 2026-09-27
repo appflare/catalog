@@ -1,0 +1,58 @@
+{
+  // A public pastebin: anyone who opens the app can post text or upload a
+  // file and get a link, optionally with a password and an expiry. Texts
+  // live in D1, uploaded files in R2.
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "xiadd-pastebin",
+  "name": "xiadd Pastebin",
+  "summary": "A pastebin with syntax highlighting, Markdown, password-protected pastes, expiry times and file uploads up to 25 MB, on D1 and R2, with a JSON API.",
+  "homepage": "https://github.com/xiadd/pastebin-worker",
+  "repo": "xiadd/pastebin-worker",
+  "license": "MIT",
+  "categories": ["sharing", "developer-tools"],
+  "authors": [{ "name": "xiadd", "github": "xiadd" }],
+  "maintainers": ["MendyLanda"],
+  // Upstream publishes no release tags; the pin tracks main.
+  "source": { "ref": "main", "sha": "5af66e42e4174c6e69223502bd46aafbeffbd0f5" },
+  "install": {
+    "tier": "artifact",
+    // Classic yarn: upstream ships a yarn 1 lockfile.
+    "packageManager": "yarn",
+    // The root config has no `main`: TanStack Start builds through Nitro's
+    // Vite plugin with the cloudflare-module preset (nitro.config.ts), which
+    // writes the Worker and its deploy config under .output and points
+    // wrangler at it through .wrangler/deploy/config.json; the packer follows
+    // that redirect as `wrangler deploy` does. Upstream's own deployment in
+    // the config (account id, custom-domain route, database id, bucket name)
+    // is dropped when packing. The Drizzle migrations stay in drizzle/, the
+    // config's migrations_dir beside wrangler.toml.
+    "wranglerConfig": "wrangler.toml",
+    "workerName": "pastebin",
+    // Upstream's deploy workflow runs `yarn build` (vite build).
+    "buildCommand": "yarn run build"
+  },
+  // D1 and R2 fit their free tiers for personal use; files over 25 MB are
+  // refused.
+  "plan": "free",
+  "requires": ["r2"],
+  "secrets": [],
+  // ENVIRONMENT keeps upstream's value, production.
+  "vars": [
+    {
+      "name": "BASE_URL",
+      "label": "Public URL",
+      "help": "The address links to pastes and files are built from, without a trailing slash: the Worker's workers.dev address, or your custom domain.",
+      // Newer managers fill in the Worker's workers.dev address here; older
+      // ones show the placeholder as is, and it must be replaced by hand.
+      "default": "{{workerUrl}}",
+      "required": true
+    }
+  ],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "Open {{workerUrl}} to post a paste or upload a file. There is no sign-in: anyone who finds the address can post, and every upload is stored in your account's R2 bucket."
+    }
+  ],
+  "tokenPermissions": []
+}

@@ -23,9 +23,11 @@
 /apps/cloudflarebase/ @MendyLanda
 /apps/cloudmark/ @MendyLanda
 /apps/cloudssh/ @MendyLanda
+/apps/collection-down/ @MendyLanda
 /apps/counterscale/ @MendyLanda
 /apps/cut/ @MendyLanda
 /apps/deepcrawl/ @MendyLanda
+/apps/dispoflare/ @MendyLanda
 /apps/durable-git/ @MendyLanda
 /apps/edgechat/ @MendyLanda
 /apps/edgeever/ @MendyLanda
@@ -89,12 +91,14 @@
 /apps/renewhelper/ @MendyLanda
 /apps/rssworker/ @MendyLanda
 /apps/screencapture-live/ @MendyLanda
+/apps/screendrop/ @MendyLanda
 /apps/second-brain-cloudflare/ @MendyLanda
 /apps/seeder/ @MendyLanda
 /apps/sharehtml/ @MendyLanda
 /apps/shotsync/ @MendyLanda
 /apps/shrtnr/ @MendyLanda
 /apps/sink/ @MendyLanda
+/apps/skland-attendance/ @MendyLanda
 /apps/statusbeam/ @MendyLanda
 /apps/sveltia-cms-auth/ @MendyLanda
 /apps/synch/ @MendyLanda
@@ -107,6 +111,7 @@
 /apps/veet/ @MendyLanda
 /apps/webrtc-turn/ @MendyLanda
 /apps/workers-firecrawl/ @MendyLanda
+/apps/xiadd-pastebin/ @MendyLanda
 /apps/yaos/ @MendyLanda
 
 /featured.json @MendyLanda

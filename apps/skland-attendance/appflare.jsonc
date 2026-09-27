@@ -1,0 +1,81 @@
+{
+  // Daily sign-in rewards for Arknights and Arknights: Endfield, claimed
+  // through Skland (Hypergryph's community app) for every account whose
+  // credential you enter. A cron trigger runs every two hours and skips
+  // accounts that already signed in that day, so a failed attempt is
+  // retried later the same day.
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "skland-attendance",
+  "name": "Skland Daily Attendance",
+  "summary": "Claims the daily Skland sign-in rewards for your Arknights and Arknights: Endfield accounts on a schedule, with optional notifications of each run.",
+  "homepage": "https://github.com/AEtherside/skland-daily-attendance",
+  "repo": "AEtherside/skland-daily-attendance",
+  // The repository has no LICENSE file; package.json and the README's
+  // License section both say MIT.
+  "license": "MIT",
+  "categories": ["bots", "utilities"],
+  "authors": [
+    { "name": "AEtherside", "github": "AEtherside" },
+    {
+      "name": "Ming Lin",
+      "url": "https://enpitsulin.xyz",
+      "github": "enpitsuLin",
+      "x": "enpitsulin"
+    }
+  ],
+  "maintainers": ["MendyLanda"],
+  // Upstream publishes no release tags; the pin tracks main.
+  "source": { "ref": "main", "sha": "1c0c3a8f8ff24cbde358f3ec441e4fca99e3a1ec" },
+  "install": {
+    "tier": "artifact",
+    "packageManager": "pnpm",
+    // The root config has no `main`: Nitro's cloudflare-module preset writes
+    // the Worker and its deploy config under .output (merging in the root
+    // config's KV binding and cron trigger) and points wrangler at it
+    // through .wrangler/deploy/config.json, which the packer follows as
+    // `wrangler deploy` does.
+    "wranglerConfig": "wrangler.jsonc",
+    "workerName": "skland-attendance",
+    // Upstream's build script is `nitro build`, which picks the Cloudflare
+    // preset only when it detects Cloudflare's own build environment; the
+    // catalog build names the preset instead.
+    "buildCommand": "pnpm exec nitro build --preset cloudflare_module"
+  },
+  // One cron trigger (of the free plan's five per account) and a KV
+  // namespace holding one key per account per day.
+  "plan": "free",
+  "requires": [],
+  "secrets": [
+    {
+      "name": "SKLAND_TOKENS",
+      "label": "Skland credentials",
+      "help": "Sign in at https://user.hypergryph.com/login (or https://www.skland.com/), then open https://web-api.hypergryph.com/account/info/hg (or https://web-api.skland.com/account/info/hg) and copy the value of `content`. For several accounts, separate the values with commas."
+    },
+    {
+      "name": "SKLAND_NOTIFICATION_URLS",
+      "label": "Notification URLs",
+      "help": "Where each run's summary is sent, as Statocysts notification URLs (https://github.com/octoplorer/statocysts), comma separated. They usually hold a bot token or webhook key. Leave empty to only log.",
+      "optional": true
+    }
+  ],
+  "vars": [
+    {
+      "name": "SKLAND_MAX_RETRIES",
+      "label": "Retries",
+      "help": "How many times a failed sign-in is retried within one run.",
+      "default": "3"
+    },
+    {
+      "name": "SKLAND_ANONYMOUS",
+      "label": "Hide character names",
+      "help": "Set to true to leave character names out of logs and notifications. Any value turns it on; leave empty to show them."
+    }
+  ],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "Nothing to open: the Worker signs your accounts in on its own, every two hours at half past, and stops for the day once an account succeeds. {{workerUrl}} only answers Hello World. Follow the runs in the Worker's logs in the Cloudflare dashboard, or set notification URLs."
+    }
+  ],
+  "tokenPermissions": []
+}

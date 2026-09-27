@@ -1,0 +1,48 @@
+{
+  // A web tool for Bilibili's digital collections (收藏集) and decoration
+  // suits: search a collection or paste its share link, browse its items,
+  // and download the videos, images and emoji packs, packed as a zip in the
+  // browser. The Worker looks things up in Bilibili's public API and relays
+  // media from Bilibili's own image and video hosts, and nothing else, since
+  // browsers cannot fetch them directly.
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "collection-down",
+  "name": "Collection Down",
+  "summary": "Browse Bilibili digital collections and decoration suits and download their videos, images and emoji packs, from a Nuxt app on your own Worker.",
+  "homepage": "https://cd.griseo.top",
+  "repo": "heartalborada-del/Collection-Down",
+  "license": "MIT",
+  "categories": ["media", "utilities"],
+  "authors": [
+    { "name": "heartalborada", "url": "https://loliurl.club", "github": "heartalborada-del" }
+  ],
+  "maintainers": ["MendyLanda"],
+  "source": { "ref": "v1.1.2", "sha": "39ad542c9d87eaa5a58ab5eb1e6b4b42e342a9a4" },
+  "install": {
+    "tier": "artifact",
+    // Classic yarn, pinned to 1.22.22 in package.json. One dependency,
+    // @heartalborada-del/svga, resolves from the author's own registry
+    // (.npmrc); the lockfile pins its tarball URL and integrity hash.
+    "packageManager": "yarn",
+    // The config's `main` and `assets` read Nitro's output in .output/;
+    // nuxt.config.ts turns off Nitro's generated deploy config, so there is
+    // no redirect. Its `env.dev` block is upstream's development Worker.
+    "wranglerConfig": "wrangler.json",
+    "workerName": "collection-down",
+    // Upstream's Cloudflare build: nuxt build --preset cloudflare-module.
+    "buildCommand": "yarn run build:cloudflare"
+  },
+  // A Worker and static assets with no storage. Large video downloads pass
+  // through the Worker, and each counts as one request.
+  "plan": "free",
+  "requires": [],
+  "secrets": [],
+  "vars": [],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "Open {{workerUrl}}, search for a collection or paste a Bilibili share link, and download its items. Anyone who finds the address can use it; it keeps no data of its own."
+    }
+  ],
+  "tokenPermissions": []
+}
