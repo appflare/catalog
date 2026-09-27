@@ -1,0 +1,144 @@
+{
+  // An interactive story game whose text, scene images and voices are all
+  // generated as you play, by the AI providers you configure: one
+  // OpenAI-compatible text model, one image model, one vision model that reads
+  // where you click, and optional text to speech. Stories are saved in the
+  // browser. The optional Supabase sign-in, analytics and image proxy are
+  // switched on by NEXT_PUBLIC_ variables that Next.js inlines at build time,
+  // so this build has none of them.
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "infiplot",
+  "name": "InfiPlot",
+  "summary": "An interactive story game generated in real time: AI writes the plot, paints every scene and voices the characters as you play, with the text, image and speech providers you choose.",
+  "homepage": "https://infiplot.com",
+  "repo": "zonghaoyuan/infiplot",
+  "license": "AGPL-3.0-only",
+  "categories": ["ai", "games"],
+  "authors": [{ "name": "Zonghao Yuan", "url": "https://yzh.im", "github": "zonghaoyuan" }],
+  "maintainers": ["MendyLanda"],
+  // InfiPlot publishes no release tags; the pin tracks main.
+  "source": { "ref": "main", "sha": "a60e18bc663caaa134d9323a2b89159b7cc9bd05" },
+  "install": {
+    "tier": "artifact",
+    "packageManager": "pnpm",
+    "wranglerConfig": "wrangler.jsonc",
+    "workerName": "infiplot",
+    // Upstream's Cloudflare build: `next build --webpack` with standalone
+    // output, then OpenNext turns it into .open-next/.
+    "buildCommand": "pnpm run build:cf"
+  },
+  // Upstream: "Cloudflare deployment requires the Workers Paid Plan because
+  // the scene pipeline needs longer CPU time" than the free plan allows.
+  "plan": "paid",
+  "requires": [],
+  "secrets": [
+    {
+      "name": "TEXT_API_KEY",
+      "label": "Text model API key",
+      "help": "API key for the text model's endpoint below."
+    },
+    {
+      "name": "IMAGE_API_KEY",
+      "label": "Image model API key",
+      "help": "API key for the image model's endpoint below, for example a Runware key."
+    },
+    {
+      "name": "VISION_API_KEY",
+      "label": "Vision model API key",
+      "help": "API key for the vision model's endpoint below."
+    },
+    {
+      "name": "TTS_API_KEY",
+      "label": "Speech API key",
+      "help": "API key for text to speech. Leave empty, with the speech endpoint or model, to play without voices.",
+      "optional": true
+    }
+  ],
+  "vars": [
+    {
+      "name": "TEXT_BASE_URL",
+      "label": "Text model endpoint",
+      "help": "Any OpenAI-compatible endpoint: DeepSeek, OpenAI, OpenRouter, Gemini's OpenAI-compatible endpoint, and so on.",
+      "default": "https://api.deepseek.com/v1",
+      "required": true
+    },
+    {
+      "name": "TEXT_MODEL",
+      "label": "Text model",
+      "help": "The model that writes the story.",
+      "default": "deepseek-v4-flash",
+      "required": true
+    },
+    {
+      "name": "IMAGE_BASE_URL",
+      "label": "Image model endpoint",
+      "help": "Runware (detected from the address) or an OpenAI-compatible image endpoint.",
+      "default": "https://api.runware.ai/v1",
+      "required": true
+    },
+    {
+      "name": "IMAGE_MODEL",
+      "label": "Image model",
+      "help": "The model that paints each scene. runware:400@6 is FLUX.2 [klein] 9B.",
+      "default": "runware:400@6",
+      "required": true
+    },
+    {
+      "name": "IMAGE_PROVIDER",
+      "label": "Image protocol",
+      "help": "Leave empty to detect it from the endpoint. Set runware, openai (gpt-image, with reference images) or openai_compatible to force one."
+    },
+    {
+      "name": "VISION_BASE_URL",
+      "label": "Vision model endpoint",
+      "help": "An OpenAI-compatible endpoint with a multimodal model; it reads what you click in a scene.",
+      "default": "https://token-plan-sgp.xiaomimimo.com/v1",
+      "required": true
+    },
+    {
+      "name": "VISION_MODEL",
+      "label": "Vision model",
+      "default": "mimo-v2.5",
+      "required": true
+    },
+    {
+      "name": "TTS_BASE_URL",
+      "label": "Speech endpoint",
+      "help": "Xiaomi MiMo or StepFun (detected from the address). Leave empty to play without voices.",
+      "default": "https://token-plan-sgp.xiaomimimo.com/v1"
+    },
+    {
+      "name": "TTS_SPEECH_MODEL",
+      "label": "Speech model",
+      "default": "mimo-v2.5-tts"
+    },
+    {
+      "name": "MOCK_IMAGE",
+      "label": "Scene images",
+      "help": "Placeholder images skip the image model entirely, for trying the story and voices without image costs.",
+      "type": "select",
+      "options": [
+        { "value": "false", "label": "Generate images" },
+        { "value": "true", "label": "Placeholder images" }
+      ],
+      "default": "false"
+    },
+    {
+      "name": "IMAGE_TIMEOUT_MS",
+      "label": "Image timeout (ms)",
+      "help": "Optional deadline per image request; a request that runs out is retried. Upstream suggests 30000 for Runware."
+    },
+    {
+      "name": "IMAGE_HEDGE_MS",
+      "label": "Image hedge (ms)",
+      "help": "Optional: when a scene image is still not done after this long, a second identical request races it (the provider may bill both). Upstream suggests 15000 for Runware."
+    }
+  ],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "Open {{workerUrl}} and start a story. **There is no sign-in**: anyone who can reach the address plays on your API keys. Put the app behind Cloudflare Access, as upstream recommends for private instances, before you share the link."
+    }
+  ],
+  "tokenPermissions": []
+}
