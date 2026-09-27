@@ -1,0 +1,61 @@
+{
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "email-explorer",
+  "name": "Email Explorer",
+  "summary": "A self-hosted email client: receive mail through Email Routing, read and write it in a web app with folders, search, contacts and several users, with each mailbox in its own Durable Object and attachments in R2.",
+  "homepage": "https://github.com/G4brym/email-explorer",
+  "repo": "G4brym/email-explorer",
+  "license": "MIT",
+  "categories": ["email"],
+  "authors": [
+    {
+      "name": "Gabriel Massadas",
+      "url": "https://massadas.com",
+      "github": "G4brym",
+      "x": "G4brym"
+    }
+  ],
+  "maintainers": ["MendyLanda"],
+  "source": { "ref": "v1.1.0", "sha": "8915b2479550baf7a4f44227730b803e9df5814e" },
+  "install": {
+    "tier": "artifact",
+    "packageManager": "pnpm",
+    // Upstream's own deployment: a small entry in the pnpm workspace that
+    // wraps the email-explorer package with sign-in turned on (the first
+    // account to register becomes the admin). The template/ folder the Deploy
+    // button uses installs the published npm package instead, outside the
+    // workspace, so it cannot be built from this commit.
+    "wranglerConfig": "packages/worker/dev/wrangler.jsonc",
+    "workerName": "email-explorer",
+    // Builds the Vue dashboard, then the worker package, which copies the
+    // dashboard into the folder the wrangler config serves as assets.
+    "buildCommand": "pnpm build",
+    // Mailboxes are created for every address that receives mail, so the
+    // zone's catch-all points at the Worker.
+    "emailRouting": { "catchAll": true }
+  },
+  // Receiving mail, SQLite Durable Objects and R2 fit the free plan. Sending
+  // works for free only to addresses verified in Email Routing; sending to
+  // anyone else needs Email Sending on the domain.
+  "plan": "free",
+  "requires": ["zone", "email-routing", "r2"],
+  // Settings are compiled into the Worker (sign-in on, the first account
+  // becomes the admin); the app reads no secrets or vars.
+  "secrets": [],
+  "vars": [],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "**Register right away.** Open {{workerUrl}} and create an account: the first account becomes the admin, and registration closes after it. Until then anyone who finds the address can take that account."
+    },
+    {
+      "type": "markdown",
+      "content": "Mail to any address of the zone you picked now reaches the app, and a mailbox appears for each address the first time it receives mail. As the admin you can create more users and give them access to mailboxes, with the roles owner, admin, write or read."
+    },
+    {
+      "type": "markdown",
+      "content": "Sending uses the Worker's `SEND_EMAIL` binding. Without further setup it can only send to addresses verified under Email Routing, Destination addresses. To send to anyone, turn on Email Sending for the domain."
+    }
+  ],
+  "tokenPermissions": []
+}
