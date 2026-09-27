@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-27T02:09:18.148Z",
+  "generatedAt": "2026-09-27T02:23:54.001Z",
   "apps": [
     {
       "slug": "2fa",
@@ -582,6 +582,50 @@
       "revision": 1
     },
     {
+      "slug": "edgeever",
+      "name": "EdgeEver",
+      "summary": "An Evernote-style notes and knowledge base with a three-pane layout, full-text search, public note sharing, AI features and a built-in MCP server, on D1 and R2.",
+      "version": "1.88.0",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/edgeever@1.88.0/edgeever-1.88.0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/edgeever@1.88.0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/edgeever@1.88.0/manifest.sig"
+      },
+      "digest": "a88c7129468281307367af00213e202bb3f8ff0dc6e0d0807b71c68f21ee69ea",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "r2"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "tianma-if",
+          "github": "tianma-if",
+          "x": "tianma_if"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/edgeever/icon.svg",
+          "sha256": "1f13ba9f2ac4ea325eddce44a427eed4e98b64b9078b23de067ed23e67fe7257"
+        },
+        "screenshots": []
+      },
+      "services": [
+        "d1",
+        "r2"
+      ],
+      "categories": [
+        "notes",
+        "productivity"
+      ],
+      "revision": 1
+    },
+    {
       "slug": "elm-chat",
       "name": "elm.chat",
       "summary": "Account-free, end-to-end encrypted chat rooms that disappear: single-use invites, messages that vanish on a timer, and no transcript kept on the server. One Worker and a Durable Object per room.",
@@ -860,6 +904,59 @@
       "revision": 1
     },
     {
+      "slug": "insightflare",
+      "name": "InsightFlare",
+      "summary": "Privacy-friendly web analytics that runs entirely on Cloudflare: a tracking script, a realtime dashboard with maps and funnels, and an API for AI agents, on D1, a Durable Object and Analytics Engine.",
+      "version": "0.7.1",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/insightflare@0.7.1/insightflare-0.7.1.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/insightflare@0.7.1/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/insightflare@0.7.1/manifest.sig"
+      },
+      "digest": "d5732716fbd80f95c7f334922ec49ba7065f07b842b111c3d304fa840f8fc52e",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "analytics-engine"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "RavelloH",
+          "url": "https://ravelloh.com",
+          "github": "RavelloH",
+          "x": "ravellohh"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/insightflare/icon.png",
+          "sha256": "1cbe17dddadd86cbddfc378205a936fc9f2f1d0fdae0f6c90c6bfa527ba8a8e5"
+        },
+        "screenshots": [
+          {
+            "url": "https://appflare.github.io/catalog/apps/insightflare/screenshots/01-realtime-visitors.png",
+            "sha256": "932eb606f86e104d6dd685bb0eb9d837b971c6f3e40cc152eaafb218b69b3867",
+            "alt": "InsightFlare: Realtime visitors"
+          }
+        ]
+      },
+      "services": [
+        "kv",
+        "d1",
+        "durable-objects",
+        "analytics-engine",
+        "cron"
+      ],
+      "categories": [
+        "analytics"
+      ],
+      "revision": 1
+    },
+    {
       "slug": "mail2telegram",
       "name": "mail2telegram",
       "summary": "Receive your domain's email in Telegram: a push for every message and a Mini App inbox with attachments, filters, and AI summaries.",
@@ -977,6 +1074,70 @@
       ],
       "categories": [
         "email"
+      ],
+      "revision": 1
+    },
+    {
+      "slug": "mailysend",
+      "name": "MailySend",
+      "summary": "A Resend-compatible email platform in your own account: transactional sending, broadcasts, automations, inbound mail and deliverability analytics, over Cloudflare Email Service, Amazon SES, Resend or SMTP.",
+      "version": "0.0.0-20260921.3708d2f",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/mailysend@0.0.0-20260921.3708d2f/mailysend-0.0.0-20260921.3708d2f.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/mailysend@0.0.0-20260921.3708d2f/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/mailysend@0.0.0-20260921.3708d2f/manifest.sig"
+      },
+      "digest": "82ab415f11783f77fb0cba2870e4a0719adca37a1d19adde94ae8acc1978e282",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "r2"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Gagandeep Singh",
+          "github": "GagnDeep"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/mailysend/icon.svg",
+          "sha256": "cb9f0b8f7c27830a8f6ccce92b1169c3d02a2205efaa3e3944d17f0c38cefb2b"
+        },
+        "screenshots": [
+          {
+            "url": "https://appflare.github.io/catalog/apps/mailysend/screenshots/01-dashboard-overview.png",
+            "sha256": "b9f4875a6220bcb56b94bb5b8c5d2b01726755b55f4f0dea8a9b6cee36c37fe2",
+            "alt": "MailySend: Dashboard overview"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/mailysend/screenshots/02-broadcast.png",
+            "sha256": "05c75bc3f8ec207a2ea12e03d3547827f8b1ed5b737c3985adb480702c45350f",
+            "alt": "MailySend: Broadcast"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/mailysend/screenshots/03-analytics.png",
+            "sha256": "d480005700295e8c0ce603633050cc2daa37775d8c26640a682a5ac49eff6207",
+            "alt": "MailySend: Analytics"
+          }
+        ]
+      },
+      "services": [
+        "kv",
+        "d1",
+        "r2",
+        "durable-objects",
+        "queues",
+        "cron",
+        "email-routing"
+      ],
+      "categories": [
+        "email",
+        "marketing"
       ],
       "revision": 1
     },
