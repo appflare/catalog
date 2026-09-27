@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-27T07:22:05.286Z",
+  "generatedAt": "2026-09-27T09:17:46.035Z",
   "apps": [
     {
       "slug": "2fa",
@@ -149,6 +149,47 @@
       "revision": 1
     },
     {
+      "slug": "alle",
+      "name": "Alle",
+      "summary": "One inbox for all your mail: forward your Gmail, Outlook and other accounts to your domain and read them together, with attachments, plus throwaway addresses on the same domain.",
+      "version": "0.0.0-20260605.9fce68a",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/alle@0.0.0-20260605.9fce68a/alle-0.0.0-20260605.9fce68a.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/alle@0.0.0-20260605.9fce68a/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/alle@0.0.0-20260605.9fce68a/manifest.sig"
+      },
+      "digest": "63d5421e40114bfed289296ebc4de68ec3a7241fff216dc83e3127e65dda47a4",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "r2",
+        "zone",
+        "email-routing"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "BESTRUI",
+          "url": "https://bestrui.com",
+          "github": "bestruirui"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "services": [
+        "d1",
+        "r2",
+        "email-routing",
+        "zone"
+      ],
+      "categories": [
+        "email",
+        "productivity"
+      ],
+      "revision": 1
+    },
+    {
       "slug": "atalaya",
       "name": "Atalaya",
       "summary": "Uptime monitoring and a status page on one Worker: HTTP, TCP and DNS checks every minute, optionally from chosen Cloudflare regions, webhook alerts, and 90 days of history in D1.",
@@ -278,6 +319,43 @@
       "revision": 1
     },
     {
+      "slug": "bashupload",
+      "name": "bashupload",
+      "summary": "Upload a file from the terminal with curl or from a browser and get a link that works for one download or until it expires, with an optional password, on R2.",
+      "version": "0.0.0-20260801.1049015",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/bashupload@0.0.0-20260801.1049015/bashupload-0.0.0-20260801.1049015.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/bashupload@0.0.0-20260801.1049015/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/bashupload@0.0.0-20260801.1049015/manifest.sig"
+      },
+      "digest": "39f45c2c9398d92f6ee8e337a7b205a6a8d599d5b6921caa97fa8d870e7cbb6e",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "r2"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "DullJZ",
+          "url": "https://www.jz-home.top",
+          "github": "DullJZ"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "services": [
+        "r2",
+        "cron"
+      ],
+      "categories": [
+        "files",
+        "sharing"
+      ],
+      "revision": 1
+    },
+    {
       "slug": "binthere",
       "name": "BinThere",
       "summary": "A zero-knowledge pastebin for one-time notes: encrypted in the browser with AES-256-GCM, burned on first read by a Durable Object, and gone after 24 hours.",
@@ -320,6 +398,45 @@
       "categories": [
         "sharing",
         "privacy"
+      ],
+      "revision": 1
+    },
+    {
+      "slug": "blobatar",
+      "name": "blobatar API",
+      "summary": "Your own avatar endpoint: GET /avatar/<name> returns a deterministic geometric blobatar SVG for any username, email or id, with Gravatar-compatible URLs.",
+      "version": "2.7.0",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/blobatar@2.7.0/blobatar-2.7.0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/blobatar@2.7.0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/blobatar@2.7.0/manifest.sig"
+      },
+      "digest": "62d3e750594ecc206a6d5ad06e402a09ee33493ef0dfff5bc63a88d88695f95e",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Alain",
+          "url": "https://blobatar.dev",
+          "github": "Alain00"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "cover": {
+          "url": "https://appflare.github.io/catalog/apps/blobatar/cover.png",
+          "sha256": "d2c30b4cc8d10606ea0bfb10d8af1ef9e02b2e5e52c6c351b190820499861bcf"
+        },
+        "screenshots": []
+      },
+      "services": [],
+      "categories": [
+        "developer-tools",
+        "utilities"
       ],
       "revision": 1
     },
@@ -383,6 +500,79 @@
       "revision": 1
     },
     {
+      "slug": "browser-relay",
+      "name": "Browser Relay Hub",
+      "summary": "Your own relay for Browser Relay: let AI agents on other machines drive the Chrome you are signed in to, through a hub in your account instead of the hosted one.",
+      "version": "1.5.4",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/browser-relay@1.5.4/browser-relay-1.5.4.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/browser-relay@1.5.4/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/browser-relay@1.5.4/manifest.sig"
+      },
+      "digest": "2d60450f4471679b9d6932d9db958fe3797138ab565f52f2b50b7fd4d7dc6cd4",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "reliefe",
+          "github": "reliefeai"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/browser-relay/icon.png",
+          "sha256": "8c2c59b8082c9f77e33bafad81906d86f914ccf4aee78c97a9921dfd5927de57"
+        },
+        "screenshots": []
+      },
+      "services": [
+        "durable-objects"
+      ],
+      "categories": [
+        "ai",
+        "remote-access"
+      ],
+      "revision": 1
+    },
+    {
+      "slug": "cap-worker",
+      "name": "Cap Worker",
+      "summary": "A self-hosted backend for Cap, the privacy-friendly proof-of-work CAPTCHA: your sites get challenges and verify tokens against your own Worker, with no tracking.",
+      "version": "0.0.0-20250915.39eb690",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/cap-worker@0.0.0-20250915.39eb690/cap-worker-0.0.0-20250915.39eb690.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/cap-worker@0.0.0-20250915.39eb690/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/cap-worker@0.0.0-20250915.39eb690/manifest.sig"
+      },
+      "digest": "1870a689474b6a9a72a3d439898e86e41fc856e96dd149f90d3e14a7cb64c353",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "xyTom",
+          "github": "xyTom"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "services": [
+        "durable-objects"
+      ],
+      "categories": [
+        "security",
+        "developer-tools"
+      ],
+      "revision": 1
+    },
+    {
       "slug": "cattopic",
       "name": "CattoPic",
       "summary": "A self-hosted image host: upload, tag, and browse images, with WebP and AVIF copies, expiry, and a public random-image API, on R2, D1, KV, Queues, and Cloudflare Images.",
@@ -427,6 +617,42 @@
       "categories": [
         "files",
         "storage"
+      ],
+      "revision": 1
+    },
+    {
+      "slug": "cf-server-monitor",
+      "name": "CF Server Monitor",
+      "summary": "Monitor your servers from a Worker: live CPU, memory, disk, traffic and latency from a small agent on each machine, with history, a map, offline and threshold alerts, and expiry reminders.",
+      "version": "0.0.0-20260927.dfb9bf1",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/cf-server-monitor@0.0.0-20260927.dfb9bf1/cf-server-monitor-0.0.0-20260927.dfb9bf1.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/cf-server-monitor@0.0.0-20260927.dfb9bf1/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/cf-server-monitor@0.0.0-20260927.dfb9bf1/manifest.sig"
+      },
+      "digest": "58e2be9c29aefc6ee7376bfaf05b34533431ab61c8eceb070cec5a26bf60e85f",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "huilang-me",
+          "url": "https://demo.huilang.me",
+          "github": "huilang-me"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "services": [
+        "d1",
+        "durable-objects",
+        "cron"
+      ],
+      "categories": [
+        "monitoring",
+        "developer-tools"
       ],
       "revision": 1
     },
@@ -556,6 +782,43 @@
       "categories": [
         "files",
         "storage"
+      ],
+      "revision": 1
+    },
+    {
+      "slug": "cloudflare-prometheus-exporter",
+      "name": "Cloudflare Prometheus Exporter",
+      "summary": "Export Cloudflare analytics as Prometheus metrics: requests, bandwidth, threats, Workers, load balancers, certificates, Magic Transit and more, for every account and zone your API token can read, refreshed each minute by Durable Objects.",
+      "version": "0.0.1-beta.15",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/cloudflare-prometheus-exporter@0.0.1-beta.15/cloudflare-prometheus-exporter-0.0.1-beta.15.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/cloudflare-prometheus-exporter@0.0.1-beta.15/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/cloudflare-prometheus-exporter@0.0.1-beta.15/manifest.sig"
+      },
+      "digest": "dc319d686ace4c5a83fc13900d278c32f4f421c9e17dd23158f0ac8209400fbc",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Cloudflare",
+          "url": "https://www.cloudflare.com",
+          "github": "cloudflare"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "services": [
+        "kv",
+        "durable-objects",
+        "zone"
+      ],
+      "categories": [
+        "monitoring",
+        "analytics",
+        "developer-tools"
       ],
       "revision": 1
     },
@@ -700,6 +963,38 @@
       "revision": 1
     },
     {
+      "slug": "collection-down",
+      "name": "Collection Down",
+      "summary": "Browse Bilibili digital collections and decoration suits and download their videos, images and emoji packs, from a Nuxt app on your own Worker.",
+      "version": "1.1.2",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/collection-down@1.1.2/collection-down-1.1.2.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/collection-down@1.1.2/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/collection-down@1.1.2/manifest.sig"
+      },
+      "digest": "fa74971e627a7cdefd2f62156314b88f2ff96f0026c7e54a87a8a8d774c616e7",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "heartalborada",
+          "url": "https://loliurl.club",
+          "github": "heartalborada-del"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "services": [],
+      "categories": [
+        "media",
+        "utilities"
+      ],
+      "revision": 1
+    },
+    {
       "slug": "counterscale",
       "name": "Counterscale",
       "summary": "Privacy-friendly web analytics you host yourself: a tracking script, a dashboard, and long-term rollups in R2, on Workers Analytics Engine.",
@@ -832,6 +1127,84 @@
       "categories": [
         "developer-tools",
         "ai"
+      ],
+      "revision": 1
+    },
+    {
+      "slug": "dictdeck",
+      "name": "DictDeck",
+      "summary": "A self-hosted Japanese dictionary, translator and flashcard deck: several dictionary sources, AI explanations on Workers AI or your own LLM provider, saved words and review cards, a Telegram bot and an MCP server.",
+      "version": "0.20.0",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/dictdeck@0.20.0/dictdeck-0.20.0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/dictdeck@0.20.0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/dictdeck@0.20.0/manifest.sig"
+      },
+      "digest": "4a397c48f4ae267f2c0752a323cadda0e7109993eac4b273ac599965aa6952a8",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "workers-ai"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Asutorufa",
+          "github": "Asutorufa",
+          "x": "Asutorufa"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "services": [
+        "d1",
+        "cron",
+        "workers-ai"
+      ],
+      "categories": [
+        "education",
+        "ai"
+      ],
+      "revision": 1
+    },
+    {
+      "slug": "dispoflare",
+      "name": "Dispoflare",
+      "summary": "Disposable email addresses on your own domains: create a random or chosen address that forwards to your inbox until the date you pick, on Email Routing.",
+      "version": "2.0.1",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/dispoflare@2.0.1/dispoflare-2.0.1.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/dispoflare@2.0.1/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/dispoflare@2.0.1/manifest.sig"
+      },
+      "digest": "d56bad550108a932ddad6e07f65c5e66302bf58dac358c7916be9a2251bc2a7b",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "zone",
+        "email-routing"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Léo Colombaro",
+          "url": "https://colombaro.fr",
+          "github": "LeoColomb",
+          "x": "LeoColomb"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "services": [
+        "cron",
+        "email-routing",
+        "zone"
+      ],
+      "categories": [
+        "email",
+        "privacy"
       ],
       "revision": 1
     },
@@ -1229,6 +1602,48 @@
       "revision": 1
     },
     {
+      "slug": "exception-notify",
+      "name": "Exception-Notify workspace",
+      "summary": "The AI analysis page for Exception-Notify alerts from Spring Boot: open an exception from DingTalk, Feishu or WeChat Work and work through it with your own AI provider.",
+      "version": "0.0.0-20251226.990d2e6",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/exception-notify@0.0.0-20251226.990d2e6/exception-notify-0.0.0-20251226.990d2e6.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/exception-notify@0.0.0-20251226.990d2e6/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/exception-notify@0.0.0-20251226.990d2e6/manifest.sig"
+      },
+      "digest": "bf2a6e87861c3207f52627aef51d6180721d34f782a73bfc847f861c4de7f4a5",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "XiaoDingSiRen",
+          "url": "https://nolimit35.cn",
+          "github": "GuangYiDing"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/exception-notify/icon.png",
+          "sha256": "fb4d5a07bac497e5318dd416ed4ce4806798574c31134fb5872bb4945602cf44"
+        },
+        "screenshots": []
+      },
+      "services": [
+        "kv",
+        "d1"
+      ],
+      "categories": [
+        "developer-tools",
+        "monitoring"
+      ],
+      "revision": 1
+    },
+    {
       "slug": "feedlog",
       "name": "FeedLog",
       "summary": "Feedback boards, a public roadmap and an AI-assisted changelog for your product, with an embeddable widget. Runs on Workers with R2 for uploads and your own Postgres through Hyperdrive.",
@@ -1360,6 +1775,85 @@
       "revision": 1
     },
     {
+      "slug": "fodi",
+      "name": "FODI",
+      "summary": "A fast index of your OneDrive: browse, preview and download files from a web page, with password-protected folders, signed download links, uploads and WebDAV, on Workers KV.",
+      "version": "0.0.0-20260403.20a227a",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/fodi@0.0.0-20260403.20a227a/fodi-0.0.0-20260403.20a227a.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/fodi@0.0.0-20260403.20a227a/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/fodi@0.0.0-20260403.20a227a/manifest.sig"
+      },
+      "digest": "db03f0e523c0ea4739664957000d2b5be1a60bbbe89a712ba3a9a5028ec206a9",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "LOGI",
+          "url": "https://logi.im",
+          "github": "vcheckzen"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/fodi/icon.png",
+          "sha256": "1dc058ac28d87601b047a5d78678fe8d9a0298cd639f1ed8eb207759ed57382f"
+        },
+        "screenshots": []
+      },
+      "services": [
+        "kv",
+        "cron"
+      ],
+      "categories": [
+        "files",
+        "sharing"
+      ],
+      "revision": 1
+    },
+    {
+      "slug": "folia",
+      "name": "Folia",
+      "summary": "A web music player built around full-screen animated lyrics, for your local library or a Navidrome server, with automatic lyric matching and AI colour themes from your own Gemini key.",
+      "version": "0.7.9",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/folia@0.7.9/folia-0.7.9.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/folia@0.7.9/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/folia@0.7.9/manifest.sig"
+      },
+      "digest": "e432e7fbb6569c7f2f0ddfb62bf15229a195b67420e464b83c2d5deb13141234",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "chthollyphile",
+          "github": "chthollyphile"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/folia/icon.svg",
+          "sha256": "0045ede40bee2e9ac4f40a3a803b16febbf75ab9beca6c438bfbd1e6cd5529a8"
+        },
+        "screenshots": []
+      },
+      "services": [],
+      "categories": [
+        "media"
+      ],
+      "revision": 1
+    },
+    {
       "slug": "formzero",
       "name": "FormZero",
       "summary": "A form backend for static sites: send HTML forms or JSON to your own endpoint and browse, chart and export the submissions from a dashboard.",
@@ -1401,6 +1895,80 @@
       ],
       "categories": [
         "business",
+        "utilities"
+      ],
+      "revision": 1
+    },
+    {
+      "slug": "freemail",
+      "name": "Freemail",
+      "summary": "Temporary and domain mailboxes on your own domain: create addresses in the browser, read what Email Routing delivers, share mailboxes with users, and send through Resend or SendFlare, on D1 and R2.",
+      "version": "5.3.1",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/freemail@5.3.1/freemail-5.3.1.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/freemail@5.3.1/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/freemail@5.3.1/manifest.sig"
+      },
+      "digest": "305ec47475e929031ab53977059977f3966526ed06e06219d6373acc13101229",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "r2",
+        "zone",
+        "email-routing"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "iding",
+          "url": "https://blog.iding.qzz.io",
+          "github": "idinging"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "services": [
+        "d1",
+        "r2",
+        "email-routing",
+        "zone"
+      ],
+      "categories": [
+        "email",
+        "privacy"
+      ],
+      "revision": 1
+    },
+    {
+      "slug": "fxtiktok",
+      "name": "fxTikTok",
+      "summary": "Fixes TikTok embeds on Discord and other chat apps: swap tiktok.com for your own address in a link and it previews the video or slideshow inline, with the author, caption and counts.",
+      "version": "0.0.0-20260906.66fbae3",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/fxtiktok@0.0.0-20260906.66fbae3/fxtiktok-0.0.0-20260906.66fbae3.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/fxtiktok@0.0.0-20260906.66fbae3/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/fxtiktok@0.0.0-20260906.66fbae3/manifest.sig"
+      },
+      "digest": "4da2afdd257ef81c86c3e11dc09de0cdbd4df9a73f7dec9d9358d846efaac414",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "dargy",
+          "url": "https://dar.gy",
+          "github": "okdargy",
+          "x": "okdargy"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "services": [],
+      "categories": [
+        "media",
         "utilities"
       ],
       "revision": 1
@@ -1543,6 +2111,50 @@
       "revision": 1
     },
     {
+      "slug": "hashpay",
+      "name": "HashPay",
+      "summary": "A crypto payment gateway run from your own Telegram bot: take USDT, USDC and native coins on eight chains or through Binance, OKX and OKPay, with a signed order API, merchant callbacks and an admin console.",
+      "version": "0.0.0-20260919.599ef7f",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/hashpay@0.0.0-20260919.599ef7f/hashpay-0.0.0-20260919.599ef7f.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/hashpay@0.0.0-20260919.599ef7f/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/hashpay@0.0.0-20260919.599ef7f/manifest.sig"
+      },
+      "digest": "afd55ec8e0f4f3991cc73ee7d5292a48a54c54c91cef8ef26941b6e33ac10154",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "TGDash",
+          "github": "TGDash"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "screenshots": [
+          {
+            "url": "https://appflare.github.io/catalog/apps/hashpay/screenshots/01-admin-overview.png",
+            "sha256": "c7023d3e5c84a78ea3a15fedded3fd631213b8a525d6a185d6018f31e16345f1",
+            "alt": "HashPay: Admin overview"
+          }
+        ]
+      },
+      "services": [
+        "d1",
+        "queues",
+        "cron"
+      ],
+      "categories": [
+        "finance",
+        "business"
+      ],
+      "revision": 1
+    },
+    {
       "slug": "hqbase",
       "name": "HQBase",
       "summary": "Your team's email workspace in your own account: shared mailboxes, drafts, labels, contacts and audit history, with a remote MCP server for agents.",
@@ -1653,6 +2265,66 @@
       "categories": [
         "files",
         "sharing"
+      ],
+      "revision": 1
+    },
+    {
+      "slug": "infiplot",
+      "name": "InfiPlot",
+      "summary": "An interactive story game generated in real time: AI writes the plot, paints every scene and voices the characters as you play, with the text, image and speech providers you choose.",
+      "version": "0.0.0-20260702.a60e18b",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/infiplot@0.0.0-20260702.a60e18b/infiplot-0.0.0-20260702.a60e18b.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/infiplot@0.0.0-20260702.a60e18b/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/infiplot@0.0.0-20260702.a60e18b/manifest.sig"
+      },
+      "digest": "04fe8982bc7549a73181924503b159f9cef55876dbc5159f135b9089f649ace9",
+      "tier": "artifact",
+      "plan": "paid",
+      "requires": [],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Zonghao Yuan",
+          "url": "https://yzh.im",
+          "github": "zonghaoyuan"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/infiplot/icon.svg",
+          "sha256": "0b5b5c2428e2b47bfacf7564f3efaa35d1700b3d34e17a007cd150572e53a802"
+        },
+        "screenshots": [
+          {
+            "url": "https://appflare.github.io/catalog/apps/infiplot/screenshots/01-scene.png",
+            "sha256": "0fe14d0ed17ee4cd72c57d9baa53fe2919c5b7c01ec85ca417a623a29b75f89b",
+            "alt": "InfiPlot: Scene"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/infiplot/screenshots/02-scene.png",
+            "sha256": "d9bd912f9cb21651d0e8e16a589c62d490108eabed601eb7db9290ada4b56e9f",
+            "alt": "InfiPlot: Scene"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/infiplot/screenshots/03-scene.png",
+            "sha256": "da1a777fa008aebc13eb915f66fe7c6ab3f5edbe31671695e7f507ce360c33aa",
+            "alt": "InfiPlot: Scene"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/infiplot/screenshots/04-scene.png",
+            "sha256": "096a1225f6ba0ed010d26c14446c387d7db679a7b7c2ddd4500f5be8f7a86788",
+            "alt": "InfiPlot: Scene"
+          }
+        ]
+      },
+      "services": [],
+      "categories": [
+        "ai",
+        "games"
       ],
       "revision": 1
     },
@@ -1805,6 +2477,74 @@
       "revision": 1
     },
     {
+      "slug": "jina-mcp",
+      "name": "Jina AI MCP Server",
+      "summary": "Jina AI's remote MCP server on your own Worker: read pages and PDFs as Markdown, take screenshots, search the web, arXiv and SSRN, and rerank or deduplicate text with Jina's Reader, Search, Embeddings and Reranker APIs.",
+      "version": "0.0.0-20260918.5d6eb19",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/jina-mcp@0.0.0-20260918.5d6eb19/jina-mcp-0.0.0-20260918.5d6eb19.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/jina-mcp@0.0.0-20260918.5d6eb19/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/jina-mcp@0.0.0-20260918.5d6eb19/manifest.sig"
+      },
+      "digest": "f3dd088a702164bad443be07b89e3ee2edcd340a926eb2927ff607a23269fe09",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Jina AI",
+          "url": "https://jina.ai",
+          "github": "jina-ai",
+          "x": "JinaAI_"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "services": [],
+      "categories": [
+        "ai",
+        "developer-tools"
+      ],
+      "revision": 1
+    },
+    {
+      "slug": "kiss-worker",
+      "name": "KISS Worker",
+      "summary": "Your own sync server for KISS Translator: keeps the extension's settings, rules and vocabulary in step across browsers and serves shared rule sets.",
+      "version": "0.0.0-20260802.7f6efde",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/kiss-worker@0.0.0-20260802.7f6efde/kiss-worker-0.0.0-20260802.7f6efde.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/kiss-worker@0.0.0-20260802.7f6efde/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/kiss-worker@0.0.0-20260802.7f6efde/manifest.sig"
+      },
+      "digest": "021f7c7fc69a45ae6a2e0e1daf6865194baec0945aaa17488fc274495be35df7",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Gabe",
+          "url": "https://fishjar.com",
+          "github": "fishjar"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "services": [
+        "kv",
+        "durable-objects"
+      ],
+      "categories": [
+        "sync",
+        "utilities"
+      ],
+      "revision": 1
+    },
+    {
       "slug": "kukuroo",
       "name": "Kukuroo",
       "summary": "Your own Web Push service in one Worker: send notifications to your iPhone, iPad or Mac with a single authenticated POST, no vendor and no native app.",
@@ -1840,6 +2580,37 @@
       ],
       "categories": [
         "notifications"
+      ],
+      "revision": 1
+    },
+    {
+      "slug": "lastfm-recently-played",
+      "name": "Last.fm Recently Played",
+      "summary": "An SVG card of your recent Last.fm scrobbles for a GitHub profile README, with themes, artwork, stats and loved tracks, plus a configurator page to build the card's URL.",
+      "version": "0.0.0-20260909.cce76de",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/lastfm-recently-played@0.0.0-20260909.cce76de/lastfm-recently-played-0.0.0-20260909.cce76de.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/lastfm-recently-played@0.0.0-20260909.cce76de/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/lastfm-recently-played@0.0.0-20260909.cce76de/manifest.sig"
+      },
+      "digest": "e96d668d663eab792fd82ba0d4527b01ed5236056d54174942a1b6d2c95a41d9",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "JeffreyCA",
+          "github": "JeffreyCA"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "services": [],
+      "categories": [
+        "media",
+        "utilities"
       ],
       "revision": 1
     },
@@ -2074,6 +2845,42 @@
       ],
       "categories": [
         "sharing",
+        "developer-tools"
+      ],
+      "revision": 1
+    },
+    {
+      "slug": "memory-note",
+      "name": "Memory Note",
+      "summary": "A small notes and to-do API behind one token: push, list, edit, move and delete notes over REST from Siri Shortcuts, Alfred, a home screen widget or any script, stored in Workers KV or a Notion database.",
+      "version": "0.0.0-20230822.c07fdc0",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/memory-note@0.0.0-20230822.c07fdc0/memory-note-0.0.0-20230822.c07fdc0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/memory-note@0.0.0-20230822.c07fdc0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/memory-note@0.0.0-20230822.c07fdc0/manifest.sig"
+      },
+      "digest": "8cf16f6b3e8993cf2d24a1721b05a8ea239c0eb8c5ae3a8814fcd77610c9b7a2",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "azu",
+          "url": "https://efcl.info",
+          "github": "azu",
+          "x": "azu_re"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "services": [
+        "kv"
+      ],
+      "categories": [
+        "notes",
+        "productivity",
         "developer-tools"
       ],
       "revision": 1
@@ -2316,6 +3123,39 @@
       "revision": 1
     },
     {
+      "slug": "neriplayer-listen-together",
+      "name": "NeriPlayer Listen Together",
+      "summary": "Your own listen-together server for the NeriPlayer Android app: create a room, share the invite, and everyone's playback, queue and track changes stay in sync.",
+      "version": "0.0.0-20260817.5ec8a8b",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/neriplayer-listen-together@0.0.0-20260817.5ec8a8b/neriplayer-listen-together-0.0.0-20260817.5ec8a8b.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/neriplayer-listen-together@0.0.0-20260817.5ec8a8b/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/neriplayer-listen-together@0.0.0-20260817.5ec8a8b/manifest.sig"
+      },
+      "digest": "e1521622326a9584dcd0475fd48d8bd6408043b5adbb84d380cadcbb69ad984e",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "TheSmallHanCat",
+          "github": "TheSmallHanCat"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "services": [
+        "durable-objects"
+      ],
+      "categories": [
+        "media",
+        "sync"
+      ],
+      "revision": 1
+    },
+    {
       "slug": "nodecrypt",
       "name": "NodeCrypt",
       "summary": "End-to-end encrypted chat rooms in the browser: no accounts and no stored history, with private messages, images, and files, relayed by a Durable Object that never sees plaintext.",
@@ -2507,6 +3347,45 @@
       ],
       "categories": [
         "email"
+      ],
+      "revision": 1
+    },
+    {
+      "slug": "one-ip",
+      "name": "One IP",
+      "summary": "IP and network diagnostics: look up an address's location, ASN, reputation and risk, check your exit IP, DNS, CDN, WebRTC and browser fingerprint, and run a speed test.",
+      "version": "0.0.0-20260924.3d65314",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/one-ip@0.0.0-20260924.3d65314/one-ip-0.0.0-20260924.3d65314.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/one-ip@0.0.0-20260924.3d65314/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/one-ip@0.0.0-20260924.3d65314/manifest.sig"
+      },
+      "digest": "ff8a2b14a86234119491855b9a8f09cec88d54247e7563f939bb3e7adb2b6199",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Hu Zhihui",
+          "url": "https://huzhihui.com",
+          "github": "zhihui-hu"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/one-ip/icon.svg",
+          "sha256": "f0a7daafcf8700026135cb75c47395b894e96036e7fe2f9a80179d4a373d2538"
+        },
+        "screenshots": []
+      },
+      "services": [],
+      "categories": [
+        "networking",
+        "utilities"
       ],
       "revision": 1
     },
@@ -2778,6 +3657,53 @@
       "revision": 1
     },
     {
+      "slug": "playwright-mcp",
+      "name": "Playwright MCP",
+      "summary": "A remote MCP server that lets AI assistants browse for you: navigate, click, type, read page snapshots and take screenshots in a headless browser from Cloudflare Browser Rendering.",
+      "version": "0.0.0-20251220.ee81e27",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/playwright-mcp@0.0.0-20251220.ee81e27/playwright-mcp-0.0.0-20251220.ee81e27.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/playwright-mcp@0.0.0-20251220.ee81e27/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/playwright-mcp@0.0.0-20251220.ee81e27/manifest.sig"
+      },
+      "digest": "4c5620238aa509e5d34c3de7b37d3be3c81120fde37ccf5c6039be7123bf4386",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "browser-rendering"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Cloudflare",
+          "url": "https://www.cloudflare.com",
+          "github": "cloudflare",
+          "x": "Cloudflare"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "screenshots": [
+          {
+            "url": "https://appflare.github.io/catalog/apps/playwright-mcp/screenshots/01-workers-ai-playground.png",
+            "sha256": "0babb2b842dcb3b300f23734b7a882a4f2533585d3489d2df56e796a1d9c1f7f",
+            "alt": "Playwright MCP: Workers ai playground"
+          }
+        ]
+      },
+      "services": [
+        "durable-objects",
+        "browser-rendering"
+      ],
+      "categories": [
+        "ai",
+        "developer-tools"
+      ],
+      "revision": 1
+    },
+    {
       "slug": "projektor",
       "name": "Projektor",
       "summary": "An issue tracker and wiki for teams and their AI coding agents: issues, boards, sprints and pages in the browser, and the same actions over MCP.",
@@ -2979,6 +3905,41 @@
       "revision": 1
     },
     {
+      "slug": "r2-webdav",
+      "name": "r2-webdav",
+      "summary": "A WebDAV server for an R2 bucket: mount it as a network drive in Finder, Windows Explorer or any WebDAV client, with locking and one user name and password.",
+      "version": "0.0.0-20260713.d39f88f",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/r2-webdav@0.0.0-20260713.d39f88f/r2-webdav-0.0.0-20260713.d39f88f.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/r2-webdav@0.0.0-20260713.d39f88f/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/r2-webdav@0.0.0-20260713.d39f88f/manifest.sig"
+      },
+      "digest": "e2d54b9014c3e30c4da3be888f9263c304f0fc37365b24760e23c7cf35abfbd3",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "r2"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Aber",
+          "github": "abersheeran"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "services": [
+        "r2"
+      ],
+      "categories": [
+        "files",
+        "storage"
+      ],
+      "revision": 1
+    },
+    {
       "slug": "rdyrct",
       "name": "rdyrct",
       "summary": "A URL shortener for teams: organizations with roles, branded short links and QR codes, click analytics that never store an IP, an MCP server, and a KV redirect path in front of D1.",
@@ -3111,6 +4072,172 @@
       "revision": 1
     },
     {
+      "slug": "renewhelper",
+      "name": "RenewHelper",
+      "summary": "Keep track of subscriptions, domain renewals, server expiry dates and birthdays: solar and lunar cycles, reminders through Telegram, email, webhooks and a dozen other channels, a calendar with an iCal feed, and a spending dashboard, on Workers KV.",
+      "version": "3.8.4",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/renewhelper@3.8.4/renewhelper-3.8.4.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/renewhelper@3.8.4/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/renewhelper@3.8.4/manifest.sig"
+      },
+      "digest": "2b5821202c2f13e11a1f1c88bc719f30ff93760f770295a7bfcc33ae73b34dda",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "LOSTFREE",
+          "github": "ieax"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/renewhelper/icon.svg",
+          "sha256": "06c039c8dd7c6b8df5947822839a8ab20d485844e962224a894b308a39649a4d"
+        },
+        "screenshots": [
+          {
+            "url": "https://appflare.github.io/catalog/apps/renewhelper/screenshots/01-services.png",
+            "sha256": "78679b5182271aa45c9d5790df1def394f3cdac28c771ffd51fe7c93295e93d9",
+            "alt": "RenewHelper: Services"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/renewhelper/screenshots/02-spending-dashboard.png",
+            "sha256": "4bac44784e883ff65247f3d45e0fd0e9897dd75793825436000c7404ed3eab66",
+            "alt": "RenewHelper: Spending dashboard"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/renewhelper/screenshots/03-calendar.png",
+            "sha256": "94c895da05f2a69fe30e35d11301e433b3ddbe4bc0adff9137d8b564d50206af",
+            "alt": "RenewHelper: Calendar"
+          }
+        ]
+      },
+      "services": [
+        "kv",
+        "cron"
+      ],
+      "categories": [
+        "productivity",
+        "finance",
+        "notifications"
+      ],
+      "revision": 1
+    },
+    {
+      "slug": "rssworker",
+      "name": "RSSWorker",
+      "summary": "A small RSS feed generator: RSS and Atom feeds for Bilibili dynamics and videos, Telegram channels, Weibo users and Xiaohongshu users, one URL per feed.",
+      "version": "0.0.0-20260818.b4057ba",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/rssworker@0.0.0-20260818.b4057ba/rssworker-0.0.0-20260818.b4057ba.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/rssworker@0.0.0-20260818.b4057ba/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/rssworker@0.0.0-20260818.b4057ba/manifest.sig"
+      },
+      "digest": "aabb009657738f8af280f06a5ea30c5dae2552d70d94bf2aa7b50654f283b1a9",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "hwa",
+          "url": "https://blog.yllhwa.com",
+          "github": "yllhwa"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "services": [],
+      "categories": [
+        "utilities"
+      ],
+      "revision": 1
+    },
+    {
+      "slug": "screencapture-live",
+      "name": "screencapture Live",
+      "summary": "The live-streaming relay for screencapture on FiveM: stream a player's game view to admins' browsers through Cloudflare Realtime, with one-time viewer grants and a visible indicator for the player.",
+      "version": "0.17.2",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/screencapture-live@0.17.2/screencapture-live-0.17.2.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/screencapture-live@0.17.2/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/screencapture-live@0.17.2/manifest.sig"
+      },
+      "digest": "043d8d51a678ad4971f45096b362a5dce82666513d0802f1c75137f7fb3a8eda",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Christopher",
+          "github": "itschip"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "services": [
+        "durable-objects"
+      ],
+      "categories": [
+        "gaming",
+        "media"
+      ],
+      "revision": 1
+    },
+    {
+      "slug": "screendrop",
+      "name": "Screendrop Cloud",
+      "summary": "The upload and sharing backend for the Screendrop macOS app: screenshots and screen recordings stored in R2, with share pages, transcripts, comments and likes.",
+      "version": "0.0.0-20260805.32a8898",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/screendrop@0.0.0-20260805.32a8898/screendrop-0.0.0-20260805.32a8898.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/screendrop@0.0.0-20260805.32a8898/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/screendrop@0.0.0-20260805.32a8898/manifest.sig"
+      },
+      "digest": "defd86c449244b1fc6a5b6ab6d8280963443e334cbf9cff4940f798f100e1718",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "r2"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Fayaz Ahmed",
+          "github": "fayazara",
+          "x": "fayazara"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/screendrop/icon.png",
+          "sha256": "ecb7bd2056e44a75898416b0498f082c33e808626d558b69ff688036018f09af"
+        },
+        "screenshots": []
+      },
+      "services": [
+        "d1",
+        "r2"
+      ],
+      "categories": [
+        "sharing",
+        "media"
+      ],
+      "revision": 1
+    },
+    {
       "slug": "second-brain-cloudflare",
       "name": "Second Brain",
       "summary": "A personal memory for your AI assistants: an MCP server that stores notes in D1 and recalls them by meaning with Vectorize and Workers AI.",
@@ -3220,6 +4347,43 @@
       "categories": [
         "productivity",
         "business"
+      ],
+      "revision": 1
+    },
+    {
+      "slug": "semanticsearch",
+      "name": "Semantic Search",
+      "summary": "A semantic search API on Vectorize and Workers AI: add documents with metadata over HTTP, then search them by meaning, with writer and read-only API keys and Swagger docs.",
+      "version": "0.0.0-20260603.baa959e",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/semanticsearch@0.0.0-20260603.baa959e/semanticsearch-0.0.0-20260603.baa959e.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/semanticsearch@0.0.0-20260603.baa959e/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/semanticsearch@0.0.0-20260603.baa959e/manifest.sig"
+      },
+      "digest": "a018962aa759d0c219222202c90ba7dbd01b9b19e92acd05317497d59b4cc909",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "workers-ai"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "SemanticSearch.ai",
+          "url": "https://semanticsearch.ai",
+          "github": "SemanticSearch-ai"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "services": [
+        "vectorize",
+        "workers-ai"
+      ],
+      "categories": [
+        "developer-tools",
+        "ai"
       ],
       "revision": 1
     },
@@ -3448,6 +4612,46 @@
       "revision": 1
     },
     {
+      "slug": "skland-attendance",
+      "name": "Skland Daily Attendance",
+      "summary": "Claims the daily Skland sign-in rewards for your Arknights and Arknights: Endfield accounts on a schedule, with optional notifications of each run.",
+      "version": "0.0.0-20260902.1c0c3a8",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/skland-attendance@0.0.0-20260902.1c0c3a8/skland-attendance-0.0.0-20260902.1c0c3a8.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/skland-attendance@0.0.0-20260902.1c0c3a8/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/skland-attendance@0.0.0-20260902.1c0c3a8/manifest.sig"
+      },
+      "digest": "1b4de1db3aaa84307669a2baa040905c66d43caed8ace2529d96bbcfe2874505",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "AEtherside",
+          "github": "AEtherside"
+        },
+        {
+          "name": "Ming Lin",
+          "url": "https://enpitsulin.xyz",
+          "github": "enpitsuLin",
+          "x": "enpitsulin"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "services": [
+        "kv",
+        "cron"
+      ],
+      "categories": [
+        "bots",
+        "utilities"
+      ],
+      "revision": 1
+    },
+    {
       "slug": "statusbeam",
       "name": "StatusBeam",
       "summary": "A status page served from Cloudflare's edge cache, with a checker that probes your sites, Statuspage and incident.io pages, and Sentry monitors every five minutes.",
@@ -3481,6 +4685,41 @@
       "categories": [
         "monitoring",
         "utilities"
+      ],
+      "revision": 1
+    },
+    {
+      "slug": "sveltia-cms-auth",
+      "name": "Sveltia CMS Authenticator",
+      "summary": "The OAuth helper that lets people sign in to Sveltia CMS (or Decap CMS) with GitHub or GitLab, for sites whose editors should not have to create access tokens.",
+      "version": "0.0.0-20260921.4fd08b5",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/sveltia-cms-auth@0.0.0-20260921.4fd08b5/sveltia-cms-auth-0.0.0-20260921.4fd08b5.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/sveltia-cms-auth@0.0.0-20260921.4fd08b5/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/sveltia-cms-auth@0.0.0-20260921.4fd08b5/manifest.sig"
+      },
+      "digest": "f48a7b6583ac4514790616ef119ecbab37fc8e7c77595dfa34b738ea5a230db9",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Sveltia",
+          "github": "sveltia"
+        },
+        {
+          "name": "Kohei Yoshino",
+          "github": "kyoshino"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "services": [],
+      "categories": [
+        "cms",
+        "developer-tools"
       ],
       "revision": 1
     },
@@ -3636,6 +4875,47 @@
       "revision": 1
     },
     {
+      "slug": "token-monitor",
+      "name": "Token Monitor Hub",
+      "summary": "Your own sync hub for Token Monitor: combine the token use, costs and plan limits of Claude Code, Codex, Cursor and 40 more AI coding tools across all your machines, live in every widget.",
+      "version": "0.63.0",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/token-monitor@0.63.0/token-monitor-0.63.0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/token-monitor@0.63.0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/token-monitor@0.63.0/manifest.sig"
+      },
+      "digest": "c3c12969d5b73086d365ee490d403b9c7e3899e6be53603a7e62d15388134075",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Javis",
+          "url": "https://javis-ai.com",
+          "github": "Javis603"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/token-monitor/icon.png",
+          "sha256": "8d4a6d1592e5defd6bb69fa26000f96325b596ed01cdf87f310e378cb271834b"
+        },
+        "screenshots": []
+      },
+      "services": [
+        "durable-objects"
+      ],
+      "categories": [
+        "ai",
+        "monitoring"
+      ],
+      "revision": 1
+    },
+    {
       "slug": "turborepo-remote-cache",
       "name": "Turborepo Remote Cache",
       "summary": "A Turborepo remote cache server on Workers and R2: point turbo at it and share build outputs between your machines and CI, without Vercel.",
@@ -3748,6 +5028,72 @@
       "revision": 1
     },
     {
+      "slug": "veet",
+      "name": "Veet",
+      "summary": "Video calls in the browser: share a meeting link and talk face to face, with chat, device settings and peer-to-peer media for small groups.",
+      "version": "0.0.0-20260728.cca7b69",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/veet@0.0.0-20260728.cca7b69/veet-0.0.0-20260728.cca7b69.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/veet@0.0.0-20260728.cca7b69/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/veet@0.0.0-20260728.cca7b69/manifest.sig"
+      },
+      "digest": "a68862c9416db557838d77eab7aaa143566b2f7afc3e630c0a322786a5b87654",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Confidence Okoghenun",
+          "url": "https://confidence.sh",
+          "github": "megaconfidence",
+          "x": "megaconfidence"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "services": [
+        "durable-objects"
+      ],
+      "categories": [
+        "chat"
+      ],
+      "revision": 1
+    },
+    {
+      "slug": "webrtc-turn",
+      "name": "AndroMeld TURN Relay",
+      "summary": "Your own TURN relay for AndroMeld: when your phone, Mac and browser cannot connect directly, they relay their encrypted traffic through Cloudflare Realtime TURN in your account.",
+      "version": "0.0.0-20260904.500651a",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/webrtc-turn@0.0.0-20260904.500651a/webrtc-turn-0.0.0-20260904.500651a.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/webrtc-turn@0.0.0-20260904.500651a/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/webrtc-turn@0.0.0-20260904.500651a/manifest.sig"
+      },
+      "digest": "9bc44edef025bbc4595c80d62e116a6b9a9e3e4bb3d947541029668b56447cc7",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "little_cup",
+          "url": "https://www.1ittlecup.com",
+          "github": "heruoxin"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "services": [],
+      "categories": [
+        "networking",
+        "sync"
+      ],
+      "revision": 1
+    },
+    {
       "slug": "workers-firecrawl",
       "name": "Workers Firecrawl",
       "summary": "A Firecrawl-compatible search, scrape and map API on Browser Rendering: point the Firecrawl SDKs at your own Worker and get pages as Markdown, HTML, links or screenshots.",
@@ -3781,6 +5127,86 @@
       "categories": [
         "developer-tools",
         "ai"
+      ],
+      "revision": 1
+    },
+    {
+      "slug": "wx2md",
+      "name": "wx2md",
+      "summary": "Turns WeChat Official Account articles, and any other web page, into clean Markdown or a readable HTML view: swap the article link's host for your Worker's, on Workers AI Markdown conversion.",
+      "version": "0.0.0-20260831.3fa0184",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/wx2md@0.0.0-20260831.3fa0184/wx2md-0.0.0-20260831.3fa0184.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/wx2md@0.0.0-20260831.3fa0184/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/wx2md@0.0.0-20260831.3fa0184/manifest.sig"
+      },
+      "digest": "00a4da9d3758a65a569d12394996778cf9f8510e06e8add2ef9c0fc59e3a4157",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "workers-ai",
+        "r2"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Asa",
+          "github": "loadchange"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "services": [
+        "r2",
+        "workers-ai"
+      ],
+      "categories": [
+        "utilities",
+        "ai"
+      ],
+      "revision": 1
+    },
+    {
+      "slug": "xiadd-pastebin",
+      "name": "xiadd Pastebin",
+      "summary": "A pastebin with syntax highlighting, Markdown, password-protected pastes, expiry times and file uploads up to 25 MB, on D1 and R2, with a JSON API.",
+      "version": "0.0.0-20260319.5af66e4",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/xiadd-pastebin@0.0.0-20260319.5af66e4/xiadd-pastebin-0.0.0-20260319.5af66e4.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/xiadd-pastebin@0.0.0-20260319.5af66e4/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/xiadd-pastebin@0.0.0-20260319.5af66e4/manifest.sig"
+      },
+      "digest": "18925652f4ae0638419e98b4b936d04686fc2e5f34a7d3c71a4acbb9cd21f04f",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "r2"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "xiadd",
+          "github": "xiadd"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/xiadd-pastebin/icon.svg",
+          "sha256": "415647cdda3b5141fc7d62183c5039a5aa07f78e4ac2defee12c44437e711407"
+        },
+        "screenshots": []
+      },
+      "services": [
+        "d1",
+        "r2"
+      ],
+      "categories": [
+        "sharing",
+        "developer-tools"
       ],
       "revision": 1
     },
