@@ -1,0 +1,106 @@
+{
+  // Upstream deploys five Workers with plain wrangler, one per directory: the
+  // SvelteKit console at the root, and one agent Worker each for auth, the
+  // database, storage and hosting under agents/. The console reaches every
+  // agent over a service binding and proxies the apps' API calls to them, so
+  // the agents need no public address. The optional hosting-outbound Worker
+  // (agents/hosting/wrangler.outbound.jsonc) only serves a Workers for
+  // Platforms namespace, which this entry does not set up, and is left out.
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "cloudflarebase",
+  "name": "Cloudflarebase",
+  "summary": "An open-source Firebase alternative on Cloudflare: auth, JSON collections and SQL tables with live queries, remote config and file storage, each project in Durable Objects of its own, run from one console. App hosting needs Workers for Platforms, which Appflare does not set up yet; the rest works.",
+  "homepage": "https://cloudflarebase.com",
+  "repo": "cloudflarebase/cloudflarebase",
+  "license": "Apache-2.0",
+  "categories": ["developer-tools", "storage"],
+  "authors": [
+    {
+      "name": "The Cloudflarebase Authors",
+      "url": "https://cloudflarebase.com",
+      "github": "cloudflarebase"
+    }
+  ],
+  "maintainers": ["MendyLanda"],
+  // Pinned to main: the repository has no tags.
+  "source": { "ref": "main", "sha": "adfd1b3007896b172f028c03dd0e442f0f8907b1" },
+  "install": {
+    "tier": "artifact",
+    "packageManager": "npm",
+    "wranglerConfig": "wrangler.jsonc",
+    "workerName": "cloudflarebase",
+    // The root install's postinstall runs `npm install` in each agent
+    // directory; installs here run without scripts, so each agent directory,
+    // which has a lockfile of its own, is listed instead.
+    "installDirs": [
+      { "path": "." },
+      { "path": "agents/auth" },
+      { "path": "agents/db" },
+      { "path": "agents/storage" },
+      { "path": "agents/hosting" }
+    ],
+    // `vite build` syncs SvelteKit's generated files itself and writes the
+    // Worker and its assets to .svelte-kit/cloudflare. The agents are bundled
+    // by wrangler from their sources.
+    "buildCommand": "npm run build",
+    "workers": [
+      { "name": "dashboard", "wranglerConfig": "wrangler.jsonc", "primary": true },
+      // The agents' operator routes carry no authentication of their own: the
+      // console's guard in front of them is the gate, which is why upstream
+      // turns their workers.dev URLs off too.
+      { "name": "auth", "wranglerConfig": "agents/auth/wrangler.jsonc", "workersDev": false },
+      { "name": "db", "wranglerConfig": "agents/db/wrangler.jsonc", "workersDev": false },
+      {
+        "name": "storage",
+        "wranglerConfig": "agents/storage/wrangler.jsonc",
+        "workersDev": false,
+        // Upstream leaves the R2 binding out of its default config, so a
+        // deploy works on an account without R2, and the agent answers file
+        // requests with a 503 until one is added. The install provisions the
+        // bucket instead.
+        "configPatch": { "r2_buckets": [{ "binding": "BUCKET" }] }
+      },
+      // Installed although it cannot serve apps yet: without it the console's
+      // Hosting pages fail with a missing binding instead of the agent's own
+      // explanation, and deleting a project reports that its hosting data
+      // could not be erased.
+      { "name": "hosting", "wranglerConfig": "agents/hosting/wrangler.jsonc", "workersDev": false }
+    ]
+  },
+  // Five Workers install only on Workers Paid. D1, R2, Durable Objects,
+  // Workers AI (the project copilot) and Analytics Engine (database events)
+  // all have free tiers.
+  "plan": "paid",
+  // The db agent writes database events to an Analytics Engine dataset, and
+  // Cloudflare refuses the upload on an account that has not turned
+  // Analytics Engine on.
+  "requires": ["r2", "workers-ai", "analytics-engine"],
+  "secrets": [
+    {
+      "name": "CONSOLE_SETUP_TOKEN",
+      "label": "Console setup token",
+      "help": "Paste it on the console's sign-in page to create the first operator account. It also lets you reclaim the console later. At least 24 characters.",
+      "generate": true,
+      "workers": ["dashboard"]
+    }
+  ],
+  "vars": [
+    {
+      "name": "EMAIL_FROM",
+      "label": "Sender address",
+      "help": "The address the auth agent sends verification and password-reset mail from, through Cloudflare Email Sending. Leave it empty to send no mail.",
+      "workers": ["auth"]
+    }
+  ],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "Open {{workerUrl}}/login and paste the console setup token to create the first operator account, then create a project. Apps call its API at `{{workerUrl}}/api/projects/<project id>`."
+    },
+    {
+      "type": "markdown",
+      "content": "App hosting needs Workers for Platforms, which Appflare does not set up yet; the rest works. The Hosting pages answer that hosting is not configured."
+    }
+  ],
+  "tokenPermissions": []
+}
