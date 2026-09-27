@@ -9,6 +9,7 @@
 /apps/bark-worker/ @MendyLanda
 /apps/binthere/ @MendyLanda
 /apps/bookshelf/ @MendyLanda
+/apps/cap-worker/ @MendyLanda
 /apps/cattopic/ @MendyLanda
 /apps/chatgpt-telegram-workers/ @MendyLanda
 /apps/civideo/ @MendyLanda
@@ -40,6 +41,7 @@
 /apps/insightflare/ @MendyLanda
 /apps/isupmap/ @MendyLanda
 /apps/jina-mcp/ @MendyLanda
+/apps/kiss-worker/ @MendyLanda
 /apps/kukuroo/ @MendyLanda
 /apps/lastfm-recently-played/ @MendyLanda
 /apps/mail2telegram/ @MendyLanda
@@ -50,6 +52,7 @@
 /apps/minshop/ @MendyLanda
 /apps/minvoice/ @MendyLanda
 /apps/nabiz/ @MendyLanda
+/apps/neriplayer-listen-together/ @MendyLanda
 /apps/nodecrypt/ @MendyLanda
 /apps/nodewarden/ @MendyLanda
 /apps/nodrix/ @MendyLanda
@@ -82,6 +85,7 @@
 /apps/turborepo-remote-cache/ @MendyLanda
 /apps/unifi-ddns/ @MendyLanda
 /apps/usage-guard-collector/ @MendyLanda
+/apps/veet/ @MendyLanda
 /apps/workers-firecrawl/ @MendyLanda
 /apps/yaos/ @MendyLanda
 
