@@ -9,6 +9,7 @@ import type {
   CatalogStats,
   FeaturedItem,
   IndexJson,
+  R2LifecycleRule,
   SandboxInstanceType,
   SeedPbkdf2Hash,
   SeedStatement,
@@ -205,6 +206,41 @@ export async function loadSeedHelpers(appflareDir: string): Promise<SeedHelpers>
   // Checked above: each is a function; the signatures are the ones
   // @appflare/schema declares, mirrored by SeedHelpers.
   return mod as SeedHelpers;
+}
+
+/**
+ * The `@appflare/schema` function the install check sets an R2 bucket's
+ * lifecycle rules with, the one the manager's install uses, so a bucket gets
+ * in CI exactly the rules it gets at install.
+ */
+export interface R2LifecycleHelpers {
+  /**
+   * The rules to put on a bucket: the ones it has (Cloudflare's default rule
+   * that aborts unfinished multipart uploads among them), without any of a
+   * declared rule's id, then the declared ones in the API's shape.
+   */
+  mergeR2LifecycleRules(
+    existing: readonly unknown[],
+    declared: readonly R2LifecycleRule[],
+  ): unknown[];
+}
+
+/**
+ * The R2 lifecycle function from `@appflare/schema` in `appflareDir`, loaded
+ * only for an artifact whose buckets declare lifecycle rules. Throws, naming
+ * what is missing, with a build that predates it.
+ */
+export async function loadR2LifecycleHelpers(appflareDir: string): Promise<R2LifecycleHelpers> {
+  assertAppflareBuilt(appflareDir);
+  const mod: unknown = await import(pathToFileURL(appflarePaths(appflareDir).schemaDist).href);
+  if (typeof (mod as Record<string, unknown> | null)?.mergeR2LifecycleRules !== "function") {
+    throw new Error(
+      `@appflare/schema in ${appflareDir} does not export mergeR2LifecycleRules(); build a newer appflare checkout`,
+    );
+  }
+  // Checked above: a function; its signature is the one @appflare/schema
+  // declares, mirrored by R2LifecycleHelpers.
+  return mod as R2LifecycleHelpers;
 }
 
 /**

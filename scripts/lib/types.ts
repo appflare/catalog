@@ -47,6 +47,53 @@ export interface CatalogEntryWorker {
   primary?: true;
   /** False for a Worker only the entry's other Workers reach: kept off workers.dev. */
   workersDev?: boolean;
+  /** This Worker's wrangler config, written at `wranglerConfig` when the repository ships none. */
+  wranglerConfigInline?: Record<string, unknown>;
+}
+
+/**
+ * `CatalogInstallDir`, in full: one directory whose dependencies the packer
+ * installs (`install.installDirs`).
+ */
+export interface CatalogInstallDir {
+  /** `.` or a path relative to the checkout's root, without `..`. */
+  path: string;
+  /** `"none"` when upstream ships no lockfile for the directory. */
+  lockfile?: "none";
+  /** The package manager of this directory, when it is not `install.packageManager`. */
+  packageManager?: string;
+  /** False installs the directory without its devDependencies (pnpm `--prod`, npm `--omit=dev`). */
+  devDependencies?: boolean;
+}
+
+/** `VectorizeMetadataIndex`, in full: a metadata property a Vectorize index's queries filter on. */
+export interface VectorizeMetadataIndex {
+  propertyName: string;
+  type: "string" | "number" | "boolean";
+}
+
+/**
+ * `R2LifecycleRule`, in full: one lifecycle rule of an R2 bucket, its ages in
+ * whole days. At least one of the three ages is set.
+ */
+export interface R2LifecycleRule {
+  id: string;
+  /** The key prefix the rule applies to; every object when omitted. */
+  prefix?: string;
+  deleteAfterDays?: number;
+  infrequentAccessAfterDays?: number;
+  abortMultipartUploadsAfterDays?: number;
+}
+
+/** Subset of `CatalogResources`: the settings wrangler's config cannot say. */
+export interface CatalogResources {
+  /** Each Vectorize binding's index shape, and the metadata indexes created with it. */
+  vectorize?: Record<
+    string,
+    { dimensions: number; metric: string; metadataIndexes?: VectorizeMetadataIndex[] }
+  >;
+  /** Each R2 binding's bucket settings: the lifecycle rules set when the bucket is created. */
+  r2?: Record<string, { lifecycle: R2LifecycleRule[] }>;
 }
 
 /** Subset of `CatalogManifest`. */
@@ -88,7 +135,18 @@ export interface CatalogManifest {
     workers?: CatalogEntryWorker[];
     /** Toolchains beyond Node.js the build needs; catalog CI installs them (artifact tier only). */
     toolchains?: "rust"[];
+    /** The directories whose dependencies the packer installs, in order; the root when omitted. */
+    installDirs?: CatalogInstallDir[];
+    /**
+     * Public build-time constants the packer sets for every build command and
+     * for wrangler's bundling, by name. Never secrets: the catalog publishes them.
+     */
+    buildEnv?: Record<string, string>;
+    /** The wrangler config of an app whose repository ships none, written at `wranglerConfig`. */
+    wranglerConfigInline?: Record<string, unknown>;
   };
+  /** Settings for resources the wrangler config binds but cannot fully describe. */
+  resources?: CatalogResources;
   plan: Plan;
   requires: string[];
   /**
@@ -178,11 +236,16 @@ export interface ArtifactEntryWorker {
  * formats 1 to 3 refuse. Format 5 is either shape too, and carries a D1
  * baseline (`d1Baseline`) or a Worker of static assets only (no modules and
  * no `mainModule`), which managers that read only formats 1 to 4 refuse.
+ * Format 6 is either shape too, and its catalog manifest declares Vectorize
+ * metadata indexes (`resources.vectorize[binding].metadataIndexes`) or R2
+ * bucket settings (`resources.r2`), which the bindings then carry
+ * (`metadataIndexes` on a `vectorize` binding, `lifecycle` on an `r2_bucket`
+ * one) and which managers that read only formats 1 to 5 refuse.
  * Whether an artifact has several Workers is whether it has `workers`,
  * whatever its format.
  */
 export interface ArtifactManifest {
-  format: 1 | 2 | 3 | 4 | 5;
+  format: 1 | 2 | 3 | 4 | 5 | 6;
   app: string;
   version: string;
   keyId: string;
@@ -222,7 +285,13 @@ export interface ArtifactManifest {
     cacheOptions?: { enabled: boolean; [key: string]: unknown };
   };
   assets: {
-    config: Record<string, unknown>;
+    /**
+     * wrangler's `assets` settings, sent as the upload's `assets.config`.
+     * `_redirects` and `_headers` hold the text of those files at the root of
+     * the assets directory, which wrangler reads there rather than uploading
+     * them as assets; omitted when there are none.
+     */
+    config: Record<string, unknown> & { _redirects?: string; _headers?: string };
     binding: string | null;
     files: (ArtifactFile & { route: string })[];
   };
@@ -232,23 +301,23 @@ export interface ArtifactManifest {
    * SQL files run on every install and update after the migrations, never
    * recorded in `d1_migrations`, by binding, in the catalog manifest's order
    * (`resources.d1[binding].schema`); each is named by its path in the
-   * app's repository. Formats 3 and 4; omitted when there are none.
+   * app's repository. Formats 3 to 6; omitted when there are none.
    */
   d1Schema?: Record<string, (ArtifactFile & { name: string })[]>;
   /**
    * Migrations run once the new version serves all traffic, recorded in
    * `d1_migrations` like the others, by binding
-   * (`resources.d1[binding].postDeployMigrationsDir`). Formats 3 and 4.
+   * (`resources.d1[binding].postDeployMigrationsDir`). Formats 3 to 6.
    */
   d1PostDeploy?: Record<string, (ArtifactFile & { name: string })[]>;
   /**
    * One SQL file per binding with the database's whole current schema
    * (`resources.d1[binding].baseline`), run once on a new database before
    * the migrations, which are then recorded in `d1_migrations` without
-   * running. Format 5; omitted when there is none.
+   * running. Formats 5 and 6; omitted when there is none.
    */
   d1Baseline?: Record<string, (ArtifactFile & { name: string })[]>;
-  /** Formats 2 to 5, for an app of several Workers: every Worker but the primary one. */
+  /** Formats 2 to 6, for an app of several Workers: every Worker but the primary one. */
   workers?: ArtifactEntryWorker[];
   /** The catalog manifest the artifact was packed from, as parsed by the schema. */
   catalog: unknown;

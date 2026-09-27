@@ -15,6 +15,7 @@ import { parseArgs } from "node:util";
 import {
   loadAppflareSchema,
   loadEntryWorkerHelpers,
+  loadR2LifecycleHelpers,
   loadSeedHelpers,
   parseOrThrow,
 } from "./lib/appflare-schema.ts";
@@ -45,6 +46,7 @@ import {
   hyperdriveSkip,
   isSeedStep,
   needsPackerSecrets,
+  needsR2LifecycleHelpers,
   needsSeedHelpers,
   POST_DEPLOY_CONFIG,
   planCiApp,
@@ -52,6 +54,7 @@ import {
   runSeed,
   seedFunctions,
   seedValues,
+  setR2LifecycleRules,
   skippedSummaryLines,
   unpackArtifact,
   waitForHealth,
@@ -108,7 +111,16 @@ deploy   Unpacks the artifact (checking every file's sha256), removes anything
 
          A Worker of static assets only (format 5: no modules and no main
          module) is deployed with its assets and compatibility settings
-         alone: the config names no main, and no module rules.
+         alone: the config names no main, and no module rules. _redirects
+         and _headers, which the artifact records as text in its assets
+         config, are written as files at the root of the assets directory.
+
+         Format 6 settings are applied as the manager applies them: each
+         Vectorize index's metadata indexes are created through the API
+         right after the index, and each R2 bucket's lifecycle rules are
+         merged into the bucket's own (keeping Cloudflare's default rule for
+         unfinished multipart uploads) and put back through the API once
+         the deploy has created the bucket.
 
          An app of several Workers (install.workers) is deployed Worker by
          Worker, each after the Workers it binds to: the primary one as
@@ -309,6 +321,11 @@ async function deployAndCheck(
     ? await loadPackerSecrets(resolveAppflareDir())
     : { deriveSecretValue: null, generateVapidPrivateKey: null };
   const values = appSecretValues(app, packer);
+  // Loaded before any deploy, so a manager build without it fails before
+  // any Worker is uploaded.
+  const lifecycle = needsR2LifecycleHelpers(app)
+    ? await loadR2LifecycleHelpers(resolveAppflareDir())
+    : null;
   const configs: Record<string, unknown>[] = [];
   for (const [i, w] of app.workers.entries()) {
     const dir = dirs[i] as string;
@@ -336,6 +353,14 @@ async function deployAndCheck(
       throw new Error(
         `${message(err)}; ${w.plan.name} may already be uploaded, and the cleanup command deletes it`,
       );
+    }
+  }
+  // wrangler created the R2 buckets during the deploys; their lifecycle
+  // rules go on now, before any SQL runs or any request reaches the app.
+  if (lifecycle !== null) {
+    await setR2LifecycleRules(request, app, lifecycle.mergeR2LifecycleRules);
+    for (const b of app.r2Lifecycles) {
+      info(`set ${b.rules.length} lifecycle rule(s) on R2 bucket ${b.bucket} (${b.binding})`);
     }
   }
   // A consumer belongs to the script, so it can only point at a deployed Worker.

@@ -150,6 +150,22 @@ package manager is `install.packageManager` unless it holds another manager's
 lockfile, or unless the entry sets `packageManager` for it. Every install runs with
 `--ignore-scripts`; build commands still run at the root.
 
+#### Installs without dev dependencies
+
+Some projects list a devDependency that cannot be installed outside their own
+setup, such as a package from a private registry, and do not need it to bundle the
+Worker. Set `"devDependencies": false` on that directory to install only its
+dependencies:
+
+```jsonc
+"installDirs": [{ "path": ".", "devDependencies": false }]
+```
+
+The install still follows the lockfile; it runs as pnpm `--prod`, npm
+`--omit=dev`, or classic yarn and bun `--production`. yarn 2 and later have no
+such install, so the pack fails there. Check that the build still works without
+the dev dependencies: a bundler or a type generator listed there is gone too.
+
 ### Build commands
 
 Set `install.buildCommand` when the app needs a build step before `wrangler deploy`
@@ -167,6 +183,54 @@ quotes, variables, and `NAME=value` assignments are refused. pnpm and npm run no
 so list such a step as a command of its own, as above. The build stops at the first
 command that fails; all of them together get 15 minutes.
 
+A build that creates, changes or removes no file in the checkout built nothing, and
+the pack fails with the last lines of its output, even when every command exited 0.
+A tool given an option it does not take there often prints its usage and exits 0,
+and the packer would otherwise bundle whatever the checkout already held. The
+commands are judged together, so a command that only checks (a type check, say)
+may sit beside the ones that write files.
+
+### Build-time constants
+
+Some apps compile public settings into their files at build time, such as Vite's
+`import.meta.env.VITE_*` or SvelteKit's `$env/static/public`, where the Worker
+cannot read them later. Set them in `install.buildEnv`:
+
+```jsonc
+"buildEnv": { "VITE_API_ORIGIN": "https://api.example.com" }
+```
+
+The packer sets each one in the environment of every build command and of
+wrangler's bundling, and the artifact's copy of the catalog manifest records them,
+so every pack of the same pin builds with the same values. Names are upper case
+(letters, digits and `_`, starting with a letter), at most 32 of them.
+
+These values are public: the catalog publishes them, and the build writes them into
+files anyone can download. Never put a secret here; use `secrets` for anything the
+Worker needs at run time. The schema refuses:
+
+- a name that looks like a credential: one containing `SECRET`, `PASSWORD`,
+  `PASSWD`, `PASSPHRASE`, `TOKEN`, `PRIVATE` or `CREDENTIAL`;
+- a name every process reads: `PATH`, `HOME`, `USER`, `LOGNAME`, `SHELL`, `PWD`,
+  `OLDPWD`, `TMPDIR`, `TMP`, `TEMP`, `LANG`, `TERM`, `TZ` and `HOSTNAME` (so a
+  constant cannot be called `TZ` or `LANG`; pick a name of the app's own, such as
+  `VITE_TIME_ZONE`);
+- a name that would change how the build runs rather than what it writes: the
+  ones the packer, wrangler and its tools read (`APPFLARE_`, `WRANGLER_`,
+  `CLOUDFLARE_`, `CF_`, `ESBUILD_`, `MINIFLARE_`, `WORKERD_`), Node.js and the
+  package managers (`NODE_`, `NPM_`, `NPX_`, `PNPM_`, `YARN_`, `BUN_`, `COREPACK_`,
+  `DENO_`), git and CI (`GIT_`, `GITHUB_`, `RUNNER_`, `ACTIONS_`, `CI`), shells
+  (`BASH...`, `ENV`, `IFS`, `PS4`, `SHELLOPTS`, `PROMPT_COMMAND` and the like), the
+  dynamic linker (`LD_`, `DYLD_`, `GCONV...`),
+  TLS and HTTP clients (`SSL_`, `OPENSSL_`, `CURL_`, `HTTP_PROXY` and the other proxy
+  names), configuration directories (`XDG_`), other toolchains
+  (`PYTHON...`, `PERL5...`, `RUBY...`, `JAVA_`, `CARGO_`, `RUST...`, `GOPATH`,
+  `GOFLAGS` and the other Go settings) and build tools (`TURBO_`, `NX_`, `PRISMA_`).
+
+These rules catch the known cases, not every one, so catalog review reads every
+constant as it reads a build command. A `self-deploying` entry cannot set `buildEnv`: its
+own installer builds the app without the packer.
+
 ### Package managers
 
 The packer installs with the package manager's own version rules, read from the
@@ -183,8 +247,14 @@ The packer installs with the package manager's own version rules, read from the
   (npm 10), unless `"packageManager": "npm@11..."` or `engines.npm` asks for a
   later major. npm 11 runs as `npx --yes npm@11.20.0 ci --ignore-scripts`, one
   exact release. A `package-lock.json` of `lockfileVersion` 3 that npm 10 refuses
-  as out of sync ("Missing: … from lock file"), as it does with some lockfiles
-  npm 11 wrote, is installed again with that npm 11, and the pack log says so.
+  as out of sync ("Missing: … from lock file") or cannot resolve (`ERESOLVE`), as
+  it does with some lockfiles npm 11 wrote, is installed again with that npm 11,
+  and the pack log says so. When no `package.json` names an npm but `.nvmrc` or
+  `engines.node` asks for Node.js 24 or later, which ships npm 11, the install
+  uses npm 11 from the start. The build itself still runs on Node.js 22.
+- **pnpm 8 lockfiles.** A `pnpm-lock.yaml` of `lockfileVersion` 6, which pnpm 10
+  refuses, installs with pnpm 9 as `npx --yes pnpm@9.15.9 install
+  --frozen-lockfile`, one exact release.
 
 Neither needs anything set in the entry. Install scripts stay off either way, but
 that does not keep the repository's own code out of the install: `npx` can resolve
@@ -243,12 +313,21 @@ Only these keys may be patched, each only in the way given:
 | `assets` | set or remove `directory` (relative, without `..`), `binding`, `html_handling`, `not_found_handling`, `run_worker_first`; or remove `assets` |
 | `build` | only `null`, when `install.buildCommand` builds instead |
 | `services` | leave bindings out, or add one to a Worker of the same entry |
-| `kv_namespaces`, `r2_buckets`, `d1_databases` | add bindings, or leave out an `id`, `bucket_name` or `database_id` that is `""`, so the install provisions it; never remove or change a binding |
+| `kv_namespaces`, `r2_buckets`, `d1_databases` | add bindings, or leave out an `id`, `bucket_name` or `database_id` that is `""` or a placeholder an upstream deploy script fills (`$NAME`, `${NAME}`, `{{NAME}}`, `<NAME>`), so the install provisions it; never remove or change a binding |
 | `vars` | only remove vars, with `null` |
 | `migrations` | only rename `new_classes` to `new_sqlite_classes` in the config's own migrations |
+| `ratelimits` | only add a rate limit an upstream deploy script adds, keeping the config's own |
+| a section Appflare cannot install | only `null`, to drop it when the app works without it (`"vpc_services": null`) |
 
 Everything else (`name`, `account_id`, `routes`, `env`, `durable_objects`,
-compatibility settings, any other key) fails validation with the reason. An app of
+compatibility settings, any other key) fails validation with the reason.
+
+The packer never drops a section of the wrangler config silently. A section it
+cannot install (Workers VPC services, Secrets Store secrets, Tail Workers, dispatch
+namespaces, Containers, AI Search, Media, Stream, inbound email `addresses`,
+Workers Sites, and the rest wrangler knows) fails the pack with a message naming
+it, instead of installing an app that would run without it. When the app works
+without that section, drop it with the `null` patch the message names. An app of
 several Workers sets `configPatch` on the Worker in `install.workers` whose config it
 changes, never on `install`; a `self-deploying` entry cannot set it.
 
@@ -264,6 +343,42 @@ entry's patch is applied by the account's sandbox Worker, and the manager refuse
 to build it with one too old to apply patches. Drop the patch in the bump that
 moves the pin past the upstream fix.
 
+### A wrangler config carried by the entry
+
+When the repository commits no wrangler config at all (its deploy script writes
+one, or it relies on wrangler's automatic setup), **open a pull request upstream
+that adds one.** Until it is merged, the entry may carry the config itself as
+`install.wranglerConfigInline`, with a comment linking the pull request, and set
+`wranglerConfig` to where the packer writes it: `.appflare.wrangler.jsonc` at the
+root, or `<directory>/.appflare.wrangler.jsonc` for a Worker that lives in a
+directory of the repository. Relative paths in the config resolve from there.
+
+```jsonc
+"install": {
+  "wranglerConfig": ".appflare.wrangler.jsonc",
+  // Until https://github.com/<owner>/<repo>/pull/<number> is merged.
+  "wranglerConfigInline": {
+    "main": "server/src/index.ts",
+    "compatibility_date": "2026-01-20",
+    "assets": { "directory": "./dist/client", "binding": "ASSETS" },
+    "d1_databases": [{ "binding": "DB" }]
+  }
+}
+```
+
+The packer writes it before installing dependencies, with the install's Worker name
+as `name`, and reads it like a config from the repository. It may set only `main`,
+`compatibility_date` (required), `compatibility_flags`, `assets`, `vars`,
+`triggers`, `observability`, `placement`, `kv_namespaces`, `r2_buckets` and
+`d1_databases` without ids, `queues`, `durable_objects` bindings to classes its own
+`migrations` create in `new_sqlite_classes`, `workflows` and `services` without a
+`script_name`, and the `ai`, `browser`, `images` and `version_metadata` bindings.
+The pack fails when the repository has a config of its own in that directory (patch
+that one instead). It cannot sit beside a `configPatch`; an app of several Workers
+sets it on each Worker in `install.workers`; a `self-deploying` entry cannot use it.
+The packer never runs wrangler's automatic setup, which changes `package.json` and
+adds dependencies, so the install would no longer match the lockfile.
+
 ### Rate limits
 
 Rate limits in wrangler's `ratelimits` install as they are. One declared the older
@@ -274,6 +389,73 @@ way, in `unsafe.bindings` with `"type": "ratelimit"`, a `namespace_id` and
 and each install check, gets rate limit counters of its own, whatever
 `namespace_id` the config names, since Cloudflare shares a namespace's counters
 across every Worker in the account that binds the same id.
+
+### Vectorize metadata indexes
+
+The wrangler config cannot say how to create a Vectorize index, so every Vectorize
+binding needs its shape under `resources.vectorize`, keyed by the binding's name.
+When the app's queries filter on metadata, list those properties too:
+
+```jsonc
+"resources": {
+  "vectorize": {
+    "VECTORIZE": {
+      "dimensions": 768,
+      "metric": "cosine",
+      "metadataIndexes": [
+        { "propertyName": "url", "type": "string" },
+        { "propertyName": "published", "type": "number" }
+      ]
+    }
+  }
+}
+```
+
+Each metadata index names a property and its type (`string`, `number` or
+`boolean`); at most ten, each property once. A name may not be empty, contain `"`,
+or start with `$`; a `.` names a nested property. The manager creates them right
+after the index, before the app writes anything, because Vectorize indexes only the
+vectors written after a metadata index exists: a filter on a property without one
+matches nothing. The install check creates them the same way.
+
+### R2 lifecycle rules
+
+An app that keeps some files only for a while (temporary uploads, exports) can have
+its bucket delete them on its own. Declare lifecycle rules under `resources.r2`,
+keyed by the R2 binding's name:
+
+```jsonc
+"resources": {
+  "r2": {
+    "FILES": {
+      "lifecycle": [
+        { "id": "Delete temporary files", "prefix": "tmp/", "deleteAfterDays": 7 },
+        { "id": "Archive exports", "prefix": "exports/", "infrequentAccessAfterDays": 30 }
+      ]
+    }
+  }
+}
+```
+
+Each rule has an `id` (1 to 64 letters, digits, spaces and `. _ -`, unique within
+the bucket) and at least one age in whole days, counted from each object's upload:
+`deleteAfterDays`, `infrequentAccessAfterDays` (move to Infrequent Access storage)
+or `abortMultipartUploadsAfterDays` (counted from the start of the upload). A rule
+applies to the keys that start with its `prefix`, or to every object without one.
+At most 20 rules per bucket. Every key of `resources.r2` must be an R2 binding of the
+wrangler config, or the pack fails.
+
+The manager sets the rules when it creates the bucket and keeps the rule Cloudflare
+gives every new bucket, which aborts unfinished multipart uploads after seven days.
+That rule's id, `Default Multipart Abort Rule`, is refused for a rule of the app's
+own; use `abortMultipartUploadsAfterDays` in another rule to change when uploads are
+aborted. A `self-deploying` entry cannot declare `resources.r2`.
+
+Metadata indexes and lifecycle rules apply to the index or bucket an install
+creates. An update does not change an index or bucket that an earlier version
+already created. An entry with either setting publishes as artifact format 6;
+managers too old to read it refuse it instead of creating the index or bucket
+without them.
 
 ### The account id and derived secrets
 
@@ -536,8 +718,16 @@ triggers, queue consumers, an `assets.binding`, or `assets.run_worker_first`.
 Observability, placement, limits and `cache` settings are left out, as wrangler
 leaves them out. The health check requests `healthPath` (default `/`) as for any
 app, so the site should answer there. When the asset directory is the repository
-root, add an `.assetsignore` that leaves out everything that is not part of the site
-(`.git`, `.wrangler`, the wrangler config), as `wrangler deploy` would upload it too.
+root, add an `.assetsignore` that leaves out everything else that is not part of the
+site (the wrangler config, the sources), as `wrangler deploy` would upload it too.
+The packer always leaves `.git`, `.wrangler` and `node_modules` directories out of
+the static assets, whatever `.assetsignore` says, and the pack log lists what it
+left out.
+
+`_redirects` and `_headers` at the root of the asset directory work as they do with
+`wrangler deploy`, for a static site and for a Worker with code alike: the packer
+records their rules in the artifact's assets settings instead of serving them as
+files, and the manager sends them with every upload. Each may be at most 512 KiB.
 
 Such an artifact is format 5, which managers too old to read it refuse. The install
 check deploys it with a `wrangler.json` that has the assets and compatibility
@@ -780,6 +970,13 @@ A sandbox entry must:
   app built only by its wrangler `build.command` does not qualify. Do not
   declare the same command in both places: the build would run twice;
 - not set `bump.autoMerge`, since CI never installs the entry (see below).
+
+The account's sandbox Worker must be recent enough for what the entry uses. A static
+site without Worker code, an inline wrangler config (`wranglerConfigInline`),
+`"installDirs": []`, a `multiline` secret, build-time constants (`buildEnv`),
+`"devDependencies": false`, Vectorize `metadataIndexes` or `resources.r2` each need a
+sandbox Worker that knows them; the manager refuses to send such an entry to an
+older one and tells the user to update the sandbox first.
 
 It may set `install.sandbox`:
 
@@ -1420,8 +1617,10 @@ self-deploying entries have no install check in CI (see "Sandbox tier" and
 1. Unpack the artifact's Worker modules (none for a Worker of static assets
    only), assets, and D1 SQL (migrations, schema files, post-deploy migrations
    and baselines), checking each
-   file's sha256 against `manifest.json`. Nothing from the app's repository runs:
-   only the prebuilt output in the artifact is deployed.
+   file's sha256 against `manifest.json`. `_redirects` and `_headers`, which the
+   artifact records in its assets settings, are written back as files at the root
+   of the assets directory, where wrangler reads them. Nothing from the app's
+   repository runs: only the prebuilt output in the artifact is deployed.
 2. Delete anything left under the same names by an earlier run.
 3. Write a `wrangler.json` from `manifest.json`. It gets the manifest's modules,
    compatibility settings, assets, vars, bindings without ids, and the Worker's
@@ -1435,8 +1634,13 @@ self-deploying entries have no install check in CI (see "Sandbox tier" and
    group per name that is never cancelled, so a superseded run's cleanup
    finishes before the next run deploys.
 4. Create the Vectorize indexes and queues through the API (wrangler does not
-   create them from a binding), then `wrangler deploy --strict`, which
-   provisions the other missing resources. Each rate limit binding gets a
+   create them from a binding), each index's metadata indexes right after it, as
+   the manager creates them, then `wrangler deploy --strict`, which provisions
+   the other missing resources. Right after the deploy, each R2 bucket with
+   lifecycle rules gets them as the manager sets them: the bucket's own rules are
+   read, the declared ones merged in with the manager's own function (keeping
+   Cloudflare's default rule for unfinished multipart uploads), and the result
+   put back through the API. Each rate limit binding gets a
    random namespace id of the run's own, since Cloudflare shares a namespace's
    counters across every Worker in the account that binds the same id. After
    the deploy, each queue consumer the artifact records is attached to the

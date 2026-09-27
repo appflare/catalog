@@ -411,3 +411,58 @@ export function assetsOnlyArtifactManifestFixture(opts: { sha: string }): Record
   };
   return m;
 }
+
+/**
+ * A schema-valid artifact `manifest.json` of format 6: a Vectorize binding
+ * `VECTORS` with two metadata indexes and an R2 binding `FILES` with two
+ * lifecycle rules, both declared in the catalog manifest's `resources` and
+ * carried on the bindings as the packer records them, plus `_redirects` and
+ * `_headers` in the assets config.
+ */
+export function format6ArtifactManifestFixture(opts: { sha: string }): Record<string, unknown> {
+  const m = artifactManifestFixture({ app: "search", version: "3.0.0", sha: opts.sha });
+  const metadataIndexes = [
+    { propertyName: "url", type: "string" },
+    { propertyName: "published", type: "number" },
+  ];
+  const lifecycle = [
+    { id: "Delete temporary files", prefix: "tmp/", deleteAfterDays: 7 },
+    { id: "Archive exports", prefix: "exports/", infrequentAccessAfterDays: 30 },
+  ];
+  m.format = 6;
+  (m.worker as Record<string, unknown>).bindings = [
+    { type: "vectorize", name: "VECTORS", dimensions: 768, metric: "cosine", metadataIndexes },
+    { type: "r2_bucket", name: "FILES", lifecycle },
+  ];
+  m.assets = {
+    config: {
+      html_handling: "auto-trailing-slash",
+      _redirects: "/old /new 301\n",
+      _headers: "/*\n  X-Frame-Options: DENY\n",
+    },
+    binding: "ASSETS",
+    files: [
+      {
+        path: "assets/index.html",
+        route: "/index.html",
+        hash: "b".repeat(32),
+        size: 1,
+        sha256: "a".repeat(64),
+        offset: 1,
+      },
+    ],
+  };
+  m.catalog = {
+    ...(m.catalog as Record<string, unknown>),
+    install: {
+      ...((m.catalog as Record<string, unknown>).install as Record<string, unknown>),
+      buildEnv: { VITE_API_ORIGIN: "https://api.example.com" },
+      installDirs: [{ path: ".", devDependencies: false }],
+    },
+    resources: {
+      vectorize: { VECTORS: { dimensions: 768, metric: "cosine", metadataIndexes } },
+      r2: { FILES: { lifecycle } },
+    },
+  };
+  return m;
+}

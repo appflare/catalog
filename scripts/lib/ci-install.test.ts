@@ -999,6 +999,7 @@ describe("cleanupCiInstall", () => {
     derivedVars: [],
     d1: [],
     vectorizeIndexes: [{ name: "ci-hello-pr1-vectors", dimensions: 384, metric: "cosine" }],
+    r2Lifecycles: [],
     hyperdriveConfigs: [],
     queues: ["ci-hello-pr1-tasks", "ci-hello-pr1-dlq"],
     queueConsumers: [
