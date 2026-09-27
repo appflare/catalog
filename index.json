@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-27T13:58:59.756Z",
+  "generatedAt": "2026-09-27T14:17:13.746Z",
   "apps": [
     {
       "slug": "2fa",
@@ -930,6 +930,7 @@
       "slug": "chatgpt-telegram-workers",
       "name": "ChatGPT Telegram Bot",
       "summary": "Your own AI chat bot on Telegram, backed by OpenAI, Anthropic, Workers AI, or any OpenAI-compatible API.",
+      "tagline": "Chat with your own AI bot on Telegram",
       "addedAt": "2026-09-23T15:28:54+03:00",
       "version": "2.0.0",
       "artifacts": {
@@ -1221,6 +1222,7 @@
       "slug": "cloudssh",
       "name": "CloudSSH",
       "summary": "A web SSH terminal on Workers: connect to your servers from the browser with multiple sessions, SFTP file management, jump hosts, saved servers, and a bring-your-own-key AI assistant.",
+      "tagline": "Connect to your servers through a browser",
       "addedAt": "2026-09-26T23:19:31+03:00",
       "version": "0.0.0-20260924.25852ca",
       "artifacts": {
@@ -1264,6 +1266,7 @@
       "slug": "collection-down",
       "name": "Collection Down",
       "summary": "Browse Bilibili digital collections and decoration suits and download their videos, images and emoji packs, from a Nuxt app on your own Worker.",
+      "tagline": "Download videos, images and emoji packs from Bilibili collections",
       "addedAt": "2026-09-27T11:50:07+03:00",
       "version": "1.1.2",
       "artifacts": {
@@ -1298,6 +1301,7 @@
       "slug": "counterscale",
       "name": "Counterscale",
       "summary": "Privacy-friendly web analytics you host yourself: a tracking script, a dashboard, and long-term rollups in R2, on Workers Analytics Engine.",
+      "tagline": "Track website visits with a dashboard you host yourself",
       "addedAt": "2026-09-27T01:13:10+03:00",
       "version": "3.4.1",
       "artifacts": {
@@ -1332,7 +1336,13 @@
           "url": "https://appflare.github.io/catalog/apps/counterscale/cover.png",
           "sha256": "ee7b5c4e5179f489cf65fc8a8fdde9f5e7a66cdeaf48029d85afb007fa757d94"
         },
-        "screenshots": []
+        "screenshots": [
+          {
+            "url": "https://appflare.github.io/catalog/apps/counterscale/screenshots/01-dashboard.png",
+            "sha256": "4b383c649f4577460eda7709432a628bde5f0a214c0c2e0cbc0f79186912b0f9",
+            "alt": "Counterscale: Dashboard"
+          }
+        ]
       },
       "services": [
         "r2",
@@ -1349,6 +1359,7 @@
       "slug": "cut",
       "name": "Cut",
       "summary": "Self-hosted link shortener on Workers + KV.",
+      "tagline": "Short links on your own domain",
       "addedAt": "2026-09-22T21:32:42+03:00",
       "version": "0.1.0",
       "artifacts": {
@@ -1384,12 +1395,12 @@
         "utilities"
       ],
       "license": "MIT",
-      "revision": 2,
+      "revision": 3,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/cut/manifest.json",
-        "sha256": "b0492a05c74b1f6f92c51a9a2c0b7b952e1c9d6622214a057d15d5f7b55fe695",
+        "sha256": "de7842381e1d59f9b4c61fc1635d28ece2e1fc7cac385af9063403c45ad26169",
         "keyId": "catalog-2026-09",
-        "signature": "PGUEDWDpX9OXeiK3cTvjLVHdaLJzab+mkNFaSYAp/TYkoRMVM9slKTXBFaGzNCieVRRi5YGUg6yKgXDKPKKLDw=="
+        "signature": "+T6pk8oqs2yKAxtEuC30D/zww5KAcpa7WWXGr1xZnSWsnuqA3t//X8TnSISr+XBPcG/xNjb+aJKlh3dZfwsUCQ=="
       }
     },
     {
@@ -1440,6 +1451,7 @@
       "slug": "dictdeck",
       "name": "DictDeck",
       "summary": "A self-hosted Japanese dictionary, translator and flashcard deck: several dictionary sources, AI explanations on Workers AI or your own LLM provider, saved words and review cards, a Telegram bot and an MCP server.",
+      "tagline": "Look up Japanese words, translate them, and review flashcards",
       "addedAt": "2026-09-27T11:58:16+03:00",
       "version": "0.20.0",
       "artifacts": {
@@ -1464,6 +1476,13 @@
       "maintainers": [
         "MendyLanda"
       ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/dictdeck/icon.svg",
+          "sha256": "60d14825b826cde264d6322cd75485f8a3c2afab197522c36d9e09f691e3cff7"
+        },
+        "screenshots": []
+      },
       "services": [
         "d1",
         "cron",
@@ -1523,6 +1542,7 @@
       "slug": "durable-git",
       "name": "dgit",
       "summary": "A git host on Durable Objects: push and clone over HTTPS with a stock git client and browse with a cgit-style web interface, one Durable Object per repository.",
+      "tagline": "Host and browse your own code repositories",
       "addedAt": "2026-09-27T04:19:23+03:00",
       "version": "0.0.8",
       "artifacts": {
@@ -1619,6 +1639,7 @@
       "slug": "edgeever",
       "name": "EdgeEver",
       "summary": "An Evernote-style notes and knowledge base with a three-pane layout, full-text search, public note sharing, AI features and a built-in MCP server, on D1 and R2.",
+      "tagline": "Notes you can organize, search, and share from your own account",
       "addedAt": "2026-09-27T05:18:00+03:00",
       "version": "1.88.0",
       "artifacts": {
@@ -1665,6 +1686,7 @@
       "slug": "edgekey",
       "name": "EdgeKey",
       "summary": "A shop for digital goods: sell card keys and codes, take payment through USDT, Epay, Alipay or Stripe, and deliver each order automatically by page and email.",
+      "tagline": "Sell digital codes and deliver them automatically after payment",
       "addedAt": "2026-09-27T07:10:18+03:00",
       "version": "0.0.0-20260817.fa69913",
       "artifacts": {
@@ -1691,7 +1713,13 @@
           "url": "https://appflare.github.io/catalog/apps/edgekey/icon.png",
           "sha256": "2b9854d3d27c83ecfd2007c1e87a71480d3aa747409e1c753c026ab95f4b69d3"
         },
-        "screenshots": []
+        "screenshots": [
+          {
+            "url": "https://appflare.github.io/catalog/apps/edgekey/screenshots/01-site-settings.png",
+            "sha256": "0f4c6dd707cf596c0f1f19d6459f2bad66cb1a827ef73d800a139f04e3b3ede8",
+            "alt": "EdgeKey: Site settings"
+          }
+        ]
       },
       "services": [
         "d1",
@@ -1708,6 +1736,7 @@
       "slug": "edgemetry",
       "name": "Edgemetry",
       "summary": "Privacy-friendly web analytics you run yourself: a 2 KB tracking script, no cookies, stackable filters, realtime views, custom events and several sites and users, on one Worker and D1.",
+      "tagline": "See your website traffic without cookies",
       "addedAt": "2026-09-27T12:14:18+03:00",
       "version": "0.3.0",
       "artifacts": {
@@ -1735,6 +1764,10 @@
           "url": "https://appflare.github.io/catalog/apps/edgemetry/icon.svg",
           "sha256": "0b8edbe4eddddf19540d2c3491c9772f0ff7bef8eec1572476228b06d691767e"
         },
+        "cover": {
+          "url": "https://appflare.github.io/catalog/apps/edgemetry/cover.png",
+          "sha256": "52a2eaeac0c4a893126b65c4c52cda6b30a20e12de42eac2234b8a472564de15"
+        },
         "screenshots": []
       },
       "services": [
@@ -1751,6 +1784,7 @@
       "slug": "elm-chat",
       "name": "elm.chat",
       "summary": "Account-free, end-to-end encrypted chat rooms that disappear: single-use invites, messages that vanish on a timer, and no transcript kept on the server. One Worker and a Durable Object per room.",
+      "tagline": "Private chat rooms that disappear, with no account needed",
       "addedAt": "2026-09-27T04:47:37+03:00",
       "version": "0.1.2",
       "artifacts": {
@@ -1779,14 +1813,14 @@
         },
         "screenshots": [
           {
-            "url": "https://appflare.github.io/catalog/apps/elm-chat/screenshots/01-create-a-room.png",
-            "sha256": "e2574221b444ccd4a2420f30e53f356ae1b50a323f8c478eae6a60981a00ba71",
-            "alt": "elm.chat: Create a room"
+            "url": "https://appflare.github.io/catalog/apps/elm-chat/screenshots/01-chat-room.png",
+            "sha256": "0b1cbc33b791b0978a5fc97a4e0e58cfa559aef909af5e14e347cc2ef8e3cff9",
+            "alt": "elm.chat: Chat room"
           },
           {
-            "url": "https://appflare.github.io/catalog/apps/elm-chat/screenshots/02-chat-room.png",
-            "sha256": "03f72d34ca43418c838b8bc1f980504863920222c29bdba31b0de419bddda1c5",
-            "alt": "elm.chat: Chat room"
+            "url": "https://appflare.github.io/catalog/apps/elm-chat/screenshots/02-create-a-room.png",
+            "sha256": "e2574221b444ccd4a2420f30e53f356ae1b50a323f8c478eae6a60981a00ba71",
+            "alt": "elm.chat: Create a room"
           }
         ]
       },
@@ -1804,6 +1838,7 @@
       "slug": "email-explorer",
       "name": "Email Explorer",
       "summary": "A self-hosted email client: receive mail through Email Routing, read and write it in a web app with folders, search, contacts and several users, with each mailbox in its own Durable Object and attachments in R2.",
+      "tagline": "Read and send email from your own domain",
       "addedAt": "2026-09-27T04:47:55+03:00",
       "version": "1.1.0",
       "artifacts": {
@@ -1861,6 +1896,7 @@
       "slug": "emailflare",
       "name": "EmailFlare",
       "summary": "Transactional email on Cloudflare Email Sending: a sending API with templates, API keys, logs, suppressions and one-click unsubscribe, plus a team inbox and lightweight CRM on Email Routing.",
+      "tagline": "Send emails and manage replies in a shared inbox",
       "addedAt": "2026-09-27T06:14:13+03:00",
       "version": "0.0.0-20260920.d448ea2",
       "artifacts": {
@@ -1914,6 +1950,7 @@
       "slug": "emdash",
       "name": "EmDash",
       "summary": "A full-stack TypeScript CMS built on Astro, the spiritual successor to WordPress: this is its blog template, with posts, pages, categories and tags, search, RSS and an admin editor, on D1 and R2.",
+      "tagline": "Create a blog with built-in search and an editor",
       "addedAt": "2026-09-27T06:14:13+03:00",
       "version": "0.0.0-20260926.e3b39ac",
       "artifacts": {
@@ -1939,6 +1976,10 @@
         "MendyLanda"
       ],
       "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/emdash/icon.svg",
+          "sha256": "323512d1d707c4a7e07a1a8a9234a740a14c9aa5f479672cdf66188d0109da77"
+        },
         "screenshots": [
           {
             "url": "https://appflare.github.io/catalog/apps/emdash/screenshots/01-home-page.png",
@@ -1949,11 +1990,6 @@
             "url": "https://appflare.github.io/catalog/apps/emdash/screenshots/02-a-post.png",
             "sha256": "ea9814577576e524c5fe33db508a77da3caf28275aefd879b90eac012d15c762",
             "alt": "EmDash: A post"
-          },
-          {
-            "url": "https://appflare.github.io/catalog/apps/emdash/screenshots/03-home-page-in-dark-mode.png",
-            "sha256": "9a0a5dfdb7883ce44d9d8e2e4a29ca98220213791c4d47f3816bf9ecb987b610",
-            "alt": "EmDash: Home page in dark mode"
           }
         ]
       },
@@ -1975,6 +2011,7 @@
       "slug": "exception-notify",
       "name": "Exception-Notify workspace",
       "summary": "The AI analysis page for Exception-Notify alerts from Spring Boot: open an exception from DingTalk, Feishu or WeChat Work and work through it with your own AI provider.",
+      "tagline": "Read error alerts and work through fixes with AI",
       "addedAt": "2026-09-27T10:48:02+03:00",
       "version": "0.0.0-20251226.990d2e6",
       "artifacts": {
@@ -2084,6 +2121,7 @@
       "slug": "firefly-iii-mcp",
       "name": "Firefly III MCP",
       "summary": "A remote MCP server for Firefly III: lets AI assistants read and record accounts, transactions, bills, budgets and more in your own Firefly III, each connection with its own personal access token.",
+      "tagline": "Manage your personal finances with an AI assistant",
       "addedAt": "2026-09-27T12:02:55+03:00",
       "version": "1.4.0",
       "artifacts": {
@@ -2189,6 +2227,7 @@
       "slug": "fodi",
       "name": "FODI",
       "summary": "A fast index of your OneDrive: browse, preview and download files from a web page, with password-protected folders, signed download links, uploads and WebDAV, on Workers KV.",
+      "tagline": "Browse and preview your OneDrive files in a web page",
       "addedAt": "2026-09-27T11:44:57+03:00",
       "version": "0.0.0-20260403.20a227a",
       "artifacts": {
@@ -2233,6 +2272,7 @@
       "slug": "folia",
       "name": "Folia",
       "summary": "A web music player built around full-screen animated lyrics, for your local library or a Navidrome server, with automatic lyric matching and AI colour themes from your own Gemini key.",
+      "tagline": "Play your music with full-screen animated lyrics",
       "addedAt": "2026-09-27T10:46:59+03:00",
       "version": "0.7.9",
       "artifacts": {
@@ -2320,6 +2360,7 @@
       "slug": "freemail",
       "name": "Freemail",
       "summary": "Temporary and domain mailboxes on your own domain: create addresses in the browser, read what Email Routing delivers, share mailboxes with users, and send through Resend or SendFlare, on D1 and R2.",
+      "tagline": "Create mailboxes and read mail on your own domain",
       "addedAt": "2026-09-27T11:44:15+03:00",
       "version": "5.3.1",
       "artifacts": {
@@ -2346,6 +2387,54 @@
       "maintainers": [
         "MendyLanda"
       ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/freemail/icon.svg",
+          "sha256": "66c27b132a4b6a1dff87ced4de49ebfdc9f90ad06c7545ee981b024ccb294aac"
+        },
+        "screenshots": [
+          {
+            "url": "https://appflare.github.io/catalog/apps/freemail/screenshots/01-mailbox.png",
+            "sha256": "e78b98df2bd6cba686e65a129b15e29552cb194b646dfb4580d2dd1c5c33f4bb",
+            "alt": "Freemail: Mailbox"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/freemail/screenshots/02-home.png",
+            "sha256": "b9103015da79d63234b399af0d154e2461019a677000e5655cc6c4e8f14e6a4c",
+            "alt": "Freemail: Home"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/freemail/screenshots/03-all-mailboxes.png",
+            "sha256": "79a5944c6bcdf58ec9c9ef050d198aba5504b1d4330e8cfe317b62dc2ccd853b",
+            "alt": "Freemail: All mailboxes"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/freemail/screenshots/04-user-management.png",
+            "sha256": "ac5daffff854a79d789eca30af9fb817f854b70174e521eafc7c9f71d3692a6c",
+            "alt": "Freemail: User management"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/freemail/screenshots/05-compose-message.png",
+            "sha256": "f067dba4abcf911c73ec93a8ec626480b42b9eb59bc065c684e112a4f383f9bf",
+            "alt": "Freemail: Compose message"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/freemail/screenshots/06-message-detail.png",
+            "sha256": "91c2e245edb81a31de33332776ef3c16987480abfd5791b4712d1015e3607531",
+            "alt": "Freemail: Message detail"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/freemail/screenshots/07-mailbox-forwarding.png",
+            "sha256": "484850eaa14167039f8458fb29ac07dbf49bd3a7c6c1dbf269596e48ef787c57",
+            "alt": "Freemail: Mailbox forwarding"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/freemail/screenshots/08-create-user.png",
+            "sha256": "f57948fb3f89e9445bf38a95350596313c850dc6793cd25d53b069cf56a2f132",
+            "alt": "Freemail: Create user"
+          }
+        ]
+      },
       "services": [
         "d1",
         "r2",
@@ -2363,6 +2452,7 @@
       "slug": "fxtiktok",
       "name": "fxTikTok",
       "summary": "Fixes TikTok embeds on Discord and other chat apps: swap tiktok.com for your own address in a link and it previews the video or slideshow inline, with the author, caption and counts.",
+      "tagline": "Make TikTok links preview videos and slideshows in chat",
       "addedAt": "2026-09-27T10:43:20+03:00",
       "version": "0.0.0-20260906.66fbae3",
       "artifacts": {
@@ -2398,6 +2488,7 @@
       "slug": "garrul",
       "name": "Garrul",
       "summary": "Self-hosted comments for static sites and blogs: an embeddable widget with threads, reactions and votes, OAuth or anonymous posting behind Turnstile, a moderation queue, and reply emails.",
+      "tagline": "Comments and reactions for your website, hosted in your account",
       "addedAt": "2026-09-27T05:55:55+03:00",
       "version": "2.29.0",
       "artifacts": {
@@ -2423,6 +2514,14 @@
         "MendyLanda"
       ],
       "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/garrul/icon.png",
+          "sha256": "b6c98bbadfa8a210065c149e0c132aad782d48a488c7644526d0a5ffcefacdbe"
+        },
+        "cover": {
+          "url": "https://appflare.github.io/catalog/apps/garrul/cover.png",
+          "sha256": "b33f9c6f01bf256ba10abcaab5ba1f3caebdf6789196460296c35dc30e972b76"
+        },
         "screenshots": [
           {
             "url": "https://appflare.github.io/catalog/apps/garrul/screenshots/01-comment-widget.png",
@@ -2438,6 +2537,31 @@
             "url": "https://appflare.github.io/catalog/apps/garrul/screenshots/03-moderation-queue.png",
             "sha256": "08e2b19ea6e83ba1ef2c28f27d180b546341b1ac7366d11056679e3bbf09fb7e",
             "alt": "Garrul: Moderation queue"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/garrul/screenshots/04-feature-settings.png",
+            "sha256": "af1b43d2ba30ea0294d6ac61324f6457737641fc30eb27c888b5fd8635f7afdf",
+            "alt": "Garrul: Feature settings"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/garrul/screenshots/05-comment-detail.png",
+            "sha256": "fa0fb3cccc458ed822b9bbd26becc245412dfc260a97ff35e1095a71c57e2431",
+            "alt": "Garrul: Comment detail"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/garrul/screenshots/06-user-list.png",
+            "sha256": "922004c364648397f8bd24f6339992a5fde0ab1b54db8a4f53543e51f294ed0b",
+            "alt": "Garrul: User list"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/garrul/screenshots/07-webhook-status.png",
+            "sha256": "d101ea68614b4c89d6fd513be1adc8c2ffb30cd2186a7b048205da30c6c76812",
+            "alt": "Garrul: Webhook status"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/garrul/screenshots/08-audit-log.png",
+            "sha256": "edc798c2d450ae6f0bad40cbc9418b9ccf51018c87f908f134d3e03a6a8cba33",
+            "alt": "Garrul: Audit log"
           }
         ]
       },
@@ -2457,6 +2581,7 @@
       "slug": "git-on-cloudflare",
       "name": "git-on-cloudflare",
       "summary": "A git server on Workers: push and clone over HTTPS, browse code in a web interface, with repositories in Durable Objects and R2.",
+      "tagline": "Host your code and browse changes in your own Cloudflare account",
       "addedAt": "2026-09-27T05:56:12+03:00",
       "version": "0.0.0-20260513.007a96e",
       "artifacts": {
@@ -2498,6 +2623,7 @@
       "slug": "glance",
       "name": "Glance",
       "summary": "Share what your coding agents build: publish HTML, Markdown and files as private sites your team opens, comments on, and annotates. An open-source alternative to Claude Artifacts.",
+      "tagline": "Share your coding agent's work as pages your team can review",
       "addedAt": "2026-09-27T01:13:10+03:00",
       "version": "0.14.0",
       "artifacts": {
@@ -2523,6 +2649,13 @@
       "maintainers": [
         "MendyLanda"
       ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/glance/icon.svg",
+          "sha256": "4defbf089c76f9880688ae69324b874e51292894c44529b0cad2fa9937bb9be5"
+        },
+        "screenshots": []
+      },
       "services": [
         "kv",
         "d1",
@@ -2541,6 +2674,7 @@
       "slug": "gmshop",
       "name": "GMShop Edge",
       "summary": "A single-tenant digital-goods shop: stock items such as licence keys delivered on payment, private downloads from R2, entitlements, coupons and refunds, guest or account checkout, and an admin console with roles, on D1, KV, R2 and Queues.",
+      "tagline": "Sell digital goods with automatic delivery from your own shop",
       "addedAt": "2026-09-27T12:03:21+03:00",
       "version": "1.0.2",
       "artifacts": {
@@ -2592,6 +2726,7 @@
       "slug": "hashpay",
       "name": "HashPay",
       "summary": "A crypto payment gateway run from your own Telegram bot: take USDT, USDC and native coins on eight chains or through Binance, OKX and OKPay, with a signed order API, merchant callbacks and an admin console.",
+      "tagline": "Accept crypto payments through your Telegram bot",
       "addedAt": "2026-09-27T10:46:59+03:00",
       "version": "0.0.0-20260919.599ef7f",
       "artifacts": {
@@ -2614,6 +2749,10 @@
         "MendyLanda"
       ],
       "media": {
+        "cover": {
+          "url": "https://appflare.github.io/catalog/apps/hashpay/cover.png",
+          "sha256": "92dd5009ce87b364ff86b375e84bd09654a6745f35f54bbdb56a75e89f3c7d08"
+        },
         "screenshots": [
           {
             "url": "https://appflare.github.io/catalog/apps/hashpay/screenshots/01-admin-overview.png",
@@ -2638,6 +2777,7 @@
       "slug": "hqbase",
       "name": "HQBase",
       "summary": "Your team's email workspace in your own account: shared mailboxes, drafts, labels, contacts and audit history, with a remote MCP server for agents.",
+      "tagline": "Shared email for your team in your own Cloudflare account",
       "addedAt": "2026-09-27T06:02:01+03:00",
       "version": "1.4.2",
       "artifacts": {
@@ -2818,6 +2958,7 @@
       "slug": "inkstone",
       "name": "Inkstone",
       "summary": "A self-hosted Markdown notebook with live preview, backlinks, full-text and semantic search, offline editing, multi-device sync, public sharing, MCP access and scheduled backups.",
+      "tagline": "A private notebook for writing, finding, and syncing notes",
       "addedAt": "2026-09-27T05:56:12+03:00",
       "version": "0.8.0",
       "artifacts": {
@@ -2924,6 +3065,7 @@
       "slug": "isupmap",
       "name": "isupmap",
       "summary": "A live up/down heatmap for 40+ popular internet services, polled every five minutes, with history and community outage reports.",
+      "tagline": "See which popular online services are up or down",
       "addedAt": "2026-09-27T06:14:13+03:00",
       "version": "0.0.0-20260904.17bb688",
       "artifacts": {
@@ -2972,6 +3114,7 @@
       "slug": "jant",
       "name": "Jant",
       "summary": "A personal microblog as smooth as Threads and Tumblr: notes, links and quotes in threads and collections, media on R2, full-text search, RSS, an API and an MCP endpoint for agents, on D1.",
+      "tagline": "Your own blog for notes, links, quotes, and threads",
       "addedAt": "2026-09-27T12:14:18+03:00",
       "version": "0.0.0-20260926.d55c0f8",
       "artifacts": {
@@ -2996,6 +3139,24 @@
       "maintainers": [
         "MendyLanda"
       ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/jant/icon.svg",
+          "sha256": "a8bb8340623a2e38f2e1e5bd9cd8b63aef4614d75d6ca2ab515d121d50dfe013"
+        },
+        "screenshots": [
+          {
+            "url": "https://appflare.github.io/catalog/apps/jant/screenshots/01-blog-home.png",
+            "sha256": "81ba4957635e52bd5ec7253cc1f07b5dbff94f6f6edacdbac95797b426fd6ac8",
+            "alt": "Jant: Blog home"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/jant/screenshots/02-writing-a-post.png",
+            "sha256": "320b1274a6e751aa6cec4493a07b3017690a01f2d9565f9fec75b37900d769bb",
+            "alt": "Jant: Writing a post"
+          }
+        ]
+      },
       "services": [
         "d1",
         "r2"
@@ -3011,6 +3172,7 @@
       "slug": "jina-mcp",
       "name": "Jina AI MCP Server",
       "summary": "Jina AI's remote MCP server on your own Worker: read pages and PDFs as Markdown, take screenshots, search the web, arXiv and SSRN, and rerank or deduplicate text with Jina's Reader, Search, Embeddings and Reranker APIs.",
+      "tagline": "Let your AI assistant read pages, search the web, and compare text",
       "addedAt": "2026-09-27T10:43:20+03:00",
       "version": "0.0.0-20260918.5d6eb19",
       "artifacts": {
@@ -3046,6 +3208,7 @@
       "slug": "kiss-worker",
       "name": "KISS Worker",
       "summary": "Your own sync server for KISS Translator: keeps the extension's settings, rules and vocabulary in step across browsers and serves shared rule sets.",
+      "tagline": "Sync your translation settings and vocabulary across browsers",
       "addedAt": "2026-09-27T10:43:47+03:00",
       "version": "0.0.0-20260802.7f6efde",
       "artifacts": {
@@ -3083,6 +3246,7 @@
       "slug": "kukuroo",
       "name": "Kukuroo",
       "summary": "Your own Web Push service in one Worker: send notifications to your iPhone, iPad or Mac with a single authenticated POST, no vendor and no native app.",
+      "tagline": "Send notifications to your iPhone, iPad or Mac without a native app",
       "addedAt": "2026-09-27T05:20:16+03:00",
       "version": "0.1.3",
       "artifacts": {
@@ -3124,6 +3288,7 @@
       "slug": "larafeed",
       "name": "Larafeed",
       "summary": "A private feed reader with passkey-only sign-in: RSS and Atom subscriptions refreshed on a schedule through Queues, OPML import and export, full-article extraction, favicons, and reader-client APIs, on D1, KV and Queues.",
+      "tagline": "Keep up with your favorite websites in one private feed",
       "addedAt": "2026-09-27T12:03:21+03:00",
       "version": "0.0.0-20260924.eedbc8b",
       "artifacts": {
@@ -3148,6 +3313,10 @@
         "MendyLanda"
       ],
       "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/larafeed/icon.png",
+          "sha256": "901ec1bf7586628584a8e6695b9846c83b46dbd3763429340364ec0d9b3e7af8"
+        },
         "screenshots": [
           {
             "url": "https://appflare.github.io/catalog/apps/larafeed/screenshots/01-reader-view.png",
@@ -3173,6 +3342,7 @@
       "slug": "lastfm-recently-played",
       "name": "Last.fm Recently Played",
       "summary": "An SVG card of your recent Last.fm scrobbles for a GitHub profile README, with themes, artwork, stats and loved tracks, plus a configurator page to build the card's URL.",
+      "tagline": "Show your recent music on your GitHub profile",
       "addedAt": "2026-09-27T10:43:20+03:00",
       "version": "0.0.0-20260909.cce76de",
       "artifacts": {
@@ -3206,6 +3376,7 @@
       "slug": "llm-api-proxy",
       "name": "LLM API Proxy",
       "summary": "One OpenAI-compatible (and Ollama-compatible) API in front of OpenAI, Anthropic, Gemini, DeepSeek, Groq, Grok, OpenRouter, Azure OpenAI and more, using your own provider keys behind a key of its own.",
+      "tagline": "Connect your AI tools to models from different providers",
       "addedAt": "2026-09-27T12:04:07+03:00",
       "version": "0.0.0-20251201.43db1c0",
       "artifacts": {
@@ -3240,6 +3411,7 @@
       "slug": "mail2telegram",
       "name": "mail2telegram",
       "summary": "Receive your domain's email in Telegram: a push for every message and a Mini App inbox with attachments, filters, and AI summaries.",
+      "tagline": "Get your email in Telegram, with a full inbox",
       "addedAt": "2026-09-23T20:44:39+03:00",
       "version": "2.0.0",
       "artifacts": {
@@ -3270,13 +3442,8 @@
       "media": {
         "screenshots": [
           {
-            "url": "https://appflare.github.io/catalog/apps/mail2telegram/screenshots/01-mini-app-inbox.png",
-            "sha256": "ca981421e9bd7d208d7584555077ce4cf440b0b4ddc152ac90cec05d7333b8f3",
-            "alt": "mail2telegram: Mini app inbox"
-          },
-          {
-            "url": "https://appflare.github.io/catalog/apps/mail2telegram/screenshots/02-messages-in-telegram.png",
-            "sha256": "e43c8725701b5184d0ca139f3d8e30c8d386a91001d28e2ddc34da649c01ccda",
+            "url": "https://appflare.github.io/catalog/apps/mail2telegram/screenshots/01-messages-in-telegram.png",
+            "sha256": "dea60dbede5d596a4ce76777eac7cc32c0d34ef7f78277bb6a86adeed68d2a98",
             "alt": "mail2telegram: Messages in telegram"
           }
         ]
@@ -3300,6 +3467,7 @@
       "slug": "mailclaw",
       "name": "MailClaw",
       "summary": "A catch-all inbox for your domain with a token-protected API for AI agents: every address receives into D1 and R2, with search, filters, export, sending through Resend or Cloudflare, and a web dashboard.",
+      "tagline": "One searchable inbox for every address on your domain",
       "addedAt": "2026-09-27T12:02:55+03:00",
       "version": "0.0.0-20260528.f13f82a",
       "artifacts": {
@@ -3327,6 +3495,13 @@
       "maintainers": [
         "MendyLanda"
       ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/mailclaw/icon.svg",
+          "sha256": "630d6d539f45bc3b706b1dd3414bb19da82b9d827556700c7e59977ab16d1fb5"
+        },
+        "screenshots": []
+      },
       "services": [
         "d1",
         "r2",
@@ -3344,6 +3519,7 @@
       "slug": "mailflare",
       "name": "Mailflare",
       "summary": "A self-hosted email service for your own domains: mailboxes, forwarding rules, and a web inbox, on Email Routing, D1, R2, Queues, and Durable Objects.",
+      "tagline": "Email and shared inboxes for your own domain",
       "addedAt": "2026-09-24T07:29:19+03:00",
       "version": "0.0.0-20260920.1bf70d2",
       "artifacts": {
@@ -3374,7 +3550,7 @@
         "screenshots": [
           {
             "url": "https://appflare.github.io/catalog/apps/mailflare/screenshots/01-inbox.png",
-            "sha256": "5851bd9c1360add38150646306fce2979cbb657eeddab5e0126822482de22b05",
+            "sha256": "6d6116e232cb8f762303de24ce6cf818eeacb3f4a5e4d903be4adc0492865e14",
             "alt": "Mailflare: Inbox"
           },
           {
@@ -3475,6 +3651,7 @@
       "slug": "md-page",
       "name": "md.page",
       "summary": "Turn Markdown into a shareable web page with one request: an API, an MCP server for coding agents, and pages that expire after 24 hours, on Workers KV.",
+      "tagline": "Turn your Markdown into a web page you can share",
       "addedAt": "2026-09-27T06:13:42+03:00",
       "version": "0.0.0-20260909.54bbbd1",
       "artifacts": {
@@ -3509,7 +3686,22 @@
           "url": "https://appflare.github.io/catalog/apps/md-page/icon.svg",
           "sha256": "b9cd0b3244cd7860c2b85143732c5c3af9e52093778c130a38f522d7969c1a03"
         },
-        "screenshots": []
+        "cover": {
+          "url": "https://appflare.github.io/catalog/apps/md-page/cover.png",
+          "sha256": "7a74cb7afd5c9d23f7c47a7fefb3bf0f8c79180dbf6a0eccfb18abc16833acee"
+        },
+        "screenshots": [
+          {
+            "url": "https://appflare.github.io/catalog/apps/md-page/screenshots/01-published-recipe.png",
+            "sha256": "b0318d6a0d6354eff3d30cfc7fbadef7856b3a12ce1c4f303e40a26fba28c639",
+            "alt": "md.page: Published recipe"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/md-page/screenshots/02-published-analysis.png",
+            "sha256": "31bc87077a0ff2aad44f31217263da9e4ef965e73762b01658196f234fd0fe6e",
+            "alt": "md.page: Published analysis"
+          }
+        ]
       },
       "services": [
         "kv",
@@ -3527,6 +3719,7 @@
       "slug": "memory-note",
       "name": "Memory Note",
       "summary": "A small notes and to-do API behind one token: push, list, edit, move and delete notes over REST from Siri Shortcuts, Alfred, a home screen widget or any script, stored in Workers KV or a Notion database.",
+      "tagline": "Notes and to-dos you can reach from shortcuts, widgets and scripts",
       "addedAt": "2026-09-27T11:44:57+03:00",
       "version": "0.0.0-20230822.c07fdc0",
       "artifacts": {
