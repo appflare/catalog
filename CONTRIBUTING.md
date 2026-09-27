@@ -379,6 +379,18 @@ Entries of 4 or 5 Workers install only on Workers Paid, so give them
   Workers has one value. `{{workerUrl}}` and `{{workerName}}` are the primary
   Worker's; in vars, `{{workerUrl:<name>}}` and `{{workerName:<name>}}` name any
   Worker of the entry.
+- **Workers only the app calls.** Set `"workersDev": false` on a Worker that only
+  the entry's other Workers reach, through a service binding or a Durable Object
+  binding, and that must not answer from the internet: for example one that trusts
+  identity headers the primary Worker sets. The manager keeps its workers.dev URL
+  and its version previews off on every install, update, rollback and settings
+  change, and the app's page lists it as not reachable from the internet. Leave it
+  out for every Worker that people or other services call, such as a file origin,
+  an inbox, or a webhook endpoint. The primary Worker cannot set it, and
+  `{{workerUrl:<name>}}` of such a Worker is refused, since it has no URL. An entry
+  that sets it publishes as artifact format 4, which Appflare managers released
+  before the field existed refuse to install or update to, asking the admin to
+  update Appflare first, instead of putting the Worker on the internet.
 
 The packer refuses an entry whose Workers have a service binding to a Worker outside
 the entry, bind each other in a cycle, bind a Workflow defined in another Worker (a
@@ -388,7 +400,8 @@ Durable Object binding whose `script_name` names a Worker outside the entry pack
 written, but the manager refuses to install it. The install check deploys every Worker (the others as
 `ci-<slug>-<suffix>-<name>`), passes when the primary Worker passes its health check
 and every other Worker answers at `/` without a 5xx or a Cloudflare error page, and
-removes all of them and every shared resource afterwards.
+removes all of them and every shared resource afterwards. A Worker with
+`"workersDev": false` is deployed with its workers.dev URL off and is not probed.
 
 ### Databases beyond wrangler migrations
 
@@ -449,6 +462,100 @@ when they meet a format they cannot read. So a release that starts using them
 reaches each install only once its Appflare is updated.
 
 The install check runs all of it (see "Install checks").
+
+### Seeding a first admin
+
+Some apps store their users in D1 and only let an existing admin create others, so
+upstream tells you to insert the first admin by hand, or ships a seed file with a
+default password. An entry can instead have Appflare insert that row once, at
+install, from values the admin enters in the install form. Declare it under
+`resources.d1[binding].seed`:
+
+```jsonc
+"secrets": [
+  { "name": "ADMIN_PASSWORD", "label": "Admin password", "generate": true, "seedOnly": true }
+],
+"vars": [
+  { "name": "ADMIN_USERNAME", "label": "Admin user name", "required": true, "seedOnly": true }
+],
+"resources": {
+  "d1": {
+    "DB": {
+      "schema": ["worker/schema.sql"],
+      "seed": {
+        "hashes": {
+          "admin": {
+            "from": "ADMIN_PASSWORD",
+            "method": "pbkdf2-sha256",
+            "iterations": 100000,
+            "saltBytes": 16,
+            "keyBytes": 32,
+            "encoding": "base64url"
+          }
+        },
+        "statements": [
+          {
+            "sql": "INSERT OR IGNORE INTO users (username, password_hash, password_salt, is_admin) VALUES (?, ?, ?, 1)",
+            "params": [{ "var": "ADMIN_USERNAME" }, { "hash": "admin" }, { "salt": "admin" }]
+          }
+        ]
+      }
+    }
+  }
+}
+```
+
+- **Params only.** Values are never written into the SQL. Put an anonymous `?`
+  wherever a value goes and list one param per `?`, in order (at most 20):
+  `{ "var": NAME }` or `{ "secret": NAME }` for a var or secret of the manifest,
+  `{ "hash": ID }` or `{ "salt": ID }` for a hash of `hashes`, or
+  `{ "value": "text" }` for literal text. D1 binds them. Numbered (`?1`) and named
+  (`:name`) parameters are refused, as is a count of `?` that differs from the
+  params.
+- **Idempotent statements.** Each statement is exactly one `INSERT OR IGNORE`, or
+  one `INSERT ... ON CONFLICT ... DO NOTHING`, so a retried step keeps the row the
+  first attempt added. `WITH`, `DO UPDATE`, other statement kinds (`CREATE`,
+  `UPDATE`, `DELETE`, `PRAGMA`, `ATTACH` and the like), and the `d1_migrations`,
+  `sqlite_` and `_cf_` tables are refused. At most 10 statements per binding.
+- **Hashes.** Hash a password exactly the way the app checks it; read the app's
+  sign-in code for the method and every parameter. `pbkdf2-sha256` takes explicit
+  `iterations` (at most 100,000, the most Cloudflare Workers derive), `saltBytes`
+  and `keyBytes` (16 to 64) and an `encoding` for both the hash and the fresh
+  random salt: `base64url` (unpadded), `base64` or `hex`. `bcrypt` gives a `$2b$`
+  hash with its salt inside, at `cost` 10 unless you set 4 to 10; a bcrypt source
+  longer than 72 bytes is refused at install, since bcrypt ignores the rest. Each
+  hash is computed once per install, so a hash and its salt match. Its `from` must
+  be a secret of the manifest, neither optional nor derived. At most 4 hashes per
+  binding, and each must be used.
+- **Seed-only values.** `"seedOnly": true` on a secret or var means it exists for
+  the seed alone: the install form asks for it once and says so, and it is never
+  set on the Worker, stored in the app's settings, or asked for again by updates or
+  settings. Use it for the admin's password, so the plaintext never sits in the
+  app's environment. A seed-only value must be used by a seed, cannot be optional,
+  derived or limited to some Workers, and no derived value may come from it. A var
+  a seed uses must be required, have a default, or be derived.
+- **Shown once.** A generated seed-only password is shown once more, with a copy
+  button, on the install's job page, and nowhere after that. Name the user in
+  `postInstall`, never the password.
+- **When it runs.** Only the install job seeds, after the binding's migrations,
+  schema files and post-deploy migrations. With `"beforeSchema": true` it runs
+  before the schema files instead, so the seeded row wins over a default row a
+  schema file adds with `INSERT OR IGNORE` (claim the default admin's user name,
+  and the upstream default password never lands). Updates never run a seed, even
+  a changed one, and never ask for seed-only values. A rollback restores the
+  Worker only.
+- **What it cannot protect.** If an upstream schema file inserts a default admin
+  and the seeded row is later deleted, the next update's schema file adds the
+  default again. Say so in the app's `README.md`, and prefer an upstream change
+  that drops the default row.
+
+Seeds are not allowed on self-deploying entries. An entry with a seed publishes as
+artifact format 4. Appflare managers released before seeds existed read at most
+format 3, so they refuse to install the entry or update to it, and say to update
+Appflare in Settings, instead of installing the app without its first admin.
+
+The install check runs every seed on a fresh database, where each statement must
+add exactly one row (see "Install checks").
 
 ### Editing an entry whose version is already released
 
@@ -1250,12 +1357,22 @@ self-deploying entries have no install check in CI (see "Sandbox tier" and
    `wrangler d1 execute --remote --file`; then, for every database, its
    post-deploy migrations with `wrangler d1 migrations apply --remote` against a
    second config whose `migrations_dir` is their folder, so `d1_migrations`
-   records them beside the others.
-   Every secret in the catalog manifest is set to a random value, and each var
-   gets its default. A required var without a default gets the placeholder `ci`.
+   records them beside the others; then every seed. A seed with
+   `beforeSchema` runs right after its database's migrations instead. Seeds go
+   through the D1 API, one `/query` call per statement with its values as
+   params (wrangler cannot bind params), after the statement is checked again
+   with the manager's guard; each statement must add exactly one row to the
+   fresh database, and no value is ever printed.
+   Every secret in the catalog manifest is set to a random value (32 random bytes
+   as base64 for `generate: "base64-key-32"`, a real key for
+   `generate: "vapid-private-key"`), and each var gets its default. A required
+   var without a default gets the placeholder `ci`. Seed-only secrets and vars
+   get values the same way (a seed-only var without a default gets `ci-admin`)
+   and are never set on a Worker; the seeds hash and bind them.
 5. Wait up to 60 seconds for `https://<worker>.<subdomain>.workers.dev/` to answer.
    The check probes the manifest's `install.healthPath` instead of `/` when it is
-   set, as the manager does.
+   set, as the manager does. A Worker the entry keeps off workers.dev
+   (`"workersDev": false`) is not probed.
    A 5xx, a `1042` refusal, or no answer is retried and fails at the deadline. Any
    other status passes. A plain 404 is retried too, but passes at the deadline,
    since an app may serve 404 at `/`. With `install.healthMode: "status-only"`

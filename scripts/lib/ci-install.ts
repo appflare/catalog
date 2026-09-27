@@ -1,12 +1,14 @@
 import { createHash, randomBytes } from "node:crypto";
 import { closeSync, mkdirSync, openSync, readSync, statSync, writeFileSync } from "node:fs";
 import path from "node:path";
-import type { EntryWorkerHelpers } from "./appflare-schema.ts";
+import bcrypt from "bcryptjs";
+import type { EntryWorkerHelpers, SeedHelpers } from "./appflare-schema.ts";
 import type {
   ArtifactBinding,
   ArtifactFile,
   ArtifactManifest,
   ArtifactQueueConsumer,
+  CatalogD1Seed,
   QueueRef,
 } from "./types.ts";
 
@@ -31,7 +33,11 @@ import type {
  * `wrangler d1 execute --file`, unrecorded; then, for every database, its
  * post-deploy migrations with `wrangler d1 migrations apply` against a second
  * config whose `migrations_dir` is their folder, so they are recorded in
- * `d1_migrations` beside the others.
+ * `d1_migrations` beside the others. A database's seed
+ * (`resources.d1[binding].seed`) runs last, or right after its migrations
+ * when it says `beforeSchema`, through the D1 API rather than wrangler,
+ * which cannot bind params (see {@link runSeed}). Seed-only secrets and vars
+ * get values for the seeds and are never set on a Worker.
  *
  * An app of several Workers (an artifact manifest with `workers`) is deployed as
  * the manager deploys it: every Worker, each after the Workers it binds to,
@@ -42,7 +48,9 @@ import type {
  * config gives them (the second deploy finds the first one's), but has no
  * name to give a KV namespace and would create one per Worker, so for an app
  * of several Workers the check creates KV namespaces through the API too and
- * writes their ids into every Worker's config.
+ * writes their ids into every Worker's config. A Worker the entry keeps off
+ * workers.dev (`install.workers[].workersDev: false`) is deployed with
+ * `workers_dev: false` and not probed, since nothing outside the app reaches it.
  */
 
 export const WORKER_DIR = "worker";
@@ -137,6 +145,8 @@ export interface CiD1Database {
   schema: string[];
   /** Its post-deploy migrations' names, applied from `d1-post-deploy/<binding>/`. */
   postDeploy: string[];
+  /** The rows it gets once, at install (`resources.d1[binding].seed`); omitted when none. */
+  seed?: CatalogD1Seed;
 }
 
 export interface CiInstallPlan {
@@ -146,12 +156,33 @@ export interface CiInstallPlan {
   /** Everything the deploy may create besides the Worker, deleted afterwards. */
   resources: CiResource[];
   /**
-   * Secret names from the catalog manifest; each gets a random value, or a new
-   * VAPID private key when it is listed in `vapidPrivateKeys`.
+   * The secrets the Worker gets, from the catalog manifest; each gets a random
+   * value, a new VAPID private key when it is listed in `vapidPrivateKeys`, or
+   * a 32-byte key when it is listed in `base64Keys`.
    */
   secrets: string[];
-  /** The `secrets` with `generate: "vapid-private-key"`, as the install form generates them. */
+  /**
+   * Secrets that only a D1 seed reads (`seedOnly`): each gets a value as
+   * `secrets` do, and is never set on the Worker, as the manager never sets it.
+   */
+  seedOnlySecrets: string[];
+  /** The secrets with `generate: "vapid-private-key"`, as the install form generates them. */
   vapidPrivateKeys: string[];
+  /** The secrets with `generate: "base64-key-32"`: 32 random bytes as padded base64. */
+  base64Keys: string[];
+  /**
+   * The values of the vars that only a D1 seed reads (`seedOnly`): the
+   * default, else a choice's first option, else {@link SEED_VAR_PLACEHOLDER}.
+   * Never set on the Worker.
+   */
+  seedVars: Record<string, string>;
+  /**
+   * Whether the Worker answers on its workers.dev URL. False only for a
+   * Worker of an app of several that the entry keeps off it
+   * (`install.workers[].workersDev: false`): the check deploys it with
+   * `workers_dev: false` and does not probe it.
+   */
+  workersDev: boolean;
   /**
    * Secrets the catalog manifest derives from another (`derive`): each gets
    * the value the manager would compute from its source's generated value.
@@ -225,11 +256,32 @@ export interface CiDerivedSecret {
 }
 
 interface CatalogForms {
+  /** The secrets the Worker gets: every one but the derived and seed-only ones. */
   secrets: string[];
+  /** Secrets, seed-only ones included, with `generate: "vapid-private-key"`. */
   vapidPrivateKeys: string[];
+  /** Secrets, seed-only ones included, with `generate: "base64-key-32"`. */
+  base64Keys: string[];
+  /** Secrets that exist only for seeds (`seedOnly`): given a value, never set on the Worker. */
+  seedOnlySecrets: string[];
   derivedSecrets: CiDerivedSecret[];
   derivedVars: CiDerivedSecret[];
-  vars: { name: string; default?: string; required: boolean; firstOption?: string }[];
+  /** The vars the Worker gets: every one but the derived and seed-only ones. */
+  vars: CatalogFormVar[];
+  /** Vars that exist only for seeds (`seedOnly`): given a value, never set on the Worker. */
+  seedOnlyVars: CatalogFormVar[];
+}
+
+interface CatalogFormVar {
+  name: string;
+  default?: string;
+  required: boolean;
+  firstOption?: string;
+}
+
+/** Whether a catalog secret or var exists only for seeds (`seedOnly: true`). */
+function seedOnly(item: unknown): boolean {
+  return (item as { seedOnly?: unknown }).seedOnly === true;
 }
 
 /** The `derive` block of a catalog secret, when it has a usable one. */
@@ -254,12 +306,16 @@ function firstOption(v: { type?: unknown; options?: unknown }): Record<string, s
  * Secret names and var defaults from the catalog manifest embedded in the
  * artifact. Optional secrets are set too, so the check covers the app with
  * every feature its secrets turn on. A derived secret or var (`derive`) is
- * listed apart, with its source: it is computed, never random.
+ * listed apart, with its source: it is computed, never random. So is a
+ * seed-only one (`seedOnly`), which only a D1 seed reads: the manager never
+ * sets it on the Worker, so neither does the check.
  */
 export function catalogForms(catalog: unknown): CatalogForms {
   const c = (catalog ?? {}) as { secrets?: unknown; vars?: unknown };
   const secrets: string[] = [];
   const vapidPrivateKeys: string[] = [];
+  const base64Keys: string[] = [];
+  const seedOnlySecrets: string[] = [];
   const derivedSecrets: CiDerivedSecret[] = [];
   for (const s of Array.isArray(c.secrets) ? c.secrets : []) {
     const name = (s as { name?: unknown }).name;
@@ -269,8 +325,10 @@ export function catalogForms(catalog: unknown): CatalogForms {
       derivedSecrets.push({ name, ...derive });
       continue;
     }
-    secrets.push(name);
-    if ((s as { generate?: unknown }).generate === "vapid-private-key") vapidPrivateKeys.push(name);
+    (seedOnly(s) ? seedOnlySecrets : secrets).push(name);
+    const generate = (s as { generate?: unknown }).generate;
+    if (generate === "vapid-private-key") vapidPrivateKeys.push(name);
+    if (generate === "base64-key-32") base64Keys.push(name);
   }
   const derivedVars: CiDerivedSecret[] = [];
   for (const v of Array.isArray(c.vars) ? c.vars : []) {
@@ -279,7 +337,7 @@ export function catalogForms(catalog: unknown): CatalogForms {
     if (typeof name === "string" && derive !== null) derivedVars.push({ name, ...derive });
   }
   const derivedVarNames = new Set(derivedVars.map((v) => v.name));
-  const vars = Array.isArray(c.vars)
+  const formVars: Array<CatalogFormVar & { seedOnly: boolean }> = Array.isArray(c.vars)
     ? c.vars
         .map(
           (v) =>
@@ -307,9 +365,20 @@ export function catalogForms(catalog: unknown): CatalogForms {
           ...(typeof v.default === "string" ? { default: v.default } : {}),
           required: v.required === true,
           ...firstOption(v),
+          seedOnly: seedOnly(v),
         }))
     : [];
-  return { secrets, vapidPrivateKeys, derivedSecrets, derivedVars, vars };
+  const formVar = ({ seedOnly: _seedOnly, ...v }: CatalogFormVar & { seedOnly: boolean }) => v;
+  return {
+    secrets,
+    vapidPrivateKeys,
+    base64Keys,
+    seedOnlySecrets,
+    derivedSecrets,
+    derivedVars,
+    vars: formVars.filter((v) => !v.seedOnly).map(formVar),
+    seedOnlyVars: formVars.filter((v) => v.seedOnly).map(formVar),
+  };
 }
 
 /**
@@ -596,6 +665,9 @@ export function cronNote(crons: readonly string[]): string | null {
 /** Placeholder for a required var without a default; the check only needs the Worker to start. */
 export const REQUIRED_VAR_PLACEHOLDER = "ci";
 
+/** What a seed-only var without a default gets, such as the first admin's user name. */
+export const SEED_VAR_PLACEHOLDER = "ci-admin";
+
 /**
  * What the manager fills in for `{{workerUrl}}`, `{{workerName}}` and
  * `{{accountId}}` in var values: the wrangler config's own vars (strings, and
@@ -705,6 +777,8 @@ export function planCiInstall(
     subdomain?: string;
     accountId?: string;
     entry?: EntryPlanContext;
+    /** False for a Worker the entry keeps off workers.dev; true by default. */
+    workersDev?: boolean;
   } = {},
 ): CiInstallPlan {
   const { worker } = manifest;
@@ -749,6 +823,7 @@ export function planCiInstall(
         break;
       case "d1": {
         const files = d1FilesOf(manifest, binding.name);
+        const seed = d1SeedOf(manifest.catalog, binding.name);
         d1.push({
           binding: binding.name,
           database_name: resource,
@@ -764,8 +839,14 @@ export function planCiInstall(
           migrations: files.migrations.length > 0,
           schema: files.schema.map((f) => `${D1_SCHEMA_DIR}/${binding.name}/${f.name}`),
           postDeploy: files.postDeploy.map((f) => f.name),
+          ...(seed === null ? {} : { seed }),
         };
-        if (database.migrations || database.schema.length > 0 || database.postDeploy.length > 0) {
+        if (
+          database.migrations ||
+          database.schema.length > 0 ||
+          database.postDeploy.length > 0 ||
+          seed !== null
+        ) {
           d1Databases.push(database);
         }
         break;
@@ -910,6 +991,16 @@ export function planCiInstall(
     const rendered = renderJsonPlaceholders(value, placeholders);
     vars[varName] = entry === undefined ? rendered : mapJsonStrings(rendered, entry.render);
   }
+  // Seed-only vars stay out of the config: only the seed statements read them.
+  const seedVars: Record<string, string> = {};
+  for (const v of forms.seedOnlyVars) {
+    const rendered = renderPlaceholders(
+      v.default ?? v.firstOption ?? SEED_VAR_PLACEHOLDER,
+      placeholders,
+    );
+    seedVars[v.name] = entry === undefined ? rendered : entry.render(rendered);
+  }
+  const workersDev = options.workersDev ?? true;
 
   const rules = new Map<WranglerRule, string[]>();
   for (const module of worker.modules) {
@@ -931,7 +1022,8 @@ export function planCiInstall(
     find_additional_modules: true,
     base_dir: WORKER_DIR,
     rules: [...rules].map(([type, globs]) => ({ type, globs })),
-    workers_dev: true,
+    // Off for a Worker the entry keeps off workers.dev, as the manager keeps it.
+    workers_dev: workersDev,
     preview_urls: false,
     send_metrics: false,
     ...(hasAssets
@@ -980,7 +1072,11 @@ export function planCiInstall(
     config,
     resources,
     secrets: forms.secrets,
+    seedOnlySecrets: forms.seedOnlySecrets,
     vapidPrivateKeys: forms.vapidPrivateKeys,
+    base64Keys: forms.base64Keys,
+    seedVars,
+    workersDev,
     derivedSecrets: forms.derivedSecrets,
     derivedVars: forms.derivedVars,
     d1: d1Databases,
@@ -1193,13 +1289,18 @@ export function planCiApp(
     scriptNames[w.name] = scriptName;
     entryNames.push(w.name);
   }
+  // A Worker kept off workers.dev has no URL; the schema refuses a
+  // `{{workerUrl:<name>}}` of one, so null never reaches a var.
+  const onWorkersDev = new Map(ordered.map((w) => [w.name, w.primary || w.workersDev !== false]));
   const placeholders = Object.fromEntries(
     Object.entries(scriptNames).map(([entryName, scriptName]) => [
       entryName,
       {
         workerName: scriptName,
         workerUrl:
-          options.subdomain === undefined ? null : healthUrl(scriptName, options.subdomain, ""),
+          options.subdomain === undefined || onWorkersDev.get(entryName) === false
+            ? null
+            : healthUrl(scriptName, options.subdomain, ""),
       },
     ]),
   );
@@ -1226,6 +1327,7 @@ export function planCiApp(
       ...planOptions,
       namespaceId,
       entry,
+      workersDev: onWorkersDev.get(entryName) !== false,
     });
     return {
       entryName,
@@ -1363,11 +1465,13 @@ function derivedValue(
 }
 
 /**
- * The value of every secret any Worker of the app gets, by name: a random
- * one for each, a new VAPID private key for a `generate: "vapid-private-key"`
- * secret, and for a derived secret the value `derive` computes from its
- * source's. A secret that goes to several Workers has one value for all of
- * them, as the install form gives it one. Never printed.
+ * The value of every secret any Worker of the app gets, and of every
+ * seed-only secret, by name: a random one (32 characters) for each, a new
+ * VAPID private key for a `generate: "vapid-private-key"` secret, 32 random
+ * bytes as padded base64 for a `generate: "base64-key-32"` one, and for a
+ * derived secret the value `derive` computes from its source's. A secret
+ * that goes to several Workers has one value for all of them, as the install
+ * form gives it one. Never printed.
  */
 export function appSecretValues(
   app: Pick<CiAppPlan, "workers">,
@@ -1377,9 +1481,12 @@ export function appSecretValues(
   const values = new Map<string, string>();
   for (const w of app.workers) {
     const vapid = new Set(w.plan.vapidPrivateKeys);
-    for (const secret of w.plan.secrets) {
+    const base64 = new Set(w.plan.base64Keys);
+    for (const secret of [...w.plan.secrets, ...w.plan.seedOnlySecrets]) {
       if (values.has(secret)) continue;
-      if (!vapid.has(secret)) {
+      if (base64.has(secret)) {
+        values.set(secret, randomBase64Key32());
+      } else if (!vapid.has(secret)) {
         values.set(secret, random());
       } else if (fns.generateVapidPrivateKey === null) {
         throw new Error(`${secret} is a VAPID private key, and no generator was loaded`);
@@ -1433,6 +1540,47 @@ export function withVars(
  * It runs after the primary's check, so its route has had time to go live.
  */
 export const OTHER_WORKER_PROBE = { path: "/", timeoutMs: 30_000 } as const;
+
+/** How long the primary Worker has to answer at its health path. */
+export const PRIMARY_PROBE_TIMEOUT_MS = 60_000;
+
+/** What the summary says of a Worker the entry keeps off workers.dev. */
+export const NOT_ON_WORKERS_DEV = "not probed: kept off workers.dev";
+
+/** One Worker's health check: a URL to poll, or why it has none. */
+export type CiHealthProbe<W> =
+  | { worker: W; url: string; timeoutMs: number }
+  | { worker: W; skipped: HealthResult };
+
+/**
+ * The health checks of the app, in order: the primary Worker at its health
+ * path, then every other Worker at {@link OTHER_WORKER_PROBE}'s path. A
+ * Worker the entry keeps off workers.dev has no URL to probe: the check,
+ * like the manager, reaches it only through the other Workers' bindings, so
+ * it is skipped and counts as passing.
+ */
+export function healthProbes<
+  W extends { primary: boolean; plan: Pick<CiInstallPlan, "name" | "workersDev"> },
+>(app: { workers: readonly W[]; healthPath: string }, subdomain: string): CiHealthProbe<W>[] {
+  const primary = app.workers.filter((w) => w.primary);
+  const others = app.workers.filter((w) => !w.primary);
+  return [
+    ...primary.map((worker) => ({
+      worker,
+      url: healthUrl(worker.plan.name, subdomain, app.healthPath),
+      timeoutMs: PRIMARY_PROBE_TIMEOUT_MS,
+    })),
+    ...others.map((worker) =>
+      worker.plan.workersDev
+        ? {
+            worker,
+            url: healthUrl(worker.plan.name, subdomain, OTHER_WORKER_PROBE.path),
+            timeoutMs: OTHER_WORKER_PROBE.timeoutMs,
+          }
+        : { worker, skipped: { ok: true, detail: NOT_ON_WORKERS_DEV } },
+    ),
+  ];
+}
 
 /** What the check found for one Worker of the app. */
 export interface CiWorkerResult {
@@ -1553,9 +1701,17 @@ export function unpackArtifact(manifest: ArtifactManifest, zipPath: string, outD
   }
 }
 
-/** A random secret value; never printed. */
+/** A random secret value, 32 characters of base64url; never printed. */
 export function randomSecret(): string {
   return randomBytes(24).toString("base64url");
+}
+
+/**
+ * A `generate: "base64-key-32"` value: 32 random bytes as padded base64 (44
+ * characters), the form the install form generates. Never printed.
+ */
+export function randomBase64Key32(): string {
+  return randomBytes(32).toString("base64");
 }
 
 // ---------------------------------------------------------------------------
@@ -1575,6 +1731,18 @@ function d1FilesOf(
     schema: of(manifest.d1Schema),
     postDeploy: of(manifest.d1PostDeploy),
   };
+}
+
+/**
+ * One D1 binding's seed (`resources.d1[binding].seed`) from the catalog
+ * manifest embedded in the artifact, or null when it has none. The schema
+ * parsed the catalog manifest, so a seed found here has its full shape.
+ */
+function d1SeedOf(catalog: unknown, binding: string): CatalogD1Seed | null {
+  const d1 = (catalog as { resources?: { d1?: unknown } } | null)?.resources?.d1;
+  if (d1 === null || typeof d1 !== "object" || !Object.hasOwn(d1, binding)) return null;
+  const seed = (d1 as Record<string, { seed?: unknown } | undefined>)[binding]?.seed;
+  return seed === undefined || seed === null ? null : (seed as CatalogD1Seed);
 }
 
 /**
@@ -1633,14 +1801,36 @@ export interface CiWranglerStep {
   args: string[];
 }
 
+/** One database's seed, run through the D1 API (see {@link runSeed}). */
+export interface CiSeedStep {
+  worker: string;
+  database: string;
+  binding: string;
+  seed: CatalogD1Seed;
+}
+
+export type CiD1Step = CiWranglerStep | CiSeedStep;
+
+/** Whether a D1 step is a seed rather than a wrangler command. */
+export function isSeedStep(step: CiD1Step): step is CiSeedStep {
+  return "seed" in step;
+}
+
 /**
- * The wrangler commands that run the app's D1 SQL once every Worker is
- * deployed, in the manager's order: for each database its migrations, then
- * its schema files one by one (unrecorded; the packer accepts only files that
- * are safe to run again); then every database's post-deploy migrations.
+ * The steps that run the app's D1 SQL once every Worker is deployed, in the
+ * manager's order: for each database its migrations, then its seed when it
+ * says `beforeSchema`, then its schema files one by one (unrecorded; the
+ * packer accepts only files that are safe to run again); then every
+ * database's post-deploy migrations; then every other seed.
  */
-export function d1Steps(databases: readonly CiAppD1Database[]): CiWranglerStep[] {
-  const steps: CiWranglerStep[] = [];
+export function d1Steps(databases: readonly CiAppD1Database[]): CiD1Step[] {
+  const steps: CiD1Step[] = [];
+  const seedStep = (d: CiAppD1Database, seed: CatalogD1Seed): CiSeedStep => ({
+    worker: d.worker,
+    database: d.database,
+    binding: d.binding,
+    seed,
+  });
   for (const d of databases) {
     if (d.migrations) {
       steps.push({
@@ -1649,6 +1839,7 @@ export function d1Steps(databases: readonly CiAppD1Database[]): CiWranglerStep[]
         args: ["d1", "migrations", "apply", d.database, "--remote"],
       });
     }
+    if (d.seed?.beforeSchema === true) steps.push(seedStep(d, d.seed));
     for (const file of d.schema) {
       steps.push({
         worker: d.worker,
@@ -1664,7 +1855,159 @@ export function d1Steps(databases: readonly CiAppD1Database[]): CiWranglerStep[]
       args: ["d1", "migrations", "apply", d.database, "--remote"],
     });
   }
+  for (const d of databases) {
+    if (d.seed !== undefined && d.seed.beforeSchema !== true) steps.push(seedStep(d, d.seed));
+  }
   return steps;
+}
+
+// ---------------------------------------------------------------------------
+// D1 seeds
+
+/** The bcrypt cost of a seed hash that names none, as the manager's seed step uses. */
+export const SEED_BCRYPT_DEFAULT_COST = 10;
+
+/** The values a seed's params and hashes read, by name. Never printed. */
+export interface CiSeedValues {
+  vars: Record<string, string>;
+  secrets: Record<string, string>;
+}
+
+/** Whether any database of the app has a seed. */
+export function needsSeedHelpers(app: { d1: ReadonlyArray<Pick<CiD1Database, "seed">> }): boolean {
+  return app.d1.some((d) => d.seed !== undefined);
+}
+
+/**
+ * What the app's seeds read: every secret value the check chose (seed-only
+ * ones included), and every var as the Workers get it from `configs` (the
+ * configs they are deployed with, derived vars included; a JSON var as its
+ * JSON text), plus each plan's seed-only vars. The primary Worker's value of
+ * a var comes first. Never printed.
+ */
+export function seedValues(
+  workers: ReadonlyArray<{
+    primary: boolean;
+    plan: Pick<CiInstallPlan, "seedVars">;
+    config: Record<string, unknown>;
+  }>,
+  secrets: ReadonlyMap<string, string>,
+): CiSeedValues {
+  const vars = new Map<string, string>();
+  const ordered = [...workers.filter((w) => w.primary), ...workers.filter((w) => !w.primary)];
+  for (const w of ordered) {
+    const own = (w.config.vars ?? {}) as Record<string, unknown>;
+    for (const [name, value] of [...Object.entries(own), ...Object.entries(w.plan.seedVars)]) {
+      if (vars.has(name) || value === undefined) continue;
+      vars.set(name, typeof value === "string" ? value : JSON.stringify(value));
+    }
+  }
+  return { vars: Object.fromEntries(vars), secrets: Object.fromEntries(secrets) };
+}
+
+/** How the check hashes and binds a seed (see `loadSeedHelpers`), and bcrypt. */
+export interface CiSeedFunctions extends SeedHelpers {
+  /** A `$2b$` bcrypt hash of `value` at `cost`, with a fresh salt. */
+  bcryptHash(value: string, cost: number): string;
+}
+
+/** `helpers` with bcryptjs's `hashSync`, the bcrypt the manager hashes seeds with. */
+export function seedFunctions(helpers: SeedHelpers): CiSeedFunctions {
+  return {
+    pbkdf2SeedHash: helpers.pbkdf2SeedHash,
+    seedStatementProblems: helpers.seedStatementProblems,
+    seedStatementParams: helpers.seedStatementParams,
+    bcryptInputProblem: helpers.bcryptInputProblem,
+    bcryptHash: (value, cost) => bcrypt.hashSync(value, cost),
+  };
+}
+
+/** Every hash of `seed`, each computed once for the run, so a hash and its salt match. */
+async function seedHashValues(
+  seed: CatalogD1Seed,
+  secrets: Readonly<Record<string, string>>,
+  fns: CiSeedFunctions,
+): Promise<Record<string, { hash: string; salt?: string }>> {
+  const out = new Map<string, { hash: string; salt?: string }>();
+  for (const [id, hash] of Object.entries(seed.hashes ?? {})) {
+    const value = Object.hasOwn(secrets, hash.from) ? secrets[hash.from] : undefined;
+    if (value === undefined || value.length === 0) {
+      throw new Error(`the seed's hash "${id}" is of ${hash.from}, which the check did not set`);
+    }
+    if (hash.method === "pbkdf2-sha256") {
+      out.set(id, await fns.pbkdf2SeedHash(hash, value));
+    } else {
+      const problem = fns.bcryptInputProblem(
+        `The source of the hash "${id}" (${hash.from})`,
+        value,
+      );
+      if (problem !== null) throw new Error(problem);
+      out.set(id, { hash: fns.bcryptHash(value, hash.cost ?? SEED_BCRYPT_DEFAULT_COST) });
+    }
+  }
+  return Object.fromEntries(out);
+}
+
+/** The rows a D1 `/query` result says its statement changed, or null when it does not say. */
+function queryChanges(res: CfResponse): number | null {
+  const first = Array.isArray(res.body?.result) ? (res.body.result[0] as unknown) : undefined;
+  const changes = (first as { meta?: { changes?: unknown } } | undefined)?.meta?.changes;
+  return typeof changes === "number" ? changes : null;
+}
+
+/**
+ * Runs one database's seed as the manager's seed step does: every statement
+ * checked again with `seedStatementProblems`, the hashes derived once, then
+ * each statement as its own `POST /d1/database/{uuid}/query` with
+ * `{ sql, params }`, so no value is ever part of the SQL. wrangler's
+ * `d1 execute` cannot bind params, hence the API. The database is fresh, so
+ * each statement must add exactly its one row (`meta.changes === 1`); a
+ * statement that adds none (a schema file already inserted the row) fails
+ * the check. Errors name the statement and D1's message, never a value.
+ * Returns the number of statements run.
+ */
+export async function runSeed(
+  request: CfRequest,
+  step: Pick<CiSeedStep, "database" | "seed">,
+  values: CiSeedValues,
+  fns: CiSeedFunctions,
+): Promise<number> {
+  const { statements } = step.seed;
+  statements.forEach((statement, i) => {
+    const problems = fns.seedStatementProblems(statement.sql, statement.params.length);
+    if (problems.length > 0) {
+      throw new Error(`seed statement ${i + 1} cannot run: ${problems.join("; ")}`);
+    }
+  });
+  const hashes = await seedHashValues(step.seed, values.secrets, fns);
+  const id = await findD1Database(request, step.database);
+  if (id === null) {
+    throw new Error(`the database ${step.database} does not exist, so it cannot be seeded`);
+  }
+  for (const [i, statement] of statements.entries()) {
+    const subject = `seed statement ${i + 1} of ${statements.length} on ${step.database}`;
+    let params: string[];
+    try {
+      params = fns.seedStatementParams(statement, { ...values, hashes });
+    } catch (error) {
+      throw new Error(`${subject}: ${error instanceof Error ? error.message : String(error)}`);
+    }
+    const res = await request("POST", `/d1/database/${encodeURIComponent(id)}/query`, {
+      sql: statement.sql,
+      params,
+    });
+    if (!created(res)) {
+      throw new Error(`${subject} failed: ${describe(res)}`);
+    }
+    const changes = queryChanges(res);
+    if (changes !== 1) {
+      throw new Error(
+        `${subject} added ${changes ?? "an unknown number of"} rows; on a fresh database each ` +
+          "statement adds its one row, so something else already wrote it",
+      );
+    }
+  }
+  return statements.length;
 }
 
 // ---------------------------------------------------------------------------
@@ -1817,6 +2160,16 @@ async function findQueueId(request: CfRequest, queue: string): Promise<string | 
   return typeof hit?.queue_id === "string" ? hit.queue_id : null;
 }
 
+/** A D1 database's uuid by name; null when it does not exist. */
+async function findD1Database(request: CfRequest, name: string): Promise<string | null> {
+  const res = await request("GET", `/d1/database?name=${encodeURIComponent(name)}&per_page=100`);
+  if (res.status !== 200 || !Array.isArray(res.body?.result)) {
+    throw new Error(`listing D1 databases failed: ${describe(res)}`);
+  }
+  const hit = (res.body.result as { uuid: string; name: string }[]).find((db) => db.name === name);
+  return hit?.uuid ?? null;
+}
+
 /** Finds a resource's id by name; null when it does not exist. */
 async function findResource(request: CfRequest, resource: CiResource): Promise<string | null> {
   switch (resource.type) {
@@ -1839,19 +2192,8 @@ async function findResource(request: CfRequest, resource: CiResource): Promise<s
       }
       throw new Error("too many KV namespaces to search");
     }
-    case "d1": {
-      const res = await request(
-        "GET",
-        `/d1/database?name=${encodeURIComponent(resource.name)}&per_page=100`,
-      );
-      if (res.status !== 200 || !Array.isArray(res.body?.result)) {
-        throw new Error(`listing D1 databases failed: ${describe(res)}`);
-      }
-      const hit = (res.body.result as { uuid: string; name: string }[]).find(
-        (db) => db.name === resource.name,
-      );
-      return hit?.uuid ?? null;
-    }
+    case "d1":
+      return findD1Database(request, resource.name);
     case "vectorize": {
       // One page lists every index (an account has at most 50,000).
       const res = await request("GET", "/vectorize/v2/indexes");

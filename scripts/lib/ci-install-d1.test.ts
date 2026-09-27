@@ -13,6 +13,7 @@ import { loadAppflareSchema, loadEntryWorkerHelpers, parseOrThrow } from "./appf
 import {
   type CiD1Database,
   d1Steps,
+  isSeedStep,
   migrationsLayout,
   planCiApp,
   planCiInstall,
@@ -144,7 +145,9 @@ describe("postDeployConfig", () => {
 describe("d1Steps", () => {
   it("runs migrations then schema files per database, then every post-deploy step", () => {
     const app = planCiApp(ledger(), "ci-ledger-pr1");
-    const steps = d1Steps(app.d1).map((s) => [s.config, ...s.args].join(" "));
+    const steps = d1Steps(app.d1).map((s) =>
+      isSeedStep(s) ? `seed ${s.database}` : [s.config, ...s.args].join(" "),
+    );
     expect(steps).toEqual([
       "wrangler.json d1 migrations apply ci-ledger-pr1-db --remote",
       "wrangler.json d1 execute ci-ledger-pr1-db --remote --yes --file d1-schema/DB/db/views.sql",

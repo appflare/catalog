@@ -11,7 +11,12 @@ import { createRequire } from "node:module";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { parseArgs } from "node:util";
-import { loadAppflareSchema, loadEntryWorkerHelpers, parseOrThrow } from "./lib/appflare-schema.ts";
+import {
+  loadAppflareSchema,
+  loadEntryWorkerHelpers,
+  loadSeedHelpers,
+  parseOrThrow,
+} from "./lib/appflare-schema.ts";
 import {
   analyticsEngineSkip,
   analyticsEngineState,
@@ -35,13 +40,17 @@ import {
   type HealthMode,
   type HealthResult,
   HYPERDRIVE_TEST_URL,
-  healthUrl,
+  healthProbes,
   hyperdriveSkip,
+  isSeedStep,
   needsPackerSecrets,
-  OTHER_WORKER_PROBE,
+  needsSeedHelpers,
   POST_DEPLOY_CONFIG,
   planCiApp,
   postDeployConfig,
+  runSeed,
+  seedFunctions,
+  seedValues,
   skippedSummaryLines,
   unpackArtifact,
   waitForHealth,
@@ -77,11 +86,17 @@ deploy   Unpacks the artifact (checking every file's sha256), removes anything
          them; then its schema files in order with wrangler d1 execute
          --file; then its post-deploy migrations with wrangler d1
          migrations apply against wrangler.post-deploy.json, whose
-         migrations_dir is their folder, so d1_migrations records them),
+         migrations_dir is their folder, so d1_migrations records them;
+         then each seed through the D1 API, one /query call per statement
+         with its values as params, where it says beforeSchema before the
+         schema files instead; each statement must add exactly one row),
          sets each catalog secret to a random value
-         (a new VAPID private key for generate: "vapid-private-key", and a
+         (a new VAPID private key for generate: "vapid-private-key", 32
+         random bytes as base64 for generate: "base64-key-32", and a
          derived one to the value the manager computes from its source's; a
-         derived var, such as a VAPID public key, goes into the config),
+         derived var, such as a VAPID public key, goes into the config;
+         seed-only secrets and vars get values for the seed and are never
+         set on a Worker),
          and waits up to 60 s for
          https://<worker>.<subdomain>.workers.dev<healthPath> to answer
          (install.healthPath from the catalog manifest, else /). A failed
@@ -96,7 +111,9 @@ deploy   Unpacks the artifact (checking every file's sha256), removes anything
          point at its CI Worker; each secret and var goes to the Workers the
          catalog manifest names, a shared secret with one value; each D1
          database's SQL runs once. After the primary's health check, every other
-         Worker must answer at / within 30 s.
+         Worker must answer at / within 30 s, except one the entry keeps off
+         workers.dev (workersDev: false), which is deployed with workers_dev
+         off and not probed.
 
          When a Worker binds an Analytics Engine dataset and the account has
          Analytics Engine off, nothing is deployed: the run summary says
@@ -284,6 +301,7 @@ async function deployAndCheck(
     ? await loadPackerSecrets(resolveAppflareDir())
     : { deriveSecretValue: null, generateVapidPrivateKey: null };
   const values = appSecretValues(app, packer);
+  const configs: Record<string, unknown>[] = [];
   for (const [i, w] of app.workers.entries()) {
     const dir = dirs[i] as string;
     const withKv = app.kvNamespaces.length > 0 ? withKvIds(w.plan.config, kvIds) : w.plan.config;
@@ -293,6 +311,7 @@ async function deployAndCheck(
       withHyperdrive,
       derivedVarValues(w.plan, values, packer.deriveSecretValue),
     );
+    configs.push(config);
     writeFileSync(path.join(dir, DEPLOY_CONFIG), `${JSON.stringify(config, null, 2)}\n`);
     const postDeploy = postDeployConfig(config, w.plan.d1);
     if (postDeploy !== null) {
@@ -315,8 +334,23 @@ async function deployAndCheck(
   for (const w of app.workers) {
     await attachQueueConsumers(request, w.plan);
   }
+  // Seeds bind values only the D1 API takes as params; loaded only for them.
+  const seeds = needsSeedHelpers(app)
+    ? seedFunctions(await loadSeedHelpers(resolveAppflareDir()))
+    : null;
+  const seedInput = seedValues(
+    app.workers.map((w, i) => ({ ...w, config: configs[i] as Record<string, unknown> })),
+    values,
+  );
   for (const step of d1Steps(app.d1)) {
-    wrangler(bin, dirOf(step.worker), step.args, undefined, step.config);
+    if (!isSeedStep(step)) {
+      wrangler(bin, dirOf(step.worker), step.args, undefined, step.config);
+    } else if (seeds === null) {
+      throw new Error(`${step.database} has a seed, and no seed functions were loaded`);
+    } else {
+      const count = await runSeed(request, step, seedInput, seeds);
+      info(`seeded ${step.database} (${step.binding}): ${count} statement(s), one row each`);
+    }
   }
   for (const [i, w] of app.workers.entries()) {
     for (const secret of [...w.plan.secrets, ...w.plan.derivedSecrets.map((s) => s.name)]) {
@@ -328,15 +362,13 @@ async function deployAndCheck(
     }
   }
   const results: CiWorkerResult[] = [];
-  for (const w of app.workers.filter((x) => x.primary)) {
-    const url = healthUrl(w.plan.name, subdomain, app.healthPath);
-    results.push({ worker: w, health: await probe(url, 60_000, app.healthMode) });
-  }
-  for (const w of app.workers.filter((x) => !x.primary)) {
-    const url = healthUrl(w.plan.name, subdomain, OTHER_WORKER_PROBE.path);
+  for (const check of healthProbes(app, subdomain)) {
     results.push({
-      worker: w,
-      health: await probe(url, OTHER_WORKER_PROBE.timeoutMs, app.healthMode),
+      worker: check.worker,
+      health:
+        "skipped" in check
+          ? check.skipped
+          : await probe(check.url, check.timeoutMs, app.healthMode),
     });
   }
   const failed = results.filter((r) => !r.health.ok);

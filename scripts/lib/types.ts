@@ -45,6 +45,8 @@ export interface CatalogEntryWorker {
   wranglerConfig: string;
   buildCommand?: string | string[];
   primary?: true;
+  /** False for a Worker only the entry's other Workers reach: kept off workers.dev. */
+  workersDev?: boolean;
 }
 
 /** Subset of `CatalogManifest`. */
@@ -134,6 +136,11 @@ export interface AppWorker {
   /** Its name within the entry (`install.workers[].name`); null for an app of one Worker. */
   name: string | null;
   primary: boolean;
+  /**
+   * Whether it answers on its workers.dev URL: false only for a Worker other
+   * than the primary one whose `install.workers[].workersDev` is false.
+   */
+  workersDev: boolean;
   worker: ArtifactWorker;
   assets: ArtifactAssets;
 }
@@ -160,11 +167,14 @@ export interface ArtifactEntryWorker {
  * `workers` lists the others in the catalog entry's order. Format 3 is either
  * shape, and carries D1 schema files or post-deploy migrations
  * (`d1Schema`, `d1PostDeploy`), which managers that read only formats 1 and
- * 2 refuse. Whether an artifact has several Workers is whether it has
- * `workers`, whatever its format.
+ * 2 refuse. Format 4 is either shape too, and its catalog manifest keeps a
+ * Worker off workers.dev (`install.workers[].workersDev: false`) or seeds a
+ * D1 database (`resources.d1[binding].seed`), which managers that read only
+ * formats 1 to 3 refuse. Whether an artifact has several Workers is whether
+ * it has `workers`, whatever its format.
  */
 export interface ArtifactManifest {
-  format: 1 | 2 | 3;
+  format: 1 | 2 | 3 | 4;
   app: string;
   version: string;
   keyId: string;
@@ -210,16 +220,16 @@ export interface ArtifactManifest {
    * SQL files run on every install and update after the migrations, never
    * recorded in `d1_migrations`, by binding, in the catalog manifest's order
    * (`resources.d1[binding].schema`); each is named by its path in the
-   * app's repository. Format 3 only; omitted when there are none.
+   * app's repository. Formats 3 and 4; omitted when there are none.
    */
   d1Schema?: Record<string, (ArtifactFile & { name: string })[]>;
   /**
    * Migrations run once the new version serves all traffic, recorded in
    * `d1_migrations` like the others, by binding
-   * (`resources.d1[binding].postDeployMigrationsDir`). Format 3 only.
+   * (`resources.d1[binding].postDeployMigrationsDir`). Formats 3 and 4.
    */
   d1PostDeploy?: Record<string, (ArtifactFile & { name: string })[]>;
-  /** Formats 2 and 3, for an app of several Workers: every Worker but the primary one. */
+  /** Formats 2 to 4, for an app of several Workers: every Worker but the primary one. */
   workers?: ArtifactEntryWorker[];
   /** The catalog manifest the artifact was packed from, as parsed by the schema. */
   catalog: unknown;
@@ -367,4 +377,47 @@ export interface CatalogStats {
   generatedAt: string;
   apps: Record<string, CatalogAppStats>;
   sources: { github: CatalogStatsSource; telemetry: CatalogStatsSource };
+}
+
+/** `SeedPbkdf2Hash`, in full: a PBKDF2-SHA-256 hash of a secret with a fresh random salt. */
+export interface SeedPbkdf2Hash {
+  from: string;
+  method: "pbkdf2-sha256";
+  iterations: number;
+  saltBytes: number;
+  keyBytes: number;
+  encoding: "base64url" | "base64" | "hex";
+}
+
+/** `SeedBcryptHash`, in full: a `$2b$` hash of a secret; its salt is part of the hash. */
+export interface SeedBcryptHash {
+  from: string;
+  method: "bcrypt";
+  cost?: number;
+}
+
+export type SeedHash = SeedPbkdf2Hash | SeedBcryptHash;
+
+/** `SeedParam`, in full: one bound value of a seed statement. */
+export type SeedParam =
+  | { var: string }
+  | { secret: string }
+  | { hash: string }
+  | { salt: string }
+  | { value: string };
+
+/** `SeedStatement`, in full: one guarded INSERT and its params, in placeholder order. */
+export interface SeedStatement {
+  sql: string;
+  params: SeedParam[];
+}
+
+/**
+ * `CatalogD1Seed`, in full: the rows one D1 binding gets once, at install
+ * (`resources.d1[binding].seed` of the catalog manifest).
+ */
+export interface CatalogD1Seed {
+  hashes?: Record<string, SeedHash>;
+  statements: SeedStatement[];
+  beforeSchema?: boolean;
 }

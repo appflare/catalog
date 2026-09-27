@@ -10,6 +10,8 @@ import type {
   FeaturedItem,
   IndexJson,
   SandboxInstanceType,
+  SeedPbkdf2Hash,
+  SeedStatement,
   WorkerFacts,
 } from "./types.ts";
 
@@ -144,6 +146,56 @@ export async function loadEntryWorkerHelpers(appflareDir: string): Promise<Entry
   // Checked above: each is a function; the signatures are the ones
   // @appflare/schema declares, mirrored by EntryWorkerHelpers.
   return mod as EntryWorkerHelpers;
+}
+
+/**
+ * The `@appflare/schema` functions the install check seeds a D1 database
+ * with, the ones the manager's seed step uses, so a seed runs in CI exactly as
+ * it runs at install.
+ */
+export interface SeedHelpers {
+  /** The PBKDF2-SHA-256 hash and fresh random salt of `value`, in the hash's encoding. */
+  pbkdf2SeedHash(hash: SeedPbkdf2Hash, value: string): Promise<{ hash: string; salt: string }>;
+  /** What is wrong with one seed statement for `params` params; empty when it may run. */
+  seedStatementProblems(sql: string, params: number): string[];
+  /** The values bound to one statement, in placeholder order; throws, naming no value, when one is missing. */
+  seedStatementParams(
+    statement: SeedStatement,
+    inputs: {
+      vars: Readonly<Record<string, string>>;
+      secrets: Readonly<Record<string, string>>;
+      hashes: Readonly<Record<string, { hash: string; salt?: string }>>;
+    },
+  ): string[];
+  /** Why `value` is too long for bcrypt, naming `label` and never the value, or null. */
+  bcryptInputProblem(label: string, value: string): string | null;
+}
+
+const SEED_HELPERS = [
+  "pbkdf2SeedHash",
+  "seedStatementProblems",
+  "seedStatementParams",
+  "bcryptInputProblem",
+] as const;
+
+/**
+ * The seed functions from `@appflare/schema` in `appflareDir`, loaded only
+ * for an artifact that seeds a database. Throws, naming what is missing,
+ * with a build that predates them.
+ */
+export async function loadSeedHelpers(appflareDir: string): Promise<SeedHelpers> {
+  assertAppflareBuilt(appflareDir);
+  const mod: unknown = await import(pathToFileURL(appflarePaths(appflareDir).schemaDist).href);
+  for (const name of SEED_HELPERS) {
+    if (typeof (mod as Record<string, unknown> | null)?.[name] !== "function") {
+      throw new Error(
+        `@appflare/schema in ${appflareDir} does not export ${name}(); build a newer appflare checkout`,
+      );
+    }
+  }
+  // Checked above: each is a function; the signatures are the ones
+  // @appflare/schema declares, mirrored by SeedHelpers.
+  return mod as SeedHelpers;
 }
 
 /**

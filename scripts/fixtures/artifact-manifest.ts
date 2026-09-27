@@ -219,3 +219,125 @@ export function d1ArtifactManifestFixture(opts: { sha: string }): Record<string,
   };
   return m;
 }
+
+/**
+ * A schema-valid artifact `manifest.json` of format 4 that seeds two D1
+ * databases from the install form. `DB` has a migration, a schema file and a
+ * post-deploy migration, and a seed that runs before its schema file
+ * (`beforeSchema`), with a PBKDF2 hash and salt of the seed-only
+ * `ADMIN_PASSWORD` and the seed-only vars `ADMIN_USERNAME` (required, no
+ * default) and `ADMIN_EMAIL` (with a default). `AUTH` has nothing but a seed,
+ * with a bcrypt hash, the ordinary var `SITE_NAME` and a literal value. The
+ * Worker also gets an ordinary secret and a `base64-key-32` one.
+ */
+export function seedArtifactManifestFixture(opts: { sha: string }): Record<string, unknown> {
+  const m = artifactManifestFixture({ app: "keep", version: "1.0.0", sha: opts.sha });
+  const hex64 = "a".repeat(64);
+  let offset = 1;
+  const file = (dir: string, binding: string, name: string) => ({
+    name,
+    path: `${dir}/${binding}/${name}`,
+    size: 1,
+    sha256: hex64,
+    offset: offset++,
+  });
+  m.format = 4;
+  (m.worker as Record<string, unknown>).bindings = [
+    { type: "d1", name: "DB" },
+    { type: "d1", name: "AUTH" },
+    { type: "plain_text", name: "SITE_NAME", text: "Upstream" },
+  ];
+  m.d1Migrations = { DB: [file("d1", "DB", "0001_init.sql")], AUTH: [] };
+  m.d1Schema = { DB: [file("d1-schema", "DB", "db/defaults.sql")] };
+  m.d1PostDeploy = { DB: [file("d1-post-deploy", "DB", "0100_cleanup.sql")] };
+  m.catalog = {
+    ...(m.catalog as Record<string, unknown>),
+    secrets: [
+      { name: "API_TOKEN", label: "API token" },
+      { name: "SESSION_KEY", label: "Session key", generate: "base64-key-32" },
+      { name: "ADMIN_PASSWORD", label: "Admin password", generate: true, seedOnly: true },
+    ],
+    vars: [
+      { name: "SITE_NAME", label: "Site name", default: "Seeded" },
+      { name: "ADMIN_USERNAME", label: "Admin user name", required: true, seedOnly: true },
+      {
+        name: "ADMIN_EMAIL",
+        label: "Admin email",
+        default: "admin@example.com",
+        seedOnly: true,
+      },
+    ],
+    resources: {
+      d1: {
+        DB: {
+          schema: ["db/defaults.sql"],
+          postDeployMigrationsDir: "db/post-deploy",
+          seed: {
+            beforeSchema: true,
+            hashes: {
+              admin: {
+                from: "ADMIN_PASSWORD",
+                method: "pbkdf2-sha256",
+                iterations: 1000,
+                saltBytes: 16,
+                keyBytes: 32,
+                encoding: "base64url",
+              },
+            },
+            statements: [
+              {
+                sql: "INSERT OR IGNORE INTO users (username, email, password_hash, password_salt) VALUES (?, ?, ?, ?)",
+                params: [
+                  { var: "ADMIN_USERNAME" },
+                  { var: "ADMIN_EMAIL" },
+                  { hash: "admin" },
+                  { salt: "admin" },
+                ],
+              },
+            ],
+          },
+        },
+        AUTH: {
+          seed: {
+            hashes: { owner: { from: "ADMIN_PASSWORD", method: "bcrypt", cost: 4 } },
+            statements: [
+              {
+                sql: "INSERT INTO admins (site, hash, role) VALUES (?, ?, ?) ON CONFLICT DO NOTHING",
+                params: [{ var: "SITE_NAME" }, { hash: "owner" }, { value: "owner" }],
+              },
+            ],
+          },
+        },
+      },
+    },
+  };
+  return m;
+}
+
+/**
+ * {@link duoArtifactManifestFixture} with its `jobs` Worker kept off
+ * workers.dev (`install.workers[].workersDev: false`), which makes it format
+ * 4. Only `web` reaches `jobs`, through its bindings, so no var names the
+ * URL of `jobs` any more, only its Worker name.
+ */
+export function privateDuoArtifactManifestFixture(opts: { sha: string }): Record<string, unknown> {
+  const m = duoArtifactManifestFixture(opts);
+  const catalog = m.catalog as Record<string, unknown>;
+  const install = catalog.install as Record<string, unknown>;
+  m.format = 4;
+  m.catalog = {
+    ...catalog,
+    install: {
+      ...install,
+      workers: [
+        { name: "web", wranglerConfig: "web/wrangler.jsonc", primary: true },
+        { name: "jobs", wranglerConfig: "jobs/wrangler.jsonc", workersDev: false },
+      ],
+    },
+    vars: [
+      { name: "JOBS_URL", label: "Jobs Worker", default: "{{workerName:jobs}}" },
+      { name: "APP_URL", label: "App URL", default: "{{workerUrl}}", workers: ["jobs"] },
+    ],
+  };
+  return m;
+}

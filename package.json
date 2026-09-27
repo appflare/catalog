@@ -35,6 +35,7 @@
     "@commitlint/cli": "21.2.3",
     "@commitlint/config-conventional": "21.2.3",
     "@types/node": "22.20.4",
+    "bcryptjs": "3.0.3",
     "typescript": "7.0.2",
     "vitest": "4.1.11"
   }
