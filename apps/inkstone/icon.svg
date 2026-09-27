@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 32 32" role="img" aria-labelledby="title description">
+  <title id="title">Inkstone</title>
+  <desc id="description">A cinnabar water drop inside a dark rounded square.</desc>
+  <rect x="2.5" y="2.5" width="27" height="27" rx="8.5" fill="#202124"/>
+  <path d="M16 8.2c2.7 3.5 5.4 6.3 5.4 9.3a5.4 5.4 0 1 1-10.8 0c0-3 2.7-5.8 5.4-9.3z" fill="#bb4430"/>
+</svg>

@@ -9,6 +9,7 @@
 /apps/bookshelf/ @MendyLanda
 /apps/cattopic/ @MendyLanda
 /apps/chatgpt-telegram-workers/ @MendyLanda
+/apps/civideo/ @MendyLanda
 /apps/cloudmark/ @MendyLanda
 /apps/cloudssh/ @MendyLanda
 /apps/counterscale/ @MendyLanda
@@ -20,7 +21,9 @@
 /apps/feedlog/ @MendyLanda
 /apps/flaremo/ @MendyLanda
 /apps/garrul/ @MendyLanda
+/apps/git-on-cloudflare/ @MendyLanda
 /apps/glance/ @MendyLanda
+/apps/inkstone/ @MendyLanda
 /apps/insightflare/ @MendyLanda
 /apps/kukuroo/ @MendyLanda
 /apps/mail2telegram/ @MendyLanda

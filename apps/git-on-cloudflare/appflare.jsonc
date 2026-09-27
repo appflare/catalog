@@ -1,0 +1,95 @@
+{
+  // A git server speaking Smart HTTP v2, with each repository's refs in a
+  // SQLite-backed Durable Object, packs in R2, ownership and access tokens in
+  // D1, and a queue that compacts packs in the background. People sign in to
+  // the web interface through an OpenID Connect provider of your choice and
+  // push with personal access tokens they create there.
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "git-on-cloudflare",
+  "name": "git-on-cloudflare",
+  "summary": "A git server on Workers: push and clone over HTTPS, browse code in a web interface, with repositories in Durable Objects and R2.",
+  "homepage": "https://github.com/zllovesuki/git-on-cloudflare",
+  "repo": "zllovesuki/git-on-cloudflare",
+  "license": "MIT",
+  "categories": ["developer-tools"],
+  "authors": [{ "name": "Rachel Chen", "url": "https://limic.dev", "github": "zllovesuki" }],
+  "maintainers": ["MendyLanda"],
+  // No release tags upstream; the pin tracks main.
+  "source": { "ref": "main", "sha": "007a96eae94c8f562d223f81eb7548c8f7c38673" },
+  "install": {
+    "tier": "artifact",
+    "packageManager": "npm",
+    // Upstream's custom-domain routes in this config are its own and are not
+    // installed.
+    "wranglerConfig": "wrangler.jsonc",
+    "workerName": "git-on-cloudflare",
+    // Vite with the Cloudflare plugin builds the Worker and the client
+    // islands into dist/.
+    "buildCommand": "npm run build"
+  },
+  // Workers Paid. The wrangler config raises `limits.cpu_ms` to 300000 (five
+  // minutes), a setting Cloudflare documents for the paid plan, and upstream
+  // lists 30 seconds of CPU per request as the working limit for fetch and
+  // push: the app inflates, hashes and assembles git packs in JavaScript,
+  // which does not fit the free plan's 10 ms of CPU per request.
+  "plan": "paid",
+  // Pack files live in R2.
+  "requires": ["r2"],
+  "secrets": [
+    {
+      "name": "SESSION_SECRET",
+      "label": "Session secret",
+      "help": "Seals browser sign-in cookies. Setting a new value signs everyone out.",
+      "generate": true
+    },
+    {
+      "name": "TESSERA_OIDC_CLIENT_ID",
+      "label": "OIDC client ID",
+      "help": "The client id of this app at your OpenID Connect provider (the variable keeps upstream's provider name). Register a confidential client using the authorization code flow with PKCE, scopes openid profile email, and the redirect URI shown after install."
+    },
+    {
+      "name": "TESSERA_OIDC_CLIENT_SECRET",
+      "label": "OIDC client secret",
+      "help": "The secret of that client."
+    }
+  ],
+  "vars": [
+    {
+      "name": "TESSERA_OIDC_ISSUER",
+      "label": "OIDC issuer URL",
+      "help": "The issuer of your OpenID Connect provider, the address that serves /.well-known/openid-configuration. It must give each user a stable `sub`; a slug-like `preferred_username` lets people claim their namespace automatically.",
+      // Replaces upstream's own identity provider from the wrangler config.
+      "default": "",
+      "required": true
+    },
+    {
+      "name": "LOG_LEVEL",
+      "label": "Log level",
+      "type": "select",
+      "options": [
+        { "value": "debug", "label": "Debug" },
+        { "value": "info", "label": "Info" },
+        { "value": "warn", "label": "Warnings" },
+        { "value": "error", "label": "Errors" }
+      ],
+      "default": "info"
+    },
+    {
+      "name": "REPO_DO_IDLE_MINUTES",
+      "label": "Idle cleanup after (minutes)",
+      "help": "How long a repository sits unused before its Durable Object tidies up.",
+      "default": "30"
+    }
+  ],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "At your OpenID Connect provider, set the client's redirect URI to `{{workerUrl}}/auth/callback`. Then open {{workerUrl}}/auth/account, sign in, create a repository, and create a personal access token for pushing."
+    },
+    {
+      "type": "markdown",
+      "content": "Push with your namespace as the user name and the token as the password:\n\n```sh\ngit remote add goc {{workerUrl}}/<namespace>/<repo>\ngit push -u goc main\n```"
+    }
+  ],
+  "tokenPermissions": []
+}
