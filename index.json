@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-27T09:17:46.035Z",
+  "generatedAt": "2026-09-27T09:26:54.560Z",
   "apps": [
     {
       "slug": "2fa",
@@ -190,6 +190,52 @@
       "revision": 1
     },
     {
+      "slug": "analytics-explorer",
+      "name": "Cloudflare Analytics Explorer",
+      "summary": "Build dashboards over your Workers Analytics Engine datasets: line, bar, area and pie charts, tables and stat cards from SQL queries, with filters and drag-and-drop layouts.",
+      "version": "0.0.0-20260208.b11ff41",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/analytics-explorer@0.0.0-20260208.b11ff41/analytics-explorer-0.0.0-20260208.b11ff41.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/analytics-explorer@0.0.0-20260208.b11ff41/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/analytics-explorer@0.0.0-20260208.b11ff41/manifest.sig"
+      },
+      "digest": "56bbfa46715c7da1d9f84dae95317e0cd8b33e82701df0f4df121211a52a4627",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Rohan Prasad",
+          "url": "https://rohanprasad.com",
+          "github": "rohanprasadofficial",
+          "x": "rohanpdofficial"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/analytics-explorer/icon.svg",
+          "sha256": "6bf9b5d3102633ef9732b5e468171c1e2729fde102728670ef681b862f4eca99"
+        },
+        "screenshots": [
+          {
+            "url": "https://appflare.github.io/catalog/apps/analytics-explorer/screenshots/01-home.png",
+            "sha256": "243d95bfc85335949888b2eea4637abe3ac9ce74b8963e508b3115873fb18f9a",
+            "alt": "Cloudflare Analytics Explorer: Home"
+          }
+        ]
+      },
+      "services": [],
+      "categories": [
+        "analytics",
+        "developer-tools"
+      ],
+      "revision": 1
+    },
+    {
       "slug": "atalaya",
       "name": "Atalaya",
       "summary": "Uptime monitoring and a status page on one Worker: HTTP, TCP and DNS checks every minute, optionally from chosen Cloudflare regions, webhook alerts, and 90 days of history in D1.",
@@ -283,6 +329,52 @@
       "categories": [
         "email",
         "ai"
+      ],
+      "revision": 1
+    },
+    {
+      "slug": "auto-reaction-bot",
+      "name": "Auto Reaction Bot",
+      "summary": "Your own Telegram bot that adds an emoji reaction to posts in the channels and groups you add it to, and to private messages, from an emoji list you choose.",
+      "version": "0.0.0-20260613.2382a29",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/auto-reaction-bot@0.0.0-20260613.2382a29/auto-reaction-bot-0.0.0-20260613.2382a29.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/auto-reaction-bot@0.0.0-20260613.2382a29/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/auto-reaction-bot@0.0.0-20260613.2382a29/manifest.sig"
+      },
+      "digest": "bb860d13011b3f7bc4045c456e0ef9008468ea994bacd1737a2d85946791cb1c",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Malith Rukshan",
+          "url": "https://malith.dev",
+          "github": "Malith-Rukshan",
+          "x": "SinglDeveloper"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/auto-reaction-bot/icon.png",
+          "sha256": "9442aee48cd5a0aedf14bc452404c3b8c05d2f7b75a443c85e1e5aebdfc82b87"
+        },
+        "screenshots": [
+          {
+            "url": "https://appflare.github.io/catalog/apps/auto-reaction-bot/screenshots/01-reactions-in-a-private-chat.png",
+            "sha256": "2f66024da61a7a20e96ee32ca3b874789fa59e4f6c378cd124233639021c3684",
+            "alt": "Auto Reaction Bot: Reactions in a private chat"
+          }
+        ]
+      },
+      "services": [],
+      "categories": [
+        "bots",
+        "chat"
       ],
       "revision": 1
     },
@@ -621,6 +713,39 @@
       "revision": 1
     },
     {
+      "slug": "cf-nav",
+      "name": "cf-nav",
+      "summary": "A card-style start page: your links in categories with a search box, public and private links, drag-and-drop ordering, and JSON export and import, stored in KV.",
+      "version": "0.0.0-20260111.6e83733",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/cf-nav@0.0.0-20260111.6e83733/cf-nav-0.0.0-20260111.6e83733.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/cf-nav@0.0.0-20260111.6e83733/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/cf-nav@0.0.0-20260111.6e83733/manifest.sig"
+      },
+      "digest": "593249b78989fface6ab82957240828709e2b1a4eaf382a53f46064d74cc34f3",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "djkyc",
+          "github": "djkyc"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "services": [
+        "kv"
+      ],
+      "categories": [
+        "productivity",
+        "utilities"
+      ],
+      "revision": 1
+    },
+    {
       "slug": "cf-server-monitor",
       "name": "CF Server Monitor",
       "summary": "Monitor your servers from a Worker: live CPU, memory, disk, traffic and latency from a small agent on each machine, with history, a map, offline and threshold alerts, and expiry reminders.",
@@ -653,6 +778,39 @@
       "categories": [
         "monitoring",
         "developer-tools"
+      ],
+      "revision": 1
+    },
+    {
+      "slug": "cftgsx",
+      "name": "cftgsx",
+      "summary": "A two-way Telegram contact bot: messages to the bot reach your admin chat, your replies go back to the sender, with broadcasts, bans and one forum topic per user.",
+      "version": "0.0.0-20251121.3ee8aed",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/cftgsx@0.0.0-20251121.3ee8aed/cftgsx-0.0.0-20251121.3ee8aed.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/cftgsx@0.0.0-20251121.3ee8aed/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/cftgsx@0.0.0-20251121.3ee8aed/manifest.sig"
+      },
+      "digest": "77d8c98bbd1b8df4fd77f4ebf76f9001117b2112dbb1153d44438dd6ff323535",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "SCSHIRKER",
+          "github": "SCSHIRKER"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "services": [
+        "kv"
+      ],
+      "categories": [
+        "chat",
+        "bots"
       ],
       "revision": 1
     },
@@ -1386,6 +1544,47 @@
       "revision": 1
     },
     {
+      "slug": "edgemetry",
+      "name": "Edgemetry",
+      "summary": "Privacy-friendly web analytics you run yourself: a 2 KB tracking script, no cookies, stackable filters, realtime views, custom events and several sites and users, on one Worker and D1.",
+      "version": "0.3.0",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/edgemetry@0.3.0/edgemetry-0.3.0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/edgemetry@0.3.0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/edgemetry@0.3.0/manifest.sig"
+      },
+      "digest": "df22888b40ee88f460847e530e30be62a53bf1879ebe9a6ddabc5f059912520d",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Nitin Hayaran",
+          "github": "hayaran",
+          "x": "nitinhayaran"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/edgemetry/icon.svg",
+          "sha256": "0b8edbe4eddddf19540d2c3491c9772f0ff7bef8eec1572476228b06d691767e"
+        },
+        "screenshots": []
+      },
+      "services": [
+        "d1",
+        "cron"
+      ],
+      "categories": [
+        "analytics"
+      ],
+      "revision": 1
+    },
+    {
       "slug": "elm-chat",
       "name": "elm.chat",
       "summary": "Account-free, end-to-end encrypted chat rooms that disappear: single-use invites, messages that vanish on a timer, and no transcript kept on the server. One Worker and a Durable Object per room.",
@@ -1703,6 +1902,39 @@
       "categories": [
         "business",
         "productivity"
+      ],
+      "revision": 1
+    },
+    {
+      "slug": "firefly-iii-mcp",
+      "name": "Firefly III MCP",
+      "summary": "A remote MCP server for Firefly III: lets AI assistants read and record accounts, transactions, bills, budgets and more in your own Firefly III, each connection with its own personal access token.",
+      "version": "1.4.0",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/firefly-iii-mcp@1.4.0/firefly-iii-mcp-1.4.0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/firefly-iii-mcp@1.4.0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/firefly-iii-mcp@1.4.0/manifest.sig"
+      },
+      "digest": "1cf909ff4e4d6930d25ebbfeda1ad169a90fbfe7e37fb63edeef43dc6d73b19f",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Mike Evans",
+          "github": "etnperlong"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "services": [
+        "durable-objects"
+      ],
+      "categories": [
+        "finance",
+        "ai"
       ],
       "revision": 1
     },
@@ -2111,6 +2343,55 @@
       "revision": 1
     },
     {
+      "slug": "gmshop",
+      "name": "GMShop Edge",
+      "summary": "A single-tenant digital-goods shop: stock items such as licence keys delivered on payment, private downloads from R2, entitlements, coupons and refunds, guest or account checkout, and an admin console with roles, on D1, KV, R2 and Queues.",
+      "version": "1.0.2",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/gmshop@1.0.2/gmshop-1.0.2.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/gmshop@1.0.2/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/gmshop@1.0.2/manifest.sig"
+      },
+      "digest": "e90c413d5a4f6045a38aa28971bdae8cdcc18742cf3f50afa583a6dd61c15b3c",
+      "tier": "artifact",
+      "plan": "paid",
+      "requires": [
+        "r2"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "GM Wallet",
+          "url": "https://gmwallet.app",
+          "github": "GMWalletApp",
+          "x": "GMwalletApp"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/gmshop/icon.png",
+          "sha256": "a5672ae3ae7fa7809b01e0554e283e59857c0f291eeb591770a09b8fc18c8608"
+        },
+        "screenshots": []
+      },
+      "services": [
+        "kv",
+        "d1",
+        "r2",
+        "queues",
+        "cron",
+        "email-routing"
+      ],
+      "categories": [
+        "ecommerce",
+        "business"
+      ],
+      "revision": 1
+    },
+    {
       "slug": "hashpay",
       "name": "HashPay",
       "summary": "A crypto payment gateway run from your own Telegram bot: take USDT, USDC and native coins on eight chains or through Binance, OKX and OKPay, with a signed order API, merchant callbacks and an admin console.",
@@ -2477,6 +2758,43 @@
       "revision": 1
     },
     {
+      "slug": "jant",
+      "name": "Jant",
+      "summary": "A personal microblog as smooth as Threads and Tumblr: notes, links and quotes in threads and collections, media on R2, full-text search, RSS, an API and an MCP endpoint for agents, on D1.",
+      "version": "0.0.0-20260926.d55c0f8",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/jant@0.0.0-20260926.d55c0f8/jant-0.0.0-20260926.d55c0f8.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/jant@0.0.0-20260926.d55c0f8/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/jant@0.0.0-20260926.d55c0f8/manifest.sig"
+      },
+      "digest": "78b70ac526b01d87cadae63ec144b119379d6d5170ffc957a7f359f24a583570",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "r2"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Jant",
+          "url": "https://jant.me",
+          "github": "jant-me"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "services": [
+        "d1",
+        "r2"
+      ],
+      "categories": [
+        "blogging",
+        "social"
+      ],
+      "revision": 1
+    },
+    {
       "slug": "jina-mcp",
       "name": "Jina AI MCP Server",
       "summary": "Jina AI's remote MCP server on your own Worker: read pages and PDFs as Markdown, take screenshots, search the web, arXiv and SSRN, and rerank or deduplicate text with Jina's Reader, Search, Embeddings and Reranker APIs.",
@@ -2584,6 +2902,53 @@
       "revision": 1
     },
     {
+      "slug": "larafeed",
+      "name": "Larafeed",
+      "summary": "A private feed reader with passkey-only sign-in: RSS and Atom subscriptions refreshed on a schedule through Queues, OPML import and export, full-article extraction, favicons, and reader-client APIs, on D1, KV and Queues.",
+      "version": "0.0.0-20260924.eedbc8b",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/larafeed@0.0.0-20260924.eedbc8b/larafeed-0.0.0-20260924.eedbc8b.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/larafeed@0.0.0-20260924.eedbc8b/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/larafeed@0.0.0-20260924.eedbc8b/manifest.sig"
+      },
+      "digest": "94610579ab918359b15c2b2251b295a94921e5365a84c68517abb65cff005a2c",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Stanislas",
+          "url": "https://stanislas.blog",
+          "github": "angristan",
+          "x": "fuolpit"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "screenshots": [
+          {
+            "url": "https://appflare.github.io/catalog/apps/larafeed/screenshots/01-reader-view.png",
+            "sha256": "2511e4ccfad4943961d7aa2ffc90dd61e0c3ab765a2915e47edf9d495c708d13",
+            "alt": "Larafeed: Reader view"
+          }
+        ]
+      },
+      "services": [
+        "kv",
+        "d1",
+        "queues",
+        "cron",
+        "images"
+      ],
+      "categories": [
+        "productivity"
+      ],
+      "revision": 1
+    },
+    {
       "slug": "lastfm-recently-played",
       "name": "Last.fm Recently Played",
       "summary": "An SVG card of your recent Last.fm scrobbles for a GitHub profile README, with themes, artwork, stats and loved tracks, plus a configurator page to build the card's URL.",
@@ -2611,6 +2976,38 @@
       "categories": [
         "media",
         "utilities"
+      ],
+      "revision": 1
+    },
+    {
+      "slug": "llm-api-proxy",
+      "name": "LLM API Proxy",
+      "summary": "One OpenAI-compatible (and Ollama-compatible) API in front of OpenAI, Anthropic, Gemini, DeepSeek, Groq, Grok, OpenRouter, Azure OpenAI and more, using your own provider keys behind a key of its own.",
+      "version": "0.0.0-20251201.43db1c0",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/llm-api-proxy@0.0.0-20251201.43db1c0/llm-api-proxy-0.0.0-20251201.43db1c0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/llm-api-proxy@0.0.0-20251201.43db1c0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/llm-api-proxy@0.0.0-20251201.43db1c0/manifest.sig"
+      },
+      "digest": "b603df9628b71348620d2132ea18800714ec2f9defce1a83e33add71f24deda2",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "rxliuli",
+          "url": "https://rxliuli.com",
+          "github": "rxliuli"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "services": [],
+      "categories": [
+        "ai",
+        "developer-tools"
       ],
       "revision": 1
     },
@@ -2669,6 +3066,48 @@
       "categories": [
         "email",
         "bots"
+      ],
+      "revision": 1
+    },
+    {
+      "slug": "mailclaw",
+      "name": "MailClaw",
+      "summary": "A catch-all inbox for your domain with a token-protected API for AI agents: every address receives into D1 and R2, with search, filters, export, sending through Resend or Cloudflare, and a web dashboard.",
+      "version": "0.0.0-20260528.f13f82a",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/mailclaw@0.0.0-20260528.f13f82a/mailclaw-0.0.0-20260528.f13f82a.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/mailclaw@0.0.0-20260528.f13f82a/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/mailclaw@0.0.0-20260528.f13f82a/manifest.sig"
+      },
+      "digest": "198e5c7bb249f0a596a7246e1da7ca7246aa6cdffd0710123e80d00e086ed4eb",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "zone",
+        "email-routing",
+        "r2"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Vincent Yang",
+          "url": "https://missuo.me",
+          "github": "missuo",
+          "x": "m1ssuo"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "services": [
+        "d1",
+        "r2",
+        "email-routing",
+        "zone"
+      ],
+      "categories": [
+        "email",
+        "ai"
       ],
       "revision": 1
     },
@@ -3072,6 +3511,46 @@
       "revision": 1
     },
     {
+      "slug": "mpp-proxy",
+      "name": "MPP Payment-Gated Proxy",
+      "summary": "Charge AI agents and other clients per request for paths of your own site: a reverse proxy that answers 402 with a Machine Payments Protocol challenge, verifies the payment on Tempo, and then passes the request to your origin.",
+      "version": "0.0.0-20260722.0e4dd80",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/mpp-proxy@0.0.0-20260722.0e4dd80/mpp-proxy-0.0.0-20260722.0e4dd80.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/mpp-proxy@0.0.0-20260722.0e4dd80/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/mpp-proxy@0.0.0-20260722.0e4dd80/manifest.sig"
+      },
+      "digest": "0e2449f2715941508681614c3c7d9bbae5cb4fe612ada75f69844709a81157ca",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Cloudflare",
+          "url": "https://www.cloudflare.com",
+          "github": "cloudflare",
+          "x": "Cloudflare"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/mpp-proxy/icon.svg",
+          "sha256": "393362e655d75d825907e59e795f7829b3346fd9760b77eeb07c61b263829275"
+        },
+        "screenshots": []
+      },
+      "services": [],
+      "categories": [
+        "finance",
+        "developer-tools"
+      ],
+      "revision": 1
+    },
+    {
       "slug": "nabiz",
       "name": "nabiz",
       "summary": "A status page that probes your services every minute from Cloudflare's edge, with 90-day uptime bars, operator notices, and Telegram or webhook alerts.",
@@ -3152,6 +3631,46 @@
       "categories": [
         "media",
         "sync"
+      ],
+      "revision": 1
+    },
+    {
+      "slug": "ni-mail",
+      "name": "ni-mail",
+      "summary": "A minimal mail receiver for your own domain with an HTTP API: fetch the latest message, list, read and thread mail per address, with attachments kept in R2, for scripts and automation.",
+      "version": "0.0.0-20260428.792b54a",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/ni-mail@0.0.0-20260428.792b54a/ni-mail-0.0.0-20260428.792b54a.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/ni-mail@0.0.0-20260428.792b54a/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/ni-mail@0.0.0-20260428.792b54a/manifest.sig"
+      },
+      "digest": "7ce74f9dcde198d5571b9b4f78aa7c5b8761e6ed4baf0742d31891db8a7baac0",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "r2",
+        "zone",
+        "email-routing"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "mskatoni",
+          "github": "mskatoni"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "services": [
+        "r2",
+        "durable-objects",
+        "email-routing",
+        "zone"
+      ],
+      "categories": [
+        "email",
+        "developer-tools"
       ],
       "revision": 1
     },
@@ -3570,6 +4089,61 @@
       "revision": 1
     },
     {
+      "slug": "openstory",
+      "name": "OpenStory",
+      "summary": "Turn a script into a storyboard and video: scene breakdown, consistent characters, locations and styles, AI-generated frames, motion, voices and music, with team libraries and an MCP server, on D1, R2, Workflows and Durable Objects. Brings your own AI provider keys.",
+      "version": "0.0.0-20260927.0311b1f",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20260927.0311b1f/openstory-0.0.0-20260927.0311b1f.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20260927.0311b1f/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20260927.0311b1f/manifest.sig"
+      },
+      "digest": "227f9599a87a244efb136e849baf7fb4531fdd2e885d0cb9215bc2e7c214d9b5",
+      "tier": "artifact",
+      "plan": "paid",
+      "requires": [
+        "r2",
+        "zone"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "OpenStory",
+          "url": "https://openstory.so",
+          "github": "openstory-so",
+          "x": "openstory_so"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/openstory/icon.svg",
+          "sha256": "3653ac735fbddc8941fe10457f42d9bff774e603afcfcc89ae315d0189c5ae38"
+        },
+        "cover": {
+          "url": "https://appflare.github.io/catalog/apps/openstory/cover.png",
+          "sha256": "1d94e3445dabe727b99742604f739b11b99f8cd63bfd6d0241ef1498939a6e74"
+        },
+        "screenshots": []
+      },
+      "services": [
+        "d1",
+        "r2",
+        "durable-objects",
+        "workflows",
+        "cron",
+        "email-routing",
+        "zone"
+      ],
+      "categories": [
+        "ai",
+        "media"
+      ],
+      "revision": 1
+    },
+    {
       "slug": "pastebin-worker",
       "name": "Pastebin Worker",
       "summary": "A pastebin and file sharer with short links, syntax highlighting, rendered Markdown, client-side encryption, a URL shortener, and a curl-friendly API, on KV and R2.",
@@ -3700,6 +4274,39 @@
       "categories": [
         "ai",
         "developer-tools"
+      ],
+      "revision": 1
+    },
+    {
+      "slug": "private-notes",
+      "name": "Private Notes",
+      "summary": "A private notebook behind one password: notes encrypted in the browser before they reach D1, search that runs in the browser, separate vaults per password, and one-time share links that burn after reading.",
+      "version": "0.0.0-20260716.4ba4163",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/private-notes@0.0.0-20260716.4ba4163/private-notes-0.0.0-20260716.4ba4163.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/private-notes@0.0.0-20260716.4ba4163/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/private-notes@0.0.0-20260716.4ba4163/manifest.sig"
+      },
+      "digest": "4234ff46ca0cd765e03af5ec4596f4e86086fb6b3b7097494e9a21104c3cc62b",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "tao-t356",
+          "github": "tao-t356"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "services": [
+        "d1"
+      ],
+      "categories": [
+        "notes",
+        "privacy"
       ],
       "revision": 1
     },
@@ -4130,6 +4737,127 @@
       "revision": 1
     },
     {
+      "slug": "renewlet",
+      "name": "Renewlet",
+      "summary": "Track recurring subscriptions and renewals: timezone-aware reminders over ten notification channels, calendar feeds, budgets, cost sharing and spending statistics, on D1, R2 and a queue.",
+      "version": "0.3.27",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/renewlet@0.3.27/renewlet-0.3.27.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/renewlet@0.3.27/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/renewlet@0.3.27/manifest.sig"
+      },
+      "digest": "54956ef66a66e4bd27c4737d464c9be1ac088b4b18b50d5fe445e3c32e3123bc",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "r2"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "zhiyingzhou",
+          "url": "https://renewlet.cc",
+          "github": "zhiyingzzhou"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/renewlet/icon.svg",
+          "sha256": "8272948127d2c3d778fde665791b1f9c42b68fee814c6658d725f45f856fa3fe"
+        },
+        "screenshots": []
+      },
+      "services": [
+        "d1",
+        "r2",
+        "queues",
+        "cron"
+      ],
+      "categories": [
+        "finance",
+        "productivity"
+      ],
+      "revision": 1
+    },
+    {
+      "slug": "resolvehq",
+      "name": "ResolveHQ",
+      "summary": "A self-hosted helpdesk: a shared inbox fed by Email Routing, threaded tickets, SLAs and snoozes, a help center and knowledge base, customer ratings, reports, a scoped API and outbound webhooks, on D1, R2 and Queues.",
+      "version": "0.3.3",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/resolvehq@0.3.3/resolvehq-0.3.3.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/resolvehq@0.3.3/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/resolvehq@0.3.3/manifest.sig"
+      },
+      "digest": "5416969726a5f872641dab71a45c606f1878d7463166606cda6bbdec9094b9f5",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "zone",
+        "email-routing",
+        "r2"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Rizvi",
+          "github": "mirza-rizvi",
+          "x": "mirza_rizvi"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "services": [
+        "d1",
+        "r2",
+        "queues",
+        "cron",
+        "email-routing",
+        "zone"
+      ],
+      "categories": [
+        "business",
+        "email"
+      ],
+      "revision": 1
+    },
+    {
+      "slug": "rsshub-never-die",
+      "name": "RSSHub Never Die",
+      "summary": "A stable RSSHub address for your feed reader: requests go to a pool of public RSSHub instances, by load balancing, failover to the next instance, or the fastest of several.",
+      "version": "1.4.2",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/rsshub-never-die@1.4.2/rsshub-never-die-1.4.2.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/rsshub-never-die@1.4.2/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/rsshub-never-die@1.4.2/manifest.sig"
+      },
+      "digest": "180afb07781f5fdaae81c4bea1a441f51a6d6e413ca311b478240e5f2e17d187",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "CaoMeiYouRen",
+          "url": "https://blog.cmyr.ltd",
+          "github": "CaoMeiYouRen"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "services": [],
+      "categories": [
+        "utilities",
+        "networking"
+      ],
+      "revision": 1
+    },
+    {
       "slug": "rssworker",
       "name": "RSSWorker",
       "summary": "A small RSS feed generator: RSS and Atom feeds for Bilibili dynamics and videos, Telegram channels, Weibo users and Xiaohongshu users, one URL per feed.",
@@ -4156,6 +4884,39 @@
       ],
       "services": [],
       "categories": [
+        "utilities"
+      ],
+      "revision": 1
+    },
+    {
+      "slug": "scrapedown",
+      "name": "scrapedown",
+      "summary": "Turn any web page into clean Markdown: one GET with a URL returns the article's text in reader mode, with its title, byline, excerpt and language.",
+      "version": "0.0.0-20240118.807d685",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/scrapedown@0.0.0-20240118.807d685/scrapedown-0.0.0-20240118.807d685.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/scrapedown@0.0.0-20240118.807d685/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/scrapedown@0.0.0-20240118.807d685/manifest.sig"
+      },
+      "digest": "44e9394b7d1f3b3ba3e19a3ae4c532fda9655dbabe338f575ac334cf19decd8a",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Ozan Şener",
+          "url": "https://getairefs.com",
+          "github": "ozanvos",
+          "x": "ozanvos"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "services": [],
+      "categories": [
+        "developer-tools",
         "utilities"
       ],
       "revision": 1
@@ -4789,6 +5550,39 @@
       "revision": 1
     },
     {
+      "slug": "telegram-push",
+      "name": "Telegram Push",
+      "summary": "Push notifications to Telegram with one HTTP request: your own bot hands each chat a push key, and any script or webhook sends a message with a GET to /push.",
+      "version": "0.0.0-20230722.bb6f717",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/telegram-push@0.0.0-20230722.bb6f717/telegram-push-0.0.0-20230722.bb6f717.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/telegram-push@0.0.0-20230722.bb6f717/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/telegram-push@0.0.0-20230722.bb6f717/manifest.sig"
+      },
+      "digest": "3aea5091f449cd79a9102ae96d6b6bbcc788106ae18cb1a43596c82a02395667",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "sduoduo233",
+          "github": "sduoduo233"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "services": [
+        "kv"
+      ],
+      "categories": [
+        "notifications",
+        "bots"
+      ],
+      "revision": 1
+    },
+    {
       "slug": "tempik",
       "name": "Tempik",
       "summary": "A disposable email service on your own domain: pick or generate an address in the browser and read the mail sent to it, received by Email Routing and kept in D1.",
@@ -5058,6 +5852,38 @@
       ],
       "categories": [
         "chat"
+      ],
+      "revision": 1
+    },
+    {
+      "slug": "vps-jsq",
+      "name": "VPS-JSQ",
+      "summary": "A VPS remaining-value calculator: enter the renewal price, currency, billing cycle and dates to see the value left and a suggested resale price, with live exchange rates and a shareable image card. Chinese interface.",
+      "version": "0.0.0-20260829.c9739a4",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/vps-jsq@0.0.0-20260829.c9739a4/vps-jsq-0.0.0-20260829.c9739a4.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/vps-jsq@0.0.0-20260829.c9739a4/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/vps-jsq@0.0.0-20260829.c9739a4/manifest.sig"
+      },
+      "digest": "c4fcd7180a990bbacbbaf63125c2e7ee0ec959e0af4f39136152567f5f0f8080",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "XiaoGe",
+          "url": "https://www.xiaoge.org/",
+          "github": "verkyer"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "services": [],
+      "categories": [
+        "finance",
+        "utilities"
       ],
       "revision": 1
     },
