@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-27T14:17:13.746Z",
+  "generatedAt": "2026-09-27T14:24:32.384Z",
   "apps": [
     {
       "slug": "2fa",
@@ -1407,6 +1407,7 @@
       "slug": "deepcrawl",
       "name": "Deepcrawl",
       "summary": "An open-source Firecrawl alternative: an API that turns any web page into clean Markdown, metadata and a tree of its links for AI agents, cached in KV with request logs in D1.",
+      "tagline": "Turn web pages into clean text and organized links",
       "addedAt": "2026-09-27T06:13:42+03:00",
       "version": "0.5.5",
       "artifacts": {
@@ -1432,7 +1433,7 @@
       "media": {
         "cover": {
           "url": "https://appflare.github.io/catalog/apps/deepcrawl/cover.png",
-          "sha256": "11932f4ae4c905d0ff0617337e8ba5d5c36f1d9d0518ab016983e24c147372dc"
+          "sha256": "d94f5dc2c4ae5a5e5fe1a1bb0f16b484e3f40f591467741e755db45a3ebd9742"
         },
         "screenshots": []
       },
@@ -3950,6 +3951,7 @@
       "slug": "mpp-proxy",
       "name": "MPP Payment-Gated Proxy",
       "summary": "Charge AI agents and other clients per request for paths of your own site: a reverse proxy that answers 402 with a Machine Payments Protocol challenge, verifies the payment on Tempo, and then passes the request to your origin.",
+      "tagline": "Charge for requests to selected parts of your website",
       "addedAt": "2026-09-27T12:13:25+03:00",
       "version": "0.0.0-20260722.0e4dd80",
       "artifacts": {
@@ -3976,7 +3978,7 @@
       "media": {
         "icon": {
           "url": "https://appflare.github.io/catalog/apps/mpp-proxy/icon.svg",
-          "sha256": "393362e655d75d825907e59e795f7829b3346fd9760b77eeb07c61b263829275"
+          "sha256": "0c00114b7b06269e3e24dc850cead6962fc5add7707de4db4da48ebba8bd08ab"
         },
         "screenshots": []
       },
@@ -3992,6 +3994,7 @@
       "slug": "nabiz",
       "name": "nabiz",
       "summary": "A status page that probes your services every minute from Cloudflare's edge, with 90-day uptime bars, operator notices, and Telegram or webhook alerts.",
+      "tagline": "A status page that checks your services every minute",
       "addedAt": "2026-09-27T06:14:13+03:00",
       "version": "3.12.1",
       "artifacts": {
@@ -4021,11 +4024,6 @@
             "url": "https://appflare.github.io/catalog/apps/nabiz/screenshots/01-status-page-light.png",
             "sha256": "badbcd99034d008abc289c173a5806748b148b74f4f19d8aef1438ade66e1c9f",
             "alt": "nabiz: Status page light"
-          },
-          {
-            "url": "https://appflare.github.io/catalog/apps/nabiz/screenshots/02-status-page-dark.png",
-            "sha256": "63b2e966cc2ac93cf865c0a875a6aa2ef0578ffd9d6cead0e2f8b2d98c173d49",
-            "alt": "nabiz: Status page dark"
           }
         ]
       },
@@ -4045,6 +4043,7 @@
       "slug": "neriplayer-listen-together",
       "name": "NeriPlayer Listen Together",
       "summary": "Your own listen-together server for the NeriPlayer Android app: create a room, share the invite, and everyone's playback, queue and track changes stay in sync.",
+      "tagline": "Keep music playback in sync while listening with friends",
       "addedAt": "2026-09-27T10:43:47+03:00",
       "version": "0.0.0-20260817.5ec8a8b",
       "artifacts": {
@@ -4066,6 +4065,13 @@
       "maintainers": [
         "MendyLanda"
       ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/neriplayer-listen-together/icon.svg",
+          "sha256": "9b56f20089e0fe5655a661f609487dadd86e8eb9b8d21e656fd9bfdb1e75f9f9"
+        },
+        "screenshots": []
+      },
       "services": [
         "durable-objects"
       ],
@@ -4080,6 +4086,7 @@
       "slug": "ni-mail",
       "name": "ni-mail",
       "summary": "A minimal mail receiver for your own domain with an HTTP API: fetch the latest message, list, read and thread mail per address, with attachments kept in R2, for scripts and automation.",
+      "tagline": "Receive mail on your domain for scripts and automations",
       "addedAt": "2026-09-27T12:14:18+03:00",
       "version": "0.0.0-20260428.792b54a",
       "artifacts": {
@@ -4166,6 +4173,7 @@
       "slug": "nodewarden",
       "name": "NodeWarden",
       "summary": "A Bitwarden-compatible password manager server: the official Bitwarden apps and browser extensions sync to it, with a web vault, attachments, Send, and passkey sign-in, on D1 and R2.",
+      "tagline": "A password vault that syncs with your Bitwarden apps",
       "addedAt": "2026-09-26T23:19:31+03:00",
       "version": "1.8.0",
       "artifacts": {
@@ -4214,6 +4222,7 @@
       "slug": "nodrix",
       "name": "nodrix",
       "summary": "A self-hosted IoT platform: devices send telemetry over HTTPS or WebSocket, variables appear on their own, and you build realtime dashboards, controls and automations on top, with a read API and an MCP server, on Durable Objects, D1 and R2. Sends anonymous usage statistics to upstream daily, with no opt-out.",
+      "tagline": "Track devices with live dashboards and automations",
       "addedAt": "2026-09-27T06:13:42+03:00",
       "version": "1.0.1",
       "artifacts": {
@@ -4269,6 +4278,7 @@
       "slug": "omnimail",
       "name": "OmniMail",
       "summary": "Self-hosted multi-domain webmail on one Worker: mailboxes and users on your own domains through Email Routing, sending through Resend or SendFlare, and external Gmail, Microsoft and other accounts in one place. The interface is in Chinese.",
+      "tagline": "Mail for your domains and other inboxes in one place",
       "addedAt": "2026-09-27T04:47:37+03:00",
       "version": "1.1.4",
       "artifacts": {
@@ -4326,6 +4336,7 @@
       "slug": "one-ip",
       "name": "One IP",
       "summary": "IP and network diagnostics: look up an address's location, ASN, reputation and risk, check your exit IP, DNS, CDN, WebRTC and browser fingerprint, and run a speed test.",
+      "tagline": "Check your IP, network privacy, speed and online service status",
       "addedAt": "2026-09-27T10:46:59+03:00",
       "version": "0.0.0-20260924.3d65314",
       "artifacts": {
@@ -4353,7 +4364,18 @@
           "url": "https://appflare.github.io/catalog/apps/one-ip/icon.svg",
           "sha256": "f0a7daafcf8700026135cb75c47395b894e96036e7fe2f9a80179d4a373d2538"
         },
-        "screenshots": []
+        "screenshots": [
+          {
+            "url": "https://appflare.github.io/catalog/apps/one-ip/screenshots/01-network-overview.png",
+            "sha256": "cd61a867a76c895ff48221bb3fbc970bb62e9a6b134ea7c51de5f60c18e0f6e6",
+            "alt": "One IP: Network overview"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/one-ip/screenshots/02-mobile-network-overview-light.png",
+            "sha256": "c882322b424beb8d09954f4659820752e63f171f1d992d7a86afb11ad3e2bebc",
+            "alt": "One IP: Mobile network overview light"
+          }
+        ]
       },
       "services": [],
       "categories": [
@@ -4367,6 +4389,7 @@
       "slug": "open-artifacts",
       "name": "Open Artifacts",
       "summary": "Let coding agents publish HTML and Markdown pages to shareable links, with client-side password protection, version history, and updates in place when the project changes, on D1 and R2.",
+      "tagline": "Share pages from your coding agent with links that stay up to date",
       "addedAt": "2026-09-27T04:19:23+03:00",
       "version": "0.0.0-20260827.4f8b54b",
       "artifacts": {
@@ -4475,6 +4498,7 @@
       "slug": "openai-gemini",
       "name": "OpenAI Gemini",
       "summary": "OpenAI-compatible API adapter for Gemini, on Workers.",
+      "tagline": "Use Gemini in apps built for OpenAI",
       "addedAt": "2026-09-23T15:16:53+03:00",
       "version": "0.0.0-20251222.61a83bd",
       "artifacts": {
@@ -4507,6 +4531,7 @@
       "slug": "openshortlink",
       "name": "OpenShort.link",
       "summary": "Link shortener and link management for your own domains: geo and device redirects, QR codes, tags, teams with roles, API keys, and click analytics on Analytics Engine.",
+      "tagline": "Create short links on your own domains and track their clicks",
       "addedAt": "2026-09-27T06:13:42+03:00",
       "version": "0.10.0",
       "artifacts": {
@@ -4555,6 +4580,7 @@
       "slug": "openstory",
       "name": "OpenStory",
       "summary": "Turn a script into a storyboard and video: scene breakdown, consistent characters, locations and styles, AI-generated frames, motion, voices and music, with team libraries and an MCP server, on D1, R2, Workflows and Durable Objects. Brings your own AI provider keys.",
+      "tagline": "Turn scripts into videos with consistent characters and scenes",
       "addedAt": "2026-09-27T12:03:21+03:00",
       "version": "0.0.0-20260927.0311b1f",
       "artifacts": {
@@ -4612,6 +4638,7 @@
       "slug": "pastebin-worker",
       "name": "Pastebin Worker",
       "summary": "A pastebin and file sharer with short links, syntax highlighting, rendered Markdown, client-side encryption, a URL shortener, and a curl-friendly API, on KV and R2.",
+      "tagline": "Share text and files with short links on your own site",
       "addedAt": "2026-09-26T23:19:31+03:00",
       "version": "0.0.0-20260717.0835cac",
       "artifacts": {
@@ -4652,6 +4679,7 @@
       "slug": "placeholders-dev",
       "name": "placeholders.dev",
       "summary": "Placeholder images generated on the fly: SVGs of any size, text, font and colours, described entirely by the URL, with light and dark variants.",
+      "tagline": "Make placeholder images in any size and color",
       "addedAt": "2026-09-27T04:19:23+03:00",
       "version": "0.0.0-20260917.3197644",
       "artifacts": {
@@ -4703,6 +4731,7 @@
       "slug": "playwright-mcp",
       "name": "Playwright MCP",
       "summary": "A remote MCP server that lets AI assistants browse for you: navigate, click, type, read page snapshots and take screenshots in a headless browser from Cloudflare Browser Rendering.",
+      "tagline": "Let your AI assistant browse websites and take screenshots",
       "addedAt": "2026-09-27T11:42:03+03:00",
       "version": "0.0.0-20251220.ee81e27",
       "artifacts": {
@@ -4752,6 +4781,7 @@
       "slug": "private-notes",
       "name": "Private Notes",
       "summary": "A private notebook behind one password: notes encrypted in the browser before they reach D1, search that runs in the browser, separate vaults per password, and one-time share links that burn after reading.",
+      "tagline": "Keep encrypted notes behind a password",
       "addedAt": "2026-09-27T12:14:18+03:00",
       "version": "0.0.0-20260716.4ba4163",
       "artifacts": {
@@ -4773,6 +4803,13 @@
       "maintainers": [
         "MendyLanda"
       ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/private-notes/icon.svg",
+          "sha256": "b3a6d23833272e8d4bc8cf66f2bc2f5086626674484de60cce1d50e42b2a3505"
+        },
+        "screenshots": []
+      },
       "services": [
         "d1"
       ],
@@ -4996,6 +5033,7 @@
       "slug": "r2-webdav",
       "name": "r2-webdav",
       "summary": "A WebDAV server for an R2 bucket: mount it as a network drive in Finder, Windows Explorer or any WebDAV client, with locking and one user name and password.",
+      "tagline": "Access your R2 files as a network drive",
       "addedAt": "2026-09-27T11:44:15+03:00",
       "version": "0.0.0-20260713.d39f88f",
       "artifacts": {
@@ -5033,6 +5071,7 @@
       "slug": "rdyrct",
       "name": "rdyrct",
       "summary": "A URL shortener for teams: organizations with roles, branded short links and QR codes, click analytics that never store an IP, an MCP server, and a KV redirect path in front of D1.",
+      "tagline": "Branded short links, QR codes, and private click analytics for teams",
       "addedAt": "2026-09-27T04:47:37+03:00",
       "version": "0.0.0-20260925.d0ece6e",
       "artifacts": {
@@ -5090,6 +5129,7 @@
       "slug": "relay",
       "name": "Relay",
       "summary": "A link shortener with cookieless click and conversion analytics: A/B splits, device and country routing, per-channel suffixes, retargeting pixels, QR codes and CSV export, on D1.",
+      "tagline": "Short links you control, with cookieless click and conversion stats",
       "addedAt": "2026-09-27T05:55:55+03:00",
       "version": "0.0.0-20260624.7fb2f44",
       "artifacts": {
