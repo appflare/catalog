@@ -78,25 +78,55 @@ app's own wrangler config, so the manifest does not repeat them.
    icon, its cover, screenshots, and `MEDIA.md` saying where each one comes from.
 6. Run the checks below, then open a pull request.
 
-### At most 21 Worker modules
+### The Worker upload budget
 
-The manager installs an app from inside a Cloudflare Workflow on the Workers free
-plan, which allows 50 subrequests per invocation. It uploads the Worker in one
-step, fetching each module from the release as its own subrequest, so an app can
-have at most `MAX_WORKER_MODULES` modules (21, exported by `@appflare/schema`).
-Every `appflare-pack verify` in CI passes `--max-modules` with that number, read
-from the schema package, and `pack-app` prints the count. An artifact over the
-limit fails verify with the packer's message instead of failing later, at
-install. A build that code-splits into many chunks, such as a framework's server
-build or a bundler with dynamic imports, must be configured to emit a single
-Worker module before the app can join the catalog.
+The manager installs and updates an app from inside a Cloudflare Workflow on the
+Workers free plan, which allows 50 subrequests per invocation. It uploads each Worker
+as one request carrying every module, and reads those modules from the release zip in
+the same invocation. So each Worker of an app must fit one upload:
 
-`pack-app` prints one `worker:` line with both limits, for example
-`1 module of at most 21, 2.41 MiB of at most 64.00 MiB (gzip 612.30 KiB, not limited)`,
-and marks what is over. Cloudflare accepts a Worker of up to 64 MiB uncompressed on
-every plan and no longer limits the compressed size, so the gzip figure is for
-reference, as wrangler prints it. Check a large build (a Nuxt or Next.js server, say)
-with `pack-app` before opening the pull request.
+- **At most 42 subrequests to read its modules:** one to follow the release asset's
+  redirect, plus one Range request per span. A span covers modules that lie next to
+  each other in the zip, up to 8 MiB, and the packer writes a Worker's modules next
+  to each other, so the count of spans, not of modules, is what counts.
+- **At most 32 MiB of module bytes:** the upload holds every module and the request
+  body in memory at once, inside the 128 MB a Worker may use. Cloudflare's own limit
+  is 64 MiB uncompressed on every plan, and it no longer limits the compressed size.
+
+`@appflare/schema` states both (`workerUploadProblem`), and every `appflare-pack
+verify` in CI passes `--check-upload` to apply them, so an artifact that does not fit
+fails verify with the packer's message instead of failing later, at install.
+
+`pack-app` prints one `worker:` line per Worker against the budget, for example
+`1 module in 1 range, 2.41 MiB of at most 32.00 MiB (gzip 612.30 KiB, not limited)`,
+and marks what is over. The gzip figure is for reference, as wrangler prints it.
+Check a large build (a Nuxt or Next.js server, say) with `pack-app` before opening
+the pull request; one over 32 MiB must be made smaller, for example by minifying it
+or serving large files as static assets.
+
+### Install directories
+
+By default the packer installs dependencies once, at the root of the checkout, from
+the lockfile there. An app whose Worker lives in a directory of its own (a template
+repository, say), or that needs a second install beside the root one, lists them in
+`install`:
+
+```jsonc
+"installDirs": [
+  { "path": "." },
+  { "path": "templates/blog", "lockfile": "none" }
+]
+```
+
+`installDirs` lists the directories to install, in order (default: the root). Set
+`lockfile: "none"` only when upstream ships no lockfile for that directory. The pack
+log then records the sha256 of the lockfile the install wrote, and reviewers check
+it. A directory that has a lockfile is always installed from it.
+
+Each `path` is `.` or a path relative to the root, without `..`. A directory's
+package manager is `install.packageManager` unless it holds another manager's
+lockfile, or unless the entry sets `packageManager` for it. Every install runs with
+`--ignore-scripts`; build commands still run at the root.
 
 ### Build commands
 
@@ -143,6 +173,30 @@ the app's settings. Neither value is logged. The source must be another secret o
 the manifest that is neither optional nor derived, a derived secret cannot be
 `generate` or `optional`, and self-deploying entries cannot derive secrets. The
 install check sets the source to a random value and the hash to its bcrypt hash.
+
+For Web Push, let the install form generate the VAPID key pair: mark the private key
+`generate: "vapid-private-key"`, and derive the public key the app hands to browsers
+as a var:
+
+```jsonc
+"secrets": [
+  { "name": "VAPID_PRIVATE_KEY", "label": "Push private key", "generate": "vapid-private-key" }
+],
+"vars": [
+  {
+    "name": "VAPID_PUBLIC_KEY",
+    "label": "Push public key",
+    "derive": { "from": "VAPID_PRIVATE_KEY", "method": "vapid-public-key" }
+  }
+]
+```
+
+The private key is the unpadded base64url of a 32-byte P-256 key, the form web-push
+libraries take, and the manager refuses any other value an admin types over it. The
+public key (unpadded base64url of the 65-byte uncompressed point) is shown read-only
+and set again whenever the private key changes. A derived var takes no `default`,
+`required`, `type`, or `options`. A secret may derive `vapid-public-key` too, when the
+app reads the public key as a secret. The install check generates a real key pair.
 
 ### Apps of several Workers
 
@@ -375,7 +429,7 @@ What CI does with a sandbox entry:
 
 - **Pull requests** (`verify.yml`): validate the manifest and pack the pinned
   commit on the runner, as for any entry. The pack proves that the app builds
-  from the pin and stays within the Worker module limit. There is **no install
+  from the pin and fits the Worker upload budget. There is **no install
   check**: the build a user gets comes from their own account's sandbox Worker,
   which CI cannot reach.
 - **Publishing** (`publish.yml`): no pack, no signature, no GitHub Release.
@@ -611,7 +665,6 @@ pnpm -s bump apply <slug> --ref <ref> --sha <sha>  # edit source, keeping commen
 node scripts/ci-install.ts deploy|cleanup <artifactDir> --suffix <suffix>  # needs a CI account
 pnpm sync-schema [--check]          # copy schema/v1.json from @appflare/schema
 pnpm gen-codeowners [--check]       # regenerate CODEOWNERS
-pnpm -s max-modules                 # the Worker module limit from @appflare/schema
 pnpm -s verify-tier <slug> --version <v> --out checks.json [--worker <name>]  # needs a paid account
 ```
 

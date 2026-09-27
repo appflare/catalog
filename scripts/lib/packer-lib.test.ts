@@ -11,7 +11,14 @@ describe.skipIf(!appflareAvailable)("the packer's functions", () => {
     expect(deriveSecretValue("bcrypt", "correct horse")).toMatch(/^\$2b\$10\$[./A-Za-z0-9]{53}$/);
   });
 
-  it("measure a packed Worker and state it against the limits", async () => {
+  it("generate a VAPID private key and derive its public key", async () => {
+    const { deriveSecretValue, generateVapidPrivateKey } = await loadPackerSecrets(appflareDir);
+    const privateKey = generateVapidPrivateKey();
+    expect(privateKey).toMatch(/^[A-Za-z0-9_-]{43}$/);
+    expect(deriveSecretValue("vapid-public-key", privateKey)).toMatch(/^[A-Za-z0-9_-]{87}$/);
+  });
+
+  it("measure a packed Worker and state it against the upload budget", async () => {
     const { artifactWorkerSize, workerSizeLine } = await loadPackerWorkerSize(appflareDir);
     const dir = mkdtempSync(path.join(tmpdir(), "catalog-size-"));
     try {
@@ -19,8 +26,9 @@ describe.skipIf(!appflareAvailable)("the packer's functions", () => {
       writeFileSync(zip, "headerexport default {};tail");
       const size = artifactWorkerSize(zip, [{ offset: 6, size: 18 }]);
       expect(size.size).toBe(18);
-      expect(workerSizeLine(size, 1, 21)).toMatch(
-        /^1 module of at most 21, 0\.02 KiB of at most 64\.00 MiB/,
+      expect(size.ranges).toBe(1);
+      expect(workerSizeLine(size, 1)).toMatch(
+        /^1 module in 1 range, 0\.02 KiB of at most 32\.00 MiB \(gzip [\d.]+ KiB, not limited\)$/,
       );
     } finally {
       rmSync(dir, { recursive: true, force: true });

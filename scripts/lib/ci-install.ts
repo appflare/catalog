@@ -116,13 +116,24 @@ export interface CiInstallPlan {
   config: Record<string, unknown>;
   /** Everything the deploy may create besides the Worker, deleted afterwards. */
   resources: CiResource[];
-  /** Secret names from the catalog manifest; each gets a random value. */
+  /**
+   * Secret names from the catalog manifest; each gets a random value, or a new
+   * VAPID private key when it is listed in `vapidPrivateKeys`.
+   */
   secrets: string[];
+  /** The `secrets` with `generate: "vapid-private-key"`, as the install form generates them. */
+  vapidPrivateKeys: string[];
   /**
    * Secrets the catalog manifest derives from another (`derive`): each gets
-   * the value the manager would compute from its source's random value.
+   * the value the manager would compute from its source's generated value.
    */
   derivedSecrets: CiDerivedSecret[];
+  /**
+   * Vars the catalog manifest derives from a secret (`derive`), such as a
+   * VAPID public key: set in the config at deploy, once the secrets have
+   * values ({@link derivedVarValues}).
+   */
+  derivedVars: CiDerivedSecret[];
   /** D1 databases with migrations to apply, by database name. */
   d1Migrations: string[];
   /** Vectorize indexes to create before the deploy (wrangler cannot provision them). */
@@ -177,7 +188,7 @@ function optionalStr(binding: ArtifactBinding, field: string): Record<string, st
   return typeof value === "string" && value.length > 0 ? { [field]: value } : {};
 }
 
-/** A secret the catalog manifest derives from another: `method` applied to `from`'s value. */
+/** A secret or var the catalog manifest derives from a secret: `method` applied to `from`'s value. */
 export interface CiDerivedSecret {
   name: string;
   from: string;
@@ -186,7 +197,9 @@ export interface CiDerivedSecret {
 
 interface CatalogForms {
   secrets: string[];
+  vapidPrivateKeys: string[];
   derivedSecrets: CiDerivedSecret[];
+  derivedVars: CiDerivedSecret[];
   vars: { name: string; default?: string; required: boolean; firstOption?: string }[];
 }
 
@@ -211,20 +224,32 @@ function firstOption(v: { type?: unknown; options?: unknown }): Record<string, s
 /**
  * Secret names and var defaults from the catalog manifest embedded in the
  * artifact. Optional secrets are set too, so the check covers the app with
- * every feature its secrets turn on. A derived secret (`derive`) is listed
- * apart, with its source: it is computed, never random.
+ * every feature its secrets turn on. A derived secret or var (`derive`) is
+ * listed apart, with its source: it is computed, never random.
  */
 export function catalogForms(catalog: unknown): CatalogForms {
   const c = (catalog ?? {}) as { secrets?: unknown; vars?: unknown };
   const secrets: string[] = [];
+  const vapidPrivateKeys: string[] = [];
   const derivedSecrets: CiDerivedSecret[] = [];
   for (const s of Array.isArray(c.secrets) ? c.secrets : []) {
     const name = (s as { name?: unknown }).name;
     if (typeof name !== "string") continue;
     const derive = deriveOf(s);
-    if (derive === null) secrets.push(name);
-    else derivedSecrets.push({ name, ...derive });
+    if (derive !== null) {
+      derivedSecrets.push({ name, ...derive });
+      continue;
+    }
+    secrets.push(name);
+    if ((s as { generate?: unknown }).generate === "vapid-private-key") vapidPrivateKeys.push(name);
   }
+  const derivedVars: CiDerivedSecret[] = [];
+  for (const v of Array.isArray(c.vars) ? c.vars : []) {
+    const name = (v as { name?: unknown }).name;
+    const derive = typeof name === "string" ? deriveOf(v) : null;
+    if (typeof name === "string" && derive !== null) derivedVars.push({ name, ...derive });
+  }
+  const derivedVarNames = new Set(derivedVars.map((v) => v.name));
   const vars = Array.isArray(c.vars)
     ? c.vars
         .map(
@@ -246,7 +271,7 @@ export function catalogForms(catalog: unknown): CatalogForms {
             required?: unknown;
             type?: unknown;
             options?: unknown;
-          } => typeof v.name === "string",
+          } => typeof v.name === "string" && !derivedVarNames.has(v.name),
         )
         .map((v) => ({
           name: v.name,
@@ -255,7 +280,7 @@ export function catalogForms(catalog: unknown): CatalogForms {
           ...firstOption(v),
         }))
     : [];
-  return { secrets, derivedSecrets, vars };
+  return { secrets, vapidPrivateKeys, derivedSecrets, derivedVars, vars };
 }
 
 /**
@@ -903,7 +928,9 @@ export function planCiInstall(
     config,
     resources,
     secrets: forms.secrets,
+    vapidPrivateKeys: forms.vapidPrivateKeys,
     derivedSecrets: forms.derivedSecrets,
+    derivedVars: forms.derivedVars,
     d1Migrations,
     vectorizeIndexes,
     hyperdriveConfigs,
@@ -1243,36 +1270,98 @@ export async function createKvNamespaces(
 }
 
 /**
+ * The packer's functions for secret values, computed as the manager computes
+ * them; each null when the app needs none (see {@link needsPackerSecrets}).
+ */
+export interface CiSecretFunctions {
+  deriveSecretValue: ((method: string, value: string) => string) | null;
+  generateVapidPrivateKey: (() => string) | null;
+}
+
+/** Whether any Worker of the app has a secret or var only the packer's functions can fill in. */
+export function needsPackerSecrets(app: Pick<CiAppPlan, "workers">): boolean {
+  return app.workers.some(
+    (w) =>
+      w.plan.vapidPrivateKeys.length > 0 ||
+      w.plan.derivedSecrets.length > 0 ||
+      w.plan.derivedVars.length > 0,
+  );
+}
+
+/** `derive.method` applied to the value of `derive.from`, refused when either is missing. */
+function derivedValue(
+  derived: CiDerivedSecret,
+  values: ReadonlyMap<string, string>,
+  derive: CiSecretFunctions["deriveSecretValue"],
+): string {
+  const source = values.get(derived.from);
+  if (source === undefined) {
+    throw new Error(`${derived.name} derives from ${derived.from}, which the check did not set`);
+  }
+  if (derive === null) {
+    throw new Error(`${derived.name} is derived, and no derivation was loaded`);
+  }
+  return derive(derived.method, source);
+}
+
+/**
  * The value of every secret any Worker of the app gets, by name: a random
- * one for each, and for a derived secret the value `derive` computes from its
+ * one for each, a new VAPID private key for a `generate: "vapid-private-key"`
+ * secret, and for a derived secret the value `derive` computes from its
  * source's. A secret that goes to several Workers has one value for all of
  * them, as the install form gives it one. Never printed.
  */
 export function appSecretValues(
   app: Pick<CiAppPlan, "workers">,
-  derive: ((method: string, value: string) => string) | null,
+  fns: CiSecretFunctions,
   random: () => string = randomSecret,
 ): Map<string, string> {
   const values = new Map<string, string>();
   for (const w of app.workers) {
+    const vapid = new Set(w.plan.vapidPrivateKeys);
     for (const secret of w.plan.secrets) {
-      if (!values.has(secret)) values.set(secret, random());
+      if (values.has(secret)) continue;
+      if (!vapid.has(secret)) {
+        values.set(secret, random());
+      } else if (fns.generateVapidPrivateKey === null) {
+        throw new Error(`${secret} is a VAPID private key, and no generator was loaded`);
+      } else {
+        values.set(secret, fns.generateVapidPrivateKey());
+      }
     }
   }
   for (const w of app.workers) {
     for (const secret of w.plan.derivedSecrets) {
-      if (values.has(secret.name)) continue;
-      const source = values.get(secret.from);
-      if (source === undefined) {
-        throw new Error(`${secret.name} derives from ${secret.from}, which the check did not set`);
+      if (!values.has(secret.name)) {
+        values.set(secret.name, derivedValue(secret, values, fns.deriveSecretValue));
       }
-      if (derive === null) {
-        throw new Error(`${secret.name} is derived, and no derivation was loaded`);
-      }
-      values.set(secret.name, derive(secret.method, source));
     }
   }
   return values;
+}
+
+/**
+ * The derived vars of one Worker (a VAPID public key, say), computed from the
+ * secret values {@link appSecretValues} chose, as the manager sets them.
+ */
+export function derivedVarValues(
+  plan: Pick<CiInstallPlan, "derivedVars">,
+  secrets: ReadonlyMap<string, string>,
+  derive: CiSecretFunctions["deriveSecretValue"],
+): Record<string, string> {
+  return Object.fromEntries(
+    plan.derivedVars.map((v) => [v.name, derivedValue(v, secrets, derive)] as const),
+  );
+}
+
+/** `config` with `vars` added to its own vars; unchanged when there are none. */
+export function withVars(
+  config: Record<string, unknown>,
+  vars: Record<string, string>,
+): Record<string, unknown> {
+  if (Object.keys(vars).length === 0) return config;
+  const own = (config.vars ?? {}) as Record<string, unknown>;
+  return { ...config, vars: { ...own, ...vars } };
 }
 
 /**

@@ -7,10 +7,14 @@ import { appflarePaths, assertAppflareBuilt } from "./paths.ts";
  * the manager compute rather than a copy that could drift.
  */
 
-/** A Worker's size, as wrangler measures it: every module's bytes, and those gzipped. */
+/**
+ * A Worker's size: every module's bytes and those gzipped, as wrangler
+ * measures it, and the Range requests the manager reads the modules with.
+ */
 export interface WorkerSize {
   size: number;
   gzipSize: number;
+  ranges: number;
 }
 
 /** The slice of `@appflare/pack` that measures a packed Worker. */
@@ -20,13 +24,17 @@ export interface PackerWorkerSize {
     zipPath: string,
     modules: ReadonlyArray<{ offset: number; size: number }>,
   ): WorkerSize;
-  /** One line on the size and module count against Cloudflare's and the manager's limits. */
-  workerSizeLine(size: WorkerSize, moduleCount: number, maxModules?: number): string;
+  /** One line on the modules, their ranges, and their size against the manager's upload budget. */
+  workerSizeLine(size: WorkerSize, moduleCount: number): string;
 }
 
-/** The slice of `@appflare/pack` that computes a derived secret as the manager does. */
+/**
+ * The slice of `@appflare/pack` that computes secret values as the manager
+ * does: a derived secret or var, and a new VAPID private key.
+ */
 export interface PackerSecrets {
   deriveSecretValue(method: string, value: string): string;
+  generateVapidPrivateKey(): string;
 }
 
 async function packLib(appflareDir: string, names: readonly string[]): Promise<unknown> {
@@ -51,8 +59,11 @@ export async function loadPackerWorkerSize(appflareDir: string): Promise<PackerW
   return (await packLib(appflareDir, ["artifactWorkerSize", "workerSizeLine"])) as PackerWorkerSize;
 }
 
-/** `deriveSecretValue` from the packer build in `appflareDir`. */
+/** `deriveSecretValue` and `generateVapidPrivateKey` from the packer build in `appflareDir`. */
 export async function loadPackerSecrets(appflareDir: string): Promise<PackerSecrets> {
-  // Checked by packLib: a function with this signature.
-  return (await packLib(appflareDir, ["deriveSecretValue"])) as PackerSecrets;
+  // Checked by packLib: both are functions with these signatures.
+  return (await packLib(appflareDir, [
+    "deriveSecretValue",
+    "generateVapidPrivateKey",
+  ])) as PackerSecrets;
 }

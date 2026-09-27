@@ -19,9 +19,9 @@ const USAGE = `Usage: pnpm pack-app <slug> [--out <dir>] [--key-id <id>]
 
 Clones the app's repo at source.sha into a temp dir, builds the artifact with
 appflare-pack (dependencies installed with --ignore-scripts), and checks it
-with appflare-pack verify --hashes-only --max-modules (the most Worker modules
-the manager can install, from @appflare/schema). Never signs and never sees a
-secret.
+with appflare-pack verify --hashes-only --check-upload (each Worker must fit
+one upload by the manager: its module bytes, and the Range requests that read
+them from the release zip). Never signs and never sees a secret.
 APPFLARE_DIR points at a built appflare checkout or packer bundle.
 
   --out <dir>      output directory (default: dist/<slug>)
@@ -107,21 +107,14 @@ runMain(async () => {
     }
     info(`packing ${slug}@${expectedVersion} with appflare-pack (no signing key present)`);
     mustRun(process.execPath, packArgs);
-    const verifyArgs = [
-      packBin,
-      "verify",
-      outDir,
-      "--hashes-only",
-      "--max-modules",
-      String(schema.maxWorkerModules),
-    ];
+    const verifyArgs = [packBin, "verify", outDir, "--hashes-only", "--check-upload"];
     if (run(process.execPath, verifyArgs) !== 0) {
       // Never leave an artifact that failed verification where build-index or
       // a later CI step could pick it up.
       clearArtifactDir(outDir);
       throw new Error(
-        `appflare-pack verify failed for ${outDir} (its message is above). A Worker with more ` +
-          `than ${schema.maxWorkerModules} modules cannot be installed by the manager.`,
+        `appflare-pack verify failed for ${outDir} (its message is above). A Worker that does ` +
+          "not fit one upload cannot be installed by the manager.",
       );
     }
   } finally {
@@ -145,13 +138,9 @@ runMain(async () => {
   const zipPath = path.join(outDir, `${slug}-${artifact.version}.zip`);
   const migrations = Object.values(artifact.d1Migrations).reduce((n, l) => n + l.length, 0);
   const sizes = await loadPackerWorkerSize(appflareDir);
-  // Each Worker is measured on its own: the limits are per Worker.
+  // Each Worker is measured on its own: every Worker is its own upload.
   const sizeLine = (worker: ArtifactWorker): string =>
-    sizes.workerSizeLine(
-      sizes.artifactWorkerSize(zipPath, worker.modules),
-      worker.modules.length,
-      schema.maxWorkerModules,
-    );
+    sizes.workerSizeLine(sizes.artifactWorkerSize(zipPath, worker.modules), worker.modules.length);
   process.stdout.write(
     [
       `${slug}@${artifact.version} (keyId=${artifact.keyId}, not signed)`,

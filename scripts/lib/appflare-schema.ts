@@ -37,11 +37,6 @@ export interface AppflareSchema {
   featuredItem: Parser<FeaturedItem>;
   /** `stats.json`. */
   catalogStats: Parser<CatalogStats>;
-  /**
-   * Most Worker modules the manager can install: it uploads each module as its
-   * own subrequest, within the free plan's per-invocation subrequest limit.
-   */
-  maxWorkerModules: number;
   /** What a sandbox tier entry's `install.sandbox` defaults to. */
   sandboxDefaults: SandboxDefaults;
   /**
@@ -192,7 +187,6 @@ export async function loadAppflareSchema(appflareDir: string): Promise<AppflareS
     indexJson: pickParser<IndexJson>(mod, "indexJsonSchema"),
     featuredItem: pickParser<FeaturedItem>(mod, "featuredItemSchema"),
     catalogStats: pickParser<CatalogStats>(mod, "catalogStatsSchema"),
-    maxWorkerModules: pickPositiveInt(mod, "MAX_WORKER_MODULES"),
     sandboxDefaults: {
       expectedMinutes: pickPositiveInt(mod, "DEFAULT_EXPECTED_BUILD_MINUTES"),
       instanceType: pickInstanceType(mod, "DEFAULT_SANDBOX_INSTANCE_TYPE"),

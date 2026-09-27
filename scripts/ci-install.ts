@@ -29,11 +29,13 @@ import {
   createKvNamespaces,
   createQueues,
   createVectorizeIndexes,
+  derivedVarValues,
   type HealthMode,
   type HealthResult,
   HYPERDRIVE_TEST_URL,
   healthUrl,
   hyperdriveSkip,
+  needsPackerSecrets,
   OTHER_WORKER_PROBE,
   planCiApp,
   skippedSummaryLines,
@@ -41,6 +43,7 @@ import {
   waitForHealth,
   withHyperdriveIds,
   withKvIds,
+  withVars,
   workersSubdomain,
 } from "./lib/ci-install.ts";
 import { info, runMain } from "./lib/cli.ts";
@@ -65,7 +68,9 @@ deploy   Unpacks the artifact (checking every file's sha256), removes anything
          Worker aimed at the CI Worker, any other refused; no cron triggers,
          which the run summary notes), runs wrangler deploy --strict, attaches the recorded queue consumers through the API,
          applies D1 migrations, sets each catalog secret to a random value
-         (a derived one to the value the manager computes from its source's),
+         (a new VAPID private key for generate: "vapid-private-key", and a
+         derived one to the value the manager computes from its source's; a
+         derived var, such as a VAPID public key, goes into the config),
          and waits up to 60 s for
          https://<worker>.<subdomain>.workers.dev<healthPath> to answer
          (install.healthPath from the catalog manifest, else /). A failed
@@ -260,11 +265,21 @@ async function deployAndCheck(
     app.hyperdriveConfigs.length > 0 && testDatabase !== undefined
       ? await createHyperdriveConfigs(request, app, testDatabase)
       : {};
+  // Secret values come first: a derived var (a VAPID public key) is computed
+  // from one and goes into the config the deploy uploads.
+  const packer = needsPackerSecrets(app)
+    ? await loadPackerSecrets(resolveAppflareDir())
+    : { deriveSecretValue: null, generateVapidPrivateKey: null };
+  const values = appSecretValues(app, packer);
   for (const [i, w] of app.workers.entries()) {
     const dir = dirs[i] as string;
     const withKv = app.kvNamespaces.length > 0 ? withKvIds(w.plan.config, kvIds) : w.plan.config;
-    const config =
+    const withHyperdrive =
       w.plan.hyperdriveConfigs.length > 0 ? withHyperdriveIds(withKv, hyperdriveIds) : withKv;
+    const config = withVars(
+      withHyperdrive,
+      derivedVarValues(w.plan, values, packer.deriveSecretValue),
+    );
     writeFileSync(path.join(dir, "wrangler.json"), `${JSON.stringify(config, null, 2)}\n`);
     info(`deploying ${w.manifest.app}@${w.manifest.version} as ${w.plan.name}`);
     try {
@@ -286,10 +301,6 @@ async function deployAndCheck(
   for (const { database, worker } of app.d1Migrations) {
     wrangler(bin, dirOf(worker), ["d1", "migrations", "apply", database, "--remote"]);
   }
-  const derived = app.workers.some((w) => w.plan.derivedSecrets.length > 0)
-    ? (await loadPackerSecrets(resolveAppflareDir())).deriveSecretValue
-    : null;
-  const values = appSecretValues(app, derived);
   for (const [i, w] of app.workers.entries()) {
     for (const secret of [...w.plan.secrets, ...w.plan.derivedSecrets.map((s) => s.name)]) {
       const value = values.get(secret);

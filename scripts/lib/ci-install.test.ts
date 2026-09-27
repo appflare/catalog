@@ -29,8 +29,10 @@ import {
   createQueues,
   createVectorizeIndexes,
   cronNote,
+  derivedVarValues,
   healthUrl,
   type JsonValue,
+  needsPackerSecrets,
   type Probe,
   planCiApp,
   planCiInstall,
@@ -42,6 +44,7 @@ import {
   unpackArtifact,
   waitForHealth,
   withKvIds,
+  withVars,
   workersSubdomain,
 } from "./ci-install.ts";
 import { appflarePaths } from "./paths.ts";
@@ -356,6 +359,34 @@ describe("planCiInstall", () => {
     expect(plan.derivedSecrets).toEqual([
       { name: "CF_PASSWORD_HASH", from: "CF_PASSWORD", method: "bcrypt" },
     ]);
+  });
+
+  it("lists VAPID private keys, and keeps derived vars out of the planned vars", () => {
+    const plan = planCiInstall(
+      manifest((m) => {
+        const catalog = m.catalog as Record<string, unknown>;
+        catalog.secrets = [
+          { name: "VAPID_PRIVATE_KEY", label: "Push key", generate: "vapid-private-key" },
+          { name: "TOKEN", label: "Token", generate: true },
+        ];
+        catalog.vars = [
+          {
+            name: "VAPID_PUBLIC_KEY",
+            label: "Push public key",
+            derive: { from: "VAPID_PRIVATE_KEY", method: "vapid-public-key" },
+          },
+        ];
+      }),
+      "ci-hello-pr1",
+    );
+    expect(plan.secrets).toEqual(["VAPID_PRIVATE_KEY", "TOKEN"]);
+    expect(plan.vapidPrivateKeys).toEqual(["VAPID_PRIVATE_KEY"]);
+    expect(plan.derivedVars).toEqual([
+      { name: "VAPID_PUBLIC_KEY", from: "VAPID_PRIVATE_KEY", method: "vapid-public-key" },
+    ]);
+    expect((plan.config.vars as Record<string, unknown> | undefined)?.VAPID_PUBLIC_KEY).toBe(
+      undefined,
+    );
   });
 
   it("probes the catalog's install.healthPath, else /", () => {
@@ -957,7 +988,9 @@ describe("cleanupCiInstall", () => {
     name: "ci-hello-pr1",
     config: {},
     secrets: [],
+    vapidPrivateKeys: [],
     derivedSecrets: [],
+    derivedVars: [],
     d1Migrations: [],
     vectorizeIndexes: [{ name: "ci-hello-pr1-vectors", dimensions: 384, metric: "cosine" }],
     hyperdriveConfigs: [],
@@ -1450,11 +1483,23 @@ describe("appSecretValues", () => {
     name: string,
     secrets: string[],
     derivedSecrets: CiInstallPlan["derivedSecrets"],
+    more: Partial<CiInstallPlan> = {},
   ) => ({
-    plan: { name, secrets, derivedSecrets } as CiInstallPlan,
+    plan: {
+      name,
+      secrets,
+      vapidPrivateKeys: [],
+      derivedSecrets,
+      derivedVars: [],
+      ...more,
+    } as CiInstallPlan,
     entryName: name,
     primary: false,
     manifest: {} as ArtifactManifest,
+  });
+  const fns = (vapid: (() => string) | null = null) => ({
+    deriveSecretValue: (method: string, value: string) => `${method}(${value})`,
+    generateVapidPrivateKey: vapid,
   });
 
   it("gives a secret several Workers get one value, and derives from it once", () => {
@@ -1466,8 +1511,7 @@ describe("appSecretValues", () => {
         worker("c", [], [{ name: "HASH", from: "SHARED", method: "bcrypt" }]),
       ],
     };
-    const derive = (method: string, value: string) => `${method}(${value})`;
-    const values = appSecretValues(app, derive, () => `v${++n}`);
+    const values = appSecretValues(app, fns(), () => `v${++n}`);
     expect([...values]).toEqual([
       ["SHARED", "v1"],
       ["A_ONLY", "v2"],
@@ -1477,7 +1521,44 @@ describe("appSecretValues", () => {
 
   it("refuses a derived secret whose source no Worker gets", () => {
     const app = { workers: [worker("a", [], [{ name: "HASH", from: "PW", method: "bcrypt" }])] };
-    expect(() => appSecretValues(app, (_m, v) => v)).toThrow(/derives from PW/);
+    expect(() => appSecretValues(app, fns())).toThrow(/derives from PW/);
+  });
+
+  it("generates a VAPID private key where the manifest asks for one, and derives vars from it", () => {
+    const w = worker("a", ["VAPID", "OTHER"], [], {
+      vapidPrivateKeys: ["VAPID"],
+      derivedVars: [{ name: "VAPID_PUBLIC", from: "VAPID", method: "vapid-public-key" }],
+    });
+    const values = appSecretValues(
+      { workers: [w] },
+      fns(() => "vapid-key"),
+      () => "random",
+    );
+    expect([...values]).toEqual([
+      ["VAPID", "vapid-key"],
+      ["OTHER", "random"],
+    ]);
+    expect(derivedVarValues(w.plan, values, fns().deriveSecretValue)).toEqual({
+      VAPID_PUBLIC: "vapid-public-key(vapid-key)",
+    });
+    expect(() => appSecretValues({ workers: [w] }, fns(null))).toThrow(/no generator was loaded/);
+    expect(() => derivedVarValues(w.plan, values, null)).toThrow(/no derivation was loaded/);
+  });
+
+  it("tells when the packer's functions are needed", () => {
+    expect(needsPackerSecrets({ workers: [worker("a", ["X"], [])] })).toBe(false);
+    expect(
+      needsPackerSecrets({ workers: [worker("a", ["X"], [], { vapidPrivateKeys: ["X"] })] }),
+    ).toBe(true);
+  });
+});
+
+describe("withVars", () => {
+  it("adds vars to a config's own, and leaves a config alone when there are none", () => {
+    const config = { name: "w", vars: { A: "1" } };
+    expect(withVars(config, {})).toBe(config);
+    expect(withVars(config, { B: "2" })).toEqual({ name: "w", vars: { A: "1", B: "2" } });
+    expect(withVars({ name: "w" }, { B: "2" })).toEqual({ name: "w", vars: { B: "2" } });
   });
 });
 

@@ -8,7 +8,7 @@ name: verify
 # What runs depends on the entry's install.tier:
 #   artifact        validate, pack, install check
 #   sandbox         validate, pack (proves the pinned commit builds and fits
-#                   the module limit); no install check: the user's account
+#                   the upload budget); no install check: the user's account
 #                   builds it, and verify-tier.yml checks it by hand
 #   self-deploying  validate only (the check job validates every manifest):
 #                   the app's own installer runs in the user's sandbox
@@ -150,8 +150,8 @@ jobs:
         env:
           APP: ${{ matrix.app }}
         run: pnpm validate "${APP}"
-      # pack-app runs appflare-pack verify --hashes-only --max-modules.
-      - name: Pack (unsigned), verify hashes and the module limit
+      # pack-app runs appflare-pack verify --hashes-only --check-upload.
+      - name: Pack (unsigned), verify hashes and the upload budget
         env:
           APP: ${{ matrix.app }}
         run: pnpm pack-app "${APP}" --out "dist/${APP}"

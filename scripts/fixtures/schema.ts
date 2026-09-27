@@ -24,8 +24,6 @@ export async function testSchema(): Promise<AppflareSchema> {
     indexJson: passthrough(),
     featuredItem: passthrough(),
     catalogStats: passthrough(),
-    // The value @appflare/schema exports; only used when it is not available.
-    maxWorkerModules: 21,
     sandboxDefaults: { expectedMinutes: 10, instanceType: "standard-1" },
     // No stand-in for the real derivation: tests that check services inject
     // their own or run only with the real schema.
