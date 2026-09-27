@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-27T03:15:30.288Z",
+  "generatedAt": "2026-09-27T03:23:54.396Z",
   "apps": [
     {
       "slug": "2fa",
@@ -189,6 +189,59 @@
       "categories": [
         "monitoring",
         "developer-tools"
+      ],
+      "revision": 1
+    },
+    {
+      "slug": "auth-inbox",
+      "name": "Auth Inbox",
+      "summary": "An inbox for sign-up and verification mail: Email Routing delivers it, an AI model of your choice pulls out codes and links and sorts each mail, and a dashboard, per-user grants and a remote MCP server let people and agents read them.",
+      "version": "0.0.0-20260709.83927b8",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/auth-inbox@0.0.0-20260709.83927b8/auth-inbox-0.0.0-20260709.83927b8.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/auth-inbox@0.0.0-20260709.83927b8/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/auth-inbox@0.0.0-20260709.83927b8/manifest.sig"
+      },
+      "digest": "0041f76c4877b73c70cd2f57421c8dbc050d7939024fb1cbf6addebce4454d8b",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "zone",
+        "email-routing"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Tony Chen",
+          "url": "https://tonychen.net",
+          "github": "TooonyChen"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "screenshots": [
+          {
+            "url": "https://appflare.github.io/catalog/apps/auth-inbox/screenshots/01-verification-code.png",
+            "sha256": "0a6e9d6551601cd9019e14758aa7f0d68b001c2babe36b3e1ce2db44e1e5a676",
+            "alt": "Auth Inbox: Verification code"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/auth-inbox/screenshots/02-mail-list.png",
+            "sha256": "60ed6d4d0eacde987d2a307d200e6cd8597644ff909afb8c6cfb7e6cdb3b6ab2",
+            "alt": "Auth Inbox: Mail list"
+          }
+        ]
+      },
+      "services": [
+        "d1",
+        "email-routing",
+        "zone"
+      ],
+      "categories": [
+        "email",
+        "ai"
       ],
       "revision": 1
     },
@@ -466,6 +519,47 @@
       "revision": 1
     },
     {
+      "slug": "clist",
+      "name": "CList",
+      "summary": "A file browser and WebDAV server over your S3, WebDAV, OneDrive and Google Drive storage, with previews, share links and audit logs.",
+      "version": "0.0.0-20260924.cb7cc24",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/clist@0.0.0-20260924.cb7cc24/clist-0.0.0-20260924.cb7cc24.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/clist@0.0.0-20260924.cb7cc24/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/clist@0.0.0-20260924.cb7cc24/manifest.sig"
+      },
+      "digest": "9b020c4b8e3092937020683411626ac0e8f87d403ac5cadbe88b689139546b5f",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "ooyyh",
+          "url": "https://blog.ooyyh.top",
+          "github": "ooyyh"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/clist/icon.png",
+          "sha256": "51b6075bdd3ea239493994b8740854da08a1aacc9b5836a5e4b3dd79cfad864e"
+        },
+        "screenshots": []
+      },
+      "services": [
+        "d1"
+      ],
+      "categories": [
+        "files",
+        "storage"
+      ],
+      "revision": 1
+    },
+    {
       "slug": "cloudmark",
       "name": "Cloudmark",
       "summary": "Bookmarks without an account: create a collection with a write token, save pages with a bookmarklet or the Chrome extension, and open them from any device. On D1.",
@@ -644,6 +738,48 @@
         "keyId": "catalog-2026-09",
         "signature": "PGUEDWDpX9OXeiK3cTvjLVHdaLJzab+mkNFaSYAp/TYkoRMVM9slKTXBFaGzNCieVRRi5YGUg6yKgXDKPKKLDw=="
       }
+    },
+    {
+      "slug": "deepcrawl",
+      "name": "Deepcrawl",
+      "summary": "An open-source Firecrawl alternative: an API that turns any web page into clean Markdown, metadata and a tree of its links for AI agents, cached in KV with request logs in D1.",
+      "version": "0.5.5",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/deepcrawl@0.5.5/deepcrawl-0.5.5.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/deepcrawl@0.5.5/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/deepcrawl@0.5.5/manifest.sig"
+      },
+      "digest": "5c6e7c5fdaf3bddc7164d25ff23ad5e5205e984f8c3cb9bcf737284124b39f3a",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Felix Lu",
+          "github": "lumpinif",
+          "x": "felixlu1018"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "cover": {
+          "url": "https://appflare.github.io/catalog/apps/deepcrawl/cover.png",
+          "sha256": "11932f4ae4c905d0ff0617337e8ba5d5c36f1d9d0518ab016983e24c147372dc"
+        },
+        "screenshots": []
+      },
+      "services": [
+        "kv",
+        "d1"
+      ],
+      "categories": [
+        "developer-tools",
+        "ai"
+      ],
+      "revision": 1
     },
     {
       "slug": "durable-git",
@@ -828,6 +964,116 @@
       ],
       "categories": [
         "email"
+      ],
+      "revision": 1
+    },
+    {
+      "slug": "emailflare",
+      "name": "EmailFlare",
+      "summary": "Transactional email on Cloudflare Email Sending: a sending API with templates, API keys, logs, suppressions and one-click unsubscribe, plus a team inbox and lightweight CRM on Email Routing.",
+      "version": "0.0.0-20260920.d448ea2",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/emailflare@0.0.0-20260920.d448ea2/emailflare-0.0.0-20260920.d448ea2.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/emailflare@0.0.0-20260920.d448ea2/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/emailflare@0.0.0-20260920.d448ea2/manifest.sig"
+      },
+      "digest": "5cbc0accb44393ab27e8c94242baab1a1c5408b0661a45cd93fd11595a40be9f",
+      "tier": "artifact",
+      "plan": "paid",
+      "requires": [
+        "zone",
+        "email-routing",
+        "r2"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "0xdps",
+          "github": "0xdps"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/emailflare/icon.svg",
+          "sha256": "5e8635350d69a57174b2dc25ca9e98335f7dc553924b103cd827202c20d6f625"
+        },
+        "screenshots": []
+      },
+      "services": [
+        "kv",
+        "d1",
+        "r2",
+        "durable-objects",
+        "queues",
+        "cron",
+        "email-routing",
+        "zone"
+      ],
+      "categories": [
+        "email",
+        "business"
+      ],
+      "revision": 1
+    },
+    {
+      "slug": "emdash",
+      "name": "EmDash",
+      "summary": "A full-stack TypeScript CMS built on Astro, the spiritual successor to WordPress: this is its blog template, with posts, pages, categories and tags, search, RSS and an admin editor, on D1 and R2.",
+      "version": "0.0.0-20260926.e3b39ac",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/emdash@0.0.0-20260926.e3b39ac/emdash-0.0.0-20260926.e3b39ac.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/emdash@0.0.0-20260926.e3b39ac/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/emdash@0.0.0-20260926.e3b39ac/manifest.sig"
+      },
+      "digest": "ca924df42cbd11cecca9de7fb26a2cdd4fa16034cca69101f828a5dea9838a6e",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "r2"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "EmDash",
+          "url": "https://emdashcms.com",
+          "github": "emdash-cms"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "screenshots": [
+          {
+            "url": "https://appflare.github.io/catalog/apps/emdash/screenshots/01-home-page.png",
+            "sha256": "88653dc93f80f8a20113422dc5e7de8f3cab5fe6aed8b0d1f65ea8a55bd738eb",
+            "alt": "EmDash: Home page"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/emdash/screenshots/02-a-post.png",
+            "sha256": "ea9814577576e524c5fe33db508a77da3caf28275aefd879b90eac012d15c762",
+            "alt": "EmDash: A post"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/emdash/screenshots/03-home-page-in-dark-mode.png",
+            "sha256": "9a0a5dfdb7883ce44d9d8e2e4a29ca98220213791c4d47f3816bf9ecb987b610",
+            "alt": "EmDash: Home page in dark mode"
+          }
+        ]
+      },
+      "services": [
+        "kv",
+        "d1",
+        "r2",
+        "cron",
+        "images"
+      ],
+      "categories": [
+        "cms",
+        "blogging"
       ],
       "revision": 1
     },
@@ -1199,6 +1445,67 @@
       "revision": 1
     },
     {
+      "slug": "imgbed",
+      "name": "CloudFlare ImgBed",
+      "summary": "Self-hosted image and file hosting with an admin panel: uploads to R2, Telegram, Discord, S3, Hugging Face or WebDAV, file management, access control, a public gallery, a REST API and WebDAV, on D1.",
+      "version": "2.7.6",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/imgbed@2.7.6/imgbed-2.7.6.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/imgbed@2.7.6/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/imgbed@2.7.6/manifest.sig"
+      },
+      "digest": "366a66cb35d98bbe5fec11628da4886dcc11b2a7aed0ad67efddc229da73e771",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "r2"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "MarSeventh",
+          "url": "https://home.sanyue.site",
+          "github": "MarSeventh"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/imgbed/icon.png",
+          "sha256": "8f126ce76901654d34caf19ec8082ac6ed8a3875fbd545fbbe87b4eae95f4418"
+        },
+        "screenshots": [
+          {
+            "url": "https://appflare.github.io/catalog/apps/imgbed/screenshots/01-upload-page.png",
+            "sha256": "ea8e8f94db790073d114907d9ee0efecce8c9ad16dff48a0aee17942818c5b7d",
+            "alt": "CloudFlare ImgBed: Upload page"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/imgbed/screenshots/02-upload-sign-in.png",
+            "sha256": "4f050603a7ef2b0616f977e3041796928f0dd5ac8508eb02cad6c5457601fdc8",
+            "alt": "CloudFlare ImgBed: Upload sign in"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/imgbed/screenshots/03-system-status.png",
+            "sha256": "358ebc9d55de709a39773de1be0b5ae13e1bfcd583e6e823929cc44ab9298a91",
+            "alt": "CloudFlare ImgBed: System status"
+          }
+        ]
+      },
+      "services": [
+        "d1",
+        "r2",
+        "images"
+      ],
+      "categories": [
+        "files",
+        "sharing"
+      ],
+      "revision": 1
+    },
+    {
       "slug": "inkstone",
       "name": "Inkstone",
       "summary": "A self-hosted Markdown notebook with live preview, backlinks, full-text and semantic search, offline editing, multi-device sync, public sharing, MCP access and scheduled backups.",
@@ -1297,6 +1604,52 @@
       ],
       "categories": [
         "analytics"
+      ],
+      "revision": 1
+    },
+    {
+      "slug": "isupmap",
+      "name": "isupmap",
+      "summary": "A live up/down heatmap for 40+ popular internet services, polled every five minutes, with history and community outage reports.",
+      "version": "0.0.0-20260904.17bb688",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/isupmap@0.0.0-20260904.17bb688/isupmap-0.0.0-20260904.17bb688.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/isupmap@0.0.0-20260904.17bb688/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/isupmap@0.0.0-20260904.17bb688/manifest.sig"
+      },
+      "digest": "8ef83d73f2ac01e1a8e7e2c505081e620843beafb1fc9c7c0854d8126f7ff64c",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "analytics-engine"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Jairon Landa",
+          "url": "https://jaironlanda.com",
+          "github": "Jaironlanda"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/isupmap/icon.png",
+          "sha256": "d97c8e9f9185e2366acbcc5c64f3545f9a7e660e09914e41ef6c00d4e3e3693b"
+        },
+        "screenshots": []
+      },
+      "services": [
+        "kv",
+        "d1",
+        "analytics-engine",
+        "queues",
+        "cron"
+      ],
+      "categories": [
+        "monitoring"
       ],
       "revision": 1
     },
@@ -1525,6 +1878,174 @@
       "revision": 1
     },
     {
+      "slug": "md-page",
+      "name": "md.page",
+      "summary": "Turn Markdown into a shareable web page with one request: an API, an MCP server for coding agents, and pages that expire after 24 hours, on Workers KV.",
+      "version": "0.0.0-20260909.54bbbd1",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/md-page@0.0.0-20260909.54bbbd1/md-page-0.0.0-20260909.54bbbd1.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/md-page@0.0.0-20260909.54bbbd1/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/md-page@0.0.0-20260909.54bbbd1/manifest.sig"
+      },
+      "digest": "742a4d3046357f982b830aa8dc483772da7df2a88f7e1ba7cc72ed340d29faf1",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "analytics-engine",
+        "r2"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Or May-Paz",
+          "github": "maypaz"
+        },
+        {
+          "name": "Matan Lachmish",
+          "url": "https://www.thebigfatninja.xyz",
+          "github": "mlachmish"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/md-page/icon.svg",
+          "sha256": "b9cd0b3244cd7860c2b85143732c5c3af9e52093778c130a38f522d7969c1a03"
+        },
+        "screenshots": []
+      },
+      "services": [
+        "kv",
+        "r2",
+        "analytics-engine"
+      ],
+      "categories": [
+        "sharing",
+        "developer-tools"
+      ],
+      "revision": 1
+    },
+    {
+      "slug": "microfeed",
+      "name": "microfeed",
+      "summary": "A lightweight CMS for audio, video, photos, documents, blog posts and links, published as a website, RSS and JSON feed, with an admin dashboard and an API for agents.",
+      "version": "1.0.13",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/microfeed@1.0.13/microfeed-1.0.13.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/microfeed@1.0.13/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/microfeed@1.0.13/manifest.sig"
+      },
+      "digest": "654ac55a96aa26a07684f6afbde63f81bd2e3261b327990fac98be8912c01c8c",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "r2"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Listen Notes",
+          "url": "https://www.listennotes.com",
+          "github": "microfeed"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/microfeed/icon.png",
+          "sha256": "7a098d51508b60a8adf084b34b0dc9c80462abfe3d296a98f267327ee92e3852"
+        },
+        "screenshots": [
+          {
+            "url": "https://appflare.github.io/catalog/apps/microfeed/screenshots/01-code-editor.png",
+            "sha256": "e4a4d6de07cc9d5f4a30eb31eb9855b21f513c349d01f2419ed8265c8094e38e",
+            "alt": "microfeed: Code editor"
+          }
+        ]
+      },
+      "services": [
+        "d1",
+        "r2",
+        "queues",
+        "cron"
+      ],
+      "categories": [
+        "cms",
+        "media"
+      ],
+      "revision": 1
+    },
+    {
+      "slug": "minshop",
+      "name": "minshop",
+      "summary": "A small, server-rendered online store with a full admin: Stripe checkout for people, Lightning invoices and a JSON API that agents can pay through, on D1 and R2.",
+      "version": "0.2.0",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/minshop@0.2.0/minshop-0.2.0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/minshop@0.2.0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/minshop@0.2.0/manifest.sig"
+      },
+      "digest": "c1efb1aa02357d3a19c85e02613050d094a8aaf0678b6fa6e2fde4d7930db214",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "r2"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Daniel Yang",
+          "url": "https://daniel-yang.com",
+          "github": "ddyy"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/minshop/icon.svg",
+          "sha256": "5b0b3fdc5ac3108a598c6740832c0eb844f77b14546314f9c1dae8136e3c2cc7"
+        },
+        "screenshots": [
+          {
+            "url": "https://appflare.github.io/catalog/apps/minshop/screenshots/01-storefront.png",
+            "sha256": "ef1bc5d8d1793931daffb7a01d1c1286efe0f9c8d909255678ddadbad1a503c0",
+            "alt": "minshop: Storefront"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/minshop/screenshots/02-cart-with-three-payment-rails.png",
+            "sha256": "c3f56bd8d75b813c2164ebe6854359311dfbd2a117db0d6ba039a36b231428a2",
+            "alt": "minshop: Cart with three payment rails"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/minshop/screenshots/03-lightning-checkout.png",
+            "sha256": "e6ef768d7af3ac36e65a6a02f4c18004aa38926c04517222d3e19631b68cec84",
+            "alt": "minshop: Lightning checkout"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/minshop/screenshots/04-admin.png",
+            "sha256": "3b94d4840832e982ac249ae32308b26c0cda744b94cb0cd9de8e75397658d914",
+            "alt": "minshop: Admin"
+          }
+        ]
+      },
+      "services": [
+        "kv",
+        "d1",
+        "r2"
+      ],
+      "categories": [
+        "business",
+        "finance"
+      ],
+      "revision": 1
+    },
+    {
       "slug": "minvoice",
       "name": "Minvoice",
       "summary": "Invoicing for one business: invoices with PDF attachments, pay links through Stripe and PayPal, payment reminders, reports and CSV export, on D1.",
@@ -1589,6 +2110,57 @@
       "categories": [
         "business",
         "finance"
+      ],
+      "revision": 1
+    },
+    {
+      "slug": "nabiz",
+      "name": "nabiz",
+      "summary": "A status page that probes your services every minute from Cloudflare's edge, with 90-day uptime bars, operator notices, and Telegram or webhook alerts.",
+      "version": "3.12.1",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/nabiz@3.12.1/nabiz-3.12.1.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/nabiz@3.12.1/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/nabiz@3.12.1/manifest.sig"
+      },
+      "digest": "5ddc7071744599993e3cea42afc24dce08a741fc8d12e4ca0cae1571fed2d65d",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Wind",
+          "url": "https://productdevbook.com",
+          "github": "productdevbook",
+          "x": "productdevbook"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "screenshots": [
+          {
+            "url": "https://appflare.github.io/catalog/apps/nabiz/screenshots/01-status-page-light.png",
+            "sha256": "badbcd99034d008abc289c173a5806748b148b74f4f19d8aef1438ade66e1c9f",
+            "alt": "nabiz: Status page light"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/nabiz/screenshots/02-status-page-dark.png",
+            "sha256": "63b2e966cc2ac93cf865c0a875a6aa2ef0578ffd9d6cead0e2f8b2d98c173d49",
+            "alt": "nabiz: Status page dark"
+          }
+        ]
+      },
+      "services": [
+        "d1",
+        "cron",
+        "images"
+      ],
+      "categories": [
+        "monitoring",
+        "utilities"
       ],
       "revision": 1
     },
@@ -1676,6 +2248,59 @@
       "categories": [
         "security",
         "passwords"
+      ],
+      "revision": 1
+    },
+    {
+      "slug": "nodrix",
+      "name": "nodrix",
+      "summary": "A self-hosted IoT platform: devices send telemetry over HTTPS or WebSocket, variables appear on their own, and you build realtime dashboards, controls and automations on top, with a read API and an MCP server, on Durable Objects, D1 and R2. Sends anonymous usage statistics to upstream daily, with no opt-out.",
+      "version": "1.0.1",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/nodrix@1.0.1/nodrix-1.0.1.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/nodrix@1.0.1/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/nodrix@1.0.1/manifest.sig"
+      },
+      "digest": "a5f0a5d6e9d243d87dea5421b305c562ba1b5a9b5dd68ab33555e3ff80b5062a",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "r2"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Arjun Krishna",
+          "url": "https://arjunkrishna.dev",
+          "github": "decoded-cipher",
+          "x": "Decoded_Cipher"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/nodrix/icon.png",
+          "sha256": "28dc605678f221f4db303d736c4e1caf775834b325224c7a26dc57c496622533"
+        },
+        "cover": {
+          "url": "https://appflare.github.io/catalog/apps/nodrix/cover.png",
+          "sha256": "bd741171cf333b8a17f88e13895d033da0ab6c282268e146bdf6646448abab28"
+        },
+        "screenshots": []
+      },
+      "services": [
+        "kv",
+        "d1",
+        "r2",
+        "durable-objects",
+        "workflows",
+        "cron"
+      ],
+      "categories": [
+        "monitoring",
+        "developer-tools"
       ],
       "revision": 1
     },
@@ -1869,6 +2494,52 @@
       "revision": 1
     },
     {
+      "slug": "openshortlink",
+      "name": "OpenShort.link",
+      "summary": "Link shortener and link management for your own domains: geo and device redirects, QR codes, tags, teams with roles, API keys, and click analytics on Analytics Engine.",
+      "version": "0.10.0",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/openshortlink@0.10.0/openshortlink-0.10.0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/openshortlink@0.10.0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/openshortlink@0.10.0/manifest.sig"
+      },
+      "digest": "ead74216105c5f7022bb9b12aa657e36135fa679dfef447ee5bd22ed9b8e378b",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "analytics-engine"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "OpenShort.link contributors",
+          "url": "https://openshort.link",
+          "github": "idhamsy"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/openshortlink/icon.png",
+          "sha256": "251d9d4b011d7bbe15718e9b396d890c8027df6eae8b1abb4a023d3df46365c3"
+        },
+        "screenshots": []
+      },
+      "services": [
+        "kv",
+        "d1",
+        "analytics-engine",
+        "cron"
+      ],
+      "categories": [
+        "utilities",
+        "analytics"
+      ],
+      "revision": 1
+    },
+    {
       "slug": "pastebin-worker",
       "name": "Pastebin Worker",
       "summary": "A pastebin and file sharer with short links, syntax highlighting, rendered Markdown, client-side encryption, a URL shortener, and a curl-friendly API, on KV and R2.",
@@ -1952,6 +2623,63 @@
       "categories": [
         "developer-tools",
         "utilities"
+      ],
+      "revision": 1
+    },
+    {
+      "slug": "projektor",
+      "name": "Projektor",
+      "summary": "An issue tracker and wiki for teams and their AI coding agents: issues, boards, sprints and pages in the browser, and the same actions over MCP.",
+      "version": "0.7.1",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/projektor@0.7.1/projektor-0.7.1.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/projektor@0.7.1/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/projektor@0.7.1/manifest.sig"
+      },
+      "digest": "9f9ddf88cbd79f72dd05028eee20395c5f133976e118b967dff30866772ad86c",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "r2"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Thomas Dickson",
+          "url": "https://tom-dickson.com",
+          "github": "TAJD"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/projektor/icon.png",
+          "sha256": "61b9dcb398c7917bda9c9db115006272811e056dc61c41b43d884fd11fb558d7"
+        },
+        "cover": {
+          "url": "https://appflare.github.io/catalog/apps/projektor/cover.png",
+          "sha256": "0e437dac08d558958d811477c990ba661258de1d3ef8d2a00c6e254cecf1172a"
+        },
+        "screenshots": [
+          {
+            "url": "https://appflare.github.io/catalog/apps/projektor/screenshots/01-issue-backlog.png",
+            "sha256": "ca1b063a811a33d175f04b7ec1a01c871b76352feed82baba284e76017de5d52",
+            "alt": "Projektor: Issue backlog"
+          }
+        ]
+      },
+      "services": [
+        "kv",
+        "d1",
+        "r2",
+        "cron"
+      ],
+      "categories": [
+        "productivity",
+        "developer-tools",
+        "ai"
       ],
       "revision": 1
     },
@@ -2280,6 +3008,71 @@
       "revision": 1
     },
     {
+      "slug": "seeder",
+      "name": "Seeder",
+      "summary": "A project manager for small teams: kanban tasks, client requests, a public client board, a daily planner and a built-in MCP server.",
+      "version": "2.1.0",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/seeder@2.1.0/seeder-2.1.0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/seeder@2.1.0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/seeder@2.1.0/manifest.sig"
+      },
+      "digest": "95e559dcb7a3be1d011bcb0ed49d90b44670d7d3ed864ba2f04ab6f394b1954d",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "r2"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Daniel Syauqi",
+          "url": "https://danielsyauqi.site",
+          "github": "danielsyauqi"
+        },
+        {
+          "name": "Thaqif Rosdi",
+          "github": "takippu"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "screenshots": [
+          {
+            "url": "https://appflare.github.io/catalog/apps/seeder/screenshots/01-kanban-board.png",
+            "sha256": "66a04ec640e5febd3075c9262c1c5a716acf559a3604d70f1a07f6c3e1babba9",
+            "alt": "Seeder: Kanban board"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/seeder/screenshots/02-dashboard.png",
+            "sha256": "150f40f28df1819aa4613687cf828a3cde6e480aebc88f357c9b8c5d4ead1d6f",
+            "alt": "Seeder: Dashboard"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/seeder/screenshots/03-client-board.png",
+            "sha256": "4d11586a7c5f301cecab94a7e49b77e6fb44da35f93e06b0ccdf314b60b7362f",
+            "alt": "Seeder: Client board"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/seeder/screenshots/04-daily-planner.png",
+            "sha256": "5f30667a5c12af507fdab23dd6378ab038eec57d3476b456a46852b6d4a4c345",
+            "alt": "Seeder: Daily planner"
+          }
+        ]
+      },
+      "services": [
+        "d1",
+        "r2"
+      ],
+      "categories": [
+        "productivity",
+        "business"
+      ],
+      "revision": 1
+    },
+    {
       "slug": "sharehtml",
       "name": "ShareHTML",
       "summary": "Publish HTML, Markdown, and code files from the command line and get a shareable link with live comments, reactions, and presence. Sign-in through Cloudflare Access.",
@@ -2500,6 +3293,43 @@
       "categories": [
         "utilities",
         "analytics"
+      ],
+      "revision": 1
+    },
+    {
+      "slug": "statusbeam",
+      "name": "StatusBeam",
+      "summary": "A status page served from Cloudflare's edge cache, with a checker that probes your sites, Statuspage and incident.io pages, and Sentry monitors every five minutes.",
+      "version": "0.1.1",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/statusbeam@0.1.1/statusbeam-0.1.1.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/statusbeam@0.1.1/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/statusbeam@0.1.1/manifest.sig"
+      },
+      "digest": "035609fe8e3e266d8de0b1d79e8f66a1112962b935a5f44a57eb9ad30afec49b",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "pleaseai",
+          "url": "https://pleaseai.dev",
+          "github": "pleaseai"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "services": [
+        "kv",
+        "d1",
+        "cron",
+        "images"
+      ],
+      "categories": [
+        "monitoring",
+        "utilities"
       ],
       "revision": 1
     },
