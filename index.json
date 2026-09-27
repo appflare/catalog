@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-27T03:03:42.903Z",
+  "generatedAt": "2026-09-27T03:15:30.288Z",
   "apps": [
     {
       "slug": "2fa",
@@ -32,6 +32,63 @@
       "categories": [
         "security",
         "utilities"
+      ],
+      "revision": 1
+    },
+    {
+      "slug": "888wiki",
+      "name": "888wiki",
+      "summary": "A Markdown-first notepad and wiki: write in Markdown, Block, Canvas or Whiteboard, publish password-protected or timed shares, and present notes as slides or books.",
+      "version": "0.0.0-20260923.acf210e",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20260923.acf210e/888wiki-0.0.0-20260923.acf210e.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20260923.acf210e/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20260923.acf210e/manifest.sig"
+      },
+      "digest": "6ecfa871c2e0b2800e7d3035d334f7f6172ff3fb88ca7bec72b14fd72a4b3f5b",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "r2"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "DAVID888",
+          "github": "tbdavid2019"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "screenshots": [
+          {
+            "url": "https://appflare.github.io/catalog/apps/888wiki/screenshots/01-markdown-editor.png",
+            "sha256": "60a45cbbca38cda3bfd3ac83f5c1f9e1a1fb92d4313f08c4eb8d22fa70944d5d",
+            "alt": "888wiki: Markdown editor"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/888wiki/screenshots/02-paragraph-annotations.png",
+            "sha256": "87dfe84ef81e2f8dd115ad748dba4e5499c8820bf1c7f27cd9ce61d3e0be66fb",
+            "alt": "888wiki: Paragraph annotations"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/888wiki/screenshots/03-slide-presentation.png",
+            "sha256": "1e00a0c4cec2f7f10659703fca2bad1bf49545be44616cb9686230c66b0786b9",
+            "alt": "888wiki: Slide presentation"
+          }
+        ]
+      },
+      "services": [
+        "kv",
+        "d1",
+        "r2",
+        "cron"
+      ],
+      "categories": [
+        "notes",
+        "productivity"
       ],
       "revision": 1
     },
@@ -906,6 +963,52 @@
       "revision": 1
     },
     {
+      "slug": "formzero",
+      "name": "FormZero",
+      "summary": "A form backend for static sites: send HTML forms or JSON to your own endpoint and browse, chart and export the submissions from a dashboard.",
+      "version": "0.0.0-20260426.a4ddde2",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/formzero@0.0.0-20260426.a4ddde2/formzero-0.0.0-20260426.a4ddde2.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/formzero@0.0.0-20260426.a4ddde2/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/formzero@0.0.0-20260426.a4ddde2/manifest.sig"
+      },
+      "digest": "dbe643804779df8d1f78833e9162b6908fc06511c153020db7cbb2c3dd13a8df",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Bohdan Petryshyn",
+          "github": "BohdanPetryshyn"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/formzero/icon.png",
+          "sha256": "ac3d329d506ec7fe9e7027a02785f6a8bdb805c719c0718bc542f95b1729429b"
+        },
+        "screenshots": [
+          {
+            "url": "https://appflare.github.io/catalog/apps/formzero/screenshots/01-submissions-dashboard.png",
+            "sha256": "fe449290d82f927169af9d05c938d62460bb0c859f44675313131cb041b672eb",
+            "alt": "FormZero: Submissions dashboard"
+          }
+        ]
+      },
+      "services": [
+        "d1"
+      ],
+      "categories": [
+        "business",
+        "utilities"
+      ],
+      "revision": 1
+    },
+    {
       "slug": "garrul",
       "name": "Garrul",
       "summary": "Self-hosted comments for static sites and blogs: an embeddable widget with threads, reactions and votes, OAuth or anonymous posting behind Turnstile, a moderation queue, and reply emails.",
@@ -1039,6 +1142,59 @@
       ],
       "categories": [
         "developer-tools"
+      ],
+      "revision": 1
+    },
+    {
+      "slug": "hqbase",
+      "name": "HQBase",
+      "summary": "Your team's email workspace in your own account: shared mailboxes, drafts, labels, contacts and audit history, with a remote MCP server for agents.",
+      "version": "1.4.2",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/hqbase@1.4.2/hqbase-1.4.2.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/hqbase@1.4.2/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/hqbase@1.4.2/manifest.sig"
+      },
+      "digest": "6f9d56f34deafde57b48bc75330690e3ab7ed935c01f1cdcbcf2b3eb8a935d19",
+      "tier": "artifact",
+      "plan": "paid",
+      "requires": [
+        "zone",
+        "email-routing",
+        "r2"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "HQBase",
+          "url": "https://hqbase.io",
+          "github": "HQBase"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "screenshots": [
+          {
+            "url": "https://appflare.github.io/catalog/apps/hqbase/screenshots/01-shared-inbox.png",
+            "sha256": "6a7ebdf28f221f304e3abdcca31fdde32feba71491173144f589465cea45fd79",
+            "alt": "HQBase: Shared inbox"
+          }
+        ]
+      },
+      "services": [
+        "d1",
+        "r2",
+        "durable-objects",
+        "queues",
+        "cron",
+        "email-routing",
+        "zone"
+      ],
+      "categories": [
+        "email",
+        "productivity"
       ],
       "revision": 1
     },
