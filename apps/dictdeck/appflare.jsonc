@@ -1,0 +1,76 @@
+{
+  // A workers-rs app: the Worker is the `worker` crate, built by the wrangler
+  // config's own build command (`worker-build --release`, run in worker/),
+  // which needs `worker-build` installed first. The web app it serves as
+  // static assets (web/out) is a Vite build. Both steps come from upstream's
+  // own `env.ci` build in wrangler.toml, without its rustup download: catalog
+  // CI installs the Rust toolchain itself.
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "dictdeck",
+  "name": "DictDeck",
+  "summary": "A self-hosted Japanese dictionary, translator and flashcard deck: several dictionary sources, AI explanations on Workers AI or your own LLM provider, saved words and review cards, a Telegram bot and an MCP server.",
+  "homepage": "https://github.com/Asutorufa/hujiang_dictionary",
+  "repo": "Asutorufa/hujiang_dictionary",
+  // The repository has no licence file.
+  "license": "NONE",
+  "categories": ["education", "ai"],
+  "authors": [{ "name": "Asutorufa", "github": "Asutorufa", "x": "Asutorufa" }],
+  "maintainers": ["MendyLanda"],
+  "source": { "ref": "v0.20.0", "sha": "2a9759e0504c99d7d2da4b622c1ec29507fac096" },
+  "install": {
+    "tier": "artifact",
+    "packageManager": "npm",
+    "wranglerConfig": "wrangler.toml",
+    "workerName": "dictdeck",
+    // The repository root has no package.json; the web app has its own
+    // lockfile.
+    "installDirs": [{ "path": "web" }],
+    "toolchains": ["rust"],
+    "buildCommand": [
+      "cargo install worker-build --version 0.8.6 --locked",
+      "npm --prefix web run build"
+    ]
+  },
+  // D1, Workers AI and one cron trigger fit the free plan.
+  "plan": "free",
+  "requires": ["workers-ai"],
+  "secrets": [
+    {
+      "name": "AUTH_PASSWORD",
+      "label": "Password",
+      "help": "Sign in to the web app with the user name below and this password. Without both, the app answers every request without a sign-in.",
+      "generate": true
+    },
+    {
+      "name": "AUTH_SECRET",
+      "label": "Session secret",
+      "help": "Signs sign-in tokens. Setting a new value signs everyone out.",
+      "generate": true
+    }
+  ],
+  "vars": [
+    {
+      "name": "AUTH_USERNAME",
+      "label": "User name",
+      "help": "Sign in to the web app with it.",
+      "required": true
+    },
+    {
+      "name": "AUTH_TOKEN_EXPIRATION",
+      "label": "Sign-in lifetime in days",
+      "help": "How long a sign-in lasts, in whole days."
+    },
+    {
+      "name": "MCP_ALLOWED_ORIGINS",
+      "label": "MCP allowed origins",
+      "help": "Comma-separated browser origins allowed to call the MCP endpoint at /mcp. Leave empty for clients that send no Origin."
+    }
+  ],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "Open {{workerUrl}} and sign in with the user name and password. Settings holds the LLM providers, the Telegram bot token and MCP tokens; the MCP endpoint is {{workerUrl}}/mcp."
+    }
+  ],
+  "tokenPermissions": []
+}
