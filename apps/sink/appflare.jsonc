@@ -21,7 +21,7 @@
     }
   ],
   "maintainers": ["MendyLanda"],
-  "source": { "ref": "v0.3.0", "sha": "6cb6ba3cbd7aa880e562d57fb010d2192b4a9e39" },
+  "source": { "ref": "v0.3.1", "sha": "bafa4e1f7e3ec034929e11e5542c4c3e116d69da" },
   "install": {
     "tier": "artifact",
     "packageManager": "pnpm",
