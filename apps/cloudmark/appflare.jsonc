@@ -1,0 +1,54 @@
+{
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "cloudmark",
+  "name": "Cloudmark",
+  "summary": "Bookmarks without an account: create a collection with a write token, save pages with a bookmarklet or the Chrome extension, and open them from any device. On D1.",
+  "homepage": "https://cloudmark.site",
+  "repo": "wesleyel/cloudmark",
+  // The LICENSE file is the GNU AGPL version 3 with no "or any later version" grant.
+  "license": "AGPL-3.0-only",
+  "categories": ["productivity", "utilities"],
+  "authors": [{ "name": "Wesley Yang", "url": "https://wesleyel.github.io", "github": "wesleyel" }],
+  "maintainers": ["MendyLanda"],
+  // The repository's only tag, chrome-v0.2.0, releases the Chrome extension,
+  // not the Worker, so the entry follows the default branch by commit.
+  "source": { "ref": "main", "sha": "7a3ee4782ab701aeb8b4edfb8288f876cb8bcb66" },
+  "install": {
+    "tier": "artifact",
+    "packageManager": "pnpm",
+    // Cloudflare's Vite plugin writes the bundled Worker and its deploy config
+    // under dist/ and points wrangler at it; the packer follows that redirect.
+    // Upstream's custom-domain routes (cloudmark.site) are not installed.
+    "wranglerConfig": "wrangler.jsonc",
+    "workerName": "cloudmark",
+    // Upstream's build script (tsc -b, then vite build); the wrangler config
+    // has no build.command.
+    "buildCommand": "pnpm run build",
+    // Answers from the Worker's own code, without a collection or token.
+    "healthPath": "/api/health"
+  },
+  // One Worker and one D1 database, both on the free plan.
+  "plan": "free",
+  "requires": [],
+  "secrets": [],
+  "vars": [
+    {
+      "name": "BASE_URL",
+      "label": "Public URL",
+      "help": "The address the app is opened at. The wrangler config sets it to upstream's own site; the current code does not read it.",
+      "default": "{{workerUrl}}",
+      "required": false
+    }
+  ],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "Open {{workerUrl}}/doc, create a collection (its `mark`) and write token, and drag the bookmarklet to your bookmarks bar. Your bookmarks are at {{workerUrl}}/<mark>. Keep the write token: anyone with it can change the collection."
+    },
+    {
+      "type": "markdown",
+      "content": "Anyone who can open {{workerUrl}} can create collections of their own, and anyone who knows a `mark` can read that collection. Only the write token allows changes."
+    }
+  ],
+  "tokenPermissions": []
+}

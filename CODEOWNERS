@@ -5,7 +5,9 @@
 /apps/agentic-inbox/ @MendyLanda
 /apps/bark-worker/ @MendyLanda
 /apps/binthere/ @MendyLanda
+/apps/cattopic/ @MendyLanda
 /apps/chatgpt-telegram-workers/ @MendyLanda
+/apps/cloudmark/ @MendyLanda
 /apps/cloudssh/ @MendyLanda
 /apps/counterscale/ @MendyLanda
 /apps/cut/ @MendyLanda
@@ -25,6 +27,7 @@
 /apps/punctual/ @MendyLanda
 /apps/r2-explorer/ @MendyLanda
 /apps/second-brain-cloudflare/ @MendyLanda
+/apps/sharehtml/ @MendyLanda
 /apps/shotsync/ @MendyLanda
 /apps/shrtnr/ @MendyLanda
 /apps/sink/ @MendyLanda
