@@ -1,0 +1,122 @@
+{
+  // Team chat on one Worker: Hono API, Durable Objects for rooms, inboxes and
+  // the scheduler, D1 for users and messages, KV for sessions, R2 for files,
+  // and the Vue front end as static assets. Sign-up is by admin invite only,
+  // so the install creates the first admin account (see the seed below).
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "edgechat",
+  "name": "EdgeChat",
+  "summary": "Team chat on Cloudflare: public and private groups, direct messages, realtime delivery, voice messages, messages and files encrypted at rest, a Telegram bridge and an admin dashboard.",
+  "homepage": "https://echat.azora.top",
+  "repo": "aozorae/Edgechat",
+  "license": "GPL-3.0",
+  "categories": ["chat"],
+  "authors": [{ "name": "aozorae", "github": "aozorae" }],
+  "maintainers": ["MendyLanda"],
+  "source": { "ref": "v2.1.2", "sha": "e47e9fa94facad3a0e1ea1306dfe90919d73ca4b" },
+  "install": {
+    "tier": "artifact",
+    "packageManager": "npm",
+    "wranglerConfig": "wrangler.example.toml",
+    "workerName": "edgechat",
+    // The Vue front end; the config's build.command writes the schema manifest.
+    "buildCommand": "npm run build:frontend",
+    "healthPath": "/api/health"
+  },
+  // Workers, D1, KV, SQLite-backed Durable Objects and one daily cron trigger
+  // fit the free plan. R2 must be turned on in the account for attachments.
+  "plan": "free",
+  "requires": ["r2"],
+  "secrets": [
+    {
+      // Upstream's automatic key mode: worker/src/encryption.js:51-56 turns
+      // EDGECHAT_ENCRYPTION_KEY_<n> into the key id auto-v<n>, and :23-26 and
+      // :94-96 accept only padded base64 that decodes to 32 bytes.
+      "name": "EDGECHAT_ENCRYPTION_KEY_1",
+      "label": "Encryption key",
+      "help": "Encrypts message bodies and attachments at rest: 32 random bytes as padded base64. Keep a copy; losing it makes everything it encrypted unreadable.",
+      "generate": "base64-key-32"
+    },
+    {
+      "name": "EDGECHAT_ADMIN_PASSWORD",
+      "label": "Admin password",
+      "help": "The password of the first admin account.",
+      "generate": true,
+      "seedOnly": true
+    }
+  ],
+  "vars": [
+    {
+      "name": "EDGECHAT_ENCRYPTION_ACTIVE_KEY_ID",
+      "label": "Active encryption key id",
+      "help": "The key that encrypts new messages. auto-v1 is the encryption key above; keep it unless you add a second key.",
+      "default": "auto-v1",
+      "required": true
+    },
+    {
+      "name": "MESSAGE_RETENTION_DAYS",
+      "label": "Keep messages for (days)",
+      "help": "A daily job deletes messages older than this, with their attachments.",
+      "default": "7",
+      "required": true
+    },
+    {
+      "name": "EDGECHAT_ADMIN_USERNAME",
+      "label": "Admin user name",
+      "help": "The user name of the first admin account, which invites everyone else.",
+      "default": "admin",
+      "required": true,
+      "seedOnly": true
+    }
+  ],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "Open {{workerUrl}} and sign in with the admin user name and password from the install form (Appflare does not keep the password). Invite people from the admin dashboard: sign-up is by invite link only."
+    }
+  ],
+  "tokenPermissions": [],
+  "resources": {
+    "d1": {
+      "DB": {
+        // schema.sql is the whole current schema and is guarded. The dated
+        // files in worker/migrations upgrade databases made before them;
+        // upstream runs them through its own planner, which skips those whose
+        // changes already exist, so they cannot run after schema.sql as plain
+        // migrations.
+        "schema": ["worker/schema.sql"],
+        // The first admin, as upstream's bootstrap script inserts it
+        // (.github/scripts/generate-admin-bootstrap-sql.mjs): display name
+        // defaults to the user name, is_admin 1, not disabled. The hash is
+        // upstream's hashPassword (worker/src/auth.js:30-53): PBKDF2 over the
+        // UTF-8 password with SHA-256, 100,000 iterations, a 16-byte random
+        // salt and 256 bits, salt and hash both unpadded base64url. Sign-in
+        // (worker/src/index.js:137-153) checks it with verifyPassword
+        // (worker/src/auth.js:55-58).
+        "seed": {
+          "hashes": {
+            "admin": {
+              "from": "EDGECHAT_ADMIN_PASSWORD",
+              "method": "pbkdf2-sha256",
+              "iterations": 100000,
+              "saltBytes": 16,
+              "keyBytes": 32,
+              "encoding": "base64url"
+            }
+          },
+          "statements": [
+            {
+              "sql": "INSERT OR IGNORE INTO users (username, display_name, password_hash, password_salt, is_admin, is_disabled) VALUES (?, ?, ?, ?, 1, 0)",
+              "params": [
+                { "var": "EDGECHAT_ADMIN_USERNAME" },
+                { "var": "EDGECHAT_ADMIN_USERNAME" },
+                { "hash": "admin" },
+                { "salt": "admin" }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  }
+}
