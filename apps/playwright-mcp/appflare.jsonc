@@ -7,6 +7,7 @@
   "slug": "playwright-mcp",
   "name": "Playwright MCP",
   "summary": "A remote MCP server that lets AI assistants browse for you: navigate, click, type, read page snapshots and take screenshots in a headless browser from Cloudflare Browser Rendering.",
+  "tagline": "Let your AI assistant browse websites and take screenshots",
   "homepage": "https://github.com/cloudflare/playwright-mcp",
   "repo": "cloudflare/playwright-mcp",
   "license": "Apache-2.0",

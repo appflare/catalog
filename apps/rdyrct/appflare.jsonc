@@ -3,6 +3,7 @@
   "slug": "rdyrct",
   "name": "rdyrct",
   "summary": "A URL shortener for teams: organizations with roles, branded short links and QR codes, click analytics that never store an IP, an MCP server, and a KV redirect path in front of D1.",
+  "tagline": "Branded short links, QR codes, and private click analytics for teams",
   "homepage": "https://rdyrct.com",
   "repo": "baronunread/rdyrct",
   "license": "MIT",

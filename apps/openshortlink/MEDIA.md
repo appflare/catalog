@@ -1,5 +1,7 @@
-# Image sources
+# Media for OpenShort.link
 
-- `icon.png`: [`logo.png`](https://github.com/idhamsy/openshortlink/blob/bd337fcf45f237087373e9a837bb884d02e7eb4f/logo.png) in idhamsy/openshortlink at bd337fc (v0.10.0), licensed AGPL-3.0 (the repository's [LICENSE](https://github.com/idhamsy/openshortlink/blob/bd337fcf45f237087373e9a837bb884d02e7eb4f/LICENSE)). Changed: scaled from 1024x1024 to 512x512 and converted from JPEG to PNG.
+Upstream: [`idhamsy/openshortlink`](https://github.com/idhamsy/openshortlink) at commit [`bd337fcf45f237087373e9a837bb884d02e7eb4f`](https://github.com/idhamsy/openshortlink/tree/bd337fcf45f237087373e9a837bb884d02e7eb4f), licensed [AGPL-3.0-only](https://github.com/idhamsy/openshortlink/blob/bd337fcf45f237087373e9a837bb884d02e7eb4f/LICENSE).
 
-No cover or screenshots: the README shows only badges, and the image files under `assets/` are empty at this commit.
+- `icon.png`: [`logo.png`](https://github.com/idhamsy/openshortlink/blob/bd337fcf45f237087373e9a837bb884d02e7eb4f/logo.png), the project logo. Converted from JPEG to PNG and scaled from 1024x1024 to 512x512; existing catalog file unchanged.
+
+Left out: The README images are badges, and all eight `assets/*.png` files at this commit are zero bytes. No screenshots or cover were found in the repository. The [project site](https://openshort.link/) returned 403 on 2026-09-27, including for the common icon and preview paths, so its images could not be inspected.

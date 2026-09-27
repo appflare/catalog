@@ -3,6 +3,7 @@
   "slug": "omnimail",
   "name": "OmniMail",
   "summary": "Self-hosted multi-domain webmail on one Worker: mailboxes and users on your own domains through Email Routing, sending through Resend or SendFlare, and external Gmail, Microsoft and other accounts in one place. The interface is in Chinese.",
+  "tagline": "Mail for your domains and other inboxes in one place",
   "homepage": "https://omnimail.aicnos.com",
   "repo": "mibgb65-cloud/OmniMail",
   "license": "MIT",

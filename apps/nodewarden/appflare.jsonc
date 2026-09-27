@@ -3,6 +3,7 @@
   "slug": "nodewarden",
   "name": "NodeWarden",
   "summary": "A Bitwarden-compatible password manager server: the official Bitwarden apps and browser extensions sync to it, with a web vault, attachments, Send, and passkey sign-in, on D1 and R2.",
+  "tagline": "A password vault that syncs with your Bitwarden apps",
   "homepage": "https://nodewarden.app",
   "repo": "shuaiplus/nodewarden",
   "license": "LGPL-3.0-only",

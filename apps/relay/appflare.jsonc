@@ -6,6 +6,7 @@
   "slug": "relay",
   "name": "Relay",
   "summary": "A link shortener with cookieless click and conversion analytics: A/B splits, device and country routing, per-channel suffixes, retargeting pixels, QR codes and CSV export, on D1.",
+  "tagline": "Short links you control, with cookieless click and conversion stats",
   "homepage": "https://github.com/YuriCrystal/relay",
   "repo": "YuriCrystal/relay",
   "license": "MIT",

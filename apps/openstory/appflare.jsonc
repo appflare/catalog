@@ -3,6 +3,7 @@
   "slug": "openstory",
   "name": "OpenStory",
   "summary": "Turn a script into a storyboard and video: scene breakdown, consistent characters, locations and styles, AI-generated frames, motion, voices and music, with team libraries and an MCP server, on D1, R2, Workflows and Durable Objects. Brings your own AI provider keys.",
+  "tagline": "Turn scripts into videos with consistent characters and scenes",
   "homepage": "https://openstory.so",
   "repo": "openstory-so/openstory",
   "license": "MIT",

@@ -8,6 +8,7 @@
   "slug": "neriplayer-listen-together",
   "name": "NeriPlayer Listen Together",
   "summary": "Your own listen-together server for the NeriPlayer Android app: create a room, share the invite, and everyone's playback, queue and track changes stay in sync.",
+  "tagline": "Keep music playback in sync while listening with friends",
   "homepage": "https://github.com/TheSmallHanCat/NeriPlayer-LTW",
   "repo": "TheSmallHanCat/NeriPlayer-LTW",
   // The repository has no LICENSE file and states no licence in its README or

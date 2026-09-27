@@ -9,6 +9,7 @@
   "slug": "ni-mail",
   "name": "ni-mail",
   "summary": "A minimal mail receiver for your own domain with an HTTP API: fetch the latest message, list, read and thread mail per address, with attachments kept in R2, for scripts and automation.",
+  "tagline": "Receive mail on your domain for scripts and automations",
   "homepage": "https://github.com/mskatoni/ni-mail",
   "repo": "mskatoni/ni-mail",
   "license": "Apache-2.0",

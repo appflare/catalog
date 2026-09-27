@@ -6,6 +6,7 @@
   "slug": "nabiz",
   "name": "nabiz",
   "summary": "A status page that probes your services every minute from Cloudflare's edge, with 90-day uptime bars, operator notices, and Telegram or webhook alerts.",
+  "tagline": "A status page that checks your services every minute",
   "homepage": "https://github.com/productdevbook/nabiz",
   "repo": "productdevbook/nabiz",
   "license": "MIT",

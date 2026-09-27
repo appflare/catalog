@@ -3,6 +3,7 @@
   "slug": "deepcrawl",
   "name": "Deepcrawl",
   "summary": "An open-source Firecrawl alternative: an API that turns any web page into clean Markdown, metadata and a tree of its links for AI agents, cached in KV with request logs in D1.",
+  "tagline": "Turn web pages into clean text and organized links",
   "homepage": "https://deepcrawl.dev",
   "repo": "lumpinif/deepcrawl",
   "license": "MIT",

@@ -3,6 +3,7 @@
   "slug": "r2-webdav",
   "name": "r2-webdav",
   "summary": "A WebDAV server for an R2 bucket: mount it as a network drive in Finder, Windows Explorer or any WebDAV client, with locking and one user name and password.",
+  "tagline": "Access your R2 files as a network drive",
   "homepage": "https://github.com/abersheeran/r2-webdav",
   "repo": "abersheeran/r2-webdav",
   // The repository has no LICENSE file and declares no licence anywhere, so

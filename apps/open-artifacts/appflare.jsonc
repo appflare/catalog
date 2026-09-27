@@ -3,6 +3,7 @@
   "slug": "open-artifacts",
   "name": "Open Artifacts",
   "summary": "Let coding agents publish HTML and Markdown pages to shareable links, with client-side password protection, version history, and updates in place when the project changes, on D1 and R2.",
+  "tagline": "Share pages from your coding agent with links that stay up to date",
   "homepage": "https://github.com/coda0HQ/open-artifacts",
   "repo": "coda0HQ/open-artifacts",
   // The LICENSE file is MIT; package.json still carries npm's default "ISC".

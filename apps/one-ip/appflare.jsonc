@@ -8,6 +8,7 @@
   "slug": "one-ip",
   "name": "One IP",
   "summary": "IP and network diagnostics: look up an address's location, ASN, reputation and risk, check your exit IP, DNS, CDN, WebRTC and browser fingerprint, and run a speed test.",
+  "tagline": "Check your IP, network privacy, speed and online service status",
   "homepage": "https://ip.huzhihui.com",
   "repo": "zhihui-hu/one-ip",
   "license": "AGPL-3.0-only",

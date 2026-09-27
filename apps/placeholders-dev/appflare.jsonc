@@ -3,6 +3,7 @@
   "slug": "placeholders-dev",
   "name": "placeholders.dev",
   "summary": "Placeholder images generated on the fly: SVGs of any size, text, font and colours, described entirely by the URL, with light and dark variants.",
+  "tagline": "Make placeholder images in any size and color",
   "homepage": "https://placeholders.dev",
   "repo": "Cherry/placeholders.dev",
   "license": "MIT",

@@ -3,6 +3,7 @@
   "slug": "openai-gemini",
   "name": "OpenAI Gemini",
   "summary": "OpenAI-compatible API adapter for Gemini, on Workers.",
+  "tagline": "Use Gemini in apps built for OpenAI",
   "homepage": "https://github.com/PublicAffairs/openai-gemini",
   "repo": "PublicAffairs/openai-gemini",
   "license": "MIT",

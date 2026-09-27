@@ -12,6 +12,7 @@
   "slug": "openshortlink",
   "name": "OpenShort.link",
   "summary": "Link shortener and link management for your own domains: geo and device redirects, QR codes, tags, teams with roles, API keys, and click analytics on Analytics Engine.",
+  "tagline": "Create short links on your own domains and track their clicks",
   "homepage": "https://openshort.link",
   "repo": "idhamsy/openshortlink",
   "license": "AGPL-3.0-only",
