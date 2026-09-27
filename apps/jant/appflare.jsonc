@@ -1,0 +1,79 @@
+{
+  // Jant's Cloudflare starter, the project its README's Deploy button
+  // deploys: a three-line Worker around the @jant/core package from npm. The
+  // app itself, its static assets and its D1 SQL all come from that package,
+  // at the version the starter's package-lock.json pins with its integrity
+  // hash, so the pin of the starter fixes the release of Jant.
+  //
+  // Jant (jant-me/jant, published as @jant/core) is AGPL-3.0-or-later; the
+  // starter repository has no LICENSE file of its own.
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "jant",
+  "name": "Jant",
+  "summary": "A personal microblog as smooth as Threads and Tumblr: notes, links and quotes in threads and collections, media on R2, full-text search, RSS, an API and an MCP endpoint for agents, on D1.",
+  "homepage": "https://jant.me",
+  "repo": "jant-me/jant-starter",
+  "license": "AGPL-3.0-or-later",
+  "categories": ["blogging", "social"],
+  "authors": [{ "name": "Jant", "url": "https://jant.me", "github": "jant-me" }],
+  "maintainers": ["MendyLanda"],
+  // The starter has no tags; upstream commits to main with each Jant release
+  // ("sync with jant v0.8.0"), so the pin follows main.
+  "source": { "ref": "main", "sha": "d55c0f8e27d61c4b0448d10b75f8877dcaf298c4" },
+  "install": {
+    "tier": "artifact",
+    "packageManager": "npm",
+    // No build: @jant/core ships its Worker code and its built client
+    // (node_modules/@jant/core/dist/client, the config's assets directory).
+    // The config's migrations_dir points into the package as well, and the
+    // install from the lockfile puts it there before the packer reads it.
+    "wranglerConfig": "wrangler.toml",
+    "workerName": "jant"
+  },
+  // One Worker, D1, R2 and static assets fit the free plan. No cron triggers.
+  "plan": "free",
+  "requires": ["r2"],
+  "secrets": [
+    {
+      "name": "AUTH_SECRET",
+      "label": "Session secret",
+      "help": "Signs sign-in sessions; at least 32 characters. Setting a new value signs everyone out.",
+      "generate": true
+    }
+  ],
+  // Upstream's SITE_PATH_PREFIX is left out: serving the site under a
+  // subpath needs its deploy command to rewrite the static assets first.
+  "vars": [
+    {
+      "name": "SITE_ORIGIN",
+      "label": "Site address",
+      "help": "The public origin, for example https://blog.example.com, once the app has a custom domain. Leave empty to use whatever address a request arrives at."
+    },
+    {
+      "name": "R2_PUBLIC_URL",
+      "label": "Public media URL",
+      "help": "Optional. A public address of the app's R2 bucket (a custom domain on it), for example https://media.example.com, so media is served from there instead of through the Worker."
+    },
+    {
+      "name": "IMAGE_TRANSFORM_URL",
+      "label": "Image transformations URL",
+      "help": "Optional. The /cdn-cgi/image endpoint of a zone with Cloudflare Image Transformations on, for example https://example.com/cdn-cgi/image, for thumbnails and resized images."
+    }
+  ],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "Open {{workerUrl}} right away: it starts with a setup page that creates the admin account, and until you finish it anyone who finds the address can. Site name, description, language and theme are set later under Settings."
+    }
+  ],
+  "tokenPermissions": [],
+  "resources": {
+    "d1": {
+      // Upstream's `jant migrate` runs these after the schema migrations and
+      // records them in a table of its own; upstream keeps each one safe to
+      // run again. Here they run once the new version is live and are
+      // recorded in d1_migrations beside the schema migrations.
+      "DB": { "postDeployMigrationsDir": "node_modules/@jant/core/src/db/backfills" }
+    }
+  }
+}

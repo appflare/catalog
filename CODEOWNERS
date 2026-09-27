@@ -37,6 +37,7 @@
 /apps/edgechat/ @MendyLanda
 /apps/edgeever/ @MendyLanda
 /apps/edgekey/ @MendyLanda
+/apps/edgemetry/ @MendyLanda
 /apps/elm-chat/ @MendyLanda
 /apps/email-explorer/ @MendyLanda
 /apps/emailflare/ @MendyLanda
@@ -61,6 +62,7 @@
 /apps/inkstone/ @MendyLanda
 /apps/insightflare/ @MendyLanda
 /apps/isupmap/ @MendyLanda
+/apps/jant/ @MendyLanda
 /apps/jina-mcp/ @MendyLanda
 /apps/kiss-worker/ @MendyLanda
 /apps/kukuroo/ @MendyLanda
@@ -79,6 +81,7 @@
 /apps/mpp-proxy/ @MendyLanda
 /apps/nabiz/ @MendyLanda
 /apps/neriplayer-listen-together/ @MendyLanda
+/apps/ni-mail/ @MendyLanda
 /apps/nodecrypt/ @MendyLanda
 /apps/nodewarden/ @MendyLanda
 /apps/nodrix/ @MendyLanda
@@ -92,6 +95,7 @@
 /apps/pastebin-worker/ @MendyLanda
 /apps/placeholders-dev/ @MendyLanda
 /apps/playwright-mcp/ @MendyLanda
+/apps/private-notes/ @MendyLanda
 /apps/projektor/ @MendyLanda
 /apps/punctual/ @MendyLanda
 /apps/quickinbox/ @MendyLanda
@@ -119,6 +123,7 @@
 /apps/statusbeam/ @MendyLanda
 /apps/sveltia-cms-auth/ @MendyLanda
 /apps/synch/ @MendyLanda
+/apps/telegram-push/ @MendyLanda
 /apps/tempik/ @MendyLanda
 /apps/ternssh/ @MendyLanda
 /apps/token-monitor/ @MendyLanda

@@ -1,0 +1,71 @@
+{
+  // An inbox with an HTTP API and no web page. Email Routing hands each
+  // message to the Worker, which parses it and keeps it in a SQLite-backed
+  // Durable Object per mailbox address, with attachments in R2. Scripts read
+  // it with the access key in an X-Auth-Key header. The repository also keeps
+  // an older KV-based Worker in wrangler.toml and worker.js; the entry builds
+  // the current one from wrangler.jsonc.
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "ni-mail",
+  "name": "ni-mail",
+  "summary": "A minimal mail receiver for your own domain with an HTTP API: fetch the latest message, list, read and thread mail per address, with attachments kept in R2, for scripts and automation.",
+  "homepage": "https://github.com/mskatoni/ni-mail",
+  "repo": "mskatoni/ni-mail",
+  "license": "Apache-2.0",
+  "categories": ["email", "developer-tools"],
+  "authors": [{ "name": "mskatoni", "github": "mskatoni" }],
+  "maintainers": ["MendyLanda"],
+  // Upstream has no release tags, so the entry follows the default branch by commit.
+  "source": { "ref": "main", "sha": "792b54a2b2bda1047af7e8f5c4ca8a77eff8a0bb" },
+  "install": {
+    "tier": "artifact",
+    "packageManager": "npm",
+    // No build step: wrangler bundles src/index.ts.
+    "wranglerConfig": "wrangler.jsonc",
+    "workerName": "ni-mail",
+    // The one route that answers without the access key.
+    "healthPath": "/health",
+    // Upstream's setup sends the zone's catch-all to the Worker, so any
+    // address of the domain can receive mail.
+    "emailRouting": { "catchAll": true }
+  },
+  // Receiving mail, a SQLite Durable Object and R2 fit the free plan. No cron
+  // triggers.
+  "plan": "free",
+  "requires": ["r2", "zone", "email-routing"],
+  "secrets": [
+    {
+      "name": "AUTH_KEY",
+      "label": "Access key",
+      "help": "Every API request needs it in the X-Auth-Key header.",
+      "generate": true
+    }
+  ],
+  "vars": [
+    {
+      "name": "DOMAINS",
+      "label": "Mail domains",
+      "help": "The domain mail arrives at, the zone you pick for Email Routing, for example example.com. Several are allowed, comma separated. Mail to any other domain is refused.",
+      // The wrangler config leaves it empty, which accepts every domain; an
+      // empty default with required makes the form ask for the real one.
+      "default": "",
+      "required": true
+    },
+    {
+      "name": "DEFAULT_MAILBOX",
+      "label": "Default mailbox",
+      "help": "The address /latest, /mails and /mail/<id> read when a request names none (with ?mailbox= or an X-Mailbox header), for example inbox@example.com. Leave empty to require one on every request."
+    }
+  ],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "Send a message to any address of your mail domain, then read it:\n\n```sh\ncurl '{{workerUrl}}/api/mailboxes/you@example.com/latest' -H 'X-Auth-Key: <access key>'\n```\n\n`/api/mailboxes/<address>/emails` lists a mailbox and `/api/mailboxes/<address>/emails/<id>` reads one message; the access key is in this app's settings."
+    },
+    {
+      "type": "markdown",
+      "content": "Every address of the zone you picked now reaches the app. Use a domain kept for this, not one that receives mail you read elsewhere."
+    }
+  ],
+  "tokenPermissions": []
+}
