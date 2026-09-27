@@ -9,7 +9,7 @@
   "categories": ["notes", "productivity"],
   "authors": [{ "name": "tianma-if", "github": "tianma-if", "x": "tianma_if" }],
   "maintainers": ["MendyLanda"],
-  "source": { "ref": "v1.88.0", "sha": "3cfccb872ea68dea9007204a090fdc1bac60d322" },
+  "source": { "ref": "v1.89.0", "sha": "8b0bfaf4a8aac4487bb0448cd508e94122e9b17b" },
   "install": {
     "tier": "artifact",
     "packageManager": "bun",
