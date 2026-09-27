@@ -10,6 +10,7 @@
   "slug": "emailflare",
   "name": "EmailFlare",
   "summary": "Transactional email on Cloudflare Email Sending: a sending API with templates, API keys, logs, suppressions and one-click unsubscribe, plus a team inbox and lightweight CRM on Email Routing.",
+  "tagline": "Send emails and manage replies in a shared inbox",
   "homepage": "https://github.com/0xdps/emailflare",
   "repo": "0xdps/emailflare",
   "license": "MIT",

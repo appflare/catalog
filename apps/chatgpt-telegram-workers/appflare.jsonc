@@ -3,6 +3,7 @@
   "slug": "chatgpt-telegram-workers",
   "name": "ChatGPT Telegram Bot",
   "summary": "Your own AI chat bot on Telegram, backed by OpenAI, Anthropic, Workers AI, or any OpenAI-compatible API.",
+  "tagline": "Chat with your own AI bot on Telegram",
   "homepage": "https://github.com/TBXark/ChatGPT-Telegram-Workers",
   "repo": "TBXark/ChatGPT-Telegram-Workers",
   "license": "MIT",

@@ -3,6 +3,7 @@
   "slug": "email-explorer",
   "name": "Email Explorer",
   "summary": "A self-hosted email client: receive mail through Email Routing, read and write it in a web app with folders, search, contacts and several users, with each mailbox in its own Durable Object and attachments in R2.",
+  "tagline": "Read and send email from your own domain",
   "homepage": "https://github.com/G4brym/email-explorer",
   "repo": "G4brym/email-explorer",
   "license": "MIT",

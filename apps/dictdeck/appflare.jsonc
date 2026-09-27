@@ -9,6 +9,7 @@
   "slug": "dictdeck",
   "name": "DictDeck",
   "summary": "A self-hosted Japanese dictionary, translator and flashcard deck: several dictionary sources, AI explanations on Workers AI or your own LLM provider, saved words and review cards, a Telegram bot and an MCP server.",
+  "tagline": "Look up Japanese words, translate them, and review flashcards",
   "homepage": "https://github.com/Asutorufa/hujiang_dictionary",
   "repo": "Asutorufa/hujiang_dictionary",
   // The repository has no licence file.

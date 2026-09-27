@@ -11,6 +11,7 @@
   "slug": "emdash",
   "name": "EmDash",
   "summary": "A full-stack TypeScript CMS built on Astro, the spiritual successor to WordPress: this is its blog template, with posts, pages, categories and tags, search, RSS and an admin editor, on D1 and R2.",
+  "tagline": "Create a blog with built-in search and an editor",
   "homepage": "https://emdashcms.com",
   "repo": "emdash-cms/templates",
   "license": "MIT",

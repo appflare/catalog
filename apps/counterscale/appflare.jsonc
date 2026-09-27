@@ -9,6 +9,7 @@
   "slug": "counterscale",
   "name": "Counterscale",
   "summary": "Privacy-friendly web analytics you host yourself: a tracking script, a dashboard, and long-term rollups in R2, on Workers Analytics Engine.",
+  "tagline": "Track website visits with a dashboard you host yourself",
   "homepage": "https://counterscale.dev",
   "repo": "benvinegar/counterscale",
   "license": "MIT",

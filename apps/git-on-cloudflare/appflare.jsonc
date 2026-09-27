@@ -8,6 +8,7 @@
   "slug": "git-on-cloudflare",
   "name": "git-on-cloudflare",
   "summary": "A git server on Workers: push and clone over HTTPS, browse code in a web interface, with repositories in Durable Objects and R2.",
+  "tagline": "Host your code and browse changes in your own Cloudflare account",
   "homepage": "https://github.com/zllovesuki/git-on-cloudflare",
   "repo": "zllovesuki/git-on-cloudflare",
   "license": "MIT",

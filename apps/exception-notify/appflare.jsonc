@@ -10,6 +10,7 @@
   "slug": "exception-notify",
   "name": "Exception-Notify workspace",
   "summary": "The AI analysis page for Exception-Notify alerts from Spring Boot: open an exception from DingTalk, Feishu or WeChat Work and work through it with your own AI provider.",
+  "tagline": "Read error alerts and work through fixes with AI",
   "homepage": "https://github.com/GuangYiDing/exception-notify",
   "repo": "GuangYiDing/exception-notify",
   // The repository has no LICENSE file; its README and pom.xml both declare

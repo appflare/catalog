@@ -9,6 +9,7 @@
   "slug": "folia",
   "name": "Folia",
   "summary": "A web music player built around full-screen animated lyrics, for your local library or a Navidrome server, with automatic lyric matching and AI colour themes from your own Gemini key.",
+  "tagline": "Play your music with full-screen animated lyrics",
   "homepage": "https://folia-site.cielaniska.top",
   "repo": "chthollyphile/folia-major",
   // The LICENSE file is the GNU AGPL version 3 with no "or any later

@@ -3,6 +3,7 @@
   "slug": "firefly-iii-mcp",
   "name": "Firefly III MCP",
   "summary": "A remote MCP server for Firefly III: lets AI assistants read and record accounts, transactions, bills, budgets and more in your own Firefly III, each connection with its own personal access token.",
+  "tagline": "Manage your personal finances with an AI assistant",
   "homepage": "https://github.com/etnperlong/firefly-iii-mcp",
   "repo": "etnperlong/firefly-iii-mcp",
   "license": "MIT",

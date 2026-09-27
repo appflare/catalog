@@ -6,6 +6,7 @@
   "slug": "edgekey",
   "name": "EdgeKey",
   "summary": "A shop for digital goods: sell card keys and codes, take payment through USDT, Epay, Alipay or Stripe, and deliver each order automatically by page and email.",
+  "tagline": "Sell digital codes and deliver them automatically after payment",
   "homepage": "https://github.com/34892002/edgeKey",
   "repo": "34892002/edgeKey",
   "license": "MIT",

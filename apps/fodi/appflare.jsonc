@@ -3,6 +3,7 @@
   "slug": "fodi",
   "name": "FODI",
   "summary": "A fast index of your OneDrive: browse, preview and download files from a web page, with password-protected folders, signed download links, uploads and WebDAV, on Workers KV.",
+  "tagline": "Browse and preview your OneDrive files in a web page",
   "homepage": "https://github.com/vcheckzen/FODI",
   "repo": "vcheckzen/FODI",
   // The LICENSE file is the GNU GPL version 3 with no "or any later version" grant.

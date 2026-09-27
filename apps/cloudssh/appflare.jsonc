@@ -3,6 +3,7 @@
   "slug": "cloudssh",
   "name": "CloudSSH",
   "summary": "A web SSH terminal on Workers: connect to your servers from the browser with multiple sessions, SFTP file management, jump hosts, saved servers, and a bring-your-own-key AI assistant.",
+  "tagline": "Connect to your servers through a browser",
   "homepage": "https://github.com/newbietan/CloudSSH",
   "repo": "newbietan/CloudSSH",
   "license": "Apache-2.0",

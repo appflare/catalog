@@ -7,6 +7,7 @@
   "slug": "edgemetry",
   "name": "Edgemetry",
   "summary": "Privacy-friendly web analytics you run yourself: a 2 KB tracking script, no cookies, stackable filters, realtime views, custom events and several sites and users, on one Worker and D1.",
+  "tagline": "See your website traffic without cookies",
   "homepage": "https://github.com/hayaran/Edgemetry",
   "repo": "hayaran/Edgemetry",
   "license": "MIT",

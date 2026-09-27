@@ -7,6 +7,7 @@
   "slug": "durable-git",
   "name": "dgit",
   "summary": "A git host on Durable Objects: push and clone over HTTPS with a stock git client and browse with a cgit-style web interface, one Durable Object per repository.",
+  "tagline": "Host and browse your own code repositories",
   "homepage": "https://github.com/littledivy/durable-git",
   "repo": "littledivy/durable-git",
   "license": "MIT",

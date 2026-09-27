@@ -9,6 +9,7 @@
   "slug": "collection-down",
   "name": "Collection Down",
   "summary": "Browse Bilibili digital collections and decoration suits and download their videos, images and emoji packs, from a Nuxt app on your own Worker.",
+  "tagline": "Download videos, images and emoji packs from Bilibili collections",
   "homepage": "https://cd.griseo.top",
   "repo": "heartalborada-del/Collection-Down",
   "license": "MIT",

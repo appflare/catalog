@@ -3,6 +3,7 @@
   "slug": "cut",
   "name": "Cut",
   "summary": "Self-hosted link shortener on Workers + KV.",
+  "tagline": "Short links on your own domain",
   "homepage": "https://github.com/MendyLanda/cut",
   "repo": "MendyLanda/cut",
   "license": "MIT",

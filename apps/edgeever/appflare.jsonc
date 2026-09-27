@@ -3,6 +3,7 @@
   "slug": "edgeever",
   "name": "EdgeEver",
   "summary": "An Evernote-style notes and knowledge base with a three-pane layout, full-text search, public note sharing, AI features and a built-in MCP server, on D1 and R2.",
+  "tagline": "Notes you can organize, search, and share from your own account",
   "homepage": "https://edgeever.org",
   "repo": "tianma-if/edgeever",
   "license": "AGPL-3.0",
