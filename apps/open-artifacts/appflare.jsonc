@@ -1,0 +1,79 @@
+{
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "open-artifacts",
+  "name": "Open Artifacts",
+  "summary": "Let coding agents publish HTML and Markdown pages to shareable links, with client-side password protection, version history, and updates in place when the project changes, on D1 and R2.",
+  "homepage": "https://github.com/coda0HQ/open-artifacts",
+  "repo": "coda0HQ/open-artifacts",
+  // The LICENSE file is MIT; package.json still carries npm's default "ISC".
+  "license": "MIT",
+  "categories": ["developer-tools", "sharing"],
+  "authors": [
+    { "name": "Frad Lee", "url": "https://frad.me", "github": "FradSer", "x": "FradSer" },
+    { "name": "code0", "url": "https://coda0.com", "github": "coda0HQ" }
+  ],
+  "maintainers": ["MendyLanda"],
+  // Upstream has no release tags, so the entry follows the default branch by commit.
+  "source": { "ref": "main", "sha": "4f8b54bec3af00ebb7e0750aa052ca7147c0f039" },
+  "install": {
+    "tier": "artifact",
+    "packageManager": "pnpm",
+    "wranglerConfig": "wrangler.jsonc",
+    "workerName": "open-artifacts"
+    // No build: the fonts, marked and mermaid bundles are committed under
+    // src/generated/ and public/vendor/, and the Worker creates its D1 tables
+    // itself (CREATE TABLE IF NOT EXISTS) on the first request.
+  },
+  // D1 and R2 have free tiers; upstream sizes the default 4 MiB page limit
+  // for the free plan.
+  "plan": "free",
+  // Page bodies are stored in an R2 bucket.
+  "requires": ["r2"],
+  "secrets": [
+    {
+      // Upstream leaves creation open when this is unset. Generated here, so a
+      // new install on a public workers.dev address does not let anyone
+      // publish to it.
+      "name": "CREATE_TOKEN",
+      "label": "Publish token",
+      "help": "Agents need it to publish new pages: set it as OPEN_ARTIFACTS_TOKEN where the skill runs. Updates to an existing page use that page's own write token. Copy it now.",
+      "generate": true
+    }
+  ],
+  "vars": [
+    {
+      "name": "PUBLIC_URL",
+      "label": "Public URL",
+      "help": "Optional. The address links should use, for example a custom domain, without a trailing path. Leave it empty to use the address each request arrives at.",
+      "default": "",
+      "required": false
+    },
+    {
+      "name": "OPEN_ARTIFACTS_WEB_FONTS",
+      "label": "Web fonts",
+      "help": "Serves web fonts from allowlisted font CDNs through the Worker. It relaxes the page sandbox so the browser can cache fonts; turn it off to keep every page in an opaque origin.",
+      "type": "select",
+      "options": [{ "value": "1", "label": "On" }, { "value": "0", "label": "Off" }],
+      "default": "1"
+    },
+    {
+      "name": "OPEN_ARTIFACTS_HANDOFF",
+      "label": "Handoff recordings",
+      "help": "Adds the Record and Play dock to published pages, which records a walkthrough with the camera and microphone.",
+      "type": "select",
+      "options": [{ "value": "1", "label": "On" }, { "value": "0", "label": "Off" }],
+      "default": "1"
+    }
+  ],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "Install the skill for your coding agent and point it at this instance:\n\n```sh\nnpx skills add coda0HQ/open-artifacts -s using-open-artifacts\nexport OPEN_ARTIFACTS_URL={{workerUrl}}\nexport OPEN_ARTIFACTS_TOKEN=<the publish token>\n```\n\nThen ask the agent to publish something as an artifact."
+    },
+    {
+      "type": "markdown",
+      "content": "Published pages are unlisted, not private: anyone with a link can open it. Protect a page with a password when publishing; it is encrypted in the agent's environment and the Worker never sees the password."
+    }
+  ],
+  "tokenPermissions": []
+}

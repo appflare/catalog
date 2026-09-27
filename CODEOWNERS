@@ -17,6 +17,7 @@
 /apps/minvoice/ @MendyLanda
 /apps/nodecrypt/ @MendyLanda
 /apps/nodewarden/ @MendyLanda
+/apps/open-artifacts/ @MendyLanda
 /apps/open-seo/ @MendyLanda
 /apps/openai-gemini/ @MendyLanda
 /apps/pastebin-worker/ @MendyLanda
@@ -25,6 +26,7 @@
 /apps/r2-explorer/ @MendyLanda
 /apps/second-brain-cloudflare/ @MendyLanda
 /apps/shotsync/ @MendyLanda
+/apps/shrtnr/ @MendyLanda
 /apps/sink/ @MendyLanda
 /apps/turborepo-remote-cache/ @MendyLanda
 /apps/unifi-ddns/ @MendyLanda
