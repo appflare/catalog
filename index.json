@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-27T14:24:32.384Z",
+  "generatedAt": "2026-09-27T14:32:59.503Z",
   "apps": [
     {
       "slug": "2fa",
@@ -114,6 +114,7 @@
       "slug": "agentic-inbox",
       "name": "Agentic Inbox",
       "summary": "A self-hosted email client with an AI agent that reads, searches, and drafts replies, on Email Routing, Durable Objects, R2, and Workers AI.",
+      "tagline": "Your own email inbox with an AI assistant that drafts replies",
       "addedAt": "2026-09-24T00:14:03+03:00",
       "version": "0.0.0-20260417.48039bb",
       "artifacts": {
@@ -216,6 +217,7 @@
       "slug": "analytics-explorer",
       "name": "Cloudflare Analytics Explorer",
       "summary": "Build dashboards over your Workers Analytics Engine datasets: line, bar, area and pie charts, tables and stat cards from SQL queries, with filters and drag-and-drop layouts.",
+      "tagline": "Build charts and dashboards from your Workers analytics data",
       "addedAt": "2026-09-27T12:08:49+03:00",
       "version": "0.0.0-20260208.b11ff41",
       "artifacts": {
@@ -367,6 +369,7 @@
       "slug": "auto-reaction-bot",
       "name": "Auto Reaction Bot",
       "summary": "Your own Telegram bot that adds an emoji reaction to posts in the channels and groups you add it to, and to private messages, from an emoji list you choose.",
+      "tagline": "Emoji reactions for your Telegram chats and channels",
       "addedAt": "2026-09-27T12:04:07+03:00",
       "version": "0.0.0-20260613.2382a29",
       "artifacts": {
@@ -592,6 +595,7 @@
       "slug": "bookshelf",
       "name": "Bookshelf",
       "summary": "A library for the ebooks you own: read EPUBs and PDFs in the browser or on a Kobo over OPDS, served from your own R2 bucket.",
+      "tagline": "Read your ebooks in a library you host yourself",
       "addedAt": "2026-09-27T04:46:44+03:00",
       "version": "0.0.0-20260826.8888795",
       "artifacts": {
@@ -628,14 +632,14 @@
         },
         "screenshots": [
           {
-            "url": "https://appflare.github.io/catalog/apps/bookshelf/screenshots/01-shelf.png",
+            "url": "https://appflare.github.io/catalog/apps/bookshelf/screenshots/01-book-shelf.png",
             "sha256": "656a95db569bc5efaf9760209e535cd087abb3102d94cb49d5b408ca89553677",
-            "alt": "Bookshelf: Shelf"
+            "alt": "Bookshelf: Book shelf"
           },
           {
-            "url": "https://appflare.github.io/catalog/apps/bookshelf/screenshots/02-reader.png",
+            "url": "https://appflare.github.io/catalog/apps/bookshelf/screenshots/02-book-reader.png",
             "sha256": "b31ecb134f7ada295e4541ddbe72a37b0f44f5310b89b5c290e2d7c04dbac12b",
-            "alt": "Bookshelf: Reader"
+            "alt": "Bookshelf: Book reader"
           }
         ]
       },
@@ -1582,6 +1586,7 @@
       "slug": "edgechat",
       "name": "EdgeChat",
       "summary": "Team chat on Cloudflare: public and private groups, direct messages, realtime delivery, voice messages, messages and files encrypted at rest, a Telegram bridge and an admin dashboard.",
+      "tagline": "Private team chat with groups, direct messages and file sharing",
       "addedAt": "2026-09-27T07:10:18+03:00",
       "version": "2.1.2",
       "artifacts": {
@@ -1612,9 +1617,9 @@
         },
         "screenshots": [
           {
-            "url": "https://appflare.github.io/catalog/apps/edgechat/screenshots/01-chat.png",
+            "url": "https://appflare.github.io/catalog/apps/edgechat/screenshots/01-chat-list.png",
             "sha256": "d97362c266f62f293cfc59e7db6889750400901cdc04686cf3fae0ff5e9fb5c0",
-            "alt": "EdgeChat: Chat"
+            "alt": "EdgeChat: Chat list"
           },
           {
             "url": "https://appflare.github.io/catalog/apps/edgechat/screenshots/02-admin-dashboard.png",
@@ -2057,6 +2062,7 @@
       "slug": "feedlog",
       "name": "FeedLog",
       "summary": "Feedback boards, a public roadmap and an AI-assisted changelog for your product, with an embeddable widget. Runs on Workers with R2 for uploads and your own Postgres through Hyperdrive.",
+      "tagline": "Collect feedback, share your roadmap and announce updates",
       "addedAt": "2026-09-27T04:47:55+03:00",
       "version": "0.5.0",
       "artifacts": {
@@ -2104,6 +2110,31 @@
             "url": "https://appflare.github.io/catalog/apps/feedlog/screenshots/01-feedback-board.png",
             "sha256": "1752edad3b4aa8ca161ee95b40255003d7135834bbfb4d054ab67cfb54969b91",
             "alt": "FeedLog: Feedback board"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/feedlog/screenshots/02-public-roadmap.png",
+            "sha256": "742c7070100acb68af029a9a7c999b9c18a20083f6af319a6971653a0a6051b1",
+            "alt": "FeedLog: Public roadmap"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/feedlog/screenshots/03-similar-feedback.png",
+            "sha256": "f2852f0dbad1c1ef27efb79f8c9aaaa0c7edd588cfd46d90e0eebc7145b08a7a",
+            "alt": "FeedLog: Similar feedback"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/feedlog/screenshots/04-ai-changelog-draft.png",
+            "sha256": "26a5ef9c5651c77931c62a2181f492e99da3ad22d02aac7acf152d8ebca6d06c",
+            "alt": "FeedLog: Ai changelog draft"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/feedlog/screenshots/05-changelog-timeline.png",
+            "sha256": "ca0966eb392549d6163a62bc4aa5e2304757e8d6e4beb8698bd647a5aea132e4",
+            "alt": "FeedLog: Changelog timeline"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/feedlog/screenshots/06-feedback-widget.png",
+            "sha256": "9724dd91eb7b89d446d271106306bf358cf222afe415adb22af2dcdaeb9fdb47",
+            "alt": "FeedLog: Feedback widget"
           }
         ]
       },
@@ -2158,6 +2189,7 @@
       "slug": "flaremo",
       "name": "FlareMo",
       "summary": "A Memos-compatible notes app for quick capture: timeline, tags, attachments, semantic search, and an MCP server, on D1, R2, and Vectorize.",
+      "tagline": "Capture notes and find them when you need them",
       "addedAt": "2026-09-23T20:44:39+03:00",
       "version": "0.20.1",
       "artifacts": {
@@ -2193,17 +2225,12 @@
         },
         "screenshots": [
           {
-            "url": "https://appflare.github.io/catalog/apps/flaremo/screenshots/01-timeline.png",
+            "url": "https://appflare.github.io/catalog/apps/flaremo/screenshots/01-notes-timeline.png",
             "sha256": "7d5f451001e5f742d1f7bb1ac6ed6c7041f187b5e0bf1546d7ccad7a41fa0a32",
-            "alt": "FlareMo: Timeline"
+            "alt": "FlareMo: Notes timeline"
           },
           {
-            "url": "https://appflare.github.io/catalog/apps/flaremo/screenshots/02-timeline-in-dark-mode.png",
-            "sha256": "14b0ac6d3e8ccff7f9ec0b809867f34cf51fc03a5cf0fd88cbe9df772ebe8a17",
-            "alt": "FlareMo: Timeline in dark mode"
-          },
-          {
-            "url": "https://appflare.github.io/catalog/apps/flaremo/screenshots/03-on-a-phone.png",
+            "url": "https://appflare.github.io/catalog/apps/flaremo/screenshots/02-on-a-phone.png",
             "sha256": "107c66d7099537767b45a56ea2a7459a323f1573e6a62fb887e785f2d081ddc9",
             "alt": "FlareMo: On a phone"
           }
@@ -2313,6 +2340,7 @@
       "slug": "formzero",
       "name": "FormZero",
       "summary": "A form backend for static sites: send HTML forms or JSON to your own endpoint and browse, chart and export the submissions from a dashboard.",
+      "tagline": "Collect form submissions and see them in your own dashboard",
       "addedAt": "2026-09-27T06:02:01+03:00",
       "version": "0.0.0-20260426.a4ddde2",
       "artifacts": {
@@ -2897,6 +2925,7 @@
       "slug": "infiplot",
       "name": "InfiPlot",
       "summary": "An interactive story game generated in real time: AI writes the plot, paints every scene and voices the characters as you play, with the text, image and speech providers you choose.",
+      "tagline": "Play stories that AI writes and illustrates as you go",
       "addedAt": "2026-09-27T10:48:02+03:00",
       "version": "0.0.0-20260702.a60e18b",
       "artifacts": {
@@ -2926,24 +2955,34 @@
         },
         "screenshots": [
           {
-            "url": "https://appflare.github.io/catalog/apps/infiplot/screenshots/01-scene.png",
+            "url": "https://appflare.github.io/catalog/apps/infiplot/screenshots/01-story-choices.png",
             "sha256": "0fe14d0ed17ee4cd72c57d9baa53fe2919c5b7c01ec85ca417a623a29b75f89b",
-            "alt": "InfiPlot: Scene"
+            "alt": "InfiPlot: Story choices"
           },
           {
-            "url": "https://appflare.github.io/catalog/apps/infiplot/screenshots/02-scene.png",
+            "url": "https://appflare.github.io/catalog/apps/infiplot/screenshots/02-cyberpunk-story-choices.png",
             "sha256": "d9bd912f9cb21651d0e8e16a589c62d490108eabed601eb7db9290ada4b56e9f",
-            "alt": "InfiPlot: Scene"
+            "alt": "InfiPlot: Cyberpunk story choices"
           },
           {
-            "url": "https://appflare.github.io/catalog/apps/infiplot/screenshots/03-scene.png",
+            "url": "https://appflare.github.io/catalog/apps/infiplot/screenshots/03-historical-story-choices.png",
             "sha256": "da1a777fa008aebc13eb915f66fe7c6ab3f5edbe31671695e7f507ce360c33aa",
-            "alt": "InfiPlot: Scene"
+            "alt": "InfiPlot: Historical story choices"
           },
           {
-            "url": "https://appflare.github.io/catalog/apps/infiplot/screenshots/04-scene.png",
+            "url": "https://appflare.github.io/catalog/apps/infiplot/screenshots/04-fantasy-story-choices.png",
             "sha256": "096a1225f6ba0ed010d26c14446c387d7db679a7b7c2ddd4500f5be8f7a86788",
-            "alt": "InfiPlot: Scene"
+            "alt": "InfiPlot: Fantasy story choices"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/infiplot/screenshots/05-story-dialogue-choices.png",
+            "sha256": "dd3abe4ecec26282d109c3019047fc29c2c48d5711eb31e17e9af942ea205a7b",
+            "alt": "InfiPlot: Story dialogue choices"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/infiplot/screenshots/06-school-story-dialogue.png",
+            "sha256": "a2e25efcd91aebca28145922f8f6e015274838d83106f94c8a279689e8ce6ea6",
+            "alt": "InfiPlot: School story dialogue"
           }
         ]
       },
@@ -4944,6 +4983,7 @@
       "slug": "quickinbox",
       "name": "Quickinbox",
       "summary": "Email for your own domain: a web mail client with threads, attachments, several users and domains, plus a REST API, CLI and MCP server.",
+      "tagline": "Email for your own domain, with a web inbox you control",
       "addedAt": "2026-09-27T04:46:44+03:00",
       "version": "1.1.0",
       "artifacts": {
@@ -4973,7 +5013,38 @@
           "url": "https://appflare.github.io/catalog/apps/quickinbox/icon.png",
           "sha256": "abf92c43e66e63cbed96cc41b47665af71b29c8aeed40919c71cebf40d8134c5"
         },
-        "screenshots": []
+        "screenshots": [
+          {
+            "url": "https://appflare.github.io/catalog/apps/quickinbox/screenshots/01-inbox-overview.png",
+            "sha256": "4218f1d7b30e512bbbd21999e193468a4fd50036bf455689f8bf3542ed6fa844",
+            "alt": "Quickinbox: Inbox overview"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/quickinbox/screenshots/02-message-thread.png",
+            "sha256": "4e46e6aae192dec31e34e0346be477b8672de8b19f7675950cfff7271143e89f",
+            "alt": "Quickinbox: Message thread"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/quickinbox/screenshots/03-starred-messages.png",
+            "sha256": "73062df9f5c0a0c72f51804cfe32b581a9c1c292e37568e58b517032e1d07fda",
+            "alt": "Quickinbox: Starred messages"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/quickinbox/screenshots/04-settings-light-theme.png",
+            "sha256": "a19cf8d667628f8ac2ae63d5146ebd1e4a5e9a1c73fd5dd5d02517165af9728c",
+            "alt": "Quickinbox: Settings light theme"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/quickinbox/screenshots/05-admin-users.png",
+            "sha256": "86629ecb2af8d9063817a004f08a7c00b3345e5c1df58f4d11e2964753f92be9",
+            "alt": "Quickinbox: Admin users"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/quickinbox/screenshots/06-create-account.png",
+            "sha256": "fe80c6ada0ba4b23412d31a47f911a868b834a8d979294736c8c253872cbbfad",
+            "alt": "Quickinbox: Create account"
+          }
+        ]
       },
       "services": [
         "d1",
@@ -4990,6 +5061,7 @@
       "slug": "r2-explorer",
       "name": "R2 Explorer",
       "summary": "A Google Drive-like file browser for an R2 bucket, on Workers + R2.",
+      "tagline": "Browse and preview files in your Cloudflare storage",
       "addedAt": "2026-09-23T15:41:37+03:00",
       "version": "1.1.10",
       "artifacts": {
@@ -5020,6 +5092,23 @@
       "maintainers": [
         "MendyLanda"
       ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/r2-explorer/icon.png",
+          "sha256": "9f9482b8f370e9fb891adc609d4c158cbbe0c73f455922a9bed46c52308cceca"
+        },
+        "cover": {
+          "url": "https://appflare.github.io/catalog/apps/r2-explorer/cover.png",
+          "sha256": "03bd7fadbfbeff872e73aae9ad140d2ad7266833168de1f02cded53eb63e6f3a"
+        },
+        "screenshots": [
+          {
+            "url": "https://appflare.github.io/catalog/apps/r2-explorer/screenshots/01-read-only-file-browser.png",
+            "sha256": "8514a9c96fd5d8fe3b9e7b0d4a52a3f8f8d440b08f1c066a1030b5a72a819d1a",
+            "alt": "R2 Explorer: Read only file browser"
+          }
+        ]
+      },
       "services": [
         "r2"
       ],
@@ -5165,6 +5254,7 @@
       "slug": "reminal",
       "name": "Reminal",
       "summary": "Your own relay for reminal: reach the terminals, app windows and desktops of your machines from any browser, end-to-end encrypted, with nothing listening on the machines.",
+      "tagline": "Reach your computers' windows and terminals from any browser",
       "addedAt": "2026-09-27T05:20:16+03:00",
       "version": "3.14.19",
       "artifacts": {
@@ -5195,7 +5285,13 @@
           "url": "https://appflare.github.io/catalog/apps/reminal/cover.png",
           "sha256": "90ed2f7be942e37e6e1ca09d92de076f542168c5b800fc622768fde7e87507b7"
         },
-        "screenshots": []
+        "screenshots": [
+          {
+            "url": "https://appflare.github.io/catalog/apps/reminal/screenshots/01-alerts-sheet.png",
+            "sha256": "9895a77b7faae05671d4772a5ffceaeceaa6e679befb69b13c7bae6d61254e42",
+            "alt": "Reminal: Alerts sheet"
+          }
+        ]
       },
       "services": [
         "durable-objects"
@@ -5271,6 +5367,7 @@
       "slug": "renewlet",
       "name": "Renewlet",
       "summary": "Track recurring subscriptions and renewals: timezone-aware reminders over ten notification channels, calendar feeds, budgets, cost sharing and spending statistics, on D1, R2 and a queue.",
+      "tagline": "Track subscriptions and get reminders before they renew",
       "addedAt": "2026-09-27T12:02:55+03:00",
       "version": "0.3.27",
       "artifacts": {
@@ -5300,7 +5397,23 @@
           "url": "https://appflare.github.io/catalog/apps/renewlet/icon.svg",
           "sha256": "8272948127d2c3d778fde665791b1f9c42b68fee814c6658d725f45f856fa3fe"
         },
-        "screenshots": []
+        "screenshots": [
+          {
+            "url": "https://appflare.github.io/catalog/apps/renewlet/screenshots/01-spending-statistics.png",
+            "sha256": "0598b86edd0ccc4f709b88be8ddc0810ce86c82d2d72296dc1627c6b4456d1be",
+            "alt": "Renewlet: Spending statistics"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/renewlet/screenshots/02-renewal-calendar.png",
+            "sha256": "4f830affd395e69c77afe0933e0bcbba99b9ca286b70481101bc6ae2847d3fd6",
+            "alt": "Renewlet: Renewal calendar"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/renewlet/screenshots/03-notification-settings.png",
+            "sha256": "fed131d3b42b03107d79b372f5be11c76a205e3c773857f7ec7871dc7a44a5c2",
+            "alt": "Renewlet: Notification settings"
+          }
+        ]
       },
       "services": [
         "d1",
@@ -5319,6 +5432,7 @@
       "slug": "resolvehq",
       "name": "ResolveHQ",
       "summary": "A self-hosted helpdesk: a shared inbox fed by Email Routing, threaded tickets, SLAs and snoozes, a help center and knowledge base, customer ratings, reports, a scoped API and outbound webhooks, on D1, R2 and Queues.",
+      "tagline": "Manage customer emails and support tickets in your own account",
       "addedAt": "2026-09-27T12:03:21+03:00",
       "version": "0.3.3",
       "artifacts": {
@@ -5364,6 +5478,7 @@
       "slug": "rsshub-never-die",
       "name": "RSSHub Never Die",
       "summary": "A stable RSSHub address for your feed reader: requests go to a pool of public RSSHub instances, by load balancing, failover to the next instance, or the fastest of several.",
+      "tagline": "One address for your feed reader that switches servers when one fails",
       "addedAt": "2026-09-27T12:13:25+03:00",
       "version": "1.4.2",
       "artifacts": {
@@ -5398,6 +5513,7 @@
       "slug": "rssworker",
       "name": "RSSWorker",
       "summary": "A small RSS feed generator: RSS and Atom feeds for Bilibili dynamics and videos, Telegram channels, Weibo users and Xiaohongshu users, one URL per feed.",
+      "tagline": "RSS feeds for Bilibili, Telegram, Weibo and Xiaohongshu updates",
       "addedAt": "2026-09-27T10:43:20+03:00",
       "version": "0.0.0-20260818.b4057ba",
       "artifacts": {
@@ -5431,6 +5547,7 @@
       "slug": "scrapedown",
       "name": "scrapedown",
       "summary": "Turn any web page into clean Markdown: one GET with a URL returns the article's text in reader mode, with its title, byline, excerpt and language.",
+      "tagline": "Turn web pages into clean, readable text",
       "addedAt": "2026-09-27T12:04:07+03:00",
       "version": "0.0.0-20240118.807d685",
       "artifacts": {
@@ -5466,6 +5583,7 @@
       "slug": "screencapture-live",
       "name": "screencapture Live",
       "summary": "The live-streaming relay for screencapture on FiveM: stream a player's game view to admins' browsers through Cloudflare Realtime, with one-time viewer grants and a visible indicator for the player.",
+      "tagline": "Let admins watch a player's game live in their browser",
       "addedAt": "2026-09-27T11:42:03+03:00",
       "version": "0.17.2",
       "artifacts": {
@@ -5491,7 +5609,7 @@
         "durable-objects"
       ],
       "categories": [
-        "gaming",
+        "games",
         "media"
       ],
       "license": "AGPL-3.0",
@@ -5501,6 +5619,7 @@
       "slug": "screendrop",
       "name": "Screendrop Cloud",
       "summary": "The upload and sharing backend for the Screendrop macOS app: screenshots and screen recordings stored in R2, with share pages, transcripts, comments and likes.",
+      "tagline": "Share screenshots and screen recordings with your own links",
       "addedAt": "2026-09-27T11:50:07+03:00",
       "version": "0.0.0-20260805.32a8898",
       "artifacts": {
@@ -5547,6 +5666,7 @@
       "slug": "second-brain-cloudflare",
       "name": "Second Brain",
       "summary": "A personal memory for your AI assistants: an MCP server that stores notes in D1 and recalls them by meaning with Vectorize and Workers AI.",
+      "tagline": "Save notes once and recall them across your AI tools",
       "addedAt": "2026-09-23T16:26:51+03:00",
       "version": "2.2.0",
       "artifacts": {
@@ -5597,6 +5717,7 @@
       "slug": "seeder",
       "name": "Seeder",
       "summary": "A project manager for small teams: kanban tasks, client requests, a public client board, a daily planner and a built-in MCP server.",
+      "tagline": "Manage team projects, tasks, and client requests in one place",
       "addedAt": "2026-09-27T06:14:13+03:00",
       "version": "2.1.0",
       "artifacts": {
@@ -5646,6 +5767,26 @@
             "url": "https://appflare.github.io/catalog/apps/seeder/screenshots/04-daily-planner.png",
             "sha256": "5f30667a5c12af507fdab23dd6378ab038eec57d3476b456a46852b6d4a4c345",
             "alt": "Seeder: Daily planner"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/seeder/screenshots/05-client-request-inbox.png",
+            "sha256": "72316687a3c1ea7ee5eb0f584962b8d82fcd11aee70a4fd890f2303da4c0f322",
+            "alt": "Seeder: Client request inbox"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/seeder/screenshots/06-task-details.png",
+            "sha256": "8c7d6a9c7e1e42b79a2fb5342e18837e07efdb3e42c0dc0802a2e8d08ff981fb",
+            "alt": "Seeder: Task details"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/seeder/screenshots/07-team-invitations.png",
+            "sha256": "913bacdc561602505b47e4219d7fc1a716f94e26fe3b510d13c386d38cc59cd2",
+            "alt": "Seeder: Team invitations"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/seeder/screenshots/08-api-tokens.png",
+            "sha256": "ef8f291a5ee12665317ff95fc08794aa55c993991ccab55438c8caa0369c7634",
+            "alt": "Seeder: Api tokens"
           }
         ]
       },
@@ -5664,6 +5805,7 @@
       "slug": "semanticsearch",
       "name": "Semantic Search",
       "summary": "A semantic search API on Vectorize and Workers AI: add documents with metadata over HTTP, then search them by meaning, with writer and read-only API keys and Swagger docs.",
+      "tagline": "Find your documents by meaning",
       "addedAt": "2026-09-27T12:00:01+03:00",
       "version": "0.0.0-20260603.baa959e",
       "artifacts": {
@@ -5688,6 +5830,13 @@
       "maintainers": [
         "MendyLanda"
       ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/semanticsearch/icon.svg",
+          "sha256": "1829f9ce8b34013fa385cfe49689e3feacc24fd5373c0936b4e23c164ee05b4e"
+        },
+        "screenshots": []
+      },
       "services": [
         "vectorize",
         "workers-ai"
@@ -5755,6 +5904,7 @@
       "slug": "shotsync",
       "name": "ShotSync",
       "summary": "A private image and text pool shared across your devices: drop a screenshot or snippet on one, grab it on another, from an installable web app backed by R2.",
+      "tagline": "Share pictures and text between your devices, privately",
       "addedAt": "2026-09-27T04:19:23+03:00",
       "version": "1.0.0",
       "artifacts": {
@@ -5779,6 +5929,10 @@
         "MendyLanda"
       ],
       "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/shotsync/icon.svg",
+          "sha256": "05a4410d491bd9e543a93394756df06ca6daf19b169ed34ae8cbacc16c3ee7ad"
+        },
         "cover": {
           "url": "https://appflare.github.io/catalog/apps/shotsync/cover.png",
           "sha256": "300978dd58fc6f349794fa27bc08302133001072488c13dbaadc0a423d8c955b"
@@ -5879,6 +6033,7 @@
       "slug": "sink",
       "name": "Sink",
       "summary": "Link shortener with visit analytics: custom slugs, expiring links, QR codes, AI slug suggestions and a realtime globe, all on Cloudflare.",
+      "tagline": "Create short links and track their visits",
       "addedAt": "2026-09-27T01:13:10+03:00",
       "version": "0.3.0",
       "artifacts": {
@@ -5914,7 +6069,18 @@
           "url": "https://appflare.github.io/catalog/apps/sink/cover.png",
           "sha256": "fb266928b6a876616d0f76bc01dc2d53939352f1cdd8861edae089feaf9610fd"
         },
-        "screenshots": []
+        "screenshots": [
+          {
+            "url": "https://appflare.github.io/catalog/apps/sink/screenshots/01-analytics-dashboard.png",
+            "sha256": "c690fdfbb56f8671de5c63017b919f83bf64439d0c291cf8695a878e1637d626",
+            "alt": "Sink: Analytics dashboard"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/sink/screenshots/02-link-list.png",
+            "sha256": "dcef30afcfb5288e47f868b55da306225b7c9f2f56ce34a7359ce2a463135f10",
+            "alt": "Sink: Link list"
+          }
+        ]
       },
       "services": [
         "kv",
@@ -5935,6 +6101,7 @@
       "slug": "skland-attendance",
       "name": "Skland Daily Attendance",
       "summary": "Claims the daily Skland sign-in rewards for your Arknights and Arknights: Endfield accounts on a schedule, with optional notifications of each run.",
+      "tagline": "Automatically claim daily rewards for Arknights and Endfield",
       "addedAt": "2026-09-27T11:50:07+03:00",
       "version": "0.0.0-20260902.1c0c3a8",
       "artifacts": {
@@ -5977,6 +6144,7 @@
       "slug": "statusbeam",
       "name": "StatusBeam",
       "summary": "A status page served from Cloudflare's edge cache, with a checker that probes your sites, Statuspage and incident.io pages, and Sentry monitors every five minutes.",
+      "tagline": "Monitor your services and share a public status page",
       "addedAt": "2026-09-27T06:14:13+03:00",
       "version": "0.1.1",
       "artifacts": {
@@ -5999,6 +6167,17 @@
       "maintainers": [
         "MendyLanda"
       ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/statusbeam/icon.svg",
+          "sha256": "bb9bc1ee944bdf197ff939110b020de630a8314a52210e7e86ba7f37627c0ec0"
+        },
+        "cover": {
+          "url": "https://appflare.github.io/catalog/apps/statusbeam/cover.png",
+          "sha256": "45fb7a993c943e54d36951243df98ac84695a96cd5f14a4b3fce12ea65eb9f41"
+        },
+        "screenshots": []
+      },
       "services": [
         "kv",
         "d1",
@@ -6016,6 +6195,7 @@
       "slug": "sveltia-cms-auth",
       "name": "Sveltia CMS Authenticator",
       "summary": "The OAuth helper that lets people sign in to Sveltia CMS (or Decap CMS) with GitHub or GitLab, for sites whose editors should not have to create access tokens.",
+      "tagline": "Let site editors sign in with GitHub without making access tokens",
       "addedAt": "2026-09-27T10:43:20+03:00",
       "version": "0.0.0-20260921.4fd08b5",
       "artifacts": {
@@ -6120,6 +6300,7 @@
       "slug": "telegram-push",
       "name": "Telegram Push",
       "summary": "Push notifications to Telegram with one HTTP request: your own bot hands each chat a push key, and any script or webhook sends a message with a GET to /push.",
+      "tagline": "Send notifications to your Telegram chats with a web request",
       "addedAt": "2026-09-27T12:14:18+03:00",
       "version": "0.0.0-20230722.bb6f717",
       "artifacts": {
@@ -6155,6 +6336,7 @@
       "slug": "tempik",
       "name": "Tempik",
       "summary": "A disposable email service on your own domain: pick or generate an address in the browser and read the mail sent to it, received by Email Routing and kept in D1.",
+      "tagline": "Disposable email addresses on your own domain",
       "addedAt": "2026-09-27T05:55:55+03:00",
       "version": "0.0.0-20260627.36d05ed",
       "artifacts": {
@@ -6245,6 +6427,7 @@
       "slug": "token-monitor",
       "name": "Token Monitor Hub",
       "summary": "Your own sync hub for Token Monitor: combine the token use, costs and plan limits of Claude Code, Codex, Cursor and 40 more AI coding tools across all your machines, live in every widget.",
+      "tagline": "Sync your AI coding usage across all your devices",
       "addedAt": "2026-09-27T11:42:03+03:00",
       "version": "0.63.0",
       "artifacts": {
@@ -6288,6 +6471,7 @@
       "slug": "turborepo-remote-cache",
       "name": "Turborepo Remote Cache",
       "summary": "A Turborepo remote cache server on Workers and R2: point turbo at it and share build outputs between your machines and CI, without Vercel.",
+      "tagline": "Speed up builds by sharing cached results across your machines",
       "addedAt": "2026-09-27T04:19:23+03:00",
       "version": "0.0.0-20260615.b0aaab5",
       "artifacts": {
@@ -6334,6 +6518,7 @@
       "slug": "unifi-ddns",
       "name": "UniFi DDNS",
       "summary": "Dynamic DNS for UniFi gateways: keeps Cloudflare A/AAAA records on your current IP.",
+      "tagline": "Keep your domain pointed at your current IP address",
       "addedAt": "2026-09-23T15:24:46+03:00",
       "version": "3.3.1",
       "artifacts": {
@@ -6369,6 +6554,7 @@
       "slug": "usage-guard-collector",
       "name": "Usage Guard Collector",
       "summary": "Usage surge alerts for your Cloudflare account: reads daily Workers, D1, Durable Objects, KV, R2 and Queues counts into D1 and pings Discord or Slack when a meter jumps.",
+      "tagline": "Get alerts when your Cloudflare usage suddenly jumps",
       "addedAt": "2026-09-27T04:19:23+03:00",
       "version": "0.0.0-20260926.c5f9e9d",
       "artifacts": {
@@ -6406,6 +6592,7 @@
       "slug": "veet",
       "name": "Veet",
       "summary": "Video calls in the browser: share a meeting link and talk face to face, with chat, device settings and peer-to-peer media for small groups.",
+      "tagline": "Share a link and talk face to face in your browser",
       "addedAt": "2026-09-27T10:43:47+03:00",
       "version": "0.0.0-20260728.cca7b69",
       "artifacts": {
@@ -6429,6 +6616,13 @@
       "maintainers": [
         "MendyLanda"
       ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/veet/icon.png",
+          "sha256": "a8d25861780b9fa262cc2e0fa9145e1f626fff67a60b804387c4b6905065e3e0"
+        },
+        "screenshots": []
+      },
       "services": [
         "durable-objects"
       ],
@@ -6442,6 +6636,7 @@
       "slug": "vps-jsq",
       "name": "VPS-JSQ",
       "summary": "A VPS remaining-value calculator: enter the renewal price, currency, billing cycle and dates to see the value left and a suggested resale price, with live exchange rates and a shareable image card. Chinese interface.",
+      "tagline": "See what the unused time on a prepaid server is worth",
       "addedAt": "2026-09-27T12:08:49+03:00",
       "version": "0.0.0-20260829.c9739a4",
       "artifacts": {
@@ -6464,6 +6659,20 @@
       "maintainers": [
         "MendyLanda"
       ],
+      "media": {
+        "screenshots": [
+          {
+            "url": "https://appflare.github.io/catalog/apps/vps-jsq/screenshots/01-calculator-overview.png",
+            "sha256": "b7d30304628d596e0f889ad8fb59e92fcb557890eee03887591c26b99ac8e002",
+            "alt": "VPS-JSQ: Calculator overview"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/vps-jsq/screenshots/02-mobile-calculator.png",
+            "sha256": "400cb1dae9a27f07f8d7ca6ef295262ec3aa4b65830636d50217e14a091962de",
+            "alt": "VPS-JSQ: Mobile calculator"
+          }
+        ]
+      },
       "services": [],
       "categories": [
         "finance",
@@ -6476,6 +6685,7 @@
       "slug": "webrtc-turn",
       "name": "AndroMeld TURN Relay",
       "summary": "Your own TURN relay for AndroMeld: when your phone, Mac and browser cannot connect directly, they relay their encrypted traffic through Cloudflare Realtime TURN in your account.",
+      "tagline": "Keep AndroMeld connected when a direct connection fails",
       "addedAt": "2026-09-27T11:42:03+03:00",
       "version": "0.0.0-20260904.500651a",
       "artifacts": {
@@ -6510,6 +6720,7 @@
       "slug": "workers-firecrawl",
       "name": "Workers Firecrawl",
       "summary": "A Firecrawl-compatible search, scrape and map API on Browser Rendering: point the Firecrawl SDKs at your own Worker and get pages as Markdown, HTML, links or screenshots.",
+      "tagline": "Search the web and turn pages into readable text",
       "addedAt": "2026-09-27T04:19:23+03:00",
       "version": "0.0.0-20260313.f53a0dc",
       "artifacts": {
@@ -6549,6 +6760,7 @@
       "slug": "wx2md",
       "name": "wx2md",
       "summary": "Turns WeChat Official Account articles, and any other web page, into clean Markdown or a readable HTML view: swap the article link's host for your Worker's, on Workers AI Markdown conversion.",
+      "tagline": "Turn WeChat articles and web pages into Markdown",
       "addedAt": "2026-09-27T12:00:01+03:00",
       "version": "0.0.0-20260831.3fa0184",
       "artifacts": {
@@ -6588,6 +6800,7 @@
       "slug": "xiadd-pastebin",
       "name": "xiadd Pastebin",
       "summary": "A pastebin with syntax highlighting, Markdown, password-protected pastes, expiry times and file uploads up to 25 MB, on D1 and R2, with a JSON API.",
+      "tagline": "Share text and files with links that can expire or use a password",
       "addedAt": "2026-09-27T11:50:07+03:00",
       "version": "0.0.0-20260319.5af66e4",
       "artifacts": {
