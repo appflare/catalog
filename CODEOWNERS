@@ -3,6 +3,7 @@
 
 /apps/2fa/ @MendyLanda
 /apps/agentic-inbox/ @MendyLanda
+/apps/atalaya/ @MendyLanda
 /apps/bark-worker/ @MendyLanda
 /apps/binthere/ @MendyLanda
 /apps/bookshelf/ @MendyLanda
@@ -13,6 +14,7 @@
 /apps/counterscale/ @MendyLanda
 /apps/cut/ @MendyLanda
 /apps/durable-git/ @MendyLanda
+/apps/elm-chat/ @MendyLanda
 /apps/flaremo/ @MendyLanda
 /apps/glance/ @MendyLanda
 /apps/mail2telegram/ @MendyLanda
@@ -20,6 +22,7 @@
 /apps/minvoice/ @MendyLanda
 /apps/nodecrypt/ @MendyLanda
 /apps/nodewarden/ @MendyLanda
+/apps/omnimail/ @MendyLanda
 /apps/open-artifacts/ @MendyLanda
 /apps/open-seo/ @MendyLanda
 /apps/openai-gemini/ @MendyLanda
@@ -28,11 +31,13 @@
 /apps/punctual/ @MendyLanda
 /apps/quickinbox/ @MendyLanda
 /apps/r2-explorer/ @MendyLanda
+/apps/rdyrct/ @MendyLanda
 /apps/second-brain-cloudflare/ @MendyLanda
 /apps/sharehtml/ @MendyLanda
 /apps/shotsync/ @MendyLanda
 /apps/shrtnr/ @MendyLanda
 /apps/sink/ @MendyLanda
+/apps/synch/ @MendyLanda
 /apps/turborepo-remote-cache/ @MendyLanda
 /apps/unifi-ddns/ @MendyLanda
 /apps/usage-guard-collector/ @MendyLanda

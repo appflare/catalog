@@ -1,0 +1,71 @@
+{
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "synch",
+  "name": "Synch",
+  "summary": "Your own server for Synch, end-to-end encrypted real-time sync for Obsidian vaults: notes are encrypted on each device, and the Worker relays and stores only ciphertext in a Durable Object, D1 and R2.",
+  "homepage": "https://synch.run",
+  "repo": "hjinco/synch",
+  "license": "MIT",
+  "categories": ["notes", "sync"],
+  "authors": [
+    { "name": "Synch", "url": "https://synch.run", "github": "hjinco" },
+    { "name": "hhhjin", "url": "https://hyeongjin.com", "github": "hhhjin" }
+  ],
+  "maintainers": ["MendyLanda"],
+  // One release line for the whole repository: each tag ships the Obsidian
+  // plugin, and the server in apps/api at the same commit is the one that
+  // plugin version expects.
+  "source": { "ref": "0.4.8", "sha": "2c07515fe4bfd0a8445d1c9fa3a1174669a495b3" },
+  "install": {
+    "tier": "artifact",
+    // A pnpm workspace (apps/*, packages/*); the root lockfile covers apps/api.
+    "packageManager": "pnpm",
+    // The self-hosted server, upstream's Deploy to Cloudflare template. Its
+    // top-level bindings are the community edition; the `managed` environment
+    // is upstream's hosted service (billing, queues, email) and is not used.
+    "wranglerConfig": "apps/api/wrangler.jsonc",
+    "workerName": "synch-api",
+    // No build: public/ holds tracked files, and wrangler bundles the Worker
+    // with the Durable Object's SQL migrations as text modules.
+    // Answers without a sign-in, from the Worker itself.
+    "healthPath": "/health"
+  },
+  // D1, R2 and a SQLite-backed Durable Object per vault all have free tiers;
+  // upstream's guide deploys to a free account.
+  "plan": "free",
+  // Blobs (attachments and note contents) go to an R2 bucket.
+  "requires": ["r2"],
+  // The three secrets the wrangler config lists under secrets.required, as
+  // upstream's deploy form asks for them.
+  "secrets": [
+    {
+      "name": "AUTH_ALLOWED_EMAILS",
+      "label": "Allowed sign-up emails",
+      "help": "Comma-separated email addresses that may create accounts, for example you@example.com,family@example.com. People already signed up can still sign in after you remove them."
+    },
+    {
+      "name": "BETTER_AUTH_SECRET",
+      "label": "Session signing secret",
+      "help": "Signs sign-in sessions. Setting a new value signs everyone out.",
+      "generate": true
+    },
+    {
+      "name": "SYNC_TOKEN_SECRET",
+      "label": "Sync token secret",
+      "help": "Signs the short-lived tokens devices use to open a sync connection.",
+      "generate": true
+    }
+  ],
+  "vars": [],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "In Obsidian, install the Synch community plugin, open **Settings → Synch**, and paste `{{workerUrl}}` under **Self-hosted server** (without a trailing slash). Save, then sign up with one of the allowed email addresses and create or connect a vault."
+    },
+    {
+      "type": "markdown",
+      "content": "The vault password never leaves your devices: the server stores only encrypted data, so a forgotten vault password cannot be recovered."
+    }
+  ],
+  "tokenPermissions": []
+}
