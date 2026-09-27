@@ -52,5 +52,5 @@
   "tokenPermissions": [],
   // The HOME_PAGE select is a form change for the build v0.1.0 already
   // released, so it is published as a revision rather than a new build.
-  "revision": 2
+  "revision": 3
 }
