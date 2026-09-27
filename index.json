@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-27T14:32:59.503Z",
+  "generatedAt": "2026-09-27T14:48:06.500Z",
   "apps": [
     {
       "slug": "2fa",
@@ -2862,6 +2862,7 @@
       "slug": "imgbed",
       "name": "CloudFlare ImgBed",
       "summary": "Self-hosted image and file hosting with an admin panel: uploads to R2, Telegram, Discord, S3, Hugging Face or WebDAV, file management, access control, a public gallery, a REST API and WebDAV, on D1.",
+      "tagline": "Store and share images and files on your own site",
       "addedAt": "2026-09-27T06:13:42+03:00",
       "version": "2.7.6",
       "artifacts": {
@@ -2893,19 +2894,19 @@
         },
         "screenshots": [
           {
-            "url": "https://appflare.github.io/catalog/apps/imgbed/screenshots/01-upload-page.png",
-            "sha256": "ea8e8f94db790073d114907d9ee0efecce8c9ad16dff48a0aee17942818c5b7d",
-            "alt": "CloudFlare ImgBed: Upload page"
-          },
-          {
-            "url": "https://appflare.github.io/catalog/apps/imgbed/screenshots/02-upload-sign-in.png",
+            "url": "https://appflare.github.io/catalog/apps/imgbed/screenshots/01-upload-sign-in.png",
             "sha256": "4f050603a7ef2b0616f977e3041796928f0dd5ac8508eb02cad6c5457601fdc8",
             "alt": "CloudFlare ImgBed: Upload sign in"
           },
           {
-            "url": "https://appflare.github.io/catalog/apps/imgbed/screenshots/03-system-status.png",
+            "url": "https://appflare.github.io/catalog/apps/imgbed/screenshots/02-system-status.png",
             "sha256": "358ebc9d55de709a39773de1be0b5ae13e1bfcd583e6e823929cc44ab9298a91",
             "alt": "CloudFlare ImgBed: System status"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/imgbed/screenshots/03-upload-result.png",
+            "sha256": "323e39d81d3169b80198163a63114baad0e3794a8c9b0c854f7d43aec57f3e8a",
+            "alt": "CloudFlare ImgBed: Upload result"
           }
         ]
       },
@@ -3050,6 +3051,7 @@
       "slug": "insightflare",
       "name": "InsightFlare",
       "summary": "Privacy-friendly web analytics that runs entirely on Cloudflare: a tracking script, a realtime dashboard with maps and funnels, and an API for AI agents, on D1, a Durable Object and Analytics Engine.",
+      "tagline": "See your website traffic and visitor trends in one dashboard",
       "addedAt": "2026-09-27T05:18:00+03:00",
       "version": "0.7.1",
       "artifacts": {
@@ -3085,6 +3087,31 @@
             "url": "https://appflare.github.io/catalog/apps/insightflare/screenshots/01-realtime-visitors.png",
             "sha256": "932eb606f86e104d6dd685bb0eb9d837b971c6f3e40cc152eaafb218b69b3867",
             "alt": "InsightFlare: Realtime visitors"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/insightflare/screenshots/02-team-dashboard.png",
+            "sha256": "b0d2cf6999739fe76d2abcf761e3a1eef3ec143fa7f026ae36c9ba3615983c2e",
+            "alt": "InsightFlare: Team dashboard"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/insightflare/screenshots/03-page-traffic.png",
+            "sha256": "b3d4ac1249a263c07a9f57165d497e3093379d323ed99fb945dfcf85e43f795d",
+            "alt": "InsightFlare: Page traffic"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/insightflare/screenshots/04-location-analysis.png",
+            "sha256": "b58cb8f9a455a3f4c5a5f4f0b862e2f371de0bc4b7d9491462ffa09fb99f5f0d",
+            "alt": "InsightFlare: Location analysis"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/insightflare/screenshots/05-conversion-funnel.png",
+            "sha256": "07a13b6832e218aeb6b0cd2db23a274bfe1eede3f8f0fbbeb8829cc80124192a",
+            "alt": "InsightFlare: Conversion funnel"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/insightflare/screenshots/06-site-settings.png",
+            "sha256": "9c40fb605358d86f5cf8e68f4796b984ae944b7c4d4babe2033ef03db5058e1e",
+            "alt": "InsightFlare: Site settings"
           }
         ]
       },
@@ -3625,6 +3652,7 @@
       "slug": "mailysend",
       "name": "MailySend",
       "summary": "A Resend-compatible email platform in your own account: transactional sending, broadcasts, automations, inbound mail and deliverability analytics, over Cloudflare Email Service, Amazon SES, Resend or SMTP.",
+      "tagline": "Send emails and campaigns from your own Cloudflare account",
       "addedAt": "2026-09-27T05:18:00+03:00",
       "version": "0.0.0-20260921.3708d2f",
       "artifacts": {
@@ -3668,6 +3696,26 @@
             "url": "https://appflare.github.io/catalog/apps/mailysend/screenshots/03-analytics.png",
             "sha256": "d480005700295e8c0ce603633050cc2daa37775d8c26640a682a5ac49eff6207",
             "alt": "MailySend: Analytics"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/mailysend/screenshots/04-message-logs.png",
+            "sha256": "52deb00d662fc80753b821254580195ba96c80a1b854d222f44654d7b9969dee",
+            "alt": "MailySend: Message logs"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/mailysend/screenshots/05-domain-records.png",
+            "sha256": "a7610b4730e7dbb4746fee3c88d7f2e1a705209579c0c0b72f82467a2ed12714",
+            "alt": "MailySend: Domain records"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/mailysend/screenshots/06-audience-contacts.png",
+            "sha256": "add3ca10ce310da98cfbca5945edf7720977c7e2694778c522331c9b714fceae",
+            "alt": "MailySend: Audience contacts"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/mailysend/screenshots/07-message-search.png",
+            "sha256": "704b6d591b97f8a004844e18e03d62ef000d37a96ddefd89cb6056d4c05dc0cc",
+            "alt": "MailySend: Message search"
           }
         ]
       },
@@ -3798,6 +3846,7 @@
       "slug": "microfeed",
       "name": "microfeed",
       "summary": "A lightweight CMS for audio, video, photos, documents, blog posts and links, published as a website, RSS and JSON feed, with an admin dashboard and an API for agents.",
+      "tagline": "Publish podcasts, photos, videos and posts on your own site",
       "addedAt": "2026-09-27T06:14:13+03:00",
       "version": "1.0.13",
       "artifacts": {
@@ -3829,7 +3878,12 @@
         },
         "screenshots": [
           {
-            "url": "https://appflare.github.io/catalog/apps/microfeed/screenshots/01-code-editor.png",
+            "url": "https://appflare.github.io/catalog/apps/microfeed/screenshots/01-dashboard-overview.png",
+            "sha256": "1b2b08cd716e9f2bbd23c8d97444cb35c858fb18ad32028e07a5d4b43f575bd7",
+            "alt": "microfeed: Dashboard overview"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/microfeed/screenshots/02-code-editor.png",
             "sha256": "e4a4d6de07cc9d5f4a30eb31eb9855b21f513c349d01f2419ed8265c8094e38e",
             "alt": "microfeed: Code editor"
           }
@@ -3852,6 +3906,7 @@
       "slug": "minshop",
       "name": "minshop",
       "summary": "A small, server-rendered online store with a full admin: Stripe checkout for people, Lightning invoices and a JSON API that agents can pay through, on D1 and R2.",
+      "tagline": "Run your own online store with card and Lightning payments",
       "addedAt": "2026-09-27T06:14:13+03:00",
       "version": "0.2.0",
       "artifacts": {
@@ -3901,6 +3956,11 @@
             "url": "https://appflare.github.io/catalog/apps/minshop/screenshots/04-admin.png",
             "sha256": "3b94d4840832e982ac249ae32308b26c0cda744b94cb0cd9de8e75397658d914",
             "alt": "minshop: Admin"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/minshop/screenshots/05-product-detail.png",
+            "sha256": "e94baaa04356a9b7d4e3a53f1c3986f166a2d8c04ee478bce1de670eb3330ce1",
+            "alt": "minshop: Product detail"
           }
         ]
       },
@@ -3920,6 +3980,7 @@
       "slug": "minvoice",
       "name": "Minvoice",
       "summary": "Invoicing for one business: invoices with PDF attachments, pay links through Stripe and PayPal, payment reminders, reports and CSV export, on D1.",
+      "tagline": "Create invoices with pay links and payment reminders",
       "addedAt": "2026-09-27T04:19:23+03:00",
       "version": "0.0.0-20260720.99563a5",
       "artifacts": {
@@ -4474,6 +4535,7 @@
       "slug": "open-seo",
       "name": "OpenSEO",
       "summary": "Self-hosted SEO research: keywords, rankings, backlinks and site audits, on your own Cloudflare account and behind Cloudflare Access.",
+      "tagline": "Find search terms, track rankings, and check your site's health",
       "addedAt": "2026-09-24T08:09:39+03:00",
       "version": "0.1.9",
       "tier": "self-deploying",
@@ -4501,7 +4563,7 @@
       "build": {
         "pin": "84e4705503ceaef54d1b284c167de9942563cdae",
         "manifest": "https://appflare.github.io/catalog/apps/open-seo/manifest.json",
-        "manifestDigest": "b616d2b58fec148890d0db69a6f4780c8e5086a27c200072eae0bd3788fb7e25",
+        "manifestDigest": "974cb5e62f1b679434eae44dce7e3a01f22054ef87cfc1f2f02c86e684d49e3d",
         "buildCommand": "pnpm exec vite build --mode selfhost",
         "expectedMinutes": 5,
         "instanceType": "standard-2"
@@ -4513,9 +4575,14 @@
         },
         "screenshots": [
           {
-            "url": "https://appflare.github.io/catalog/apps/open-seo/screenshots/01-keyword-research.png",
-            "sha256": "6d3dc3d7a23facf2fbbf95927b50ad505a28556e23b28cd842eb182351100894",
-            "alt": "OpenSEO: Keyword research"
+            "url": "https://appflare.github.io/catalog/apps/open-seo/screenshots/01-keyword-results.png",
+            "sha256": "b38fbce16a87ec10950832b2e8cdf6d39fd34b97a20999d499931c6493ced18a",
+            "alt": "OpenSEO: Keyword results"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/open-seo/screenshots/02-site-audit.png",
+            "sha256": "53b23274ce22794376368d9ed87b242656d2c3659abbad03d5cb6502dafe3781",
+            "alt": "OpenSEO: Site audit"
           }
         ]
       },
@@ -4863,6 +4930,7 @@
       "slug": "projektor",
       "name": "Projektor",
       "summary": "An issue tracker and wiki for teams and their AI coding agents: issues, boards, sprints and pages in the browser, and the same actions over MCP.",
+      "tagline": "Track team issues and keep a wiki alongside AI coding agents",
       "addedAt": "2026-09-27T06:13:42+03:00",
       "version": "0.7.1",
       "artifacts": {
@@ -4922,6 +4990,7 @@
       "slug": "punctual",
       "name": "Punctual",
       "summary": "Scheduling links for you and your team, a Calendly alternative: booking pages, Google and Microsoft 365 calendar sync, round-robin and collective events, reminders, and webhooks.",
+      "tagline": "Let people book time with you or your team",
       "addedAt": "2026-09-26T23:19:31+03:00",
       "version": "0.3.0",
       "artifacts": {
@@ -5307,6 +5376,7 @@
       "slug": "renewhelper",
       "name": "RenewHelper",
       "summary": "Keep track of subscriptions, domain renewals, server expiry dates and birthdays: solar and lunar cycles, reminders through Telegram, email, webhooks and a dozen other channels, a calendar with an iCal feed, and a spending dashboard, on Workers KV.",
+      "tagline": "Track renewals and important dates with timely reminders",
       "addedAt": "2026-09-27T11:44:57+03:00",
       "version": "3.8.4",
       "artifacts": {
@@ -5348,6 +5418,16 @@
             "url": "https://appflare.github.io/catalog/apps/renewhelper/screenshots/03-calendar.png",
             "sha256": "94c895da05f2a69fe30e35d11301e433b3ddbe4bc0adff9137d8b564d50206af",
             "alt": "RenewHelper: Calendar"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/renewhelper/screenshots/04-notification-settings.png",
+            "sha256": "db2e5376a0aca62cbae6ca8c4e8082b1e4ce9f15c5954d5239b9bfe2d87b5693",
+            "alt": "RenewHelper: Notification settings"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/renewhelper/screenshots/05-new-service-form.png",
+            "sha256": "d77c2ee3f875acc3c7d5d2aa2afaf7f71a43f8e06b6f615d26faeb2877d2fb82",
+            "alt": "RenewHelper: New service form"
           }
         ]
       },
@@ -5613,7 +5693,13 @@
         "media"
       ],
       "license": "AGPL-3.0",
-      "revision": 1
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/screencapture-live/manifest.json",
+        "sha256": "b7f0897ab68614abe307587a554db81d205ef828918f557f5399739bfff1b668",
+        "keyId": "catalog-2026-09",
+        "signature": "KBZTaruxqV+EtsNVICRG0pYjToBqHI0xiXKyzSA5r9XCvIu3jJpWoWWmiY2WUJpm1A+wH8fJ1JxqWwyAxhNTAg=="
+      }
     },
     {
       "slug": "screendrop",
@@ -5852,6 +5938,7 @@
       "slug": "sharehtml",
       "name": "ShareHTML",
       "summary": "Publish HTML, Markdown, and code files from the command line and get a shareable link with live comments, reactions, and presence. Sign-in through Cloudflare Access.",
+      "tagline": "Publish web pages and documents by link and gather comments",
       "addedAt": "2026-09-27T04:19:23+03:00",
       "version": "0.0.0-20260407.27ddaaf",
       "artifacts": {
@@ -5959,6 +6046,7 @@
       "slug": "shrtnr",
       "name": "shrtnr",
       "summary": "A URL shortener you drive from code and AI assistants: a REST API with typed SDKs, an MCP server, per-user links behind Cloudflare Access, bundles and click analytics, on D1 and KV.",
+      "tagline": "Create short links and track clicks in one place",
       "addedAt": "2026-09-27T04:19:23+03:00",
       "version": "0.42.1",
       "artifacts": {
@@ -6233,6 +6321,7 @@
       "slug": "synch",
       "name": "Synch",
       "summary": "Your own server for Synch, end-to-end encrypted real-time sync for Obsidian vaults: notes are encrypted on each device, and the Worker relays and stores only ciphertext in a Durable Object, D1 and R2.",
+      "tagline": "Keep your Obsidian notes in sync on your own server",
       "addedAt": "2026-09-27T04:47:37+03:00",
       "version": "0.4.8",
       "artifacts": {
@@ -6271,18 +6360,7 @@
           "url": "https://appflare.github.io/catalog/apps/synch/cover.png",
           "sha256": "99fc3e009889b059263c110bf7cfdbc84727ea03011aa283822bcb3f7f37a8dd"
         },
-        "screenshots": [
-          {
-            "url": "https://appflare.github.io/catalog/apps/synch/screenshots/01-create-a-vault.png",
-            "sha256": "c6d72e1ac2ff4b3f03314a1bccf1f85f5b59c36a527493cef93fad34502925be",
-            "alt": "Synch: Create a vault"
-          },
-          {
-            "url": "https://appflare.github.io/catalog/apps/synch/screenshots/02-connect-a-vault.png",
-            "sha256": "fa7ce3e766e2b0ea692bc1f7b2c8aec9ea95517ad81fb3f888744a0b026dc8c5",
-            "alt": "Synch: Connect a vault"
-          }
-        ]
+        "screenshots": []
       },
       "services": [
         "d1",
@@ -6377,6 +6455,7 @@
       "slug": "ternssh",
       "name": "ternssh",
       "summary": "An SSH workspace in the browser: a draggable dashboard of terminals, SFTP file management, server status and process monitors, saved servers and keys, and an AI command helper.",
+      "tagline": "Manage SSH servers and files from your browser",
       "addedAt": "2026-09-27T05:20:16+03:00",
       "version": "0.0.13",
       "artifacts": {
