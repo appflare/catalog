@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-27T01:52:27.418Z",
+  "generatedAt": "2026-09-27T01:59:38.524Z",
   "apps": [
     {
       "slug": "2fa",
@@ -88,6 +88,50 @@
       "categories": [
         "email",
         "ai"
+      ],
+      "revision": 1
+    },
+    {
+      "slug": "atalaya",
+      "name": "Atalaya",
+      "summary": "Uptime monitoring and a status page on one Worker: HTTP, TCP and DNS checks every minute, optionally from chosen Cloudflare regions, webhook alerts, and 90 days of history in D1.",
+      "version": "0.0.0-20260926.5437d1c",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/atalaya@0.0.0-20260926.5437d1c/atalaya-0.0.0-20260926.5437d1c.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/atalaya@0.0.0-20260926.5437d1c/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/atalaya@0.0.0-20260926.5437d1c/manifest.sig"
+      },
+      "digest": "ef47aed8eda011147a360dd9b695d6ebfd68929ed16d37db1fab643ee7a98f06",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Daniel Carrillo",
+          "url": "https://dcarrillo.es",
+          "github": "dcarrillo",
+          "x": "dani_carrillo"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/atalaya/icon.svg",
+          "sha256": "b5432407e161c711bf4dceacbed3366d4602207e73a5193b85ef5ba5080881d1"
+        },
+        "screenshots": []
+      },
+      "services": [
+        "d1",
+        "durable-objects",
+        "cron"
+      ],
+      "categories": [
+        "monitoring",
+        "developer-tools"
       ],
       "revision": 1
     },
@@ -538,6 +582,175 @@
       "revision": 1
     },
     {
+      "slug": "elm-chat",
+      "name": "elm.chat",
+      "summary": "Account-free, end-to-end encrypted chat rooms that disappear: single-use invites, messages that vanish on a timer, and no transcript kept on the server. One Worker and a Durable Object per room.",
+      "version": "0.1.2",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/elm-chat@0.1.2/elm-chat-0.1.2.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/elm-chat@0.1.2/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/elm-chat@0.1.2/manifest.sig"
+      },
+      "digest": "2d60db7c7862e61dc02ec9946fdfeca92652470fbbd8d6d6473be4346edd8603",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Shawn Bure",
+          "github": "shawnbure"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "cover": {
+          "url": "https://appflare.github.io/catalog/apps/elm-chat/cover.png",
+          "sha256": "891ec84e3819688b36bf7b21fd360f8a291704cf0320c2d7a309a8c9d147a0c2"
+        },
+        "screenshots": [
+          {
+            "url": "https://appflare.github.io/catalog/apps/elm-chat/screenshots/01-create-a-room.png",
+            "sha256": "e2574221b444ccd4a2420f30e53f356ae1b50a323f8c478eae6a60981a00ba71",
+            "alt": "elm.chat: Create a room"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/elm-chat/screenshots/02-chat-room.png",
+            "sha256": "03f72d34ca43418c838b8bc1f980504863920222c29bdba31b0de419bddda1c5",
+            "alt": "elm.chat: Chat room"
+          }
+        ]
+      },
+      "services": [
+        "durable-objects"
+      ],
+      "categories": [
+        "chat",
+        "privacy"
+      ],
+      "revision": 1
+    },
+    {
+      "slug": "email-explorer",
+      "name": "Email Explorer",
+      "summary": "A self-hosted email client: receive mail through Email Routing, read and write it in a web app with folders, search, contacts and several users, with each mailbox in its own Durable Object and attachments in R2.",
+      "version": "1.1.0",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/email-explorer@1.1.0/email-explorer-1.1.0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/email-explorer@1.1.0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/email-explorer@1.1.0/manifest.sig"
+      },
+      "digest": "ffbf89895ceeeaec9bd9bfa6f60cbfe3dd7a8f62416a56e5f0050e78e49cdafd",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "zone",
+        "email-routing",
+        "r2"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Gabriel Massadas",
+          "url": "https://massadas.com",
+          "github": "G4brym",
+          "x": "G4brym"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "screenshots": [
+          {
+            "url": "https://appflare.github.io/catalog/apps/email-explorer/screenshots/01-inbox.png",
+            "sha256": "a77f5eaedc89c4b7da6c2c24f0f9a196ea1bd793a53c9f85c9b6dee854b274ae",
+            "alt": "Email Explorer: Inbox"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/email-explorer/screenshots/02-composer.png",
+            "sha256": "9d30942c744b2915095eaa102eaeca34b30964aaa497fc4248486337b97c08d2",
+            "alt": "Email Explorer: Composer"
+          }
+        ]
+      },
+      "services": [
+        "r2",
+        "durable-objects",
+        "email-routing",
+        "zone"
+      ],
+      "categories": [
+        "email"
+      ],
+      "revision": 1
+    },
+    {
+      "slug": "feedlog",
+      "name": "FeedLog",
+      "summary": "Feedback boards, a public roadmap and an AI-assisted changelog for your product, with an embeddable widget. Runs on Workers with R2 for uploads and your own Postgres through Hyperdrive.",
+      "version": "0.5.0",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/feedlog@0.5.0/feedlog-0.5.0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/feedlog@0.5.0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/feedlog@0.5.0/manifest.sig"
+      },
+      "digest": "ab2e76027678751b5d82852655385049d56a66554581eb1c2b9b558d9722135f",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "r2"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "LinkCraft Studio",
+          "url": "https://feedlog.ai",
+          "github": "linkcraftstudio"
+        },
+        {
+          "name": "guoliim",
+          "github": "guoliim"
+        },
+        {
+          "name": "Jeff",
+          "github": "canghai118",
+          "x": "lastz321"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/feedlog/icon.svg",
+          "sha256": "bf31875ecb7e02e696c9300b4fe59f394ce4010cc34d1bdb0c2c1459147a0971"
+        },
+        "cover": {
+          "url": "https://appflare.github.io/catalog/apps/feedlog/cover.png",
+          "sha256": "5d537feeffb2f0f910c7c44ee511b8524f920a8c83dceecac149d1065c352292"
+        },
+        "screenshots": [
+          {
+            "url": "https://appflare.github.io/catalog/apps/feedlog/screenshots/01-feedback-board.png",
+            "sha256": "1752edad3b4aa8ca161ee95b40255003d7135834bbfb4d054ab67cfb54969b91",
+            "alt": "FeedLog: Feedback board"
+          }
+        ]
+      },
+      "services": [
+        "r2",
+        "hyperdrive"
+      ],
+      "categories": [
+        "business",
+        "productivity"
+      ],
+      "revision": 1
+    },
+    {
       "slug": "flaremo",
       "name": "FlareMo",
       "summary": "A Memos-compatible notes app for quick capture: timeline, tags, attachments, semantic search, and an MCP server, on D1, R2, and Vectorize.",
@@ -923,6 +1136,61 @@
       "revision": 1
     },
     {
+      "slug": "omnimail",
+      "name": "OmniMail",
+      "summary": "Self-hosted multi-domain webmail on one Worker: mailboxes and users on your own domains through Email Routing, sending through Resend or SendFlare, and external Gmail, Microsoft and other accounts in one place. The interface is in Chinese.",
+      "version": "1.1.4",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/omnimail@1.1.4/omnimail-1.1.4.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/omnimail@1.1.4/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/omnimail@1.1.4/manifest.sig"
+      },
+      "digest": "28a8547adce3420da4f85717e9bbebf5388502c2b664f8b0130387dadec3c25f",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "zone",
+        "email-routing",
+        "r2"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "OmniMail contributors",
+          "url": "https://omnimail.aicnos.com",
+          "github": "mibgb65-cloud"
+        },
+        {
+          "name": "mimanchi412",
+          "github": "mimanchi412"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/omnimail/icon.svg",
+          "sha256": "a0bf76d88fa98bae3253efe1e8f5772a64901b56f8ecdb8f234205f632d23007"
+        },
+        "screenshots": []
+      },
+      "services": [
+        "d1",
+        "r2",
+        "queues",
+        "workflows",
+        "cron",
+        "workers-ai",
+        "email-routing",
+        "zone"
+      ],
+      "categories": [
+        "email"
+      ],
+      "revision": 1
+    },
+    {
       "slug": "open-artifacts",
       "name": "Open Artifacts",
       "summary": "Let coding agents publish HTML and Markdown pages to shareable links, with client-side password protection, version history, and updates in place when the project changes, on D1 and R2.",
@@ -1288,6 +1556,61 @@
       "revision": 1
     },
     {
+      "slug": "rdyrct",
+      "name": "rdyrct",
+      "summary": "A URL shortener for teams: organizations with roles, branded short links and QR codes, click analytics that never store an IP, an MCP server, and a KV redirect path in front of D1.",
+      "version": "0.0.0-20260925.d0ece6e",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/rdyrct@0.0.0-20260925.d0ece6e/rdyrct-0.0.0-20260925.d0ece6e.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/rdyrct@0.0.0-20260925.d0ece6e/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/rdyrct@0.0.0-20260925.d0ece6e/manifest.sig"
+      },
+      "digest": "2f1b42d7647fcd24b62293e084dd49b244b0ac4c2f2ba8d0597ebed5f70acc08",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "r2"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Andrea Bruno",
+          "url": "https://brnr.dev",
+          "github": "baronunread",
+          "x": "baronunread"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/rdyrct/icon.svg",
+          "sha256": "907ea837408ca4e6d5d4ee9af94908afe2ffd1abdc693a233d887ecae8e23aaf"
+        },
+        "cover": {
+          "url": "https://appflare.github.io/catalog/apps/rdyrct/cover.png",
+          "sha256": "7f78bd6ba457e75b893b57285674985ae7f851cb35383b416084038e09b0a98d"
+        },
+        "screenshots": []
+      },
+      "services": [
+        "kv",
+        "d1",
+        "r2",
+        "durable-objects",
+        "queues",
+        "workflows",
+        "cron",
+        "zone"
+      ],
+      "categories": [
+        "utilities",
+        "analytics"
+      ],
+      "revision": 1
+    },
+    {
       "slug": "second-brain-cloudflare",
       "name": "Second Brain",
       "summary": "A personal memory for your AI assistants: an MCP server that stores notes in D1 and recalls them by meaning with Vectorize and Workers AI.",
@@ -1556,6 +1879,71 @@
       "categories": [
         "utilities",
         "analytics"
+      ],
+      "revision": 1
+    },
+    {
+      "slug": "synch",
+      "name": "Synch",
+      "summary": "Your own server for Synch, end-to-end encrypted real-time sync for Obsidian vaults: notes are encrypted on each device, and the Worker relays and stores only ciphertext in a Durable Object, D1 and R2.",
+      "version": "0.4.8",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/synch@0.4.8/synch-0.4.8.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/synch@0.4.8/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/synch@0.4.8/manifest.sig"
+      },
+      "digest": "e9e7f5a70905856c961a959a183921e926a0b7824da6d1916c86c3db33fbca01",
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "r2"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Synch",
+          "url": "https://synch.run",
+          "github": "hjinco"
+        },
+        {
+          "name": "hhhjin",
+          "url": "https://hyeongjin.com",
+          "github": "hhhjin"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/synch/icon.png",
+          "sha256": "6aa7ad1fbf0544583c8a0e7a6d3b3b3261d2eac3c3bdbfb6994b6981660d0b6b"
+        },
+        "cover": {
+          "url": "https://appflare.github.io/catalog/apps/synch/cover.png",
+          "sha256": "99fc3e009889b059263c110bf7cfdbc84727ea03011aa283822bcb3f7f37a8dd"
+        },
+        "screenshots": [
+          {
+            "url": "https://appflare.github.io/catalog/apps/synch/screenshots/01-create-a-vault.png",
+            "sha256": "c6d72e1ac2ff4b3f03314a1bccf1f85f5b59c36a527493cef93fad34502925be",
+            "alt": "Synch: Create a vault"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/synch/screenshots/02-connect-a-vault.png",
+            "sha256": "fa7ce3e766e2b0ea692bc1f7b2c8aec9ea95517ad81fb3f888744a0b026dc8c5",
+            "alt": "Synch: Connect a vault"
+          }
+        ]
+      },
+      "services": [
+        "d1",
+        "r2",
+        "durable-objects"
+      ],
+      "categories": [
+        "notes",
+        "sync"
       ],
       "revision": 1
     },
