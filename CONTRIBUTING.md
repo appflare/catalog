@@ -145,6 +145,114 @@ quotes, variables, and `NAME=value` assignments are refused. pnpm and npm run no
 so list such a step as a command of its own, as above. The build stops at the first
 command that fails; all of them together get 15 minutes.
 
+### Package managers
+
+The packer installs with the package manager's own version rules, read from the
+`package.json` nearest each install directory (at or above it):
+
+- **yarn 2 or later** must be pinned with `"packageManager": "yarn@4.x.y"`. It
+  installs through corepack, which ships with Node.js 22 and fetches the pinned
+  yarn, as `corepack yarn install --immutable --mode=skip-build` with
+  `YARN_ENABLE_SCRIPTS=false`, since yarn 2 refuses classic yarn's flags. A
+  repository with a `.yarnrc.yml` but no pin fails the pack: corepack would run
+  classic yarn, which ignores those settings and runs install scripts. Ask
+  upstream to add the pin; until then the entry cannot be packed.
+- **npm 11 lockfiles.** npm installs with the npm that ships with Node.js 22
+  (npm 10), unless `"packageManager": "npm@11..."` or `engines.npm` asks for a
+  later major. npm 11 runs as `npx --yes npm@11.20.0 ci --ignore-scripts`, one
+  exact release. A `package-lock.json` of `lockfileVersion` 3 that npm 10 refuses
+  as out of sync ("Missing: … from lock file"), as it does with some lockfiles
+  npm 11 wrote, is installed again with that npm 11, and the pack log says so.
+
+Neither needs anything set in the entry. Install scripts stay off either way, but
+that does not keep the repository's own code out of the install: `npx` can resolve
+a binary from the checkout's `node_modules`, and a `yarnPath` in `.yarnrc.yml` runs
+the yarn release committed to the repository. Review both, as you review the build
+commands.
+
+### Rust builds
+
+A workers-rs app whose build runs `worker-build` sets `install.toolchains`:
+
+```jsonc
+"toolchains": ["rust"]
+```
+
+The pack jobs of `verify` and `publish` then install a Rust toolchain with the
+`wasm32-unknown-unknown` target before packing (`scripts/rust-toolchain.ts` picks
+it). The toolchain is the one the upstream checkout pins in `rust-toolchain.toml`
+(or `rust-toolchain`) at `source.sha`, nearest the wrangler config, with the file's
+`targets` and `components`; without such a file it is `RUST_TOOLCHAIN` in the
+workflows, an exact stable release. `worker-build` downloads its own
+`wasm-bindgen`, `esbuild` and `wasm-opt`, and a build command such as
+`cargo install worker-build@^0.7 && worker-build --release` fetches `worker-build`
+itself. Crates that compile C for wasm32 (`zstd-sys`, for one) use the runner's
+`clang` and `llvm-ar`, which the workflows set as `CC_wasm32_unknown_unknown` and
+`AR_wasm32_unknown_unknown`; that overrides an upstream `.cargo/config.toml` that
+points them at a macOS path.
+
+Only the `artifact` tier takes `toolchains`: the sandbox image that builds
+`sandbox` and `self-deploying` entries in an account has no Rust. To pack such an
+app locally, have `rustup` with the target installed.
+
+### Patching the wrangler config
+
+Some upstream configs cannot be installed from their pinned commit as they are: a
+storage binding with an empty id that wrangler refuses, a Durable Object class that
+must be SQLite-backed on the Free plan, a service binding to a Worker the app does
+not ship, or a `build` block that fights `install.buildCommand`. **Open a pull
+request upstream first.** Until it is merged, the entry may carry the change as
+`install.configPatch`, a JSON merge patch (RFC 7386: an object merges key by key,
+`null` removes a key, an array replaces the whole list), with a comment linking the
+pull request beside it:
+
+```jsonc
+"install": {
+  // Until https://github.com/<owner>/<repo>/pull/<number> is merged.
+  "configPatch": { "build": null, "vars": { "DEBUG": null } }
+}
+```
+
+Only these keys may be patched, each only in the way given:
+
+| Key | What a patch may do |
+|---|---|
+| `main` | set the entrypoint, relative to the config, without `..` |
+| `assets` | set or remove `directory` (relative, without `..`), `binding`, `html_handling`, `not_found_handling`, `run_worker_first`; or remove `assets` |
+| `build` | only `null`, when `install.buildCommand` builds instead |
+| `services` | leave bindings out, or add one to a Worker of the same entry |
+| `kv_namespaces`, `r2_buckets`, `d1_databases` | add bindings, or leave out an `id`, `bucket_name` or `database_id` that is `""`, so the install provisions it; never remove or change a binding |
+| `vars` | only remove vars, with `null` |
+| `migrations` | only rename `new_classes` to `new_sqlite_classes` in the config's own migrations |
+
+Everything else (`name`, `account_id`, `routes`, `env`, `durable_objects`,
+compatibility settings, any other key) fails validation with the reason. An app of
+several Workers sets `configPatch` on the Worker in `install.workers` whose config it
+changes, never on `install`; a `self-deploying` entry cannot set it.
+
+The patch is part of the catalog manifest, so the artifact's signature covers it.
+After the build commands, the packer writes the patched config beside the original
+as `.appflare.wrangler.jsonc` (a TOML config is written as JSONC too), so relative
+paths resolve as before, and prints each change in the pack log. A build command
+that reads the wrangler config itself still sees it unpatched. `appflare-pack
+inspect <checkout> --config <config> --manifest apps/<slug>/appflare.jsonc` applies
+the patch and shows what changed. The install check needs nothing for it: it
+deploys from the artifact, which records the patched config's bindings. A `sandbox`
+entry's patch is applied by the account's sandbox Worker, and the manager refuses
+to build it with one too old to apply patches. Drop the patch in the bump that
+moves the pin past the upstream fix.
+
+### Rate limits
+
+Rate limits in wrangler's `ratelimits` install as they are. One declared the older
+way, in `unsafe.bindings` with `"type": "ratelimit"`, a `namespace_id` and
+`"simple": { "limit": <number>, "period": 10 | 60 }`, is recorded as the same
+`ratelimit` binding. Any other `unsafe` binding, and a non-empty `unsafe.metadata` or
+`unsafe.capnp`, fails the pack: Appflare cannot tell what it needs. Each install,
+and each install check, gets rate limit counters of its own, whatever
+`namespace_id` the config names, since Cloudflare shares a namespace's counters
+across every Worker in the account that binds the same id.
+
 ### The account id and derived secrets
 
 A var whose default (or wrangler config value) holds `{{accountId}}` gets the id of
@@ -197,6 +305,24 @@ public key (unpadded base64url of the 65-byte uncompressed point) is shown read-
 and set again whenever the private key changes. A derived var takes no `default`,
 `required`, `type`, or `options`. A secret may derive `vapid-public-key` too, when the
 app reads the public key as a secret. The install check generates a real key pair.
+
+### Secrets and vars of one name
+
+A Worker cannot have a var and a secret of the same name: Cloudflare refuses to set
+the secret over the var, and deploying the var over an existing secret replaces the
+secret. So:
+
+- **Never declare a secret as a plain var.** A password, token or key goes in
+  `secrets`, even when the app's wrangler config ships a placeholder for it in
+  `vars`.
+- **A var named after a secret is dropped.** When the wrangler config sets a var
+  whose name `secrets` declares, the packer leaves the var out of the artifact and
+  logs `var <NAME> is provided as a secret`, and the manager never sends it.
+- **Declaring both is refused.** A name listed in both `secrets` and `vars` of
+  `appflare.jsonc` fails validation; keep one of them.
+
+The secrets the wrangler config lists in `secrets.required` belong in `secrets`
+too; the pack log names any the manifest leaves out.
 
 ### Apps of several Workers
 
@@ -724,6 +850,7 @@ pnpm -s bump plan --out <dir> [--only cut,...]    # pins that moved upstream (ne
 pnpm -s bump apply <slug> --ref <ref> --sha <sha>  # edit source, keeping comments
 node scripts/ci-install.ts deploy|cleanup <artifactDir> --suffix <suffix>  # needs a CI account
 pnpm sync-schema [--check]          # copy schema/v1.json from @appflare/schema
+node scripts/rust-toolchain.ts <slug>  # the Rust toolchain a pack job installs for the app
 pnpm gen-codeowners [--check]       # regenerate CODEOWNERS
 pnpm -s verify-tier <slug> --version <v> --out checks.json [--worker <name>]  # needs a paid account
 ```

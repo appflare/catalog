@@ -47,6 +47,12 @@ defaults:
     shell: bash
     working-directory: catalog
 
+env:
+  # The Rust release pack jobs install for an entry that needs Rust and whose
+  # checkout pins no toolchain of its own (scripts/rust-toolchain.ts). An exact
+  # release, so a pack does not change when a new stable ships.
+  RUST_TOOLCHAIN: "1.98.1"
+
 jobs:
   build-packer:
     name: build packer
@@ -146,6 +152,44 @@ jobs:
         with:
           bun-version: 1.3.12
           no-cache: true
+      # Entries whose install.toolchains lists rust (workers-rs apps, built
+      # with worker-build) need a Rust toolchain with the wasm32 target, which
+      # the runner image's default toolchain lacks. The toolchain is the one
+      # the upstream checkout pins in rust-toolchain.toml at the entry's
+      # pinned commit, else RUST_TOOLCHAIN above. worker-build fetches its own
+      # wasm-bindgen, esbuild and wasm-opt, so nothing else is installed.
+      - name: Read the Rust toolchain the entry needs
+        id: rust
+        env:
+          APP: ${{ matrix.app }}
+        run: node scripts/rust-toolchain.ts "${APP}" >> "${GITHUB_OUTPUT}"
+      - name: Set up Rust
+        if: steps.rust.outputs.rust == 'true'
+        env:
+          TOOLCHAIN: ${{ steps.rust.outputs.toolchain }}
+          TARGETS: ${{ steps.rust.outputs.targets }}
+          COMPONENTS: ${{ steps.rust.outputs.components }}
+        run: |
+          set -euo pipefail
+          # The script allows only rustup names, so splitting these on spaces is safe.
+          args=(--profile minimal)
+          for target in ${TARGETS}; do args+=(--target "${target}"); done
+          for component in ${COMPONENTS}; do args+=(--component "${component}"); done
+          rustup toolchain install "${TOOLCHAIN}" "${args[@]}"
+          rustup default "${TOOLCHAIN}"
+          # Crates that compile C for wasm32 (zstd-sys, for one) need clang and
+          # llvm-ar. Some upstream .cargo/config.toml files point them at a
+          # macOS Homebrew path; cargo's [env] never overrides a variable that
+          # is already set, so the runner's own clang wins.
+          if command -v clang > /dev/null; then
+            echo "CC_wasm32_unknown_unknown=$(command -v clang)" >> "${GITHUB_ENV}"
+            ar="$(clang -print-prog-name=llvm-ar)"
+            if [ -x "${ar}" ] || ar="$(command -v llvm-ar)"; then
+              echo "AR_wasm32_unknown_unknown=${ar}" >> "${GITHUB_ENV}"
+            fi
+          fi
+          rustc --version
+          cargo --version
       - name: Validate manifest
         env:
           APP: ${{ matrix.app }}

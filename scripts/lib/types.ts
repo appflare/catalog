@@ -79,6 +79,8 @@ export interface CatalogManifest {
     selfDeploying?: CatalogSelfDeploying;
     /** The Workers of an app that installs as several (artifact tier only). */
     workers?: CatalogEntryWorker[];
+    /** Toolchains beyond Node.js the build needs; catalog CI installs them (artifact tier only). */
+    toolchains?: "rust"[];
   };
   plan: Plan;
   requires: string[];
