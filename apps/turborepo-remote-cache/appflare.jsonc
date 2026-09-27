@@ -1,0 +1,71 @@
+{
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "turborepo-remote-cache",
+  "name": "Turborepo Remote Cache",
+  "summary": "A Turborepo remote cache server on Workers and R2: point turbo at it and share build outputs between your machines and CI, without Vercel.",
+  "homepage": "https://adirishi.github.io/turborepo-remote-cache-cloudflare/",
+  "repo": "AdiRishi/turborepo-remote-cache-cloudflare",
+  "license": "MIT",
+  "categories": ["developer-tools"],
+  "authors": [
+    {
+      "name": "Adishwar Rishi",
+      "url": "https://www.adishwar-rishi.com",
+      "github": "AdiRishi",
+      "x": "AdishwarR"
+    }
+  ],
+  "maintainers": ["MendyLanda"],
+  // The default branch, not the newest tag (v4.0.0): that release bundles
+  // Hono 4.11.4, and the fixes since (Hono 4.12.25, whose advisories cover the
+  // CORS and cache middleware this server uses, and a timing-safe token
+  // comparison) are released only on master so far. The bump bot moves the
+  // pin to the next tag that contains this commit.
+  "source": { "ref": "master", "sha": "b0aaab5c3063dd5f8d15e38e69398a0c040edcda" },
+  "install": {
+    "tier": "artifact",
+    "packageManager": "pnpm",
+    // wrangler bundles src/index.ts directly; the Vite config is for local
+    // development only.
+    "wranglerConfig": "wrangler.jsonc",
+    "workerName": "turborepo-remote-cache",
+    // Answers "pong" without a token.
+    "healthPath": "/ping"
+  },
+  // R2 (10 GB free) holds the cache; one daily cron (03:00 UTC) deletes
+  // entries older than the expiry below. Both fit the free plan.
+  "plan": "free",
+  // Upstream can also keep the cache in KV, but its wrangler config binds
+  // only the R2 bucket, so that is what an install gets.
+  "requires": ["r2"],
+  "secrets": [
+    {
+      "name": "TURBO_TOKEN",
+      "label": "Turbo token",
+      "help": "The Bearer token turbo sends with every cache request; set the same value as TURBO_TOKEN wherever turbo runs. Copy it now.",
+      "generate": true
+    }
+  ],
+  // ENVIRONMENT keeps upstream's "production".
+  "vars": [
+    {
+      "name": "BUCKET_OBJECT_EXPIRATION_HOURS",
+      "label": "Cache lifetime in hours",
+      "help": "The daily cleanup deletes cache entries older than this. 720 is 30 days.",
+      // The wrangler config gives this var a number, so the Worker reads JSON.
+      "default": "720",
+      "required": false
+    }
+  ],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "Set these wherever turbo runs (a `.env` file loaded with dotenv-cli, or your CI's secrets):\n\n```\nTURBO_API={{workerUrl}}\nTURBO_TEAM=team_yourteam\nTURBO_TOKEN=<the turbo token>\n```\n\n`TURBO_TEAM` must start with `team_`. turbo then prints \"Remote caching enabled\"."
+    },
+    {
+      "type": "markdown",
+      "content": "Optional but recommended: sign cache artifacts by adding `\"remoteCache\": { \"signature\": true }` to `turbo.json` and setting `TURBO_REMOTE_CACHE_SIGNATURE_KEY` next to the variables above."
+    }
+  ],
+  "tokenPermissions": []
+}

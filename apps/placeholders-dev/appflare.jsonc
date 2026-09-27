@@ -1,0 +1,40 @@
+{
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "placeholders-dev",
+  "name": "placeholders.dev",
+  "summary": "Placeholder images generated on the fly: SVGs of any size, text, font and colours, described entirely by the URL, with light and dark variants.",
+  "homepage": "https://placeholders.dev",
+  "repo": "Cherry/placeholders.dev",
+  "license": "MIT",
+  "categories": ["developer-tools", "utilities"],
+  "authors": [
+    { "name": "James Ross", "url": "https://jross.me", "github": "Cherry", "x": "CherryJimbo" },
+    // src/simple-svg-placeholder.ts is based on their simple-svg-placeholder (MIT).
+    { "name": "Cloud Four", "url": "https://cloudfour.com", "github": "cloudfour" }
+  ],
+  "maintainers": ["MendyLanda"],
+  // Upstream has no release tags; the pin is the head of main, the commit that
+  // added the MIT LICENSE file.
+  "source": { "ref": "main", "sha": "31976442d30800f768cb991c285c9af0d0dcac38" },
+  "install": {
+    "tier": "artifact",
+    "packageManager": "npm",
+    // The top-level Worker, as upstream's `npm run publish` deploys it. The
+    // `production` environment adds upstream's own routes and an Analytics
+    // Engine dataset, which the code treats as optional; it is not installed.
+    "wranglerConfig": "wrangler.toml",
+    "workerName": "placeholders"
+  },
+  // One Worker and its static homepage; no storage.
+  "plan": "free",
+  "requires": [],
+  "secrets": [],
+  "vars": [],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "Images are served under `/api` on this install: {{workerUrl}}/api/350x150, or with options, {{workerUrl}}/api/?width=400&height=100&text=Hello&bgColor=%23313131&textColor=%23dfdfde. The homepage at {{workerUrl}} lists every option; its examples point at the public images.placeholders.dev host."
+    }
+  ],
+  "tokenPermissions": []
+}

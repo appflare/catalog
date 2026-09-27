@@ -1,0 +1,46 @@
+{
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "binthere",
+  "name": "BinThere",
+  "summary": "A zero-knowledge pastebin for one-time notes: encrypted in the browser with AES-256-GCM, burned on first read by a Durable Object, and gone after 24 hours.",
+  "homepage": "https://binthere.gaury.dev",
+  "repo": "nxfu/binthere",
+  "license": "MIT",
+  "categories": ["sharing", "privacy"],
+  "authors": [{ "name": "Gaurav", "url": "https://gaury.dev", "github": "nxfu" }],
+  "maintainers": ["MendyLanda"],
+  // The default branch, not the newest tag (v1.1.0): the commit after that
+  // release that caps the paste body while it streams in (instead of reading
+  // the whole request first) is released only on main so far. The bump bot
+  // moves the pin to the next tag that contains this commit.
+  "source": { "ref": "main", "sha": "63e5544d38d3ffc439978a3bf62d287ce57fe83f" },
+  "install": {
+    "tier": "artifact",
+    "packageManager": "npm",
+    // Plain JavaScript and static files: no build step. Upstream's origin
+    // deployment keeps its KV namespace ids in this config; Appflare takes
+    // only the bindings and creates a namespace of the install's own.
+    "wranglerConfig": "wrangler.toml",
+    "workerName": "binthere"
+  },
+  // KV for stored notes (1,000 writes a day on the free plan), a SQLite-backed
+  // Durable Object for the atomic burn-after-read, and a rate limit binding
+  // all fit the free plan for personal use.
+  "plan": "free",
+  "requires": [],
+  // The Worker reads no secrets or settings: notes are encrypted before they
+  // leave the browser, and paste creation is limited to 30 a minute per IP.
+  "secrets": [],
+  "vars": [],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "Open {{workerUrl}}, write a note, and share the link it gives you. The key is in the part after `#`, which never reaches the server; the first person to open the link burns the note, and unread notes expire after 24 hours."
+    },
+    {
+      "type": "markdown",
+      "content": "Anyone who finds the address can create notes. To use upstream's command-line client with this install instead of the public server, run `export BINTHERE_SERVER={{workerUrl}}` or pass `--server {{workerUrl}}`."
+    }
+  ],
+  "tokenPermissions": []
+}

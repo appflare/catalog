@@ -1,0 +1,97 @@
+{
+  // Each repository is its own SQLite-backed Durable Object that speaks git's
+  // smart HTTP protocol and renders a cgit-style web interface. Reads of public
+  // repositories are open; pushes need the push token, and pushing to a new
+  // name creates the repository.
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "durable-git",
+  "name": "dgit",
+  "summary": "A git host on Durable Objects: push and clone over HTTPS with a stock git client and browse with a cgit-style web interface, one Durable Object per repository.",
+  "homepage": "https://github.com/littledivy/durable-git",
+  "repo": "littledivy/durable-git",
+  "license": "MIT",
+  "categories": ["developer-tools"],
+  "authors": [
+    { "name": "Divy Srivastava", "url": "https://littledivy.com", "github": "littledivy" }
+  ],
+  "maintainers": ["MendyLanda"],
+  "source": { "ref": "v0.0.8", "sha": "d5eba04eda584b855a1bde1f86a836b751c378c0" },
+  "install": {
+    "tier": "artifact",
+    "packageManager": "npm",
+    // Upstream's own custom-domain route in this config is not installed.
+    // Upstream keeps its Worker name git-cells only so its existing Durable
+    // Object data stays bound; a new install can use any name.
+    "wranglerConfig": "wrangler.jsonc",
+    "workerName": "dgit"
+  },
+  // Workers Paid. The wrangler config raises `limits.cpu_ms` to 300000 (five
+  // minutes), a setting Cloudflare documents for the paid plan only; how a
+  // Free account treats it at upload has not been checked. The app needs the
+  // paid plan regardless: it parses, hashes and builds git packfiles in
+  // JavaScript, which a push or clone of any real repository cannot fit into
+  // the free plan's 10 ms of CPU per request.
+  "plan": "paid",
+  // PACK_CACHE: pushed pack bytes and cached full clones live in R2.
+  "requires": ["r2"],
+  "secrets": [
+    {
+      "name": "GIT_TOKEN",
+      "label": "Push token",
+      "help": "The password for git push (any user name) and for the admin calls; private repositories need it to read as well. Copy it now.",
+      "generate": true
+    },
+    {
+      "name": "GIT_TOKENS",
+      "label": "More push tokens",
+      "help": "Further accepted tokens, separated by commas, for example one per person.",
+      "optional": true
+    }
+  ],
+  "vars": [
+    {
+      "name": "SITE_NAME",
+      "label": "Site name",
+      "help": "Shown as the title of every page.",
+      "default": "dgit",
+      "required": true
+    },
+    {
+      "name": "SITE_DESC",
+      "label": "Site description",
+      "help": "Shown under the title.",
+      "default": "a fast webinterface for the git dscm, on Cloudflare"
+    },
+    {
+      "name": "SITE_OWNER",
+      "label": "Default owner",
+      "help": "Listed as the owner of repositories that do not set one. Leave empty to show none.",
+      // Replaces upstream's own name from the wrangler config.
+      "default": ""
+    },
+    {
+      "name": "MAX_PUSH_MB",
+      "label": "Largest push in MB",
+      "help": "Pushes larger than this are refused. Empty means 512. A Worker has 128 MB of memory, so push a very large history in several parts."
+    },
+    {
+      "name": "SHA1DC",
+      "label": "SHA-1 collision detection",
+      "help": "Screen every pushed object for a SHA-1 collision attack. Slower pushes; object ids are the same either way.",
+      "type": "select",
+      "options": [{ "value": "0", "label": "Off" }, { "value": "1", "label": "On" }],
+      "default": "0"
+    }
+  ],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "Push any repository to create it:\n\n```sh\ngit remote add dgit {{workerUrl}}/myrepo.git\ngit push -u dgit main\n```\n\nGit asks for a user name (anything) and a password (the push token). Browse at {{workerUrl}}."
+    },
+    {
+      "type": "markdown",
+      "content": "Describe a repository, file it under a section, or make it private (hidden, and readable only with the token):\n\n```sh\ncurl -X PUT -u x:<push token> -d '{\"description\":\"...\",\"section\":\"tools\",\"private\":true}' {{workerUrl}}/myrepo/config\n```"
+    }
+  ],
+  "tokenPermissions": []
+}

@@ -4,10 +4,12 @@
 /apps/2fa/ @MendyLanda
 /apps/agentic-inbox/ @MendyLanda
 /apps/bark-worker/ @MendyLanda
+/apps/binthere/ @MendyLanda
 /apps/chatgpt-telegram-workers/ @MendyLanda
 /apps/cloudssh/ @MendyLanda
 /apps/counterscale/ @MendyLanda
 /apps/cut/ @MendyLanda
+/apps/durable-git/ @MendyLanda
 /apps/flaremo/ @MendyLanda
 /apps/glance/ @MendyLanda
 /apps/mail2telegram/ @MendyLanda
@@ -18,12 +20,16 @@
 /apps/open-seo/ @MendyLanda
 /apps/openai-gemini/ @MendyLanda
 /apps/pastebin-worker/ @MendyLanda
+/apps/placeholders-dev/ @MendyLanda
 /apps/punctual/ @MendyLanda
 /apps/r2-explorer/ @MendyLanda
 /apps/second-brain-cloudflare/ @MendyLanda
+/apps/shotsync/ @MendyLanda
 /apps/sink/ @MendyLanda
+/apps/turborepo-remote-cache/ @MendyLanda
 /apps/unifi-ddns/ @MendyLanda
 /apps/usage-guard-collector/ @MendyLanda
+/apps/workers-firecrawl/ @MendyLanda
 /apps/yaos/ @MendyLanda
 
 /featured.json @MendyLanda
