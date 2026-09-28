@@ -12,6 +12,9 @@
   // permission. It has no SPDX id.
   "license": "LicenseRef-ResolveHQ-Source-Available",
   "categories": ["business", "email"],
+  // APP_URL now starts at the workers.dev address, a form change for the
+  // build already released: a revision, no new build.
+  "revision": 2,
   "authors": [{ "name": "Rizvi", "github": "mirza-rizvi", "x": "mirza_rizvi" }],
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v0.3.3", "sha": "1750133fd4b5f2a078c4dd71ce82ec9f85fddd24" },
@@ -75,8 +78,10 @@
     {
       "name": "APP_URL",
       "label": "App URL",
-      "help": "Optional. The address your agents use, without a trailing slash, for links in outgoing mail and for sign-in checks. Leave it empty to use the address each request arrives on; set it when you serve the app on a custom domain.",
-      "default": ""
+      "help": "The address your agents use, without a trailing slash, for links in outgoing mail and for sign-in checks. Starts at the workers.dev address; change it when you serve the app on a custom domain. Left empty, links use the address each request arrives on, and satisfaction surveys are not sent.",
+      // Queued replies have no request to take an address from, so without a
+      // value the app leaves the satisfaction survey out of resolving replies.
+      "default": "{{workerUrl}}"
     },
     {
       "name": "SYSTEM_MAIL_FROM",
