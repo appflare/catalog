@@ -18,7 +18,7 @@
   ],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags, so the entry follows the default branch by commit.
-  "source": { "ref": "main", "sha": "d0ece6ee7a8ff8ae6188f07fe749c881b9d415e2" },
+  "source": { "ref": "main", "sha": "970cbf3f1ac7da2be8864aacb59534d172ad0e1b" },
   "install": {
     "tier": "artifact",
     "packageManager": "bun",
