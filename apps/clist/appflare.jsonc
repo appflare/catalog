@@ -14,7 +14,9 @@
   "homepage": "https://github.com/ooyyh/Cloudflare-Clist",
   "repo": "ooyyh/Cloudflare-Clist",
   "license": "MIT",
-  "categories": ["files", "storage"],
+  "categories": ["files"],
+  // The category changed after this release was published: a revision, no new build.
+  "revision": 2,
   "authors": [{ "name": "ooyyh", "url": "https://blog.ooyyh.top", "github": "ooyyh" }],
   "maintainers": ["MendyLanda"],
   // Pinned to master: the latest tag, v1.2.0, predates the repository's

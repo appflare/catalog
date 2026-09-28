@@ -7,7 +7,9 @@
   "homepage": "https://github.com/cloudflare/templates/tree/main/r2-explorer-template",
   "repo": "cloudflare/templates",
   "license": "MIT",
-  "categories": ["storage"],
+  "categories": ["files"],
+  // The category changed after this release was published: a revision, no new build.
+  "revision": 2,
   "authors": [
     {
       "name": "Gabriel Massadas",

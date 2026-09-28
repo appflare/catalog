@@ -9,7 +9,9 @@
   // The repository has no LICENSE file and declares no licence anywhere, so
   // the catalog shows it as unlicensed.
   "license": "NONE",
-  "categories": ["files", "storage"],
+  "categories": ["files"],
+  // The category changed after this release was published: a revision, no new build.
+  "revision": 2,
   "authors": [{ "name": "Aber", "github": "abersheeran" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags, so the entry follows the default branch by commit.

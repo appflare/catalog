@@ -15,7 +15,9 @@
   "homepage": "https://jant.me",
   "repo": "jant-me/jant-starter",
   "license": "AGPL-3.0-or-later",
-  "categories": ["blogging", "social"],
+  "categories": ["cms", "community"],
+  // The category changed after this release was published: a revision, no new build.
+  "revision": 2,
   "authors": [{ "name": "Jant", "url": "https://jant.me", "github": "jant-me" }],
   "maintainers": ["MendyLanda"],
   // The starter has no tags; upstream commits to main with each Jant release

@@ -14,7 +14,9 @@
   "homepage": "https://cloudflarebase.com",
   "repo": "cloudflarebase/cloudflarebase",
   "license": "Apache-2.0",
-  "categories": ["developer-tools", "storage"],
+  "categories": ["developer-tools", "files"],
+  // The category changed after this release was published: a revision, no new build.
+  "revision": 2,
   "authors": [
     {
       "name": "The Cloudflarebase Authors",
