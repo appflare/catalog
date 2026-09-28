@@ -1,12 +1,13 @@
 import { describe, expect, it } from "vitest";
 import { createGhBumpHistory } from "./bump-history.ts";
-import type { GhRunner } from "./github-releases.ts";
+import type { GhRunner } from "./gh-api.ts";
 
 describe("createGhBumpHistory", () => {
   it("lists the app's bump branches and pull requests, reading pull requests once", () => {
     const calls: string[] = [];
-    const run: GhRunner = (args) => {
-      const target = args[2] as string;
+    const run: GhRunner = (request) => {
+      expect(request.paginate).toBe(true);
+      const target = request.path;
       calls.push(target);
       if (target.startsWith("repos/appflare/catalog/pulls")) {
         return Buffer.from(
