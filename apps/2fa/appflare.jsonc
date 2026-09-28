@@ -10,7 +10,7 @@
   "categories": ["security", "utilities"],
   "authors": [{ "name": "wuzf", "github": "wuzf" }],
   "maintainers": ["MendyLanda"],
-  "source": { "ref": "v1.9.0", "sha": "9e58e54fa3ad1e5812ec1333bc00de205aac476e" },
+  "source": { "ref": "v1.10.0", "sha": "7b8060e88f7a67bb87cc00bb339dbeec25833fac" },
   "install": {
     "tier": "artifact",
     "packageManager": "npm",
