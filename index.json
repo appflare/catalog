@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-27T20:50:07.893Z",
+  "generatedAt": "2026-09-28T01:05:27.595Z",
   "apps": [
     {
       "slug": "2fa",
@@ -777,11 +777,16 @@
         "images"
       ],
       "categories": [
-        "files",
-        "storage"
+        "files"
       ],
       "license": "GPL-3.0-only",
-      "revision": 1
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/cattopic/manifest.json",
+        "sha256": "613e611d19545e777e04f8892475766be6937896b454d11af75383658be22cc9",
+        "keyId": "catalog-2026-09",
+        "signature": "WjvtzlJJISHfoPodlvnVo/TNGhhd5r1P9r9t0UIPcn2xII1mmPYO0jL3jEv+m7TmTiA+MeLpIOVaAYPhjEBFBA=="
+      }
     },
     {
       "slug": "cf-nav",
@@ -1062,11 +1067,16 @@
         "d1"
       ],
       "categories": [
-        "files",
-        "storage"
+        "files"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/clist/manifest.json",
+        "sha256": "db5dd6bd4d2fdc04c603f6001eedb3b18fad7fa96d8e3fcf9f83db2340dc507d",
+        "keyId": "catalog-2026-09",
+        "signature": "7//H9Hbm5KsK1Qfrz1MZC0DtASS5NTsW0sI7DT5eshQauJlqinsrwDUCuncsKRyH0pGWQ1J1Fp1gB3ODYiVhCw=="
+      }
     },
     {
       "slug": "cloudflare-prometheus-exporter",
@@ -1169,10 +1179,16 @@
       ],
       "categories": [
         "developer-tools",
-        "storage"
+        "files"
       ],
       "license": "Apache-2.0",
-      "revision": 1
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/cloudflarebase/manifest.json",
+        "sha256": "f56dfb88e914a238556e41ffabc279d2d6c8f8bcdea3879fd441c41208202cb3",
+        "keyId": "catalog-2026-09",
+        "signature": "bRBRWyJ7pt7OAhdrAOyfjyZeQOxwaH1HPHIQZBI+1bwCQL1qu9+Z/xOZ+ACNyEoJnXM3LcCADQowABBwIgf4BQ=="
+      }
     },
     {
       "slug": "cloudmark",
@@ -2007,11 +2023,16 @@
         "images"
       ],
       "categories": [
-        "cms",
-        "blogging"
+        "cms"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/emdash/manifest.json",
+        "sha256": "a8f31f67a27d79db612c98116a899636e131dd7d3b9197803822dd7fa96a019f",
+        "keyId": "catalog-2026-09",
+        "signature": "DApwLC5X+wpLrGUkz+FLKYHuHJX4zF3j3Qw/YJKEB8UhmH6ObVWcCCQuiOOKLWhJnlIdMy411bMPmgm+AibeAQ=="
+      }
     },
     {
       "slug": "exception-notify",
@@ -3229,11 +3250,17 @@
         "r2"
       ],
       "categories": [
-        "blogging",
-        "social"
+        "cms",
+        "community"
       ],
       "license": "AGPL-3.0-or-later",
-      "revision": 1
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/jant/manifest.json",
+        "sha256": "eb649dc34530f7ad829a22e2992903d2dbf9d53074dbc8efb4dcdd1af61da12e",
+        "keyId": "catalog-2026-09",
+        "signature": "tzVYr4RzOfNQkPbeFirAQhnuU9xFtZ/+n4UM2F+BL+PKKP8cdgmcV/2e6w9JyLyMWXkQms+f4LeNCz8hVI7nAA=="
+      }
     },
     {
       "slug": "jina-mcp",
@@ -5182,10 +5209,16 @@
         "r2"
       ],
       "categories": [
-        "storage"
+        "files"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/r2-explorer/manifest.json",
+        "sha256": "f5199ec04849d84bc2489d0ebdbd6a9a0e9b8b1ccdd5892a6d488fa04a40d050",
+        "keyId": "catalog-2026-09",
+        "signature": "dfrp7Ui+X2IG6JRlxLzgB8uYEr4Vc4+Qvco5bfALq/MAXTtigayrluKHBMue+ku2ip6twL2AvjzHRzMgTJYeCQ=="
+      }
     },
     {
       "slug": "r2-webdav",
@@ -5219,11 +5252,16 @@
         "r2"
       ],
       "categories": [
-        "files",
-        "storage"
+        "files"
       ],
       "license": "NONE",
-      "revision": 1
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/r2-webdav/manifest.json",
+        "sha256": "5e81d50b830edb24472959f6426ceab8abcb5eea995ed8b222c6544711964c69",
+        "keyId": "catalog-2026-09",
+        "signature": "ts6K8eRv7qB+wVHe7YTNQ0rhH10/fzTagXWdM8jM14O/zT3LDY8rYOm0CmOz+aXH0RwXDGBT/qMI30fQSfjYDA=="
+      }
     },
     {
       "slug": "rdyrct",
