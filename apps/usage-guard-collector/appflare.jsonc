@@ -4,7 +4,6 @@
   "name": "Usage Guard Collector",
   "summary": "Usage surge alerts for your Cloudflare account: reads daily Workers, D1, Durable Objects, KV, R2 and Queues counts into D1 and pings Discord or Slack when a meter jumps.",
   "tagline": "Get alerts when your Cloudflare usage suddenly jumps",
-  "homepage": "https://github.com/HowardZlh/usage-guard-collector",
   "repo": "HowardZlh/usage-guard-collector",
   "license": "MIT",
   "categories": ["monitoring", "utilities"],
@@ -13,15 +12,12 @@
   // Upstream has no release tags; the pin tracks the default branch, main.
   "source": { "ref": "main", "sha": "c5f9e9d539e5d9b6e9b178eb3646774380e6829a" },
   "install": {
-    "tier": "artifact",
     "packageManager": "pnpm",
-    "wranglerConfig": "wrangler.jsonc",
-    "workerName": "usage-guard-collector"
+    "wranglerConfig": "wrangler.jsonc"
   },
   // One cron every 6 hours, two GraphQL requests a run and a few dozen D1
   // rows: well inside the free plan.
   "plan": "free",
-  "requires": [],
   // Seeded from upstream's .dev.vars.example and the webhooks its wrangler
   // config names as optional. Upstream asks for CF_ACCOUNT_ID as a secret;
   // it is not secret, so here it is a var filled in with this account's id.
@@ -29,7 +25,8 @@
     {
       "name": "CF_API_TOKEN",
       "label": "Analytics API token",
-      "help": "A Cloudflare API token with Account Analytics Read on this account and nothing else. The Worker reads usage through the GraphQL Analytics API with it and never logs it."
+      "help": "A Cloudflare API token with Account Analytics Read on this account and nothing else. The Worker reads usage through the GraphQL Analytics API with it and never logs it.",
+      "cloudflareToken": true
     },
     {
       "name": "DISCORD_WEBHOOK_URL",
@@ -49,19 +46,19 @@
       "name": "CF_ACCOUNT_ID",
       "label": "Cloudflare account ID",
       "help": "The account whose usage is watched: this one. Filled in on every install and update.",
-      "default": "{{accountId}}",
-      "required": true
+      "default": "{{accountId}}"
     },
     {
       "name": "THRESHOLDS_JSON",
       "label": "Alert floors",
-      "help": "Optional JSON object of per-metric minimums a surge must reach, for example {\"d1.rows_read\": 5000000}. Metric names are those on the status page. Leave empty for upstream's defaults."
+      "help": "Optional JSON object of per-metric minimums a surge must reach, for example {\"d1.rows_read\": 5000000}. Metric names are those on the status page. Leave empty for upstream's defaults.",
+      "optional": true
     }
   ],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "The first collection runs at the next 00:00, 06:00, 12:00 or 18:00 UTC; open {{workerUrl}} afterwards for the last 7 days of usage and the current surges. The first day flags nothing, since there is no baseline yet."
+      "content": "The first collection runs at the next 00:00, 06:00, 12:00 or 18:00 UTC; open {{appUrl}} afterwards for the last 7 days of usage and the current surges. The first day flags nothing, since there is no baseline yet."
     },
     {
       "type": "markdown",
@@ -70,9 +67,10 @@
   ],
   "tokenPermissions": [
     {
-      "name": "Account.Account Analytics:Read",
+      "group": "Account Analytics",
       "scope": "account",
-      "description": "Read the account's daily usage through the GraphQL Analytics API (CF_API_TOKEN)."
+      "access": "read",
+      "reason": "Reads the account's daily usage through the GraphQL Analytics API."
     }
   ]
 }

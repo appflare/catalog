@@ -12,18 +12,16 @@
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v0.7.1", "sha": "4d245d159c97b57e46daabf6631055b6395ee2c4" },
   "install": {
-    "tier": "artifact",
     "packageManager": "pnpm",
     // The API Worker, which also serves the web app as static assets.
     "wranglerConfig": "apps/api/wrangler.toml",
-    "workerName": "projektor",
     // Upstream's web build (Astro, then its service worker check and the
     // Content-Security-Policy _headers file), copied beside the API Worker's
     // config so its assets directory stays inside that folder, as upstream's
     // release bundle ships it.
     "buildCommand": ["pnpm --filter @projektor/web run build", "cp -r apps/web/dist apps/api/web"],
     // Answers without a sign-in, from the Worker's own code.
-    "healthPath": "/api/health",
+    "health": { "path": "/api/health" },
     // The repository's config is the one for local development. Upstream's
     // release config (scripts/release-assets/wrangler.example.toml) adds the
     // web app as static assets, with the routes the Worker answers first, and
@@ -49,7 +47,7 @@
       "name": "JWT_SECRET",
       "label": "Signing secret",
       "help": "Signs the OAuth consent flow that connects Claude and other MCP clients.",
-      "generate": true
+      "generate": "password"
     }
   ],
   "vars": [
@@ -57,13 +55,13 @@
       "name": "CF_ACCESS_TEAM_DOMAIN",
       "label": "Cloudflare Access team domain",
       "help": "Set after enabling Cloudflare Access for this app: your Zero Trust team domain without https://, for example myteam.cloudflareaccess.com. The app checks each sign-in's Access token against it.",
-      "required": false
+      "optional": true
     },
     {
       "name": "CF_ACCESS_AUDIENCE",
       "label": "Cloudflare Access audience (AUD) tag",
       "help": "Set after enabling Cloudflare Access for this app: the Application Audience (AUD) tag of the Access application that protects it.",
-      "required": false
+      "optional": true
     },
     {
       "name": "ADMIN_EMAILS",
@@ -71,8 +69,7 @@
       "help": "Comma-separated emails that become workspace owners. The first of them to sign in creates the default workspace.",
       // The config's value is upstream's development address; an empty
       // default makes the form ask for real ones.
-      "default": "",
-      "required": true
+      "default": ""
     },
     {
       "name": "AUTO_JOIN_ROLE",
@@ -85,19 +82,22 @@
         { "value": "member", "label": "Member" },
         { "value": "admin", "label": "Admin" }
       ],
-      "default": "none"
+      "default": "none",
+      "optional": true
     },
     {
       "name": "DEFAULT_WORKSPACE_NAME",
       "label": "Workspace name",
       "help": "The name of the workspace the first admin creates.",
-      "default": "Projektor"
+      "default": "Projektor",
+      "optional": true
     },
     {
       "name": "DEFAULT_WORKSPACE_SLUG",
       "label": "Workspace slug",
       "help": "The short id of that workspace, in lowercase letters, digits and hyphens.",
-      "default": "projektor"
+      "default": "projektor",
+      "optional": true
     }
   ],
   "postInstall": [
@@ -107,12 +107,11 @@
     },
     {
       "type": "markdown",
-      "content": "Then open {{workerUrl}} and sign in with one of the admin emails: the first admin creates the default workspace. The database is already migrated."
+      "content": "Then open {{appUrl}} and sign in with one of the admin emails: the first admin creates the default workspace. The database is already migrated."
     },
     {
       "type": "markdown",
       "content": "To connect Claude or another MCP client, `/.well-known` and `/oauth/token` must answer without Access: add a Cloudflare Access application with a Bypass policy for each of those two paths, and keep `/oauth/authorize` protected. Upstream's [deploy guide](https://tajd.github.io/projektor/guides/deploying/) explains it."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

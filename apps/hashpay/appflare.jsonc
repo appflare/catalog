@@ -10,7 +10,6 @@
   "name": "HashPay",
   "summary": "A crypto payment gateway run from your own Telegram bot: take USDT, USDC and native coins on eight chains or through Binance, OKX and OKPay, with a signed order API, merchant callbacks and an admin console.",
   "tagline": "Accept crypto payments through your Telegram bot",
-  "homepage": "https://github.com/TGDash/HashPay",
   "repo": "TGDash/HashPay",
   "license": "Apache-2.0",
   "categories": ["finance", "business"],
@@ -19,7 +18,6 @@
   // Upstream has no release tags, so the entry follows the default branch by commit.
   "source": { "ref": "main", "sha": "599ef7f7ad0c6f653884c41fe891ebb07d484b2f" },
   "install": {
-    "tier": "artifact",
     "packageManager": "npm",
     // Cloudflare's Vite plugin writes the bundled Worker and its deploy
     // config under dist/ and points wrangler at it; the packer follows that
@@ -28,18 +26,16 @@
     // the same files and applies any that d1_migrations lacks, under the same
     // names, so the two never apply one twice.
     "wranglerConfig": "wrangler.jsonc",
-    "workerName": "hashpay",
     // Upstream's build script (vite build).
     "buildCommand": "npm run build",
     // Public app state from the Worker's own code and D1. (/ is served by
     // the Worker too, but only renders the static app.)
-    "healthPath": "/api/state"
+    "health": { "path": "/api/state" }
   },
   // D1, one queue (10,000 operations a day on the free plan) and one cron
   // trigger every minute fit the free plan. The account's free allowance is
   // 5 cron triggers in total.
   "plan": "free",
-  "requires": [],
   "secrets": [
     {
       "name": "TGBOT_TOKEN",
@@ -50,15 +46,13 @@
       "name": "APP_SECRET",
       "label": "App secret",
       "help": "Signs admin sessions and sign-in challenges. Setting a new value signs everyone out.",
-      "generate": true
+      "generate": "password"
     }
   ],
-  "vars": [],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Open {{workerUrl}} right away to finish setup: enter this address as the site domain, which points the Telegram bot's webhook at the app. Then send your bot a message in Telegram: the first account to message it becomes the admin, so do this before anyone else can."
+      "content": "Open {{appUrl}} right away to finish setup: enter this address as the site domain, which points the Telegram bot's webhook at the app. Then send your bot a message in Telegram: the first account to message it becomes the admin, so do this before anyone else can."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

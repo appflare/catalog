@@ -4,7 +4,6 @@
   "name": "Auth Inbox",
   "summary": "An inbox for sign-up and verification mail: Email Routing delivers it, an AI model of your choice pulls out codes and links and sorts each mail, and a dashboard, per-user grants and a remote MCP server let people and agents read them.",
   "tagline": "Get sign-up codes and links in one private inbox",
-  "homepage": "https://github.com/TooonyChen/AuthInbox",
   "repo": "TooonyChen/AuthInbox",
   "license": "MIT",
   "categories": ["email", "ai"],
@@ -13,7 +12,6 @@
   // Upstream has no release tags, so the entry follows the default branch by commit.
   "source": { "ref": "main", "sha": "83927b8b2b37bb61a53db69017c05a13570be89d" },
   "install": {
-    "tier": "artifact",
     // A pnpm workspace: the Worker at the root, the React dashboard in web/.
     "packageManager": "pnpm",
     // Upstream's config template, copied to wrangler.toml before it is read,
@@ -22,12 +20,11 @@
     // upstream, so OAuth for remote MCP connectors stays off and /mcp takes
     // the app's own API keys.
     "wranglerConfig": "wrangler.toml.example",
-    "workerName": "auth-inbox",
     // Upstream's `build:web`: the dashboard the Worker serves as static assets.
     "buildCommand": "pnpm --filter auth-inbox-web run build",
     // Unauthenticated and reads D1: it reports whether the first admin still
     // has to be created.
-    "healthPath": "/api/auth/setup",
+    "health": { "path": "/api/auth/setup" },
     // Upstream's setup guide sends the zone's catch-all to the Worker, so any
     // address of the domain can be handed out for a sign-up.
     "emailRouting": { "catchAll": true }
@@ -44,7 +41,7 @@
       "name": "JWT_SECRET",
       "label": "Session signing key",
       "help": "Signs dashboard sign-in sessions. Setting a new value signs everyone out.",
-      "generate": true
+      "generate": "password"
     },
     {
       "name": "AI_API_KEY",
@@ -63,8 +60,7 @@
       "name": "AI_BASE_URL",
       "label": "AI base URL",
       "help": "Your provider's API base URL, without a trailing slash. OpenAI: https://api.openai.com. Anthropic: https://api.anthropic.com. DeepSeek: https://api.deepseek.com. Groq: https://api.groq.com/openai. The default is Gemini's OpenAI-compatible endpoint.",
-      "default": "https://generativelanguage.googleapis.com/v1beta/openai",
-      "required": true
+      "default": "https://generativelanguage.googleapis.com/v1beta/openai"
     },
     {
       "name": "AI_API_FORMAT",
@@ -76,19 +72,20 @@
         { "value": "responses", "label": "OpenAI Responses API" },
         { "value": "anthropic", "label": "Anthropic Messages" }
       ],
-      "default": "openai"
+      "default": "openai",
+      "optional": true
     },
     {
       "name": "AI_MODEL",
       "label": "AI model",
       "help": "The model ID, for example gemini-2.0-flash, gpt-4o-mini or claude-3-5-haiku-20241022.",
-      "default": "gemini-2.0-flash",
-      "required": true
+      "default": "gemini-2.0-flash"
     },
     {
       "name": "AI_FALLBACK_BASE_URL",
       "label": "Fallback AI base URL",
-      "help": "Optional. The base URL of the fallback provider."
+      "help": "Optional. The base URL of the fallback provider.",
+      "optional": true
     },
     {
       "name": "AI_FALLBACK_API_FORMAT",
@@ -100,12 +97,14 @@
         { "value": "responses", "label": "OpenAI Responses API" },
         { "value": "anthropic", "label": "Anthropic Messages" }
       ],
-      "default": "openai"
+      "default": "openai",
+      "optional": true
     },
     {
       "name": "AI_FALLBACK_MODEL",
       "label": "Fallback AI model",
-      "help": "Optional. The model ID of the fallback provider."
+      "help": "Optional. The model ID of the fallback provider.",
+      "optional": true
     },
     {
       "name": "UseBark",
@@ -113,24 +112,27 @@
       "help": "Push each new code to iOS devices through Bark (https://bark.day.app).",
       "type": "select",
       "options": [{ "value": "false", "label": "Off" }, { "value": "true", "label": "On" }],
-      "default": "false"
+      "default": "false",
+      "optional": true
     },
     {
       "name": "barkTokens",
       "label": "Bark device tokens",
-      "help": "The device tokens from the Bark app, in brackets and comma separated, for example [token1, token2]. Only used when Bark notifications are on."
+      "help": "The device tokens from the Bark app, in brackets and comma separated, for example [token1, token2]. Only used when Bark notifications are on.",
+      "optional": true
     },
     {
       "name": "barkUrl",
       "label": "Bark server URL",
       "help": "The Bark server to push through; your own if you run one.",
-      "default": "https://api.day.app"
+      "default": "https://api.day.app",
+      "optional": true
     }
   ],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Open {{workerUrl}} right away: while no account exists, the sign-in page lets anyone create the first admin account, so create yours before sharing the address."
+      "content": "Open {{appUrl}} right away: while no account exists, the sign-in page lets anyone create the first admin account, so create yours before sharing the address."
     },
     {
       "type": "markdown",
@@ -138,8 +140,7 @@
     },
     {
       "type": "markdown",
-      "content": "AI agents connect to {{workerUrl}}/mcp with an API key created in the dashboard (Claude Code, Cursor and other clients that send a header)."
+      "content": "AI agents connect to {{appUrl}}/mcp with an API key created in the dashboard (Claude Code, Cursor and other clients that send a header)."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

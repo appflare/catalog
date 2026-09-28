@@ -26,10 +26,12 @@ Validates every apps/<slug>/appflare.jsonc and writes index.json.
 A sandbox or self-deploying tier entry is listed with a build block instead of
 an artifact: its pin, the URL and sha256 of its catalog manifest as build-site
 publishes it, and the size and time of a run in the sandbox Worker.
-Each artifact tier app's version and digest come from dist/<slug>/manifest.json when it was
-built from the current pin, otherwise from the GitHub Release <slug>@<version>
-for the version the current pin packs to (via gh api), provided its manifest
-has the same source.sha; otherwise the app is omitted with a warning.
+Each artifact tier app's version and artifacts (release URLs and the sha256 of
+its manifest.json) come from dist/<slug>/manifest.json when it was built from
+the current pin, otherwise from the GitHub Release <slug>@<version> for the
+version the current pin packs to (via gh api), provided the catalog manifest
+packed into it has the same source.sha; otherwise the app is omitted with a
+warning.
 
   --releases-only   ignore dist/; fail if the release lookup fails or the
                     catalog's git history is shallow (publish CI)
@@ -55,11 +57,12 @@ consumers, crons and Durable Object migrations, plus the catalog manifest packed
 into it) for an artifact tier entry, from the catalog manifest's declarations
 for a sandbox or self-deploying one.
 
-Every row lists the entry's license, and its licenseNote and tagline when it
-has them, from the current appflare.jsonc, and addedAt: the committer time of
-the oldest commit that added apps/<slug>/appflare.jsonc. That needs the whole
-git history; in a shallow clone the rows keep the addedAt of the previous
-index, with a warning (fatal with --releases-only).
+Every row lists the entry's tagline, license, and licenseNote when it has one,
+from the current appflare.jsonc, and addedAt: the committer time of the oldest
+commit that added apps/<slug>/appflare.jsonc (the time of this build for an
+entry not committed yet). That needs the whole git history; in a shallow clone
+the rows keep the addedAt of the previous index, with a warning (fatal with
+--releases-only).
 
 A row with images lists them (apps/<slug>/icon.svg|icon.png, cover.png,
 screenshots/*.png, each optional) by their Pages URL and sha256. The index carries
@@ -101,6 +104,7 @@ runMain(async () => {
     addedAt = previousAddedTimes(previousApps);
   }
 
+  const now = new Date();
   const apps = buildIndexApps(manifests, {
     repo,
     distDir: releasesOnly ? null : distDir,
@@ -111,6 +115,7 @@ runMain(async () => {
     warn,
     previousApps,
     addedAt,
+    builtAt: now.toISOString(),
     sandboxDefaults: schema.sandboxDefaults,
     mediaFor: mediaReader(appsDir, repo),
     services: schema.appServices,
@@ -124,7 +129,7 @@ runMain(async () => {
           ),
         }),
   });
-  const index = finalizeIndex(apps, previous, new Date(), schema.indexJson, {
+  const index = finalizeIndex(apps, previous, now, schema.indexJson, {
     featured: readFeatured(catalogRoot, repo, schema.featuredItem).items,
     stats: statsUrl(pagesBaseUrl(repo)),
   });
@@ -133,7 +138,7 @@ runMain(async () => {
   for (const app of index.apps) {
     const where =
       app.build === undefined
-        ? `${app.slug}@${app.version} digest=${app.digest}${
+        ? `${app.slug}@${app.version} digest=${app.artifacts?.digest}${
             app.catalogManifest === undefined
               ? ""
               : ` revision ${app.revision}: revised catalog manifest sha256=${app.catalogManifest.sha256}`

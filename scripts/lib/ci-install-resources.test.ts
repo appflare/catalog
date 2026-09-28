@@ -3,7 +3,7 @@ import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { format6ArtifactManifestFixture } from "../fixtures/artifact-manifest.ts";
+import { resourcesArtifactManifestFixture } from "../fixtures/artifact-manifest.ts";
 import { appflareAvailable, appflareDir } from "../fixtures/schema.ts";
 import { loadAppflareSchema, loadR2LifecycleHelpers } from "./appflare-schema.ts";
 import {
@@ -19,7 +19,7 @@ import type { ArtifactManifest, R2LifecycleRule } from "./types.ts";
 
 const PIN = "0123456789abcdef0123456789abcdef01234567";
 
-const search = () => format6ArtifactManifestFixture({ sha: PIN }) as unknown as ArtifactManifest;
+const search = () => resourcesArtifactManifestFixture({ sha: PIN }) as unknown as ArtifactManifest;
 
 const DEFAULT_RULE = {
   id: "Default Multipart Abort Rule",
@@ -34,7 +34,7 @@ const fakeMerge = (existing: readonly unknown[], declared: readonly R2LifecycleR
   ...declared.map((r) => ({ merged: r.id })),
 ];
 
-describe("planning format 6 settings", () => {
+describe("planning resource settings", () => {
   it("plans the Vectorize index with its metadata indexes", () => {
     expect(planCiInstall(search(), "ci-search-pr1").vectorizeIndexes).toEqual([
       {
@@ -184,7 +184,7 @@ describe("setR2LifecycleRules", () => {
 describe("unpackArtifact with asset rule files", () => {
   let dir: string;
   beforeEach(() => {
-    dir = mkdtempSync(path.join(tmpdir(), "ci-unpack-format6-test-"));
+    dir = mkdtempSync(path.join(tmpdir(), "ci-unpack-resources-test-"));
   });
   afterEach(() => {
     rmSync(dir, { recursive: true, force: true });
@@ -225,17 +225,12 @@ describe("unpackArtifact with asset rule files", () => {
   });
 });
 
-describe.skipIf(!appflareAvailable)("format 6 with the real @appflare/schema", () => {
-  it("accepts the fixture as format 6 and refuses it as format 5", async () => {
+describe.skipIf(!appflareAvailable)("resource settings with the real @appflare/schema", () => {
+  it("accepts the fixture", async () => {
     const schema = await loadAppflareSchema(appflareDir);
-    const m = format6ArtifactManifestFixture({ sha: PIN });
+    const m = resourcesArtifactManifestFixture({ sha: PIN });
     const parsed = schema.artifactManifest.safeParse(m);
     expect(parsed.success ? null : parsed.error.issues).toBeNull();
-    const refused = schema.artifactManifest.safeParse({ ...m, format: 5 });
-    expect(refused.success).toBe(false);
-    if (!refused.success) {
-      expect(refused.error.issues.map((i) => i.message).join("\n")).toMatch(/needs format 6/);
-    }
   });
 
   it("merges rules with the manager's function, keeping Cloudflare's default rule", async () => {
@@ -253,13 +248,14 @@ describe.skipIf(!appflareAvailable)("format 6 with the real @appflare/schema", (
         rules: [
           DEFAULT_RULE,
           {
-            id: "Delete temporary files",
+            // On the bucket, the rules Appflare manages carry its prefix.
+            id: "appflare:Delete temporary files",
             enabled: true,
             conditions: { prefix: "tmp/" },
             deleteObjectsTransition: { condition: { type: "Age", maxAge: 7 * 86400 } },
           },
           {
-            id: "Archive exports",
+            id: "appflare:Archive exports",
             enabled: true,
             conditions: { prefix: "exports/" },
             storageClassTransitions: [

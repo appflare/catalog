@@ -18,11 +18,12 @@ const pinSchema = z.object({
   slug: z.string().min(1),
   name: z.string().min(1),
   repo: z.string().regex(/^[^/\s]+\/[^/\s]+$/),
-  source: z.object({ ref: z.string().min(1), sha: z.string().regex(/^[0-9a-f]{40}$/) }),
-  install: z.object({
-    wranglerConfig: z.string().min(1),
+  source: z.object({
+    ref: z.string().min(1),
+    sha: z.string().regex(/^[0-9a-f]{40}$/),
     version: z.string().min(1).optional(),
   }),
+  install: z.object({ wranglerConfig: z.string().min(1) }),
 });
 export type AppPin = z.infer<typeof pinSchema> & {
   /** `bump.autoMerge` in the manifest; see `readAutoMerge`. */
@@ -57,11 +58,11 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 
 /**
  * Whether the bump pull request for `pin` merges itself. An entry that states
- * `install.version` never does: a person has to set the new version first, or
+ * `source.version` never does: a person has to set the new version first, or
  * publish refuses the moved pin.
  */
 export function autoMerges(pin: AppPin): boolean {
-  return pin.autoMerge && pin.install.version === undefined;
+  return pin.autoMerge && pin.source.version === undefined;
 }
 
 /** A pin that moved upstream. */
@@ -297,7 +298,7 @@ function codeSpan(text: string): string {
 
 /**
  * The pull request body: where the pin moves, the compare link, the commits,
- * and, for an entry that states `install.version`, a reminder to update it.
+ * and, for an entry that states `source.version`, a reminder to update it.
  */
 export function renderBumpBody(
   pin: AppPin,
@@ -333,15 +334,15 @@ export function renderBumpBody(
       lines.push(`- ${codeSpan(subject)}`);
     }
   }
-  if (pin.install.version !== undefined) {
+  if (pin.source.version !== undefined) {
     lines.push(
       "",
       "Before merging:",
       "",
-      `- [ ] Set \`install.version\` in \`apps/${pin.slug}/appflare.jsonc\` to ${pin.name}'s ` +
-        `version at the new commit (it is ${codeSpan(pin.install.version)} now). The repository's ` +
+      `- [ ] Set \`source.version\` in \`apps/${pin.slug}/appflare.jsonc\` to ${pin.name}'s ` +
+        `version at the new commit (it is ${codeSpan(pin.source.version)} now). The repository's ` +
         "tag does not describe this app, so this pull request cannot tell the new version, and " +
-        "publish refuses a moved pin under an `install.version` that is already released.",
+        "publish refuses a moved pin under a `source.version` that is already released.",
     );
   }
   lines.push(
@@ -368,7 +369,7 @@ function mergePathText(pin: AppPin): string {
   if (pin.autoMerge) {
     return (
       `**A maintainer merges this pull request.** ${manifest} sets \`bump.autoMerge\`, but ` +
-      "it also sets `install.version`, which has to be updated by hand first, so this " +
+      "it also sets `source.version`, which has to be updated by hand first, so this " +
       "pull request does not merge itself. Merging publishes the new version."
     );
   }

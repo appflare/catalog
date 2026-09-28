@@ -12,16 +12,14 @@
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v1.8.0", "sha": "39c076b2e1e78410fedbcdd1d4f89cac13b6810e" },
   "install": {
-    "tier": "artifact",
     "packageManager": "npm",
     // The R2 variant, upstream's default. wrangler.kv.toml keeps attachments in
     // KV instead, which the free plan limits to 1,000 writes a day. The web
     // vault is built by the config's own build.command (npm run build).
     "wranglerConfig": "wrangler.toml",
-    "workerName": "nodewarden",
     // Runs Worker code without credentials: the server configuration Bitwarden
     // clients read when they connect.
-    "healthPath": "/api/config"
+    "health": { "path": "/api/config" }
   },
   // D1, SQLite-backed Durable Objects, and R2 (10 GB) all have free tiers.
   "plan": "free",
@@ -33,7 +31,7 @@
       "name": "JWT_SECRET",
       "label": "Token signing secret",
       "help": "Signs sign-in tokens, attachment links, and passkey challenges. At least 32 characters; changing it later signs every device out.",
-      "generate": true
+      "generate": "password"
     }
   ],
   // The passkey relying party (WEBAUTHN_RP_ID, WEBAUTHN_RP_NAME,
@@ -44,7 +42,7 @@
       "name": "HIDE_WEB_VAULT",
       "label": "Web vault",
       "help": "Hiding it makes the server's web pages answer 404. Bitwarden apps, extensions, and an already installed web vault app keep working.",
-      "required": false,
+      "optional": true,
       "type": "select",
       "options": [
         { "value": "0", "label": "Serve the web vault" },
@@ -56,14 +54,13 @@
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Open {{workerUrl}} and create your account right away: the first account registered becomes the admin, and every later account needs an invite code from the admin page."
+      "content": "Open {{appUrl}} and create your account right away: the first account registered becomes the admin, and every later account needs an invite code from the admin page."
     },
     {
       "type": "markdown",
-      "content": "In a Bitwarden app or browser extension, choose a self-hosted server and enter {{workerUrl}} as the server URL. Back up your vault regularly from the web vault's backup center; NodeWarden is not affiliated with Bitwarden."
+      "content": "In a Bitwarden app or browser extension, choose a self-hosted server and enter {{appUrl}} as the server URL. Back up your vault regularly from the web vault's backup center; NodeWarden is not affiliated with Bitwarden."
     }
   ],
-  "tokenPermissions": [],
   // Upstream publishes each release under a semver tag with release notes; the
   // install check runs every one before it merges.
   "bump": { "autoMerge": true }

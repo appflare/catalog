@@ -17,9 +17,11 @@ import type { PlannedRevision } from "./revision.ts";
 export interface PlannedArtifact {
   app: string;
   version: string;
-  source: { repo: string; sha: string; ref: string };
   keyId: string;
-  /** The schema-parsed catalog manifest, key-sorted. */
+  /**
+   * The schema-parsed catalog manifest, key-sorted. It holds the pin
+   * (`repo`, `source.sha`, `source.ref`), which the artifact records only there.
+   */
   catalog: unknown;
 }
 
@@ -34,18 +36,17 @@ export interface PublishPlan {
 }
 
 /** The fields of an artifact manifest checked against the plan. */
-export const PLANNED_FIELDS = ["app", "version", "source", "keyId", "catalog"] as const;
+export const PLANNED_FIELDS = ["app", "version", "keyId", "catalog"] as const;
 
 /** A plan entry for a schema-parsed catalog manifest. */
 export function plannedArtifact(
-  catalog: { slug: string; repo: string; source: { sha: string; ref: string } },
+  catalog: { slug: string },
   version: string,
   keyId: string,
 ): PlannedArtifact {
   return {
     app: catalog.slug,
     version,
-    source: { repo: catalog.repo, sha: catalog.source.sha, ref: catalog.source.ref },
     keyId,
     catalog: canonicalize(catalog),
   };
@@ -67,10 +68,6 @@ export function parsePlan(json: unknown): PublishPlan {
       e.app === slug &&
       typeof e.version === "string" &&
       typeof e.keyId === "string" &&
-      isRecord(e.source) &&
-      typeof e.source.repo === "string" &&
-      typeof e.source.sha === "string" &&
-      typeof e.source.ref === "string" &&
       isRecord(e.catalog);
     if (!ok) {
       throw new Error(`publish plan: entry "${slug}" is malformed`);
@@ -110,7 +107,7 @@ export function diffAgainstPlan(manifest: unknown, planned: PlannedArtifact): st
     if (canonicalJson(m[field]) === canonicalJson(planned[field])) {
       continue;
     }
-    if (field === "catalog" || field === "source") {
+    if (field === "catalog") {
       for (const key of changedFields(m[field], planned[field])) {
         const got = isRecord(m[field]) ? (m[field] as Record<string, unknown>)[key] : undefined;
         const want = (planned[field] as Record<string, unknown>)[key];

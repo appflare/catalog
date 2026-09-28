@@ -24,13 +24,11 @@
   // Bookshelf publishes no release tags; the pin tracks main.
   "source": { "ref": "main", "sha": "8888795162ff76285f246957cc34cc9988253a60" },
   "install": {
-    "tier": "artifact",
     "packageManager": "npm",
     // The app package of the npm workspace. Upstream's EU jurisdiction on the
     // bucket is not carried over: the bucket is created in the default
     // location, and the Worker's own workers.dev setting is left to Appflare.
     "wranglerConfig": "apps/bookshelf/wrangler.jsonc",
-    "workerName": "bookshelf",
     // Upstream's `bundle` pipeline: turbo builds the workspace packages and
     // copies pdf.js's assets, then OpenNext builds the Next.js app into
     // .open-next/. The Worker binds itself (WORKER_SELF_REFERENCE) for
@@ -40,7 +38,6 @@
   // R2 and rate limits fit the free plan for a personal library.
   "plan": "free",
   "requires": ["r2"],
-  "secrets": [],
   "vars": [
     {
       "name": "BOOKSHELF_READ_ONLY",
@@ -51,23 +48,24 @@
         { "value": "0", "label": "Allow changes" },
         { "value": "1", "label": "Read only" }
       ],
-      "default": "0"
+      "default": "0",
+      "optional": true
     },
     {
       "name": "BOOKSHELF_SITE_URL",
       "label": "Public address",
-      "help": "Used for link previews and canonical URLs. Leave empty to use the address each request arrives on."
+      "help": "Used for link previews and canonical URLs. Leave empty to use the address each request arrives on.",
+      "optional": true
     }
   ],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "**There is no sign-in.** Anyone who can reach {{workerUrl}} can download every book and pick any profile. Put the app behind Cloudflare Access, or turn off its workers.dev address and serve it only where you trust the network."
+      "content": "**There is no sign-in.** Anyone who can reach {{appUrl}} can download every book and pick any profile. Put the app behind Cloudflare Access, or turn off its workers.dev address and serve it only where you trust the network."
     },
     {
       "type": "markdown",
-      "content": "Publish books from a checkout of the repository: put them in `books/`, set `storage.bucket` in `bookshelf.config.json` to `{{workerName}}-books` and delete `storage.jurisdiction`, set the `r2_buckets` entry in `apps/bookshelf/wrangler.jsonc` to the same bucket, then run `npx wrangler login` and `npm run sync`. The shelf at {{workerUrl}} shows them right away."
+      "content": "Publish books from a checkout of the repository: put them in `books/`, set `storage.bucket` in `bookshelf.config.json` to `{{workerName}}-books` and delete `storage.jurisdiction`, set the `r2_buckets` entry in `apps/bookshelf/wrangler.jsonc` to the same bucket, then run `npx wrangler login` and `npm run sync`. The shelf at {{appUrl}} shows them right away."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

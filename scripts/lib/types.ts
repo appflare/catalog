@@ -18,10 +18,24 @@ export interface CatalogSelfDeploying {
   tool: "alchemy";
   deployCommand: string[];
   destroyCommand: string[];
-  stageArg?: string;
-  stateStore: "cloudflare";
   /** Worker names with `{{stage}}` for the install's stage; the first serves the app. */
-  workers: string[];
+  workerNames: string[];
+}
+
+/**
+ * `HealthMode`: how the install's health check reads the Worker's answer, the
+ * manager's rule. `no-server-errors` fails a persistent 5xx; `any-response`
+ * (apps whose every route sits behind Cloudflare Access or their own sign-in)
+ * counts any answer of the Worker itself as healthy, a 5xx of its own included.
+ */
+export type HealthMode = "no-server-errors" | "any-response";
+
+/** `CatalogTokenPermission`, in full: one permission of the app's own Cloudflare API token. */
+export interface CatalogTokenPermission {
+  group: string;
+  scope: "account" | "zone";
+  access: "read" | "edit";
+  reason: string;
 }
 
 /** `CatalogAuthor`, in full: a person or organization that wrote the app upstream. */
@@ -102,11 +116,12 @@ export interface CatalogManifest {
   slug: string;
   name: string;
   summary: string;
-  /** One plain line for catalog tiles; managers shorten `summary` when it is omitted. */
-  tagline?: string;
-  homepage: string;
+  /** One plain line for catalog tiles. */
+  tagline: string;
+  /** The app's home page; the repository's GitHub page when omitted. */
+  homepage?: string;
   repo: string;
-  /** Any text; `licenseWarning` in `@appflare/schema` says when it is not an SPDX expression. */
+  /** An SPDX license expression of current ids (or `LicenseRef-`, `NONE`). */
   license: string;
   /** One short line shown next to the license. */
   licenseNote?: string;
@@ -114,21 +129,27 @@ export interface CatalogManifest {
   /** Who wrote the app upstream; the index lists the owner of `repo` when omitted. */
   authors?: CatalogAuthor[];
   maintainers: string[];
-  source: { ref: string; sha: string };
+  source: {
+    ref: string;
+    sha: string;
+    /** The app's version when the repository's tags do not describe it (monorepos). */
+    version?: string;
+  };
   install: {
     tier: InstallTier;
     packageManager: string;
     wranglerConfig: string;
-    workerName: string;
-    /** The app's version when the repository's tags do not describe it (monorepos). */
-    version?: string;
+    /** The Worker's name; the slug when omitted (see {@link catalogWorkerName}). */
+    workerName?: string;
+    /** The install's health check: the path probed and how its answer is read. */
+    health: { path: string; mode: HealthMode };
     /**
      * The command, or the commands in order, the packer runs after installing
      * dependencies, before bundling.
      */
     buildCommand?: string | string[];
     /** How a run in the sandbox Worker is sized (`sandbox` and `self-deploying` tiers). */
-    sandbox?: { expectedMinutes?: number; instanceType?: SandboxInstanceType };
+    container?: { expectedMinutes?: number; instanceType?: SandboxInstanceType };
     /** How the sandbox Worker runs the app's own installer (`self-deploying` tier only). */
     selfDeploying?: CatalogSelfDeploying;
     /** The Workers of an app that installs as several (artifact tier only). */
@@ -156,11 +177,19 @@ export interface CatalogManifest {
   secrets: (Record<string, unknown> & { workers?: string[] })[];
   vars: (Record<string, unknown> & { workers?: string[] })[];
   /** Permissions of the Cloudflare API token the admin creates for the app itself. */
-  tokenPermissions: { name: string; description?: string; scope?: "account" | "zone" | "user" }[];
+  tokenPermissions: CatalogTokenPermission[];
   /** How the bump bot treats the entry. */
   bump?: { autoMerge: boolean };
-  /** Which edit of the entry's form and copy this is for its build; omitted means 1. */
-  revision?: number;
+  /** Which edit of the entry's form and copy this is for its build (1 when the file omits it). */
+  revision: number;
+}
+
+/**
+ * The Worker an entry installs as: `install.workerName`, else the slug, as
+ * `catalogWorkerName` in `@appflare/schema` has it.
+ */
+export function catalogWorkerName(manifest: Pick<CatalogManifest, "slug" | "install">): string {
+  return manifest.install.workerName ?? manifest.slug;
 }
 
 /** A file stored in the artifact zip, addressed by byte range. */
@@ -225,43 +254,31 @@ export interface ArtifactEntryWorker {
 }
 
 /**
- * Subset of `ArtifactManifest`. Format 1 is an app of one Worker. Format 2 is
- * an app of several: `worker` and `assets` are the primary Worker's, and
- * `workers` lists the others in the catalog entry's order. Format 3 is either
- * shape, and carries D1 schema files or post-deploy migrations
- * (`d1Schema`, `d1PostDeploy`), which managers that read only formats 1 and
- * 2 refuse. Format 4 is either shape too, and its catalog manifest keeps a
- * Worker off workers.dev (`install.workers[].workersDev: false`) or seeds a
- * D1 database (`resources.d1[binding].seed`), which managers that read only
- * formats 1 to 3 refuse. Format 5 is either shape too, and carries a D1
- * baseline (`d1Baseline`) or a Worker of static assets only (no modules and
- * no `mainModule`), which managers that read only formats 1 to 4 refuse.
- * Format 6 is either shape too, and its catalog manifest declares Vectorize
- * metadata indexes (`resources.vectorize[binding].metadataIndexes`) or R2
- * bucket settings (`resources.r2`), which the bindings then carry
- * (`metadataIndexes` on a `vectorize` binding, `lifecycle` on an `r2_bucket`
- * one) and which managers that read only formats 1 to 5 refuse.
- * Whether an artifact has several Workers is whether it has `workers`,
- * whatever its format.
+ * Subset of `ArtifactManifest`. `worker` and `assets` are the app's Worker;
+ * for an app of several Workers they are the primary one's, and `workers`
+ * lists the others in the catalog entry's order. Whether an artifact has
+ * several Workers is whether it has `workers`.
  */
 export interface ArtifactManifest {
-  format: 1 | 2 | 3 | 4 | 5 | 6;
+  /**
+   * The only artifact format; a manager refuses a higher one it does not
+   * know, so it is raised only for a field an older manager must not skip.
+   */
+  format: 1;
   app: string;
   version: string;
   keyId: string;
-  source: { repo: string; sha: string; ref: string };
   worker: {
     name: string;
     /**
      * The wrangler config the Worker was built from, relative to the checkout:
      * the manifest's `install.wranglerConfig`, and the config wrangler deploys
-     * (another one when the build left a redirect beside it). Omitted by
-     * packers that predate it.
+     * (another one when the build left a redirect beside it).
      */
-    wranglerConfig?: { declared: string; effective: string };
+    wranglerConfig: { declared: string; effective: string };
     /**
      * The module the Worker starts from. Omitted, with `modules` empty, for a
-     * Worker that serves its static assets only (format 5).
+     * Worker that serves its static assets only.
      */
     mainModule?: string;
     compatibilityDate: string;
@@ -295,39 +312,40 @@ export interface ArtifactManifest {
     binding: string | null;
     files: (ArtifactFile & { route: string })[];
   };
-  /** Every D1 migration of the app, by binding; shared by the Workers that bind it. */
-  d1Migrations: Record<string, (ArtifactFile & { name: string })[]>;
-  /**
-   * SQL files run on every install and update after the migrations, never
-   * recorded in `d1_migrations`, by binding, in the catalog manifest's order
-   * (`resources.d1[binding].schema`); each is named by its path in the
-   * app's repository. Formats 3 to 6; omitted when there are none.
-   */
-  d1Schema?: Record<string, (ArtifactFile & { name: string })[]>;
-  /**
-   * Migrations run once the new version serves all traffic, recorded in
-   * `d1_migrations` like the others, by binding
-   * (`resources.d1[binding].postDeployMigrationsDir`). Formats 3 to 6.
-   */
-  d1PostDeploy?: Record<string, (ArtifactFile & { name: string })[]>;
-  /**
-   * One SQL file per binding with the database's whole current schema
-   * (`resources.d1[binding].baseline`), run once on a new database before
-   * the migrations, which are then recorded in `d1_migrations` without
-   * running. Formats 5 and 6; omitted when there is none.
-   */
-  d1Baseline?: Record<string, (ArtifactFile & { name: string })[]>;
-  /** Formats 2 to 6, for an app of several Workers: every Worker but the primary one. */
+  /** The D1 SQL of every binding, by binding name; shared by the Workers that bind it. */
+  d1: Record<string, ArtifactD1Binding>;
+  /** For an app of several Workers: every Worker but the primary one. */
   workers?: ArtifactEntryWorker[];
   /** The catalog manifest the artifact was packed from, as parsed by the schema. */
-  catalog: unknown;
+  catalog: CatalogManifest;
 }
 
-/** `IndexArtifacts`: release-asset URLs of one app version. */
+/** A D1 SQL file of an artifact: an {@link ArtifactFile} named by its migration name or path. */
+export type ArtifactD1File = ArtifactFile & { name: string };
+
+/**
+ * `ArtifactD1Binding`, in full: the D1 SQL of one binding. `migrations` run
+ * in order and are recorded in `d1_migrations`; `schema` files run on every
+ * install and update after them (`resources.d1[binding].schema`);
+ * `postDeploy` migrations run once the new version serves all traffic
+ * (`postDeployMigrationsDir`); `baseline` holds the whole current schema,
+ * run once on a new database before the migrations, which are then recorded
+ * without running (`resources.d1[binding].baseline`).
+ */
+export interface ArtifactD1Binding {
+  migrations: ArtifactD1File[];
+  schema: ArtifactD1File[];
+  postDeploy: ArtifactD1File[];
+  baseline?: ArtifactD1File;
+}
+
+/** `IndexArtifacts`: release-asset URLs of one app version, and the digest of its manifest. */
 export interface IndexArtifacts {
   zip: string;
   manifest: string;
   sig: string;
+  /** sha256 of the exact bytes of the release's `manifest.json`. */
+  digest: string;
 }
 
 /**
@@ -349,60 +367,44 @@ export interface IndexBuild {
 
 /**
  * `IndexApp`, in full: the catalog builds it. `artifact` tier rows carry
- * `artifacts` and `digest`; `sandbox` and `self-deploying` tier rows carry
- * `build` instead.
+ * `artifacts` (with the manifest's digest); `sandbox` and `self-deploying`
+ * tier rows carry `build` instead.
  */
 export interface IndexApp {
   slug: string;
   name: string;
   summary: string;
-  /** The catalog manifest's `tagline`; omitted when it has none. */
-  tagline?: string;
+  /** The catalog manifest's `tagline`. */
+  tagline: string;
   /**
    * When the entry first appeared in the catalog: the committer time of the
-   * commit that added its `appflare.jsonc` (see `added-at.ts`). Omitted when
-   * that is unknown.
+   * commit that added its `appflare.jsonc` (see `added-at.ts`).
    */
-  addedAt?: string;
+  addedAt: string;
   version: string;
   artifacts?: IndexArtifacts;
-  digest?: string;
   tier: InstallTier;
   plan: Plan;
   requires: string[];
   lastVerified: string | null;
-  /**
-   * Who wrote the app (see `indexAuthors`). The schema keeps it optional for
-   * indexes published before it existed; this catalog always writes it.
-   */
+  /** Who wrote the app (see `indexAuthors`). */
   authors: CatalogAuthor[];
   maintainers: string[];
   build?: IndexBuild;
   /** The entry's images on the Pages site (see `media.ts`); omitted when it has none. */
   media?: IndexMedia;
-  /**
-   * The Cloudflare services the app uses (see `appServices`). The schema keeps
-   * it optional for indexes published before it existed; this catalog always
-   * writes it.
-   */
+  /** The Cloudflare services the app uses (see `appServices`). */
   services: string[];
   /** The app declares key-value backed Durable Objects; written only when true. */
   keyValueDurableObjects?: true;
-  /** The catalog manifest's `categories`; always written, like `services`. */
+  /** The catalog manifest's `categories`. */
   categories: string[];
-  /**
-   * The catalog manifest's `license`. The schema keeps it optional for
-   * indexes published before it existed; `build-index` always writes it.
-   */
-  license?: string;
+  /** The catalog manifest's `license`. */
+  license: string;
   /** The catalog manifest's `licenseNote`; omitted when it has none. */
   licenseNote?: string;
-  /**
-   * The catalog manifest's revision (see `revision.ts`); omitted means 1. The
-   * schema keeps it optional for indexes published before it existed;
-   * `build-index` always writes it.
-   */
-  revision?: number;
+  /** The catalog manifest's revision (see `revision.ts`). */
+  revision: number;
   /**
    * An `artifact` tier row whose revision is above its release's: the revised
    * catalog manifest on the Pages site, signed with the release's key, which

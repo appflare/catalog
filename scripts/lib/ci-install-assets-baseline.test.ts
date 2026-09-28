@@ -71,8 +71,9 @@ describe("a D1 baseline", () => {
 
   it("runs just the baseline when the version ships no migrations", () => {
     const m = notes();
-    m.d1Migrations = { DB: [] };
-    delete m.d1PostDeploy;
+    const db = m.d1.DB;
+    if (db === undefined) throw new Error("the fixture binds DB");
+    m.d1.DB = { ...db, migrations: [], postDeploy: [] };
     const steps = d1Steps(planCiApp(m, "ci-notes-pr1").d1);
     expect(steps).toHaveLength(1);
     expect(steps[0] !== undefined && !isSeedStep(steps[0]) ? steps[0].args.at(-1) : null).toBe(
@@ -106,10 +107,10 @@ describe("a Worker of static assets only", () => {
   });
 });
 
-describe("unpackArtifact with format 5", () => {
+describe("unpackArtifact with a baseline or static assets only", () => {
   let dir: string;
   beforeEach(() => {
-    dir = mkdtempSync(path.join(tmpdir(), "ci-unpack-format5-test-"));
+    dir = mkdtempSync(path.join(tmpdir(), "ci-unpack-assets-baseline-test-"));
   });
   afterEach(() => {
     rmSync(dir, { recursive: true, force: true });
@@ -144,10 +145,13 @@ describe("unpackArtifact with format 5", () => {
     });
     const m = notes();
     m.worker.modules = [{ name: "index.js", type: "esm", path: "worker/index.js", ...main }];
-    m.d1Migrations = { DB: [{ name: "0001_init.sql", path: "d1/DB/0001_init.sql", ...init }] };
-    delete m.d1PostDeploy;
-    m.d1Baseline = {
-      DB: [{ name: "db/schema.sql", path: "d1-baseline/DB/db/schema.sql", ...baseline }],
+    m.d1 = {
+      DB: {
+        migrations: [{ name: "0001_init.sql", path: "d1/DB/0001_init.sql", ...init }],
+        schema: [],
+        postDeploy: [],
+        baseline: { name: "db/schema.sql", path: "d1-baseline/DB/db/schema.sql", ...baseline },
+      },
     };
     const out = path.join(dir, "out");
     unpackArtifact(m, path.join(dir, "a.zip"), out);
@@ -173,17 +177,16 @@ describe("unpackArtifact with format 5", () => {
   });
 });
 
-describe.skipIf(!appflareAvailable)("format 5 with the real @appflare/schema", () => {
-  it("accepts both fixtures as format 5 and refuses them as format 4", async () => {
-    const schema = await loadAppflareSchema(appflareDir);
-    for (const fixture of [baselineArtifactManifestFixture, assetsOnlyArtifactManifestFixture]) {
-      const m = fixture({ sha: PIN });
-      expect(schema.artifactManifest.safeParse(m).success).toBe(true);
-      const refused = schema.artifactManifest.safeParse({ ...m, format: 4 });
-      expect(refused.success).toBe(false);
-      if (!refused.success) {
-        expect(refused.error.issues.map((i) => i.message).join("\n")).toMatch(/needs format 5/);
+describe.skipIf(!appflareAvailable)(
+  "a baseline and static assets with the real @appflare/schema",
+  () => {
+    it("accepts both fixtures, and refuses them in a format it does not read", async () => {
+      const schema = await loadAppflareSchema(appflareDir);
+      for (const fixture of [baselineArtifactManifestFixture, assetsOnlyArtifactManifestFixture]) {
+        const m = fixture({ sha: PIN });
+        expect(schema.artifactManifest.safeParse(m).success).toBe(true);
+        expect(schema.artifactManifest.safeParse({ ...m, format: 2 }).success).toBe(false);
       }
-    }
-  });
-});
+    });
+  },
+);

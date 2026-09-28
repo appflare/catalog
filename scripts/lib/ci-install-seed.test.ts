@@ -44,7 +44,7 @@ describe("catalogForms with seed-only secrets and vars", () => {
     expect(forms.vars.map((v) => v.name)).toEqual(["SITE_NAME"]);
     expect(forms.seedOnlyVars).toEqual([
       { name: "ADMIN_USERNAME", required: true },
-      { name: "ADMIN_EMAIL", default: "admin@example.com", required: false },
+      { name: "ADMIN_EMAIL", default: "admin@example.com", required: true },
     ]);
   });
 
@@ -342,14 +342,9 @@ describe("runSeed", () => {
 });
 
 describe.skipIf(!appflareAvailable)("seeds with the real @appflare/schema", () => {
-  it("accepts the seeded artifact as format 4 and refuses it as format 3", async () => {
+  it("accepts the seeded artifact", async () => {
     const schema = await loadAppflareSchema(appflareDir);
-    expect(parseOrThrow(schema.artifactManifest, keep(), "keep").format).toBe(4);
-    const old = schema.artifactManifest.safeParse({ ...keep(), format: 3 });
-    expect(old.success).toBe(false);
-    if (!old.success) {
-      expect(old.error.issues.map((i) => i.message).join("\n")).toMatch(/needs format 4/);
-    }
+    expect(parseOrThrow(schema.artifactManifest, keep(), "keep").format).toBe(1);
   });
 
   it("stores hashes the app can check: PBKDF2 with its salt, and bcrypt", async (ctx) => {

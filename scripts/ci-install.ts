@@ -81,8 +81,9 @@ deploy   Unpacks the artifact (checking every file's sha256), removes anything
          and the Worker's exports, cache block and Worker Loaders as recorded;
          Vectorize indexes and queues are created first through the API, and
          each rate limit gets a random namespace id; vars as the manager sets
-         them, JSON vars kept as JSON and {{workerUrl}}, {{workerName}} and
-         {{accountId}} filled in for the CI Worker; a service binding to the app's own
+         them, JSON vars kept as JSON and {{appUrl}}, {{workerUrl}}, their
+         hostnames, {{workerName}} and {{accountId}} filled in for the CI
+         Worker, which is served at its workers.dev URL; a service binding to the app's own
          Worker aimed at the CI Worker, any other refused; no cron triggers,
          which the run summary notes), runs wrangler deploy --strict, attaches the recorded queue consumers through the API,
          runs each D1 database's SQL as the manager does (its migrations
@@ -105,17 +106,18 @@ deploy   Unpacks the artifact (checking every file's sha256), removes anything
          seed-only secrets and vars get values for the seed and are never
          set on a Worker),
          and waits up to 60 s for
-         https://<worker>.<subdomain>.workers.dev<healthPath> to answer
-         (install.healthPath from the catalog manifest, else /). A failed
+         https://<worker>.<subdomain>.workers.dev<path> to answer
+         (install.health.path from the catalog manifest, else /; read as
+         install.health.mode says). A failed
          deploy may still have uploaded the Worker; cleanup deletes it.
 
-         A Worker of static assets only (format 5: no modules and no main
-         module) is deployed with its assets and compatibility settings
+         A Worker of static assets only (no modules and no main module)
+         is deployed with its assets and compatibility settings
          alone: the config names no main, and no module rules. _redirects
          and _headers, which the artifact records as text in its assets
          config, are written as files at the root of the assets directory.
 
-         Format 6 settings are applied as the manager applies them: each
+         Resource settings are applied as the manager applies them: each
          Vectorize index's metadata indexes are created through the API
          right after the index, and each R2 bucket's lifecycle rules are
          merged into the bucket's own (keeping Cloudflare's default rule for
@@ -405,9 +407,7 @@ async function deployAndCheck(
     results.push({
       worker: check.worker,
       health:
-        "skipped" in check
-          ? check.skipped
-          : await probe(check.url, check.timeoutMs, app.healthMode),
+        "skipped" in check ? check.skipped : await probe(check.url, check.timeoutMs, app.probeMode),
     });
   }
   const failed = results.filter((r) => !r.health.ok);

@@ -9,7 +9,6 @@
   "name": "KISS Worker",
   "summary": "Your own sync server for KISS Translator: keeps the extension's settings, rules and vocabulary in step across browsers and serves shared rule sets.",
   "tagline": "Sync your translation settings and vocabulary across browsers",
-  "homepage": "https://github.com/fishjar/kiss-worker",
   "repo": "fishjar/kiss-worker",
   "license": "MIT",
   "categories": ["sync", "utilities"],
@@ -18,39 +17,34 @@
   // Upstream has no tags; the pin follows the default branch.
   "source": { "ref": "master", "sha": "7f6efdec4d97e1d6ed816db5f7d58cd8a65de9c0" },
   "install": {
-    "tier": "artifact",
     "packageManager": "npm",
     // One plain JavaScript file and no build step. The config declares the
     // Durable Object class with an `exports` block (SQLite storage) instead of
     // `migrations`; the artifact carries the block and the manager sends it
     // with the upload, as wrangler does.
     "wranglerConfig": "wrangler.toml",
-    "workerName": "kiss-worker",
     // Runs Worker code and needs the sync password: without it every route
     // answers 503, with it this route answers 403 to a request without a key.
-    "healthPath": "/rules"
+    "health": { "path": "/rules" }
   },
   // KV and a SQLite-backed Durable Object both have free tiers.
   "plan": "free",
-  "requires": [],
   "secrets": [
     {
       "name": "AUTH_VALUE",
       "label": "Sync password",
       "help": "The extension's Sync Key: enter the same value there. Copy it before you install; it cannot be read back later, only replaced.",
-      "generate": true
+      "generate": "password"
     }
   ],
-  "vars": [],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "In KISS Translator's Sync Setting, set Sync Type to KISS-Worker, Sync API to {{workerUrl}}, and Sync Key to the sync password from this install."
+      "content": "In KISS Translator's Sync Setting, set Sync Type to KISS-Worker, Sync API to {{appUrl}}, and Sync Key to the sync password from this install."
     },
     {
       "type": "markdown",
-      "content": "Rule sets you share from the extension are served from this install at {{workerUrl}}/rules; the extension shows the full share link."
+      "content": "Rule sets you share from the extension are served from this install at {{appUrl}}/rules; the extension shows the full share link."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

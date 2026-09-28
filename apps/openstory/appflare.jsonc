@@ -20,7 +20,6 @@
   // Upstream has no release tags, so the entry follows the default branch by commit.
   "source": { "ref": "main", "sha": "0311b1f63f2804fbb17bbbd999732198e424f098" },
   "install": {
-    "tier": "artifact",
     "packageManager": "bun",
     // The config's default environment is what upstream's Deploy to
     // Cloudflare button installs; its D1 id is a placeholder, dropped when
@@ -28,7 +27,6 @@
     // deployment, with a video-export container) and `test` are not used,
     // so server-side video export reports that it is unavailable.
     "wranglerConfig": "wrangler.jsonc",
-    "workerName": "openstory",
     // Upstream's deploy: drizzle-kit writes one folder per migration, and
     // its script flattens them into drizzle/migrations-wrangler, the D1
     // binding's migrations_dir. Then Vite with the Cloudflare plugin builds
@@ -53,13 +51,13 @@
       "name": "BETTER_AUTH_SECRET",
       "label": "Session secret",
       "help": "Signs sessions. Setting a new value signs everyone out.",
-      "generate": true
+      "generate": "password"
     },
     {
       "name": "API_KEY_ENCRYPTION_KEY",
       "label": "API key encryption key",
       "help": "Encrypts the AI provider keys teams add in the app. Setting a new value makes the stored keys unreadable, so teams must add them again.",
-      "generate": true
+      "generate": "password"
     },
     {
       "name": "FAL_KEY",
@@ -109,31 +107,29 @@
       "name": "VITE_APP_URL",
       "label": "App URL",
       "help": "The address people open the app at, without a trailing slash. Sign-in accepts requests from it, and device sign-in links point to it.",
-      "default": "{{workerUrl}}",
-      "required": true
+      "default": "{{appUrl}}"
     },
     {
       "name": "EMAIL_FROM",
       "label": "Sender address",
-      "help": "The From of sign-in code emails, for example noreply@example.com, at a domain onboarded in Cloudflare Email Sending. Sign-in is by emailed codes, so without it nobody can create an account.",
-      "required": true
+      "help": "The From of sign-in code emails, for example noreply@example.com, at a domain onboarded in Cloudflare Email Sending. Sign-in is by emailed codes, so without it nobody can create an account."
     },
     {
       "name": "ADMIN_EMAILS",
       "label": "System admin emails",
       "help": "Optional. Comma-separated addresses of the people who manage gift codes and moderation.",
-      "default": ""
+      "default": "",
+      "optional": true
     }
   ],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Onboard the sender address's domain under Email Service > Email Sending in the Cloudflare dashboard, then open {{workerUrl}} and sign in with the code sent to your email."
+      "content": "Onboard the sender address's domain under Email Service > Email Sending in the Cloudflare dashboard, then open {{appUrl}} and sign in with the code sent to your email."
     },
     {
       "type": "markdown",
       "content": "Generation runs on your AI provider accounts: add fal and OpenRouter keys under Settings > API Keys for your team, or set server-wide keys in this app's settings. Generations on server-wide keys draw on team credits, which system admins grant with gift codes."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

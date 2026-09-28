@@ -8,7 +8,6 @@
   "name": "Veet",
   "summary": "Video calls in the browser: share a meeting link and talk face to face, with chat, device settings and peer-to-peer media for small groups.",
   "tagline": "Share a link and talk face to face in your browser",
-  "homepage": "https://github.com/megaconfidence/veet",
   "repo": "megaconfidence/veet",
   // The repository has no LICENSE file and states no licence in its README or
   // package.json.
@@ -26,20 +25,17 @@
   // Upstream has no tags; the pin follows the default branch.
   "source": { "ref": "main", "sha": "cca7b6923040a502f873323db2edd3b56fa3681d" },
   "install": {
-    "tier": "artifact",
     "packageManager": "npm",
     // Plain JavaScript and static files: no build step. The config declares the
     // Durable Object class with an `exports` block (SQLite storage) instead of
     // `migrations`; the artifact carries the block and the manager sends it
     // with the upload, as wrangler does.
-    "wranglerConfig": "wrangler.jsonc",
-    "workerName": "veet"
+    "wranglerConfig": "wrangler.jsonc"
   },
   // A SQLite-backed Durable Object and static assets fit the free plan; the
   // optional TURN relay is billed by Cloudflare Realtime, with a free
   // allowance.
   "plan": "free",
-  "requires": [],
   "secrets": [
     {
       "name": "TURN_KEY_ID",
@@ -54,12 +50,10 @@
       "optional": true
     }
   ],
-  "vars": [],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Open {{workerUrl}}, start a meeting, and share its link. Anyone with the link can join, and calls work best with up to four or five people, since each browser sends its video to every other one."
+      "content": "Open {{appUrl}}, start a meeting, and share its link. Anyone with the link can join, and calls work best with up to four or five people, since each browser sends its video to every other one."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

@@ -4,7 +4,6 @@
   "name": "ShotSync",
   "summary": "A private image and text pool shared across your devices: drop a screenshot or snippet on one, grab it on another, from an installable web app backed by R2.",
   "tagline": "Share pictures and text between your devices, privately",
-  "homepage": "https://github.com/Defiabell/shotsync",
   "repo": "Defiabell/shotsync",
   "license": "MIT",
   "categories": ["files", "sharing"],
@@ -15,12 +14,10 @@
   // the self-hosted Worker installed here is the one in wrangler.toml.
   "source": { "ref": "v1.0.0", "sha": "39c024a4d93095b5cddfbe4ad9950a37d7e319a4" },
   "install": {
-    "tier": "artifact",
     "packageManager": "npm",
     // The top-level Worker. The `demo` environment in the same file is
     // upstream's read-only public demo and is not installed.
-    "wranglerConfig": "wrangler.toml",
-    "workerName": "shotsync"
+    "wranglerConfig": "wrangler.toml"
   },
   // One Worker and one R2 bucket (10 GB free); the Worker does no image
   // processing, since the browser converts and thumbnails before uploading.
@@ -31,14 +28,13 @@
       "name": "AUTH_TOKEN",
       "label": "Access token",
       "help": "The one shared secret for the pool: every device enters it once, and it also signs the 7-day share links, so changing it invalidates links already shared. Copy it now.",
-      "generate": true
+      "generate": "password"
     }
   ],
-  "vars": [],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Open {{workerUrl}} on each device and enter the access token once; it is kept in that browser. On a phone, add the page to the home screen to use it like an app. The interface is in Chinese; upstream's README maps each button to English."
+      "content": "Open {{appUrl}} on each device and enter the access token once; it is kept in that browser. On a phone, add the page to the home screen to use it like an app. The interface is in Chinese; upstream's README maps each button to English."
     },
     {
       "type": "markdown",
@@ -46,8 +42,7 @@
     },
     {
       "type": "markdown",
-      "content": "Upstream also has a Mac menu-bar app that uploads every screenshot, and an iOS Shortcut for the share sheet (`mac/` and `shortcut/` in the repository); point them at {{workerUrl}} with the same token."
+      "content": "Upstream also has a Mac menu-bar app that uploads every screenshot, and an iOS Shortcut for the share sheet (`mac/` and `shortcut/` in the repository); point them at {{appUrl}} with the same token."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

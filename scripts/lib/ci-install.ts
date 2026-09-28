@@ -5,14 +5,18 @@ import bcrypt from "bcryptjs";
 import type { EntryWorkerHelpers, SeedHelpers } from "./appflare-schema.ts";
 import type {
   ArtifactBinding,
+  ArtifactD1Binding,
   ArtifactFile,
   ArtifactManifest,
   ArtifactQueueConsumer,
   CatalogD1Seed,
+  HealthMode,
   QueueRef,
   R2LifecycleRule,
   VectorizeMetadataIndex,
 } from "./types.ts";
+
+export type { HealthMode } from "./types.ts";
 
 /**
  * Installs a packed artifact into the CI Cloudflare account with wrangler, to
@@ -30,7 +34,7 @@ import type {
  * resources can be found and deleted by name afterwards without any records.
  *
  * What wrangler's config cannot say about a resource is set as the manager
- * sets it (artifact format 6): a Vectorize index's metadata indexes
+ * sets it: a Vectorize index's metadata indexes
  * (`resources.vectorize[binding].metadataIndexes`) are created right after
  * the index, one `metadata_index/create` call each, and an R2 bucket's
  * lifecycle rules (`resources.r2[binding].lifecycle`) are merged into the
@@ -54,8 +58,7 @@ import type {
  * which cannot bind params (see {@link runSeed}). Seed-only secrets and vars
  * get values for the seeds and are never set on a Worker.
  *
- * A Worker of static assets only (no modules and no `mainModule`, artifact
- * format 5) is deployed as `wrangler deploy` deploys a config with `assets`
+ * A Worker of static assets only (no modules and no `mainModule`) is deployed as `wrangler deploy` deploys a config with `assets`
  * and no `main`: the config names no entry module, no module rules and no
  * bundling settings, and nothing is unpacked under `worker/`.
  *
@@ -259,10 +262,10 @@ export interface CiInstallPlan {
   queueConsumers: CiQueueConsumer[];
   /** What the check deploys but cannot exercise, for the run's summary. */
   notes: string[];
-  /** The path the health check probes: the catalog's `install.healthPath`, else `/`. */
-  healthPath: string;
-  /** How the health check reads the answer: the catalog's `install.healthMode`, else `default`. */
-  healthMode: HealthMode;
+  /** The path the health check probes: the catalog's `install.health.path`. */
+  probePath: string;
+  /** How the health check reads the answer: the catalog's `install.health.mode`. */
+  probeMode: HealthMode;
 }
 
 type WranglerRule =
@@ -324,6 +327,7 @@ interface CatalogForms {
 interface CatalogFormVar {
   name: string;
   default?: string;
+  /** The app cannot run without a value: the var does not set `optional: true`. */
   required: boolean;
   firstOption?: string;
 }
@@ -393,7 +397,7 @@ export function catalogForms(catalog: unknown): CatalogForms {
             v as {
               name?: unknown;
               default?: unknown;
-              required?: unknown;
+              optional?: unknown;
               type?: unknown;
               options?: unknown;
             },
@@ -404,7 +408,7 @@ export function catalogForms(catalog: unknown): CatalogForms {
           ): v is {
             name: string;
             default?: unknown;
-            required?: unknown;
+            optional?: unknown;
             type?: unknown;
             options?: unknown;
           } => typeof v.name === "string" && !derivedVarNames.has(v.name),
@@ -412,7 +416,8 @@ export function catalogForms(catalog: unknown): CatalogForms {
         .map((v) => ({
           name: v.name,
           ...(typeof v.default === "string" ? { default: v.default } : {}),
-          required: v.required === true,
+          // A var needs a value unless it says it is optional.
+          required: v.optional !== true,
           ...firstOption(v),
           seedOnly: seedOnly(v),
         }))
@@ -469,7 +474,7 @@ function vectorizeIndex(binding: ArtifactBinding, resource: string): CiVectorize
 const METADATA_TYPES: readonly string[] = ["string", "number", "boolean"];
 
 /**
- * The metadata indexes a `vectorize` binding records (format 6), or
+ * The metadata indexes a `vectorize` binding records, or
  * undefined when it has none. The artifact schema has checked them; this
  * only refuses a shape the check could not use.
  */
@@ -494,7 +499,7 @@ function metadataIndexesOf(binding: ArtifactBinding): VectorizeMetadataIndex[] |
 }
 
 /**
- * The lifecycle rules an `r2_bucket` binding records (format 6), or
+ * The lifecycle rules an `r2_bucket` binding records, or
  * undefined when it has none. The artifact schema has checked them.
  */
 function lifecycleOf(binding: ArtifactBinding): R2LifecycleRule[] | undefined {
@@ -515,51 +520,50 @@ function lifecycleOf(binding: ArtifactBinding): R2LifecycleRule[] | undefined {
 const HEALTH_PATH = /^\/[^\s?#]*$/;
 
 /**
- * The path to probe, from `install.healthPath` in the catalog manifest embedded
- * in the artifact; `/` when it is absent, as the manager does. Throws for a
- * value the schema would reject, rather than probing somewhere else.
+ * The path to probe, from `install.health.path` in the catalog manifest
+ * embedded in the artifact; `/` when it is absent, as the manager does.
+ * Throws for a value the schema would reject, rather than probing somewhere
+ * else.
  */
 export function catalogHealthPath(catalog: unknown): string {
-  const install = (catalog as { install?: { healthPath?: unknown } } | null)?.install;
-  const healthPath = install?.healthPath;
-  if (healthPath === undefined) {
+  const path = catalogHealth(catalog)?.path;
+  if (path === undefined) {
     return "/";
   }
-  if (typeof healthPath !== "string" || !HEALTH_PATH.test(healthPath)) {
-    throw new Error(`install.healthPath ${JSON.stringify(healthPath)} is not a URL path`);
+  if (typeof path !== "string" || !HEALTH_PATH.test(path)) {
+    throw new Error(`install.health.path ${JSON.stringify(path)} is not a URL path`);
   }
-  return healthPath;
+  return path;
 }
 
 /**
- * How the health check reads the Worker's answer, the manager's rule:
- * `default` fails a persistent 5xx; `status-only` (apps whose every route sits
- * behind Cloudflare Access or their own sign-in) counts any answer of the
- * Worker itself as healthy, a 5xx of its own included.
- */
-export type HealthMode = "default" | "status-only";
-
-/**
- * The mode from `install.healthMode` in the catalog manifest embedded in the
- * artifact; `default` when it is absent. Read loosely, since the schema this
- * repository validates against may not know the field yet. Throws for a value
- * the manager would not accept, rather than checking by another rule.
+ * The mode from `install.health.mode` in the catalog manifest embedded in the
+ * artifact; `no-server-errors` when it is absent, as the schema defaults it.
+ * Throws for a value the manager would not accept, rather than checking by
+ * another rule.
  */
 export function catalogHealthMode(catalog: unknown): HealthMode {
-  const install = (catalog as { install?: { healthMode?: unknown } } | null)?.install;
-  const mode = install?.healthMode;
+  const mode = catalogHealth(catalog)?.mode;
   if (mode === undefined) {
-    return "default";
+    return "no-server-errors";
   }
-  if (mode !== "default" && mode !== "status-only") {
-    throw new Error(`install.healthMode ${JSON.stringify(mode)} is not "default" or "status-only"`);
+  if (mode !== "no-server-errors" && mode !== "any-response") {
+    throw new Error(
+      `install.health.mode ${JSON.stringify(mode)} is not "no-server-errors" or "any-response"`,
+    );
   }
   return mode;
 }
 
+/** `install.health` of a catalog manifest, read loosely; undefined when it has none. */
+function catalogHealth(catalog: unknown): { path?: unknown; mode?: unknown } | undefined {
+  const health = (catalog as { install?: { health?: unknown } } | null)?.install?.health;
+  return health !== null && typeof health === "object" ? health : undefined;
+}
+
 /** The URL the health check probes for Worker `name` in the account's workers.dev subdomain. */
-export function healthUrl(name: string, subdomain: string, healthPath: string): string {
-  return `https://${name}.${subdomain}.workers.dev${healthPath}`;
+export function healthUrl(name: string, subdomain: string, probePath: string): string {
+  return `https://${name}.${subdomain}.workers.dev${probePath}`;
 }
 
 /** The largest rate limit namespace id the check assigns: 2^31-1, as the manager does. */
@@ -656,7 +660,7 @@ export interface EntryPlanContext {
   queueBindings: ReadonlySet<string>;
   /** `entryWorkerRefName` from `@appflare/schema`: the entry Worker `{{workerName:<name>}}` names. */
   refName: (value: unknown) => string | null;
-  /** Fills in `{{workerUrl:<name>}}` and `{{workerName:<name>}}` (`renderEntryWorkerPlaceholders`). */
+  /** Fills in the per-Worker placeholders, such as `{{workerUrl:<name>}}` (`renderEntryWorkerPlaceholders`). */
   render: (text: string) => string;
 }
 
@@ -769,13 +773,19 @@ export const REQUIRED_VAR_PLACEHOLDER = "ci";
 export const SEED_VAR_PLACEHOLDER = "ci-admin";
 
 /**
- * What the manager fills in for `{{workerUrl}}`, `{{workerName}}` and
- * `{{accountId}}` in var values: the wrangler config's own vars (strings, and
- * strings inside JSON values) and the catalog's var defaults.
+ * What the manager fills in for the address placeholders (`{{appUrl}}`,
+ * `{{appHostname}}`, `{{workerUrl}}`, `{{workerHostname}}`), `{{workerName}}`
+ * and `{{accountId}}` in var values: the wrangler config's own vars
+ * (strings, and strings inside JSON values) and the catalog's var defaults.
  */
 export interface PlaceholderValues {
   /** `https://<worker>.<subdomain>.workers.dev`; null keeps `{{workerUrl}}` as written. */
   workerUrl: string | null;
+  /**
+   * The address the app is served at. The install check gives no app a custom
+   * domain, so it is `workerUrl`; null keeps `{{appUrl}}` as written.
+   */
+  appUrl: string | null;
   workerName: string;
   /** The account's id; absent or null keeps `{{accountId}}` as written. */
   accountId?: string | null;
@@ -793,14 +803,35 @@ export type JsonValue =
 // The manager's rules, from @appflare/schema: whitespace inside the braces is
 // allowed, and anything else in double braces is left as written. A test
 // checks these copies against the schema package's own functions.
-const PLACEHOLDER_PATTERN = /\{\{\s*(workerUrl|workerName|accountId)\s*\}\}/g;
+const PLACEHOLDER_PATTERN =
+  /\{\{\s*(appUrl|appHostname|workerUrl|workerHostname|workerName|accountId)\s*\}\}/g;
 
-/** `text` with `{{workerUrl}}`, `{{workerName}}` and `{{accountId}}` filled in, as the manager does. */
+/** The hostname of an https:// URL. */
+function hostnameOf(url: string): string {
+  return url.replace(/^[a-z]+:\/\//i, "").replace(/[/?#].*$/, "");
+}
+
+/**
+ * `text` with the address placeholders, `{{workerName}}` and `{{accountId}}`
+ * filled in, as the manager does. `{{wildcardHostname}}` is kept as written:
+ * the install check gives no app a wildcard domain.
+ */
 export function renderPlaceholders(text: string, values: PlaceholderValues): string {
   return text.replace(PLACEHOLDER_PATTERN, (match, key: string) => {
-    if (key === "workerName") return values.workerName;
-    if (key === "accountId") return values.accountId ?? match;
-    return values.workerUrl ?? match;
+    switch (key) {
+      case "workerName":
+        return values.workerName;
+      case "accountId":
+        return values.accountId ?? match;
+      case "appUrl":
+        return values.appUrl ?? match;
+      case "appHostname":
+        return values.appUrl === null ? match : hostnameOf(values.appUrl);
+      case "workerHostname":
+        return values.workerUrl === null ? match : hostnameOf(values.workerUrl);
+      default:
+        return values.workerUrl ?? match;
+    }
   });
 }
 
@@ -885,9 +916,11 @@ export function planCiInstall(
   const { entry } = options;
   const namespaceId = options.namespaceId ?? randomNamespaceId;
   const appName = entry?.installName ?? name;
+  const appUrl = options.subdomain === undefined ? null : healthUrl(appName, options.subdomain, "");
   const placeholders: PlaceholderValues = {
     workerName: appName,
-    workerUrl: options.subdomain === undefined ? null : healthUrl(appName, options.subdomain, ""),
+    workerUrl: appUrl,
+    appUrl,
     accountId: options.accountId ?? null,
   };
   const resources: CiResource[] = [];
@@ -934,7 +967,7 @@ export function planCiInstall(
           ),
         });
         resources.push({ type: "d1", name: resource, binding: binding.name });
-        const baseline = files.baseline[0];
+        const baseline = files.baseline;
         const database: CiD1Database = {
           database: resource,
           binding: binding.name,
@@ -1220,8 +1253,8 @@ export function planCiInstall(
     queues,
     queueConsumers,
     notes,
-    healthPath: catalogHealthPath(manifest.catalog),
-    healthMode: catalogHealthMode(manifest.catalog),
+    probePath: catalogHealthPath(manifest.catalog),
+    probeMode: catalogHealthMode(manifest.catalog),
   };
 }
 
@@ -1350,8 +1383,8 @@ export interface CiAppPlan {
    * named (the first in deploy order that binds it).
    */
   d1: CiAppD1Database[];
-  healthPath: string;
-  healthMode: HealthMode;
+  probePath: string;
+  probeMode: HealthMode;
 }
 
 /** A Worker name is a DNS label on workers.dev: at most 63 characters. */
@@ -1402,8 +1435,8 @@ export function planCiApp(
       queues: plan.queues,
       kvNamespaces: [],
       d1: plan.d1.map((database) => ({ ...database, worker: name })),
-      healthPath: plan.healthPath,
-      healthMode: plan.healthMode,
+      probePath: plan.probePath,
+      probeMode: plan.probeMode,
     };
   }
   if (helpers === undefined) {
@@ -1431,16 +1464,14 @@ export function planCiApp(
   // `{{workerUrl:<name>}}` of one, so null never reaches a var.
   const onWorkersDev = new Map(ordered.map((w) => [w.name, w.primary || w.workersDev !== false]));
   const placeholders = Object.fromEntries(
-    Object.entries(scriptNames).map(([entryName, scriptName]) => [
-      entryName,
-      {
-        workerName: scriptName,
-        workerUrl:
-          options.subdomain === undefined || onWorkersDev.get(entryName) === false
-            ? null
-            : healthUrl(scriptName, options.subdomain, ""),
-      },
-    ]),
+    Object.entries(scriptNames).map(([entryName, scriptName]) => {
+      const url =
+        options.subdomain === undefined || onWorkersDev.get(entryName) === false
+          ? null
+          : healthUrl(scriptName, options.subdomain, "");
+      // No custom domains in the install check: each Worker is served at its workers.dev URL.
+      return [entryName, { workerName: scriptName, workerUrl: url, appUrl: url }];
+    }),
   );
   const bindings = ordered.flatMap((w) => w.worker.bindings);
   const entry: EntryPlanContext = {
@@ -1515,8 +1546,8 @@ export function planCiApp(
     queues: [...new Set(plans.flatMap((p) => p.queues))],
     kvNamespaces: resources.filter((r) => r.type === "kv"),
     d1,
-    healthPath: primary?.healthPath ?? "/",
-    healthMode: primary?.healthMode ?? "default",
+    probePath: primary?.probePath ?? "/",
+    probeMode: primary?.probeMode ?? "no-server-errors",
   };
 }
 
@@ -1703,13 +1734,13 @@ export type CiHealthProbe<W> =
  */
 export function healthProbes<
   W extends { primary: boolean; plan: Pick<CiInstallPlan, "name" | "workersDev"> },
->(app: { workers: readonly W[]; healthPath: string }, subdomain: string): CiHealthProbe<W>[] {
+>(app: { workers: readonly W[]; probePath: string }, subdomain: string): CiHealthProbe<W>[] {
   const primary = app.workers.filter((w) => w.primary);
   const others = app.workers.filter((w) => !w.primary);
   return [
     ...primary.map((worker) => ({
       worker,
-      url: healthUrl(worker.plan.name, subdomain, app.healthPath),
+      url: healthUrl(worker.plan.name, subdomain, app.probePath),
       timeoutMs: PRIMARY_PROBE_TIMEOUT_MS,
     })),
     ...others.map((worker) =>
@@ -1820,20 +1851,20 @@ export function unpackArtifact(manifest: ArtifactManifest, zipPath: string, outD
         data: read(a),
       });
     }
-    const d1Lists = [
-      [D1_DIR, manifest.d1Migrations],
-      [D1_SCHEMA_DIR, manifest.d1Schema ?? {}],
-      [D1_POST_DEPLOY_DIR, manifest.d1PostDeploy ?? {}],
-      [D1_BASELINE_DIR, manifest.d1Baseline ?? {}],
-    ] as const;
     for (const name of ASSET_RULE_FILES) {
       const text = manifest.assets.config[name];
       if (typeof text === "string") {
         writes.push({ target: path.join(outDir, ASSETS_DIR, name), data: Buffer.from(text) });
       }
     }
-    for (const [dir, byBinding] of d1Lists) {
-      for (const [binding, files] of Object.entries(byBinding)) {
+    for (const [binding, sql] of Object.entries(manifest.d1)) {
+      const lists = [
+        [D1_DIR, sql.migrations],
+        [D1_SCHEMA_DIR, sql.schema],
+        [D1_POST_DEPLOY_DIR, sql.postDeploy],
+        [D1_BASELINE_DIR, sql.baseline === undefined ? [] : [sql.baseline]],
+      ] as const;
+      for (const [dir, files] of lists) {
         for (const f of files) {
           writes.push({
             target: safeJoin(path.join(outDir, dir), `${binding}/${f.name}`),
@@ -1871,21 +1902,10 @@ export function randomBase64Key32(): string {
 // ---------------------------------------------------------------------------
 // D1
 
-type D1File = ArtifactManifest["d1Migrations"][string][number];
-
 /** One D1 binding's migrations, schema files, post-deploy migrations and baseline, as the artifact records them. */
-function d1FilesOf(
-  manifest: ArtifactManifest,
-  binding: string,
-): { migrations: D1File[]; schema: D1File[]; postDeploy: D1File[]; baseline: D1File[] } {
-  const of = (lists: Record<string, D1File[]> | undefined): D1File[] =>
-    lists !== undefined && Object.hasOwn(lists, binding) ? (lists[binding] ?? []) : [];
-  return {
-    migrations: of(manifest.d1Migrations),
-    schema: of(manifest.d1Schema),
-    postDeploy: of(manifest.d1PostDeploy),
-    baseline: of(manifest.d1Baseline),
-  };
+function d1FilesOf(manifest: ArtifactManifest, binding: string): ArtifactD1Binding {
+  const sql = Object.hasOwn(manifest.d1, binding) ? manifest.d1[binding] : undefined;
+  return sql ?? { migrations: [], schema: [], postDeploy: [] };
 }
 
 /**
@@ -2218,13 +2238,13 @@ export async function runSeed(
 export type Probe = { status: number; body: string } | { error: string };
 
 /**
- * Whether a probe settles the check or should be retried. Under `status-only`
+ * Whether a probe settles the check or should be retried. Under `any-response`
  * any answer of the Worker itself settles it, a 5xx included; Cloudflare's own
  * error pages (`error code: <n>`) are not the Worker's answer.
  */
 export function classifyProbe(
   probe: Probe,
-  mode: HealthMode = "default",
+  mode: HealthMode = "no-server-errors",
 ): "ok" | "retry" | "soft-404" {
   if ("error" in probe) {
     return "retry";
@@ -2234,7 +2254,7 @@ export function classifyProbe(
     // Any other 404 may still be the workers.dev route propagating.
     return probe.body.includes("error code: 1042") ? "retry" : "soft-404";
   }
-  if (mode === "status-only" && !/^error code: \d+/.test(probe.body.trimStart())) {
+  if (mode === "any-response" && !/^error code: \d+/.test(probe.body.trimStart())) {
     return "ok";
   }
   if (probe.status >= 500) {
@@ -2252,7 +2272,7 @@ export interface HealthResult {
  * Polls `url` until it answers something other than a 5xx or a 404, for up to
  * `timeoutMs`. A plain 404 that persists to the deadline passes (an app without
  * a health path may serve 404 at `/`); a 1042, a 5xx, or no answer fails.
- * Under `status-only` a 5xx of the Worker's own passes too.
+ * Under `any-response` a 5xx of the Worker's own passes too.
  */
 export async function waitForHealth(
   probe: () => Promise<Probe>,

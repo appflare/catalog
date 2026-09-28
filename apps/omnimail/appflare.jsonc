@@ -22,7 +22,6 @@
   // The bump bot reads only v-prefixed semver tags, which are the web ones.
   "source": { "ref": "v1.1.4", "sha": "daa18a98494c2f9e7dd28c994dadfce0d6e5ab82" },
   "install": {
-    "tier": "artifact",
     "packageManager": "npm",
     "wranglerConfig": "wrangler.jsonc",
     "workerName": "omni-mail",
@@ -30,7 +29,7 @@
     // script runs its lint and type checks first; the bundle is the same.
     "buildCommand": "vite build",
     // Answers without a sign-in, after the API has checked the D1 schema.
-    "healthPath": "/api/config",
+    "health": { "path": "/api/config" },
     // Upstream's guide points the zone's catch-all at the Worker. Mail to an
     // address that is not a mailbox in the app is refused during the SMTP
     // exchange and never stored.
@@ -58,13 +57,13 @@
       "name": "MAIL_CREDENTIALS_KEY",
       "label": "Mail credentials key",
       "help": "Encrypts the passwords and tokens of connected external mailboxes (Gmail, Microsoft, QQ, NAVER, Yandex, iCloud, Linux DO). Changing it makes saved credentials unreadable.",
-      "generate": true
+      "generate": "password"
     },
     {
       "name": "TOTP_ENCRYPTION_KEY",
       "label": "Two-factor encryption key",
       "help": "Encrypts administrators' authenticator secrets. Have administrators turn two-factor off before you change it.",
-      "generate": true
+      "generate": "password"
     },
     {
       "name": "RESEND_DOMAIN_CONFIGS",
@@ -107,40 +106,44 @@
     {
       "name": "SUPER_ADMIN_EMAIL",
       "label": "Super administrator email",
-      "help": "The sign-in address of the one super administrator, for example owner@example.com.",
-      "required": true
+      "help": "The sign-in address of the one super administrator, for example owner@example.com."
     },
     {
       "name": "APP_NAME",
       "label": "Site name",
       "help": "Shown in the app and in authenticator apps.",
-      "default": "OmniMail"
+      "default": "OmniMail",
+      "optional": true
     },
     {
       "name": "TURNSTILE_SITE_KEY",
       "label": "Turnstile site key",
-      "help": "Optional. The public key of the Turnstile widget whose secret key is set above."
+      "help": "Optional. The public key of the Turnstile widget whose secret key is set above.",
+      "optional": true
     },
     {
       "name": "SENDFLARE_FROM",
       "label": "SendFlare sender",
-      "help": "Optional. A verified sender address for SendFlare, without a display name."
+      "help": "Optional. A verified sender address for SendFlare, without a display name.",
+      "optional": true
     },
     {
       "name": "LINUX_DO_CLIENT_ID",
       "label": "Linux DO Connect client ID",
-      "help": "Optional. Register {{workerUrl}}/api/auth/linux-do/callback as the callback URL."
+      "help": "Optional. Register the app's address followed by /api/auth/linux-do/callback as the callback URL.",
+      "optional": true
     },
     {
       "name": "APP_ORIGINS",
       "label": "Extra allowed origins",
-      "help": "Optional. Comma-separated exact origins of other front ends or browser extensions (chrome-extension://<id>) that may call the API. The app's own address never needs listing."
+      "help": "Optional. Comma-separated exact origins of other front ends or browser extensions (chrome-extension://<id>) that may call the API. The app's own address never needs listing.",
+      "optional": true
     }
   ],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Open {{workerUrl}}. The first-run page checks D1, R2, the mail queue, the super administrator email and the setup token; enter a display name, a password and the setup token to create the super administrator. The database is already migrated."
+      "content": "Open {{appUrl}}. The first-run page checks D1, R2, the mail queue, the super administrator email and the setup token; enter a display name, a password and the setup token to create the super administrator. The database is already migrated."
     },
     {
       "type": "markdown",
@@ -150,6 +153,5 @@
       "type": "markdown",
       "content": "Sending needs a Resend or SendFlare account with a verified sender domain; set its configuration in this app's settings."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

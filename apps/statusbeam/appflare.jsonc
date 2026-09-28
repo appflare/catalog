@@ -17,13 +17,14 @@
   "maintainers": ["MendyLanda"],
   // The monorepo tags each package on its own (web-v0.1.1, worker-v0.1.1,
   // both on this commit), so the version is set here.
-  "source": { "ref": "web-v0.1.1", "sha": "4473885671aa0227c21ac4e08d69d5023c7c0879" },
+  "source": {
+    "ref": "web-v0.1.1",
+    "sha": "4473885671aa0227c21ac4e08d69d5023c7c0879",
+    "version": "0.1.1"
+  },
   "install": {
-    "tier": "artifact",
     "packageManager": "bun",
     "wranglerConfig": "apps/web/wrangler.jsonc",
-    "workerName": "statusbeam",
-    "version": "0.1.1",
     // The shared core package first, then the Astro status page. The checker
     // is bundled by wrangler from its sources.
     "buildCommand": [
@@ -37,7 +38,6 @@
   },
   // Workers, D1, KV, Workers Cache and one cron trigger fit the free plan.
   "plan": "free",
-  "requires": [],
   "resources": {
     "d1": {
       // Upstream ships one schema file instead of migrations. Every statement
@@ -51,7 +51,7 @@
       "name": "WEBHOOK_SECRET",
       "label": "Webhook secret",
       "help": "Authenticates Statuspage and Sentry webhooks sent to the checker. Without it the webhook endpoint refuses every request and only the cron updates status.",
-      "generate": true,
+      "generate": "password",
       "workers": ["checker"]
     },
     {
@@ -76,12 +76,10 @@
       "workers": ["checker"]
     }
   ],
-  "vars": [],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Write your list of sites as upstream's `status.config.example.yml` shows, then in the Cloudflare dashboard open Storage & Databases, Workers KV, the namespace named `{{workerName}}-status-kv`, and add it as the value of the key `config`. The checker's next run, within five minutes, fills {{workerUrl}}."
+      "content": "Write your list of sites as upstream's `status.config.example.yml` shows, then in the Cloudflare dashboard open Storage & Databases, Workers KV, the namespace named `{{workerName}}-status-kv`, and add it as the value of the key `config`. The checker's next run, within five minutes, fills {{appUrl}}."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

@@ -9,7 +9,6 @@
   "name": "git-on-cloudflare",
   "summary": "A git server on Workers: push and clone over HTTPS, browse code in a web interface, with repositories in Durable Objects and R2.",
   "tagline": "Host your code and browse changes in your own Cloudflare account",
-  "homepage": "https://github.com/zllovesuki/git-on-cloudflare",
   "repo": "zllovesuki/git-on-cloudflare",
   "license": "MIT",
   "categories": ["developer-tools"],
@@ -18,12 +17,10 @@
   // No release tags upstream; the pin tracks main.
   "source": { "ref": "main", "sha": "007a96eae94c8f562d223f81eb7548c8f7c38673" },
   "install": {
-    "tier": "artifact",
     "packageManager": "npm",
     // Upstream's custom-domain routes in this config are its own and are not
     // installed.
     "wranglerConfig": "wrangler.jsonc",
-    "workerName": "git-on-cloudflare",
     // Vite with the Cloudflare plugin builds the Worker and the client
     // islands into dist/.
     "buildCommand": "npm run build"
@@ -41,7 +38,7 @@
       "name": "SESSION_SECRET",
       "label": "Session secret",
       "help": "Seals browser sign-in cookies. Setting a new value signs everyone out.",
-      "generate": true
+      "generate": "password"
     },
     {
       "name": "TESSERA_OIDC_CLIENT_ID",
@@ -60,8 +57,7 @@
       "label": "OIDC issuer URL",
       "help": "The issuer of your OpenID Connect provider, the address that serves /.well-known/openid-configuration. It must give each user a stable `sub`; a slug-like `preferred_username` lets people claim their namespace automatically.",
       // Replaces upstream's own identity provider from the wrangler config.
-      "default": "",
-      "required": true
+      "default": ""
     },
     {
       "name": "LOG_LEVEL",
@@ -73,24 +69,25 @@
         { "value": "warn", "label": "Warnings" },
         { "value": "error", "label": "Errors" }
       ],
-      "default": "info"
+      "default": "info",
+      "optional": true
     },
     {
       "name": "REPO_DO_IDLE_MINUTES",
       "label": "Idle cleanup after (minutes)",
       "help": "How long a repository sits unused before its Durable Object tidies up.",
-      "default": "30"
+      "default": "30",
+      "optional": true
     }
   ],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "At your OpenID Connect provider, set the client's redirect URI to `{{workerUrl}}/auth/callback`. Then open {{workerUrl}}/auth/account, sign in, create a repository, and create a personal access token for pushing."
+      "content": "At your OpenID Connect provider, set the client's redirect URI to `{{appUrl}}/auth/callback`. Then open {{appUrl}}/auth/account, sign in, create a repository, and create a personal access token for pushing."
     },
     {
       "type": "markdown",
-      "content": "Push with your namespace as the user name and the token as the password:\n\n```sh\ngit remote add goc {{workerUrl}}/<namespace>/<repo>\ngit push -u goc main\n```"
+      "content": "Push with your namespace as the user name and the token as the password:\n\n```sh\ngit remote add goc {{appUrl}}/<namespace>/<repo>\ngit push -u goc main\n```"
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

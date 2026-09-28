@@ -16,7 +16,6 @@
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v0.63.0", "sha": "f756d1d0fdbf415c1cd4a7178f3fe5d7a026fc90" },
   "install": {
-    "tier": "artifact",
     "packageManager": "npm",
     // The hub is its own npm project in worker/, with its own lockfile,
     // beside the Electron widget at the root. Plain JavaScript: no build step.
@@ -24,19 +23,18 @@
     "wranglerConfig": "worker/wrangler.toml",
     "workerName": "token-monitor-hub",
     // Answers without the secret.
-    "healthPath": "/api/health"
+    "health": { "path": "/api/health" }
   },
   // One SQLite-backed Durable Object holds every device's record; a few
   // devices posting once a minute stay far inside the free plan.
   "plan": "free",
-  "requires": [],
   "secrets": [
     {
       // Upstream answers 503 on every data route while it is unset.
       "name": "TOKEN_MONITOR_SECRET",
       "label": "Hub secret",
       "help": "Every widget and agent sends it to post or read your usage. Enter the same value in each widget's Multi-device Sync settings and as TOKEN_MONITOR_SECRET for headless agents. Changing it disconnects them until they get the new one.",
-      "generate": true
+      "generate": "password"
     }
   ],
   "vars": [
@@ -46,18 +44,18 @@
       "help": "Serves combined totals without the secret at /api/public/stats, for public dashboards. Per-device records and account identifiers are left out.",
       "type": "select",
       "options": [{ "value": "0", "label": "Off" }, { "value": "1", "label": "On" }],
-      "default": "0"
+      "default": "0",
+      "optional": true
     }
   ],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "In each Token Monitor widget, open Settings, Multi-device Sync, and enter the hub URL {{workerUrl}} and the hub secret from this app's settings. The status pill turns from Local to Live once it connects."
+      "content": "In each Token Monitor widget, open Settings, Multi-device Sync, and enter the hub URL {{appUrl}} and the hub secret from this app's settings. The status pill turns from Local to Live once it connects."
     },
     {
       "type": "markdown",
-      "content": "For a headless agent, set `TOKEN_MONITOR_HUB_URL={{workerUrl}}` and `TOKEN_MONITOR_SECRET` to the hub secret in its `.env`. iOS widgets (Widgy, Scriptable) can read `{{workerUrl}}/api/stats` with the secret as a Bearer header."
+      "content": "For a headless agent, set `TOKEN_MONITOR_HUB_URL={{appUrl}}` and `TOKEN_MONITOR_SECRET` to the hub secret in its `.env`. iOS widgets (Widgy, Scriptable) can read `{{appUrl}}/api/stats` with the secret as a Bearer header."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

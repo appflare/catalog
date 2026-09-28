@@ -7,32 +7,28 @@
   "name": "LLM API Proxy",
   "summary": "One OpenAI-compatible (and Ollama-compatible) API in front of OpenAI, Anthropic, Gemini, DeepSeek, Groq, Grok, OpenRouter, Azure OpenAI and more, using your own provider keys behind a key of its own.",
   "tagline": "Connect your AI tools to models from different providers",
-  "homepage": "https://github.com/rxliuli/llm-api-proxy",
   "repo": "rxliuli/llm-api-proxy",
-  "license": "GPL-3.0",
+  "license": "GPL-3.0-only",
   "categories": ["ai", "developer-tools"],
   "authors": [{ "name": "rxliuli", "url": "https://rxliuli.com", "github": "rxliuli" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags; the pin is the head of main.
   "source": { "ref": "main", "sha": "43db1c01feaf4daee11a9552cd606cbbff2ab079" },
   "install": {
-    "tier": "artifact",
     "packageManager": "pnpm",
     "wranglerConfig": "wrangler.jsonc",
-    "workerName": "llm-api-proxy",
     // "/" answers 404. Without the proxy key this route answers 401 from the
     // Worker itself, before any call to a provider.
-    "healthPath": "/v1/models"
+    "health": { "path": "/v1/models" }
   },
   // One stateless Worker; the providers bill their own usage.
   "plan": "free",
-  "requires": [],
   "secrets": [
     {
       "name": "API_KEY",
       "label": "Proxy API key",
       "help": "Clients send it as `Authorization: Bearer <key>`; the Ollama API takes it in the path. Without it the proxy refuses every request.",
-      "generate": true
+      "generate": "password"
     },
     { "name": "OPENAI_API_KEY", "label": "OpenAI API key", "optional": true },
     {
@@ -85,72 +81,83 @@
     {
       "name": "CORS_ORIGIN",
       "label": "Allowed browser origin",
-      "help": "The one origin allowed to call the proxy from a browser, for example `https://example.com`. Leave empty for server-side clients only."
+      "help": "The one origin allowed to call the proxy from a browser, for example `https://example.com`. Leave empty for server-side clients only.",
+      "optional": true
     },
     {
       "name": "OPENROUTER_MODELS",
       "label": "OpenRouter models",
-      "help": "Comma-separated OpenRouter model ids, for example `openai/gpt-4o-mini,anthropic/claude-sonnet-4.5`. Leave empty for upstream's list."
+      "help": "Comma-separated OpenRouter model ids, for example `openai/gpt-4o-mini,anthropic/claude-sonnet-4.5`. Leave empty for upstream's list.",
+      "optional": true
     },
     {
       "name": "CEREBRAS_MODELS",
       "label": "Cerebras models",
-      "help": "Comma-separated Cerebras model ids, for example `llama-3.1-8b`."
+      "help": "Comma-separated Cerebras model ids, for example `llama-3.1-8b`.",
+      "optional": true
     },
     {
       "name": "AZURE_OPENAI_ENDPOINT",
       "label": "Azure OpenAI endpoint",
-      "help": "For example `https://<resource>.openai.azure.com`."
+      "help": "For example `https://<resource>.openai.azure.com`.",
+      "optional": true
     },
     {
       "name": "AZURE_API_VERSION",
       "label": "Azure OpenAI API version",
-      "help": "For example `2024-10-21`."
+      "help": "For example `2024-10-21`.",
+      "optional": true
     },
     {
       "name": "AZURE_DEPLOYMENT_MODELS",
       "label": "Azure OpenAI deployments",
-      "help": "Comma-separated `model:deployment` pairs, for example `gpt-4o-mini:gpt-4o-mini-dev,gpt-35-turbo:gpt-35-dev`."
+      "help": "Comma-separated `model:deployment` pairs, for example `gpt-4o-mini:gpt-4o-mini-dev,gpt-35-turbo:gpt-35-dev`.",
+      "optional": true
     },
     {
       "name": "ALIYUN_BAILIAN_MODELS",
       "label": "Bailian models",
-      "help": "Comma-separated model ids, for example `qwen-max,qwen-7b-chat`. Leave empty for `qwen-max`."
+      "help": "Comma-separated model ids, for example `qwen-max,qwen-7b-chat`. Leave empty for `qwen-max`.",
+      "optional": true
     },
     {
       "name": "OLLAMA_BASE_URL",
       "label": "Ollama base URL",
-      "help": "The OpenAI-compatible URL of an Ollama server the Worker can reach over the internet, for example `https://ollama.example.com/v1`. Setting it turns the Ollama provider on."
+      "help": "The OpenAI-compatible URL of an Ollama server the Worker can reach over the internet, for example `https://ollama.example.com/v1`. Setting it turns the Ollama provider on.",
+      "optional": true
     },
     {
       "name": "OLLAMA_MODELS",
       "label": "Ollama models",
-      "help": "Comma-separated models of that server, for example `llama3.3:70b,phi4:latest`. Clients ask for them as `ollama/<model>`."
+      "help": "Comma-separated models of that server, for example `llama3.3:70b,phi4:latest`. Clients ask for them as `ollama/<model>`.",
+      "optional": true
     },
     {
       "name": "VERTEX_ANTROPIC_GOOGLE_SA_CLIENT_EMAIL",
       "label": "Vertex AI service account email",
-      "help": "The `client_email` of the service account."
+      "help": "The `client_email` of the service account.",
+      "optional": true
     },
     {
       "name": "VERTEX_ANTROPIC_REGION",
       "label": "Vertex AI region",
-      "help": "For example `us-east5`."
+      "help": "For example `us-east5`.",
+      "optional": true
     },
     {
       "name": "VERTEX_ANTROPIC_PROJECTID",
-      "label": "Vertex AI project ID"
+      "label": "Vertex AI project ID",
+      "optional": true
     }
   ],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Point an OpenAI client at {{workerUrl}}/v1 with the proxy API key from this app's settings as its API key. {{workerUrl}}/v1/models lists the models of every provider you configured; ask for any of them by name."
+      "content": "Point an OpenAI client at {{appUrl}}/v1 with the proxy API key from this app's settings as its API key. {{appUrl}}/v1/models lists the models of every provider you configured; ask for any of them by name."
     },
     {
       "type": "markdown",
-      "content": "Clients that only speak the Ollama API use {{workerUrl}}/ollama/<proxy API key>/v1. That address carries the key in its path, so it shows up in request logs."
+      "content": "Clients that only speak the Ollama API use {{appUrl}}/ollama/<proxy API key>/v1. That address carries the key in its path, so it shows up in request logs."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

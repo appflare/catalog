@@ -18,10 +18,8 @@
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v1.1.0", "sha": "ed79eebaa1ec571b24f41a8537b275201ab53515" },
   "install": {
-    "tier": "artifact",
     "packageManager": "bun",
     "wranglerConfig": "wrangler.jsonc",
-    "workerName": "quickinbox",
     // `vite build` (SvelteKit's Cloudflare adapter), then upstream's script
     // that wraps the generated Worker with its email() handler.
     "buildCommand": "bun run build"
@@ -97,35 +95,35 @@
         { "value": "resend", "label": "Resend" },
         { "value": "cloudflare", "label": "Cloudflare Email Service" }
       ],
-      "default": "resend"
+      "default": "resend",
+      "optional": true
     },
     {
       "name": "CLOUDFLARE_MAIL_DOMAINS",
       "label": "Cloudflare mail domains",
       "help": "With Cloudflare Email Service: your domains, separated by commas. Ignored with Resend.",
-      "default": "example.com",
-      "required": true
+      "default": "example.com"
     },
     {
       "name": "APP_URL",
       "label": "App URL",
       "help": "Linked from Telegram notifications.",
-      "default": "{{workerUrl}}"
+      "default": "{{appUrl}}",
+      "optional": true
     }
   ],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Open {{workerUrl}}/setup to pick your domain and create the admin account; its address is both the inbox and the sign-in."
+      "content": "Open {{appUrl}}/setup to pick your domain and create the admin account; its address is both the inbox and the sign-in."
     },
     {
       "type": "markdown",
-      "content": "**Resend:** verify the domain in Resend with receiving on, then add a webhook to `{{workerUrl}}/api/webhooks/resend` for the events `email.received`, `email.sent`, `email.delivered`, `email.bounced`, `email.complained`, `email.delivery_delayed` and `email.failed`, and paste its signing secret into this app's settings as the Resend webhook signing secret."
+      "content": "**Resend:** verify the domain in Resend with receiving on, then add a webhook to `{{appUrl}}/api/webhooks/resend` for the events `email.received`, `email.sent`, `email.delivered`, `email.bounced`, `email.complained`, `email.delivery_delayed` and `email.failed`, and paste its signing secret into this app's settings as the Resend webhook signing secret."
     },
     {
       "type": "markdown",
       "content": "**Cloudflare Email Service:** turn on Email Sending and Email Routing for the domain, point the zone's catch-all rule at this Worker ({{workerName}}), and list the domain under Cloudflare mail domains."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

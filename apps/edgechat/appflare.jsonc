@@ -10,19 +10,17 @@
   "tagline": "Private team chat with groups, direct messages and file sharing",
   "homepage": "https://echat.azora.top",
   "repo": "aozorae/Edgechat",
-  "license": "GPL-3.0",
+  "license": "GPL-3.0-or-later",
   "categories": ["chat"],
   "authors": [{ "name": "aozorae", "github": "aozorae" }],
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v2.1.2", "sha": "e47e9fa94facad3a0e1ea1306dfe90919d73ca4b" },
   "install": {
-    "tier": "artifact",
     "packageManager": "npm",
     "wranglerConfig": "wrangler.example.toml",
-    "workerName": "edgechat",
     // The Vue front end; the config's build.command writes the schema manifest.
     "buildCommand": "npm run build:frontend",
-    "healthPath": "/api/health"
+    "health": { "path": "/api/health" }
   },
   // Workers, D1, KV, SQLite-backed Durable Objects and one daily cron trigger
   // fit the free plan. R2 must be turned on in the account for attachments.
@@ -42,7 +40,7 @@
       "name": "EDGECHAT_ADMIN_PASSWORD",
       "label": "Admin password",
       "help": "The password of the first admin account.",
-      "generate": true,
+      "generate": "password",
       "seedOnly": true
     }
   ],
@@ -51,32 +49,28 @@
       "name": "EDGECHAT_ENCRYPTION_ACTIVE_KEY_ID",
       "label": "Active encryption key id",
       "help": "The key that encrypts new messages. auto-v1 is the encryption key above; keep it unless you add a second key.",
-      "default": "auto-v1",
-      "required": true
+      "default": "auto-v1"
     },
     {
       "name": "MESSAGE_RETENTION_DAYS",
       "label": "Keep messages for (days)",
       "help": "A daily job deletes messages older than this, with their attachments.",
-      "default": "7",
-      "required": true
+      "default": "7"
     },
     {
       "name": "EDGECHAT_ADMIN_USERNAME",
       "label": "Admin user name",
       "help": "The user name of the first admin account, which invites everyone else.",
       "default": "admin",
-      "required": true,
       "seedOnly": true
     }
   ],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Open {{workerUrl}} and sign in with the admin user name and password from the install form (Appflare does not keep the password). Invite people from the admin dashboard: sign-up is by invite link only."
+      "content": "Open {{appUrl}} and sign in with the admin user name and password from the install form (Appflare does not keep the password). Invite people from the admin dashboard: sign-up is by invite link only."
     }
   ],
-  "tokenPermissions": [],
   "resources": {
     "d1": {
       "DB": {

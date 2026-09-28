@@ -4,7 +4,6 @@
   "name": "Glance",
   "summary": "Share what your coding agents build: publish HTML, Markdown and files as private sites your team opens, comments on, and annotates. An open-source alternative to Claude Artifacts.",
   "tagline": "Share your coding agent's work as pages your team can review",
-  "homepage": "https://github.com/plivo-labs/glance",
   "repo": "plivo-labs/glance",
   "license": "MIT",
   "categories": ["developer-tools"],
@@ -12,13 +11,11 @@
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v0.14.0", "sha": "caaed8f60a5365a652a9d519f77bfcb489016585" },
   "install": {
-    "tier": "artifact",
     "packageManager": "bun",
     // The app Worker serves the web app (built below) and the API; the content
     // Worker serves uploaded files from its own origin, so a published page
     // can never read the app's cookies.
     "wranglerConfig": "packages/api/wrangler.jsonc",
-    "workerName": "glance",
     // The React front end the app Worker serves as static assets.
     "buildCommand": "bun run build:web",
     "workers": [
@@ -26,7 +23,7 @@
       { "name": "content", "wranglerConfig": "packages/api/wrangler.content.jsonc" }
     ],
     // Answers without a sign-in, from the Worker's own code.
-    "healthPath": "/api/health"
+    "health": { "path": "/api/health" }
   },
   // D1, KV, R2, a SQLite-backed Durable Object, rate limits and Workers AI
   // (voice-comment transcription) all have free tiers.
@@ -37,14 +34,14 @@
       "name": "SESSION_SECRET",
       "label": "Session secret",
       "help": "Signs the app's sign-in sessions.",
-      "generate": true,
+      "generate": "password",
       "workers": ["app"]
     },
     {
       "name": "CONTENT_TOKEN_SECRET",
       "label": "Content token secret",
       "help": "Signs the short-lived links the app hands out for private files. Both Workers check it.",
-      "generate": true
+      "generate": "password"
     },
     {
       "name": "BOOTSTRAP_TOKEN",
@@ -79,32 +76,31 @@
       "name": "APP_URL",
       "label": "App URL",
       "help": "Where people open Glance. Both Workers use it.",
-      "default": "{{workerUrl}}"
+      "default": "{{appUrl}}",
+      "optional": true
     },
     {
       "name": "CONTENT_URL",
       "label": "Content URL",
       "help": "The content Worker's address, which serves uploaded files.",
-      "default": "{{workerUrl:content}}"
+      "default": "{{appUrl:content}}",
+      "optional": true
     },
     {
       "name": "ALLOWED_HD",
       "label": "Allowed Google Workspace domain",
-      "help": "Only accounts of this domain may sign in with Google, for example example.com.",
-      "required": true
+      "help": "Only accounts of this domain may sign in with Google, for example example.com."
     },
     {
       "name": "SUPERADMIN_EMAIL",
       "label": "Admin email",
-      "help": "The first sign-in token makes this address the first admin.",
-      "required": true
+      "help": "The first sign-in token makes this address the first admin."
     }
   ],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Open {{workerUrl}}/login and paste the first sign-in token under **Complete setup** to become the admin. Published files are served from {{workerUrl:content}}."
+      "content": "Open {{appUrl}}/login and paste the first sign-in token under **Complete setup** to become the admin. Published files are served from {{appUrl:content}}."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

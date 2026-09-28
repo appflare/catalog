@@ -36,11 +36,11 @@ import type { VersionResolver } from "./versions.ts";
 /**
  * Builds the catalog index. Every row lists the app's `authors` from the
  * current manifest, or the owner of its repository (`authors.ts`), its
- * `categories`, `license` (and `licenseNote` and `tagline` when it has them),
- * and the Cloudflare `services` it uses (see `rowFacts`), so a manager can
- * show them without reading a manifest, and `addedAt`, when the entry first
- * appeared in the catalog (`added-at.ts`). Otherwise rows depend on the
- * entry's `install.tier`:
+ * `tagline`, `categories`, `license` (and `licenseNote` when it has one),
+ * its `revision`, and the Cloudflare `services` it uses (see `rowFacts`), so a
+ * manager can show them without reading a manifest, and `addedAt`, when the
+ * entry first appeared in the catalog (`added-at.ts`). Otherwise rows depend
+ * on the entry's `install.tier`:
  *
  * - `sandbox` and `self-deploying`: no artifact. The row's `version` is what
  *   the current pin packs to, and its `build` block names the pin and the
@@ -52,20 +52,21 @@ import type { VersionResolver } from "./versions.ts";
  *   (`self-deploying`).
  * - `artifact`: as below.
  *
- * Where an `artifact` tier app's `version` and `digest` come from:
+ * Where an `artifact` tier app's `version` and `artifacts.digest` come from:
  *
  * 1. A local artifact at `<distDir>/<slug>/manifest.json` (written by
  *    `pack-app`), when present and built from the manifest's current pin
- *    (`app` equals the slug and `source.sha` equals `source.sha` in
- *    `appflare.jsonc`). A local artifact for another pin is ignored with a warning.
+ *    (`app` equals the slug and the embedded catalog manifest's `source.sha`
+ *    equals `source.sha` in `appflare.jsonc`). A local artifact for another
+ *    pin is ignored with a warning.
  * 2. Otherwise the GitHub Release tagged `<slug>@<version>`, where `<version>` is
  *    what the CURRENT pin packs to (the packer's own `deriveVersion`), provided
  *    it carries the three assets and its `manifest.json` names the same app,
- *    version, and `source.sha`. Never "the most recent release": a pin whose
+ *    version, and pin. Never "the most recent release": a pin whose
  *    release does not exist yet is not listed with an older artifact.
  * 3. Otherwise the app is omitted, with a warning.
  *
- * `digest` is always the sha256 hex of the exact `manifest.json` bytes.
+ * `artifacts.digest` is always the sha256 hex of the exact `manifest.json` bytes.
  * Publish CI passes `distDir: null` so every digest is over bytes actually on a
  * release.
  */
@@ -88,15 +89,20 @@ export interface IndexBuildOptions {
   warn: (message: string) => void;
   /** Rows of the index being replaced, to carry `lastVerified` forward. */
   previousApps?: readonly IndexApp[];
-  /** What `install.sandbox` defaults to, from `@appflare/schema`. */
+  /** What `install.container` defaults to, from `@appflare/schema`. */
   sandboxDefaults: SandboxDefaults;
   /** The entry's images (see `media.ts`); rows get no `media` block without it. */
   mediaFor?: (manifest: CatalogManifest) => IndexMedia | undefined;
   /**
    * When each entry first appeared in the catalog, by slug (see
-   * `added-at.ts`); a row without a time gets no `addedAt`.
+   * `added-at.ts`). An entry missing from it gets {@link builtAt}.
    */
   addedAt?: ReadonlyMap<string, string>;
+  /**
+   * When this index is built, in ISO 8601: the `addedAt` of an entry whose
+   * first commit is unknown, such as one that is not committed yet.
+   */
+  builtAt: string;
   /** `appServices` from `@appflare/schema`, which works out each row's `services`. */
   services: AppServicesOf;
   /**
@@ -132,14 +138,25 @@ export function sha256Hex(bytes: Uint8Array): string {
   return createHash("sha256").update(bytes).digest("hex");
 }
 
-/** Release-asset URLs for one app version. */
-export function artifactUrls(repo: string, slug: string, version: string): IndexArtifacts {
+/** Release-asset URLs for one app version, with the sha256 of its `manifest.json`. */
+export function artifactUrls(
+  repo: string,
+  slug: string,
+  version: string,
+  digest: string,
+): IndexArtifacts {
   const base = `https://github.com/${repo}/releases/download/${slug}@${version}`;
   return {
     zip: `${base}/${slug}-${version}.zip`,
     manifest: `${base}/manifest.json`,
     sig: `${base}/manifest.sig`,
+    digest,
   };
+}
+
+/** The commit an artifact was built from: its embedded catalog manifest's pin. */
+function artifactPin(artifact: ArtifactManifest): string {
+  return artifact.catalog.source.sha;
 }
 
 function parseArtifactManifest(
@@ -168,7 +185,7 @@ export function resolveArtifact(
     if (existsSync(localPath)) {
       const bytes = readFileSync(localPath);
       const local = parseArtifactManifest(bytes, options.artifactManifest, localPath);
-      if (local.app === slug && local.source.sha === manifest.source.sha) {
+      if (local.app === slug && artifactPin(local) === manifest.source.sha) {
         if (local.keyId === "unsigned") {
           options.warn(
             `${slug}: listing the local UNSIGNED artifact ${local.version} from ${localPath}; ` +
@@ -178,7 +195,7 @@ export function resolveArtifact(
         return { version: local.version, digest: sha256Hex(bytes), from: "local", manifest: local };
       }
       options.warn(
-        `${slug}: ignoring ${localPath}: built from ${local.app}@${local.source.sha}, ` +
+        `${slug}: ignoring ${localPath}: built from ${local.app}@${artifactPin(local)}, ` +
           `not the current pin ${manifest.source.sha}`,
       );
     }
@@ -216,11 +233,11 @@ export function resolveArtifact(
       if (
         published.app !== slug ||
         published.version !== version ||
-        published.source.sha !== manifest.source.sha
+        artifactPin(published) !== manifest.source.sha
       ) {
         options.warn(
           `${slug}: omitted: ${label} describes ${published.app}@${published.version} from ` +
-            `${published.source.sha}, not the current pin ${manifest.source.sha}`,
+            `${artifactPin(published)}, not the current pin ${manifest.source.sha}`,
         );
         return null;
       }
@@ -243,12 +260,12 @@ export function resolveArtifact(
 
 /**
  * The digest that identifies what a row installs, which `lastVerified` is
- * about: the artifact manifest's `digest`, or for a `sandbox` or
+ * about: the artifact manifest's (`artifacts.digest`), or for a `sandbox` or
  * `self-deploying` tier row the published catalog manifest's
  * `build.manifestDigest`. Null for neither.
  */
-export function verifiedDigest(row: Pick<IndexApp, "digest" | "build">): string | null {
-  return row.digest ?? row.build?.manifestDigest ?? null;
+export function verifiedDigest(row: Pick<IndexApp, "artifacts" | "build">): string | null {
+  return row.artifacts?.digest ?? row.build?.manifestDigest ?? null;
 }
 
 /**
@@ -286,6 +303,7 @@ export function toIndexApp(
     | "workerFacts"
     | "mediaFor"
     | "addedAt"
+    | "builtAt"
     | "revisionProblem"
     | "revisionSignatures"
     | "previousApps"
@@ -303,10 +321,10 @@ export function toIndexApp(
     slug: manifest.slug,
     name: manifest.name,
     summary: manifest.summary,
+    tagline: manifest.tagline,
     ...addedAtOf(manifest, options),
     version: artifact.version,
-    artifacts: artifactUrls(options.repo, manifest.slug, artifact.version),
-    digest: artifact.digest,
+    artifacts: artifactUrls(options.repo, manifest.slug, artifact.version, artifact.digest),
     tier: manifest.install.tier,
     plan: manifest.plan,
     requires: [...manifest.requires],
@@ -321,10 +339,10 @@ export function toIndexApp(
 
 /**
  * A row's `services`, `keyValueDurableObjects` (only when true),
- * `categories`, `license`, and `licenseNote` and `tagline` when the current
- * catalog manifest has them. `licenseNote` and `tagline` are index-only
- * (`INDEX_ONLY_FIELDS` in `publish-plan.ts`): an edit to them publishes with
- * the next index and no release. For an artifact tier entry the services come from the
+ * `categories`, `license`, and `licenseNote` when the current catalog
+ * manifest has one. `licenseNote`, like the row's `tagline` and `authors`, is
+ * index-only (`INDEX_ONLY_CATALOG_FIELDS` in `@appflare/schema`): an edit to
+ * it publishes with the next index and no release. For an artifact tier entry the services come from the
  * published artifact manifest: its Workers (bindings, queue consumers, crons,
  * Durable Object migrations of every Worker of the app together, from
  * `workerFacts`) and the catalog manifest packed into it
@@ -341,10 +359,9 @@ export function rowFacts(
   workerFacts: WorkerFactsOf = oneWorkerFacts,
 ): Pick<
   IndexApp,
-  "services" | "keyValueDurableObjects" | "categories" | "license" | "licenseNote" | "tagline"
+  "services" | "keyValueDurableObjects" | "categories" | "license" | "licenseNote"
 > {
-  // Parsed by the real artifact manifest schema, so a full catalog manifest.
-  const catalog = artifact === null ? manifest : (artifact.catalog as CatalogManifest);
+  const catalog = artifact === null ? manifest : artifact.catalog;
   const found = services(
     { ...catalog, requires: [...new Set([...manifest.requires, ...catalog.requires])] },
     artifact === null ? null : workerFacts(artifact),
@@ -355,17 +372,15 @@ export function rowFacts(
     categories: [...manifest.categories],
     license: manifest.license,
     ...(manifest.licenseNote === undefined ? {} : { licenseNote: manifest.licenseNote }),
-    ...(manifest.tagline === undefined ? {} : { tagline: manifest.tagline }),
   };
 }
 
-/** A row's `addedAt`, when the entry's first commit is known. */
+/** A row's `addedAt`: the entry's first commit, else when the index is built. */
 function addedAtOf(
   manifest: CatalogManifest,
-  options: Pick<IndexBuildOptions, "addedAt">,
-): { addedAt?: string } {
-  const time = options.addedAt?.get(manifest.slug);
-  return time === undefined ? {} : { addedAt: time };
+  options: Pick<IndexBuildOptions, "addedAt" | "builtAt">,
+): { addedAt: string } {
+  return { addedAt: options.addedAt?.get(manifest.slug) ?? options.builtAt };
 }
 
 /**
@@ -396,6 +411,7 @@ export function toSandboxIndexApp(
     slug: manifest.slug,
     name: manifest.name,
     summary: manifest.summary,
+    tagline: manifest.tagline,
     ...addedAtOf(manifest, options),
     version,
     tier: manifest.install.tier,

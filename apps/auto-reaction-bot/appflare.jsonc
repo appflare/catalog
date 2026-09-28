@@ -8,7 +8,6 @@
   "name": "Auto Reaction Bot",
   "summary": "Your own Telegram bot that adds an emoji reaction to posts in the channels and groups you add it to, and to private messages, from an emoji list you choose.",
   "tagline": "Emoji reactions for your Telegram chats and channels",
-  "homepage": "https://github.com/Malith-Rukshan/Auto-Reaction-Bot",
   "repo": "Malith-Rukshan/Auto-Reaction-Bot",
   "license": "MIT",
   "categories": ["bots", "chat"],
@@ -24,16 +23,13 @@
   // Upstream has no release tags; the pin is the head of main.
   "source": { "ref": "main", "sha": "2382a29cd863a9a47aacf99fc28afb37a4d4c260" },
   "install": {
-    "tier": "artifact",
     // package.json lists express and dotenv for the Node.js server; the
     // Worker entry imports neither.
     "packageManager": "npm",
-    "wranglerConfig": "wrangler.toml",
-    "workerName": "auto-reaction-bot"
+    "wranglerConfig": "wrangler.toml"
   },
   // One Worker without storage; one Telegram API call per message it reacts to.
   "plan": "free",
-  "requires": [],
   "secrets": [
     {
       "name": "BOT_TOKEN",
@@ -45,26 +41,26 @@
     {
       "name": "BOT_USERNAME",
       "label": "Bot username",
-      "help": "The bot's username without the @. Used for its /start reply and its Add to Group and Add to Channel buttons.",
-      "required": true
+      "help": "The bot's username without the @. Used for its /start reply and its Add to Group and Add to Channel buttons."
     },
     {
       "name": "EMOJI_LIST",
       "label": "Reaction emojis",
       "help": "The emojis to pick from, written one after another. Telegram accepts only its own reaction set; see https://core.telegram.org/bots/api#reactiontype.",
-      "default": "👍❤🔥🥰👏😁🎉🤩🙏👌🕊😍🐳❤‍🔥💯⚡🏆",
-      "required": true
+      "default": "👍❤🔥🥰👏😁🎉🤩🙏👌🕊😍🐳❤‍🔥💯⚡🏆"
     },
     {
       "name": "RANDOM_LEVEL",
       "label": "Randomness in groups",
       "help": "From 0 to 10. At 0 the bot reacts to every group message; higher numbers make it react less often. Private chats and channels always get a reaction.",
-      "default": "0"
+      "default": "0",
+      "optional": true
     },
     {
       "name": "RESTRICTED_CHATS",
       "label": "Chats to skip",
-      "help": "Comma-separated chat IDs where the bot never reacts, for example `-1001234567890,-1009876543210`."
+      "help": "Comma-separated chat IDs where the bot never reacts, for example `-1001234567890,-1009876543210`.",
+      "optional": true
     },
     {
       "name": "LOG_LEVEL",
@@ -77,18 +73,18 @@
         { "value": "info", "label": "Info" },
         { "value": "debug", "label": "Debug" }
       ],
-      "default": "info"
+      "default": "info",
+      "optional": true
     }
   ],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Connect the bot to this Worker by opening https://api.telegram.org/bot<your bot token>/setWebhook?url={{workerUrl}}/ in a browser, with your bot token in place of the brackets. Then add the bot to a group or channel (as an admin in channels) or message it directly; {{workerUrl}}/health reports whether the token and username are set."
+      "content": "Connect the bot to this Worker by opening https://api.telegram.org/bot<your bot token>/setWebhook?url={{appUrl}}/ in a browser, with your bot token in place of the brackets. Then add the bot to a group or channel (as an admin in channels) or message it directly; {{appUrl}}/health reports whether the token and username are set."
     },
     {
       "type": "markdown",
       "content": "The webhook has no secret of its own: anyone who learns this address can send the Worker made-up updates, which make the bot react or reply only in chats it is already part of. Keep the address to yourself."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

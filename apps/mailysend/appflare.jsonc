@@ -13,12 +13,10 @@
   // MailySend has no release tags yet; the pin tracks main.
   "source": { "ref": "main", "sha": "3708d2f6fdfbb95aa979284733ae83950dc6e115" },
   "install": {
-    "tier": "artifact",
     "packageManager": "pnpm",
     // The app Worker. The separate tracking Worker (apps/track) is optional
     // upstream: the app serves the tracking and unsubscribe routes itself.
     "wranglerConfig": "apps/app/wrangler.jsonc",
-    "workerName": "mailysend",
     // Upstream's Workers Builds command: the workspace packages, the TanStack
     // Start build through the Cloudflare Vite plugin, then a script that
     // leaves the Analytics Engine datasets out of the generated config (they
@@ -31,7 +29,7 @@
     // to pick between them.
     "buildCommand": ["pnpm run build:cf", "rm wrangler.json"],
     // Answers without a sign-in.
-    "healthPath": "/v1/health"
+    "health": { "path": "/v1/health" }
   },
   // D1, KV, R2, Queues and SQLite-backed Durable Objects all have free tiers.
   // One cron trigger, every minute (upstream keeps it to one because the
@@ -47,18 +45,18 @@
     {
       "name": "MS_OWNER_EMAIL",
       "label": "Owner email",
-      "help": "Optional. Only this address may claim the instance at /setup. Without it, the first person to open /setup becomes the owner."
+      "help": "Optional. Only this address may claim the instance at /setup. Without it, the first person to open /setup becomes the owner.",
+      "optional": true
     }
   ],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Open {{workerUrl}}/setup right away to claim the instance: register a passkey and keep the ten recovery codes it shows. Passkeys are bound to the hostname you claim it on, so claim it on the address you will keep using."
+      "content": "Open {{appUrl}}/setup right away to claim the instance: register a passkey and keep the ten recovery codes it shows. Passkeys are bound to the hostname you claim it on, so claim it on the address you will keep using."
     },
     {
       "type": "markdown",
-      "content": "Add a sending domain and a transport under **Settings > Transports**, then create an API key. Point any Resend client at `{{workerUrl}}` to send through it."
+      "content": "Add a sending domain and a transport under **Settings > Transports**, then create an API key. Point any Resend client at `{{appUrl}}` to send through it."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

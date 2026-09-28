@@ -1,15 +1,22 @@
 import path from "node:path";
+import { pathToFileURL } from "node:url";
 import { beforeAll, describe, expect, it } from "vitest";
 import { artifactManifestFixture } from "../fixtures/artifact-manifest.ts";
 import { sandboxFixture } from "../fixtures/sandbox-manifest.ts";
-import { appflareAvailable, testSchema } from "../fixtures/schema.ts";
+import { appflareAvailable, appflareDir, testSchema } from "../fixtures/schema.ts";
 import type { AppflareSchema } from "./appflare-schema.ts";
 import { findApp, loadManifest } from "./apps.ts";
 import { canonicalJson, changedFields } from "./canonical.ts";
 import type { ReleaseLookup } from "./github-releases.ts";
 import { IncompleteReleaseError } from "./github-releases.ts";
-import { sha256Hex } from "./index-builder.ts";
-import { decide, type PlanDecision, type RevisionContext } from "./publish-plan.ts";
+import { artifactUrls, sha256Hex } from "./index-builder.ts";
+import { appflarePaths } from "./paths.ts";
+import {
+  decide,
+  INDEX_ONLY_FIELDS,
+  type PlanDecision,
+  type RevisionContext,
+} from "./publish-plan.ts";
 import { revisedManifestDigest, revisedManifestFile } from "./revision.ts";
 import type { CatalogManifest, IndexApp } from "./types.ts";
 import type { VersionResolver } from "./versions.ts";
@@ -97,7 +104,6 @@ describe("decide", () => {
       planned: {
         app: "hello",
         version: "1.2.3",
-        source: { repo: "example/hello", sha: PIN, ref: "v1.2.3" },
         keyId: KEY_ID,
         catalog: JSON.parse(canonicalJson(hello)),
       },
@@ -195,8 +201,8 @@ describe("decide with a revision", () => {
     ({
       slug: "hello",
       version: "1.2.3",
-      digest: sha256Hex(releaseBytes(hello)),
-      revision: manifest.revision ?? 1,
+      artifacts: artifactUrls("appflare/catalog", "hello", "1.2.3", sha256Hex(releaseBytes(hello))),
+      revision: manifest.revision,
       ...(catalogManifest
         ? {
             catalogManifest: {
@@ -304,7 +310,10 @@ describe("decide with a revision", () => {
 
   it("ignores a previous row for another release", async () => {
     const releases = releasedWith("hello@1.2.3", hello);
-    const other = { ...rowFor({ ...revised(), revision: 5 }), digest: "f".repeat(64) } as IndexApp;
+    const other = {
+      ...rowFor({ ...revised(), revision: 5 }),
+      artifacts: artifactUrls("appflare/catalog", "hello", "1.2.3", "f".repeat(64)),
+    } as IndexApp;
     expect((await plan(revised(), releases, { previous: other })).action).toBe("revise");
   });
 });
@@ -326,21 +335,21 @@ describe("canonicalJson / changedFields", () => {
   });
 });
 
-describe("decide with install.version", () => {
+describe("decide with source.version", () => {
   const OLD = "89abcdef0123456789abcdef0123456789abcdef";
   const withVersion = (m: CatalogManifest, version: string): CatalogManifest => ({
     ...m,
-    install: { ...m.install, version },
+    source: { ...m.source, version },
   });
 
-  it("refuses a moved pin whose install.version is already released", async () => {
+  it("refuses a moved pin whose source.version is already released", async () => {
     const current = withVersion(hello, "1.2.3");
     const published = { ...current, source: { ref: "v1.2.2", sha: OLD } };
     const releases = releasedWith("hello@1.2.3", published, OLD, "v1.2.2");
     const decision = await plan(current, releases);
     expect(decision.action).toBe("error");
     expect(decision.action === "error" && decision.message).toMatch(
-      /pins v1\.2\.3@0123456, but install\.version is still 1\.2\.3, and hello@1\.2\.3 is already released from v1\.2\.2@89abcde\..*bump install\.version/,
+      /pins v1\.2\.3@0123456, but source\.version is still 1\.2\.3, and hello@1\.2\.3 is already released from v1\.2\.2@89abcde\..*bump source\.version/,
     );
   });
 
@@ -350,12 +359,23 @@ describe("decide with install.version", () => {
     expect((await plan(current, releases)).action).toBe("skip");
   });
 
-  it("asks for a new install.version on a metadata-only edit", async () => {
+  it("asks for a new source.version on a metadata-only edit", async () => {
     const current = withVersion(hello, "1.2.3");
     const releases = releasedWith("hello@1.2.3", { ...current, summary: "Old summary." });
     const decision = await plan(current, releases);
     expect(decision.action === "error" && decision.message).toMatch(
-      /changed \(summary\).*comes from install\.version, so bump it.*or bump revision to 2/,
+      /changed \(summary\).*comes from source\.version, so bump it.*or bump revision to 2/,
+    );
+  });
+});
+
+describe.skipIf(!appflareAvailable)("INDEX_ONLY_FIELDS", () => {
+  it("lists the fields @appflare/schema says need no release", async () => {
+    const mod = (await import(pathToFileURL(appflarePaths(appflareDir).schemaDist).href)) as {
+      INDEX_ONLY_CATALOG_FIELDS?: readonly string[];
+    };
+    expect([...INDEX_ONLY_FIELDS].sort()).toEqual(
+      [...(mod.INDEX_ONLY_CATALOG_FIELDS ?? [])].sort(),
     );
   });
 });

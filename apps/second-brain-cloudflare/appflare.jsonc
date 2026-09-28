@@ -4,7 +4,6 @@
   "name": "Second Brain",
   "summary": "A personal memory for your AI assistants: an MCP server that stores notes in D1 and recalls them by meaning with Vectorize and Workers AI.",
   "tagline": "Save notes once and recall them across your AI tools",
-  "homepage": "https://github.com/rahilp/second-brain-cloudflare",
   "repo": "rahilp/second-brain-cloudflare",
   "license": "MIT",
   "categories": ["ai", "productivity"],
@@ -19,14 +18,13 @@
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v2.2.0", "sha": "8be9305f37aa1b1eddb9d08f9894f04a22af7d8e" },
   "install": {
-    "tier": "artifact",
     "packageManager": "npm",
     "wranglerConfig": "wrangler.jsonc",
     "workerName": "second-brain",
     // Answered by the Worker's OAuth provider from its own configuration: no
     // credentials, no database or KV read. The dashboard at / is a static asset
     // that would answer even if the Worker failed.
-    "healthPath": "/.well-known/oauth-authorization-server"
+    "health": { "path": "/.well-known/oauth-authorization-server" }
   },
   // Vectorize and Workers AI are both on the free plan: Vectorize stores 5 million
   // dimensions (about 13,000 vectors at 384 each) and Workers AI gives 10,000
@@ -40,7 +38,7 @@
       "name": "AUTH_TOKEN",
       "label": "Auth token",
       "help": "The one password for everything: the dashboard, the sign-in page MCP clients open, and the Bearer token for API calls. Any phrase works; copy it now.",
-      "generate": true
+      "generate": "password"
     }
   ],
   // VECTORIZE_GRACE_MS (how long a new memory may wait for its vectors before the
@@ -49,18 +47,17 @@
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Open {{workerUrl}} and sign in with the auth token to browse, search, and add memories."
+      "content": "Open {{appUrl}} and sign in with the auth token to browse, search, and add memories."
     },
     {
       "type": "markdown",
-      "content": "Connect Claude Code with `claude mcp add --transport http second-brain {{workerUrl}}/mcp`, or Codex CLI with `codex mcp add second-brain --url {{workerUrl}}/mcp`. The first time the client connects it opens a sign-in page in the browser; enter the auth token there."
+      "content": "Connect Claude Code with `claude mcp add --transport http second-brain {{appUrl}}/mcp`, or Codex CLI with `codex mcp add second-brain --url {{appUrl}}/mcp`. The first time the client connects it opens a sign-in page in the browser; enter the auth token there."
     },
     {
       "type": "markdown",
-      "content": "In ChatGPT or the Claude desktop and web apps, add `{{workerUrl}}/mcp` as a custom MCP connector and sign in with the auth token when asked. The app works best with its custom instructions in the client's personalization settings; they are in the upstream repository's `AI_Instructions` folder, and its wiki page Connect to AI Clients lists the menus for each client."
+      "content": "In ChatGPT or the Claude desktop and web apps, add `{{appUrl}}/mcp` as a custom MCP connector and sign in with the auth token when asked. The app works best with its custom instructions in the client's personalization settings; they are in the upstream repository's `AI_Instructions` folder, and its wiki page Connect to AI Clients lists the menus for each client."
     }
   ],
-  "tokenPermissions": [],
   // The Vectorize index is created before the Worker is uploaded, and its shape
   // cannot change later. The embedding model, @cf/baai/bge-small-en-v1.5, returns
   // 384-dimensional vectors, and upstream creates the index with cosine distance.

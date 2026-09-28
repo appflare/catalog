@@ -54,12 +54,10 @@ describe("diffAgainstPlan", () => {
     ]);
   });
 
-  it("reports a changed source.sha (in source and in catalog.source)", () => {
+  it("reports a changed source.sha, which the artifact records in catalog.source", () => {
     const { manifest, planned } = fixture();
-    (manifest.source as Record<string, unknown>).sha = OTHER_SHA;
     (manifest.catalog as { source: Record<string, unknown> }).source.sha = OTHER_SHA;
     expect(diffAgainstPlan(manifest, planned)).toEqual([
-      `source.sha: planned "${PIN}", got "${OTHER_SHA}"`,
       `catalog.source: planned {"ref":"v1.2.3","sha":"${PIN}"}, got {"ref":"v1.2.3","sha":"${OTHER_SHA}"}`,
     ]);
   });
