@@ -11,11 +11,13 @@
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v2.2.6", "sha": "03ba2fe92c28dbe47bcdb5472fb8d8fe6fc888cd" },
   "install": {
+    "packageManager": "npm",
     // Upstream commits no lockfile and has no runtime dependencies: the Worker
     // is one plain JavaScript file, and wrangler, its only dev dependency, is
-    // not used (the packer bundles with its own). Classic yarn's frozen install
-    // is the one that accepts a missing lockfile, so it stands in here.
-    "packageManager": "yarn",
+    // not used (the packer bundles with its own). So the install resolves
+    // without a lockfile and leaves dev dependencies out; the pack log records
+    // the hash of the lockfile it writes.
+    "installDirs": [{ "path": ".", "lockfile": "none", "devDependencies": false }],
     "wranglerConfig": "wrangler.json",
     // Runs Worker code and reads D1 (the device count). With a basic auth
     // secret set it answers 401, which the check also counts as healthy.
