@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-28T01:05:27.595Z",
+  "generatedAt": "2026-09-28T08:46:04.659Z",
   "apps": [
     {
       "slug": "2fa",
@@ -74,6 +74,10 @@
         "MendyLanda"
       ],
       "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/888wiki/icon.svg",
+          "sha256": "25f8838549f4e6f9459497108d92cdc59aafe9bb418a5ab7ca05d476e039ef3a"
+        },
         "screenshots": [
           {
             "url": "https://appflare.github.io/catalog/apps/888wiki/screenshots/01-markdown-editor.png",
@@ -566,6 +570,10 @@
         "MendyLanda"
       ],
       "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/blobatar/icon.svg",
+          "sha256": "c1c0651104a2a4e77a75f724e59936af0a9b8224e068f18a4049422555218cef"
+        },
         "cover": {
           "url": "https://appflare.github.io/catalog/apps/blobatar/cover.png",
           "sha256": "d2c30b4cc8d10606ea0bfb10d8af1ef9e02b2e5e52c6c351b190820499861bcf"
@@ -2799,6 +2807,10 @@
         "MendyLanda"
       ],
       "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/hashpay/icon.svg",
+          "sha256": "848db8344f264004d2ac6be76a8e5d5350c2bcd11aad024ad47d2eb2b9237208"
+        },
         "cover": {
           "url": "https://appflare.github.io/catalog/apps/hashpay/cover.png",
           "sha256": "92dd5009ce87b364ff86b375e84bd09654a6745f35f54bbdb56a75e89f3c7d08"
@@ -3363,6 +3375,10 @@
         "MendyLanda"
       ],
       "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/kukuroo/icon.svg",
+          "sha256": "543e22d65c8e0078b26a97b24c90f3846462ee9fd142512cfa492be6deec1b56"
+        },
         "cover": {
           "url": "https://appflare.github.io/catalog/apps/kukuroo/cover.png",
           "sha256": "0b24816bdcd711f21ab9db937cd0eadbb227d03d47cb080c8dbbbf926931591e"
@@ -3641,6 +3657,10 @@
         "MendyLanda"
       ],
       "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/mailflare/icon.png",
+          "sha256": "99e25176a3c443b584503fe07a5ed66fe2e06413b7e1c605e52649ed57bdc493"
+        },
         "screenshots": [
           {
             "url": "https://appflare.github.io/catalog/apps/mailflare/screenshots/01-inbox.png",
@@ -4146,6 +4166,10 @@
         "MendyLanda"
       ],
       "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/nabiz/icon.svg",
+          "sha256": "d2c0c989e03bc6aeff223fbf1177a43c915107c69fd6f89df3da61b2fa999097"
+        },
         "screenshots": [
           {
             "url": "https://appflare.github.io/catalog/apps/nabiz/screenshots/01-status-page-light.png",
@@ -4547,6 +4571,13 @@
       "maintainers": [
         "MendyLanda"
       ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/open-artifacts/icon.svg",
+          "sha256": "c22bb6df9af03c7ecfe3c42f4b08354c22d2526ba34a02dfe74872f836c2bdf4"
+        },
+        "screenshots": []
+      },
       "services": [
         "d1",
         "r2"
@@ -5577,6 +5608,13 @@
       "maintainers": [
         "MendyLanda"
       ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/resolvehq/icon.svg",
+          "sha256": "9a5c89a8b0e5577066c826e7fa3f3e573416c6ae582b61ae2c260a0d8dee3ebc"
+        },
+        "screenshots": []
+      },
       "services": [
         "d1",
         "r2",
@@ -5590,7 +5628,13 @@
         "email"
       ],
       "license": "LicenseRef-ResolveHQ-Source-Available",
-      "revision": 1
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/resolvehq/manifest.json",
+        "sha256": "48846370e2cec4ea176fee833f80f1c670584c93a92ce9c939c68ce659f89299",
+        "keyId": "catalog-2026-09",
+        "signature": "w+FkzMgEC5k9ryYLp4E0Fwxasxb/r9f/2RSqmR/4pbayqZ8+2WRL2iEi8CzrRaSQ1Rqb00RTYacgpR+LxV5UDQ=="
+      }
     },
     {
       "slug": "rsshub-never-die",
@@ -6477,6 +6521,13 @@
       "maintainers": [
         "MendyLanda"
       ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/tempik/icon.svg",
+          "sha256": "6e627e99129a5214e66a5b530fa7ca7b74dc0aa46df7c0e9f5924d0322a04c5f"
+        },
+        "screenshots": []
+      },
       "services": [
         "d1",
         "email-routing",
