@@ -64,8 +64,9 @@
     {
       "name": "CF_API_TOKEN",
       "label": "Cache purge token",
-      "help": "A Cloudflare API token with Cache Purge on the zone that serves the page. With the zone id below, a status change shows at once instead of within the cache's 60 seconds.",
+      "help": "A token you create for the app, with the permission listed below on the zone that serves the page. With the zone id below, a status change shows at once instead of within the cache's 60 seconds.",
       "optional": true,
+      "cloudflareToken": true,
       "workers": ["checker"]
     },
     {
@@ -80,6 +81,16 @@
     {
       "type": "markdown",
       "content": "Write your list of sites as upstream's `status.config.example.yml` shows, then in the Cloudflare dashboard open Storage & Databases, Workers KV, the namespace named `{{workerName}}-status-kv`, and add it as the value of the key `config`. The checker's next run, within five minutes, fills {{appUrl}}."
+    }
+  ],
+  // The checker purges the status page's cache tags when a status changes
+  // (upstream apps/worker/src/cache.ts, POST /zones/{zone}/purge_cache).
+  "tokenPermissions": [
+    {
+      "group": "Cache Purge",
+      "scope": "zone",
+      "access": "edit",
+      "reason": "Clears the status page from Cloudflare's cache when a status changes, so visitors see it at once."
     }
   ]
 }

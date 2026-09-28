@@ -841,7 +841,8 @@ install, from values the admin enters in the install form. Declare it under
 Seeds are not allowed on self-deploying entries.
 
 The install check runs every seed on a fresh database, where each statement must
-add exactly one row (see "Install checks").
+add at least one row (see "Install checks"). D1 counts the rows a trigger writes
+too, so a statement on a table with an `AFTER INSERT` trigger may add more.
 
 ### Editing an entry whose version is already released
 
@@ -1713,8 +1714,9 @@ self-deploying entries have no install check in CI (see "Sandbox tier" and
    `beforeSchema` runs right after its database's migrations instead. Seeds go
    through the D1 API, one `/query` call per statement with its values as
    params (wrangler cannot bind params), after the statement is checked again
-   with the manager's guard; each statement must add exactly one row to the
-   fresh database, and no value is ever printed.
+   with the manager's guard; each statement must add at least one row to the
+   fresh database (a statement that adds none found its row already written),
+   and no value is ever printed.
    Every secret in the catalog manifest is set to a random value (32 random bytes
    as base64 for `generate: "base64-key-32"`, a real key for
    `generate: "vapid-private-key"`), and each var gets its default. A var that is
@@ -1751,6 +1753,16 @@ How this differs from installing with the manager:
   and applies D1 migrations, schema files and post-deploy migrations itself, in
   the same `d1_migrations` table format wrangler uses. Here wrangler does both
   from the unpacked files.
+- **Workers plan.** The CI account is on the free plan unless the
+  `CI_ACCOUNT_PLAN` repository variable says `paid`. On the free plan an entry
+  with `plan: "paid"` is packed but not deployed: it may use what the free plan
+  refuses at upload, such as a `limits.cpu_ms`. The install check job passes
+  with a notice naming the app, and the nightly run lists it as skipped and
+  records no verification for it. Set `CI_ACCOUNT_PLAN` to `paid` once the CI
+  account is on Workers Paid.
+- **Parallel installs.** At most six install checks run at once, since the free
+  plan allows 10 D1 databases per account and wrangler creates each app's
+  databases during its deploy.
 - **Inputs.** A real install uses the values the user entered. Here secrets are
   random and vars use their defaults, so this checks that the Worker deploys and
   starts, not that the app is fully configured.

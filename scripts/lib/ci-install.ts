@@ -11,6 +11,7 @@ import type {
   ArtifactQueueConsumer,
   CatalogD1Seed,
   HealthMode,
+  Plan,
   QueueRef,
   R2LifecycleRule,
   VectorizeMetadataIndex,
@@ -2183,9 +2184,11 @@ function queryChanges(res: CfResponse): number | null {
  * each statement as its own `POST /d1/database/{uuid}/query` with
  * `{ sql, params }`, so no value is ever part of the SQL. wrangler's
  * `d1 execute` cannot bind params, hence the API. The database is fresh, so
- * each statement must add exactly its one row (`meta.changes === 1`); a
+ * each statement must add at least one row (`meta.changes >= 1`); a
  * statement that adds none (a schema file already inserted the row) fails
- * the check. Errors name the statement and D1's message, never a value.
+ * the check. D1 counts the rows a trigger writes too, so a statement on a
+ * table with an `AFTER INSERT` trigger may report more, which the manager
+ * accepts as well. Errors name the statement and D1's message, never a value.
  * Returns the number of statements run.
  */
 export async function runSeed(
@@ -2222,10 +2225,10 @@ export async function runSeed(
       throw new Error(`${subject} failed: ${describe(res)}`);
     }
     const changes = queryChanges(res);
-    if (changes !== 1) {
+    if (changes === null || changes < 1) {
       throw new Error(
         `${subject} added ${changes ?? "an unknown number of"} rows; on a fresh database each ` +
-          "statement adds its one row, so something else already wrote it",
+          "statement adds its row, so something else already wrote it",
       );
     }
   }
@@ -2858,6 +2861,52 @@ export function skippedSummaryLines(
   reason: string,
 ): string[] {
   return [`SKIP ${manifest.app}@${manifest.version} as ${name}: ${reason}`];
+}
+
+// ---------------------------------------------------------------------------
+// Workers plan
+
+/**
+ * The environment variable (a repository variable in CI) naming the CI
+ * account's Workers plan, `free` or `paid`; unset or empty means `free`.
+ * Cloudflare offers no cheap read of an account's plan to a token scoped to
+ * Workers, so the workflow says which plan the account is on.
+ */
+export const CI_ACCOUNT_PLAN = "CI_ACCOUNT_PLAN";
+
+/** The CI account's plan from {@link CI_ACCOUNT_PLAN}; throws for any other value. */
+export function ciAccountPlan(value: string | undefined): Plan {
+  const plan = value?.trim() ?? "";
+  if (plan === "") return "free";
+  if (plan === "free" || plan === "paid") return plan;
+  throw new Error(`${CI_ACCOUNT_PLAN} ${JSON.stringify(plan)} is not "free" or "paid"`);
+}
+
+/** The run summary's word for an entry that needs Workers Paid on a free CI account. */
+export const PAID_PLAN_SKIP = `skipped: the entry needs Workers Paid and ${CI_ACCOUNT_PLAN} is free`;
+
+/**
+ * Why the check skips an app on this account's plan, or null when it can run:
+ * an entry whose catalog manifest says `plan: "paid"` may use what the free
+ * plan refuses at upload (a `limits.cpu_ms`, Containers, a Worker Loader), so
+ * its deploy on a free account says nothing about the app. Read loosely from
+ * the catalog manifest embedded in the artifact, which the schema has checked.
+ */
+export function paidPlanSkip(catalog: unknown, accountPlan: Plan): string | null {
+  const plan = (catalog as { plan?: unknown } | null)?.plan;
+  return plan === "paid" && accountPlan === "free" ? PAID_PLAN_SKIP : null;
+}
+
+/**
+ * A GitHub Actions notice for a skipped app, so the skip shows on the run's
+ * page and never passes silently. `reason` is one of the fixed skip reasons,
+ * which hold no value from the account.
+ */
+export function skipNotice(
+  manifest: Pick<ArtifactManifest, "app" | "version">,
+  reason: string,
+): string {
+  return `::notice title=Install check skipped::${manifest.app}@${manifest.version}: ${reason}`;
 }
 
 // ---------------------------------------------------------------------------

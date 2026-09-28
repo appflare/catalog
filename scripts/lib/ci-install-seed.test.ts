@@ -270,23 +270,28 @@ describe("runSeed", () => {
     expect(d1.queries[1]?.body.params[1]).toBe(`bcrypt-10:${PASSWORD.length}`);
   });
 
-  it("fails unless every statement adds exactly one row, naming no value", async () => {
-    for (const changes of [0, 2]) {
-      const d1 = fakeD1(["ci-keep-pr1-db"], changes);
-      const run = runSeed(
-        d1.request,
-        { database: "ci-keep-pr1-db", seed: seedOf("DB") },
-        inputs(),
-        fakeSeedFunctions(),
-      );
-      await expect(run).rejects.toThrow(
-        new RegExp(`seed statement 1 of 1 on ci-keep-pr1-db added ${changes} rows`),
-      );
-      await run.catch((error: Error) => {
-        expect(error.message).not.toContain(PASSWORD);
-        expect(error.message).not.toContain("ci-admin");
-      });
-    }
+  it("accepts a statement whose trigger adds more rows", async () => {
+    const d1 = fakeD1(["ci-keep-pr1-db"], 2);
+    await expect(
+      runSeed(d1.request, { database: "ci-keep-pr1-db", seed: seedOf("DB") }, inputs(), {
+        ...fakeSeedFunctions(),
+      }),
+    ).resolves.toBe(1);
+  });
+
+  it("fails when a statement adds no row, naming no value", async () => {
+    const d1 = fakeD1(["ci-keep-pr1-db"], 0);
+    const run = runSeed(
+      d1.request,
+      { database: "ci-keep-pr1-db", seed: seedOf("DB") },
+      inputs(),
+      fakeSeedFunctions(),
+    );
+    await expect(run).rejects.toThrow("seed statement 1 of 1 on ci-keep-pr1-db added 0 rows");
+    await run.catch((error: Error) => {
+      expect(error.message).not.toContain(PASSWORD);
+      expect(error.message).not.toContain("ci-admin");
+    });
   });
 
   it("fails on D1's refusal with its message", async () => {
