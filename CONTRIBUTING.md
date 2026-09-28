@@ -920,7 +920,7 @@ their current catalog manifest in the row's `build` block.
 Every image is optional:
 
 ```
-apps/<slug>/icon.svg or icon.png   square icon shown in lists (128 to 1024 px for a PNG)
+apps/<slug>/icon.svg or icon.png   square icon shown in lists (64 to 1024 px for a PNG)
 apps/<slug>/cover.png              1200x630 PNG shown on the app's page, sized for OpenGraph previews
 apps/<slug>/screenshots/*.png      at most 8, shown in file name order
 apps/<slug>/MEDIA.md               where each image comes from, and its licence

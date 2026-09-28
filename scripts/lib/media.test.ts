@@ -123,6 +123,26 @@ describe("readAppMedia", () => {
     expect(text).toMatch(/MEDIA.md: missing/);
   });
 
+  it("accepts a square PNG icon from 64 to 1024 px and refuses others", () => {
+    sources("icon.png");
+    for (const px of [64, 96, 1024]) {
+      write("icon.png", pngHeader(px, px));
+      const read = readAppMedia(dir, "demo", "Demo", REPO);
+      expect(read.problems).toEqual([]);
+      expect(read.media?.icon?.url).toBe(`${SITE}/icon.png`);
+    }
+    for (const [w, h] of [
+      [63, 63],
+      [1025, 1025],
+      [96, 64],
+    ] as const) {
+      write("icon.png", pngHeader(w, h));
+      expect(readAppMedia(dir, "demo", "Demo", REPO).problems).toEqual([
+        `apps/demo/icon.png: ${w}x${h}, must be square, 64 to 1024 px`,
+      ]);
+    }
+  });
+
   it("accepts an entry with no images, or with only some of them", () => {
     expect(readAppMedia(dir, "demo", "Demo", REPO)).toEqual({
       media: undefined,
