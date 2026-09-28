@@ -6,7 +6,8 @@ name: nightly
 # summary and fails its job; the app stays in the catalog and keeps its
 # previous lastVerified. Only artifact tier apps have a release to install;
 # sandbox and self-deploying entries are skipped here and verified by hand
-# with verify-tier.yml.
+# with verify-tier.yml. After the Pages deploy, the docs site is rebuilt so
+# appflare.dev shows the new install check dates (see publish.yml).
 
 on:
   schedule:
@@ -255,3 +256,37 @@ jobs:
     steps:
       - id: deploy
         uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
+
+  docs:
+    name: rebuild docs
+    needs: pages
+    if: ${{ !cancelled() && needs.pages.result == 'success' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    # No checkout and no code from either repository: one API call that starts
+    # the docs site workflow in appflare/appflare, which builds main against
+    # whatever this catalog now serves. The workflow token gets no permissions;
+    # the call uses DOCS_REBUILD_TOKEN, and without it the job only says so.
+    permissions: {}
+    steps:
+      - name: Start the docs site workflow
+        working-directory: .
+        env:
+          DOCS_REBUILD_TOKEN: ${{ secrets.DOCS_REBUILD_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ -z "${DOCS_REBUILD_TOKEN}" ]; then
+            echo "::notice title=Docs rebuild skipped::docs rebuild skipped: DOCS_REBUILD_TOKEN is not set"
+            exit 0
+          fi
+          # The header goes in on stdin (printf is a shell builtin), so the
+          # token is never in a process's arguments or in the log.
+          printf 'Authorization: Bearer %s\n' "${DOCS_REBUILD_TOKEN}" |
+            curl --fail-with-body --silent --show-error --retry 3 --max-time 30 \
+              -X POST \
+              -H @- \
+              -H "Accept: application/vnd.github+json" \
+              -H "X-GitHub-Api-Version: 2022-11-28" \
+              --data '{"ref":"main"}' \
+              https://api.github.com/repos/appflare/appflare/actions/workflows/docs.yml/dispatches
+          echo "started the docs site workflow on appflare/appflare main"

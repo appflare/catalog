@@ -1394,6 +1394,7 @@ Each job gets only the secret it needs:
 | `sign-revisions` | `APPFLARE_SIGNING_KEY`; `contents: read` to check out the catalog | runs no app code; signs each planned revised catalog manifest (only the planned bytes, with its release's key id), checks each signature with the embedded keys; uploads `revision-signatures` |
 | `release` | `CATALOG_PUSH_KEY`; `contents: write` for the releases | re-checks every planned artifact against the plan, `verify --require-signed`, creates `<slug>@<version>` with the three assets (skips complete existing releases), `build-index --releases-only` (with the `revision-signatures` when there are revisions), commits `index.json` as `github-actions[bot]` with `[skip ci]` and pushes it with `CATALOG_PUSH_KEY` |
 | `pages` | `pages: write`, `id-token: write` | deploys the site `build-site` assembles: `index.json`, `schema/v1.json`, and the `apps/<slug>/manifest.json` of each sandbox and self-deploying entry and of each revised artifact tier entry (with its `manifest.json.sig`) |
+| `docs` | `DOCS_REBUILD_TOKEN`; no workflow token permissions, no checkout | runs no code; after a successful Pages deploy, asks GitHub to run the docs site workflow in `appflare/appflare`, so appflare.dev lists what was just published. Without the secret it prints "docs rebuild skipped: DOCS_REBUILD_TOKEN is not set" and succeeds |
 
 ### What the signing step trusts
 
@@ -1442,6 +1443,7 @@ Secrets:
 | `APPFLARE_DEPLOY_KEY` | `build-packer` only | Private half of a read-only SSH deploy key registered on `appflare/appflare` |
 | `APPFLARE_SIGNING_KEY` | `publish.yml` `sign` and `sign-revisions` jobs only | Base64 PKCS#8 Ed25519 private key, key id `catalog-2026-09` |
 | `CATALOG_PUSH_KEY` | `publish.yml` `release` and `nightly.yml` `record results` only | Private half (OpenSSH, Ed25519) of a deploy key with write access registered on this repository; pushes the `index.json` commit to `main` |
+| `DOCS_REBUILD_TOKEN` (optional) | `publish.yml` and `nightly.yml` `docs` jobs only | Fine-grained personal access token that starts the docs site workflow in `appflare/appflare` |
 
 The `sign` job fails with an explicit error while `APPFLARE_SIGNING_KEY` is unset.
 Its public half is `catalog-2026-09` in `signingKeys` in `appflare/appflare`. When
@@ -1467,6 +1469,18 @@ Repository settings the maintainer has to make:
   and `nightly.yml` are pushed with it, because the ruleset below applies to every
   push to `main` and would reject a push with the workflow's own token. Pushes
   with a deploy key start push workflows, so those commits carry `[skip ci]`.
+- To have appflare.dev pick up each publish and each night's install check dates
+  right away, create a fine-grained personal access token (GitHub Settings >
+  Developer settings > Fine-grained tokens) with the `appflare` organization as
+  its resource owner, access to the `appflare/appflare` repository only, and one
+  repository permission: **Actions: Read and write**. Store it as the
+  `DOCS_REBUILD_TOKEN` secret under this repository's Settings > Secrets and
+  variables > Actions. The `docs` jobs only use it to start that repository's
+  docs workflow; they check nothing out and run no code. Without it they skip
+  with a notice and the site still rebuilds on its own daily schedule. When the
+  token expires, the `docs` job fails with GitHub's answer in its log (a publish
+  or a night's checks are already live by then); replace the secret and re-run
+  that job.
 - Turn on **Allow auto-merge** under Settings > General, for entries that set
   `bump.autoMerge`.
 - Protect `main` with a branch ruleset that requires the status checks `verify
@@ -1751,4 +1765,6 @@ signature check, the deploy and health check, or the cleanup, which fails when
 something is left in the CI account. A failed app stays in the catalog and keeps
 its previous `lastVerified`, so its date stops moving until a later run passes.
 When only `record results` or `deploy Pages` is red, the checks ran but the new
-dates did not reach the published `index.json`; re-run the failed jobs.
+dates did not reach the published `index.json`; re-run the failed jobs. After the
+deploy, the `docs` job starts a rebuild of appflare.dev so its app pages show the
+new dates too (see `DOCS_REBUILD_TOKEN` under "Publishing").
