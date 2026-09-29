@@ -4,7 +4,6 @@
   "name": "UniFi DDNS",
   "summary": "Dynamic DNS for UniFi gateways: keeps Cloudflare A/AAAA records on your current IP.",
   "tagline": "Keep your domain pointed at your current IP address",
-  "homepage": "https://github.com/willswire/unifi-ddns",
   "repo": "willswire/unifi-ddns",
   "license": "MIT",
   "categories": ["networking"],
@@ -12,10 +11,8 @@
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v3.3.1", "sha": "c3f1f1bf59378582c977fbed8c97b19cc9143736" },
   "install": {
-    "tier": "artifact",
     "packageManager": "npm",
-    "wranglerConfig": "wrangler.toml",
-    "workerName": "unifi-ddns"
+    "wranglerConfig": "wrangler.toml"
   },
   "plan": "free",
   // The Worker edits DNS with a token the router sends on every request, not
@@ -25,7 +22,6 @@
   // token as the password of each update request (HTTP Basic auth), so the
   // token lives in the UniFi controller, never in this Worker or in Appflare.
   "secrets": [],
-  "vars": [],
   "postInstall": [
     {
       "type": "markdown",
@@ -33,14 +29,15 @@
     },
     {
       "type": "markdown",
-      "content": "In the UniFi controller, open **Settings > Internet > WAN > Dynamic DNS** and create an entry:\n\n- **Service:** `custom`\n- **Hostname:** the record to update, for example `home.example.com` (several, comma-separated, are allowed)\n- **Username:** your Cloudflare account email\n- **Password:** the API token\n- **Server:** {{workerUrl}} without `https://`, followed by `/update?ip=%i&hostname=%h`\n\nOlder gateways (USG, USG Pro) take the host name alone in **Server**, without the path."
+      "content": "In the UniFi controller, open **Settings > Internet > WAN > Dynamic DNS** and create an entry:\n\n- **Service:** `custom`\n- **Hostname:** the record to update, for example `home.example.com` (several, comma-separated, are allowed)\n- **Username:** your Cloudflare account email\n- **Password:** the API token\n- **Server:** {{appUrl}} without `https://`, followed by `/update?ip=%i&hostname=%h`\n\nOlder gateways (USG, USG Pro) take the host name alone in **Server**, without the path."
     }
   ],
   "tokenPermissions": [
     {
-      "name": "Zone.DNS",
-      "description": "Edit DNS records in the one zone the router updates.",
-      "scope": "zone"
+      "group": "DNS",
+      "scope": "zone",
+      "access": "edit",
+      "reason": "Updates the router's DNS record in the zone it belongs to."
     }
   ]
 }

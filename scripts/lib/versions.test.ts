@@ -10,29 +10,30 @@ import {
 
 const SHA = "6056400d47530aa87e4ae5764b37ffca9d00e87f";
 
-function manifest(ref: string, installVersion?: string): CatalogManifest {
+function manifest(ref: string, sourceVersion?: string): CatalogManifest {
   return {
     slug: "cut",
     repo: "MendyLanda/cut",
-    source: { ref, sha: SHA },
-    install: installVersion === undefined ? {} : { version: installVersion },
+    source:
+      sourceVersion === undefined ? { ref, sha: SHA } : { ref, sha: SHA, version: sourceVersion },
+    install: {},
   } as CatalogManifest;
 }
 
 /** Mirrors the packer's rule, so these tests run without an appflare build. */
 const fakePacker: PackerVersioning = {
   semverFromRef: (ref) => /^v?(\d+\.\d+\.\d+)$/.exec(ref)?.[1] ?? null,
-  deriveVersion: ({ installVersion, ref, sha, commitDate, buildDate }) =>
-    installVersion ??
+  deriveVersion: ({ sourceVersion, ref, sha, commitDate, buildDate }) =>
+    sourceVersion ??
     fakePacker.semverFromRef(ref) ??
     `0.0.0-${commitDate ?? buildDate}.${sha.slice(0, 7)}`,
   formatBuildDate: () => "20990101",
 };
 
-/** A packer build from before install.version, which ignores it. */
+/** A packer build from before source.version, which ignores it. */
 const oldPacker: PackerVersioning = {
   ...fakePacker,
-  deriveVersion: (input) => fakePacker.deriveVersion({ ...input, installVersion: undefined }),
+  deriveVersion: (input) => fakePacker.deriveVersion({ ...input, sourceVersion: undefined }),
 };
 
 const noCommitDate: CommitDateLookup = () => {
@@ -57,19 +58,19 @@ describe("createVersionResolver", () => {
     expect(versions.versionOf(manifest("v0.1.0"))).toBe("0.1.0");
   });
 
-  it("takes install.version over the tag and the commit date, without fetching", () => {
+  it("takes source.version over the tag and the commit date, without fetching", () => {
     const versions = createVersionResolver(fakePacker, noCommitDate);
     expect(versions.versionOf(manifest("v11.0.0", "1.1.10"))).toBe("1.1.10");
     expect(versions.versionOf(manifest("main", "0.4.0"))).toBe("0.4.0");
-    // Same pin, another install.version: not served from the cache.
+    // Same pin, another source.version: not served from the cache.
     expect(versions.versionOf(manifest("v11.0.0", "1.1.11"))).toBe("1.1.11");
     expect(versions.versionOf(manifest("v11.0.0"))).toBe("11.0.0");
   });
 
-  it("refuses a packer build that ignores install.version", () => {
+  it("refuses a packer build that ignores source.version", () => {
     const versions = createVersionResolver(oldPacker, noCommitDate);
     expect(() => versions.versionOf(manifest("v11.0.0", "1.1.10"))).toThrow(
-      /cut sets install\.version 1\.1\.10, but the @appflare\/pack build .* derives 11\.0\.0/,
+      /cut sets source\.version 1\.1\.10, but the @appflare\/pack build .* derives 11\.0\.0/,
     );
     expect(versions.versionOf(manifest("v11.0.0"))).toBe("11.0.0");
   });
@@ -86,7 +87,7 @@ describe.skipIf(!appflareAvailable)("with the real @appflare/pack", () => {
     expect(versions.versionOf(manifest("v11.0.0", "1.1.10"))).toBe("1.1.10");
   });
 
-  it("rejects an install.version that is not semver, as the packer does", async () => {
+  it("rejects an source.version that is not semver, as the packer does", async () => {
     const versions = createVersionResolver(await loadPackerVersioning(appflareDir), noCommitDate);
     expect(() => versions.versionOf(manifest("v11.0.0", "v1.1.10"))).toThrow(
       /is not a semver version/,

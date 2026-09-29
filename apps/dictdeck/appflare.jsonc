@@ -10,7 +10,6 @@
   "name": "DictDeck",
   "summary": "A self-hosted Japanese dictionary, translator and flashcard deck: several dictionary sources, AI explanations on Workers AI or your own LLM provider, saved words and review cards, a Telegram bot and an MCP server.",
   "tagline": "Look up Japanese words, translate them, and review flashcards",
-  "homepage": "https://github.com/Asutorufa/hujiang_dictionary",
   "repo": "Asutorufa/hujiang_dictionary",
   // The repository has no licence file.
   "license": "NONE",
@@ -19,10 +18,8 @@
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v0.20.0", "sha": "2a9759e0504c99d7d2da4b622c1ec29507fac096" },
   "install": {
-    "tier": "artifact",
     "packageManager": "npm",
     "wranglerConfig": "wrangler.toml",
-    "workerName": "dictdeck",
     // The repository root has no package.json; the web app has its own
     // lockfile.
     "installDirs": [{ "path": "web" }],
@@ -40,38 +37,38 @@
       "name": "AUTH_PASSWORD",
       "label": "Password",
       "help": "Sign in to the web app with the user name below and this password. Without both, the app answers every request without a sign-in.",
-      "generate": true
+      "generate": "password"
     },
     {
       "name": "AUTH_SECRET",
       "label": "Session secret",
       "help": "Signs sign-in tokens. Setting a new value signs everyone out.",
-      "generate": true
+      "generate": "password"
     }
   ],
   "vars": [
     {
       "name": "AUTH_USERNAME",
       "label": "User name",
-      "help": "Sign in to the web app with it.",
-      "required": true
+      "help": "Sign in to the web app with it."
     },
     {
       "name": "AUTH_TOKEN_EXPIRATION",
       "label": "Sign-in lifetime in days",
-      "help": "How long a sign-in lasts, in whole days."
+      "help": "How long a sign-in lasts, in whole days.",
+      "optional": true
     },
     {
       "name": "MCP_ALLOWED_ORIGINS",
       "label": "MCP allowed origins",
-      "help": "Comma-separated browser origins allowed to call the MCP endpoint at /mcp. Leave empty for clients that send no Origin."
+      "help": "Comma-separated browser origins allowed to call the MCP endpoint at /mcp. Leave empty for clients that send no Origin.",
+      "optional": true
     }
   ],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Open {{workerUrl}} and sign in with the user name and password. Settings holds the LLM providers, the Telegram bot token and MCP tokens; the MCP endpoint is {{workerUrl}}/mcp."
+      "content": "Open {{appUrl}} and sign in with the user name and password. Settings holds the LLM providers, the Telegram bot token and MCP tokens; the MCP endpoint is {{appUrl}}/mcp."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

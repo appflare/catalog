@@ -9,7 +9,6 @@
   "name": "OpenSEO",
   "summary": "Self-hosted SEO research: keywords, rankings, backlinks and site audits, on your own Cloudflare account and behind Cloudflare Access.",
   "tagline": "Find search terms, track rankings, and check your site's health",
-  "homepage": "https://github.com/every-app/open-seo",
   "repo": "every-app/open-seo",
   "license": "MIT",
   "categories": ["marketing", "analytics"],
@@ -24,31 +23,28 @@
     "packageManager": "pnpm",
     // Not read by this tier (the Alchemy stack reads it itself); required by the schema.
     "wranglerConfig": "wrangler.jsonc",
-    "workerName": "open-seo",
     // The same build as `pnpm deploy:selfhost`, minus its type check; runs
     // without credentials before the installer.
     "buildCommand": "pnpm exec vite build --mode selfhost",
     // Unauthenticated in the app, but the Access application covers the whole
     // hostname, so the probe only sees Access's redirect.
-    "healthPath": "/api/health",
-    "healthMode": "status-only",
+    "health": { "path": "/api/health", "mode": "any-response" },
     // One installer run: the dependency install, the Vite build of about 7,400
     // modules, then the deploy. The repository's .npmrc gives Node a 4 GiB
     // heap because the build needs more than the default, which leaves no
     // room on standard-1 (4 GiB in all), so it runs on standard-2. A live
     // run measured 2.9 minutes for the install and 3.7 for the destroy; this
     // is the longer of the two, rounded up, with some headroom.
-    "sandbox": { "expectedMinutes": 5, "instanceType": "standard-2" },
+    "container": { "expectedMinutes": 5, "instanceType": "standard-2" },
     "selfDeploying": {
       "tool": "alchemy",
       // `pnpm alchemy` is the package's script, which adds --experimental-strip-types.
       // --yes also deploys Alchemy's state store on the first run.
       "deployCommand": ["pnpm", "alchemy", "deploy", "--yes"],
       "destroyCommand": ["pnpm", "alchemy", "destroy", "--yes"],
-      "stateStore": "cloudflare",
       // alchemy.access.ts: workerName(stage) = `open-seo-${stage}`; the audit
       // Worker is `${workerName(stage)}-audit` (alchemy.run.ts).
-      "workers": ["open-seo-{{stage}}", "open-seo-{{stage}}-audit"]
+      "workerNames": ["open-seo-{{stage}}", "open-seo-{{stage}}-audit"]
     }
   },
   // The app itself runs on Workers Free, but its installer runs in the sandbox
@@ -66,20 +62,19 @@
     {
       "name": "ACCESS_ALLOWED_EMAILS",
       "label": "Allowed emails",
-      "help": "Comma-separated emails Cloudflare Access lets in. The installer puts an Access application with exactly these in front of OpenSEO; dashboard edits to its policy are overwritten on the next update.",
-      "required": true
+      "help": "Comma-separated emails Cloudflare Access lets in. The installer puts an Access application with exactly these in front of OpenSEO; dashboard edits to its policy are overwritten on the next update."
     },
     {
       "name": "OPENSEO_TELEMETRY_DISABLED",
       "label": "Disable anonymous telemetry",
       "help": "Set to 1 to opt out of OpenSEO's anonymized telemetry.",
-      "required": false
+      "optional": true
     }
   ],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Open {{workerUrl}} and sign in through Cloudflare Access with one of the allowed emails. If the account had no Zero Trust team, the installer created one named after your workers.dev subdomain. {{workerUrl}}/api/health reports OpenSEO's configuration checks once you are signed in."
+      "content": "Open {{appUrl}} and sign in through Cloudflare Access with one of the allowed emails. If the account had no Zero Trust team, the installer created one named after your workers.dev subdomain. {{appUrl}}/api/health reports OpenSEO's configuration checks once you are signed in."
     }
   ],
   // docs/SELF_HOSTING_CLOUDFLARE.md and docs/PREVIEW_DEPLOYMENTS.md (v0.1.9):
@@ -93,44 +88,52 @@
   "tokenPermissions": [
     // Also covers the two Workflows: Cloudflare's API accepts Workers Scripts Edit for them, and no Workflows token group exists.
     {
-      "name": "Workers Scripts",
+      "group": "Workers Scripts",
       "scope": "account",
-      "description": "Deploy the two Workers, their Durable Objects, cron triggers and workers.dev routes; on a first deploy also Alchemy's alchemy-state-store Worker (with a workers.dev route) and the temporary preview Worker its login uses."
+      "access": "edit",
+      "reason": "Deploys the two Workers with their Durable Objects, Workflows, cron triggers and workers.dev routes, and on a first deploy the Workers Alchemy's state store uses."
     },
     {
-      "name": "Workers KV Storage",
+      "group": "Workers KV Storage",
       "scope": "account",
-      "description": "Create the app's two KV namespaces."
+      "access": "edit",
+      "reason": "Creates the app's two KV namespaces."
     },
     {
-      "name": "D1",
+      "group": "D1",
       "scope": "account",
-      "description": "Create the database and apply its migrations."
+      "access": "edit",
+      "reason": "Creates the database and applies its migrations."
     },
     {
-      "name": "Workers R2 Storage",
+      "group": "Workers R2 Storage",
       "scope": "account",
-      "description": "Create the cache bucket and its lifecycle rule."
+      "access": "edit",
+      "reason": "Creates the cache bucket and its lifecycle rule."
     },
     {
-      "name": "Secrets Store:Edit",
+      "group": "Secrets Store",
       "scope": "account",
-      "description": "Edit, not Read: on an account without Alchemy's state store, the first deploy creates the Secrets Store and puts the state store's token and encryption key in it; later runs read them."
+      "access": "edit",
+      "reason": "On a first deploy, creates a Secrets Store and keeps the state store's token and encryption key in it; later deploys read them."
     },
     {
-      "name": "Account Settings:Read",
+      "group": "Account Settings",
       "scope": "account",
-      "description": "Alchemy's state-store login reads the account."
+      "access": "read",
+      "reason": "Reads the account when Alchemy's state store signs in."
     },
     {
-      "name": "Access: Apps and Policies",
+      "group": "Access: Apps and Policies",
       "scope": "account",
-      "description": "Create the Access application and allow policy in front of OpenSEO."
+      "access": "edit",
+      "reason": "Creates the Access application and allow policy in front of OpenSEO."
     },
     {
-      "name": "Access: Organizations, Identity Providers, and Groups",
+      "group": "Access: Organizations, Identity Providers, and Groups",
       "scope": "account",
-      "description": "Read the Zero Trust team domain, and create a team if the account has none."
+      "access": "edit",
+      "reason": "Reads the Zero Trust team domain, and creates a team if the account has none."
     }
   ]
 }

@@ -19,18 +19,20 @@
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v2.1.0", "sha": "0268c44dd565257f4ff5074e03bb9b3ac285ef5f" },
   "install": {
-    "tier": "artifact",
     "packageManager": "npm",
     "wranglerConfig": "wrangler.jsonc",
-    "workerName": "seeder",
     // Next.js through OpenNext, which runs `next build` itself and writes
     // the Worker and its static assets to .open-next/.
     "buildCommand": "opennextjs-cloudflare build"
   },
-  // Upstream documents the free plan as enough. The wrangler config also sets
-  // `limits.cpu_ms` to 30000, the paid plan's default CPU ceiling, which the
-  // artifact records as it is.
-  "plan": "free",
+  // Workers Paid. Upstream's wrangler config sets `limits.cpu_ms` to 30000,
+  // which Cloudflare refuses at upload on the free plan (error 100328), and a
+  // config patch cannot remove it. Upstream's own comment beside the limit
+  // puts a normal page render at tens of milliseconds of CPU, over the free
+  // plan's 10 ms per request, and every sign-in hashes the password with
+  // Better Auth's default scrypt. Upstream's docs say a free account works;
+  // its own config does not deploy there.
+  "plan": "paid",
   // Images and file uploads go to an R2 bucket.
   "requires": ["r2"],
   "secrets": [
@@ -38,7 +40,7 @@
       "name": "BETTER_AUTH_SECRET",
       "label": "Session secret",
       "help": "Signs sign-in sessions. Setting a new value signs everyone out.",
-      "generate": true
+      "generate": "password"
     },
     {
       "name": "VCS_ENCRYPTION_KEY",
@@ -62,36 +64,35 @@
     {
       "name": "OWNER_EMAIL",
       "label": "Owner email",
-      "help": "The only address that can create the first account, which becomes the owner. After that, sign-up is by invite only.",
-      "required": true
+      "help": "The only address that can create the first account, which becomes the owner. After that, sign-up is by invite only."
     },
     {
       "name": "BETTER_AUTH_URL",
       "label": "App URL",
-      "help": "Where people open Seeder, without a trailing slash. Change it when you add a custom domain.",
-      "default": "{{workerUrl}}",
-      "required": true
+      "help": "Where people open Seeder, without a trailing slash.",
+      "default": "{{appUrl}}"
     },
     {
       "name": "BETTER_AUTH_TRUSTED_ORIGINS",
       "label": "Other allowed origins",
-      "help": "Further addresses the app is reachable at, separated by commas (for example the workers.dev address after moving to a custom domain), so sign-in from them is not refused."
+      "help": "Further addresses the app is reachable at, separated by commas (for example the workers.dev address after moving to a custom domain), so sign-in from them is not refused.",
+      "optional": true
     },
     {
       "name": "MCP_ALLOWED_ORIGINS",
       "label": "MCP allowed origins",
-      "help": "Origins of browser-based MCP clients allowed to call /api/mcp, separated by commas, for example https://claude.ai. Empty allows any origin; a personal access token is always required."
+      "help": "Origins of browser-based MCP clients allowed to call /api/mcp, separated by commas, for example https://claude.ai. Empty allows any origin; a personal access token is always required.",
+      "optional": true
     }
   ],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Open {{workerUrl}}/sign-in and create the owner account with the owner email. Invite the rest of the team from the admin pages."
+      "content": "Open {{appUrl}}/sign-in and create the owner account with the owner email. Invite the rest of the team from the admin pages."
     },
     {
       "type": "markdown",
-      "content": "Connect an AI assistant: create a token under **Settings > API tokens**, then add `{{workerUrl}}/api/mcp` to the client with the token as a Bearer header."
+      "content": "Connect an AI assistant: create a token under **Settings > API tokens**, then add `{{appUrl}}/api/mcp` to the client with the token as a Bearer header."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

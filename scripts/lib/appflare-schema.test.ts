@@ -6,7 +6,9 @@ import {
   artifactManifestFixture,
   duoArtifactManifestFixture,
 } from "../fixtures/artifact-manifest.ts";
+import { appflareAvailable, testSchema } from "../fixtures/schema.ts";
 import { loadEntryWorkerHelpers, oneWorkerFacts } from "./appflare-schema.ts";
+import { findApp, readManifestFile } from "./apps.ts";
 import { appflarePaths } from "./paths.ts";
 import type { ArtifactManifest } from "./types.ts";
 
@@ -59,5 +61,39 @@ describe("oneWorkerFacts", () => {
     expect(oneWorkerFacts(one as unknown as ArtifactManifest)).toBe(one.worker);
     const duo = duoArtifactManifestFixture({ sha: PIN }) as unknown as ArtifactManifest;
     expect(() => oneWorkerFacts(duo)).toThrow(/has several Workers/);
+  });
+});
+
+describe.skipIf(!appflareAvailable)("the catalog manifest parser", () => {
+  const fixtureApps = path.join(import.meta.dirname, "..", "fixtures", "apps");
+  const hello = () =>
+    readManifestFile(findApp(fixtureApps, "hello").manifestPath) as Record<string, unknown>;
+  const messages = async (manifest: unknown): Promise<string> => {
+    const result = (await testSchema()).catalogManifest.safeParse(manifest);
+    return result.success ? "" : result.error.issues.map((i) => i.message).join("\n");
+  };
+
+  it("accepts the fixture entry", async () => {
+    expect(await messages(hello())).toBe("");
+  });
+
+  it("refuses a misspelled field instead of dropping it", async () => {
+    const install = hello().install as Record<string, unknown>;
+    expect(await messages({ ...hello(), install: { ...install, healthpath: "/x" } })).not.toBe("");
+  });
+
+  it("refuses a license that is not an SPDX expression of current ids", async () => {
+    for (const license of ["Custom terms", "GPL-3.0", "none"]) {
+      expect(await messages({ ...hello(), license })).toMatch(/license/);
+    }
+    for (const license of ["MIT", "GPL-3.0-only", "MIT OR Apache-2.0", "NONE"]) {
+      expect(await messages({ ...hello(), license })).toBe("");
+    }
+  });
+
+  it("refuses a category off the list, and more than three", async () => {
+    expect(await messages({ ...hello(), categories: ["gadgets"] })).not.toBe("");
+    const four = ["utilities", "files", "sharing", "sync"];
+    expect(await messages({ ...hello(), categories: four })).not.toBe("");
   });
 });

@@ -13,7 +13,7 @@ name: bump
 # Pull requests opened with the workflow token do not trigger pull_request
 # workflows, so this starts verify and conventions on each new branch.
 #
-# An app whose appflare.jsonc sets bump.autoMerge (and not install.version) gets
+# An app whose appflare.jsonc sets bump.autoMerge (and not source.version) gets
 # GitHub auto-merge (squash) enabled on its pull request, so it merges once the
 # required checks pass; every other bump waits for a maintainer. Auto-merge is
 # enabled with the GraphQL mutation rather than `gh pr merge --auto`, because gh

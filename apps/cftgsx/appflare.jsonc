@@ -7,7 +7,6 @@
   "name": "cftgsx",
   "summary": "A two-way Telegram contact bot: messages to the bot reach your admin chat, your replies go back to the sender, with broadcasts, bans and one forum topic per user.",
   "tagline": "Answer messages to your Telegram bot from one chat",
-  "homepage": "https://github.com/SCSHIRKER/cftgsx",
   "repo": "SCSHIRKER/cftgsx",
   "license": "MIT",
   "categories": ["chat", "bots"],
@@ -19,14 +18,12 @@
   // that contains this commit.
   "source": { "ref": "main", "sha": "3ee8aedcce4179549647e5b05f20cd40f9369fe8" },
   "install": {
-    "tier": "artifact",
     "packageManager": "npm",
     // Upstream ships no lockfile; the pack log records the hash of the one
     // the install writes. The only dependency is wrangler.
     "installDirs": [{ "path": ".", "lockfile": "none" }],
     // One plain JavaScript file, no build step.
     "wranglerConfig": "wrangler.toml",
-    "workerName": "cftgsx",
     // The config keeps the USER_STORAGE namespace commented out, and without
     // it user tracking, bans, broadcasts to everyone and forum mode do
     // nothing. Adding the binding lets the install create the namespace. No
@@ -38,12 +35,11 @@
     // Telegram token and chat id and answers 500 when they do not, which the
     // install check's placeholder values never do. Any answer of the Worker
     // counts.
-    "healthMode": "status-only"
+    "health": { "mode": "any-response" }
   },
   // One Worker and one KV namespace. Every forwarded message from a new user
   // and every ban is a KV write; the free plan allows 1,000 a day.
   "plan": "free",
-  "requires": [],
   "secrets": [
     {
       "name": "BOT_TOKEN",
@@ -54,21 +50,20 @@
       "name": "WEBHOOK_SECRET",
       "label": "Webhook secret",
       "help": "Telegram sends it with every update and the bot refuses updates without it, so no one else can post fake messages to the bot. Visit /setWebhook again after changing it.",
-      "generate": true
+      "generate": "password"
     },
     {
       "name": "USER_ID_SECRET",
       "label": "User tag signing key",
       "help": "Signs the user id in each forwarded message, so a reply reaches the user who wrote and a forged tag is refused.",
-      "generate": true
+      "generate": "password"
     }
   ],
   "vars": [
     {
       "name": "ADMIN_CHAT_ID",
       "label": "Admin chat id",
-      "help": "The numeric Telegram id of the chat that receives the messages: your own user id, or a group's id (negative, starting with -100). @userinfobot shows yours.",
-      "required": true
+      "help": "The numeric Telegram id of the chat that receives the messages: your own user id, or a group's id (negative, starting with -100). @userinfobot shows yours."
     },
     {
       "name": "ENABLE_USER_TRACKING",
@@ -76,7 +71,8 @@
       "help": "Keeps a list of up to 1,000 users who wrote, for /users and for broadcasting to everyone with /post all.",
       "type": "select",
       "options": [{ "value": "false", "label": "Off" }, { "value": "true", "label": "On" }],
-      "default": "false"
+      "default": "false",
+      "optional": true
     },
     {
       "name": "ENABLE_FORUM_MODE",
@@ -84,18 +80,18 @@
       "help": "Gives each user a topic of their own in the admin chat and asks new users a small sum before their first message goes through. The admin chat must be a group with topics turned on, and the bot an admin there.",
       "type": "select",
       "options": [{ "value": "false", "label": "Off" }, { "value": "true", "label": "On" }],
-      "default": "false"
+      "default": "false",
+      "optional": true
     }
   ],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Open {{workerUrl}}/setWebhook once: it points your bot at {{workerUrl}}/webhook with the webhook secret. Then send /start to the bot from the admin chat to see its commands."
+      "content": "Open {{appUrl}}/setWebhook once: it points your bot at {{appUrl}}/webhook with the webhook secret. Then send /start to the bot from the admin chat to see its commands."
     },
     {
       "type": "markdown",
       "content": "Messages people send the bot arrive in the admin chat; reply to one to answer its sender. /post sends a broadcast, /ban blocks a user, and /status shows what is turned on."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

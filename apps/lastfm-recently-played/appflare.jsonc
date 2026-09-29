@@ -4,7 +4,6 @@
   "name": "Last.fm Recently Played",
   "summary": "An SVG card of your recent Last.fm scrobbles for a GitHub profile README, with themes, artwork, stats and loved tracks, plus a configurator page to build the card's URL.",
   "tagline": "Show your recent music on your GitHub profile",
-  "homepage": "https://github.com/JeffreyCA/lastfm-recently-played-readme",
   "repo": "JeffreyCA/lastfm-recently-played-readme",
   "license": "MIT",
   "categories": ["media", "utilities"],
@@ -13,17 +12,14 @@
   // Upstream has no release tags; the pin is the head of main.
   "source": { "ref": "main", "sha": "cce76de9b974f6f5155254b4fd6f710949470965" },
   "install": {
-    "tier": "artifact",
     "packageManager": "npm",
     "wranglerConfig": "wrangler.jsonc",
-    "workerName": "lastfm-recently-played",
     // Answers 200 whether or not the API key is set.
-    "healthPath": "/api/health"
+    "health": { "path": "/api/health" }
   },
   // One Worker, its configurator page as static assets, and the Workers
   // cache in front of it; no storage.
   "plan": "free",
-  "requires": [],
   "secrets": [
     {
       "name": "LASTFM_API_KEY",
@@ -37,8 +33,7 @@
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Build a card at {{workerUrl}}, or add `![My scrobbles]({{workerUrl}}/svg?user=<your Last.fm user name>)` to a README. GitHub caches README images, so new scrobbles can take a few minutes to show."
+      "content": "Build a card at {{appUrl}}, or add `![My scrobbles]({{appUrl}}/svg?user=<your Last.fm user name>)` to a README. GitHub caches README images, so new scrobbles can take a few minutes to show."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

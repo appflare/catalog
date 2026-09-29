@@ -9,7 +9,6 @@
   "name": "Skland Daily Attendance",
   "summary": "Claims the daily Skland sign-in rewards for your Arknights and Arknights: Endfield accounts on a schedule, with optional notifications of each run.",
   "tagline": "Automatically claim daily rewards for Arknights and Endfield",
-  "homepage": "https://github.com/AEtherside/skland-daily-attendance",
   "repo": "AEtherside/skland-daily-attendance",
   // The repository has no LICENSE file; package.json and the README's
   // License section both say MIT.
@@ -28,7 +27,6 @@
   // Upstream publishes no release tags; the pin tracks main.
   "source": { "ref": "main", "sha": "1c0c3a8f8ff24cbde358f3ec441e4fca99e3a1ec" },
   "install": {
-    "tier": "artifact",
     "packageManager": "pnpm",
     // The root config has no `main`: Nitro's cloudflare-module preset writes
     // the Worker and its deploy config under .output (merging in the root
@@ -36,7 +34,6 @@
     // through .wrangler/deploy/config.json, which the packer follows as
     // `wrangler deploy` does.
     "wranglerConfig": "wrangler.jsonc",
-    "workerName": "skland-attendance",
     // Upstream's build script is `nitro build`, which picks the Cloudflare
     // preset only when it detects Cloudflare's own build environment; the
     // catalog build names the preset instead.
@@ -45,7 +42,6 @@
   // One cron trigger (of the free plan's five per account) and a KV
   // namespace holding one key per account per day.
   "plan": "free",
-  "requires": [],
   "secrets": [
     {
       "name": "SKLAND_TOKENS",
@@ -64,19 +60,20 @@
       "name": "SKLAND_MAX_RETRIES",
       "label": "Retries",
       "help": "How many times a failed sign-in is retried within one run.",
-      "default": "3"
+      "default": "3",
+      "optional": true
     },
     {
       "name": "SKLAND_ANONYMOUS",
       "label": "Hide character names",
-      "help": "Set to true to leave character names out of logs and notifications. Any value turns it on; leave empty to show them."
+      "help": "Set to true to leave character names out of logs and notifications. Any value turns it on; leave empty to show them.",
+      "optional": true
     }
   ],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Nothing to open: the Worker signs your accounts in on its own, every two hours at half past, and stops for the day once an account succeeds. {{workerUrl}} only answers Hello World. Follow the runs in the Worker's logs in the Cloudflare dashboard, or set notification URLs."
+      "content": "Nothing to open: the Worker signs your accounts in on its own, every two hours at half past, and stops for the day once an account succeeds. {{appUrl}} only answers Hello World. Follow the runs in the Worker's logs in the Cloudflare dashboard, or set notification URLs."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

@@ -6,7 +6,6 @@
   "name": "RSSHub Never Die",
   "summary": "A stable RSSHub address for your feed reader: requests go to a pool of public RSSHub instances, by load balancing, failover to the next instance, or the fastest of several.",
   "tagline": "One address for your feed reader that switches servers when one fails",
-  "homepage": "https://github.com/CaoMeiYouRen/rsshub-never-die",
   "repo": "CaoMeiYouRen/rsshub-never-die",
   "license": "MIT",
   "categories": ["utilities", "networking"],
@@ -17,19 +16,16 @@
   // 4.12.32, fixes nothing this Worker uses.
   "source": { "ref": "v1.4.2", "sha": "989f97b083bb22faa0c63a8d66dd432987dbaba6" },
   "install": {
-    "tier": "artifact",
     "packageManager": "pnpm",
     // The wrangler config points at dist/app.mjs, which tsup writes. This is
     // upstream's `pnpm run build` (cross-env NODE_ENV=production tsup); it
     // also writes the Node.js entry points, which the Worker does not use.
     "buildCommand": "pnpm run build",
-    "wranglerConfig": "wrangler.toml",
-    "workerName": "rsshub-never-die"
+    "wranglerConfig": "wrangler.toml"
   },
   // One stateless Worker. Every feed request costs one to six subrequests,
   // depending on the mode.
   "plan": "free",
-  "requires": [],
   // The wrangler config sets AUTH_KEY in [vars] to an empty string; as a
   // secret here, that var is left out of the artifact.
   "secrets": [
@@ -44,7 +40,8 @@
     {
       "name": "RSSHUB_NODE_URLS",
       "label": "RSSHub instances",
-      "help": "Comma-separated instance URLs; add |weight=N after one to pick it more often (default 1). https://rsshub.app is always in the pool. Put your own instance here if you run one."
+      "help": "Comma-separated instance URLs; add |weight=N after one to pick it more often (default 1). https://rsshub.app is always in the pool. Put your own instance here if you run one.",
+      "optional": true
     },
     {
       "name": "MODE",
@@ -58,24 +55,26 @@
           "label": "Fastest: ask several at once, return the first answer"
         }
       ],
-      "default": "loadbalance"
+      "default": "loadbalance",
+      "optional": true
     },
     {
       "name": "MAX_NODE_NUM",
       "label": "Instances per request",
-      "help": "The most instances failover and fastest mode try for one request. Workers allow six fetches at a time, so keep it at 6 or less for the fastest mode."
+      "help": "The most instances failover and fastest mode try for one request. Workers allow six fetches at a time, so keep it at 6 or less for the fastest mode.",
+      "optional": true
     },
     {
       "name": "CACHE_MAX_AGE",
       "label": "Cache time (seconds)",
-      "help": "How long a feed stays cached. The cache works only on a custom domain; on workers.dev every request goes to an instance."
+      "help": "How long a feed stays cached. The cache works only on a custom domain; on workers.dev every request goes to an instance.",
+      "optional": true
     }
   ],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Use {{workerUrl}} wherever a feed reader or RSSHub Radar asks for an RSSHub address: {{workerUrl}}/github/issue/DIYgod/RSSHub, say, is answered by one of the instances in the pool."
+      "content": "Use {{appUrl}} wherever a feed reader or RSSHub Radar asks for an RSSHub address: {{appUrl}}/github/issue/DIYgod/RSSHub, say, is answered by one of the instances in the pool."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

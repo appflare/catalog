@@ -51,23 +51,29 @@ branch locally.
 Every app needs a public repository. If an app works with Cloudflare's Deploy
 button, it should work with Appflare: bindings, compatibility settings, assets, and
 crons come from the app's own wrangler config, so the manifest does not repeat them.
+A catalog entry's install replaces the app's Deploy button rather than wrapping it:
+Appflare installs a signed build of the pinned commit into the user's account and
+keeps it updated, instead of copying the repository.
 
 Any license is accepted: open source, source-available, or none at all. The catalog
 never leaves an app out for its license; managers show the license as the
 repository declares it, and `NONE` as **No license**. Write `license` as the app's
-own repository declares it:
+own repository declares it, in one of these forms:
 
-- an SPDX license expression: `MIT`, `Apache-2.0`, `MIT OR Apache-2.0`, or a
-  source-available license such as `BUSL-1.1`, `FSL-1.1-MIT` or `Elastic-2.0`;
+- an SPDX license expression of current SPDX ids: `MIT`, `Apache-2.0`,
+  `MIT OR Apache-2.0`, or a source-available license such as `BUSL-1.1`,
+  `FSL-1.1-MIT` or `Elastic-2.0`. Deprecated ids are refused: write
+  `GPL-3.0-only` or `GPL-3.0-or-later`, never `GPL-3.0`, as the project's license
+  notice says ("or any later version" means `-or-later`; the license text alone
+  means `-only`);
 - `NONE` when the repository publishes no license;
-- `SEE LICENSE IN <file>`, with a path in the repository, for a license that has no
-  SPDX id.
+- `LicenseRef-<name>` for a license that has no SPDX id, with a `licenseNote` that
+  says what it allows.
 
 Add `licenseNote`, one short line of at most 160 characters such as
 `"Source-available: production use restricted; see the license"`, when the id does
 not say what matters; managers mark an app with a note as source-available.
-`pnpm validate` warns about a `license` in none of these forms (managers then show
-the text as it is written), but does not fail on it.
+`pnpm validate` refuses a `license` in none of these forms.
 
 ## Adding or updating an app
 
@@ -77,10 +83,11 @@ the text as it is written), but does not fail on it.
    it belongs to (`v1.2.3`) or to the branch (`main`) for untagged apps. The packer
    derives the version from it: a semver tag gives `1.2.3`, anything else gives
    `0.0.0-<commit date YYYYMMDD>.<sha7>`. When the repository's tags do not
-   describe the app, as in a monorepo of many templates, set `install.version` to
-   the app's own version (`"version": "1.1.10"`, semver without a leading `v`); it
-   wins over the tag. It must change whenever `source` moves: publish refuses a
-   new pin under an `install.version` that is already released.
+   describe the app, as in a monorepo of many templates, set `source.version` to
+   the app's own version (`"source": { "ref": "v11.0.0", "sha": "...", "version":
+   "1.1.10" }`, semver without a leading `v`); it wins over the tag. It must change
+   whenever the pin moves: publish refuses a new pin under a `source.version` that
+   is already released.
 3. List at least one GitHub user in `maintainers`: the people who package the app
    for the catalog, shown as "Packaged by" on the app's page in the manager. They
    own `/apps/<slug>/` in CODEOWNERS, so GitHub asks them to review every pull
@@ -90,15 +97,31 @@ the text as it is written), but does not fail on it.
    `{ "name", "url"?, "github"?, "x"? }`: an https website, and GitHub and X handles
    without `@`. Catalog cards show the names; the app's page adds the links. When
    `authors` is omitted, `index.json` lists the owner of `repo`.
-5. Add a `tagline`: what the app does, in one line of at most 80 characters with
-   no trailing period, such as `"Short links on your own domain"`. Managers show
-   it under the app's name on catalog tiles, so write it in plain words for someone
-   who is not a developer: what they get, not how it is built. It is optional
-   (without it, tiles shorten `summary`), but every entry should have one. Adding
-   or changing it on a released entry needs no new pin and no revision.
-6. Optionally, add images the upstream project publishes (see "Images" below): its
+5. Add a `tagline` (required): what the app does, in one line of at most 80
+   characters with no trailing period, such as `"Short links on your own domain"`.
+   Managers show it under the app's name on catalog tiles, so write it in plain
+   words for someone who is not a developer: what they get, not how it is built.
+   Changing it on a released entry needs no new pin and no revision.
+6. Pick one to three `categories`, the most specific that fit, from this list (the
+   manager's label follows each id): `ai` AI, `analytics` Analytics, `bots` Bots,
+   `business` Business, `chat` Chat, `cms` Websites and blogs, `community`
+   Community, `developer-tools` Developer tools, `ecommerce` E-commerce,
+   `education` Education, `email` Email, `family` Family, `files` Files, `finance`
+   Finance, `games` Games, `marketing` Marketing, `media` Media, `monitoring`
+   Monitoring, `networking` Networking, `notes` Notes, `notifications`
+   Notifications, `passwords` Passwords, `privacy` Privacy, `productivity`
+   Productivity, `remote-access` Remote access, `scheduling` Scheduling,
+   `security` Security, `sharing` Sharing, `sync` Sync, `utilities` Utilities.
+   `pnpm validate` refuses any other id, and more than three.
+7. Optionally, add images the upstream project publishes (see "Images" below): its
    icon, its cover, screenshots, and `MEDIA.md` saying where each one comes from.
-7. Run the checks below, then open a pull request.
+8. Run the checks below, then open a pull request.
+
+Leave out what states a default: `homepage` when it is the repository's GitHub
+page, `install.tier` when it is `"artifact"`, `install.workerName` when it is the
+slug, `revision` when it is 1, and `requires`, `secrets`, `vars`, `postInstall`
+and `tokenPermissions` when they are empty. `pnpm validate` refuses a field the
+schema does not know, so a misspelled one fails instead of being ignored.
 
 ### The Worker upload budget
 
@@ -437,8 +460,8 @@ keyed by the R2 binding's name:
 }
 ```
 
-Each rule has an `id` (1 to 64 letters, digits, spaces and `. _ -`, unique within
-the bucket) and at least one age in whole days, counted from each object's upload:
+Each rule has an `id` (1 to 55 letters, digits, spaces and `. _ -`, starting with a
+letter or digit, unique within the bucket) and at least one age in whole days, counted from each object's upload:
 `deleteAfterDays`, `infrequentAccessAfterDays` (move to Infrequent Access storage)
 or `abortMultipartUploadsAfterDays` (counted from the start of the upload). A rule
 applies to the keys that start with its `prefix`, or to every object without one.
@@ -447,21 +470,30 @@ wrangler config, or the pack fails.
 
 The manager sets the rules when it creates the bucket and keeps the rule Cloudflare
 gives every new bucket, which aborts unfinished multipart uploads after seven days.
+On the bucket each rule's id starts with `appflare:` (`appflare:Delete temporary
+files`), so a rule someone added by hand is never replaced.
 That rule's id, `Default Multipart Abort Rule`, is refused for a rule of the app's
 own; use `abortMultipartUploadsAfterDays` in another rule to change when uploads are
 aborted. A `self-deploying` entry cannot declare `resources.r2`.
 
-Metadata indexes and lifecycle rules apply to the index or bucket an install
-creates. An update does not change an index or bucket that an earlier version
-already created. An entry with either setting publishes as artifact format 6;
-managers too old to read it refuse it instead of creating the index or bucket
-without them.
+Metadata indexes and lifecycle rules also reach an index or bucket an earlier
+version created: an update adds the missing metadata indexes before the new code
+runs, and merges the lifecycle rules only once the new version serves, so a failed
+update never leaves a rule deleting the old version's files. Nothing is deleted,
+and a rollback leaves the rules in place.
 
 ### The account id and derived secrets
 
+Var defaults and wrangler config values may hold placeholders the manager fills
+in. For the app's own address use `{{appUrl}}` (or `{{appHostname}}` without
+`https://`): its custom domain while workers.dev is turned off for it, else its
+workers.dev URL. `{{workerUrl}}` (and `{{workerHostname}}`) is always the
+workers.dev address, for the rare app that must name that address; the schema
+lists every placeholder and where each one is allowed.
+
 A var whose default (or wrangler config value) holds `{{accountId}}` gets the id of
 the account the app is installed in, filled in on every install, update, and
-settings change, next to `{{workerUrl}}` and `{{workerName}}`. Use it for apps that
+settings change, next to `{{appUrl}}` and `{{workerName}}`. Use it for apps that
 query the Cloudflare API about their own account, such as the Analytics Engine SQL
 API. The install check fills in the CI account's id.
 
@@ -507,7 +539,7 @@ The private key is the unpadded base64url of a 32-byte P-256 key, the form web-p
 libraries take, and the manager refuses any other value an admin types over it. The
 public key (unpadded base64url of the 65-byte uncompressed point) is shown read-only
 and set again whenever the private key changes. A derived var takes no `default`,
-`required`, `type`, or `options`. A secret may derive `vapid-public-key` too, when the
+`options`, `type: "select"`, or `optional`. A secret may derive `vapid-public-key` too, when the
 app reads the public key as a secret. The install check generates a real key pair.
 
 ### Secrets and vars of one name
@@ -540,7 +572,6 @@ Entries of 4 or 5 Workers install only on Workers Paid, so give them
 
 ```jsonc
 "install": {
-  "tier": "artifact",
   "wranglerConfig": "packages/api/wrangler.jsonc",
   "workerName": "glance",
   "workers": [
@@ -549,11 +580,11 @@ Entries of 4 or 5 Workers install only on Workers Paid, so give them
   ]
 },
 "secrets": [
-  { "name": "CONTENT_TOKEN_SECRET", "label": "Content token secret", "generate": true },
+  { "name": "CONTENT_TOKEN_SECRET", "label": "Content token secret", "generate": "password" },
   { "name": "BOOTSTRAP_TOKEN", "label": "First sign-in token", "workers": ["app"] }
 ],
 "vars": [
-  { "name": "CONTENT_URL", "label": "Content URL", "default": "{{workerUrl:content}}" }
+  { "name": "CONTENT_URL", "label": "Content URL", "default": "{{appUrl:content}}" }
 ]
 ```
 
@@ -580,8 +611,8 @@ Entries of 4 or 5 Workers install only on Workers Paid, so give them
 - **Secrets and vars.** A secret goes to every Worker unless its `workers` lists
   some; a var goes to the Workers whose wrangler config declares it (every Worker
   when none does) unless its `workers` lists some. A secret shared by several
-  Workers has one value. `{{workerUrl}}` and `{{workerName}}` are the primary
-  Worker's; in vars, `{{workerUrl:<name>}}` and `{{workerName:<name>}}` name any
+  Workers has one value. `{{appUrl}}`, `{{workerUrl}}` and `{{workerName}}` are the
+  primary Worker's; in vars, `{{appUrl:<name>}}` and `{{workerName:<name>}}` name any
   Worker of the entry.
 - **Workers only the app calls.** Set `"workersDev": false` on a Worker that only
   the entry's other Workers reach, through a service binding or a Durable Object
@@ -591,10 +622,7 @@ Entries of 4 or 5 Workers install only on Workers Paid, so give them
   change, and the app's page lists it as not reachable from the internet. Leave it
   out for every Worker that people or other services call, such as a file origin,
   an inbox, or a webhook endpoint. The primary Worker cannot set it, and
-  `{{workerUrl:<name>}}` of such a Worker is refused, since it has no URL. An entry
-  that sets it publishes as artifact format 4, which Appflare managers released
-  before the field existed refuse to install or update to, asking the admin to
-  update Appflare first, instead of putting the Worker on the internet.
+  `{{workerUrl:<name>}}` of such a Worker is refused, since it has no URL.
 
 The packer refuses an entry whose Workers have a service binding to a Worker outside
 the entry, bind each other in a cycle, bind a Workflow defined in another Worker (a
@@ -619,7 +647,7 @@ root and must stay inside it.
 "resources": {
   "d1": {
     "DB": {
-      "migrations": "prisma/migrations/*/migration.sql",
+      "migrationsGlob": "prisma/migrations/*/migration.sql",
       "schema": ["src/db/views.sql"],
       "postDeployMigrationsDir": "src/db/post-deploy"
     }
@@ -630,14 +658,14 @@ root and must stay inside it.
 - **`migrationsDir`.** Another folder of migrations, in place of the wrangler
   config's `migrations_dir`. Its `.sql` files run in wrangler's order and are
   recorded in `d1_migrations`.
-- **`migrations`.** A glob, for tools that write one folder per migration (Prisma,
+- **`migrationsGlob`.** A glob, for tools that write one folder per migration (Prisma,
   Drizzle). It works as wrangler's `migrations_dir` plus `migrations_pattern`: the
   folder is everything before the first segment with a `*`, and each file is named
   by its path from there (`20240101_init/migration.sql`), exactly as wrangler names
   it, so a database migrated with wrangler and one migrated by Appflare record the
   same names. They run in wrangler's order: segment by segment, by the number before
   the first `_` (`9_b` before `10_a`), then by name. Give either `migrationsDir` or
-  `migrations`, not both. When upstream already sets `migrations_pattern`, prefer
+  `migrationsGlob`, not both. When upstream already sets `migrations_pattern`, prefer
   that.
 - **`schema`.** SQL files that run, in the order listed, on every install and update
   after the migrations, and are never recorded in `d1_migrations`. Each must be safe
@@ -658,12 +686,6 @@ root and must stay inside it.
   beside the migrations, so their file names must differ from the migrations'.
   Rolling back does not revert them: a rollback redeploys the previous Worker and
   leaves the database as it is, as it does after every migration.
-
-An entry with `schema` files or post-deploy migrations publishes as artifact format
-3. A manager too old to read format 3 refuses to install it or update to it, rather
-than install it without its SQL; newer managers say to update Appflare in Settings
-when they meet a format they cannot read. So a release that starts using them
-reaches each install only once its Appflare is updated.
 
 The install check runs all of it (see "Install checks").
 
@@ -696,9 +718,7 @@ empty.
   commit's migrations, so a column a migration adds must also be in the baseline.
   Check that when you add the entry and every time you move its pin.
 
-An entry with a baseline publishes as artifact format 5; managers too old to read it
-refuse it instead of running the migrations on an empty database. The install check
-runs the baseline with `wrangler d1 execute --remote --file`, then records every
+The install check runs the baseline with `wrangler d1 execute --remote --file`, then records every
 migration and post-deploy migration in `d1_migrations` without running them, as the
 manager does (see "Install checks").
 
@@ -716,8 +736,8 @@ Such a Worker has no code to use anything else, so the pack fails when it has
 bindings (`vars` included), catalog `secrets` or `vars`, Durable Objects, cron
 triggers, queue consumers, an `assets.binding`, or `assets.run_worker_first`.
 Observability, placement, limits and `cache` settings are left out, as wrangler
-leaves them out. The health check requests `healthPath` (default `/`) as for any
-app, so the site should answer there. When the asset directory is the repository
+leaves them out. The health check requests `install.health.path` (default `/`) as
+for any app, so the site should answer there. When the asset directory is the repository
 root, add an `.assetsignore` that leaves out everything else that is not part of the
 site (the wrangler config, the sources), as `wrangler deploy` would upload it too.
 The packer always leaves `.git`, `.wrangler` and `node_modules` directories out of
@@ -729,8 +749,7 @@ left out.
 records their rules in the artifact's assets settings instead of serving them as
 files, and the manager sends them with every upload. Each may be at most 512 KiB.
 
-Such an artifact is format 5, which managers too old to read it refuse. The install
-check deploys it with a `wrangler.json` that has the assets and compatibility
+The install check deploys it with a `wrangler.json` that has the assets and compatibility
 settings and no `main`.
 
 ### Seeding a first admin
@@ -743,10 +762,10 @@ install, from values the admin enters in the install form. Declare it under
 
 ```jsonc
 "secrets": [
-  { "name": "ADMIN_PASSWORD", "label": "Admin password", "generate": true, "seedOnly": true }
+  { "name": "ADMIN_PASSWORD", "label": "Admin password", "generate": "password", "seedOnly": true }
 ],
 "vars": [
-  { "name": "ADMIN_USERNAME", "label": "Admin user name", "required": true, "seedOnly": true }
+  { "name": "ADMIN_USERNAME", "label": "Admin user name", "seedOnly": true }
 ],
 "resources": {
   "d1": {
@@ -803,7 +822,7 @@ install, from values the admin enters in the install form. Declare it under
   settings. Use it for the admin's password, so the plaintext never sits in the
   app's environment. A seed-only value must be used by a seed, cannot be optional,
   derived or limited to some Workers, and no derived value may come from it. A var
-  a seed uses must be required, have a default, or be derived.
+  a seed uses must not be optional, or must have a default or be derived.
 - **Shown once.** A generated seed-only password is shown once more, with a copy
   button, on the install's job page, and nowhere after that. Name the user in
   `postInstall`, never the password.
@@ -819,13 +838,11 @@ install, from values the admin enters in the install form. Declare it under
   default again. Say so in the app's `README.md`, and prefer an upstream change
   that drops the default row.
 
-Seeds are not allowed on self-deploying entries. An entry with a seed publishes as
-artifact format 4. Appflare managers released before seeds existed read at most
-format 3, so they refuse to install the entry or update to it, and say to update
-Appflare in Settings, instead of installing the app without its first admin.
+Seeds are not allowed on self-deploying entries.
 
 The install check runs every seed on a fresh database, where each statement must
-add exactly one row (see "Install checks").
+add at least one row (see "Install checks"). D1 counts the rows a trigger writes
+too, so a statement on a table with an `AFTER INSERT` trigger may add more.
 
 ### Editing an entry whose version is already released
 
@@ -855,7 +872,7 @@ Anything else (`source`, `install`, `plan`, `requires`, `tokenPermissions`,
 `resources`) changes what gets built, provisioned, or asked of the account. To ship
 it, re-pin `source`: a newer `source.sha` (for branch pins), or a new tag in
 `source.ref` and its `source.sha`. When the release's version comes from
-`install.version`, bump that too.
+`source.version`, bump that too.
 
 `publish-plan` tells you which case you are in: with only form and copy changes it
 fails with "or bump revision to N", and it refuses a revision that changes anything
@@ -879,7 +896,7 @@ above the one its release was built with:
   (`node scripts/sign-revisions.ts --plan plan.json --out signatures.json
   --sign-key-env APPFLARE_SIGNING_KEY --key-id catalog-2026-09`);
 - `build-index --revision-signatures signatures.json` writes the row as before
-  (same `version`, `artifacts` and `digest`, so `lastVerified` is kept: the Worker
+  (same `version` and `artifacts`, digest included, so `lastVerified` is kept: the Worker
   the install check ran is unchanged), with `revision` and `catalogManifest`: the
   URL, sha256, key id and signature of the revised manifest. Later rebuilds keep
   the signature while the bytes stay the same; a revision no signature covers is
@@ -978,14 +995,14 @@ site without Worker code, an inline wrangler config (`wranglerConfigInline`),
 sandbox Worker that knows them; the manager refuses to send such an entry to an
 older one and tells the user to update the sandbox first.
 
-It may set `install.sandbox`:
+It may set `install.container`:
 
 ```jsonc
 "install": {
   "tier": "sandbox",
   // ...
   "buildCommand": "pnpm run build",
-  "sandbox": { "expectedMinutes": 12, "instanceType": "standard-1" }
+  "container": { "expectedMinutes": 12, "instanceType": "standard-1" }
 }
 ```
 
@@ -1004,8 +1021,8 @@ What CI does with a sandbox entry:
   check**: the build a user gets comes from their own account's sandbox Worker,
   which CI cannot reach.
 - **Publishing** (`publish.yml`): no pack, no signature, no GitHub Release.
-  `build-index` lists the entry with a `build` block instead of `artifacts` and
-  `digest`, which holds the pinned commit, the build command, `expectedMinutes`
+  `build-index` lists the entry with a `build` block instead of `artifacts`,
+  which holds the pinned commit, the build command, `expectedMinutes`
   and `instanceType` with the defaults filled in, and the URL and sha256 of the
   entry's catalog manifest. The Pages site serves that manifest at
   `apps/<slug>/manifest.json`, next to `index.json`: the schema-parsed manifest
@@ -1058,15 +1075,15 @@ installer's commands and nothing else. For one run it:
    scripts disabled;
 2. runs `install.buildCommand`, if the entry has one, without credentials;
 3. runs `install.selfDeploying.deployCommand` with the token, the account id, and
-   the app's settings, followed by the stage option and the install's stage
-   (`appflare-` and 8 characters of the install id), so two installs never share
-   a resource.
+   the app's settings, followed by the tool's own stage option and the install's
+   stage (`appflare-` and 8 characters of the install id), so two installs never
+   share a resource. The tool keeps its state in the user's account.
 
 An update runs the same steps at the new pin; the installer converges on what it
 deployed before. There is no snapshot, so an update cannot be rolled back.
 Uninstalling runs `install.selfDeploying.destroyCommand` and then deletes the
 token and secrets from the sandbox Worker. After each deploy the manager reads
-the Workers listed in `install.selfDeploying.workers` and records what they bind,
+the Workers listed in `install.selfDeploying.workerNames` and records what they bind,
 labelled as managed by the app's installer; Appflare never deletes any of it
 itself.
 
@@ -1075,35 +1092,57 @@ A self-deploying entry must:
 - set `"plan": "paid"`, for the container, even when the app itself would run on
   the free plan;
 - describe its installer in `install.selfDeploying` (the schema also requires
-  it): the `tool`, the `deployCommand` and `destroyCommand` as argv without the
-  stage option, the `stateStore`, and the `workers` it creates, each with
-  `{{stage}}` for the install's stage. The first Worker serves the app: its
-  workers.dev URL is the install's URL and the health check probes it;
-- list `tokenPermissions`, the permissions of the app's token, each with a
-  `description` of what the installer does with it. Name them as the dashboard's
-  token form does (`Workers Scripts`, `Secrets Store:Edit`) with `"scope"`;
-  without a `:Read` or `:Edit` suffix a permission means Edit;
+  it): the `tool`, the `deployCommand` and `destroyCommand` as argv (lists of
+  arguments, run without a shell) without the stage option, and the
+  `workerNames` of the Workers it creates, each with `{{stage}}` for the
+  install's stage. The first Worker serves the app: its workers.dev URL is the
+  install's URL and the health check probes it;
+- list `tokenPermissions`, the permissions of the app's token, each as
+  `{ "group", "scope", "access", "reason" }`: the permission group as the
+  dashboard's token form names it (`"Workers Scripts"`, `"Secrets Store"`; the
+  schema lists every group Appflare can select), `"scope"` `"account"` or
+  `"zone"`, `"access"` `"read"` or `"edit"`, and a `reason`, one plain sentence of
+  what the installer does with it;
 - not set `bump.autoMerge`, since CI never installs the entry.
 
 It may set `install.buildCommand` (a build that needs no credentials, run
-before the installer) and `install.sandbox`, which sizes the installer's run and
-feeds the cost the manager shows, exactly as for a sandbox entry:
+before the installer) and `install.container`, which sizes the installer's run
+and feeds the cost the manager shows, exactly as for a sandbox entry:
 
 ```jsonc
 "install": {
   "tier": "self-deploying",
   // ...
   "buildCommand": "pnpm exec vite build --mode selfhost",
-  "sandbox": { "expectedMinutes": 15, "instanceType": "standard-2" },
+  "container": { "expectedMinutes": 15, "instanceType": "standard-2" },
   "selfDeploying": {
     "tool": "alchemy",
     "deployCommand": ["pnpm", "alchemy", "deploy", "--yes"],
     "destroyCommand": ["pnpm", "alchemy", "destroy", "--yes"],
-    "stateStore": "cloudflare",
-    "workers": ["open-seo-{{stage}}", "open-seo-{{stage}}-audit"]
+    "workerNames": ["open-seo-{{stage}}", "open-seo-{{stage}}-audit"]
   }
-}
+},
+"tokenPermissions": [
+  {
+    "group": "Workers Scripts",
+    "scope": "account",
+    "access": "edit",
+    "reason": "Deploys the app's two Workers and their cron triggers."
+  },
+  {
+    "group": "Account Settings",
+    "scope": "account",
+    "access": "read",
+    "reason": "Reads the account when the installer's state store signs in."
+  }
+]
 ```
+
+An entry whose app reads a Cloudflare API token of its own at run time (an
+artifact tier entry that queries the Analytics API, say) lists the token's
+`tokenPermissions` the same way, and marks the secret that takes the token with
+`"cloudflareToken": true`, so the install and settings forms show how to create
+it next to that field.
 
 The commands run without a terminal, so they must not prompt. Review the pinned
 commit's installer the way you would review a build: it runs with a token that
@@ -1132,7 +1171,7 @@ So `lastVerified` of a self-deploying entry is set only by hand, with
    app's token from the install page, and note the stage the app's page shows
    and how long the run took; `expectedMinutes` should match it, rounded up.
 2. Run Actions > verify tier > Run workflow with the slug, that version, and the
-   Worker name: the first of `install.selfDeploying.workers` with `{{stage}}`
+   Worker name: the first of `install.selfDeploying.workerNames` with `{{stage}}`
    replaced by that stage. The workflow refuses a self-deploying entry without it,
    or with a name that does not fit that template.
 3. Uninstall the app in the manager, which runs the installer's destroy command,
@@ -1141,7 +1180,7 @@ So `lastVerified` of a self-deploying entry is set only by hand, with
 The check is the same as for a sandbox entry: the account must have the
 `appflare-sandbox` Worker, `index.json` must list that version, and the Worker
 must pass the health check (for apps behind Cloudflare Access, set
-`install.healthMode` to `"status-only"`). A pass is recorded against the entry's
+`install.health` to `{ "mode": "any-response" }`). A pass is recorded against the entry's
 version and catalog manifest digest, so any edit to the entry, not only a new
 pin, clears it until the next manual check.
 
@@ -1267,7 +1306,7 @@ throwaway key pair; verify with `--public-key` instead of the embedded keys.
 
 ### Where index.json gets each app's version and digest
 
-`digest` is the sha256 of the exact bytes of an artifact's `manifest.json`.
+`artifacts.digest` is the sha256 of the exact bytes of an artifact's `manifest.json`.
 `build-index` picks the artifact for each app in this order:
 
 1. `dist/<slug>/manifest.json`, if `pack-app` wrote it from the manifest's current
@@ -1276,7 +1315,8 @@ throwaway key pair; verify with `--public-key` instead of the embedded keys.
    current pin packs to. The scripts compute it with the packer's own
    `deriveVersion`; for branch pins that needs the commit date, which they read by
    fetching only the pinned commit object. The release must have all three assets,
-   and its `manifest.json` must name the same app, version, and `source.sha`.
+   and its `manifest.json` must name the same app and version, and the catalog
+   manifest packed into it the same `source.sha`.
    Otherwise the app is left out with a warning. It is never "the most recent
    release": a new pin without a release yet is not listed with an older artifact.
    The lookup goes through `gh api`, so `gh` must be installed and logged in.
@@ -1296,10 +1336,11 @@ rebuilds rows, so a failed check can never drop an app. Every rebuild by
 same, which a revision does not change. A new version starts at `null` until its
 first nightly run.
 
-Every row also carries the entry's `license`, and its `licenseNote` and `tagline`
-when it has them, from the current `appflare.jsonc`, and `addedAt`: the committer
-time of the oldest commit that added `apps/<slug>/appflare.jsonc` (a renamed slug
-counts from its new path), which managers use for "New this week". That needs the
+Every row also carries the entry's `tagline`, `categories` and `license`, and its
+`licenseNote` when it has one, from the current `appflare.jsonc`, and `addedAt`:
+the committer time of the oldest commit that added `apps/<slug>/appflare.jsonc` (a
+renamed slug counts from its new path; an entry not committed yet gets the time of
+the build), which managers use for "New this week". That needs the
 catalog's whole git history, so the publish job checks it out with `fetch-depth: 0`,
 and `build-index --releases-only` fails in a shallow clone. A local `pnpm
 build-index` in a shallow clone keeps the previous index's `addedAt`, with a warning.
@@ -1541,7 +1582,7 @@ place, keeping the manifest's comments and layout. It commits
 `chore(<slug>): bump to <ref>` (branch targets add `@<short sha>`) on
 `bump/<slug>/<short sha>` and opens a pull request. The pull request body links
 the upstream compare view and lists the commits in between. For an app that sets
-`install.version`, the body also has a checklist item to update it: the
+`source.version`, the body also has a checklist item to update it: the
 workflow cannot know the app's new version.
 
 Cadence and cleanup:
@@ -1594,7 +1635,7 @@ checks finish:
 The pull request body says which path applies. These cases fall back to a
 maintainer:
 
-- An entry that also sets `install.version` never merges itself: someone has to
+- An entry that also sets `source.version` never merges itself: someone has to
   set the new version first.
 - `bump.yml` asks GitHub for `main`'s rules first and enables auto-merge only
   when `verify passed` is a required status check. Otherwise nothing would stop
@@ -1673,21 +1714,22 @@ self-deploying entries have no install check in CI (see "Sandbox tier" and
    `beforeSchema` runs right after its database's migrations instead. Seeds go
    through the D1 API, one `/query` call per statement with its values as
    params (wrangler cannot bind params), after the statement is checked again
-   with the manager's guard; each statement must add exactly one row to the
-   fresh database, and no value is ever printed.
+   with the manager's guard; each statement must add at least one row to the
+   fresh database (a statement that adds none found its row already written),
+   and no value is ever printed.
    Every secret in the catalog manifest is set to a random value (32 random bytes
    as base64 for `generate: "base64-key-32"`, a real key for
-   `generate: "vapid-private-key"`), and each var gets its default. A required
-   var without a default gets the placeholder `ci`. Seed-only secrets and vars
+   `generate: "vapid-private-key"`), and each var gets its default. A var that is
+   not `optional` and has no default gets the placeholder `ci`. Seed-only secrets and vars
    get values the same way (a seed-only var without a default gets `ci-admin`)
    and are never set on a Worker; the seeds hash and bind them.
 5. Wait up to 60 seconds for `https://<worker>.<subdomain>.workers.dev/` to answer.
-   The check probes the manifest's `install.healthPath` instead of `/` when it is
+   The check probes the manifest's `install.health.path` instead of `/` when it is
    set, as the manager does. A Worker the entry keeps off workers.dev
    (`"workersDev": false`) is not probed.
    A 5xx, a `1042` refusal, or no answer is retried and fails at the deadline. Any
    other status passes. A plain 404 is retried too, but passes at the deadline,
-   since an app may serve 404 at `/`. With `install.healthMode: "status-only"`
+   since an app may serve 404 at `/`. With `install.health.mode` `"any-response"`
    (for apps whose every route sits behind Cloudflare Access or their own
    sign-in), a 5xx the Worker answers itself passes too; Cloudflare's own error
    pages (`error code: <n>`) are still retried.
@@ -1711,6 +1753,16 @@ How this differs from installing with the manager:
   and applies D1 migrations, schema files and post-deploy migrations itself, in
   the same `d1_migrations` table format wrangler uses. Here wrangler does both
   from the unpacked files.
+- **Workers plan.** The CI account is on the free plan unless the
+  `CI_ACCOUNT_PLAN` repository variable says `paid`. On the free plan an entry
+  with `plan: "paid"` is packed but not deployed: it may use what the free plan
+  refuses at upload, such as a `limits.cpu_ms`. The install check job passes
+  with a notice naming the app, and the nightly run lists it as skipped and
+  records no verification for it. Set `CI_ACCOUNT_PLAN` to `paid` once the CI
+  account is on Workers Paid.
+- **Parallel installs.** At most six install checks run at once, since the free
+  plan allows 10 D1 databases per account and wrangler creates each app's
+  databases during its deploy.
 - **Inputs.** A real install uses the values the user entered. Here secrets are
   random and vars use their defaults, so this checks that the Worker deploys and
   starts, not that the app is fully configured.

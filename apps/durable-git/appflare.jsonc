@@ -8,7 +8,6 @@
   "name": "dgit",
   "summary": "A git host on Durable Objects: push and clone over HTTPS with a stock git client and browse with a cgit-style web interface, one Durable Object per repository.",
   "tagline": "Host and browse your own code repositories",
-  "homepage": "https://github.com/littledivy/durable-git",
   "repo": "littledivy/durable-git",
   "license": "MIT",
   "categories": ["developer-tools"],
@@ -18,7 +17,6 @@
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v0.0.8", "sha": "d5eba04eda584b855a1bde1f86a836b751c378c0" },
   "install": {
-    "tier": "artifact",
     "packageManager": "npm",
     // Upstream's own custom-domain route in this config is not installed.
     // Upstream keeps its Worker name git-cells only so its existing Durable
@@ -40,7 +38,7 @@
       "name": "GIT_TOKEN",
       "label": "Push token",
       "help": "The password for git push (any user name) and for the admin calls; private repositories need it to read as well. Copy it now.",
-      "generate": true
+      "generate": "password"
     },
     {
       "name": "GIT_TOKENS",
@@ -54,26 +52,28 @@
       "name": "SITE_NAME",
       "label": "Site name",
       "help": "Shown as the title of every page.",
-      "default": "dgit",
-      "required": true
+      "default": "dgit"
     },
     {
       "name": "SITE_DESC",
       "label": "Site description",
       "help": "Shown under the title.",
-      "default": "a fast webinterface for the git dscm, on Cloudflare"
+      "default": "a fast webinterface for the git dscm, on Cloudflare",
+      "optional": true
     },
     {
       "name": "SITE_OWNER",
       "label": "Default owner",
       "help": "Listed as the owner of repositories that do not set one. Leave empty to show none.",
       // Replaces upstream's own name from the wrangler config.
-      "default": ""
+      "default": "",
+      "optional": true
     },
     {
       "name": "MAX_PUSH_MB",
       "label": "Largest push in MB",
-      "help": "Pushes larger than this are refused. Empty means 512. A Worker has 128 MB of memory, so push a very large history in several parts."
+      "help": "Pushes larger than this are refused. Empty means 512. A Worker has 128 MB of memory, so push a very large history in several parts.",
+      "optional": true
     },
     {
       "name": "SHA1DC",
@@ -81,18 +81,18 @@
       "help": "Screen every pushed object for a SHA-1 collision attack. Slower pushes; object ids are the same either way.",
       "type": "select",
       "options": [{ "value": "0", "label": "Off" }, { "value": "1", "label": "On" }],
-      "default": "0"
+      "default": "0",
+      "optional": true
     }
   ],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Push any repository to create it:\n\n```sh\ngit remote add dgit {{workerUrl}}/myrepo.git\ngit push -u dgit main\n```\n\nGit asks for a user name (anything) and a password (the push token). Browse at {{workerUrl}}."
+      "content": "Push any repository to create it:\n\n```sh\ngit remote add dgit {{appUrl}}/myrepo.git\ngit push -u dgit main\n```\n\nGit asks for a user name (anything) and a password (the push token). Browse at {{appUrl}}."
     },
     {
       "type": "markdown",
-      "content": "Describe a repository, file it under a section, or make it private (hidden, and readable only with the token):\n\n```sh\ncurl -X PUT -u x:<push token> -d '{\"description\":\"...\",\"section\":\"tools\",\"private\":true}' {{workerUrl}}/myrepo/config\n```"
+      "content": "Describe a repository, file it under a section, or make it private (hidden, and readable only with the token):\n\n```sh\ncurl -X PUT -u x:<push token> -d '{\"description\":\"...\",\"section\":\"tools\",\"private\":true}' {{appUrl}}/myrepo/config\n```"
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

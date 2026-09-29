@@ -98,7 +98,8 @@ export interface StatsTarget {
 const targetManifestSchema = z.object({
   slug: z.string().min(1),
   repo: z.string().regex(/^[A-Za-z0-9-]+\/[A-Za-z0-9._-]+$/),
-  homepage: z.string(),
+  /** Omitted means the repository's GitHub page. */
+  homepage: z.string().optional(),
 });
 
 /**
@@ -110,7 +111,7 @@ const targetManifestSchema = z.object({
 export function statsTargets(apps: readonly AppEntry[]): StatsTarget[] {
   return apps.map((app) => {
     const m = targetManifestSchema.parse(readManifestFile(app.manifestPath));
-    const shared = m.homepage.startsWith(`https://github.com/${m.repo}/tree/`);
+    const shared = m.homepage?.startsWith(`https://github.com/${m.repo}/tree/`) === true;
     return { slug: m.slug, repo: shared ? null : m.repo };
   });
 }

@@ -10,7 +10,6 @@
   "name": "Dispoflare",
   "summary": "Disposable email addresses on your own domains: create a random or chosen address that forwards to your inbox until the date you pick, on Email Routing.",
   "tagline": "Disposable email addresses on your own domains",
-  "homepage": "https://github.com/LeoColomb/dispoflare",
   "repo": "LeoColomb/dispoflare",
   "license": "MIT",
   "categories": ["email", "privacy"],
@@ -25,13 +24,11 @@
   "maintainers": ["MendyLanda"],
   "source": { "ref": "2.0.1", "sha": "46f4acae087178b4ca5edac3cbe613b324249f9e" },
   "install": {
-    "tier": "artifact",
     "packageManager": "npm",
     // React Router through the Cloudflare Vite plugin, which writes the
     // Worker and the config wrangler deploys from under build/ and points
     // wrangler at it; the packer follows that redirect.
     "wranglerConfig": "wrangler.jsonc",
-    "workerName": "dispoflare",
     // The cron job points an address that reaches its deprecation date at
     // the Worker named "dispoflare" (workers/scheduled.ts), and it acts on
     // every Dispoflare rule the token can see, so the app runs once per
@@ -51,7 +48,8 @@
     {
       "name": "CLOUDFLARE_API_TOKEN",
       "label": "Cloudflare API token for Dispoflare",
-      "help": "A token you create for the app, separate from Appflare's, with these permissions: Account, Email Routing Addresses, Read; Zone, Email Routing Rules, Edit; Zone, Zone, Read; Zone, Zone Settings, Read. Limit its zone resources to the domains you want addresses on. Paste the token secret only, without \"Bearer\"."
+      "help": "A token you create for the app, separate from Appflare's, with these permissions: Account, Email Routing Addresses, Read; Zone, Email Routing Rules, Edit; Zone, Zone, Read; Zone, Zone Settings, Read. Limit its zone resources to the domains you want addresses on. Paste the token secret only, without \"Bearer\".",
+      "cloudflareToken": true
     }
   ],
   "vars": [
@@ -59,23 +57,23 @@
       "name": "CLOUDFLARE_ACCOUNT_ID",
       "label": "Account ID",
       "help": "The account whose verified destination addresses the app forwards to: this one.",
-      "default": "{{accountId}}",
-      "required": true
+      "default": "{{accountId}}"
     },
     {
       "name": "SENTRY_DSN",
       "label": "Sentry DSN",
-      "help": "Reports the Worker's errors to Sentry. Leave empty to only log them."
+      "help": "Reports the Worker's errors to Sentry. Leave empty to only log them.",
+      "optional": true
     }
   ],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "**Dispoflare has no sign-in: protect it with Cloudflare Access before you use it.** Until then anyone who finds {{workerUrl}} can list your verified destination addresses and create or delete forwarding addresses on your domains. In the Cloudflare dashboard, open Workers & Pages, select this Worker, open Settings, Domains & Routes, and turn on Cloudflare Access for its workers.dev address."
+      "content": "**Dispoflare has no sign-in: protect it with Cloudflare Access before you use it.** Until then anyone who finds {{appUrl}} can list your verified destination addresses and create or delete forwarding addresses on your domains. In the Cloudflare dashboard, open Workers & Pages, select this Worker, open Settings, Domains & Routes, and turn on Cloudflare Access for its workers.dev address."
     },
     {
       "type": "markdown",
-      "content": "Then open {{workerUrl}}. It lists the zones where Email Routing is on and the destination addresses verified under Email Routing, Destination addresses; add and verify your own inbox there first. Create an address, pick the inbox it forwards to and its expiry date, and see them all under Manage."
+      "content": "Then open {{appUrl}}. It lists the zones where Email Routing is on and the destination addresses verified under Email Routing, Destination addresses; add and verify your own inbox there first. Create an address, pick the inbox it forwards to and its expiry date, and see them all under Manage."
     },
     {
       "type": "markdown",
@@ -86,24 +84,28 @@
   // reference and upstream's token template in its README.
   "tokenPermissions": [
     {
-      "name": "Account.Email Routing Addresses:Read",
-      "description": "Lists the verified destination addresses an address can forward to.",
-      "scope": "account"
+      "group": "Email Routing Addresses",
+      "scope": "account",
+      "access": "read",
+      "reason": "Lists the verified destination addresses an address can forward to."
     },
     {
-      "name": "Zone.Email Routing Rules:Edit",
-      "description": "Creates, turns off and deletes the routing rule behind each disposable address.",
-      "scope": "zone"
+      "group": "Email Routing Rules",
+      "scope": "zone",
+      "access": "edit",
+      "reason": "Creates, turns off and deletes the routing rule behind each disposable address."
     },
     {
-      "name": "Zone.Zone:Read",
-      "description": "Lists your zones.",
-      "scope": "zone"
+      "group": "Zone",
+      "scope": "zone",
+      "access": "read",
+      "reason": "Lists your zones."
     },
     {
-      "name": "Zone.Zone Settings:Read",
-      "description": "Checks which zones have Email Routing turned on.",
-      "scope": "zone"
+      "group": "Zone Settings",
+      "scope": "zone",
+      "access": "read",
+      "reason": "Checks which zones have Email Routing turned on."
     }
   ]
 }

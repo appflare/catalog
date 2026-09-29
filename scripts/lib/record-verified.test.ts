@@ -12,9 +12,10 @@ function row(slug: string, version: string, digest = D): IndexApp {
     slug,
     name: slug,
     summary: "s",
+    tagline: "t",
+    addedAt: "2026-09-01T00:00:00.000Z",
     version,
-    artifacts: artifactUrls("appflare/catalog", slug, version),
-    digest,
+    artifacts: artifactUrls("appflare/catalog", slug, version, digest),
     tier: "artifact",
     plan: "free",
     requires: [],
@@ -22,7 +23,9 @@ function row(slug: string, version: string, digest = D): IndexApp {
     authors: [{ name: "octocat", github: "octocat" }],
     maintainers: ["octocat"],
     services: [],
-    categories: [],
+    categories: ["utilities"],
+    license: "MIT",
+    revision: 1,
   };
 }
 
@@ -94,6 +97,8 @@ describe("patchLastVerified for sandbox tier rows", () => {
     slug: "built",
     name: "Built",
     summary: "s",
+    tagline: "t",
+    addedAt: "2026-09-01T00:00:00.000Z",
     version: "1.0.0",
     tier: "sandbox",
     plan: "paid",
@@ -102,7 +107,9 @@ describe("patchLastVerified for sandbox tier rows", () => {
     authors: [{ name: "octocat", github: "octocat" }],
     maintainers: ["octocat"],
     services: [],
-    categories: [],
+    categories: ["utilities"],
+    license: "MIT",
+    revision: 1,
     build: {
       pin: "0".repeat(40),
       manifest: "https://appflare.github.io/catalog/apps/built/manifest.json",

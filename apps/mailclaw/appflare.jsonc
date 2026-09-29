@@ -18,10 +18,8 @@
   // default branch until upstream tags again.
   "source": { "ref": "main", "sha": "f13f82addd88a4cfe2f371763c6051e4a8dd87ad" },
   "install": {
-    "tier": "artifact",
     "packageManager": "bun",
     "wranglerConfig": "wrangler.jsonc",
-    "workerName": "mailclaw",
     // The Worker at the root and the React dashboard in dashboard/, each
     // with its own bun.lock.
     "installDirs": [{ "path": "." }, { "path": "dashboard" }],
@@ -29,7 +27,7 @@
     // dashboard the Worker serves from dashboard/dist.
     "buildCommand": "bun run --cwd dashboard build",
     // Answers without the API token.
-    "healthPath": "/api/health",
+    "health": { "path": "/api/health" },
     // Upstream's setup sends every address of the domain to the Worker
     // through the zone's catch-all rule.
     "emailRouting": { "catchAll": true }
@@ -50,7 +48,7 @@
       "name": "API_TOKEN",
       "label": "API token",
       "help": "Sent as `Authorization: Bearer <token>` by agents, scripts and the dashboard to read, search, delete and send mail.",
-      "generate": true
+      "generate": "password"
     },
     {
       "name": "RESEND_API_KEY",
@@ -69,18 +67,18 @@
         { "value": "resend", "label": "Resend" },
         { "value": "cloudflare", "label": "Cloudflare" }
       ],
-      "default": "resend"
+      "default": "resend",
+      "optional": true
     }
   ],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Mail to any address of the domain you chose now lands in the inbox. Open {{workerUrl}}, enter the address and the API token, and read it there, or call `{{workerUrl}}/api/emails` with `Authorization: Bearer <token>`."
+      "content": "Mail to any address of the domain you chose now lands in the inbox. Open {{appUrl}}, enter the address and the API token, and read it there, or call `{{appUrl}}/api/emails` with `Authorization: Bearer <token>`."
     },
     {
       "type": "markdown",
       "content": "Upstream's agent skill in `skills/` and its command-line client in `rust-cli/` take the same address and token."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

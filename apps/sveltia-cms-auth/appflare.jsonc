@@ -4,7 +4,6 @@
   "name": "Sveltia CMS Authenticator",
   "summary": "The OAuth helper that lets people sign in to Sveltia CMS (or Decap CMS) with GitHub or GitLab, for sites whose editors should not have to create access tokens.",
   "tagline": "Let site editors sign in with GitHub without making access tokens",
-  "homepage": "https://github.com/sveltia/sveltia-cms-auth",
   "repo": "sveltia/sveltia-cms-auth",
   "license": "MIT",
   "categories": ["cms", "developer-tools"],
@@ -16,14 +15,11 @@
   // Upstream has no release tags; the pin is the head of main.
   "source": { "ref": "main", "sha": "4fd08b5d4e009a85fa473fd523824ca9dfee9533" },
   "install": {
-    "tier": "artifact",
     "packageManager": "pnpm",
-    "wranglerConfig": "wrangler.toml",
-    "workerName": "sveltia-cms-auth"
+    "wranglerConfig": "wrangler.toml"
   },
   // One Worker without storage.
   "plan": "free",
-  "requires": [],
   // The OAuth app's callback is this Worker's address, which exists only after
   // the install, so the client credentials are optional here and set in the
   // app's settings afterwards.
@@ -31,13 +27,13 @@
     {
       "name": "GITHUB_CLIENT_SECRET",
       "label": "GitHub client secret",
-      "help": "The client secret of the GitHub OAuth app whose callback URL is {{workerUrl}}/callback.",
+      "help": "The client secret of the GitHub OAuth app whose callback URL is the app's address followed by /callback.",
       "optional": true
     },
     {
       "name": "GITLAB_CLIENT_SECRET",
       "label": "GitLab secret",
-      "help": "The secret of the GitLab application whose redirect URI is {{workerUrl}}/callback. Only for GitLab.",
+      "help": "The secret of the GitLab application whose redirect URI is the app's address followed by /callback. Only for GitLab.",
       "optional": true
     }
   ],
@@ -45,47 +41,45 @@
     {
       "name": "ALLOWED_DOMAINS",
       "label": "Allowed site hostnames",
-      "help": "The hostnames of the sites whose CMS may sign in through this Worker, comma-separated; `*.example.com` matches any subdomain. Tokens are only handed to pages on these hosts. Upstream treats this as optional; it is required here, since an empty list hands tokens to any site.",
-      "required": true
+      "help": "The hostnames of the sites whose CMS may sign in through this Worker, comma-separated; `*.example.com` matches any subdomain. Tokens are only handed to pages on these hosts. Upstream treats this as optional; it is required here, since an empty list hands tokens to any site."
     },
     {
       "name": "GITHUB_CLIENT_ID",
       "label": "GitHub client ID",
       "help": "The client ID of the GitHub OAuth app.",
       "default": "",
-      "required": false
+      "optional": true
     },
     {
       "name": "GITHUB_HOSTNAME",
       "label": "GitHub hostname",
       "help": "Change only for GitHub Enterprise Server.",
       "default": "github.com",
-      "required": false
+      "optional": true
     },
     {
       "name": "GITLAB_CLIENT_ID",
       "label": "GitLab application ID",
       "help": "The application ID of the GitLab application. Only for GitLab.",
       "default": "",
-      "required": false
+      "optional": true
     },
     {
       "name": "GITLAB_HOSTNAME",
       "label": "GitLab hostname",
       "help": "Change only for a self-managed GitLab.",
       "default": "gitlab.com",
-      "required": false
+      "optional": true
     }
   ],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Register a GitHub OAuth app at https://github.com/settings/applications/new with the authorization callback URL {{workerUrl}}/callback, then set its client ID and client secret in this app's settings. For GitLab, register an application with the redirect URI {{workerUrl}}/callback, confidential, scope `api`."
+      "content": "Register a GitHub OAuth app at https://github.com/settings/applications/new with the authorization callback URL {{appUrl}}/callback, then set its client ID and client secret in this app's settings. For GitLab, register an application with the redirect URI {{appUrl}}/callback, confidential, scope `api`."
     },
     {
       "type": "markdown",
-      "content": "Then add `base_url: {{workerUrl}}` under `backend` in your CMS's `admin/config.yml`."
+      "content": "Then add `base_url: {{appUrl}}` under `backend` in your CMS's `admin/config.yml`."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

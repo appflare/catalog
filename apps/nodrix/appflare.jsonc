@@ -19,10 +19,8 @@
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v1.0.1", "sha": "1b8af9175cd68fe097f548a6adbfd735237ce103" },
   "install": {
-    "tier": "artifact",
     "packageManager": "bun",
     "wranglerConfig": "wrangler.toml",
-    "workerName": "nodrix",
     // Upstream commits no lockfile (bun.lock is gitignored), so the packer
     // resolves the workspace's version ranges at pack time; the pack log
     // records the sha256 of the bun.lock it wrote
@@ -54,20 +52,18 @@
   // settings. NODRIX_UPSTREAM_REPO keeps the value in the wrangler config,
   // the repository the update check polls.
   "secrets": [],
-  "vars": [],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Open {{workerUrl}} right away: the first account created there becomes the owner, and sign-up closes after it. Invite other people from **Users**."
+      "content": "Open {{appUrl}} right away: the first account created there becomes the owner, and sign-up closes after it. Invite other people from **Users**."
     },
     {
       "type": "markdown",
-      "content": "Create a project, mint a project token, and send telemetry to `{{workerUrl}}/v1/telemetry` with the token as a Bearer header. Google and GitHub sign-in are set up under **Settings > Sign-in providers**."
+      "content": "Create a project, mint a project token, and send telemetry to `{{appUrl}}/v1/telemetry` with the token as a Bearer header. Google and GitHub sign-in are set up under **Settings > Sign-in providers**."
     },
     {
       "type": "markdown",
       "content": "nodrix sends anonymous usage statistics (an instance id, version, counts and feature flags) to upstream's collector once at setup and daily from its cron trigger. It has no setting to turn this off."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

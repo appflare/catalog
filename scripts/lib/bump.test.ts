@@ -346,15 +346,15 @@ describe("renderBumpBody", () => {
     expect(renderBumpBody(tagPin, bump, null)).toContain("could not be compared");
   });
 
-  it("asks to update install.version only for entries that set it", () => {
-    expect(renderBumpBody(tagPin, bump, null)).not.toContain("install.version");
+  it("asks to update source.version only for entries that set it", () => {
+    expect(renderBumpBody(tagPin, bump, null)).not.toContain("source.version");
     const versioned: AppPin = {
       ...tagPin,
-      install: { ...tagPin.install, version: "1.1.10" },
+      source: { ...tagPin.source, version: "1.1.10" },
     };
     const body = renderBumpBody(versioned, bump, null);
     expect(body).toContain(
-      "- [ ] Set `install.version` in `apps/hello/appflare.jsonc` to Hello's version at the " +
+      "- [ ] Set `source.version` in `apps/hello/appflare.jsonc` to Hello's version at the " +
         "new commit (it is `1.1.10` now).",
     );
   });
@@ -417,13 +417,13 @@ describe("auto-merge", () => {
     expect(body).not.toContain("merges itself.**");
   });
 
-  it("never auto-merges an entry that sets install.version", () => {
-    const versioned: AppPin = { ...autoPin, install: { ...autoPin.install, version: "1.1.10" } };
+  it("never auto-merges an entry that sets source.version", () => {
+    const versioned: AppPin = { ...autoPin, source: { ...autoPin.source, version: "1.1.10" } };
     const bump = bumped(decideBump(versioned, tag("v1.3.0"), never));
     expect(bump.autoMerge).toBe(false);
     const body = renderBumpBody(versioned, bump, null);
-    expect(body).toContain("but it also sets `install.version`");
-    expect(body).toContain("- [ ] Set `install.version`");
+    expect(body).toContain("but it also sets `source.version`");
+    expect(body).toContain("- [ ] Set `source.version`");
     expect(body).not.toContain("merges itself.**");
   });
 });
