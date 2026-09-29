@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-28T14:04:34.036Z",
+  "generatedAt": "2026-09-29T08:18:17.105Z",
   "apps": [
     {
       "slug": "2fa",
@@ -12,12 +12,12 @@
         "zip": "https://github.com/appflare/catalog/releases/download/2fa@1.9.0/2fa-1.9.0.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/2fa@1.9.0/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/2fa@1.9.0/manifest.sig",
-        "digest": "2cff0e8de6c29b33ca3da41b5a372757e72bb0b0cad6398c50e1b39726aa4b64"
+        "digest": "0660cc7b9ccd4e681cb96cea314c2109638abe58460a483be416df6835924d24"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-09-28T10:13:07.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "wuzf",
@@ -56,14 +56,14 @@
         "zip": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20260923.acf210e/888wiki-0.0.0-20260923.acf210e.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20260923.acf210e/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20260923.acf210e/manifest.sig",
-        "digest": "6ecfa871c2e0b2800e7d3035d334f7f6172ff3fb88ca7bec72b14fd72a4b3f5b"
+        "digest": "14ef5a6643bdf9c7648fd2c8fd4761cdb1e9f6c24742c77ff0c731f0dde7e6e9"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-09-28T10:14:10.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "DAVID888",
@@ -125,7 +125,7 @@
         "zip": "https://github.com/appflare/catalog/releases/download/agentic-inbox@0.0.0-20260417.48039bb/agentic-inbox-0.0.0-20260417.48039bb.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/agentic-inbox@0.0.0-20260417.48039bb/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/agentic-inbox@0.0.0-20260417.48039bb/manifest.sig",
-        "digest": "93a950b6d2cc2a1f8a4934d36af6dd84d39db8580d82ddbee554ae40652d631d"
+        "digest": "c4abc459029e62e87fcb67073754dc7c6c1cfbf05aba1b8ed0d55801e02f9645"
       },
       "tier": "artifact",
       "plan": "free",
@@ -135,7 +135,7 @@
         "r2",
         "workers-ai"
       ],
-      "lastVerified": "2026-09-28T10:11:34.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Cloudflare",
@@ -184,7 +184,7 @@
         "zip": "https://github.com/appflare/catalog/releases/download/alle@0.0.0-20260605.9fce68a/alle-0.0.0-20260605.9fce68a.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/alle@0.0.0-20260605.9fce68a/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/alle@0.0.0-20260605.9fce68a/manifest.sig",
-        "digest": "63d5421e40114bfed289296ebc4de68ec3a7241fff216dc83e3127e65dda47a4"
+        "digest": "c816dba7a611908d86d5dc8c52830d6c51f5e23e496229a9ad34e0a69e211902"
       },
       "tier": "artifact",
       "plan": "free",
@@ -193,7 +193,7 @@
         "zone",
         "email-routing"
       ],
-      "lastVerified": "2026-09-28T10:12:16.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "BESTRUI",
@@ -228,12 +228,12 @@
         "zip": "https://github.com/appflare/catalog/releases/download/analytics-explorer@0.0.0-20260208.b11ff41/analytics-explorer-0.0.0-20260208.b11ff41.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/analytics-explorer@0.0.0-20260208.b11ff41/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/analytics-explorer@0.0.0-20260208.b11ff41/manifest.sig",
-        "digest": "56bbfa46715c7da1d9f84dae95317e0cd8b33e82701df0f4df121211a52a4627"
+        "digest": "2458c45570604a92668a3f9b9938ddbf244b9ebb0f4a999ba9d6fc8abe303025"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-09-28T10:13:06.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Rohan Prasad",
@@ -277,12 +277,12 @@
         "zip": "https://github.com/appflare/catalog/releases/download/atalaya@0.0.0-20260926.5437d1c/atalaya-0.0.0-20260926.5437d1c.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/atalaya@0.0.0-20260926.5437d1c/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/atalaya@0.0.0-20260926.5437d1c/manifest.sig",
-        "digest": "ef47aed8eda011147a360dd9b695d6ebfd68929ed16d37db1fab643ee7a98f06"
+        "digest": "89d44e4655e5f08243679b4812f9a76e0256fffacd45544f3d80e1d154fc4f02"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-09-28T10:13:49.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Daniel Carrillo",
@@ -324,7 +324,7 @@
         "zip": "https://github.com/appflare/catalog/releases/download/auth-inbox@0.0.0-20260709.83927b8/auth-inbox-0.0.0-20260709.83927b8.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/auth-inbox@0.0.0-20260709.83927b8/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/auth-inbox@0.0.0-20260709.83927b8/manifest.sig",
-        "digest": "0041f76c4877b73c70cd2f57421c8dbc050d7939024fb1cbf6addebce4454d8b"
+        "digest": "0f9fa0c25cd57be00ecbde259cd7d45b26601bbf5b470fb223fc83e00b44925d"
       },
       "tier": "artifact",
       "plan": "free",
@@ -332,7 +332,7 @@
         "zone",
         "email-routing"
       ],
-      "lastVerified": "2026-09-28T10:13:31.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Tony Chen",
@@ -380,12 +380,12 @@
         "zip": "https://github.com/appflare/catalog/releases/download/auto-reaction-bot@0.0.0-20260613.2382a29/auto-reaction-bot-0.0.0-20260613.2382a29.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/auto-reaction-bot@0.0.0-20260613.2382a29/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/auto-reaction-bot@0.0.0-20260613.2382a29/manifest.sig",
-        "digest": "bb860d13011b3f7bc4045c456e0ef9008468ea994bacd1737a2d85946791cb1c"
+        "digest": "949b1ab1a1aed4c6061e12b64ad05ad77cb429dcefeb5e6eac7c1c576801931e"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-09-28T10:12:10.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Malith Rukshan",
@@ -429,12 +429,12 @@
         "zip": "https://github.com/appflare/catalog/releases/download/bark-worker@2.2.6/bark-worker-2.2.6.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/bark-worker@2.2.6/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/bark-worker@2.2.6/manifest.sig",
-        "digest": "fee4a99284fd3cb1b5557594460f4d37b7cf372f8814ad862187a8b8d326027d"
+        "digest": "47dbb2fdcedc3b11953ce728533ac7a77608c0a6e073f524603a294ffc7fe00e"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-09-28T10:11:22.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "cwxia0s",
@@ -464,14 +464,14 @@
         "zip": "https://github.com/appflare/catalog/releases/download/bashupload@0.0.0-20260801.1049015/bashupload-0.0.0-20260801.1049015.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/bashupload@0.0.0-20260801.1049015/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/bashupload@0.0.0-20260801.1049015/manifest.sig",
-        "digest": "39f45c2c9398d92f6ee8e337a7b205a6a8d599d5b6921caa97fa8d870e7cbb6e"
+        "digest": "5f61dd0f312c3378acf3b1382020d5463b2cff5cd10d01b32179ad21351831ae"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-09-28T10:12:45.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "DullJZ",
@@ -504,12 +504,12 @@
         "zip": "https://github.com/appflare/catalog/releases/download/binthere@0.0.0-20260919.63e5544/binthere-0.0.0-20260919.63e5544.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/binthere@0.0.0-20260919.63e5544/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/binthere@0.0.0-20260919.63e5544/manifest.sig",
-        "digest": "01ddcdbcac3362b2dd9804011abd807266852d609ea31ba13ad2d2ee533c2fd1"
+        "digest": "99a6e88a084e1be282d247beb0e9fc41e36eb795291051459151e2ab2d925bc4"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-09-28T10:12:10.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Gaurav",
@@ -553,12 +553,12 @@
         "zip": "https://github.com/appflare/catalog/releases/download/blobatar@2.7.0/blobatar-2.7.0.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/blobatar@2.7.0/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/blobatar@2.7.0/manifest.sig",
-        "digest": "62d3e750594ecc206a6d5ad06e402a09ee33493ef0dfff5bc63a88d88695f95e"
+        "digest": "28605349d0b8f1eae989da861c21b413e4033c65fe8c80b9f80d435ad10168df"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-09-28T10:11:23.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Alain",
@@ -610,14 +610,14 @@
         "zip": "https://github.com/appflare/catalog/releases/download/bookshelf@0.0.0-20260826.8888795/bookshelf-0.0.0-20260826.8888795.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/bookshelf@0.0.0-20260826.8888795/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/bookshelf@0.0.0-20260826.8888795/manifest.sig",
-        "digest": "25d2f44d63a24bc7055350bc7376119d655b859369bc62f366fd380c28a2255c"
+        "digest": "d6b63712c418a9042fa316e8fe7ff1e479d72bfa85ffd02d59a16dae2d2ddc51"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-09-28T10:12:16.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Murat Erkin Cicek",
@@ -672,12 +672,12 @@
         "zip": "https://github.com/appflare/catalog/releases/download/browser-relay@1.5.4/browser-relay-1.5.4.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/browser-relay@1.5.4/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/browser-relay@1.5.4/manifest.sig",
-        "digest": "2d60450f4471679b9d6932d9db958fe3797138ab565f52f2b50b7fd4d7dc6cd4"
+        "digest": "957dcf59912de4654c59fb6b5ad0b422e54f37c1bb730a01a516eb966bbfdc0c"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-09-28T10:12:37.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "reliefe",
@@ -715,12 +715,12 @@
         "zip": "https://github.com/appflare/catalog/releases/download/cap-worker@0.0.0-20250915.39eb690/cap-worker-0.0.0-20250915.39eb690.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/cap-worker@0.0.0-20250915.39eb690/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/cap-worker@0.0.0-20250915.39eb690/manifest.sig",
-        "digest": "1870a689474b6a9a72a3d439898e86e41fc856e96dd149f90d3e14a7cb64c353"
+        "digest": "9806fc86739ac2cc6abc5b935aade56f27dc7f59e76271167565af30b8e081d4"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-09-28T10:11:28.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "xyTom",
@@ -751,14 +751,14 @@
         "zip": "https://github.com/appflare/catalog/releases/download/cattopic@1.0.0/cattopic-1.0.0.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/cattopic@1.0.0/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/cattopic@1.0.0/manifest.sig",
-        "digest": "a41b4caf0d7334ed02b98eb4a232a61cdccaad406ef01cf32f9682c16af2b27b"
+        "digest": "b058691defecf88c39bc279a53d4a36663ddb0a4d5477c0678f8ba410d0a7737"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-09-28T10:11:38.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Firefly",
@@ -788,13 +788,7 @@
         "files"
       ],
       "license": "GPL-3.0-only",
-      "revision": 2,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/cattopic/manifest.json",
-        "sha256": "613e611d19545e777e04f8892475766be6937896b454d11af75383658be22cc9",
-        "keyId": "catalog-2026-09",
-        "signature": "WjvtzlJJISHfoPodlvnVo/TNGhhd5r1P9r9t0UIPcn2xII1mmPYO0jL3jEv+m7TmTiA+MeLpIOVaAYPhjEBFBA=="
-      }
+      "revision": 2
     },
     {
       "slug": "cf-nav",
@@ -807,12 +801,12 @@
         "zip": "https://github.com/appflare/catalog/releases/download/cf-nav@0.0.0-20260111.6e83733/cf-nav-0.0.0-20260111.6e83733.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/cf-nav@0.0.0-20260111.6e83733/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/cf-nav@0.0.0-20260111.6e83733/manifest.sig",
-        "digest": "593249b78989fface6ab82957240828709e2b1a4eaf382a53f46064d74cc34f3"
+        "digest": "55ae6e9d735b4d154097f88ef1f329650f68881ba9c47d7adb7a67c7b9b25112"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-09-28T10:12:06.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "djkyc",
@@ -850,12 +844,12 @@
         "zip": "https://github.com/appflare/catalog/releases/download/cf-server-monitor@0.0.0-20260927.dfb9bf1/cf-server-monitor-0.0.0-20260927.dfb9bf1.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/cf-server-monitor@0.0.0-20260927.dfb9bf1/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/cf-server-monitor@0.0.0-20260927.dfb9bf1/manifest.sig",
-        "digest": "58e2be9c29aefc6ee7376bfaf05b34533431ab61c8eceb070cec5a26bf60e85f"
+        "digest": "d5c1919ee25542970035480e5663973c7ea0a9925bb8829586a42d7ea7496a44"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-09-28T10:12:01.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "huilang-me",
@@ -918,12 +912,12 @@
         "zip": "https://github.com/appflare/catalog/releases/download/cftgsx@0.0.0-20251121.3ee8aed/cftgsx-0.0.0-20251121.3ee8aed.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/cftgsx@0.0.0-20251121.3ee8aed/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/cftgsx@0.0.0-20251121.3ee8aed/manifest.sig",
-        "digest": "77d8c98bbd1b8df4fd77f4ebf76f9001117b2112dbb1153d44438dd6ff323535"
+        "digest": "96eaad644a7cdd4ace975485de05734f52b8b55e38a8e21e04f78d33216aa870"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-09-28T10:12:56.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "SCSHIRKER",
@@ -954,12 +948,12 @@
         "zip": "https://github.com/appflare/catalog/releases/download/chatgpt-telegram-workers@2.0.0/chatgpt-telegram-workers-2.0.0.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/chatgpt-telegram-workers@2.0.0/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/chatgpt-telegram-workers@2.0.0/manifest.sig",
-        "digest": "3b9a3045538667cf8b625e6169e0bc91a7964f35d6914f813796befd3be645ab"
+        "digest": "1f9359ed26f6ed74578e521ed16536f69c471a523d5b787eaede49edd3f830c8"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-09-28T10:12:43.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "TBXark",
@@ -1002,14 +996,14 @@
         "zip": "https://github.com/appflare/catalog/releases/download/civideo@0.2.0/civideo-0.2.0.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/civideo@0.2.0/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/civideo@0.2.0/manifest.sig",
-        "digest": "bd8454ec22246b15f0b082f9f0cabdf25384be7c3852b71c942341a58ab2a2e0"
+        "digest": "370c599a81d7fca2f4fa18206ac82398f79e9d90dcb98e8e62433e1ac11db708"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-09-28T10:13:51.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "bitoceango",
@@ -1048,12 +1042,12 @@
         "zip": "https://github.com/appflare/catalog/releases/download/clist@0.0.0-20260924.cb7cc24/clist-0.0.0-20260924.cb7cc24.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/clist@0.0.0-20260924.cb7cc24/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/clist@0.0.0-20260924.cb7cc24/manifest.sig",
-        "digest": "9b020c4b8e3092937020683411626ac0e8f87d403ac5cadbe88b689139546b5f"
+        "digest": "fafd95bd9d8f7c3ee65a2cfe725751389478e9fb884cbaab0579e42734671df3"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-09-28T10:11:33.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "ooyyh",
@@ -1078,13 +1072,7 @@
         "files"
       ],
       "license": "MIT",
-      "revision": 2,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/clist/manifest.json",
-        "sha256": "db5dd6bd4d2fdc04c603f6001eedb3b18fad7fa96d8e3fcf9f83db2340dc507d",
-        "keyId": "catalog-2026-09",
-        "signature": "7//H9Hbm5KsK1Qfrz1MZC0DtASS5NTsW0sI7DT5eshQauJlqinsrwDUCuncsKRyH0pGWQ1J1Fp1gB3ODYiVhCw=="
-      }
+      "revision": 2
     },
     {
       "slug": "cloudflare-prometheus-exporter",
@@ -1097,12 +1085,12 @@
         "zip": "https://github.com/appflare/catalog/releases/download/cloudflare-prometheus-exporter@0.0.1-beta.15/cloudflare-prometheus-exporter-0.0.1-beta.15.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/cloudflare-prometheus-exporter@0.0.1-beta.15/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/cloudflare-prometheus-exporter@0.0.1-beta.15/manifest.sig",
-        "digest": "dc319d686ace4c5a83fc13900d278c32f4f421c9e17dd23158f0ac8209400fbc"
+        "digest": "77dca6c114a05088291b3e3397b8052aae4bf09155e9446ed69db1376c07afa8"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-09-28T10:11:31.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Cloudflare",
@@ -1146,7 +1134,7 @@
         "zip": "https://github.com/appflare/catalog/releases/download/cloudflarebase@0.0.0-20260827.adfd1b3/cloudflarebase-0.0.0-20260827.adfd1b3.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/cloudflarebase@0.0.0-20260827.adfd1b3/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/cloudflarebase@0.0.0-20260827.adfd1b3/manifest.sig",
-        "digest": "296bad4d7a31037098dd799a05dc2c51eb4bb7d869938fad82d6919c101c7bd1"
+        "digest": "6de4293f655802ffee9f47ee53402c8c7303854a30b3fad6c0832705f92e94de"
       },
       "tier": "artifact",
       "plan": "paid",
@@ -1155,7 +1143,7 @@
         "workers-ai",
         "analytics-engine"
       ],
-      "lastVerified": "2026-09-28T10:14:09.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "The Cloudflarebase Authors",
@@ -1190,13 +1178,7 @@
         "files"
       ],
       "license": "Apache-2.0",
-      "revision": 2,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/cloudflarebase/manifest.json",
-        "sha256": "f56dfb88e914a238556e41ffabc279d2d6c8f8bcdea3879fd441c41208202cb3",
-        "keyId": "catalog-2026-09",
-        "signature": "bRBRWyJ7pt7OAhdrAOyfjyZeQOxwaH1HPHIQZBI+1bwCQL1qu9+Z/xOZ+ACNyEoJnXM3LcCADQowABBwIgf4BQ=="
-      }
+      "revision": 2
     },
     {
       "slug": "cloudmark",
@@ -1209,12 +1191,12 @@
         "zip": "https://github.com/appflare/catalog/releases/download/cloudmark@0.0.0-20260810.7a3ee47/cloudmark-0.0.0-20260810.7a3ee47.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/cloudmark@0.0.0-20260810.7a3ee47/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/cloudmark@0.0.0-20260810.7a3ee47/manifest.sig",
-        "digest": "56a8b857077fd4873279469dc92856dee299aaff60454947a138b0e68f97b86f"
+        "digest": "520cfb6ae6ac586bb9f8147b3277de2f2bb032d4b6536dcfd1a8ff6546a24ba7"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-09-28T10:13:25.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Wesley Yang",
@@ -1257,12 +1239,12 @@
         "zip": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20260924.25852ca/cloudssh-0.0.0-20260924.25852ca.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20260924.25852ca/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20260924.25852ca/manifest.sig",
-        "digest": "381d38f68c6f9fa40a27586cc4152b48771e0e1e0971f8b580fbafc10097b6e7"
+        "digest": "7fb14d0af075605f3f50dffa001784b134e82bd411075f02e11f250fd0fa8166"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-09-28T10:11:25.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "TanXin",
@@ -1301,12 +1283,12 @@
         "zip": "https://github.com/appflare/catalog/releases/download/collection-down@1.1.2/collection-down-1.1.2.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/collection-down@1.1.2/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/collection-down@1.1.2/manifest.sig",
-        "digest": "fa74971e627a7cdefd2f62156314b88f2ff96f0026c7e54a87a8a8d774c616e7"
+        "digest": "016fa3435d506b6506a885da9ad5d66e50915a43aab0aa0ef2f26b525e417ab5"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-09-28T10:12:45.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "heartalborada",
@@ -1336,14 +1318,14 @@
         "zip": "https://github.com/appflare/catalog/releases/download/counterscale@3.4.1/counterscale-3.4.1.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/counterscale@3.4.1/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/counterscale@3.4.1/manifest.sig",
-        "digest": "0b1c1c322c992c79d9d3721d1be148f2fe5a2822d354f9814af896e50d173541"
+        "digest": "87920737d20bb8d2c901e2fd51ce35eb782e7ca727cf17c41ee1ebe41a1a4f9d"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-09-28T10:12:42.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Ben Vinegar",
@@ -1394,12 +1376,12 @@
         "zip": "https://github.com/appflare/catalog/releases/download/cut@0.1.0/cut-0.1.0.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/cut@0.1.0/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/cut@0.1.0/manifest.sig",
-        "digest": "86bbb3cbe1afbcff52c18a91a659b8f7876043a78f434a6a9c7eb274edb4a6c1"
+        "digest": "2f2e3d65e5fd1246f4ec7081e5f95e694b5be6c65bfe2f69f78e0c026adf34a7"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-09-28T10:13:31.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Mendy Landa",
@@ -1423,13 +1405,7 @@
         "utilities"
       ],
       "license": "MIT",
-      "revision": 3,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/cut/manifest.json",
-        "sha256": "de7842381e1d59f9b4c61fc1635d28ece2e1fc7cac385af9063403c45ad26169",
-        "keyId": "catalog-2026-09",
-        "signature": "+T6pk8oqs2yKAxtEuC30D/zww5KAcpa7WWXGr1xZnSWsnuqA3t//X8TnSISr+XBPcG/xNjb+aJKlh3dZfwsUCQ=="
-      }
+      "revision": 3
     },
     {
       "slug": "deepcrawl",
@@ -1442,12 +1418,12 @@
         "zip": "https://github.com/appflare/catalog/releases/download/deepcrawl@0.5.5/deepcrawl-0.5.5.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/deepcrawl@0.5.5/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/deepcrawl@0.5.5/manifest.sig",
-        "digest": "5c6e7c5fdaf3bddc7164d25ff23ad5e5205e984f8c3cb9bcf737284124b39f3a"
+        "digest": "8e2aef25c0c8afee8eb8ed083284b44917df210ff53e4acc879b027c228ac2c2"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-09-28T10:12:07.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Felix Lu",
@@ -1487,14 +1463,14 @@
         "zip": "https://github.com/appflare/catalog/releases/download/dictdeck@0.20.0/dictdeck-0.20.0.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/dictdeck@0.20.0/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/dictdeck@0.20.0/manifest.sig",
-        "digest": "4a397c48f4ae267f2c0752a323cadda0e7109993eac4b273ac599965aa6952a8"
+        "digest": "192bb36cf0de1673e00fed723eb10756f1068556b8df0d775af2301e72b950a2"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "workers-ai"
       ],
-      "lastVerified": "2026-09-28T10:13:34.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Asutorufa",
@@ -1535,7 +1511,7 @@
         "zip": "https://github.com/appflare/catalog/releases/download/dispoflare@2.0.1/dispoflare-2.0.1.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/dispoflare@2.0.1/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/dispoflare@2.0.1/manifest.sig",
-        "digest": "d56bad550108a932ddad6e07f65c5e66302bf58dac358c7916be9a2251bc2a7b"
+        "digest": "b3bf1bb1447397f77a4d0c5add42c19e172f3351350d07cf4ba03f7cc3800014"
       },
       "tier": "artifact",
       "plan": "free",
@@ -1543,7 +1519,7 @@
         "zone",
         "email-routing"
       ],
-      "lastVerified": "2026-09-28T10:12:03.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Léo Colombaro",
@@ -1578,7 +1554,7 @@
         "zip": "https://github.com/appflare/catalog/releases/download/durable-git@0.0.8/durable-git-0.0.8.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/durable-git@0.0.8/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/durable-git@0.0.8/manifest.sig",
-        "digest": "316745b32193ba5a8d8063e63729c6869956cb8b0a62ee0c77c775a650d85313"
+        "digest": "2ff11f2b7d0091ad7d312135fdeff7771532ea3328f04ad78a414e33f37cecc9"
       },
       "tier": "artifact",
       "plan": "paid",
@@ -1617,7 +1593,7 @@
         "zip": "https://github.com/appflare/catalog/releases/download/edgechat@2.1.2/edgechat-2.1.2.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/edgechat@2.1.2/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/edgechat@2.1.2/manifest.sig",
-        "digest": "3e74f9c9bb25494b1f45882113d6b9c9571a63c85168dedb0b5f24c3d3fc1258"
+        "digest": "f05baa98389f202b23eb23944208c91fb067d98facc54e5befac80955ffa5d3c"
       },
       "tier": "artifact",
       "plan": "free",
@@ -1676,14 +1652,14 @@
         "zip": "https://github.com/appflare/catalog/releases/download/edgeever@1.88.0/edgeever-1.88.0.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/edgeever@1.88.0/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/edgeever@1.88.0/manifest.sig",
-        "digest": "a88c7129468281307367af00213e202bb3f8ff0dc6e0d0807b71c68f21ee69ea"
+        "digest": "f718a5a68b9348acdbe7ece4ea0a008a3189647156355940572d45c41500be2b"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-09-28T10:13:36.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "tianma-if",
@@ -1723,12 +1699,12 @@
         "zip": "https://github.com/appflare/catalog/releases/download/edgekey@0.0.0-20260817.fa69913/edgekey-0.0.0-20260817.fa69913.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/edgekey@0.0.0-20260817.fa69913/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/edgekey@0.0.0-20260817.fa69913/manifest.sig",
-        "digest": "c6628b60090bb7620890228262dc05533c5c6b633740ad4c0fcafd9d54c3032e"
+        "digest": "dc58a530981196e0fc86880dd2cbbc2cdff33dfdcde626dbfc9353e3ac0264aa"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-09-28T10:12:55.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "ggyy",
@@ -1773,12 +1749,12 @@
         "zip": "https://github.com/appflare/catalog/releases/download/edgemetry@0.3.0/edgemetry-0.3.0.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/edgemetry@0.3.0/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/edgemetry@0.3.0/manifest.sig",
-        "digest": "df22888b40ee88f460847e530e30be62a53bf1879ebe9a6ddabc5f059912520d"
+        "digest": "6c8ba8477c62db07fde38038de5353a758d8807f7b63909f739c0af74528c654"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-09-28T10:11:24.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Nitin Hayaran",
@@ -1821,12 +1797,12 @@
         "zip": "https://github.com/appflare/catalog/releases/download/elm-chat@0.1.2/elm-chat-0.1.2.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/elm-chat@0.1.2/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/elm-chat@0.1.2/manifest.sig",
-        "digest": "2d60db7c7862e61dc02ec9946fdfeca92652470fbbd8d6d6473be4346edd8603"
+        "digest": "e90b47a24f7998b7594678dde74b6faee42701559bd79e468d6745c8b43a1e0c"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-09-28T10:12:12.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Shawn Bure",
@@ -1875,7 +1851,7 @@
         "zip": "https://github.com/appflare/catalog/releases/download/email-explorer@1.1.0/email-explorer-1.1.0.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/email-explorer@1.1.0/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/email-explorer@1.1.0/manifest.sig",
-        "digest": "ffbf89895ceeeaec9bd9bfa6f60cbfe3dd7a8f62416a56e5f0050e78e49cdafd"
+        "digest": "fcbc9d66fe524f1c859accb4ceb9ca1e0e855dc3b31fddc279406c27d8233b2e"
       },
       "tier": "artifact",
       "plan": "free",
@@ -1884,7 +1860,7 @@
         "email-routing",
         "r2"
       ],
-      "lastVerified": "2026-09-28T10:13:28.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Gabriel Massadas",
@@ -1933,7 +1909,7 @@
         "zip": "https://github.com/appflare/catalog/releases/download/emailflare@0.0.0-20260920.d448ea2/emailflare-0.0.0-20260920.d448ea2.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/emailflare@0.0.0-20260920.d448ea2/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/emailflare@0.0.0-20260920.d448ea2/manifest.sig",
-        "digest": "5cbc0accb44393ab27e8c94242baab1a1c5408b0661a45cd93fd11595a40be9f"
+        "digest": "5a0a039af72f1c9149a900c55591ad31466b73f77fdd2959ba83ac3b2807ad06"
       },
       "tier": "artifact",
       "plan": "paid",
@@ -1942,7 +1918,7 @@
         "email-routing",
         "r2"
       ],
-      "lastVerified": "2026-09-28T10:13:38.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "0xdps",
@@ -1987,14 +1963,14 @@
         "zip": "https://github.com/appflare/catalog/releases/download/emdash@0.0.0-20260926.e3b39ac/emdash-0.0.0-20260926.e3b39ac.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/emdash@0.0.0-20260926.e3b39ac/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/emdash@0.0.0-20260926.e3b39ac/manifest.sig",
-        "digest": "ca924df42cbd11cecca9de7fb26a2cdd4fa16034cca69101f828a5dea9838a6e"
+        "digest": "45204cf5da9943be650625edcc9c45a0dd9af986bed06fb351fb6196533d4635"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-09-28T10:12:05.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "EmDash",
@@ -2034,13 +2010,7 @@
         "cms"
       ],
       "license": "MIT",
-      "revision": 2,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/emdash/manifest.json",
-        "sha256": "a8f31f67a27d79db612c98116a899636e131dd7d3b9197803822dd7fa96a019f",
-        "keyId": "catalog-2026-09",
-        "signature": "DApwLC5X+wpLrGUkz+FLKYHuHJX4zF3j3Qw/YJKEB8UhmH6ObVWcCCQuiOOKLWhJnlIdMy411bMPmgm+AibeAQ=="
-      }
+      "revision": 2
     },
     {
       "slug": "exception-notify",
@@ -2053,12 +2023,12 @@
         "zip": "https://github.com/appflare/catalog/releases/download/exception-notify@0.0.0-20251226.990d2e6/exception-notify-0.0.0-20251226.990d2e6.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/exception-notify@0.0.0-20251226.990d2e6/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/exception-notify@0.0.0-20251226.990d2e6/manifest.sig",
-        "digest": "bf2a6e87861c3207f52627aef51d6180721d34f782a73bfc847f861c4de7f4a5"
+        "digest": "1bc85830df700d5b394bfb441b95fc7b2828e2afd41311ec94f1abac6f2c40bf"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-09-28T10:11:29.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "XiaoDingSiRen",
@@ -2098,14 +2068,14 @@
         "zip": "https://github.com/appflare/catalog/releases/download/feedlog@0.5.0/feedlog-0.5.0.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/feedlog@0.5.0/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/feedlog@0.5.0/manifest.sig",
-        "digest": "ab2e76027678751b5d82852655385049d56a66554581eb1c2b9b558d9722135f"
+        "digest": "cca3d99a581eca92c4ffc1a430bc5d77960119dad0de01abbc02201d01a4ed9f"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-09-28T10:13:20.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "LinkCraft Studio",
@@ -2189,12 +2159,12 @@
         "zip": "https://github.com/appflare/catalog/releases/download/firefly-iii-mcp@1.4.0/firefly-iii-mcp-1.4.0.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/firefly-iii-mcp@1.4.0/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/firefly-iii-mcp@1.4.0/manifest.sig",
-        "digest": "1cf909ff4e4d6930d25ebbfeda1ad169a90fbfe7e37fb63edeef43dc6d73b19f"
+        "digest": "3fd3888b3676b53a6148ba42d9d4f5b1afdd4875ca9cee08c155a7fffdac1ee1"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-09-28T10:13:07.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Mike Evans",
@@ -2225,7 +2195,7 @@
         "zip": "https://github.com/appflare/catalog/releases/download/flaremo@0.20.1/flaremo-0.20.1.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/flaremo@0.20.1/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/flaremo@0.20.1/manifest.sig",
-        "digest": "5f70b5772b8bb3a38240e42e8273e95601a7e6a6c69fb045746cdf2e6ce6b2bc"
+        "digest": "40795245450013f111a16a4311a25a12ab8173d011113e962798daaaff1f4c1c"
       },
       "tier": "artifact",
       "plan": "free",
@@ -2233,7 +2203,7 @@
         "r2",
         "workers-ai"
       ],
-      "lastVerified": "2026-09-28T10:13:02.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "realchendahuang",
@@ -2291,12 +2261,12 @@
         "zip": "https://github.com/appflare/catalog/releases/download/fodi@0.0.0-20260403.20a227a/fodi-0.0.0-20260403.20a227a.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/fodi@0.0.0-20260403.20a227a/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/fodi@0.0.0-20260403.20a227a/manifest.sig",
-        "digest": "db03f0e523c0ea4739664957000d2b5be1a60bbbe89a712ba3a9a5028ec206a9"
+        "digest": "a57fce4a1a3406f2f3a4bfe43162fe53b61677d1c048181d39591e4de2606189"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-09-28T10:11:26.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "LOGI",
@@ -2336,12 +2306,12 @@
         "zip": "https://github.com/appflare/catalog/releases/download/folia@0.7.9/folia-0.7.9.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/folia@0.7.9/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/folia@0.7.9/manifest.sig",
-        "digest": "e432e7fbb6569c7f2f0ddfb62bf15229a195b67420e464b83c2d5deb13141234"
+        "digest": "59fa4efa53f670c772633d1f1c5df94cf917b0cc03a022359dca76c699462964"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-09-28T10:11:26.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "chthollyphile",
@@ -2376,12 +2346,12 @@
         "zip": "https://github.com/appflare/catalog/releases/download/formzero@0.0.0-20260426.a4ddde2/formzero-0.0.0-20260426.a4ddde2.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/formzero@0.0.0-20260426.a4ddde2/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/formzero@0.0.0-20260426.a4ddde2/manifest.sig",
-        "digest": "dbe643804779df8d1f78833e9162b6908fc06511c153020db7cbb2c3dd13a8df"
+        "digest": "7c3fabc91c374081f2d317319d73b99022f055a3c081aee13e6541811d4d220e"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-09-28T10:13:34.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Bohdan Petryshyn",
@@ -2425,7 +2395,7 @@
         "zip": "https://github.com/appflare/catalog/releases/download/freemail@5.3.1/freemail-5.3.1.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/freemail@5.3.1/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/freemail@5.3.1/manifest.sig",
-        "digest": "305ec47475e929031ab53977059977f3966526ed06e06219d6373acc13101229"
+        "digest": "4df6208c58613e1bf22148a81be590f59b7388577029e71900739efe235355e9"
       },
       "tier": "artifact",
       "plan": "free",
@@ -2434,7 +2404,7 @@
         "zone",
         "email-routing"
       ],
-      "lastVerified": "2026-09-28T10:12:27.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "iding",
@@ -2517,12 +2487,12 @@
         "zip": "https://github.com/appflare/catalog/releases/download/fxtiktok@0.0.0-20260906.66fbae3/fxtiktok-0.0.0-20260906.66fbae3.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/fxtiktok@0.0.0-20260906.66fbae3/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/fxtiktok@0.0.0-20260906.66fbae3/manifest.sig",
-        "digest": "4da2afdd257ef81c86c3e11dc09de0cdbd4df9a73f7dec9d9358d846efaac414"
+        "digest": "84a1e56d7f240239fbee8b5106d217cee352cbf93a51656e83df05c7a15dec0c"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-09-28T10:12:17.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "dargy",
@@ -2553,14 +2523,14 @@
         "zip": "https://github.com/appflare/catalog/releases/download/garrul@2.29.0/garrul-2.29.0.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/garrul@2.29.0/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/garrul@2.29.0/manifest.sig",
-        "digest": "4b783c700518a5156f17d07b0894f571124daac619f94ec6877fe394680b9580"
+        "digest": "2b6f35520bf73094c61299b4a14aff432e6a5439cd7d10934a57da5f75da449f"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "analytics-engine"
       ],
-      "lastVerified": "2026-09-28T10:12:42.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "KingPin",
@@ -2646,7 +2616,7 @@
         "zip": "https://github.com/appflare/catalog/releases/download/git-on-cloudflare@0.0.0-20260513.007a96e/git-on-cloudflare-0.0.0-20260513.007a96e.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/git-on-cloudflare@0.0.0-20260513.007a96e/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/git-on-cloudflare@0.0.0-20260513.007a96e/manifest.sig",
-        "digest": "47c4dd2a0104fff6aad567cf9d5db7ee76f69ee7b8bef958edf234b415608dbb"
+        "digest": "2f81ae01133e099307671a1a0234bc59cc23e21e29b9a98f414937e7edc7aa83"
       },
       "tier": "artifact",
       "plan": "paid",
@@ -2688,7 +2658,7 @@
         "zip": "https://github.com/appflare/catalog/releases/download/glance@0.14.0/glance-0.14.0.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/glance@0.14.0/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/glance@0.14.0/manifest.sig",
-        "digest": "3176680ba1dceacbf7b9d9c64fbbe21c1400e41cb3bbb9beb57d4ea505af370e"
+        "digest": "862de2e8e431b34514fbc43570087a2172d797df5b77508dcb8cbf719227bb01"
       },
       "tier": "artifact",
       "plan": "free",
@@ -2696,7 +2666,7 @@
         "r2",
         "workers-ai"
       ],
-      "lastVerified": "2026-09-28T10:12:47.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Plivo",
@@ -2739,14 +2709,14 @@
         "zip": "https://github.com/appflare/catalog/releases/download/gmshop@1.0.2/gmshop-1.0.2.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/gmshop@1.0.2/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/gmshop@1.0.2/manifest.sig",
-        "digest": "e90c413d5a4f6045a38aa28971bdae8cdcc18742cf3f50afa583a6dd61c15b3c"
+        "digest": "dd5b384cbf71620024684d225e96da5b561bedcc0cb936a4a7496ffabe0471f4"
       },
       "tier": "artifact",
       "plan": "paid",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-09-28T10:11:54.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "GM Wallet",
@@ -2791,12 +2761,12 @@
         "zip": "https://github.com/appflare/catalog/releases/download/hashpay@0.0.0-20260919.599ef7f/hashpay-0.0.0-20260919.599ef7f.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/hashpay@0.0.0-20260919.599ef7f/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/hashpay@0.0.0-20260919.599ef7f/manifest.sig",
-        "digest": "afd55ec8e0f4f3991cc73ee7d5292a48a54c54c91cef8ef26941b6e33ac10154"
+        "digest": "e6b24fa51183e9b032625ebefcd0222955139bb34e9e2c275c77555e3849b903"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-09-28T10:11:39.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "TGDash",
@@ -2846,7 +2816,7 @@
         "zip": "https://github.com/appflare/catalog/releases/download/hqbase@1.4.2/hqbase-1.4.2.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/hqbase@1.4.2/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/hqbase@1.4.2/manifest.sig",
-        "digest": "6f9d56f34deafde57b48bc75330690e3ab7ed935c01f1cdcbcf2b3eb8a935d19"
+        "digest": "87fad7cba45e55d8dc95a67c9918d2c01075f044aed1b6e6de5836e61f1057d3"
       },
       "tier": "artifact",
       "plan": "paid",
@@ -2855,7 +2825,7 @@
         "email-routing",
         "r2"
       ],
-      "lastVerified": "2026-09-28T10:11:56.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "HQBase",
@@ -2902,14 +2872,14 @@
         "zip": "https://github.com/appflare/catalog/releases/download/imgbed@2.7.6/imgbed-2.7.6.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/imgbed@2.7.6/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/imgbed@2.7.6/manifest.sig",
-        "digest": "366a66cb35d98bbe5fec11628da4886dcc11b2a7aed0ad67efddc229da73e771"
+        "digest": "58bd44da03a347d90024fc5601e3233673c3aefe01ba176bf1ce54a4e8b2a454"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-09-28T10:11:38.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "MarSeventh",
@@ -2966,12 +2936,12 @@
         "zip": "https://github.com/appflare/catalog/releases/download/infiplot@0.0.0-20260702.a60e18b/infiplot-0.0.0-20260702.a60e18b.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/infiplot@0.0.0-20260702.a60e18b/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/infiplot@0.0.0-20260702.a60e18b/manifest.sig",
-        "digest": "04fe8982bc7549a73181924503b159f9cef55876dbc5159f135b9089f649ace9"
+        "digest": "ffd89c7229ad7c78fa197d21a8d84a5df522fe5d6848e01cc7c821550d011154"
       },
       "tier": "artifact",
       "plan": "paid",
       "requires": [],
-      "lastVerified": "2026-09-28T10:12:45.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Zonghao Yuan",
@@ -3039,7 +3009,7 @@
         "zip": "https://github.com/appflare/catalog/releases/download/inkstone@0.8.0/inkstone-0.8.0.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/inkstone@0.8.0/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/inkstone@0.8.0/manifest.sig",
-        "digest": "9769e1759b239a1b05f53e89e5b53607743d21e8415ffe2f811804a0239ac78b"
+        "digest": "00159a9a95213c70c2adc2f53ba21e83a0427ef7e8d251438aa72a153ba8d745"
       },
       "tier": "artifact",
       "plan": "free",
@@ -3047,7 +3017,7 @@
         "r2",
         "workers-ai"
       ],
-      "lastVerified": "2026-09-28T10:13:01.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Shuai",
@@ -3091,14 +3061,14 @@
         "zip": "https://github.com/appflare/catalog/releases/download/insightflare@0.7.1/insightflare-0.7.1.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/insightflare@0.7.1/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/insightflare@0.7.1/manifest.sig",
-        "digest": "d5732716fbd80f95c7f334922ec49ba7065f07b842b111c3d304fa840f8fc52e"
+        "digest": "82198139d8f1e45b332de7a1b0a514b5d38256ae1c7a38f89946314f4348c2b8"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "analytics-engine"
       ],
-      "lastVerified": "2026-09-28T10:13:18.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "RavelloH",
@@ -3172,14 +3142,14 @@
         "zip": "https://github.com/appflare/catalog/releases/download/isupmap@0.0.0-20260904.17bb688/isupmap-0.0.0-20260904.17bb688.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/isupmap@0.0.0-20260904.17bb688/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/isupmap@0.0.0-20260904.17bb688/manifest.sig",
-        "digest": "8ef83d73f2ac01e1a8e7e2c505081e620843beafb1fc9c7c0854d8126f7ff64c"
+        "digest": "6e452d1e9f5b899e70563efb4a0da611065509a678ef792e04cfb9446cb93168"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "analytics-engine"
       ],
-      "lastVerified": "2026-09-28T10:11:44.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Jairon Landa",
@@ -3221,14 +3191,14 @@
         "zip": "https://github.com/appflare/catalog/releases/download/jant@0.0.0-20260926.d55c0f8/jant-0.0.0-20260926.d55c0f8.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/jant@0.0.0-20260926.d55c0f8/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/jant@0.0.0-20260926.d55c0f8/manifest.sig",
-        "digest": "78b70ac526b01d87cadae63ec144b119379d6d5170ffc957a7f359f24a583570"
+        "digest": "aea622374eb8e577a30f519051872c71ab8b8095812a48cd1c0a7ce4d72f4cb2"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-09-28T10:14:03.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Jant",
@@ -3266,13 +3236,7 @@
         "community"
       ],
       "license": "AGPL-3.0-or-later",
-      "revision": 2,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/jant/manifest.json",
-        "sha256": "eb649dc34530f7ad829a22e2992903d2dbf9d53074dbc8efb4dcdd1af61da12e",
-        "keyId": "catalog-2026-09",
-        "signature": "tzVYr4RzOfNQkPbeFirAQhnuU9xFtZ/+n4UM2F+BL+PKKP8cdgmcV/2e6w9JyLyMWXkQms+f4LeNCz8hVI7nAA=="
-      }
+      "revision": 2
     },
     {
       "slug": "jina-mcp",
@@ -3285,12 +3249,12 @@
         "zip": "https://github.com/appflare/catalog/releases/download/jina-mcp@0.0.0-20260918.5d6eb19/jina-mcp-0.0.0-20260918.5d6eb19.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/jina-mcp@0.0.0-20260918.5d6eb19/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/jina-mcp@0.0.0-20260918.5d6eb19/manifest.sig",
-        "digest": "f3dd088a702164bad443be07b89e3ee2edcd340a926eb2927ff607a23269fe09"
+        "digest": "fb1cea135410d2017e007e537cab48cd115f02c7a14c37c7af2ec03197655249"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-09-28T10:12:32.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Jina AI",
@@ -3321,12 +3285,12 @@
         "zip": "https://github.com/appflare/catalog/releases/download/kiss-worker@0.0.0-20260802.7f6efde/kiss-worker-0.0.0-20260802.7f6efde.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/kiss-worker@0.0.0-20260802.7f6efde/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/kiss-worker@0.0.0-20260802.7f6efde/manifest.sig",
-        "digest": "021f7c7fc69a45ae6a2e0e1daf6865194baec0945aaa17488fc274495be35df7"
+        "digest": "0c8b97c242603d7a968e1331f2581379d35a33d2f922fd31c7c13a90657840f2"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-09-28T10:11:21.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Gabe",
@@ -3359,12 +3323,12 @@
         "zip": "https://github.com/appflare/catalog/releases/download/kukuroo@0.1.3/kukuroo-0.1.3.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/kukuroo@0.1.3/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/kukuroo@0.1.3/manifest.sig",
-        "digest": "ae6a16d697decfba9dcf5f4f217c9a04777f98226e296fe220600b91b7b19a25"
+        "digest": "51698c03feee651d9ae1078d52582f02cdda3a19aed181a9e1f82268345a54cc"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-09-28T10:14:01.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Saiday",
@@ -3405,12 +3369,12 @@
         "zip": "https://github.com/appflare/catalog/releases/download/larafeed@0.0.0-20260924.eedbc8b/larafeed-0.0.0-20260924.eedbc8b.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/larafeed@0.0.0-20260924.eedbc8b/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/larafeed@0.0.0-20260924.eedbc8b/manifest.sig",
-        "digest": "94610579ab918359b15c2b2251b295a94921e5365a84c68517abb65cff005a2c"
+        "digest": "97dacef613e9e554d0224951111a876118482966dee48a757a78d92de335d2fc"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-09-28T10:16:29.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Stanislas",
@@ -3459,12 +3423,12 @@
         "zip": "https://github.com/appflare/catalog/releases/download/lastfm-recently-played@0.0.0-20260909.cce76de/lastfm-recently-played-0.0.0-20260909.cce76de.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/lastfm-recently-played@0.0.0-20260909.cce76de/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/lastfm-recently-played@0.0.0-20260909.cce76de/manifest.sig",
-        "digest": "e96d668d663eab792fd82ba0d4527b01ed5236056d54174942a1b6d2c95a41d9"
+        "digest": "26b8c0bbe5a2aa6363239ee792e4a9d4e0c11ebe8f2b5f2f799e9255ffdb8bcd"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-09-28T10:15:38.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "JeffreyCA",
@@ -3493,12 +3457,12 @@
         "zip": "https://github.com/appflare/catalog/releases/download/llm-api-proxy@0.0.0-20251201.43db1c0/llm-api-proxy-0.0.0-20251201.43db1c0.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/llm-api-proxy@0.0.0-20251201.43db1c0/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/llm-api-proxy@0.0.0-20251201.43db1c0/manifest.sig",
-        "digest": "b603df9628b71348620d2132ea18800714ec2f9defce1a83e33add71f24deda2"
+        "digest": "8233a34ca8cc4e895459c688dbaf7b04efb87408ea2ff40d474be57276c5bc10"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-09-28T10:14:53.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "rxliuli",
@@ -3528,7 +3492,7 @@
         "zip": "https://github.com/appflare/catalog/releases/download/mail2telegram@2.0.0/mail2telegram-2.0.0.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/mail2telegram@2.0.0/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/mail2telegram@2.0.0/manifest.sig",
-        "digest": "6a847e9d696e51798eca0e07e0c22d24ab195bfb01898b33f507e2d73573d560"
+        "digest": "020756f70e2d86ffe367a8cba9a41b790b1044382ce2c9890cf50af5cbdf1b69"
       },
       "tier": "artifact",
       "plan": "free",
@@ -3537,7 +3501,7 @@
         "email-routing",
         "r2"
       ],
-      "lastVerified": "2026-09-28T10:14:36.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "TBXark",
@@ -3584,7 +3548,7 @@
         "zip": "https://github.com/appflare/catalog/releases/download/mailclaw@0.0.0-20260528.f13f82a/mailclaw-0.0.0-20260528.f13f82a.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/mailclaw@0.0.0-20260528.f13f82a/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/mailclaw@0.0.0-20260528.f13f82a/manifest.sig",
-        "digest": "198e5c7bb249f0a596a7246e1da7ca7246aa6cdffd0710123e80d00e086ed4eb"
+        "digest": "a1d299efa5ded4a96c4fd2586a458d5d6191e39faf3e72f08ac37315657a9bc7"
       },
       "tier": "artifact",
       "plan": "free",
@@ -3593,7 +3557,7 @@
         "email-routing",
         "r2"
       ],
-      "lastVerified": "2026-09-28T10:16:55.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Vincent Yang",
@@ -3636,7 +3600,7 @@
         "zip": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20260920.1bf70d2/mailflare-0.0.0-20260920.1bf70d2.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20260920.1bf70d2/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20260920.1bf70d2/manifest.sig",
-        "digest": "fbe601fe7065ec7cda3fb1b9c7e1aeb7e45838142c2825f0164de17ccdcc6803"
+        "digest": "2d8739cfbef1ba06730d746c57b3dc8f02aaa3296254f0c25624774e7ab19c89"
       },
       "tier": "artifact",
       "plan": "paid",
@@ -3645,7 +3609,7 @@
         "email-routing",
         "r2"
       ],
-      "lastVerified": "2026-09-28T10:14:46.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Hieu Nguyen",
@@ -3706,7 +3670,7 @@
         "zip": "https://github.com/appflare/catalog/releases/download/mailysend@0.0.0-20260921.3708d2f/mailysend-0.0.0-20260921.3708d2f.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/mailysend@0.0.0-20260921.3708d2f/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/mailysend@0.0.0-20260921.3708d2f/manifest.sig",
-        "digest": "82ab415f11783f77fb0cba2870e4a0719adca37a1d19adde94ae8acc1978e282"
+        "digest": "d62d111572a30220d509bc2da329818f34161b39a5aadc9ac7ff96d6d3ca24c9"
       },
       "tier": "artifact",
       "plan": "free",
@@ -3793,7 +3757,7 @@
         "zip": "https://github.com/appflare/catalog/releases/download/md-page@0.0.0-20260909.54bbbd1/md-page-0.0.0-20260909.54bbbd1.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/md-page@0.0.0-20260909.54bbbd1/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/md-page@0.0.0-20260909.54bbbd1/manifest.sig",
-        "digest": "742a4d3046357f982b830aa8dc483772da7df2a88f7e1ba7cc72ed340d29faf1"
+        "digest": "638f017b1ab3735a71c97737881802f6f721f430e19454e95df7877a5f7afe2b"
       },
       "tier": "artifact",
       "plan": "free",
@@ -3801,7 +3765,7 @@
         "analytics-engine",
         "r2"
       ],
-      "lastVerified": "2026-09-28T10:14:43.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Or May-Paz",
@@ -3861,12 +3825,12 @@
         "zip": "https://github.com/appflare/catalog/releases/download/memory-note@0.0.0-20230822.c07fdc0/memory-note-0.0.0-20230822.c07fdc0.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/memory-note@0.0.0-20230822.c07fdc0/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/memory-note@0.0.0-20230822.c07fdc0/manifest.sig",
-        "digest": "8cf16f6b3e8993cf2d24a1721b05a8ea239c0eb8c5ae3a8814fcd77610c9b7a2"
+        "digest": "0f67d3ec0e9037b814850a275728b91854a70ecd2ff3d550c50af119c31f3832"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-09-28T10:15:49.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "azu",
@@ -3900,14 +3864,14 @@
         "zip": "https://github.com/appflare/catalog/releases/download/microfeed@1.0.13/microfeed-1.0.13.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/microfeed@1.0.13/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/microfeed@1.0.13/manifest.sig",
-        "digest": "654ac55a96aa26a07684f6afbde63f81bd2e3261b327990fac98be8912c01c8c"
+        "digest": "ba044b37a793542086ecefe6e7fa10e71695492418b25ffd15a275bc85f34a9a"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-09-28T10:14:49.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Listen Notes",
@@ -3960,14 +3924,14 @@
         "zip": "https://github.com/appflare/catalog/releases/download/minshop@0.2.0/minshop-0.2.0.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/minshop@0.2.0/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/minshop@0.2.0/manifest.sig",
-        "digest": "c1efb1aa02357d3a19c85e02613050d094a8aaf0678b6fa6e2fde4d7930db214"
+        "digest": "3a7b673ebd03251fc98361f1c08e19e4ba80417bb3169be80cb3be0575caa5a3"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-09-28T10:17:06.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Daniel Yang",
@@ -4034,12 +3998,12 @@
         "zip": "https://github.com/appflare/catalog/releases/download/minvoice@0.0.0-20260720.99563a5/minvoice-0.0.0-20260720.99563a5.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/minvoice@0.0.0-20260720.99563a5/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/minvoice@0.0.0-20260720.99563a5/manifest.sig",
-        "digest": "8430c08a7082085410d1632b33992f77d8ace093acfc1a0dfeed9d926e232ddc"
+        "digest": "30eceab44296a68eb746a77551bd8db73774b98e1a4280c5ea859ed7a2e1b149"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-09-28T10:14:21.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Daniel Yang",
@@ -4105,12 +4069,12 @@
         "zip": "https://github.com/appflare/catalog/releases/download/mpp-proxy@0.0.0-20260722.0e4dd80/mpp-proxy-0.0.0-20260722.0e4dd80.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/mpp-proxy@0.0.0-20260722.0e4dd80/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/mpp-proxy@0.0.0-20260722.0e4dd80/manifest.sig",
-        "digest": "0e2449f2715941508681614c3c7d9bbae5cb4fe612ada75f69844709a81157ca"
+        "digest": "7d58a0b2d05cb11f1d1ba4c5638cf67c5f76cbf6d9af0c2e6bd76f8c2cb4a6f2"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-09-28T10:14:36.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Cloudflare",
@@ -4148,12 +4112,12 @@
         "zip": "https://github.com/appflare/catalog/releases/download/nabiz@3.12.1/nabiz-3.12.1.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/nabiz@3.12.1/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/nabiz@3.12.1/manifest.sig",
-        "digest": "5ddc7071744599993e3cea42afc24dce08a741fc8d12e4ca0cae1571fed2d65d"
+        "digest": "086a0110381a8e9dc0efc1a87128cbc2330fb9b05f1520401f2627975ac9695d"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-09-28T10:14:36.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Wind",
@@ -4201,12 +4165,12 @@
         "zip": "https://github.com/appflare/catalog/releases/download/neriplayer-listen-together@0.0.0-20260817.5ec8a8b/neriplayer-listen-together-0.0.0-20260817.5ec8a8b.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/neriplayer-listen-together@0.0.0-20260817.5ec8a8b/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/neriplayer-listen-together@0.0.0-20260817.5ec8a8b/manifest.sig",
-        "digest": "e1521622326a9584dcd0475fd48d8bd6408043b5adbb84d380cadcbb69ad984e"
+        "digest": "7dc8aaea5428d2d91b0dfb5507cb11f209afc9dc76cbd2af36c7133e665d18fa"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-09-28T10:15:21.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "TheSmallHanCat",
@@ -4244,7 +4208,7 @@
         "zip": "https://github.com/appflare/catalog/releases/download/ni-mail@0.0.0-20260428.792b54a/ni-mail-0.0.0-20260428.792b54a.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/ni-mail@0.0.0-20260428.792b54a/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/ni-mail@0.0.0-20260428.792b54a/manifest.sig",
-        "digest": "7ce74f9dcde198d5571b9b4f78aa7c5b8761e6ed4baf0742d31891db8a7baac0"
+        "digest": "118cb55a527d8b79c68d0d73554182d5bcf78f53691258a6f6ab8586d4512ba2"
       },
       "tier": "artifact",
       "plan": "free",
@@ -4253,7 +4217,7 @@
         "zone",
         "email-routing"
       ],
-      "lastVerified": "2026-09-28T10:16:03.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "mskatoni",
@@ -4287,12 +4251,12 @@
         "zip": "https://github.com/appflare/catalog/releases/download/nodecrypt@0.0.0-20260817.54ed049/nodecrypt-0.0.0-20260817.54ed049.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/nodecrypt@0.0.0-20260817.54ed049/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/nodecrypt@0.0.0-20260817.54ed049/manifest.sig",
-        "digest": "10f72cc3c4836a216c77fdd95f309233c12b62d680791117e6aee6d17573998d"
+        "digest": "0bf04cc1764e7ff9aec08e0060c5cb3e478635752e2ed0b881d3f55e80214bc1"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-09-28T10:14:01.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Shuai",
@@ -4331,14 +4295,14 @@
         "zip": "https://github.com/appflare/catalog/releases/download/nodewarden@1.8.0/nodewarden-1.8.0.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/nodewarden@1.8.0/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/nodewarden@1.8.0/manifest.sig",
-        "digest": "9ed578e583d44438433b60797f119f6fa312814153e7483aca687b2b063e8167"
+        "digest": "bb0fd857ac91255da33c1f241837c11c7348f251f64cb0af3aa271780cb021d9"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-09-28T10:15:25.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Shuai",
@@ -4380,14 +4344,14 @@
         "zip": "https://github.com/appflare/catalog/releases/download/nodrix@1.0.1/nodrix-1.0.1.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/nodrix@1.0.1/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/nodrix@1.0.1/manifest.sig",
-        "digest": "a5f0a5d6e9d243d87dea5421b305c562ba1b5a9b5dd68ab33555e3ff80b5062a"
+        "digest": "8ff7b0209fe379456bdba50fb77c482940f53bffa975250f29e054b0cf13981f"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-09-28T10:15:11.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Arjun Krishna",
@@ -4436,7 +4400,7 @@
         "zip": "https://github.com/appflare/catalog/releases/download/omnimail@1.1.4/omnimail-1.1.4.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/omnimail@1.1.4/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/omnimail@1.1.4/manifest.sig",
-        "digest": "28a8547adce3420da4f85717e9bbebf5388502c2b664f8b0130387dadec3c25f"
+        "digest": "ee4c883c163aae2b8b09151b92a031d8d0691ecf30c052f180338bd7f9c3a88d"
       },
       "tier": "artifact",
       "plan": "free",
@@ -4445,7 +4409,7 @@
         "email-routing",
         "r2"
       ],
-      "lastVerified": "2026-09-28T10:15:40.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "OmniMail contributors",
@@ -4494,12 +4458,12 @@
         "zip": "https://github.com/appflare/catalog/releases/download/one-ip@0.0.0-20260924.3d65314/one-ip-0.0.0-20260924.3d65314.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/one-ip@0.0.0-20260924.3d65314/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/one-ip@0.0.0-20260924.3d65314/manifest.sig",
-        "digest": "ff8a2b14a86234119491855b9a8f09cec88d54247e7563f939bb3e7adb2b6199"
+        "digest": "e958abb59dda7bb9c79e42e4b983e38e3c100209acdc262493fe94883cdd9624"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-09-28T10:14:18.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Hu Zhihui",
@@ -4547,14 +4511,14 @@
         "zip": "https://github.com/appflare/catalog/releases/download/open-artifacts@0.0.0-20260827.4f8b54b/open-artifacts-0.0.0-20260827.4f8b54b.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/open-artifacts@0.0.0-20260827.4f8b54b/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/open-artifacts@0.0.0-20260827.4f8b54b/manifest.sig",
-        "digest": "fcc36aa3560cb15c0132d581d29cc6cc1073fa6a56dbfa899948e3e8fc1fd8b6"
+        "digest": "505b8cab4bb502ef572a5a16ba135912aece3c3c9458ddb909ae5ae6c747fe3d"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-09-28T10:15:22.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Frad Lee",
@@ -4621,7 +4585,7 @@
       "build": {
         "pin": "84e4705503ceaef54d1b284c167de9942563cdae",
         "manifest": "https://appflare.github.io/catalog/apps/open-seo/manifest.json",
-        "manifestDigest": "a8039e4967accc79bbcede418ed2be8b3db9277fc5bef7213469adf09ce005a5",
+        "manifestDigest": "5c5dbfa8b7ec29e1142c8cbd00f920719b5d545e693b8a887a64e45ba02bae10",
         "buildCommand": "pnpm exec vite build --mode selfhost",
         "expectedMinutes": 5,
         "instanceType": "standard-2"
@@ -4669,12 +4633,12 @@
         "zip": "https://github.com/appflare/catalog/releases/download/openai-gemini@0.0.0-20251222.61a83bd/openai-gemini-0.0.0-20251222.61a83bd.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/openai-gemini@0.0.0-20251222.61a83bd/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/openai-gemini@0.0.0-20251222.61a83bd/manifest.sig",
-        "digest": "e3744316bcd3d3e3475468054de21b3c86d6396efc8c512c7ae54627799181b8"
+        "digest": "5210db0baaad70240f26860a7596029e3c178c9faec0585ef8bcfa76aff909e6"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-09-28T10:14:31.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "PublicAffairs",
@@ -4702,14 +4666,14 @@
         "zip": "https://github.com/appflare/catalog/releases/download/openshortlink@0.10.0/openshortlink-0.10.0.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/openshortlink@0.10.0/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/openshortlink@0.10.0/manifest.sig",
-        "digest": "ead74216105c5f7022bb9b12aa657e36135fa679dfef447ee5bd22ed9b8e378b"
+        "digest": "ee8bc20e77ab01b481944a69e74659e34aa05a660f8346b240554f742adae314"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "analytics-engine"
       ],
-      "lastVerified": "2026-09-28T10:15:21.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "OpenShort.link contributors",
@@ -4751,7 +4715,7 @@
         "zip": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20260927.0311b1f/openstory-0.0.0-20260927.0311b1f.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20260927.0311b1f/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20260927.0311b1f/manifest.sig",
-        "digest": "227f9599a87a244efb136e849baf7fb4531fdd2e885d0cb9215bc2e7c214d9b5"
+        "digest": "e93ae7a3a34813b07977659138bab5dad98ab574016d1f263d1e4be23ae4cc76"
       },
       "tier": "artifact",
       "plan": "paid",
@@ -4759,7 +4723,7 @@
         "r2",
         "zone"
       ],
-      "lastVerified": "2026-09-28T10:18:34.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "OpenStory",
@@ -4809,14 +4773,14 @@
         "zip": "https://github.com/appflare/catalog/releases/download/pastebin-worker@0.0.0-20260717.0835cac/pastebin-worker-0.0.0-20260717.0835cac.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/pastebin-worker@0.0.0-20260717.0835cac/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/pastebin-worker@0.0.0-20260717.0835cac/manifest.sig",
-        "digest": "91dac52e31f516c55d25df8e9613d2601813f7e68c2e36106af4916dc3987553"
+        "digest": "6612674f0d78be5496840a1bd8c0bc4b1f92dd2e4937ccb2aed650242e420fe3"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-09-28T10:14:52.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Sharzy",
@@ -4850,12 +4814,12 @@
         "zip": "https://github.com/appflare/catalog/releases/download/placeholders-dev@0.0.0-20260917.3197644/placeholders-dev-0.0.0-20260917.3197644.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/placeholders-dev@0.0.0-20260917.3197644/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/placeholders-dev@0.0.0-20260917.3197644/manifest.sig",
-        "digest": "dedd8a18627a6359ca6ec216f78ecda5bb7e0f9a28f73d5996f26ac22f4f5ef7"
+        "digest": "cb6dad8618193f9ff0a7b3ea1f8a49441565922dbf729c57820df58ee66781fd"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-09-28T10:14:57.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "James Ross",
@@ -4902,14 +4866,14 @@
         "zip": "https://github.com/appflare/catalog/releases/download/playwright-mcp@0.0.0-20251220.ee81e27/playwright-mcp-0.0.0-20251220.ee81e27.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/playwright-mcp@0.0.0-20251220.ee81e27/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/playwright-mcp@0.0.0-20251220.ee81e27/manifest.sig",
-        "digest": "4c5620238aa509e5d34c3de7b37d3be3c81120fde37ccf5c6039be7123bf4386"
+        "digest": "a12bab86a86b764c900c902e58dc33b03feda2d35423443ee2172c446da7d0e1"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "browser-rendering"
       ],
-      "lastVerified": "2026-09-28T10:16:07.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Cloudflare",
@@ -4952,12 +4916,12 @@
         "zip": "https://github.com/appflare/catalog/releases/download/private-notes@0.0.0-20260716.4ba4163/private-notes-0.0.0-20260716.4ba4163.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/private-notes@0.0.0-20260716.4ba4163/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/private-notes@0.0.0-20260716.4ba4163/manifest.sig",
-        "digest": "4234ff46ca0cd765e03af5ec4596f4e86086fb6b3b7097494e9a21104c3cc62b"
+        "digest": "097e2264e797c0083558b8b2c896ad0f2d5b95f79f1e8645ff15cf748622935d"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-09-28T10:16:14.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "tao-t356",
@@ -4995,14 +4959,14 @@
         "zip": "https://github.com/appflare/catalog/releases/download/projektor@0.7.1/projektor-0.7.1.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/projektor@0.7.1/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/projektor@0.7.1/manifest.sig",
-        "digest": "9f9ddf88cbd79f72dd05028eee20395c5f133976e118b967dff30866772ad86c"
+        "digest": "ad9c8e1b8151e599e3c9f43ec0630633b0157778493973dba462d669d9999bf2"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-09-28T10:17:03.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Thomas Dickson",
@@ -5055,14 +5019,14 @@
         "zip": "https://github.com/appflare/catalog/releases/download/punctual@0.3.0/punctual-0.3.0.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/punctual@0.3.0/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/punctual@0.3.0/manifest.sig",
-        "digest": "26dc2069226bbf23a9254fff60a3bf506ab98e3183552ff25385e916a4861585"
+        "digest": "fd41b8a90dfd1d357fe12101ab16cb2b721d1c1fa54505b26f058d214fb93152"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-09-28T10:15:42.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Creative Content Crafts",
@@ -5117,14 +5081,14 @@
         "zip": "https://github.com/appflare/catalog/releases/download/quickinbox@1.1.0/quickinbox-1.1.0.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/quickinbox@1.1.0/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/quickinbox@1.1.0/manifest.sig",
-        "digest": "b86acdb9ce67f974f852d4a0b92a5c803761fbc9287f05386834369d7794ac03"
+        "digest": "b431599b790b60927286df82c0f4bd1318af142f31374edb522ef3bb66abb195"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-09-28T10:16:56.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Irasubiza Divin Prince",
@@ -5195,14 +5159,14 @@
         "zip": "https://github.com/appflare/catalog/releases/download/r2-explorer@1.1.10/r2-explorer-1.1.10.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/r2-explorer@1.1.10/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/r2-explorer@1.1.10/manifest.sig",
-        "digest": "c699b308a4f8a80f2a9d40a06bac0aef5f2f4ff13b953a55f1e845421c7ba71b"
+        "digest": "703212dc1470066faa35f214c6ef30808c7237a4796f7b82d841cd3ec637948b"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-09-28T10:16:04.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Gabriel Massadas",
@@ -5243,13 +5207,7 @@
         "files"
       ],
       "license": "MIT",
-      "revision": 2,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/r2-explorer/manifest.json",
-        "sha256": "f5199ec04849d84bc2489d0ebdbd6a9a0e9b8b1ccdd5892a6d488fa04a40d050",
-        "keyId": "catalog-2026-09",
-        "signature": "dfrp7Ui+X2IG6JRlxLzgB8uYEr4Vc4+Qvco5bfALq/MAXTtigayrluKHBMue+ku2ip6twL2AvjzHRzMgTJYeCQ=="
-      }
+      "revision": 2
     },
     {
       "slug": "r2-webdav",
@@ -5262,14 +5220,14 @@
         "zip": "https://github.com/appflare/catalog/releases/download/r2-webdav@0.0.0-20260713.d39f88f/r2-webdav-0.0.0-20260713.d39f88f.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/r2-webdav@0.0.0-20260713.d39f88f/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/r2-webdav@0.0.0-20260713.d39f88f/manifest.sig",
-        "digest": "e2d54b9014c3e30c4da3be888f9263c304f0fc37365b24760e23c7cf35abfbd3"
+        "digest": "2431a28d366fb657addfb8fa569b0eccccfb3af1c6237a1d9b3264ca029ebfb5"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-09-28T10:15:32.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Aber",
@@ -5286,13 +5244,7 @@
         "files"
       ],
       "license": "NONE",
-      "revision": 2,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/r2-webdav/manifest.json",
-        "sha256": "5e81d50b830edb24472959f6426ceab8abcb5eea995ed8b222c6544711964c69",
-        "keyId": "catalog-2026-09",
-        "signature": "ts6K8eRv7qB+wVHe7YTNQ0rhH10/fzTagXWdM8jM14O/zT3LDY8rYOm0CmOz+aXH0RwXDGBT/qMI30fQSfjYDA=="
-      }
+      "revision": 2
     },
     {
       "slug": "rdyrct",
@@ -5305,14 +5257,14 @@
         "zip": "https://github.com/appflare/catalog/releases/download/rdyrct@0.0.0-20260925.d0ece6e/rdyrct-0.0.0-20260925.d0ece6e.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/rdyrct@0.0.0-20260925.d0ece6e/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/rdyrct@0.0.0-20260925.d0ece6e/manifest.sig",
-        "digest": "2f1b42d7647fcd24b62293e084dd49b244b0ac4c2f2ba8d0597ebed5f70acc08"
+        "digest": "e0d820a1c2bfa040a12ab49caffae6608c5c89fc1c4a8b2b50a39cff1b64b98d"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-09-28T10:17:20.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Andrea Bruno",
@@ -5363,12 +5315,12 @@
         "zip": "https://github.com/appflare/catalog/releases/download/relay@0.0.0-20260624.7fb2f44/relay-0.0.0-20260624.7fb2f44.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/relay@0.0.0-20260624.7fb2f44/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/relay@0.0.0-20260624.7fb2f44/manifest.sig",
-        "digest": "6aa28a770a4f972e99d856d22743a5dafb72007fead1ef4510ddaa8940b0a467"
+        "digest": "cfc13299473be5e8847500efa4fcc339ad6e0cb167db9f4eb55d0bffa933f184"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-09-28T10:14:15.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Yuri",
@@ -5399,12 +5351,12 @@
         "zip": "https://github.com/appflare/catalog/releases/download/reminal@3.14.19/reminal-3.14.19.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/reminal@3.14.19/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/reminal@3.14.19/manifest.sig",
-        "digest": "01de37233cd55b89853c5c29a5504fa6a2c4d003f45d69a0ad958f5f94458364"
+        "digest": "09b6b89caaa8f8676c8458f17f07e380d5e2209e7b0aebb61762dc75602c0b37"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-09-28T10:14:40.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Harshal Gajjar",
@@ -5452,12 +5404,12 @@
         "zip": "https://github.com/appflare/catalog/releases/download/renewhelper@3.8.4/renewhelper-3.8.4.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/renewhelper@3.8.4/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/renewhelper@3.8.4/manifest.sig",
-        "digest": "2b5821202c2f13e11a1f1c88bc719f30ff93760f770295a7bfcc33ae73b34dda"
+        "digest": "9def398aeb2a53e12926b91bd6630169b8f9063dc676572629faec8f53c71660"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-09-28T10:13:59.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "LOSTFREE",
@@ -5523,14 +5475,14 @@
         "zip": "https://github.com/appflare/catalog/releases/download/renewlet@0.3.27/renewlet-0.3.27.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/renewlet@0.3.27/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/renewlet@0.3.27/manifest.sig",
-        "digest": "54956ef66a66e4bd27c4737d464c9be1ac088b4b18b50d5fe445e3c32e3123bc"
+        "digest": "65afddd3b6635be7876911192c4ee697b349bd633c417d3ce0ad1b11fc75bd03"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-09-28T10:17:05.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "zhiyingzhou",
@@ -5588,7 +5540,7 @@
         "zip": "https://github.com/appflare/catalog/releases/download/resolvehq@0.3.3/resolvehq-0.3.3.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/resolvehq@0.3.3/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/resolvehq@0.3.3/manifest.sig",
-        "digest": "5416969726a5f872641dab71a45c606f1878d7463166606cda6bbdec9094b9f5"
+        "digest": "8fcea8aa990f3f296b35205ded894fd888d43c63061d251b36dd2426337fd247"
       },
       "tier": "artifact",
       "plan": "free",
@@ -5597,7 +5549,7 @@
         "email-routing",
         "r2"
       ],
-      "lastVerified": "2026-09-28T10:16:30.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Rizvi",
@@ -5629,13 +5581,7 @@
       ],
       "license": "LicenseRef-ResolveHQ-Source-Available",
       "licenseNote": "Source-available: free to run for personal or internal use; selling it, hosting it for others or sharing copies needs the author's permission",
-      "revision": 2,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/resolvehq/manifest.json",
-        "sha256": "48846370e2cec4ea176fee833f80f1c670584c93a92ce9c939c68ce659f89299",
-        "keyId": "catalog-2026-09",
-        "signature": "w+FkzMgEC5k9ryYLp4E0Fwxasxb/r9f/2RSqmR/4pbayqZ8+2WRL2iEi8CzrRaSQ1Rqb00RTYacgpR+LxV5UDQ=="
-      }
+      "revision": 2
     },
     {
       "slug": "rsshub-never-die",
@@ -5648,12 +5594,12 @@
         "zip": "https://github.com/appflare/catalog/releases/download/rsshub-never-die@1.4.2/rsshub-never-die-1.4.2.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/rsshub-never-die@1.4.2/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/rsshub-never-die@1.4.2/manifest.sig",
-        "digest": "180afb07781f5fdaae81c4bea1a441f51a6d6e413ca311b478240e5f2e17d187"
+        "digest": "2511ebba9de7a5ea89e49ac8746022ff5fae2c1471d182fafa431dc4c784957b"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-09-28T10:15:27.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "CaoMeiYouRen",
@@ -5683,12 +5629,12 @@
         "zip": "https://github.com/appflare/catalog/releases/download/rssworker@0.0.0-20260818.b4057ba/rssworker-0.0.0-20260818.b4057ba.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/rssworker@0.0.0-20260818.b4057ba/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/rssworker@0.0.0-20260818.b4057ba/manifest.sig",
-        "digest": "aabb009657738f8af280f06a5ea30c5dae2552d70d94bf2aa7b50654f283b1a9"
+        "digest": "9626f2ccfd6ca8f4de059b547260d0615e980d1d04a4dc7f0486f751f7c3b623"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-09-28T10:16:28.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "hwa",
@@ -5717,12 +5663,12 @@
         "zip": "https://github.com/appflare/catalog/releases/download/scrapedown@0.0.0-20240118.807d685/scrapedown-0.0.0-20240118.807d685.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/scrapedown@0.0.0-20240118.807d685/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/scrapedown@0.0.0-20240118.807d685/manifest.sig",
-        "digest": "44e9394b7d1f3b3ba3e19a3ae4c532fda9655dbabe338f575ac334cf19decd8a"
+        "digest": "d41f16d7d8de1aaa3cda17f518025ca1e0885284af6f41b4cb80a60157aef249"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-09-28T10:14:18.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Ozan Şener",
@@ -5753,12 +5699,12 @@
         "zip": "https://github.com/appflare/catalog/releases/download/screencapture-live@0.17.2/screencapture-live-0.17.2.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/screencapture-live@0.17.2/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/screencapture-live@0.17.2/manifest.sig",
-        "digest": "043d8d51a678ad4971f45096b362a5dce82666513d0802f1c75137f7fb3a8eda"
+        "digest": "fb3111d60204dac9d7f812f1b499e42e97ad9edeaf8c7223f2c43bf24fbbde5e"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-09-28T10:17:05.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Christopher",
@@ -5776,13 +5722,7 @@
         "media"
       ],
       "license": "AGPL-3.0-only",
-      "revision": 2,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/screencapture-live/manifest.json",
-        "sha256": "b7f0897ab68614abe307587a554db81d205ef828918f557f5399739bfff1b668",
-        "keyId": "catalog-2026-09",
-        "signature": "KBZTaruxqV+EtsNVICRG0pYjToBqHI0xiXKyzSA5r9XCvIu3jJpWoWWmiY2WUJpm1A+wH8fJ1JxqWwyAxhNTAg=="
-      }
+      "revision": 2
     },
     {
       "slug": "screendrop",
@@ -5795,14 +5735,14 @@
         "zip": "https://github.com/appflare/catalog/releases/download/screendrop@0.0.0-20260805.32a8898/screendrop-0.0.0-20260805.32a8898.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/screendrop@0.0.0-20260805.32a8898/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/screendrop@0.0.0-20260805.32a8898/manifest.sig",
-        "digest": "defd86c449244b1fc6a5b6ab6d8280963443e334cbf9cff4940f798f100e1718"
+        "digest": "9c8c2ad97267276db5e6a98ae71f4b283850dd334bb8d3b2e59e1804683b0dcb"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-09-28T10:14:29.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Fayaz Ahmed",
@@ -5842,14 +5782,14 @@
         "zip": "https://github.com/appflare/catalog/releases/download/second-brain-cloudflare@2.2.0/second-brain-cloudflare-2.2.0.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/second-brain-cloudflare@2.2.0/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/second-brain-cloudflare@2.2.0/manifest.sig",
-        "digest": "87d892be0b0f809c01b3e5627e1749096d86243e32017abbbc0b66fa6347c98d"
+        "digest": "26310f94cf7c76d2dc3ada8798fb123fb3ceab1cbbc11cff21f6e57e94cac770"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "workers-ai"
       ],
-      "lastVerified": "2026-09-28T10:16:20.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Rahil Pirani",
@@ -5893,10 +5833,10 @@
         "zip": "https://github.com/appflare/catalog/releases/download/seeder@2.1.0/seeder-2.1.0.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/seeder@2.1.0/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/seeder@2.1.0/manifest.sig",
-        "digest": "95e559dcb7a3be1d011bcb0ed49d90b44670d7d3ed864ba2f04ab6f394b1954d"
+        "digest": "36c7aceb28970ef186e63d34aafa8fcae35391732d2d170e0f42cd43f0d3c951"
       },
       "tier": "artifact",
-      "plan": "free",
+      "plan": "paid",
       "requires": [
         "r2"
       ],
@@ -5981,14 +5921,14 @@
         "zip": "https://github.com/appflare/catalog/releases/download/semanticsearch@0.0.0-20260603.baa959e/semanticsearch-0.0.0-20260603.baa959e.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/semanticsearch@0.0.0-20260603.baa959e/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/semanticsearch@0.0.0-20260603.baa959e/manifest.sig",
-        "digest": "a018962aa759d0c219222202c90ba7dbd01b9b19e92acd05317497d59b4cc909"
+        "digest": "27e8b86fed8c97844a1bbab42b9d67ee55cc514c2129dfccf3c7ccb10b406b97"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "workers-ai"
       ],
-      "lastVerified": "2026-09-28T10:15:03.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "SemanticSearch.ai",
@@ -6028,14 +5968,14 @@
         "zip": "https://github.com/appflare/catalog/releases/download/sharehtml@0.0.0-20260407.27ddaaf/sharehtml-0.0.0-20260407.27ddaaf.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/sharehtml@0.0.0-20260407.27ddaaf/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/sharehtml@0.0.0-20260407.27ddaaf/manifest.sig",
-        "digest": "85f9744265fd4c854208b27baf410ebe346d3455aea3c4c190d1a77acc8afa34"
+        "digest": "b0487507c47211797c43c79bcb7f976ea762fdda787fb64f30d1c97f50779a9b"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-09-28T10:15:33.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Phillip Jones",
@@ -6081,14 +6021,14 @@
         "zip": "https://github.com/appflare/catalog/releases/download/shotsync@1.0.0/shotsync-1.0.0.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/shotsync@1.0.0/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/shotsync@1.0.0/manifest.sig",
-        "digest": "7ad7873c33a4b3b855d2707c635fde530e9198efe933c8ca66ed70cf35cca2a2"
+        "digest": "78baac7bea97f30e4e8d461542e196dc04d1e56a81d4dfe7ca3ffe692b726ed8"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-09-28T10:16:16.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Jinkun Sun",
@@ -6136,12 +6076,12 @@
         "zip": "https://github.com/appflare/catalog/releases/download/shrtnr@0.42.1/shrtnr-0.42.1.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/shrtnr@0.42.1/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/shrtnr@0.42.1/manifest.sig",
-        "digest": "221e5201c43a6003627d08571a8e31f23622b7a872c6609aa3dd9c389d8c1241"
+        "digest": "a261513c4d8a8641b900bfa2e4b7432eeee049e30f280acadb6ef09a63cbdb02"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-09-28T10:15:34.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Oddbit",
@@ -6211,7 +6151,7 @@
         "zip": "https://github.com/appflare/catalog/releases/download/sink@0.3.0/sink-0.3.0.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/sink@0.3.0/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/sink@0.3.0/manifest.sig",
-        "digest": "0b3200dc94f88c600190da570e507fa3a18aecc43d46c3c982fa070517a7c2f7"
+        "digest": "ad58e8a120ee874b8bd65e5487aea51535311819c59044289f8eb7b313269eed"
       },
       "tier": "artifact",
       "plan": "free",
@@ -6219,7 +6159,7 @@
         "r2",
         "workers-ai"
       ],
-      "lastVerified": "2026-09-28T10:16:09.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "miantiao",
@@ -6279,12 +6219,12 @@
         "zip": "https://github.com/appflare/catalog/releases/download/skland-attendance@0.0.0-20260902.1c0c3a8/skland-attendance-0.0.0-20260902.1c0c3a8.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/skland-attendance@0.0.0-20260902.1c0c3a8/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/skland-attendance@0.0.0-20260902.1c0c3a8/manifest.sig",
-        "digest": "1b4de1db3aaa84307669a2baa040905c66d43caed8ace2529d96bbcfe2874505"
+        "digest": "663a8eca23bf03baa86cdcddd4e39c7029731b32fc3d39c17c242c03efa43eef"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-09-28T10:14:04.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "AEtherside",
@@ -6322,12 +6262,12 @@
         "zip": "https://github.com/appflare/catalog/releases/download/statusbeam@0.1.1/statusbeam-0.1.1.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/statusbeam@0.1.1/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/statusbeam@0.1.1/manifest.sig",
-        "digest": "035609fe8e3e266d8de0b1d79e8f66a1112962b935a5f44a57eb9ad30afec49b"
+        "digest": "4b3a2103fb607f7ee210e4a70e7815d7b9d17560b224ae122d2bdfcd683722a9"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-09-28T10:16:39.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "pleaseai",
@@ -6353,7 +6293,8 @@
         "kv",
         "d1",
         "cron",
-        "images"
+        "images",
+        "zone"
       ],
       "categories": [
         "monitoring",
@@ -6373,12 +6314,12 @@
         "zip": "https://github.com/appflare/catalog/releases/download/sveltia-cms-auth@0.0.0-20260921.4fd08b5/sveltia-cms-auth-0.0.0-20260921.4fd08b5.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/sveltia-cms-auth@0.0.0-20260921.4fd08b5/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/sveltia-cms-auth@0.0.0-20260921.4fd08b5/manifest.sig",
-        "digest": "f48a7b6583ac4514790616ef119ecbab37fc8e7c77595dfa34b738ea5a230db9"
+        "digest": "54c181a2237c60dc2696ad44d7d147fc5ccee3fa8a132915301f7399afa372cb"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-09-28T10:16:22.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Sveltia",
@@ -6411,14 +6352,14 @@
         "zip": "https://github.com/appflare/catalog/releases/download/synch@0.4.8/synch-0.4.8.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/synch@0.4.8/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/synch@0.4.8/manifest.sig",
-        "digest": "e9e7f5a70905856c961a959a183921e926a0b7824da6d1916c86c3db33fbca01"
+        "digest": "3805ac3fbd32e97a5e8210895fb75c99ababec26534455d31c0351ee4c11eaf0"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-09-28T10:15:37.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Synch",
@@ -6468,12 +6409,12 @@
         "zip": "https://github.com/appflare/catalog/releases/download/telegram-push@0.0.0-20230722.bb6f717/telegram-push-0.0.0-20230722.bb6f717.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/telegram-push@0.0.0-20230722.bb6f717/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/telegram-push@0.0.0-20230722.bb6f717/manifest.sig",
-        "digest": "3aea5091f449cd79a9102ae96d6b6bbcc788106ae18cb1a43596c82a02395667"
+        "digest": "65405fe2b7d3add5ee54fa256386df76ae32c8fd40fcf541ae3b7ee8e4e87723"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-09-28T10:15:59.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "sduoduo233",
@@ -6504,7 +6445,7 @@
         "zip": "https://github.com/appflare/catalog/releases/download/tempik@0.0.0-20260627.36d05ed/tempik-0.0.0-20260627.36d05ed.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/tempik@0.0.0-20260627.36d05ed/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/tempik@0.0.0-20260627.36d05ed/manifest.sig",
-        "digest": "78b69e71f110360f4d4c0da035f4cccf5ef6cf4e8d037ffda97e97408b4eeae0"
+        "digest": "1988c3dc3d72b6c28f3f1962770191145d6438eb5940008d0d2093f51248d348"
       },
       "tier": "artifact",
       "plan": "free",
@@ -6512,7 +6453,7 @@
         "zone",
         "email-routing"
       ],
-      "lastVerified": "2026-09-28T10:14:26.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Hiroto Masato",
@@ -6552,12 +6493,12 @@
         "zip": "https://github.com/appflare/catalog/releases/download/ternssh@0.0.13/ternssh-0.0.13.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/ternssh@0.0.13/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/ternssh@0.0.13/manifest.sig",
-        "digest": "298197d145ae4f6cedd5fa8cbc9a3fc8358399d29f9279a31faaef8b2218f4c6"
+        "digest": "7f8dc546781f08b597b03a0debeecb26058b158e3ac916d92b94fee21f3fe580"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-09-28T10:16:21.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "haradakashiwa",
@@ -6603,12 +6544,12 @@
         "zip": "https://github.com/appflare/catalog/releases/download/token-monitor@0.63.0/token-monitor-0.63.0.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/token-monitor@0.63.0/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/token-monitor@0.63.0/manifest.sig",
-        "digest": "c3c12969d5b73086d365ee490d403b9c7e3899e6be53603a7e62d15388134075"
+        "digest": "f6415ce764f24a0a9d5a81dd82c0403c217d0da95d37621bb22b27255dc35e1f"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-09-28T10:15:20.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Javis",
@@ -6647,14 +6588,14 @@
         "zip": "https://github.com/appflare/catalog/releases/download/turborepo-remote-cache@0.0.0-20260615.b0aaab5/turborepo-remote-cache-0.0.0-20260615.b0aaab5.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/turborepo-remote-cache@0.0.0-20260615.b0aaab5/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/turborepo-remote-cache@0.0.0-20260615.b0aaab5/manifest.sig",
-        "digest": "5c57d68673e1e9c4f61a72d956dc91c4e17b06c1ae6073129cb2fadc1f981bd4"
+        "digest": "d73f85140e98a6ae0c3f17dde32e0be8df71713f587c10903b6e1869af8d4080"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-09-28T10:16:01.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Adishwar Rishi",
@@ -6694,12 +6635,12 @@
         "zip": "https://github.com/appflare/catalog/releases/download/unifi-ddns@3.3.1/unifi-ddns-3.3.1.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/unifi-ddns@3.3.1/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/unifi-ddns@3.3.1/manifest.sig",
-        "digest": "1decd124c931015a1dd139ac6a8ab0fc20604ef8c5f61ee96751471757888238"
+        "digest": "04b0f3c2f4e57e749aec550e34c0180591ecddc7efb4e2d8286122ea4bed7998"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-09-28T10:14:47.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Will Walker",
@@ -6730,12 +6671,12 @@
         "zip": "https://github.com/appflare/catalog/releases/download/usage-guard-collector@0.0.0-20260926.c5f9e9d/usage-guard-collector-0.0.0-20260926.c5f9e9d.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/usage-guard-collector@0.0.0-20260926.c5f9e9d/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/usage-guard-collector@0.0.0-20260926.c5f9e9d/manifest.sig",
-        "digest": "dc4e4f625dbe8cd317e5e48e4d31e3143278429ba2e3184f7593e399d4232a7e"
+        "digest": "8b3a4367595fa0ef93fd010f35df8a9d7228ff673bc38da75483487694363d32"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-09-28T10:15:34.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Howard",
@@ -6768,12 +6709,12 @@
         "zip": "https://github.com/appflare/catalog/releases/download/veet@0.0.0-20260728.cca7b69/veet-0.0.0-20260728.cca7b69.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/veet@0.0.0-20260728.cca7b69/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/veet@0.0.0-20260728.cca7b69/manifest.sig",
-        "digest": "a68862c9416db557838d77eab7aaa143566b2f7afc3e630c0a322786a5b87654"
+        "digest": "6d9d984529c1fd00893f46001081afbf5306070f3a0b8b1be1e28f1e40444092"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-09-28T10:16:55.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Confidence Okoghenun",
@@ -6812,12 +6753,12 @@
         "zip": "https://github.com/appflare/catalog/releases/download/vps-jsq@0.0.0-20260829.c9739a4/vps-jsq-0.0.0-20260829.c9739a4.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/vps-jsq@0.0.0-20260829.c9739a4/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/vps-jsq@0.0.0-20260829.c9739a4/manifest.sig",
-        "digest": "c4fcd7180a990bbacbbaf63125c2e7ee0ec959e0af4f39136152567f5f0f8080"
+        "digest": "bfdf0ad3d4e52d31c3ce6cebc55705af238e3aa4a145ad4797dff3d12093d455"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-09-28T10:16:57.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "XiaoGe",
@@ -6861,12 +6802,12 @@
         "zip": "https://github.com/appflare/catalog/releases/download/webrtc-turn@0.0.0-20260904.500651a/webrtc-turn-0.0.0-20260904.500651a.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/webrtc-turn@0.0.0-20260904.500651a/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/webrtc-turn@0.0.0-20260904.500651a/manifest.sig",
-        "digest": "9bc44edef025bbc4595c80d62e116a6b9a9e3e4bb3d947541029668b56447cc7"
+        "digest": "29d669692d3815c196405d9a98e56e1a6eddbf2e5e60eef22b690060344d5621"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-09-28T10:16:46.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "little_cup",
@@ -6896,14 +6837,14 @@
         "zip": "https://github.com/appflare/catalog/releases/download/workers-firecrawl@0.0.0-20260313.f53a0dc/workers-firecrawl-0.0.0-20260313.f53a0dc.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/workers-firecrawl@0.0.0-20260313.f53a0dc/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/workers-firecrawl@0.0.0-20260313.f53a0dc/manifest.sig",
-        "digest": "d42348f44e49aa89307fa5d09ec385aad2387f773eed979720047b007966405a"
+        "digest": "1c7d966afdbea03ee5780ed7684e41ea5f70af4b253dcec0f76e0d7898f0ae77"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "browser-rendering"
       ],
-      "lastVerified": "2026-09-28T10:16:48.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Gabriel Massadas",
@@ -6936,7 +6877,7 @@
         "zip": "https://github.com/appflare/catalog/releases/download/wx2md@0.0.0-20260831.3fa0184/wx2md-0.0.0-20260831.3fa0184.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/wx2md@0.0.0-20260831.3fa0184/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/wx2md@0.0.0-20260831.3fa0184/manifest.sig",
-        "digest": "00a4da9d3758a65a569d12394996778cf9f8510e06e8add2ef9c0fc59e3a4157"
+        "digest": "995bba9c99993f8525ff2fa8ec97e121e5e74896d93c257c0fef5854ef5c5077"
       },
       "tier": "artifact",
       "plan": "free",
@@ -6944,7 +6885,7 @@
         "workers-ai",
         "r2"
       ],
-      "lastVerified": "2026-09-28T10:16:53.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Asa",
@@ -6976,14 +6917,14 @@
         "zip": "https://github.com/appflare/catalog/releases/download/xiadd-pastebin@0.0.0-20260319.5af66e4/xiadd-pastebin-0.0.0-20260319.5af66e4.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/xiadd-pastebin@0.0.0-20260319.5af66e4/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/xiadd-pastebin@0.0.0-20260319.5af66e4/manifest.sig",
-        "digest": "18925652f4ae0638419e98b4b936d04686fc2e5f34a7d3c71a4acbb9cd21f04f"
+        "digest": "32532f5b319741c7e76f89efcf70321ad07f04f04a6cf656c8d473a6827e3126"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-09-28T10:16:57.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "xiadd",
@@ -7022,14 +6963,14 @@
         "zip": "https://github.com/appflare/catalog/releases/download/yaos@2.1.1/yaos-2.1.1.zip",
         "manifest": "https://github.com/appflare/catalog/releases/download/yaos@2.1.1/manifest.json",
         "sig": "https://github.com/appflare/catalog/releases/download/yaos@2.1.1/manifest.sig",
-        "digest": "c815bfdc6a5e6f7e3f376401d6cd6ea4cd5d5f038a5e22d828e7503c195eec1a"
+        "digest": "200f6550e14073d5f45a3f8d11ba74971a19e7bba389123761e5cf07e5d9091b"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-09-28T10:17:06.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Kavin",
