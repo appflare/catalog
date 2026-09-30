@@ -18,7 +18,7 @@
   "categories": ["media"],
   "authors": [{ "name": "chthollyphile", "github": "chthollyphile" }],
   "maintainers": ["MendyLanda"],
-  "source": { "ref": "v0.7.9", "sha": "c249bde0173c92d053838eb79b63ca06fb7fe2f3" },
+  "source": { "ref": "v0.7.11", "sha": "6fe68d89abb7031eb266d71fda01b36a0fa0573e" },
   "install": {
     "packageManager": "npm",
     // The config at the root is the one upstream's Deploy button reads: the
