@@ -10,7 +10,7 @@
   "authors": [{ "name": "TanXin", "url": "https://tanxin.me", "github": "newbietan" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags; the pin tracks main.
-  "source": { "ref": "main", "sha": "25852ca23d90b78a6ca23eb95cb6f5336ed7116d" },
+  "source": { "ref": "main", "sha": "8a00aeda064e288f9d7c8775655b9918d7351604" },
   "install": {
     "packageManager": "pnpm",
     // No build step: upstream commits the web client, built and inlined into
