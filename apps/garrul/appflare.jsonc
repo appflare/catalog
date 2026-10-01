@@ -13,7 +13,7 @@
   "categories": ["community"],
   "authors": [{ "name": "KingPin", "url": "https://sumguy.com", "github": "KingPin" }],
   "maintainers": ["MendyLanda"],
-  "source": { "ref": "v2.29.0", "sha": "30cb07d9f003585010b9734f04bc55f5ce307176" },
+  "source": { "ref": "v2.31.0", "sha": "f41bc57f2d48da6a0cbfbe5c90657c3630193787" },
   "install": {
     "packageManager": "npm",
     // Upstream keeps only this example config in the repository (the real one
