@@ -18,7 +18,7 @@
   "revision": 2,
   "authors": [{ "name": "Rizvi", "github": "mirza-rizvi", "x": "mirza_rizvi" }],
   "maintainers": ["MendyLanda"],
-  "source": { "ref": "v0.3.3", "sha": "1750133fd4b5f2a078c4dd71ce82ec9f85fddd24" },
+  "source": { "ref": "v0.3.4", "sha": "427e7b061c68b4bc1ea5bd08be1c809e282529bd" },
   "install": {
     "packageManager": "npm",
     "wranglerConfig": "wrangler.jsonc",
