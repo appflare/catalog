@@ -8,6 +8,9 @@
   "repo": "oddbit/shrtnr",
   "license": "Apache-2.0",
   "categories": ["utilities", "analytics"],
+  // The first step after installing changed after this release was published:
+  // a revision, no new build.
+  "revision": 2,
   "authors": [
     { "name": "Oddbit", "url": "https://oddbit.id", "github": "oddbit", "x": "evenbit" },
     {
@@ -74,7 +77,7 @@
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Short links redirect right away, but the admin pages open only behind Cloudflare Access. In the Cloudflare dashboard, open Workers & Pages, select this Worker, open Settings, Domains & Routes, and turn on Cloudflare Access for its workers.dev address. The dialog shows the application audience (AUD) tag and your team domain."
+      "content": "Short links redirect right away, but the admin pages open only behind Cloudflare Access. In the Zero Trust dashboard, under Access, Applications, add a self-hosted application for {{appHostname}} with the path `_/admin/*`, and copy its Application Audience (AUD) tag. Protect only that path: Appflare's Cloudflare Access protection, and the one-click Access in the Worker's settings, cover every path, short links included."
     },
     {
       "type": "markdown",

@@ -15,6 +15,9 @@
   "repo": "zonghaoyuan/infiplot",
   "license": "AGPL-3.0-only",
   "categories": ["ai", "games"],
+  // Upstream has not moved since the released pin, so the Access protection
+  // below is a revision of that build.
+  "revision": 2,
   "authors": [{ "name": "Zonghao Yuan", "url": "https://yzh.im", "github": "zonghaoyuan" }],
   "maintainers": ["MendyLanda"],
   // InfiPlot publishes no release tags; the pin tracks main.
@@ -29,6 +32,11 @@
   // Upstream: "Cloudflare deployment requires the Workers Paid Plan because
   // the scene pipeline needs longer CPU time" than the free plan allows.
   "plan": "paid",
+  // No sign-in in this build, and every scene is paid for with the admin's
+  // keys, so protection starts switched on, as upstream recommends for a
+  // private instance. Stories are saved in the browser; nothing must stay
+  // public.
+  "access": { "mode": "recommended" },
   "secrets": [
     {
       "name": "TEXT_API_KEY",
@@ -135,7 +143,7 @@
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Open {{appUrl}} and start a story. **There is no sign-in**: anyone who can reach the address plays on your API keys. Put the app behind Cloudflare Access, as upstream recommends for private instances, before you share the link."
+      "content": "Open {{appUrl}} and start a story. **The game has no sign-in of its own**: behind Cloudflare Access only Appflare's users play; without it, anyone who can reach the address plays on your API keys."
     }
   ]
 }

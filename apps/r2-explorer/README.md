@@ -12,20 +12,22 @@ R2 must be enabled on the Cloudflare account. Enabling it asks for a payment
 method even though R2's free tier covers typical use, so the app is listed as
 free-plan compatible but will not install on an account without R2.
 
+The account also needs a Zero Trust organization for Cloudflare Access (see
+Security below); its free plan is enough.
+
 ## Security
 
 The template sets no authentication in code, and the configuration cannot be
-changed through secrets or variables. Until you protect it, anyone who knows
-the Worker's URL can list and download every file in the bucket. Protect it
-with Cloudflare Access, which needs Zero Trust turned on (the free plan is
-enough):
+changed through secrets or variables. Unprotected, anyone who knows the Worker's
+URL could list and download every file in the bucket, so Appflare installs it
+only behind Cloudflare Access, and its protection cannot be turned off: Access
+checks every request before the Worker runs, on the `workers.dev` URL, its
+previews and any domain, and lets in only the people who use this Appflare. That
+needs a Zero Trust organization on the account (its free plan is enough).
 
-1. In the Cloudflare dashboard, open Workers & Pages and select the Worker.
-2. Open the Access tab and choose Protect this Worker behind Access.
-3. Select All traffic, pick who may sign in, and apply.
-
-Access then checks every request before the Worker runs, on the `workers.dev`
-URL and any custom domain.
+Installed before Appflare could protect apps? Delete any Access application you
+made for the Worker in the Zero Trust dashboard, then turn on **Cloudflare
+Access** on the app's page in Appflare.
 
 ## Read-only
 

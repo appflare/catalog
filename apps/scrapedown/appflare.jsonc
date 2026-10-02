@@ -10,6 +10,9 @@
   "repo": "ozanvos/scrapedown",
   "license": "MIT",
   "categories": ["developer-tools", "utilities"],
+  // The note on Cloudflare Access changed after this release was published: a
+  // revision, no new build.
+  "revision": 2,
   "authors": [
     { "name": "Ozan Şener", "url": "https://getairefs.com", "github": "ozanvos", "x": "ozanvos" }
   ],
@@ -24,6 +27,8 @@
   // One stateless Worker: one outbound fetch per request.
   "plan": "free",
   // Upstream has no access key: anyone who knows the address can use it.
+  // No `access` block: the endpoint is called by programs, which cannot sign
+  // in to Cloudflare Access, so protection stays offered and off.
   "secrets": [],
   "postInstall": [
     {
@@ -32,7 +37,7 @@
     },
     {
       "type": "markdown",
-      "content": "The endpoint has no key: anyone who learns this address can have your Worker fetch pages, within your Workers request allowance. Keep the address to yourself, or put the Worker behind Cloudflare Access."
+      "content": "The endpoint has no key: anyone who learns this address can have your Worker fetch pages, within your Workers request allowance. Keep the address to yourself. Cloudflare Access protection would admit only Appflare's users signed in through a browser, so scripts and other programs could no longer call it."
     }
   ]
 }

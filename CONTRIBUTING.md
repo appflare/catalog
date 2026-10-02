@@ -858,18 +858,20 @@ change is one of these:
   needs no new release and no revision (once the entry has a published revision,
   an edit to any of them needs the next revision too, since a published revision
   never changes; see "Revisions").
-- **A revision: the form and copy only.** Raise `revision` by one (it is 1 when
-  omitted) in the same change. A revision may change `name`, `summary`, `homepage`,
-  `license`, `categories`, `maintainers`, `secrets`, `vars`, `postInstall` and
-  `bump`, as well as the fields above (`REVISABLE_CATALOG_FIELDS` in `@appflare/schema`):
+- **A revision: the form, the copy and Cloudflare Access.** Raise `revision` by one
+  (it is 1 when omitted) in the same change. A revision may change `name`, `summary`,
+  `homepage`, `license`, `categories`, `maintainers`, `secrets`, `vars`, `postInstall`,
+  `bump` and `access`, as well as the fields above (`REVISABLE_CATALOG_FIELDS` in
+  `@appflare/schema`), and may add `"access"` to `requires` (nothing else there):
   labels and help text, a var that becomes a `select`, a secret the app already
-  reads but the entry forgot. Nothing is built. The release stays exactly as it
+  reads but the entry forgot, Cloudflare Access protection for an app that has no
+  sign-in. Nothing is built. The release stays exactly as it
   is; the revised manifest is signed by the catalog's release key and published
   next to the index (see "Revisions" below). Managers switch to the new form
   without an update and without a job.
 
-Anything else (`source`, `install`, `plan`, `requires`, `tokenPermissions`,
-`resources`) changes what gets built, provisioned, or asked of the account. To ship
+Anything else (`source`, `install`, `plan`, any other change to `requires`,
+`tokenPermissions`, `resources`) changes what gets built, provisioned, or asked of the account. To ship
 it, re-pin `source`: a newer `source.sha` (for branch pins), or a new tag in
 `source.ref` and its `source.sha`. When the release's version comes from
 `source.version`, bump that too.
@@ -915,9 +917,11 @@ how the manifest parses.
 Which copy is authoritative: the `manifest.json` inside the release is the
 artifact's and never changes. It alone decides the Worker and every field a
 revision may not change. For the install and settings forms and the copy, managers
-use the revised manifest the row lists. A revision may change only form fields and
-copy, but those do reach the Worker: var defaults become its vars, and generated
-secrets its secrets. That is why the revised file is signed by the catalog's
+use the revised manifest the row lists, and they read `access` and `"access"` in
+`requires` from it too. A revision may change only form fields, copy and Access
+protection, but those do reach the app: var defaults become its vars, generated
+secrets its secrets, and `access` decides who reaches it and what stays public. That
+is why the revised file is signed by the catalog's
 release key, and why managers use it only after checking its sha256 against the
 index, its signature under the release's key id, and its fields against the signed
 `manifest.json` (same app, only revisable fields changed, vars that suit the signed

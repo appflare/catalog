@@ -18,10 +18,13 @@ hand.
 
 ## Notes
 
-- **Sign-in.** `/admin` uses the admin password. To protect it with Cloudflare Access
-  instead, attach a custom domain to the Worker, create an Access application for the
-  `/admin` path, and set the team domain and audience tag in the app's settings; the
-  password sign-in then turns off.
+- **Sign-in.** `/admin` uses the admin password. Appflare can also put the app behind
+  Cloudflare Access (switched off by default; only then does the account need a Zero
+  Trust organization). Every Appflare user then signs in through Access, and Appflare
+  fills in the team domain and the audience tag, which turns the password sign-in off.
+  The pay pages, their PDFs, the Stripe and PayPal webhooks, the pay pages' styles and
+  fonts, and `/health` stay public for your clients and uptime monitors. Turning protection off empties the two
+  values again, and the password works as before.
 - **API keys.** Stripe, PayPal and Resend keys can be set here as secrets or entered in
   the app's Settings page, which stores them in D1 encrypted with the generated
   `SETTINGS_MASTER_KEY`.

@@ -37,7 +37,7 @@ import type { VersionResolver } from "./versions.ts";
  *   next revision: a signed revision never changes);
  * - a complete release with a different catalog manifest and no revision
  *   above the release's: error; the author must re-pin `source`, or raise
- *   `revision` when only the form and copy changed. Fields in
+ *   `revision` when only the form, the copy or Cloudflare Access changed. Fields in
  *   {@link INDEX_ONLY_FIELDS} do not count: the index reads them from the
  *   current manifest, so they need no new release;
  * - a draft, prerelease, or incomplete release: the lookup throws, naming it.
@@ -164,7 +164,7 @@ export async function decide(
         : "this entry's version comes from source.version, so bump it (and re-pin `source` " +
           "if the app changed) to publish the change") +
       (revisionBlocker === null
-        ? `, or bump revision to ${next}: only the form and copy changed, so no new build is needed.`
+        ? `, or bump revision to ${next}: only what a revision may change changed (the form, the copy, Cloudflare Access), so no new build is needed.`
         : `. Bumping revision cannot publish it: ${revisionBlocker}.`),
   };
 }
