@@ -17,7 +17,7 @@
     { "name": "Every App", "url": "https://everyapp.dev", "github": "every-app" }
   ],
   "maintainers": ["MendyLanda"],
-  "source": { "ref": "v0.1.9", "sha": "84e4705503ceaef54d1b284c167de9942563cdae" },
+  "source": { "ref": "v0.1.10", "sha": "95c4d10c1c1d7bf57ad7328a682a86e16eec2f06" },
   "install": {
     "tier": "self-deploying",
     "packageManager": "pnpm",
