@@ -13,7 +13,7 @@
   "categories": ["remote-access", "developer-tools"],
   "authors": [{ "name": "Harshal Gajjar", "github": "harshalgajjar" }],
   "maintainers": ["MendyLanda"],
-  "source": { "ref": "v3.14.19", "sha": "49baa3576d146314b177a33b5cfee15a44b2f289" },
+  "source": { "ref": "v3.15.6", "sha": "342bf81bf768d82f58b0a7ea0915f1fd788a3199" },
   "install": {
     "packageManager": "npm",
     "wranglerConfig": "cloudflare/wrangler.toml",
