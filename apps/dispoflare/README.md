@@ -8,10 +8,14 @@ month later when you asked for that. Licensed MIT.
 
 ## Notes
 
-- **No sign-in.** Upstream expects Cloudflare Access in front of the app. Turn it on
-  for the Worker's workers.dev address (or custom domain) before using it; until then
-  anyone with the address can see your destination addresses and add or remove
-  forwarding addresses.
+- **No sign-in.** Upstream expects Cloudflare Access in front of the app, since anyone
+  who reaches it can see your destination addresses and add or remove forwarding
+  addresses. Appflare installs it only behind Cloudflare Access, which lets in only the
+  people who use this Appflare, so the account needs a Zero Trust organization (its
+  free plan is enough), and its protection cannot be turned off.
+- **Installed before Appflare could protect apps?** Delete any Access application you
+  made for the Worker in the Zero Trust dashboard, then turn on **Cloudflare Access** on
+  the app's page in Appflare.
 - **Its own token.** The app calls the Cloudflare API with `CLOUDFLARE_API_TOKEN`, a
   token you create with Email Routing Addresses Read (account), Email Routing Rules
   Edit, Zone Read and Zone Settings Read. `CLOUDFLARE_ACCOUNT_ID` is filled in with the

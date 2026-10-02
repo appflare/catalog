@@ -7,6 +7,9 @@
   "repo": "cloudflare/agentic-inbox",
   "license": "Apache-2.0",
   "categories": ["email", "ai"],
+  // Upstream has not moved since the released pin, so the Access protection
+  // below is a revision of that build.
+  "revision": 2,
   "authors": [
     { "name": "Cloudflare", "url": "https://www.cloudflare.com", "github": "cloudflare" }
   ],
@@ -24,8 +27,9 @@
     // Upstream's build script; the wrangler config has no build.command.
     "buildCommand": "react-router build",
     // Every route sits behind the app's own Cloudflare Access check, which
-    // refuses a request without an Access token, and answers 500 until
-    // POLICY_AUD and TEAM_DOMAIN are set. Any answer of the Worker counts.
+    // refuses a request without an Access token and answers 500 while
+    // POLICY_AUD and TEAM_DOMAIN are empty, as on the unprotected install
+    // check. Any answer of the Worker counts.
     "health": { "mode": "any-response" },
     // Upstream's setup points the zone's catch-all rule at the Worker; mail to
     // an address without a mailbox is dropped by the app.
@@ -35,12 +39,29 @@
   // plan. Sending works for free only to addresses verified in Email Routing;
   // sending to anyone else needs Workers Paid and Email Sending.
   "plan": "free",
-  "requires": ["zone", "email-routing", "r2", "workers-ai"],
-  // POLICY_AUD and TEAM_DOMAIN come from Cloudflare Access, which can only be
-  // turned on for the Worker after it exists, so they are set afterwards as
-  // secrets in the Worker's settings (see below); updates keep them.
-  "secrets": [],
+  "requires": ["zone", "email-routing", "r2", "workers-ai", "access"],
+  // The app has no sign-in of its own: workers/app.ts refuses every request
+  // without a Cloudflare Access token it can verify, so it installs only
+  // behind Appflare's Access application. Mail arrives through the email
+  // handler, which Access does not see; nothing else must stay public.
+  "access": { "mode": "required" },
   "vars": [
+    {
+      // workers/app.ts getAccessUrls: a full https URL, either the team's
+      // origin or its /cdn-cgi/access/certs URL (wrangler.jsonc says either
+      // works). The certs URL is empty while the app is unprotected, which the
+      // app answers with its "must be configured" error.
+      "name": "TEAM_DOMAIN",
+      "label": "Cloudflare Access keys",
+      "help": "Filled in by Appflare from the app's Cloudflare Access protection: where your Zero Trust team publishes the keys that sign its sign-ins.",
+      "default": "{{accessCertsUrl}}"
+    },
+    {
+      "name": "POLICY_AUD",
+      "label": "Cloudflare Access audience (AUD) tag",
+      "help": "Filled in by Appflare: the audience tag of the app's Cloudflare Access application.",
+      "default": "{{accessAud}}"
+    },
     {
       "name": "DOMAINS",
       "label": "Mail domain",
@@ -62,11 +83,7 @@
   "postInstall": [
     {
       "type": "markdown",
-      "content": "**The app refuses every request until Cloudflare Access protects it.** In the Cloudflare dashboard, open Workers & Pages, select this Worker, open Settings, Domains & Routes, and turn on Cloudflare Access for its workers.dev address. The dialog shows the application audience (AUD) tag and the team domain. Add them as secrets of the Worker named `POLICY_AUD` and `TEAM_DOMAIN` (the team domain as `https://<team>.cloudflareaccess.com`)."
-    },
-    {
-      "type": "markdown",
-      "content": "Then open {{appUrl}}, sign in through Access, and create a mailbox for an address in your domain, for example `hello@example.com`. Mail to addresses without a mailbox is dropped."
+      "content": "Open {{appUrl}}, sign in through Cloudflare Access with the email of your Appflare account, and create a mailbox for an address in your domain, for example `hello@example.com`. Mail to addresses without a mailbox is dropped."
     },
     {
       "type": "markdown",
@@ -74,7 +91,7 @@
     },
     {
       "type": "markdown",
-      "content": "Anyone who passes the Access policy can open every mailbox, including through the MCP server at {{appUrl}}/mcp, so keep the policy to the people who should read all of them."
+      "content": "Every Appflare user can sign in and open every mailbox, including through the MCP server at {{appUrl}}/mcp, so install it only on an Appflare whose users should read all of them."
     }
   ]
 }
