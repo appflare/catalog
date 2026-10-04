@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-04T10:27:05.989Z",
+  "generatedAt": "2026-10-04T16:40:03.097Z",
   "apps": [
     {
       "slug": "2fa",
@@ -43,7 +43,8 @@
         "utilities"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "888wiki",
@@ -112,7 +113,8 @@
         "productivity"
       ],
       "license": "AGPL-3.0-only",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "agentic-inbox",
@@ -133,7 +135,8 @@
         "zone",
         "email-routing",
         "r2",
-        "workers-ai"
+        "workers-ai",
+        "access"
       ],
       "lastVerified": "2026-10-04T10:06:25.000Z",
       "authors": [
@@ -164,14 +167,22 @@
         "durable-objects",
         "workers-ai",
         "email-routing",
-        "zone"
+        "zone",
+        "access"
       ],
       "categories": [
         "email",
         "ai"
       ],
       "license": "Apache-2.0",
-      "revision": 1
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/agentic-inbox/manifest.json",
+        "sha256": "b322fca3e5c06d1721d4a9c40f916c0c4b1160f43246388b8f4c402a8eae5977",
+        "keyId": "catalog-2026-09",
+        "signature": "OSEoPkwqirGsIumt/0GoRPwVVId4jDt2ZhuLdrvrb1EMFmKE8Zq4THwu5KbYG7yvwO41c1kCtxhE4dvxeU/+CA=="
+      },
+      "accessOffer": "required"
     },
     {
       "slug": "alle",
@@ -215,7 +226,8 @@
         "productivity"
       ],
       "license": "NONE",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "analytics-explorer",
@@ -264,7 +276,8 @@
         "developer-tools"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "atalaya",
@@ -311,7 +324,8 @@
         "developer-tools"
       ],
       "license": "Apache-2.0",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "auth-inbox",
@@ -367,7 +381,8 @@
         "ai"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "auto-reaction-bot",
@@ -416,7 +431,8 @@
         "chat"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "bark-worker",
@@ -451,7 +467,8 @@
         "notifications"
       ],
       "license": "GPL-3.0-only",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "bashupload",
@@ -491,7 +508,8 @@
         "sharing"
       ],
       "license": "NONE",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "binthere",
@@ -540,7 +558,8 @@
         "privacy"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "blobatar",
@@ -597,7 +616,8 @@
         "utilities"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "bookshelf",
@@ -659,7 +679,14 @@
         "productivity"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/bookshelf/manifest.json",
+        "sha256": "b04724b4854ae141d9b03bdf3440ed8aaecb249d8fe57badba868f3d90b58d0b",
+        "keyId": "catalog-2026-09",
+        "signature": "lI118SxmYgrDn/wHO7S6NIFGE6/6BP+69vnjgAmU+gz93Tb772QiFbsZrZer3/rVVl5besMjn859bDHP+wQ6DQ=="
+      },
+      "accessOffer": "recommended"
     },
     {
       "slug": "browser-relay",
@@ -702,7 +729,8 @@
         "remote-access"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "cap-worker",
@@ -738,7 +766,8 @@
         "developer-tools"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "cattopic",
@@ -788,7 +817,8 @@
         "files"
       ],
       "license": "GPL-3.0-only",
-      "revision": 2
+      "revision": 2,
+      "accessOffer": "offered"
     },
     {
       "slug": "cf-nav",
@@ -831,7 +861,8 @@
         "utilities"
       ],
       "license": "NONE",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "cf-server-monitor",
@@ -899,7 +930,8 @@
         "developer-tools"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "cftgsx",
@@ -935,7 +967,8 @@
         "bots"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "chatgpt-telegram-workers",
@@ -983,7 +1016,8 @@
         "bots"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "civideo",
@@ -1029,7 +1063,8 @@
         "family"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "clist",
@@ -1072,7 +1107,8 @@
         "files"
       ],
       "license": "MIT",
-      "revision": 2
+      "revision": 2,
+      "accessOffer": "offered"
     },
     {
       "slug": "cloudflare-prometheus-exporter",
@@ -1121,7 +1157,8 @@
         "developer-tools"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "cloudflarebase",
@@ -1178,7 +1215,8 @@
         "files"
       ],
       "license": "Apache-2.0",
-      "revision": 2
+      "revision": 2,
+      "accessOffer": "offered"
     },
     {
       "slug": "cloudmark",
@@ -1226,7 +1264,8 @@
         "utilities"
       ],
       "license": "AGPL-3.0-only",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "cloudssh",
@@ -1270,7 +1309,8 @@
         "developer-tools"
       ],
       "license": "Apache-2.0",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "collection-down",
@@ -1305,7 +1345,8 @@
         "utilities"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "counterscale",
@@ -1363,7 +1404,8 @@
         "analytics"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "cut",
@@ -1405,7 +1447,8 @@
         "utilities"
       ],
       "license": "MIT",
-      "revision": 3
+      "revision": 3,
+      "accessOffer": "offered"
     },
     {
       "slug": "deepcrawl",
@@ -1450,7 +1493,8 @@
         "ai"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "dictdeck",
@@ -1498,7 +1542,8 @@
         "ai"
       ],
       "license": "NONE",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "dispoflare",
@@ -1517,7 +1562,8 @@
       "plan": "free",
       "requires": [
         "zone",
-        "email-routing"
+        "email-routing",
+        "access"
       ],
       "lastVerified": "2026-10-04T10:09:40.000Z",
       "authors": [
@@ -1534,14 +1580,22 @@
       "services": [
         "cron",
         "email-routing",
-        "zone"
+        "zone",
+        "access"
       ],
       "categories": [
         "email",
         "privacy"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/dispoflare/manifest.json",
+        "sha256": "0a65b652a2b24ec3d347bb8342d94f5476940099315b4886601158030ee9ff7b",
+        "keyId": "catalog-2026-09",
+        "signature": "+BmOCnAue/GiAzasBM0MDukMEzeZTtNISrTkd5nZs59p6WdMCquWdw/c7x4T+4RAePNJDPP+4wVnNH+tfJv1Ag=="
+      },
+      "accessOffer": "required"
     },
     {
       "slug": "durable-git",
@@ -1580,7 +1634,8 @@
         "developer-tools"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "edgechat",
@@ -1639,7 +1694,8 @@
         "chat"
       ],
       "license": "GPL-3.0-or-later",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "edgeever",
@@ -1686,7 +1742,8 @@
         "productivity"
       ],
       "license": "AGPL-3.0-only",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "edgekey",
@@ -1736,7 +1793,8 @@
         "ecommerce"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "edgemetry",
@@ -1784,7 +1842,8 @@
         "analytics"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "elm-chat",
@@ -1838,7 +1897,8 @@
         "privacy"
       ],
       "license": "AGPL-3.0-only",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "email-explorer",
@@ -1896,7 +1956,8 @@
         "email"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "emailflare",
@@ -1950,7 +2011,8 @@
         "business"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "emdash",
@@ -2010,7 +2072,8 @@
         "cms"
       ],
       "license": "MIT",
-      "revision": 2
+      "revision": 2,
+      "accessOffer": "offered"
     },
     {
       "slug": "exception-notify",
@@ -2055,7 +2118,8 @@
         "monitoring"
       ],
       "license": "Apache-2.0",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "feedlog",
@@ -2146,7 +2210,8 @@
         "productivity"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "firefly-iii-mcp",
@@ -2182,7 +2247,8 @@
         "ai"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "flaremo",
@@ -2248,7 +2314,8 @@
         "notes"
       ],
       "license": "AGPL-3.0-only",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "fodi",
@@ -2293,7 +2360,8 @@
         "sharing"
       ],
       "license": "GPL-3.0-only",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "folia",
@@ -2333,7 +2401,8 @@
         "media"
       ],
       "license": "AGPL-3.0-only",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "formzero",
@@ -2382,7 +2451,8 @@
         "utilities"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "freemail",
@@ -2474,7 +2544,8 @@
         "privacy"
       ],
       "license": "Apache-2.0",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "fxtiktok",
@@ -2510,7 +2581,8 @@
         "utilities"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "garrul",
@@ -2603,7 +2675,8 @@
         "community"
       ],
       "license": "Apache-2.0",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "git-on-cloudflare",
@@ -2645,7 +2718,8 @@
         "developer-tools"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "glance",
@@ -2696,7 +2770,8 @@
         "developer-tools"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "gmshop",
@@ -2748,7 +2823,8 @@
         "business"
       ],
       "license": "GPL-3.0-or-later",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "hashpay",
@@ -2803,7 +2879,8 @@
         "business"
       ],
       "license": "Apache-2.0",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "hqbase",
@@ -2859,7 +2936,8 @@
         "productivity"
       ],
       "license": "AGPL-3.0-only",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "imgbed",
@@ -2923,7 +3001,8 @@
         "sharing"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "infiplot",
@@ -2996,7 +3075,14 @@
         "games"
       ],
       "license": "AGPL-3.0-only",
-      "revision": 1
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/infiplot/manifest.json",
+        "sha256": "9088c78d01a45311dcc910252bac50459faa46a28adb3d4a337a8dca56830d67",
+        "keyId": "catalog-2026-09",
+        "signature": "S85NhzFzLsULrZnJZDZZkb+qavInqtiEvE08l9gPe2PmDUjoo/BAOAHPAH40d42fXUML8/fP/eCIYPxmpLfqCA=="
+      },
+      "accessOffer": "recommended"
     },
     {
       "slug": "inkstone",
@@ -3048,7 +3134,8 @@
         "productivity"
       ],
       "license": "LGPL-3.0-only",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "insightflare",
@@ -3129,7 +3216,8 @@
         "analytics"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "isupmap",
@@ -3178,7 +3266,8 @@
         "monitoring"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "jant",
@@ -3236,7 +3325,8 @@
         "community"
       ],
       "license": "AGPL-3.0-or-later",
-      "revision": 2
+      "revision": 2,
+      "accessOffer": "offered"
     },
     {
       "slug": "jina-mcp",
@@ -3272,7 +3362,8 @@
         "developer-tools"
       ],
       "license": "Apache-2.0",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "kiss-worker",
@@ -3310,7 +3401,8 @@
         "utilities"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "kukuroo",
@@ -3356,7 +3448,8 @@
         "notifications"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "larafeed",
@@ -3410,7 +3503,8 @@
         "productivity"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "lastfm-recently-played",
@@ -3444,7 +3538,8 @@
         "utilities"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "llm-api-proxy",
@@ -3479,7 +3574,8 @@
         "developer-tools"
       ],
       "license": "GPL-3.0-only",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "mail2telegram",
@@ -3535,7 +3631,8 @@
         "bots"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "mailclaw",
@@ -3587,7 +3684,8 @@
         "ai"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "mailflare",
@@ -3657,7 +3755,8 @@
         "email"
       ],
       "license": "AGPL-3.0-only",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "mailysend",
@@ -3744,7 +3843,8 @@
         "marketing"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "md-page",
@@ -3812,7 +3912,8 @@
         "developer-tools"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "memory-note",
@@ -3851,7 +3952,8 @@
         "developer-tools"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "microfeed",
@@ -3911,7 +4013,8 @@
         "media"
       ],
       "license": "AGPL-3.0-only",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "minshop",
@@ -3985,7 +4088,8 @@
         "finance"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "minvoice",
@@ -4002,7 +4106,9 @@
       },
       "tier": "artifact",
       "plan": "free",
-      "requires": [],
+      "requires": [
+        "access"
+      ],
       "lastVerified": "2026-10-04T10:15:51.000Z",
       "authors": [
         {
@@ -4049,14 +4155,22 @@
       },
       "services": [
         "d1",
-        "cron"
+        "cron",
+        "access"
       ],
       "categories": [
         "business",
         "finance"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/minvoice/manifest.json",
+        "sha256": "2458b7dad738dc7db3c9c96955e0e5ef95b9484529c86ddcc0c3d4fec5775cff",
+        "keyId": "catalog-2026-09",
+        "signature": "BmQPEI2o1PTwWlD0hUGES/QvBA7r6EFDkxzEj4zoMullf8FQnTHIhh4CILQuajHakx3DYyz+CtBox5ToZ748BQ=="
+      },
+      "accessOffer": "offered"
     },
     {
       "slug": "mpp-proxy",
@@ -4099,7 +4213,8 @@
         "developer-tools"
       ],
       "license": "Apache-2.0",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "nabiz",
@@ -4152,7 +4267,8 @@
         "utilities"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "neriplayer-listen-together",
@@ -4195,7 +4311,8 @@
         "sync"
       ],
       "license": "NONE",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "ni-mail",
@@ -4238,7 +4355,8 @@
         "developer-tools"
       ],
       "license": "Apache-2.0",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "nodecrypt",
@@ -4282,7 +4400,8 @@
         "privacy"
       ],
       "license": "ISC",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "nodewarden",
@@ -4331,7 +4450,8 @@
         "passwords"
       ],
       "license": "LGPL-3.0-only",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "nodrix",
@@ -4387,7 +4507,8 @@
         "developer-tools"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "omnimail",
@@ -4445,7 +4566,8 @@
         "email"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "one-ip",
@@ -4498,7 +4620,8 @@
         "utilities"
       ],
       "license": "AGPL-3.0-only",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "open-artifacts",
@@ -4551,7 +4674,8 @@
         "sharing"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "open-seo",
@@ -4653,7 +4777,8 @@
         "ai"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "openshortlink",
@@ -4702,7 +4827,8 @@
         "analytics"
       ],
       "license": "AGPL-3.0-only",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "openstory",
@@ -4760,7 +4886,8 @@
         "media"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "pastebin-worker",
@@ -4801,7 +4928,8 @@
         "sharing"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "placeholders-dev",
@@ -4853,7 +4981,8 @@
         "utilities"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "playwright-mcp",
@@ -4903,7 +5032,8 @@
         "developer-tools"
       ],
       "license": "Apache-2.0",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "private-notes",
@@ -4946,7 +5076,8 @@
         "privacy"
       ],
       "license": "NONE",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "projektor",
@@ -4954,19 +5085,20 @@
       "summary": "An issue tracker and wiki for teams and their AI coding agents: issues, boards, sprints and pages in the browser, and the same actions over MCP.",
       "tagline": "Track team issues and keep a wiki alongside AI coding agents",
       "addedAt": "2026-09-27T06:13:42+03:00",
-      "version": "0.7.1",
+      "version": "0.7.6",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/projektor@0.7.1/projektor-0.7.1.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/projektor@0.7.1/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/projektor@0.7.1/manifest.sig",
-        "digest": "ad9c8e1b8151e599e3c9f43ec0630633b0157778493973dba462d669d9999bf2"
+        "zip": "https://github.com/appflare/catalog/releases/download/projektor@0.7.6/projektor-0.7.6.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/projektor@0.7.6/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/projektor@0.7.6/manifest.sig",
+        "digest": "f59c21932ddd814eb9c32dd620f41bc2d696d7a54be9c59de3edb84033fd5ee5"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
-        "r2"
+        "r2",
+        "access"
       ],
-      "lastVerified": "2026-10-04T10:19:01.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Thomas Dickson",
@@ -4998,7 +5130,9 @@
         "kv",
         "d1",
         "r2",
-        "cron"
+        "durable-objects",
+        "cron",
+        "access"
       ],
       "categories": [
         "productivity",
@@ -5006,7 +5140,8 @@
         "ai"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "required"
     },
     {
       "slug": "punctual",
@@ -5068,7 +5203,8 @@
         "scheduling"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "quickinbox",
@@ -5146,7 +5282,8 @@
         "email"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "r2-explorer",
@@ -5164,7 +5301,8 @@
       "tier": "artifact",
       "plan": "free",
       "requires": [
-        "r2"
+        "r2",
+        "access"
       ],
       "lastVerified": "2026-10-04T10:18:56.000Z",
       "authors": [
@@ -5201,13 +5339,21 @@
         ]
       },
       "services": [
-        "r2"
+        "r2",
+        "access"
       ],
       "categories": [
         "files"
       ],
       "license": "MIT",
-      "revision": 2
+      "revision": 3,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/r2-explorer/manifest.json",
+        "sha256": "b08abc0d5e1d35337eda762bf8dc8a9dade102723ea907035f8675cbe8816857",
+        "keyId": "catalog-2026-09",
+        "signature": "KAPjGSvRN/FSv/1BNPlKlO+MmD6jAuMK/D87j78mx3IVnvMI3mpcs0dZM9OXuLjso+DRUk3aWyYQQmLYtRK+Bw=="
+      },
+      "accessOffer": "required"
     },
     {
       "slug": "r2-webdav",
@@ -5244,7 +5390,8 @@
         "files"
       ],
       "license": "NONE",
-      "revision": 2
+      "revision": 2,
+      "accessOffer": "offered"
     },
     {
       "slug": "rdyrct",
@@ -5302,7 +5449,8 @@
         "analytics"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "relay",
@@ -5338,7 +5486,8 @@
         "analytics"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "reminal",
@@ -5391,7 +5540,8 @@
         "developer-tools"
       ],
       "license": "AGPL-3.0-or-later",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "renewhelper",
@@ -5462,7 +5612,8 @@
         "notifications"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "renewlet",
@@ -5527,7 +5678,8 @@
         "productivity"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "resolvehq",
@@ -5581,7 +5733,8 @@
       ],
       "license": "LicenseRef-ResolveHQ-Source-Available",
       "licenseNote": "Source-available: free to run for personal or internal use; selling it, hosting it for others or sharing copies needs the author's permission",
-      "revision": 2
+      "revision": 2,
+      "accessOffer": "offered"
     },
     {
       "slug": "rsshub-never-die",
@@ -5616,7 +5769,8 @@
         "networking"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "rssworker",
@@ -5650,7 +5804,8 @@
         "utilities"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "scrapedown",
@@ -5686,7 +5841,14 @@
         "utilities"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/scrapedown/manifest.json",
+        "sha256": "4d91adbb0e66620e42a0f0775289f6d0c4cca725d4a30e56dcf826221bb0e6e3",
+        "keyId": "catalog-2026-09",
+        "signature": "Pdb0gymZoNfSah5Fe+LCqK1ZG0ohFcPMv2FdZZoI3jrX0BgGF4Rg70UbZ3wtK+DbTdJxRZOMOLtRriJN/ECyBQ=="
+      },
+      "accessOffer": "offered"
     },
     {
       "slug": "screencapture-live",
@@ -5722,7 +5884,8 @@
         "media"
       ],
       "license": "AGPL-3.0-only",
-      "revision": 2
+      "revision": 2,
+      "accessOffer": "offered"
     },
     {
       "slug": "screendrop",
@@ -5769,7 +5932,8 @@
         "media"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "second-brain-cloudflare",
@@ -5820,7 +5984,8 @@
         "productivity"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "seeder",
@@ -5908,7 +6073,8 @@
         "business"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "semanticsearch",
@@ -5955,7 +6121,8 @@
         "ai"
       ],
       "license": "Apache-2.0",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "sharehtml",
@@ -5973,7 +6140,8 @@
       "tier": "artifact",
       "plan": "free",
       "requires": [
-        "r2"
+        "r2",
+        "access"
       ],
       "lastVerified": "2026-10-04T10:21:21.000Z",
       "authors": [
@@ -6001,14 +6169,22 @@
       },
       "services": [
         "r2",
-        "durable-objects"
+        "durable-objects",
+        "access"
       ],
       "categories": [
         "files",
         "sharing"
       ],
       "license": "Apache-2.0",
-      "revision": 1
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/sharehtml/manifest.json",
+        "sha256": "4a8b747ac2c0e095a95329330d8d9a666ba0e5fe7a28b7a446fead7936b8991f",
+        "keyId": "catalog-2026-09",
+        "signature": "qu4/bn50/hAN94MXnDR2MgFICIAUempV5LFOjqTDrH1epVybpQHLqQXcSlN2OaSBk0KZ9Qrf6Ga619WprsXNBQ=="
+      },
+      "accessOffer": "recommended"
     },
     {
       "slug": "shotsync",
@@ -6063,7 +6239,8 @@
         "sharing"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "shrtnr",
@@ -6138,7 +6315,14 @@
         "analytics"
       ],
       "license": "Apache-2.0",
-      "revision": 1
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/shrtnr/manifest.json",
+        "sha256": "e23124775da921ee06c5e9671f2c5b1bac1770eea4f61dbd7b54c2e8ef0f3a72",
+        "keyId": "catalog-2026-09",
+        "signature": "NElV9KNRVI47AgU6VknXbkrDXr2qixCE8KsA6//JMj5RGTpkE6BkUX5xrBwYSm/umz3KNw+hsWtRPU24nsP+DQ=="
+      },
+      "accessOffer": "offered"
     },
     {
       "slug": "sink",
@@ -6206,7 +6390,8 @@
         "analytics"
       ],
       "license": "AGPL-3.0-only",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "skland-attendance",
@@ -6249,7 +6434,8 @@
         "utilities"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "statusbeam",
@@ -6301,7 +6487,8 @@
         "utilities"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "sveltia-cms-auth",
@@ -6339,7 +6526,8 @@
         "developer-tools"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "synch",
@@ -6396,7 +6584,8 @@
         "sync"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "telegram-push",
@@ -6432,7 +6621,8 @@
         "bots"
       ],
       "license": "NONE",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "tempik",
@@ -6480,7 +6670,8 @@
         "privacy"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "ternssh",
@@ -6497,7 +6688,9 @@
       },
       "tier": "artifact",
       "plan": "free",
-      "requires": [],
+      "requires": [
+        "access"
+      ],
       "lastVerified": "2026-10-04T10:22:45.000Z",
       "authors": [
         {
@@ -6524,14 +6717,22 @@
       },
       "services": [
         "d1",
-        "durable-objects"
+        "durable-objects",
+        "access"
       ],
       "categories": [
         "remote-access",
         "developer-tools"
       ],
       "license": "GPL-3.0-or-later",
-      "revision": 1
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/ternssh/manifest.json",
+        "sha256": "1c74d016b2301c43f821905272fcb16d518ab340a4970812ca3304a59d36d201",
+        "keyId": "catalog-2026-09",
+        "signature": "sU15C18nFhX4R5c3gHRNV5tJH26hUCdWXGG+CqV1fmUiKSiMfJYxNquncPKFqIIWP3NGHYcgdxrOLcsuDHT9BA=="
+      },
+      "accessOffer": "offered"
     },
     {
       "slug": "token-monitor",
@@ -6575,7 +6776,8 @@
         "monitoring"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "turborepo-remote-cache",
@@ -6622,7 +6824,8 @@
         "developer-tools"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "unifi-ddns",
@@ -6658,7 +6861,8 @@
         "networking"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "usage-guard-collector",
@@ -6666,17 +6870,17 @@
       "summary": "Usage surge alerts for your Cloudflare account: reads daily Workers, D1, Durable Objects, KV, R2 and Queues counts into D1 and pings Discord or Slack when a meter jumps.",
       "tagline": "Get alerts when your Cloudflare usage suddenly jumps",
       "addedAt": "2026-09-27T04:19:23+03:00",
-      "version": "0.0.0-20260926.c5f9e9d",
+      "version": "0.0.0-20260930.f9809bb",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/usage-guard-collector@0.0.0-20260926.c5f9e9d/usage-guard-collector-0.0.0-20260926.c5f9e9d.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/usage-guard-collector@0.0.0-20260926.c5f9e9d/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/usage-guard-collector@0.0.0-20260926.c5f9e9d/manifest.sig",
-        "digest": "8b3a4367595fa0ef93fd010f35df8a9d7228ff673bc38da75483487694363d32"
+        "zip": "https://github.com/appflare/catalog/releases/download/usage-guard-collector@0.0.0-20260930.f9809bb/usage-guard-collector-0.0.0-20260930.f9809bb.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/usage-guard-collector@0.0.0-20260930.f9809bb/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/usage-guard-collector@0.0.0-20260930.f9809bb/manifest.sig",
+        "digest": "01f2af16f2e78807fe0a9857656c4f510b6b304e0df5e1f64517a8d963d7c81d"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-10-04T10:23:32.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Howard",
@@ -6696,7 +6900,8 @@
         "utilities"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "recommended"
     },
     {
       "slug": "veet",
@@ -6740,7 +6945,8 @@
         "chat"
       ],
       "license": "NONE",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "vps-jsq",
@@ -6789,7 +6995,8 @@
         "utilities"
       ],
       "license": "Apache-2.0",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "webrtc-turn",
@@ -6824,7 +7031,8 @@
         "sync"
       ],
       "license": "GPL-3.0-or-later",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "workers-firecrawl",
@@ -6864,7 +7072,8 @@
         "ai"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "wx2md",
@@ -6904,7 +7113,8 @@
         "ai"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "xiadd-pastebin",
@@ -6950,7 +7160,8 @@
         "developer-tools"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     },
     {
       "slug": "yaos",
@@ -7009,7 +7220,8 @@
         "sync"
       ],
       "license": "0BSD",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "offered"
     }
   ],
   "featured": [],
