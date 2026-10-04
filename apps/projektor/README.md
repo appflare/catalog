@@ -25,6 +25,13 @@ could not reach it with an Access service token either, and Projektor refuses
 service-token sign-ins anyway. `/oauth/authorize`, where you approve a client, stays
 behind Access.
 
+Two features reach people without an Access session, each checked by its own token, so
+their paths are public too: issue share links (`/share/*`, the data and logo under
+`/api/share/*`, and the page's scripts, styles and font under `/_astro/*` and
+`/fonts/*`), and feedback that other sites send to `/api/feedback/submit` with a
+feedback source's token. Everything else, the board, issues and wiki included, asks
+for a sign-in.
+
 Installed before Appflare could protect apps? Delete the Access applications you made
 for the Worker in the Zero Trust dashboard, turn on **Cloudflare Access** on the app's
 page in Appflare, then update.
