@@ -31,5 +31,4 @@ hand.
 - **Email.** Resend is the email provider: verify your sending domain at Resend and add
   its API key. Upstream's other provider, Cloudflare Email Sending, needs a `send_email`
   binding that only its production config has, so it is not available here.
-- **Pin.** Upstream has no release tags, so the pin follows the default branch and each
-  bump is reviewed by a maintainer.
+- **Pin.** Upstream has no release tags, so the pin follows the default branch.

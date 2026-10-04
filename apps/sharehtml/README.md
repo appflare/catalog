@@ -30,5 +30,4 @@ Apache-2.0.
   Bun), which signs in through Access with `sharehtml login`.
 - **Build.** The Worker package is built with Vite from upstream's top-level wrangler
   environment; the auth vars its production environment sets come from the install form.
-- **Pin.** Upstream has no release tags, so the pin follows `main` and each bump is
-  reviewed by a maintainer.
+- **Pin.** Upstream has no release tags, so the pin follows `main`.

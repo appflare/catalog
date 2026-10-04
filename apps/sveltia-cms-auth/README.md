@@ -14,6 +14,5 @@ should sign in without making personal access tokens. Licensed MIT.
 - **Allowed hostnames.** Upstream treats `ALLOWED_DOMAINS` as optional and strongly
   recommends it. It is required here: the Worker hands access tokens only to pages on
   those hosts, and with an empty list it hands them to any site.
-- **Pin.** Upstream has no release tags, so the pin follows the default branch and each
-  bump is reviewed by a maintainer.
+- **Pin.** Upstream has no release tags, so the pin follows the default branch.
 - No images: the repository publishes none.

@@ -27,5 +27,4 @@ It never calls a Cloudflare write API: it cannot stop a Worker or change a setti
   the account. The cron runs either way.
 - **Numbers.** These are analytics counts, not the invoice, and sit a little above what
   is billed.
-- **Pin.** Upstream has no release tags, so the pin follows the default branch and each
-  bump is reviewed by a maintainer.
+- **Pin.** Upstream has no release tags, so the pin follows the default branch.
