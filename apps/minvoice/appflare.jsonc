@@ -9,8 +9,9 @@
   "license": "MIT",
   "categories": ["business", "finance"],
   // Upstream has not moved since the released pin, so the public paths below
-  // are a revision of that build.
-  "revision": 2,
+  // (revision 2) and the generated admin password (revision 3) are revisions
+  // of that build.
+  "revision": 3,
   "authors": [{ "name": "Daniel Yang", "url": "https://daniel-yang.com", "github": "ddyy" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags; the pin tracks the default branch, main.
@@ -49,9 +50,13 @@
   // encrypted with SETTINGS_MASTER_KEY; a secret set here wins over that.
   "secrets": [
     {
+      // Any non-empty value turns the password sign-in on
+      // (src/lib/admin-auth.ts:22), and the session key is a hash of it
+      // (:43-47).
       "name": "ADMIN_PASSWORD",
       "label": "Admin password",
-      "help": "Signs you in at /admin. Pick something long. Setting the Cloudflare Access team domain and audience tag (below) turns the password sign-in off."
+      "help": "Signs you in at /admin. Setting the Cloudflare Access team domain and audience tag (below) turns the password sign-in off.",
+      "generate": "password"
     },
     {
       "name": "SETTINGS_MASTER_KEY",

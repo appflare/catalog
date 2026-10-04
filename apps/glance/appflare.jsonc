@@ -7,6 +7,8 @@
   "repo": "plivo-labs/glance",
   "license": "MIT",
   "categories": ["developer-tools"],
+  // Generated secrets added after this release was published: a revision, no new build.
+  "revision": 2,
   "authors": [{ "name": "Plivo", "url": "https://www.plivo.com", "github": "plivo-labs" }],
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v0.14.0", "sha": "caaed8f60a5365a652a9d519f77bfcb489016585" },
@@ -44,15 +46,22 @@
       "generate": "password"
     },
     {
+      // Upstream makes it with `openssl rand -hex 32` (DEPLOY.md:60) and
+      // compares it as fixed-length MACs
+      // (packages/api/src/lib/bootstrap.ts:13-25), so any value works.
       "name": "BOOTSTRAP_TOKEN",
       "label": "First sign-in token",
       "help": "Paste it on the sign-in page to claim the first admin account (the admin email below). It stops working once an admin exists.",
+      "generate": "password",
       "workers": ["app"]
     },
     {
+      // An HMAC key upstream makes with `openssl rand -hex 32`
+      // (DEPLOY.md:65-68).
       "name": "DATA_TOKEN_SECRET",
       "label": "Data token secret",
-      "help": "Turns on the shared data backend for published sites (glance.db). Any long random value.",
+      "help": "Turns on the shared data backend for published sites (glance.db).",
+      "generate": "password",
       "optional": true,
       "workers": ["app"]
     },

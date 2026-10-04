@@ -10,6 +10,8 @@
   "repo": "YuriCrystal/relay",
   "license": "MIT",
   "categories": ["utilities", "analytics"],
+  // Generated secrets added after this release was published: a revision, no new build.
+  "revision": 2,
   "authors": [{ "name": "Yuri", "github": "YuriCrystal" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags, so the entry follows the default branch by commit.
@@ -37,9 +39,11 @@
       "generate": "password"
     },
     {
+      // Compared with plain equality (worker.js:214-217), so any value works.
       "name": "CONVERSION_TOKEN",
       "label": "Conversion token",
       "help": "When set, conversion reports to /track must carry it; without it anyone can report a conversion.",
+      "generate": "password",
       "optional": true
     },
     {

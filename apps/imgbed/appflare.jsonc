@@ -8,6 +8,8 @@
   "repo": "MarSeventh/CloudFlare-ImgBed",
   "license": "MIT",
   "categories": ["files", "sharing"],
+  // Generated secrets added after this release was published: a revision, no new build.
+  "revision": 2,
   "authors": [{ "name": "MarSeventh", "url": "https://home.sanyue.site", "github": "MarSeventh" }],
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v2.7.6", "sha": "bf9d8211ce6daa3af7b5b60685250bebcb2f681a" },
@@ -61,9 +63,12 @@
       "generate": "password"
     },
     {
+      // Any string, ideally a complex one (functions/api/auth/resetAuth.js:8-9),
+      // sent as ?key= (:28-29), so it must be URL-safe; a generated one is.
       "name": "RESET_KEY",
       "label": "Sign-in reset key",
       "help": "Opening /api/auth/resetAuth?key=<this key> clears the passwords saved in the admin panel and signs everyone out, so the admin and upload passwords above apply again. Leave unset unless you need it.",
+      "generate": "password",
       "optional": true
     },
     {

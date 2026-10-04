@@ -8,6 +8,8 @@
   "repo": "tianma-if/edgeever",
   "license": "AGPL-3.0-only",
   "categories": ["notes", "productivity"],
+  // Generated secrets added after this release was published: a revision, no new build.
+  "revision": 2,
   "authors": [{ "name": "tianma-if", "github": "tianma-if", "x": "tianma_if" }],
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v1.88.0", "sha": "3cfccb872ea68dea9007204a090fdc1bac60d322" },
@@ -32,9 +34,14 @@
       "generate": "password"
     },
     {
+      // Any non-empty string: upstream trims it and uses it as key material
+      // (apps/api/src/ai-service.ts:73-90). Keys saved before it is set stay
+      // readable, since the admin password's key stays in the decryption ring
+      // (:98-105).
       "name": "EDGE_EVER_CREDENTIALS_ENCRYPTION_KEY",
       "label": "Credentials encryption key",
       "help": "Optional. Encrypts the AI provider keys you save in the app, instead of a key derived from the admin password, so the password can change without re-entering them.",
+      "generate": "password",
       "optional": true
     }
   ],

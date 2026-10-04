@@ -9,11 +9,11 @@ Licensed MIT; the Seeder name and logo are the authors' trademarks.
 ## Before you install
 
 - **R2 enabled**, for uploaded images and files.
-- **An encryption key** for the Git integration: 32 random bytes in base64
-  (`openssl rand -base64 32`). The app does not start without it.
 
 ## Notes
 
+- **Encryption key.** The Git integration's key, 32 random bytes in base64, is generated
+  at install. The app does not start without it.
 - **First owner.** Only the owner email can create the first account at `/sign-in`;
   after that, people join by invite.
 - **App URL.** `BETTER_AUTH_URL` is filled in with the workers.dev address. After adding
