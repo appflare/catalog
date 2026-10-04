@@ -14,7 +14,7 @@
   "categories": ["ai", "monitoring"],
   "authors": [{ "name": "Javis", "url": "https://javis-ai.com", "github": "Javis603" }],
   "maintainers": ["MendyLanda"],
-  "source": { "ref": "v0.63.0", "sha": "f756d1d0fdbf415c1cd4a7178f3fe5d7a026fc90" },
+  "source": { "ref": "v0.66.0", "sha": "e7bac3aff6a1bc7cf74fd149a26d2730cfe32de8" },
   "install": {
     "packageManager": "npm",
     // The hub is its own npm project in worker/, with its own lockfile,
