@@ -1,51 +1,6 @@
 {
-  "generatedAt": "2026-10-04T17:17:58.272Z",
+  "generatedAt": "2026-10-04T19:56:34.698Z",
   "apps": [
-    {
-      "slug": "2fa",
-      "name": "2FA",
-      "summary": "A two-factor code manager for TOTP and HOTP keys: scan or import from Google Authenticator, Aegis, 2FAS, and Bitwarden, encrypted in KV, with backups to WebDAV, S3, OneDrive, or Google Drive.",
-      "tagline": "Store your two-factor codes with automatic backups",
-      "addedAt": "2026-09-26T23:19:31+03:00",
-      "version": "1.9.0",
-      "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/2fa@1.9.0/2fa-1.9.0.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/2fa@1.9.0/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/2fa@1.9.0/manifest.sig",
-        "digest": "0660cc7b9ccd4e681cb96cea314c2109638abe58460a483be416df6835924d24"
-      },
-      "tier": "artifact",
-      "plan": "free",
-      "requires": [],
-      "lastVerified": "2026-10-04T10:06:24.000Z",
-      "authors": [
-        {
-          "name": "wuzf",
-          "github": "wuzf"
-        }
-      ],
-      "maintainers": [
-        "MendyLanda"
-      ],
-      "media": {
-        "icon": {
-          "url": "https://appflare.github.io/catalog/apps/2fa/icon.svg",
-          "sha256": "5c9a0c9e7d2f58ed9a0cbfed6588423bdac4c67028b0bb561978c84c94d1b485"
-        },
-        "screenshots": []
-      },
-      "services": [
-        "kv",
-        "cron"
-      ],
-      "categories": [
-        "security",
-        "utilities"
-      ],
-      "license": "MIT",
-      "revision": 1,
-      "accessOffer": "offered"
-    },
     {
       "slug": "888wiki",
       "name": "888wiki",
@@ -324,7 +279,13 @@
         "developer-tools"
       ],
       "license": "Apache-2.0",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/atalaya/manifest.json",
+        "sha256": "2bfb61ef963b5ee5b5395b77938aa8fc06234279600eebb456df7caadedec75e",
+        "keyId": "catalog-2026-09",
+        "signature": "XGtaGcd9iyfArBuV0yQzrWohp4iPdcpKgYw7LQqz5E4sE/dMaDfTDhdbNjY3GFh5OMH/VhzAoRxNevu1lqtCCw=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -508,7 +469,13 @@
         "sharing"
       ],
       "license": "NONE",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/bashupload/manifest.json",
+        "sha256": "7a9e884defc7fc1bb81a9c1b2ad2d8c88063b792a6b3b57d25a07ac0d066ef71",
+        "keyId": "catalog-2026-09",
+        "signature": "ox61D0hNw+fOyGCsFi00+RM3cSsrfdZqMVxbzU8lURrs/yO3FOiu2hRmfZ2vJXWGy3msNwnZL91k1XQ+/Ja7CA=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -1404,7 +1371,13 @@
         "analytics"
       ],
       "license": "MIT",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/counterscale/manifest.json",
+        "sha256": "be729c9e2b2b4226503a7a17c2004f51216a844dd176c6f34f16a4b5fb7a7b0f",
+        "keyId": "catalog-2026-09",
+        "signature": "bphg/cvSsTDGtwkUqPBxi99OObUaafNmn/1c3lmHlZ08RbXgJIpAVVvCgF3eX3gBZYimQYcXQjvz5ZO8jIBTDw=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -1742,7 +1715,13 @@
         "productivity"
       ],
       "license": "AGPL-3.0-only",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/edgeever/manifest.json",
+        "sha256": "755643b57037253c1869c5c8426313c79518e1a229adc72d878391de35205a08",
+        "keyId": "catalog-2026-09",
+        "signature": "EAz7J3k5do4k3q+f8fzLjuErUUAXKQ0j/7vfQ+oXWiW5saTo6hNcBB81qcFQh2lr3t88iH9a6g3ej4GUbEOVAw=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -2360,7 +2339,13 @@
         "sharing"
       ],
       "license": "GPL-3.0-only",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/fodi/manifest.json",
+        "sha256": "f8b5035dc59fee929c7aabd610a5d50ee7331f3712fca0949afe4ea9b3c9be75",
+        "keyId": "catalog-2026-09",
+        "signature": "NPLO7riTdNhmOVGf4HdaKJlmwPGQg36BhfBaDgI5+gJmEcRqODypP44sYWogJZsEuj3Kxr4FtSeWDmKoZQJ6AQ=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -2770,7 +2755,13 @@
         "developer-tools"
       ],
       "license": "MIT",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/glance/manifest.json",
+        "sha256": "a540d44104615fb7e085b92866c6f60b3a485da3d09c787063cd5bb82fce3420",
+        "keyId": "catalog-2026-09",
+        "signature": "r40hpbj/Rj+743ZXUMmOov9Vg+y4Y7xZFEaxZ+CLJnNS0CW4nRCgR/vZdXu28vUzyE/eHmTF8FsBULB7zD6EBQ=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -3001,7 +2992,13 @@
         "sharing"
       ],
       "license": "MIT",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/imgbed/manifest.json",
+        "sha256": "f5857edcb0369414c1822da5014db299aa4b016fc35d84b60d61b6dad6b7b67a",
+        "keyId": "catalog-2026-09",
+        "signature": "FxKsF8j//D/1K8ke/y0+3SgQJcWBYM0kbN2jXrDHzA0XioqDehcBcpjDvkO6duADYKZyDr1Ihd+PcMZgHOtRAg=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -4163,12 +4160,12 @@
         "finance"
       ],
       "license": "MIT",
-      "revision": 2,
+      "revision": 3,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/minvoice/manifest.json",
-        "sha256": "2458b7dad738dc7db3c9c96955e0e5ef95b9484529c86ddcc0c3d4fec5775cff",
+        "sha256": "63405c5f2501839c81a683b00e7bfa0bfa61b1091709c7f0e4047fb7b7a94368",
         "keyId": "catalog-2026-09",
-        "signature": "BmQPEI2o1PTwWlD0hUGES/QvBA7r6EFDkxzEj4zoMullf8FQnTHIhh4CILQuajHakx3DYyz+CtBox5ToZ748BQ=="
+        "signature": "YpzYzOeSSEvizK/kNcla/BKrMT3WQU7ABawc44OsoM0tEIh0/u3XjLpP3+HP7iEJjoldj3FhejJhni0HFyOfBg=="
       },
       "accessOffer": "offered"
     },
@@ -4566,7 +4563,13 @@
         "email"
       ],
       "license": "MIT",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/omnimail/manifest.json",
+        "sha256": "0e62b4976cfcbf412ec7a12b786403323e30bcbdafac585c2be968de2c8ec4d4",
+        "keyId": "catalog-2026-09",
+        "signature": "0Ae/QqLW8oVmi8nORC1QPM2AIUBTFf0rmp0RZoJEm/eiHlprCYufXE0XW1BnCFWMRg4zCct9sdyCNz8BiI+8CQ=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -5077,7 +5080,13 @@
         "privacy"
       ],
       "license": "NONE",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/private-notes/manifest.json",
+        "sha256": "d6f407138512760b3c67b0d69e65fedf0f15b46e372cbf191412a5d28631bfbb",
+        "keyId": "catalog-2026-09",
+        "signature": "1xy4CjfS/6CFByW59VKv9dTYkqn931UH3ZSnIE3vcZ7WqpPwkR5FdztP90xLkjAcraSW0dHQhiINeqyBxTx0DA=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -5283,7 +5292,13 @@
         "email"
       ],
       "license": "MIT",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/quickinbox/manifest.json",
+        "sha256": "546a703e61a667ab6209af68327f92421b3f6c85a0243f97d41460d20354ca37",
+        "keyId": "catalog-2026-09",
+        "signature": "gUIVNxaFlHf5grtLc2TNoKM8yIrk5mwKbAJqJF67uO53GY0o64qZLBGitpEcSKiiP7aBcUtdXsNRGX2b6W4gCA=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -5487,7 +5502,13 @@
         "analytics"
       ],
       "license": "MIT",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/relay/manifest.json",
+        "sha256": "4c9995b2746f9b32e66de862c727674f6ff30a33731ab10b89dfe9e9ed7a1b17",
+        "keyId": "catalog-2026-09",
+        "signature": "hIlyRfyJuzvJqu0mAP6gGLpMZ/jxFf8sJVscKMHTc7k5yhIQ58K8AVjrQzyHutmobEXuxCnbGs+Rdb4eWOqRDw=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -5770,7 +5791,13 @@
         "networking"
       ],
       "license": "MIT",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/rsshub-never-die/manifest.json",
+        "sha256": "78ed472c48e606ab57db1da24401cb48bbc8886874de8bbde15e25dba927e953",
+        "keyId": "catalog-2026-09",
+        "signature": "12iYuL6edRUZj32I+1O8xE3jwAJ7qNU8gpALWPH82t+9FuUUboG+lqi7J7C+KGRhpSMAd4w+V127mn7JKekjAQ=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -6074,7 +6101,13 @@
         "business"
       ],
       "license": "MIT",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/seeder/manifest.json",
+        "sha256": "2e6d3452c2c9f3157ee653773de5d57a26da19b5730d585364c4138d9da72e4c",
+        "keyId": "catalog-2026-09",
+        "signature": "Gu9hmdxKwUU/Zrx6jcPLuCHe5fnFsyVFB45rkFFe5MbBj4gyTQkM37BzPuDhVDNYikgGmIkkg9WsmaZ2Pix9Dw=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -6122,7 +6155,13 @@
         "ai"
       ],
       "license": "Apache-2.0",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/semanticsearch/manifest.json",
+        "sha256": "4e9589014bca19d537649e5d5d5d3beecdd2039b4c7fa786fc7d6871955563cf",
+        "keyId": "catalog-2026-09",
+        "signature": "IBAUHtM/RPBStHUycPMMz7I7R/k2f3M/IgRzsI42mdmSlkYK3hioHuUkMSMqaOMOYo/8uSrzoWvn3h3pqithBA=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -6391,7 +6430,13 @@
         "analytics"
       ],
       "license": "AGPL-3.0-only",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/sink/manifest.json",
+        "sha256": "76d2a81044ecd3b33b2da8f60cfc72444a5722c7480574b4bb94786a2cf69646",
+        "keyId": "catalog-2026-09",
+        "signature": "8FP/SD9aD7trXhWRuOnDkV9cQOTkVUapvQKyfXEC7D2+5k99K6SD0OskmhFfNiTNdrriN5wzjHs2+dKmyqW+BQ=="
+      },
       "accessOffer": "offered"
     },
     {
