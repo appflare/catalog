@@ -69,9 +69,9 @@
   // (README.md, docs/SELF_HOSTING_CLOUDFLARE.md), and its own deploy sets no
   // CPU limit. The two Workers and two cron triggers fit Workers Free. Site
   // audits fetch and parse up to 200 pages per Workflow step
-  // (src/server/workflows/siteAuditWorkflowCrawl.ts), close to a Free step's
-  // 10 ms of CPU and 50 subrequests; if audits fail on Free, this becomes
-  // "paid".
+  // (src/server/workflows/siteAuditWorkflowCrawl.ts), which comes close to
+  // Workers Free's Workflow limits: 10 ms of CPU and 50 external subrequests
+  // per Workflow run. If audits fail on Free, this becomes "paid".
   "plan": "free",
   "requires": ["r2", "access"],
   // The only sign-in OpenSEO has besides Access is its hosted mode (email

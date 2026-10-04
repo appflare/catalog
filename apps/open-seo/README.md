@@ -26,9 +26,9 @@ Upstream says its Cloudflare self-host works on Cloudflare's free plan, and the
 entry is listed for Workers Free on that basis: the two Workers and two cron
 triggers fit it. Site audits are the part closest to Free's limits. The
 site-audit Workflow fetches and analyzes up to 200 pages in each step (an audit
-has 50 pages by default, so one step), and Workers Free gives a Workflow step
-10 ms of CPU time and 50 subrequests. If audits stop partway on Workers Free,
-Workers Paid gives a step 30 seconds of CPU time and 10,000 subrequests.
+has 50 pages by default, so one step), and Workers Free gives a Workflow 10 ms of
+CPU time and 50 external subrequests per run. If audits stop partway or report
+pages they could not fetch on Workers Free, Workers Paid lifts those limits.
 
 ## Sign-in
 
