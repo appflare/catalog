@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-04T16:40:03.097Z",
+  "generatedAt": "2026-10-04T17:17:58.272Z",
   "apps": [
     {
       "slug": "2fa",
@@ -4683,12 +4683,18 @@
       "summary": "Self-hosted SEO research: keywords, rankings, backlinks and site audits, on your own Cloudflare account and behind Cloudflare Access.",
       "tagline": "Find search terms, track rankings, and check your site's health",
       "addedAt": "2026-09-24T08:09:39+03:00",
-      "version": "0.1.9",
-      "tier": "self-deploying",
-      "plan": "paid",
+      "version": "0.1.10",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/open-seo@0.1.10/open-seo-0.1.10.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/open-seo@0.1.10/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/open-seo@0.1.10/manifest.sig",
+        "digest": "62bcae45fdf56e1ef8ab7127f963cd497903366d54014d289a01ca31def6249f"
+      },
+      "tier": "artifact",
+      "plan": "free",
       "requires": [
         "r2",
-        "containers"
+        "access"
       ],
       "lastVerified": null,
       "authors": [
@@ -4706,14 +4712,6 @@
       "maintainers": [
         "MendyLanda"
       ],
-      "build": {
-        "pin": "84e4705503ceaef54d1b284c167de9942563cdae",
-        "manifest": "https://appflare.github.io/catalog/apps/open-seo/manifest.json",
-        "manifestDigest": "5c5dbfa8b7ec29e1142c8cbd00f920719b5d545e693b8a887a64e45ba02bae10",
-        "buildCommand": "pnpm exec vite build --mode selfhost",
-        "expectedMinutes": 5,
-        "instanceType": "standard-2"
-      },
       "media": {
         "icon": {
           "url": "https://appflare.github.io/catalog/apps/open-seo/icon.png",
@@ -4736,7 +4734,9 @@
         "kv",
         "d1",
         "r2",
-        "containers",
+        "durable-objects",
+        "workflows",
+        "cron",
         "access"
       ],
       "categories": [
@@ -4744,7 +4744,8 @@
         "analytics"
       ],
       "license": "MIT",
-      "revision": 1
+      "revision": 1,
+      "accessOffer": "required"
     },
     {
       "slug": "openai-gemini",
