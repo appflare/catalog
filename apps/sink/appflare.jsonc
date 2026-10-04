@@ -13,6 +13,8 @@
   "repo": "miantiao-me/Sink",
   "license": "AGPL-3.0-only",
   "categories": ["utilities", "analytics"],
+  // Generated secrets added after this release was published: a revision, no new build.
+  "revision": 2,
   "authors": [
     {
       "name": "miantiao",
@@ -39,9 +41,14 @@
   "requires": ["r2", "workers-ai"],
   "secrets": [
     {
+      // Upstream's own fallback is a random value
+      // (nuxt.config.ts:22, `randomBytes(32).toString('base64url')`), and it
+      // refuses tokens shorter than 8 characters
+      // (server/middleware/2.auth.ts:31-36).
       "name": "NUXT_SITE_TOKEN",
       "label": "Site token",
-      "help": "The dashboard's sign-in password and the API key for Sink's API. At least 8 characters; keep it stable, since changing it signs out every browser and API client."
+      "help": "The dashboard's sign-in password and the API key for Sink's API. A value of your own needs at least 8 characters. Keep it stable: changing it signs out every browser and API client.",
+      "generate": "password"
     },
     {
       "name": "NUXT_CF_API_TOKEN",

@@ -12,6 +12,8 @@
   "repo": "danielsyauqi/Seeder",
   "license": "MIT",
   "categories": ["productivity", "business"],
+  // Generated secrets added after this release was published: a revision, no new build.
+  "revision": 2,
   "authors": [
     { "name": "Daniel Syauqi", "url": "https://danielsyauqi.site", "github": "danielsyauqi" },
     { "name": "Thaqif Rosdi", "github": "takippu" }
@@ -43,9 +45,13 @@
       "generate": "password"
     },
     {
+      // Upstream decodes it with atob and refuses anything but 32 bytes
+      // (lib/crypto/secrets.ts:15,37-44), and suggests `openssl rand -base64
+      // 32` (lib/env.ts:35-37), which is exactly this kind of value.
       "name": "VCS_ENCRYPTION_KEY",
       "label": "Git integration encryption key",
-      "help": "Encrypts GitHub and GitLab tokens and webhook secrets at rest. The app will not start without it. It must be 32 random bytes in base64: run `openssl rand -base64 32` and paste the output. Changing it later makes stored integration tokens unreadable."
+      "help": "Encrypts GitHub and GitLab tokens and webhook secrets at rest: 32 random bytes in base64. The app will not start without it. Changing it later makes stored integration tokens unreadable.",
+      "generate": "base64-key-32"
     },
     {
       "name": "GOOGLE_CLIENT_ID",

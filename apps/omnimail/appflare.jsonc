@@ -8,6 +8,8 @@
   "repo": "mibgb65-cloud/OmniMail",
   "license": "MIT",
   "categories": ["email"],
+  // Generated secrets added after this release was published: a revision, no new build.
+  "revision": 2,
   "authors": [
     {
       "name": "OmniMail contributors",
@@ -49,9 +51,16 @@
   // Worker's settings to turn them on.
   "secrets": [
     {
+      // Upstream refuses a token under 32 UTF-8 bytes
+      // (email-worker/src/features/auth/setup/setup-security.ts:3,13-16). A
+      // generated password is 32 ASCII characters, exactly the minimum, so it
+      // only works while the manager generates at least 32. Once setup has
+      // run, the first-run endpoint refuses before it reads the token
+      // (email-worker/src/features/auth/setup/setup-api.ts:39-41).
       "name": "SETUP_TOKEN",
       "label": "Setup token",
-      "help": "At least 32 random characters. You paste it on the first-run page to create the super administrator; remove it from the app's settings once that is done."
+      "help": "You paste it on the first-run page to create the super administrator. After that the first-run page refuses to run again, so the token no longer opens anything. A value of your own needs at least 32 characters.",
+      "generate": "password"
     },
     {
       "name": "MAIL_CREDENTIALS_KEY",

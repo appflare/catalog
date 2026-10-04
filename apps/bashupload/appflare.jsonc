@@ -14,6 +14,8 @@
   // the catalog shows it as unlicensed.
   "license": "NONE",
   "categories": ["files", "sharing"],
+  // Generated secrets added after this release was published: a revision, no new build.
+  "revision": 2,
   "authors": [{ "name": "DullJZ", "url": "https://www.jz-home.top", "github": "DullJZ" }],
   "maintainers": ["MendyLanda"],
   // Upstream's tags (bashupload-0.1.0, chart-v0.1.0) name its Docker image
@@ -36,9 +38,13 @@
   // secret here, that var is left out of the artifact.
   "secrets": [
     {
+      // Basic auth credentials are split on every colon (src/index.js:189-195)
+      // and the password is compared with !== (:204); a generated one has no
+      // colon.
       "name": "PASSWORD",
       "label": "Password",
       "help": "Optional. When set, every upload and download must send it in the Authorization header (curl -H 'Authorization: <password>'), and the web page asks for it. Without it anyone who finds the address can upload files to your bucket.",
+      "generate": "password",
       "optional": true
     }
   ],

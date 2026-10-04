@@ -8,6 +8,8 @@
   "repo": "dcarrillo/atalaya",
   "license": "Apache-2.0",
   "categories": ["monitoring", "developer-tools"],
+  // Generated secrets added after this release was published: a revision, no new build.
+  "revision": 2,
   "authors": [
     {
       "name": "Daniel Carrillo",
@@ -52,9 +54,13 @@
       "help": "The user name for the status page's sign-in (HTTP basic auth)."
     },
     {
+      // Upstream compares it in constant time with everything after the first
+      // colon of the basic auth credentials (src/lib/auth.ts:59-69), so any
+      // value works.
       "name": "STATUS_PASSWORD",
       "label": "Status page password",
-      "help": "The password for the status page's sign-in."
+      "help": "The password for the status page's sign-in.",
+      "generate": "password"
     },
     {
       "name": "AUTH_TOKEN",
