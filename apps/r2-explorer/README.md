@@ -25,9 +25,15 @@ checks every request before the Worker runs, on the `workers.dev` URL, its
 previews and any domain, and lets in only the people who use this Appflare. That
 needs a Zero Trust organization on the account (its free plan is enough).
 
-Installed before Appflare could protect apps? Delete any Access application you
-made for the Worker in the Zero Trust dashboard, then turn on **Cloudflare
-Access** on the app's page in Appflare.
+Installed before Appflare could protect apps? Keep the Access application you made
+for the Worker until Appflare's protection is on: the app has no sign-in of its own,
+so deleting it first would open every file to anyone with the address. In the Zero
+Trust dashboard, rename it to `Appflare: <name> (<Worker>)`, with the app's name as
+Appflare lists it and its Worker name (for example `Appflare: R2 Explorer
+(r2-explorer)`), then turn on **Cloudflare Access** on the app's page in Appflare.
+Appflare takes that application over, keeping its audience tag and policies and
+adding its own, as long as it covers only this app's addresses. Any other Access
+application covering them must be deleted first.
 
 ## Read-only
 

@@ -13,9 +13,15 @@ month later when you asked for that. Licensed MIT.
   addresses. Appflare installs it only behind Cloudflare Access, which lets in only the
   people who use this Appflare, so the account needs a Zero Trust organization (its
   free plan is enough), and its protection cannot be turned off.
-- **Installed before Appflare could protect apps?** Delete any Access application you
-  made for the Worker in the Zero Trust dashboard, then turn on **Cloudflare Access** on
-  the app's page in Appflare.
+- **Installed before Appflare could protect apps?** Keep the Access application you
+  made for the Worker until Appflare's protection is on: the app has no sign-in of its
+  own, so deleting it first would show your addresses and forwarding rules to anyone
+  with the app's address. In the Zero Trust dashboard, rename it to
+  `Appflare: <name> (<Worker>)`, with the app's name as Appflare lists it and its Worker
+  name (for example `Appflare: Dispoflare (dispoflare)`), then turn on **Cloudflare
+  Access** on the app's page in Appflare. Appflare takes that application over, keeping
+  its audience tag and policies and adding its own, as long as it covers only this
+  app's addresses. Any other Access application covering them must be deleted first.
 - **Its own token.** The app calls the Cloudflare API with `CLOUDFLARE_API_TOKEN`, a
   token you create with Email Routing Addresses Read (account), Email Routing Rules
   Edit, Zone Read and Zone Settings Read. `CLOUDFLARE_ACCOUNT_ID` is filled in with the
