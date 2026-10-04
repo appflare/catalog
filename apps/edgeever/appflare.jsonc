@@ -10,7 +10,7 @@
   "categories": ["notes", "productivity"],
   "authors": [{ "name": "tianma-if", "github": "tianma-if", "x": "tianma_if" }],
   "maintainers": ["MendyLanda"],
-  "source": { "ref": "v1.88.0", "sha": "3cfccb872ea68dea9007204a090fdc1bac60d322" },
+  "source": { "ref": "v1.99.1", "sha": "9d7ac555f7a50adde3293673acacc6604bfdb5e8" },
   "install": {
     "packageManager": "bun",
     "wranglerConfig": "wrangler.toml",
