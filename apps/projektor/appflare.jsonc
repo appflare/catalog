@@ -53,8 +53,25 @@
   // behind Access and gives MCP clients an Access service token; Appflare's
   // policy admits only Appflare's users and its own health-check token, so
   // /mcp is public here and relies on the app's own check. /oauth/authorize,
-  // the consent screen, stays behind Access.
-  "access": { "mode": "required", "bypass": ["/.well-known/*", "/oauth/token", "/mcp/*"] },
+  // the consent screen, stays behind Access. Two more features answer people
+  // without an Access session, each by its own token (apps/api/src/index.ts,
+  // mounted before the auth middleware): issue share links (the /share/<token>
+  // page, which loads its data and logo from /api/share/<token> and its
+  // scripts, styles and font from /_astro/ and /fonts/), and feedback that
+  // other sites POST to /api/feedback/submit with a feedback source's token.
+  "access": {
+    "mode": "required",
+    "bypass": [
+      "/.well-known/*",
+      "/oauth/token",
+      "/mcp/*",
+      "/share/*",
+      "/api/share/*",
+      "/_astro/*",
+      "/fonts/*",
+      "/api/feedback/submit"
+    ]
+  },
   "secrets": [
     {
       "name": "JWT_SECRET",
