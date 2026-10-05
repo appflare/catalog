@@ -13,6 +13,8 @@
   // package.json.
   "license": "NONE",
   "categories": ["chat"],
+  // Field links added after this release was published: a revision, no new build.
+  "revision": 2,
   "authors": [
     {
       "name": "Confidence Okoghenun",
@@ -41,12 +43,20 @@
       "name": "TURN_KEY_ID",
       "label": "TURN key ID",
       "help": "From a TURN key in the Cloudflare dashboard under Realtime. Leave both TURN fields empty to connect with STUN only, which works on most home networks but not behind symmetric NAT or strict firewalls.",
+      "link": {
+        "label": "Create a TURN key",
+        "url": "https://dash.cloudflare.com/?to=/:account/calls"
+      },
       "optional": true
     },
     {
       "name": "TURN_KEY_API_TOKEN",
       "label": "TURN key API token",
       "help": "The API token shown with the TURN key above. The Worker uses it to hand each browser short-lived relay credentials; the token itself never reaches the browser.",
+      "link": {
+        "label": "Create a TURN key",
+        "url": "https://dash.cloudflare.com/?to=/:account/calls"
+      },
       "optional": true
     }
   ],

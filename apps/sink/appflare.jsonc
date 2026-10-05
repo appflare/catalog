@@ -13,6 +13,9 @@
   "repo": "miantiao-me/Sink",
   "license": "AGPL-3.0-only",
   "categories": ["utilities", "analytics"],
+  // Generated secrets (revision 2) and openPath (revision 3) came after this
+  // release was published: revisions, no new build.
+  "revision": 3,
   "authors": [
     {
       "name": "miantiao",
@@ -22,7 +25,7 @@
     }
   ],
   "maintainers": ["MendyLanda"],
-  "source": { "ref": "v0.3.0", "sha": "6cb6ba3cbd7aa880e562d57fb010d2192b4a9e39" },
+  "source": { "ref": "v0.3.1", "sha": "bafa4e1f7e3ec034929e11e5542c4c3e116d69da" },
   "install": {
     "packageManager": "pnpm",
     "wranglerConfig": "wrangler.jsonc",
@@ -39,9 +42,14 @@
   "requires": ["r2", "workers-ai"],
   "secrets": [
     {
+      // Upstream's own fallback is a random value
+      // (nuxt.config.ts:22, `randomBytes(32).toString('base64url')`), and it
+      // refuses tokens shorter than 8 characters
+      // (server/middleware/2.auth.ts:31-36).
       "name": "NUXT_SITE_TOKEN",
       "label": "Site token",
-      "help": "The dashboard's sign-in password and the API key for Sink's API. At least 8 characters; keep it stable, since changing it signs out every browser and API client."
+      "help": "The dashboard's sign-in password and the API key for Sink's API. A value of your own needs at least 8 characters. Keep it stable: changing it signs out every browser and API client.",
+      "generate": "password"
     },
     {
       "name": "NUXT_CF_API_TOKEN",
@@ -85,6 +93,7 @@
       "optional": true
     }
   ],
+  "openPath": "/dashboard",
   "postInstall": [
     {
       "type": "markdown",

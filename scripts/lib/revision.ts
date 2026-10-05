@@ -35,11 +35,13 @@ import type {
  * Which copy is authoritative: the Worker, and every field a revision may not
  * change, always come from the signed `manifest.json` inside the release. The
  * install and settings forms and the copy come from the revised catalog
- * manifest when the row lists one. A revision may change only form fields and
- * copy (`REVISABLE_CATALOG_FIELDS` in `@appflare/schema`, enforced here by
- * `revisionProblem` and again by the manager), but var defaults and generated
- * secrets do reach the Worker, which is why the file is signed like the
- * release. A manager refuses an unsigned or badly signed revision, and while a
+ * manifest when the row lists one, and so do `access` and `"access"` in
+ * `requires`. A revision may change only form fields, copy and Cloudflare
+ * Access protection, and add `"access"` to `requires`
+ * (`REVISABLE_CATALOG_FIELDS` in `@appflare/schema`, enforced here by
+ * `revisionProblem` and again by the manager), but var defaults, generated
+ * secrets and `access` do reach the app, which is why the file is signed like
+ * the release. A manager refuses an unsigned or badly signed revision, and while a
  * release lists one, installing it needs the revised file: when the file is
  * unreachable, installs and updates to that release fail.
  */

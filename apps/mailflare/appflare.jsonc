@@ -8,6 +8,8 @@
   // The LICENSE file is the GNU AGPL version 3 with no "or any later version" grant.
   "license": "AGPL-3.0-only",
   "categories": ["email"],
+  // Help text edited after this release was published: a revision, no new build.
+  "revision": 2,
   "authors": [{ "name": "Hieu Nguyen", "github": "hieunc229", "x": "hieuSSR" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags, so the entry follows the default branch by commit.
@@ -56,7 +58,7 @@
     {
       "name": "APP_URL",
       "label": "Public URL",
-      "help": "Optional. The address people open the app at, used in password-reset links and JMAP. Leave it empty to use the address of each request.",
+      "help": "The address people open the app at, used in password-reset links and JMAP. Leave it empty to use the address of each request.",
       "optional": true
     }
   ],

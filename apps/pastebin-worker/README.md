@@ -12,4 +12,4 @@ service page. Uploads are open to anyone until you list uploaders with bcrypt
 password hashes.
 
 Pastebin Worker is licensed under MIT. Upstream has no release tags, so the pin
-follows the default branch and each bump is reviewed by a maintainer.
+follows the default branch.

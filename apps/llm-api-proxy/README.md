@@ -18,6 +18,5 @@ Moonshot, 01.AI, OpenRouter and an Ollama server of your own. Licensed GPL-3.0.
   That puts the key in the URL, so it appears in the Worker's request logs.
 - **Browsers.** Set the allowed browser origin to call the proxy from one web app;
   without it browsers get no CORS headers.
-- **Pin.** Upstream has no release tags, so the pin follows the default branch and each
-  bump is reviewed by a maintainer.
+- **Pin.** Upstream has no release tags, so the pin follows the default branch.
 - No images: the repository publishes none.

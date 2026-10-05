@@ -7,10 +7,13 @@
   "repo": "newbietan/CloudSSH",
   "license": "Apache-2.0",
   "categories": ["remote-access", "developer-tools"],
+  // Field links (revision 2) and the formatting of URLs in the notes (revision 3)
+  // came after this release was published: revisions, no new build.
+  "revision": 3,
   "authors": [{ "name": "TanXin", "url": "https://tanxin.me", "github": "newbietan" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags; the pin tracks main.
-  "source": { "ref": "main", "sha": "25852ca23d90b78a6ca23eb95cb6f5336ed7116d" },
+  "source": { "ref": "main", "sha": "4678a760710b4c0b9eae35aea4ed3773380816c6" },
   "install": {
     "packageManager": "pnpm",
     // No build step: upstream commits the web client, built and inlined into
@@ -32,12 +35,20 @@
       "name": "GITHUB_CLIENT_SECRET",
       "label": "GitHub OAuth client secret",
       "help": "From your GitHub OAuth app, together with its client ID below.",
+      "link": {
+        "label": "Create an OAuth app",
+        "url": "https://github.com/settings/applications/new"
+      },
       "optional": true
     },
     {
       "name": "TURNSTILE_SECRET",
       "label": "Turnstile secret key",
       "help": "Adds Cloudflare Turnstile bot checks to sign-in and connections, together with the site key below.",
+      "link": {
+        "label": "Create a widget",
+        "url": "https://dash.cloudflare.com/?to=/:account/turnstile"
+      },
       "optional": true
     }
   ],
@@ -61,6 +72,10 @@
       "name": "GITHUB_CLIENT_ID",
       "label": "GitHub OAuth client ID",
       "help": "Enables GitHub sign-in and saved servers. Create an OAuth app at github.com/settings/developers with <public URL>/api/auth/callback as its callback URL.",
+      "link": {
+        "label": "Create an OAuth app",
+        "url": "https://github.com/settings/applications/new"
+      },
       "optional": true
     },
     {
@@ -81,6 +96,10 @@
     {
       "name": "TURNSTILE_SITEKEY",
       "label": "Turnstile site key",
+      "link": {
+        "label": "Create a widget",
+        "url": "https://dash.cloudflare.com/?to=/:account/turnstile"
+      },
       "optional": true
     },
     {
@@ -110,7 +129,7 @@
     },
     {
       "type": "markdown",
-      "content": "To sign in with GitHub instead, create an OAuth app with {{appUrl}}/api/auth/callback as its callback URL, and set its client ID and secret, and your numeric user id under Allowed GitHub users, in the app's settings."
+      "content": "To sign in with GitHub instead, create an OAuth app with `{{appUrl}}/api/auth/callback` as its callback URL, and set its client ID and secret, and your numeric user id under Allowed GitHub users, in the app's settings."
     }
   ]
 }

@@ -2,7 +2,7 @@ import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "nod
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
-import { findApp } from "./apps.ts";
+import { type AppEntry, findApp } from "./apps.ts";
 import {
   type AppPin,
   appDirectory,
@@ -50,7 +50,7 @@ describe("decideBump for a tag pin", () => {
       to: { ref: "v1.3.0", sha: NEW, kind: "tag" },
       branch: "bump/hello/89abcde",
       title: "chore(hello): bump to v1.3.0",
-      autoMerge: false,
+      autoMerge: true,
     });
   });
 
@@ -361,70 +361,125 @@ describe("renderBumpBody", () => {
 });
 
 describe("auto-merge", () => {
-  const autoApp = findApp(
+  const optOutApp = findApp(
     path.join(import.meta.dirname, "..", "fixtures", "auto-merge-apps"),
-    "hello-auto",
+    "hello-opt-out",
   );
-  const autoPin = readPin(autoApp);
-
-  it("reads bump.autoMerge from the raw JSONC, comments included", () => {
-    expect(autoPin.autoMerge).toBe(true);
-    expect(tagPin.autoMerge).toBe(false);
-  });
-
-  it("counts only a literal true, so a malformed setting never merges or stops the bot", () => {
-    expect(readAutoMerge({ bump: { autoMerge: true } })).toBe(true);
-    for (const manifest of [
-      {},
-      null,
-      "bump",
-      { bump: true },
-      { bump: [true] },
-      { bump: {} },
-      { bump: { autoMerge: false } },
-      { bump: { autoMerge: "true" } },
-      { bump: { autoMerge: 1 } },
-    ]) {
-      expect(readAutoMerge(manifest)).toBe(false);
-    }
-  });
-
-  it("marks the bump for auto-merge and says so in the body", () => {
-    const plan = planBumps([autoApp], {
+  const optOutPin = readPin(optOutApp);
+  const plan1 = (app: AppEntry): Bump => {
+    const plan = planBumps([app], {
       resolve: () => tag("v1.3.0"),
       compare: () => ({ total: 0, subjects: [] }),
       relation: never,
       changedFiles: never,
     });
+    expect(plan.failed).toEqual([]);
     expect(plan.bumps).toHaveLength(1);
-    const bump = plan.bumps[0] as Bump;
+    return plan.bumps[0] as Bump;
+  };
+
+  it("reads bump.autoMerge and the tier from the raw JSONC, comments included", () => {
+    expect(tagPin).toMatchObject({ tier: "artifact", autoMerge: "on" });
+    expect(optOutPin).toMatchObject({ tier: "artifact", autoMerge: "off" });
+  });
+
+  it("reads an absent setting or true as on, and false as off", () => {
+    for (const manifest of [{}, { bump: {} }, { bump: { autoMerge: true } }]) {
+      expect(readAutoMerge(manifest)).toBe("on");
+    }
+    expect(readAutoMerge({ bump: { autoMerge: false } })).toBe("off");
+  });
+
+  it("reads anything else as malformed, which never merges or stops the bot", () => {
+    for (const manifest of [
+      null,
+      "bump",
+      { bump: null },
+      { bump: true },
+      { bump: [true] },
+      { bump: { autoMerge: "false" } },
+      { bump: { autoMerge: 0 } },
+      { bump: { automerge: false } },
+      { bump: { autoMerge: true, extra: 1 } },
+    ]) {
+      expect(readAutoMerge(manifest)).toBe("malformed");
+    }
+    const malformed: AppPin = { ...tagPin, autoMerge: "malformed" };
+    const bump = bumped(decideBump(malformed, tag("v1.3.0"), never));
+    expect(bump.autoMerge).toBe(false);
+    expect(renderBumpBody(malformed, bump, null)).toContain(
+      "**A maintainer merges this pull request.** The bump bot cannot read the `bump` " +
+        "setting in `apps/hello/appflare.jsonc`",
+    );
+  });
+
+  it("merges the bump of an entry without a bump setting, and says how to stop it", () => {
+    const bump = plan1(hello);
     expect(bump.autoMerge).toBe(true);
-    expect(bump.title).toBe("chore(hello-auto): bump to v1.3.0");
-    const body = renderBumpBody(autoPin, bump, null);
+    const body = renderBumpBody(tagPin, bump, null);
     expect(body).toContain("**This pull request merges itself.**");
-    expect(body).toContain("`apps/hello-auto/appflare.jsonc` sets `bump.autoMerge`");
     expect(body).toContain("the next nightly bump run publishes the new version");
+    expect(body).toContain("it does not review upstream's code");
+    expect(body).toContain("disable auto-merge here or close the pull request");
+    expect(body).toContain('set `"bump": { "autoMerge": false }` in `apps/hello/appflare.jsonc`');
+    expect(body).toContain("installs it into the CI account");
     expect(body).not.toContain("A maintainer merges");
     expect(body).not.toContain("Merging publishes");
   });
 
-  it("leaves an entry without the setting to a maintainer", () => {
-    const bump = bumped(decideBump(tagPin, tag("v1.3.0"), never));
+  it("merges a branch-tracked entry's bump too", () => {
+    const bump = bumped(decideBump(branchPin, head(), () => ({ ahead: 1, behind: 0 })));
+    expect(bump.autoMerge).toBe(true);
+  });
+
+  it("leaves an entry that sets bump.autoMerge to false to a maintainer", () => {
+    const bump = plan1(optOutApp);
     expect(bump.autoMerge).toBe(false);
-    const body = renderBumpBody(tagPin, bump, null);
-    expect(body).toContain("**A maintainer merges this pull request** after reviewing");
+    const body = renderBumpBody(optOutPin, bump, null);
+    expect(body).toContain(
+      "**A maintainer merges this pull request.** `apps/hello-opt-out/appflare.jsonc` sets " +
+        "`bump.autoMerge` to `false`",
+    );
     expect(body).toContain("Merging publishes the new version.");
     expect(body).not.toContain("merges itself.**");
   });
 
   it("never auto-merges an entry that sets source.version", () => {
-    const versioned: AppPin = { ...autoPin, source: { ...autoPin.source, version: "1.1.10" } };
+    const versioned: AppPin = { ...tagPin, source: { ...tagPin.source, version: "1.1.10" } };
     const bump = bumped(decideBump(versioned, tag("v1.3.0"), never));
     expect(bump.autoMerge).toBe(false);
     const body = renderBumpBody(versioned, bump, null);
-    expect(body).toContain("but it also sets `source.version`");
+    expect(body).toContain("sets `source.version`, which has to be updated by hand first");
     expect(body).toContain("- [ ] Set `source.version`");
     expect(body).not.toContain("merges itself.**");
+  });
+
+  it("never auto-merges a sandbox or self-deploying entry, which CI does not install", () => {
+    const root = mkdtempSync(path.join(tmpdir(), "appflare-bump-tier-"));
+    try {
+      for (const tier of ["sandbox", "self-deploying"]) {
+        const dir = path.join(root, tier);
+        mkdirSync(dir);
+        const text = readFileSync(hello.manifestPath, "utf8")
+          .replace('"slug": "hello"', `"slug": "${tier}"`)
+          .replace('"install": {', `"install": {\n    "tier": "${tier}",`);
+        writeFileSync(path.join(dir, "appflare.jsonc"), text);
+        const app = findApp(root, tier);
+        const pin = readPin(app);
+        expect(pin).toMatchObject({ tier, autoMerge: "on" });
+        const bump = plan1(app);
+        expect(bump.autoMerge).toBe(false);
+        const body = renderBumpBody(pin, bump, null);
+        expect(body).toContain(
+          `**A maintainer merges this pull request.** \`apps/${tier}/appflare.jsonc\` is a ` +
+            `\`${tier}\` tier entry, which CI does not install`,
+        );
+        expect(body).not.toContain("installs it into the CI account");
+        expect(body).not.toContain("merges itself.**");
+      }
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
   });
 });
 

@@ -15,11 +15,13 @@
   "repo": "Jaironlanda/isupmap",
   "license": "MIT",
   "categories": ["monitoring"],
+  // Field links added after this release was published: a revision, no new build.
+  "revision": 2,
   "authors": [
     { "name": "Jairon Landa", "url": "https://jaironlanda.com", "github": "Jaironlanda" }
   ],
   "maintainers": ["MendyLanda"],
-  "source": { "ref": "main", "sha": "17bb6884b4d4fabfd4cecfb4bf8254b155cb6dea" },
+  "source": { "ref": "main", "sha": "0b78646b79dc7a635f0aae98a942b5003322eff6" },
   "install": {
     "packageManager": "npm",
     "wranglerConfig": "wrangler.jsonc"
@@ -41,12 +43,17 @@
       "name": "PROTOMAPS_KEY",
       "label": "Protomaps API key",
       "help": "Shows a world map of where reports come from on each service's page. Free keys at protomaps.com. The key is sent to visitors' browsers, which load the map tiles with it.",
+      "link": { "label": "Get a key", "url": "https://protomaps.com/account" },
       "optional": true
     },
     {
       "name": "GA_ID",
       "label": "Google Analytics measurement ID",
       "help": "A GA4 measurement ID (G-...) to count visitors with Google Analytics. Leave empty to load no analytics.",
+      "link": {
+        "label": "Find your measurement ID",
+        "url": "https://support.google.com/analytics/answer/12270356"
+      },
       "optional": true
     }
   ],

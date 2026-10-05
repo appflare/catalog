@@ -9,6 +9,8 @@
   // later version".
   "license": "GPL-3.0-or-later",
   "categories": ["ecommerce", "business"],
+  // openPath added after this release was published: a revision, no new build.
+  "revision": 2,
   "authors": [
     {
       "name": "GM Wallet",
@@ -18,7 +20,7 @@
     }
   ],
   "maintainers": ["MendyLanda"],
-  "source": { "ref": "v1.0.2", "sha": "c5ed4855d4623417b61542966bcba15a6aeb8ce4" },
+  "source": { "ref": "v1.0.3", "sha": "9312956fe883816538660852c4f3db5d611cdbde" },
   "install": {
     "packageManager": "bun",
     "wranglerConfig": "wrangler.jsonc",
@@ -40,6 +42,7 @@
   // None: the Better Auth secret, the shop's address and every provider
   // credential are created or entered in the admin console and stored in D1.
   "secrets": [],
+  "openPath": "/admin",
   "postInstall": [
     {
       "type": "markdown",

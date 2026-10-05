@@ -12,6 +12,9 @@
   "repo": "danielsyauqi/Seeder",
   "license": "MIT",
   "categories": ["productivity", "business"],
+  // Generated secrets (revision 2) and field links (revision 3) came after this
+  // release was published: revisions, no new build.
+  "revision": 3,
   "authors": [
     { "name": "Daniel Syauqi", "url": "https://danielsyauqi.site", "github": "danielsyauqi" },
     { "name": "Thaqif Rosdi", "github": "takippu" }
@@ -43,20 +46,32 @@
       "generate": "password"
     },
     {
+      // Upstream decodes it with atob and refuses anything but 32 bytes
+      // (lib/crypto/secrets.ts:15,37-44), and suggests `openssl rand -base64
+      // 32` (lib/env.ts:35-37), which is exactly this kind of value.
       "name": "VCS_ENCRYPTION_KEY",
       "label": "Git integration encryption key",
-      "help": "Encrypts GitHub and GitLab tokens and webhook secrets at rest. The app will not start without it. It must be 32 random bytes in base64: run `openssl rand -base64 32` and paste the output. Changing it later makes stored integration tokens unreadable."
+      "help": "Encrypts GitHub and GitLab tokens and webhook secrets at rest: 32 random bytes in base64. The app will not start without it. Changing it later makes stored integration tokens unreadable.",
+      "generate": "base64-key-32"
     },
     {
       "name": "GOOGLE_CLIENT_ID",
       "label": "Google OAuth client ID",
       "help": "Adds Google sign-in when set together with the client secret. Redirect URI: <app URL>/api/auth/callback/google.",
+      "link": {
+        "label": "Create an OAuth client",
+        "url": "https://console.cloud.google.com/apis/credentials"
+      },
       "optional": true
     },
     {
       "name": "GOOGLE_CLIENT_SECRET",
       "label": "Google OAuth client secret",
       "help": "The secret of the Google OAuth client above.",
+      "link": {
+        "label": "Create an OAuth client",
+        "url": "https://console.cloud.google.com/apis/credentials"
+      },
       "optional": true
     }
   ],

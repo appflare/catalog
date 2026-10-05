@@ -15,10 +15,13 @@
   // GPL-3.0, but that licence does not extend to this separate repository.
   "license": "NONE",
   "categories": ["media", "sync"],
+  // The formatting of URLs in the notes changed after this release was published:
+  // a revision, no new build.
+  "revision": 2,
   "authors": [{ "name": "TheSmallHanCat", "github": "TheSmallHanCat" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no tags; the pin follows the default branch.
-  "source": { "ref": "main", "sha": "5ec8a8b0748f685ccb4b6890e6fc6f297b9df8f7" },
+  "source": { "ref": "main", "sha": "d83f9e2f6b12d0f020fd23145ace10c71e3de777" },
   "install": {
     "packageManager": "npm",
     // Plain JavaScript: no build step.
@@ -39,7 +42,7 @@
   "postInstall": [
     {
       "type": "markdown",
-      "content": "In NeriPlayer, open Settings, go to the listen-together server settings, enter {{appUrl}}, and run the availability test. Then create a room or join one from an invite link."
+      "content": "In NeriPlayer, open Settings, go to the listen-together server settings, enter `{{appUrl}}`, and run the availability test. Then create a room or join one from an invite link."
     },
     {
       "type": "markdown",

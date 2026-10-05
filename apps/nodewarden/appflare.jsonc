@@ -8,9 +8,12 @@
   "repo": "shuaiplus/nodewarden",
   "license": "LGPL-3.0-only",
   "categories": ["security", "passwords"],
+  // The formatting of URLs in the notes changed after this release was published:
+  // a revision, no new build.
+  "revision": 2,
   "authors": [{ "name": "Shuai", "url": "https://shuai.plus", "github": "shuaiplus" }],
   "maintainers": ["MendyLanda"],
-  "source": { "ref": "v1.8.0", "sha": "39c076b2e1e78410fedbcdd1d4f89cac13b6810e" },
+  "source": { "ref": "v1.8.1", "sha": "e92c91e771fac13c54042902d64d015514daa9ad" },
   "install": {
     "packageManager": "npm",
     // The R2 variant, upstream's default. wrangler.kv.toml keeps attachments in
@@ -58,7 +61,7 @@
     },
     {
       "type": "markdown",
-      "content": "In a Bitwarden app or browser extension, choose a self-hosted server and enter {{appUrl}} as the server URL. Back up your vault regularly from the web vault's backup center; NodeWarden is not affiliated with Bitwarden."
+      "content": "In a Bitwarden app or browser extension, choose a self-hosted server and enter `{{appUrl}}` as the server URL. Back up your vault regularly from the web vault's backup center; NodeWarden is not affiliated with Bitwarden."
     }
   ],
   // Upstream publishes each release under a semver tag with release notes; the
