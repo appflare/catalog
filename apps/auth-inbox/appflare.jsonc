@@ -7,8 +7,10 @@
   "repo": "TooonyChen/AuthInbox",
   "license": "MIT",
   "categories": ["email", "ai"],
-  // Help text edited after this release was published: a revision, no new build.
-  "revision": 2,
+  // Edited help text (revision 2), field links (revision 3) and the formatting of
+  // URLs in the notes (revision 4) came after this release was published:
+  // revisions, no new build.
+  "revision": 4,
   "authors": [{ "name": "Tony Chen", "url": "https://tonychen.net", "github": "TooonyChen" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags, so the entry follows the default branch by commit.
@@ -48,7 +50,8 @@
     {
       "name": "AI_API_KEY",
       "label": "AI API key",
-      "help": "The API key of your AI provider (Google AI Studio, OpenAI, Anthropic, DeepSeek, Groq and others), for the base URL and model below."
+      "help": "The API key of your AI provider (Google AI Studio, OpenAI, Anthropic, DeepSeek, Groq and others), for the base URL and model below.",
+      "link": { "label": "Get a Gemini key", "url": "https://aistudio.google.com/app/apikey" }
     },
     {
       "name": "AI_FALLBACK_API_KEY",
@@ -121,6 +124,7 @@
       "name": "barkTokens",
       "label": "Bark device tokens",
       "help": "The device tokens from the Bark app, in brackets and comma separated, for example [token1, token2]. Only used when Bark notifications are on.",
+      "link": { "label": "Get the Bark app", "url": "https://bark.day.app/" },
       "optional": true
     },
     {
@@ -142,7 +146,7 @@
     },
     {
       "type": "markdown",
-      "content": "AI agents connect to {{appUrl}}/mcp with an API key created in the dashboard (Claude Code, Cursor and other clients that send a header)."
+      "content": "AI agents connect to `{{appUrl}}/mcp` with an API key created in the dashboard (Claude Code, Cursor and other clients that send a header)."
     }
   ]
 }

@@ -12,6 +12,9 @@
   "repo": "Alain00/blobatar",
   "license": "MIT",
   "categories": ["developer-tools", "utilities"],
+  // The formatting of URLs in the notes changed after this release was published:
+  // a revision, no new build.
+  "revision": 2,
   "authors": [{ "name": "Alain", "url": "https://blobatar.dev", "github": "Alain00" }],
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v2.7.0", "sha": "ebb7ea4808b1263629fc8fa65e2398b9cbdb6f6b" },
@@ -37,7 +40,7 @@
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Point avatar URLs at {{appUrl}}/avatar/<name>, for example `<img src=\"{{appUrl}}/avatar/alice?size=64\">`. {{appUrl}}/avatar/ lists every parameter, and {{appUrl}}/openapi.json describes the endpoint. To serve a Gravatar URL, keep its path and query and change only the host."
+      "content": "Point avatar URLs at `{{appUrl}}/avatar/<name>`, for example `<img src=\"{{appUrl}}/avatar/alice?size=64\">`. {{appUrl}}/avatar/ lists every parameter, and {{appUrl}}/openapi.json describes the endpoint. To serve a Gravatar URL, keep its path and query and change only the host."
     }
   ]
 }

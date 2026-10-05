@@ -16,8 +16,9 @@
   "repo": "emdash-cms/templates",
   "license": "MIT",
   "categories": ["cms"],
-  // The category changed after this release was published: a revision, no new build.
-  "revision": 2,
+  // The category changed in revision 2, which this release was built with.
+  // openPath added after it was published: a revision, no new build.
+  "revision": 3,
   "authors": [{ "name": "EmDash", "url": "https://emdashcms.com", "github": "emdash-cms" }],
   "maintainers": ["MendyLanda"],
   // The templates repository has no tags; the pin tracks main.
@@ -38,6 +39,7 @@
   // for scheduled publishing and maintenance.
   "plan": "free",
   "requires": ["r2"],
+  "openPath": "/_emdash/admin",
   "postInstall": [
     {
       "type": "markdown",
