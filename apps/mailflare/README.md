@@ -2,14 +2,14 @@
 
 [Mailflare](https://github.com/hieunc229/mailflare) is a self-hosted email service for
 your own domains: mailboxes, forwarding and reject rules, a web inbox with real-time
-updates, JMAP, and daily D1 backups to R2. It runs as one Worker (Next.js 16 through
-OpenNext) with D1, R2, two queues it consumes, a SQLite Durable Object, a rate limit,
-Images, and an `email` handler. License: AGPL-3.0.
+updates, JMAP, and daily D1 backups to R2. It runs as one Worker (Next.js 16 built
+with vinext and the Cloudflare Vite plugin) with D1, R2, three queues it consumes, a
+SQLite Durable Object, two rate limits, Images, Workers AI, and an `email` handler.
+License: AGPL-3.0.
 
 ## Before you install
 
-- **Workers Paid.** Upstream requires it to send mail and recommends it overall. The
-  Worker is about 2.5 MB compressed, close to the free plan's 3 MB limit.
+- **Workers Paid.** Upstream requires it to send mail and recommends it overall.
 - **A domain on Cloudflare DNS in this account**, with Email Routing available.
 - **R2 enabled** on the account.
 - **An API token for the app itself** (`CF_TOKEN`), separate from Appflare's token. On
@@ -40,9 +40,9 @@ Images, and an `email` handler. License: AGPL-3.0.
   token, so Appflare does not know about them. Remove the rules and catch-all that
   point at `mailflare` under Email Routing on each connected domain, or mail to those
   addresses fails once the Worker is gone.
-- **Build.** `opennextjs-cloudflare build` runs the app's own `build` script, which
-  bundles the D1 migrations into the app and runs `next build`, then writes
-  `.open-next/`, which the wrangler config deploys.
+- **Build.** The app's own `build` script bundles the D1 migrations into the app and
+  runs `vite build`, which writes the Worker and its assets to `dist/` along with the
+  config wrangler deploys from.
 - **Health.** `/api/setup/status` needs no sign-in, reads D1, and answers before the
   first admin exists.
 
