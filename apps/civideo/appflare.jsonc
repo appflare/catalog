@@ -12,6 +12,8 @@
   "repo": "bitoceango/civideo",
   "license": "MIT",
   "categories": ["media", "family"],
+  // Field links added after this release was published: a revision, no new build.
+  "revision": 2,
   "authors": [{ "name": "bitoceango", "github": "bitoceango" }],
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v0.2.0", "sha": "272d45d7e0d41a844795e1d76ffc138f1ad4a7ad" },
@@ -54,12 +56,20 @@
       "name": "R2_ACCESS_KEY_ID",
       "label": "R2 access key id",
       "help": "For uploads from the parents' desktop app: an R2 API token (S3 credentials) with Object Read & Write on this app's bucket. The app never sees it; the Worker signs each upload with it. Leave it unset to upload only with upstream's command-line tool.",
+      "link": {
+        "label": "Create a token",
+        "url": "https://dash.cloudflare.com/?to=/:account/r2/overview"
+      },
       "optional": true
     },
     {
       "name": "R2_SECRET_ACCESS_KEY",
       "label": "R2 secret access key",
       "help": "The secret of the same R2 API token.",
+      "link": {
+        "label": "Create a token",
+        "url": "https://dash.cloudflare.com/?to=/:account/r2/overview"
+      },
       "optional": true
     }
   ],

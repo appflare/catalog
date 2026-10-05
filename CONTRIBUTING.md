@@ -560,6 +560,35 @@ secret. So:
 The secrets the wrangler config lists in `secrets.required` belong in `secrets`
 too; the pack log names any the manifest leaves out.
 
+### Links beside fields, and where Open goes
+
+A secret or var whose value comes from another service can carry a `link`: a
+short label and the https:// page where the admin gets the value. The install and
+settings forms show it beside the field and open it in a new tab. Help text stays
+plain text, so the link goes here, not in `help`.
+
+```jsonc
+{
+  "name": "OPENROUTER_API_KEY",
+  "label": "OpenRouter API key",
+  "help": "Turns on SAM, the in-app SEO agent.",
+  "link": { "label": "Get a key", "url": "https://openrouter.ai/settings/keys" }
+}
+```
+
+Use the most direct stable page (the one that creates the key, not the docs home),
+and one wording per kind of thing: "Get a key", "Create a bot", "Create an OAuth
+client", "Create a token", "Open the dashboard". The forms add the new-tab mark.
+
+`openPath` says where the app's own interface lives when it is not at the root,
+such as Sink's `/dashboard` or a shop's `/admin`: every Open button in the manager
+goes to the app's address plus this path. Health checks, `{{appUrl}}` and the
+address lists stay at the root. When the root is a public site and the path is
+where the admin manages it, use the admin path.
+
+Both need manager 0.3.0 to show; older managers ignore them, so an entry can use
+them without `requires`. Both may change in a revision.
+
 ### Apps of several Workers
 
 Some apps ship as more than one Worker from one repository: a web app and a content
@@ -861,9 +890,9 @@ change is one of these:
 - **A revision: the form, the copy and Cloudflare Access.** Raise `revision` by one
   (it is 1 when omitted) in the same change. A revision may change `name`, `summary`,
   `homepage`, `license`, `categories`, `maintainers`, `secrets`, `vars`, `postInstall`,
-  `bump` and `access`, as well as the fields above (`REVISABLE_CATALOG_FIELDS` in
+  `openPath`, `bump` and `access`, as well as the fields above (`REVISABLE_CATALOG_FIELDS` in
   `@appflare/schema`), and may add `"access"` to `requires` (nothing else there):
-  labels and help text, a var that becomes a `select`, a secret the app already
+  labels, help text and field links, where Open goes, a var that becomes a `select`, a secret the app already
   reads but the entry forgot, Cloudflare Access protection for an app that has no
   sign-in. Nothing is built. The release stays exactly as it
   is; the revised manifest is signed by the catalog's release key and published

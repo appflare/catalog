@@ -7,6 +7,8 @@
   "repo": "yllhwa/RSSWorker",
   "license": "MIT",
   "categories": ["utilities"],
+  // Field links added after this release was published: a revision, no new build.
+  "revision": 2,
   "authors": [{ "name": "hwa", "url": "https://blog.yllhwa.com", "github": "yllhwa" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags; the pin is the head of main.
@@ -27,6 +29,7 @@
       "name": "WEIBO_COOKIE",
       "label": "Weibo cookie",
       "help": "The Cookie header of a signed-in m.weibo.cn request. Weibo feeds need it; the other feeds do not.",
+      "link": { "label": "Sign in to Weibo", "url": "https://m.weibo.cn/" },
       "optional": true
     }
   ],

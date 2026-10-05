@@ -8,6 +8,8 @@
   "repo": "lumpinif/deepcrawl",
   "license": "MIT",
   "categories": ["developer-tools", "ai"],
+  // Field links added after this release was published: a revision, no new build.
+  "revision": 2,
   "authors": [{ "name": "Felix Lu", "github": "lumpinif", "x": "felixlu1018" }],
   "maintainers": ["MendyLanda"],
   // Upstream's release tags (deepcrawl@X.Y.Z) version the project's
@@ -64,12 +66,14 @@
       "name": "UPSTASH_REDIS_REST_URL",
       "label": "Upstash Redis REST URL",
       "help": "Turns on per-client rate limiting of the API, with the token below. Without both, requests are not rate limited.",
+      "link": { "label": "Create a database", "url": "https://console.upstash.com/redis" },
       "optional": true
     },
     {
       "name": "UPSTASH_REDIS_REST_TOKEN",
       "label": "Upstash Redis REST token",
       "help": "The REST token of the Upstash database above.",
+      "link": { "label": "Create a database", "url": "https://console.upstash.com/redis" },
       "optional": true
     }
   ],

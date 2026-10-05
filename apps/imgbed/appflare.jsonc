@@ -8,8 +8,9 @@
   "repo": "MarSeventh/CloudFlare-ImgBed",
   "license": "MIT",
   "categories": ["files", "sharing"],
-  // Generated secrets added after this release was published: a revision, no new build.
-  "revision": 2,
+  // Generated secrets (revision 2) and field links (revision 3) came after this
+  // release was published: revisions, no new build.
+  "revision": 3,
   "authors": [{ "name": "MarSeventh", "url": "https://home.sanyue.site", "github": "MarSeventh" }],
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v2.7.6", "sha": "bf9d8211ce6daa3af7b5b60685250bebcb2f681a" },
@@ -75,6 +76,7 @@
       "name": "TG_BOT_TOKEN",
       "label": "Telegram bot token",
       "help": "Adds a Telegram storage channel. Channels can also be added in the admin panel instead.",
+      "link": { "label": "Create a bot", "url": "https://t.me/BotFather" },
       "optional": true
     }
   ],
@@ -90,6 +92,7 @@
       "name": "TG_CHAT_ID",
       "label": "Telegram chat id",
       "help": "The channel or chat the Telegram bot stores files in, for example -1001234567890. Used only with a Telegram bot token.",
+      "link": { "label": "Find your chat ID", "url": "https://t.me/userinfobot" },
       "optional": true
     },
     {
