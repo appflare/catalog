@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-05T18:33:44.475Z",
+  "generatedAt": "2026-10-05T19:14:03.743Z",
   "apps": [
     {
       "slug": "2fa",
@@ -45,76 +45,6 @@
       ],
       "license": "MIT",
       "revision": 1,
-      "accessOffer": "offered"
-    },
-    {
-      "slug": "888wiki",
-      "name": "888wiki",
-      "summary": "A Markdown-first notepad and wiki: write in Markdown, Block, Canvas or Whiteboard, publish password-protected or timed shares, and present notes as slides or books.",
-      "tagline": "Write notes and share them with passwords or time limits",
-      "addedAt": "2026-09-27T06:02:01+03:00",
-      "version": "0.0.0-20260929.fead93e",
-      "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20260929.fead93e/888wiki-0.0.0-20260929.fead93e.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20260929.fead93e/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20260929.fead93e/manifest.sig",
-        "digest": "597af7f8edddb979fcea7df5374e8a4674a5c6ff7c027daaf9da841f94028944"
-      },
-      "tier": "artifact",
-      "plan": "free",
-      "requires": [
-        "r2"
-      ],
-      "lastVerified": null,
-      "authors": [
-        {
-          "name": "DAVID888",
-          "github": "tbdavid2019"
-        }
-      ],
-      "maintainers": [
-        "MendyLanda"
-      ],
-      "media": {
-        "icon": {
-          "url": "https://appflare.github.io/catalog/apps/888wiki/icon.svg",
-          "sha256": "25f8838549f4e6f9459497108d92cdc59aafe9bb418a5ab7ca05d476e039ef3a"
-        },
-        "screenshots": [
-          {
-            "url": "https://appflare.github.io/catalog/apps/888wiki/screenshots/01-markdown-editor.png",
-            "sha256": "60a45cbbca38cda3bfd3ac83f5c1f9e1a1fb92d4313f08c4eb8d22fa70944d5d",
-            "alt": "888wiki: Markdown editor"
-          },
-          {
-            "url": "https://appflare.github.io/catalog/apps/888wiki/screenshots/02-paragraph-annotations.png",
-            "sha256": "87dfe84ef81e2f8dd115ad748dba4e5499c8820bf1c7f27cd9ce61d3e0be66fb",
-            "alt": "888wiki: Paragraph annotations"
-          },
-          {
-            "url": "https://appflare.github.io/catalog/apps/888wiki/screenshots/03-slide-presentation.png",
-            "sha256": "1e00a0c4cec2f7f10659703fca2bad1bf49545be44616cb9686230c66b0786b9",
-            "alt": "888wiki: Slide presentation"
-          },
-          {
-            "url": "https://appflare.github.io/catalog/apps/888wiki/screenshots/04-seal-settings.png",
-            "sha256": "5634e55c85b74f02bfc23d4b7cf1f52ece35444c54104929d996e4e47704fce9",
-            "alt": "888wiki: Seal settings"
-          }
-        ]
-      },
-      "services": [
-        "kv",
-        "d1",
-        "r2",
-        "cron"
-      ],
-      "categories": [
-        "notes",
-        "productivity"
-      ],
-      "license": "AGPL-3.0-only",
-      "revision": 2,
       "accessOffer": "offered"
     },
     {
@@ -3627,61 +3557,6 @@
       "accessOffer": "offered"
     },
     {
-      "slug": "larafeed",
-      "name": "Larafeed",
-      "summary": "A private feed reader with passkey-only sign-in: RSS and Atom subscriptions refreshed on a schedule through Queues, OPML import and export, full-article extraction, favicons, and reader-client APIs, on D1, KV and Queues.",
-      "tagline": "Keep up with your favorite websites in one private feed",
-      "addedAt": "2026-09-27T12:03:21+03:00",
-      "version": "0.0.0-20261004.e5cd275",
-      "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/larafeed@0.0.0-20261004.e5cd275/larafeed-0.0.0-20261004.e5cd275.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/larafeed@0.0.0-20261004.e5cd275/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/larafeed@0.0.0-20261004.e5cd275/manifest.sig",
-        "digest": "ab08f103313b158528799900860b1ef8e934a3dcaef4892658d8f9680be4ca00"
-      },
-      "tier": "artifact",
-      "plan": "free",
-      "requires": [],
-      "lastVerified": null,
-      "authors": [
-        {
-          "name": "Stanislas",
-          "url": "https://stanislas.blog",
-          "github": "angristan",
-          "x": "fuolpit"
-        }
-      ],
-      "maintainers": [
-        "MendyLanda"
-      ],
-      "media": {
-        "icon": {
-          "url": "https://appflare.github.io/catalog/apps/larafeed/icon.png",
-          "sha256": "901ec1bf7586628584a8e6695b9846c83b46dbd3763429340364ec0d9b3e7af8"
-        },
-        "screenshots": [
-          {
-            "url": "https://appflare.github.io/catalog/apps/larafeed/screenshots/01-reader-view.png",
-            "sha256": "2511e4ccfad4943961d7aa2ffc90dd61e0c3ab765a2915e47edf9d495c708d13",
-            "alt": "Larafeed: Reader view"
-          }
-        ]
-      },
-      "services": [
-        "kv",
-        "d1",
-        "queues",
-        "cron",
-        "images"
-      ],
-      "categories": [
-        "productivity"
-      ],
-      "license": "MIT",
-      "revision": 1,
-      "accessOffer": "offered"
-    },
-    {
       "slug": "lastfm-recently-played",
       "name": "Last.fm Recently Played",
       "summary": "An SVG card of your recent Last.fm scrobbles for a GitHub profile README, with themes, artwork, stats and loved tracks, plus a configurator page to build the card's URL.",
@@ -3884,78 +3759,6 @@
         "keyId": "catalog-2026-09",
         "signature": "HONbCgnr3BcR0TGWoEuVBdrkzqnJqX3udSumfGcq/Smb8xOPXNNUH+6NHrJGo2FzcqdsP8Vrr5reG6SbJGrNDA=="
       },
-      "accessOffer": "offered"
-    },
-    {
-      "slug": "mailflare",
-      "name": "Mailflare",
-      "summary": "A self-hosted email service for your own domains: mailboxes, forwarding rules, and a web inbox, on Email Routing, D1, R2, Queues, and Durable Objects.",
-      "tagline": "Email and shared inboxes for your own domain",
-      "addedAt": "2026-09-24T07:29:19+03:00",
-      "version": "0.0.0-20261002.c2043e1",
-      "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261002.c2043e1/mailflare-0.0.0-20261002.c2043e1.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261002.c2043e1/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261002.c2043e1/manifest.sig",
-        "digest": "b871c754753aa29095e3b937b1b40b0415eae60393f2462b32ab916408e54e59"
-      },
-      "tier": "artifact",
-      "plan": "paid",
-      "requires": [
-        "zone",
-        "email-routing",
-        "r2"
-      ],
-      "lastVerified": null,
-      "authors": [
-        {
-          "name": "Hieu Nguyen",
-          "github": "hieunc229",
-          "x": "hieuSSR"
-        }
-      ],
-      "maintainers": [
-        "MendyLanda"
-      ],
-      "media": {
-        "icon": {
-          "url": "https://appflare.github.io/catalog/apps/mailflare/icon.png",
-          "sha256": "99e25176a3c443b584503fe07a5ed66fe2e06413b7e1c605e52649ed57bdc493"
-        },
-        "screenshots": [
-          {
-            "url": "https://appflare.github.io/catalog/apps/mailflare/screenshots/01-inbox.png",
-            "sha256": "6d6116e232cb8f762303de24ce6cf818eeacb3f4a5e4d903be4adc0492865e14",
-            "alt": "Mailflare: Inbox"
-          },
-          {
-            "url": "https://appflare.github.io/catalog/apps/mailflare/screenshots/02-domains.png",
-            "sha256": "b2db3790cee7e45bc347f36889455cc7cf5f6a30280135921fbfb476f0e4de76",
-            "alt": "Mailflare: Domains"
-          },
-          {
-            "url": "https://appflare.github.io/catalog/apps/mailflare/screenshots/03-mailboxes.png",
-            "sha256": "450ffbebdd462fe98789d8e6c13a0757807726fad5bef16ce3751a0f23dcdbfb",
-            "alt": "Mailflare: Mailboxes"
-          }
-        ]
-      },
-      "services": [
-        "d1",
-        "r2",
-        "durable-objects",
-        "queues",
-        "cron",
-        "workers-ai",
-        "images",
-        "email-routing",
-        "zone"
-      ],
-      "categories": [
-        "email"
-      ],
-      "license": "AGPL-3.0-only",
-      "revision": 2,
       "accessOffer": "offered"
     },
     {
@@ -5597,65 +5400,6 @@
       "accessOffer": "offered"
     },
     {
-      "slug": "rdyrct",
-      "name": "rdyrct",
-      "summary": "A URL shortener for teams: organizations with roles, branded short links and QR codes, click analytics that never store an IP, an MCP server, and a KV redirect path in front of D1.",
-      "tagline": "Branded short links, QR codes, and private click analytics for teams",
-      "addedAt": "2026-09-27T04:47:37+03:00",
-      "version": "0.0.0-20261002.8377203",
-      "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/rdyrct@0.0.0-20261002.8377203/rdyrct-0.0.0-20261002.8377203.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/rdyrct@0.0.0-20261002.8377203/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/rdyrct@0.0.0-20261002.8377203/manifest.sig",
-        "digest": "6069c4c2824113cf1d7108fd9632a811336b4306243182ce45fc6afca5e1f01b"
-      },
-      "tier": "artifact",
-      "plan": "free",
-      "requires": [
-        "r2"
-      ],
-      "lastVerified": null,
-      "authors": [
-        {
-          "name": "Andrea Bruno",
-          "url": "https://brnr.dev",
-          "github": "baronunread",
-          "x": "baronunread"
-        }
-      ],
-      "maintainers": [
-        "MendyLanda"
-      ],
-      "media": {
-        "icon": {
-          "url": "https://appflare.github.io/catalog/apps/rdyrct/icon.svg",
-          "sha256": "907ea837408ca4e6d5d4ee9af94908afe2ffd1abdc693a233d887ecae8e23aaf"
-        },
-        "cover": {
-          "url": "https://appflare.github.io/catalog/apps/rdyrct/cover.png",
-          "sha256": "7f78bd6ba457e75b893b57285674985ae7f851cb35383b416084038e09b0a98d"
-        },
-        "screenshots": []
-      },
-      "services": [
-        "kv",
-        "d1",
-        "r2",
-        "durable-objects",
-        "queues",
-        "workflows",
-        "cron",
-        "zone"
-      ],
-      "categories": [
-        "utilities",
-        "analytics"
-      ],
-      "license": "MIT",
-      "revision": 3,
-      "accessOffer": "offered"
-    },
-    {
       "slug": "relay",
       "name": "Relay",
       "summary": "A link shortener with cookieless click and conversion analytics: A/B splits, device and country routing, per-channel suffixes, retargeting pixels, QR codes and CSV export, on D1.",
@@ -6790,6 +6534,65 @@
       ],
       "license": "MIT",
       "revision": 3,
+      "accessOffer": "offered"
+    },
+    {
+      "slug": "synch",
+      "name": "Synch",
+      "summary": "Your own server for Synch, end-to-end encrypted real-time sync for Obsidian vaults: notes are encrypted on each device, and the Worker relays and stores only ciphertext in a Durable Object, D1 and R2.",
+      "tagline": "Keep your Obsidian notes in sync on your own server",
+      "addedAt": "2026-09-27T04:47:37+03:00",
+      "version": "0.5.4",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/synch@0.5.4/synch-0.5.4.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/synch@0.5.4/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/synch@0.5.4/manifest.sig",
+        "digest": "314d08ec47bf4115a99a3b0e5991732f7415d2c6aabaf79c701a64c806627e5c"
+      },
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "r2"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Synch",
+          "url": "https://synch.run",
+          "github": "hjinco"
+        },
+        {
+          "name": "hhhjin",
+          "url": "https://hyeongjin.com",
+          "github": "hhhjin"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/synch/icon.png",
+          "sha256": "6aa7ad1fbf0544583c8a0e7a6d3b3b3261d2eac3c3bdbfb6994b6981660d0b6b"
+        },
+        "cover": {
+          "url": "https://appflare.github.io/catalog/apps/synch/cover.png",
+          "sha256": "99fc3e009889b059263c110bf7cfdbc84727ea03011aa283822bcb3f7f37a8dd"
+        },
+        "screenshots": []
+      },
+      "services": [
+        "d1",
+        "r2",
+        "durable-objects",
+        "cron"
+      ],
+      "categories": [
+        "notes",
+        "sync"
+      ],
+      "license": "MIT",
+      "revision": 1,
       "accessOffer": "offered"
     },
     {
