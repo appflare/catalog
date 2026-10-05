@@ -7,6 +7,8 @@
   "repo": "jina-ai/MCP",
   "license": "Apache-2.0",
   "categories": ["ai", "developer-tools"],
+  // Field links added after this release was published: a revision, no new build.
+  "revision": 2,
   "authors": [{ "name": "Jina AI", "url": "https://jina.ai", "github": "jina-ai", "x": "JinaAI_" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags; the pin is the head of main.
@@ -24,6 +26,7 @@
       "name": "JINA_API_KEY",
       "label": "Jina API key",
       "help": "Used for every call that sends no Authorization header of its own. Anyone who knows this Worker's address can then spend it, so leave it unset and have each client send its own key unless the address stays private. Free keys at https://jina.ai.",
+      "link": { "label": "Get a key", "url": "https://jina.ai/api-dashboard/key-manager" },
       "optional": true
     }
   ],

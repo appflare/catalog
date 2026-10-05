@@ -14,9 +14,9 @@
   "repo": "itschip/screencapture",
   "license": "AGPL-3.0-only",
   "categories": ["games", "media"],
-  // The category was renamed after this release was published; the revision
-  // publishes that change without a new build.
-  "revision": 2,
+  // The category was renamed in revision 2, which this release was built with.
+  // Field links added after it was published: a revision, no new build.
+  "revision": 3,
   "authors": [{ "name": "Christopher", "github": "itschip" }],
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v0.17.2", "sha": "8fb1021330052eba49c9f9378026bd76203edc21" },
@@ -36,12 +36,20 @@
     {
       "name": "CALLS_APP_ID",
       "label": "Realtime app ID",
-      "help": "The App ID of a Realtime SFU app you create in the Cloudflare dashboard under Realtime, Serverless SFU."
+      "help": "The App ID of a Realtime SFU app you create in the Cloudflare dashboard under Realtime, Serverless SFU.",
+      "link": {
+        "label": "Create a Realtime app",
+        "url": "https://dash.cloudflare.com/?to=/:account/realtime/sfu"
+      }
     },
     {
       "name": "CALLS_APP_SECRET",
       "label": "Realtime app secret",
-      "help": "The App Secret of the same Realtime SFU app. The Worker uses it to open sessions; it never reaches the game server or the players."
+      "help": "The App Secret of the same Realtime SFU app. The Worker uses it to open sessions; it never reaches the game server or the players.",
+      "link": {
+        "label": "Create a Realtime app",
+        "url": "https://dash.cloudflare.com/?to=/:account/realtime/sfu"
+      }
     }
   ],
   "postInstall": [

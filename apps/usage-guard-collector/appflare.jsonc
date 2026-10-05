@@ -7,6 +7,8 @@
   "repo": "HowardZlh/usage-guard-collector",
   "license": "MIT",
   "categories": ["monitoring", "utilities"],
+  // Field links added after this release was published: a revision, no new build.
+  "revision": 2,
   "authors": [{ "name": "Howard", "url": "https://www.guushu.com", "github": "HowardZlh" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags; the pin tracks the default branch, main.
@@ -36,12 +38,20 @@
       "name": "DISCORD_WEBHOOK_URL",
       "label": "Discord webhook URL",
       "help": "Where surge alerts are posted in Discord. Without a webhook, surges show only on the status page.",
+      "link": {
+        "label": "Create a webhook",
+        "url": "https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks"
+      },
       "optional": true
     },
     {
       "name": "SLACK_WEBHOOK_URL",
       "label": "Slack webhook URL",
       "help": "Where surge alerts are posted in Slack (an incoming webhook).",
+      "link": {
+        "label": "Create a webhook",
+        "url": "https://docs.slack.dev/messaging/sending-messages-using-incoming-webhooks/"
+      },
       "optional": true
     }
   ],

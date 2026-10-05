@@ -12,6 +12,8 @@
   // The repository has no LICENSE file; its README's License section says MIT.
   "license": "MIT",
   "categories": ["sharing", "media"],
+  // Field links added after this release was published: a revision, no new build.
+  "revision": 2,
   "authors": [{ "name": "Fayaz Ahmed", "github": "fayazara", "x": "fayazara" }],
   "maintainers": ["MendyLanda"],
   // Upstream publishes no release tags; the pin tracks main, which the
@@ -50,12 +52,20 @@
       "name": "GITHUB_CLIENT_SECRET",
       "label": "GitHub OAuth client secret",
       "help": "For \"Sign in with GitHub\" on share pages, with the client ID below. The OAuth app's callback URL is the app's address followed by /api/auth/callback/github.",
+      "link": {
+        "label": "Create an OAuth app",
+        "url": "https://github.com/settings/applications/new"
+      },
       "optional": true
     },
     {
       "name": "GOOGLE_CLIENT_SECRET",
       "label": "Google OAuth client secret",
       "help": "For \"Sign in with Google\" on share pages, with the client ID below. The OAuth client's redirect URI is the app's address followed by /api/auth/callback/google.",
+      "link": {
+        "label": "Create an OAuth client",
+        "url": "https://console.cloud.google.com/apis/credentials"
+      },
       "optional": true
     }
   ],
@@ -76,12 +86,20 @@
       "name": "GITHUB_CLIENT_ID",
       "label": "GitHub OAuth client ID",
       "help": "Comments and likes need a signed-in viewer. Set up GitHub, Google, or both; without either, share pages show no comments or likes.",
+      "link": {
+        "label": "Create an OAuth app",
+        "url": "https://github.com/settings/applications/new"
+      },
       "optional": true
     },
     {
       "name": "GOOGLE_CLIENT_ID",
       "label": "Google OAuth client ID",
       "help": "A Web application OAuth client. Publish its consent screen, or only its test users can sign in.",
+      "link": {
+        "label": "Create an OAuth client",
+        "url": "https://console.cloud.google.com/apis/credentials"
+      },
       "optional": true
     }
   ],

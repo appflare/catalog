@@ -16,9 +16,9 @@
   "license": "AGPL-3.0-only",
   "categories": ["ai", "games"],
   // Upstream has not moved since the released pin, so the Access protection
-  // below (revision 2) and the edited help text (revision 3) are revisions of
-  // that build.
-  "revision": 3,
+  // below (revision 2), the edited help text (revision 3) and the field links
+  // (revision 4) are revisions of that build.
+  "revision": 4,
   "authors": [{ "name": "Zonghao Yuan", "url": "https://yzh.im", "github": "zonghaoyuan" }],
   "maintainers": ["MendyLanda"],
   // InfiPlot publishes no release tags; the pin tracks main.
@@ -42,22 +42,26 @@
     {
       "name": "TEXT_API_KEY",
       "label": "Text model API key",
-      "help": "API key for the text model's endpoint below."
+      "help": "API key for the text model's endpoint below.",
+      "link": { "label": "Get a DeepSeek key", "url": "https://platform.deepseek.com/api_keys" }
     },
     {
       "name": "IMAGE_API_KEY",
       "label": "Image model API key",
-      "help": "API key for the image model's endpoint below, for example a Runware key."
+      "help": "API key for the image model's endpoint below, for example a Runware key.",
+      "link": { "label": "Get a Runware key", "url": "https://my.runware.ai/keys" }
     },
     {
       "name": "VISION_API_KEY",
       "label": "Vision model API key",
-      "help": "API key for the vision model's endpoint below."
+      "help": "API key for the vision model's endpoint below.",
+      "link": { "label": "Get a MiMo key", "url": "https://platform.xiaomimimo.com/" }
     },
     {
       "name": "TTS_API_KEY",
       "label": "Speech API key",
       "help": "API key for text to speech. Leave empty, with the speech endpoint or model, to play without voices.",
+      "link": { "label": "Get a MiMo key", "url": "https://platform.xiaomimimo.com/" },
       "optional": true
     }
   ],

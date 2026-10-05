@@ -7,8 +7,9 @@
   "repo": "TooonyChen/AuthInbox",
   "license": "MIT",
   "categories": ["email", "ai"],
-  // Help text edited after this release was published: a revision, no new build.
-  "revision": 2,
+  // Edited help text (revision 2) and field links (revision 3) came after this
+  // release was published: revisions, no new build.
+  "revision": 3,
   "authors": [{ "name": "Tony Chen", "url": "https://tonychen.net", "github": "TooonyChen" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags, so the entry follows the default branch by commit.
@@ -48,7 +49,8 @@
     {
       "name": "AI_API_KEY",
       "label": "AI API key",
-      "help": "The API key of your AI provider (Google AI Studio, OpenAI, Anthropic, DeepSeek, Groq and others), for the base URL and model below."
+      "help": "The API key of your AI provider (Google AI Studio, OpenAI, Anthropic, DeepSeek, Groq and others), for the base URL and model below.",
+      "link": { "label": "Get a Gemini key", "url": "https://aistudio.google.com/app/apikey" }
     },
     {
       "name": "AI_FALLBACK_API_KEY",
@@ -121,6 +123,7 @@
       "name": "barkTokens",
       "label": "Bark device tokens",
       "help": "The device tokens from the Bark app, in brackets and comma separated, for example [token1, token2]. Only used when Bark notifications are on.",
+      "link": { "label": "Get the Bark app", "url": "https://bark.day.app/" },
       "optional": true
     },
     {

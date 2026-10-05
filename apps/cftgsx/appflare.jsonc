@@ -10,6 +10,8 @@
   "repo": "SCSHIRKER/cftgsx",
   "license": "MIT",
   "categories": ["chat", "bots"],
+  // Field links added after this release was published: a revision, no new build.
+  "revision": 2,
   "authors": [{ "name": "SCSHIRKER", "github": "SCSHIRKER" }],
   "maintainers": ["MendyLanda"],
   // The default branch, not the only tag (v1.2.0, July 2025): the commits
@@ -44,7 +46,8 @@
     {
       "name": "BOT_TOKEN",
       "label": "Telegram bot token",
-      "help": "From @BotFather, in the form 123456789:AA…"
+      "help": "From @BotFather, in the form 123456789:AA…",
+      "link": { "label": "Create a bot", "url": "https://t.me/BotFather" }
     },
     {
       "name": "WEBHOOK_SECRET",
@@ -63,7 +66,8 @@
     {
       "name": "ADMIN_CHAT_ID",
       "label": "Admin chat id",
-      "help": "The numeric Telegram id of the chat that receives the messages: your own user id, or a group's id (negative, starting with -100). @userinfobot shows yours."
+      "help": "The numeric Telegram id of the chat that receives the messages: your own user id, or a group's id (negative, starting with -100). @userinfobot shows yours.",
+      "link": { "label": "Find your chat ID", "url": "https://t.me/userinfobot" }
     },
     {
       "name": "ENABLE_USER_TRACKING",
