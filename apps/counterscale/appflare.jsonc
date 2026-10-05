@@ -14,6 +14,8 @@
   "repo": "benvinegar/counterscale",
   "license": "MIT",
   "categories": ["analytics"],
+  // Generated secrets added after this release was published: a revision, no new build.
+  "revision": 2,
   "authors": [
     { "name": "Ben Vinegar", "url": "https://benv.ca", "github": "benvinegar", "x": "bentlegen" }
   ],
@@ -48,9 +50,14 @@
       "cloudflareToken": true
     },
     {
+      // Upstream's CLI asks for at least 8 characters
+      // (packages/cli/src/lib/ui.ts:77-88). The bcrypt hash below is computed
+      // from the generated value as from a typed one, and its 32 characters
+      // are within the 72 bytes bcrypt reads.
       "name": "CF_PASSWORD",
       "label": "Dashboard password",
-      "help": "Sign in to the dashboard with it. Counterscale keeps only its hash: Appflare computes CF_PASSWORD_HASH from it on install and whenever you change it here."
+      "help": "Sign in to the dashboard with it. Counterscale keeps only its hash: Appflare computes CF_PASSWORD_HASH from it on install and whenever you change it here.",
+      "generate": "password"
     },
     {
       "name": "CF_PASSWORD_HASH",

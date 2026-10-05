@@ -15,6 +15,5 @@ strings, all through Jina's APIs. Licensed Apache-2.0.
   `?exclude_tools=` on the `/v1` URL trim the tools a client sees.
 - **Jina blog search.** `search_jina_blog` reads Jina's blog through a key only the
   hosted server has, so it answers with an error on an install.
-- **Pin.** Upstream has no release tags, so the pin follows the default branch and each
-  bump is reviewed by a maintainer.
+- **Pin.** Upstream has no release tags, so the pin follows the default branch.
 - No images: the README's screenshots show third-party MCP clients, not the server.

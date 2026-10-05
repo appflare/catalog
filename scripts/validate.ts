@@ -20,7 +20,7 @@ LicenseRef-<name> license must come with a licenseNote. Tier rules: a sandbox ti
 declare install.buildCommand; a self-deploying entry must set plan "paid",
 describe its installer in install.selfDeploying, and list tokenPermissions;
 and entries CI does not install (sandbox, self-deploying) must not set
-bump.autoMerge.
+bump.autoMerge to true.
 
 It also checks each entry's images, all of them optional: at most one square
 icon (icon.svg or icon.png), a 1200x630 cover.png, and screenshots/*.png.

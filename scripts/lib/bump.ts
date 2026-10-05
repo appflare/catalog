@@ -2,6 +2,7 @@ import path from "node:path";
 import { z } from "zod";
 import type { AppEntry } from "./apps.ts";
 import { readManifestFile } from "./apps.ts";
+import { declaredTier } from "./changed-apps.ts";
 import { setJsoncStrings } from "./jsonc-edit.ts";
 import {
   type ChangedFiles,
@@ -26,8 +27,10 @@ const pinSchema = z.object({
   install: z.object({ wranglerConfig: z.string().min(1) }),
 });
 export type AppPin = z.infer<typeof pinSchema> & {
+  /** `install.tier` as CI reads it, `artifact` when absent; see `declaredTier`. */
+  tier: string;
   /** `bump.autoMerge` in the manifest; see `readAutoMerge`. */
-  autoMerge: boolean;
+  autoMerge: AutoMergeSetting;
 };
 
 export function readPin(app: AppEntry): AppPin {
@@ -36,20 +39,41 @@ export function readPin(app: AppEntry): AppPin {
   if (!result.success) {
     throw new Error(`${app.manifestPath}: ${z.prettifyError(result.error)}`);
   }
-  return { ...result.data, autoMerge: readAutoMerge(manifest) };
+  return { ...result.data, tier: declaredTier(manifest), autoMerge: readAutoMerge(manifest) };
 }
 
 /**
- * Whether a raw manifest sets `bump.autoMerge` to exactly `true`. Read from the
- * parsed JSONC rather than the synced schema, which may be older than the field;
- * a missing or malformed `bump` never stops the bot and means a maintainer
- * merges (the validate step reports a malformed one once the schema has it).
+ * What an entry's `bump` setting asks of the bot: `on` when `bump` or
+ * `bump.autoMerge` is absent or `bump.autoMerge` is `true`, `off` for
+ * `bump.autoMerge: false`, and `malformed` for anything else.
  */
-export function readAutoMerge(manifest: unknown): boolean {
-  if (!isRecord(manifest) || !isRecord(manifest.bump)) {
-    return false;
+export type AutoMergeSetting = "on" | "off" | "malformed";
+
+/**
+ * Reads `bump.autoMerge` from the parsed JSONC rather than the synced schema,
+ * whose default for it may still be `false`. A malformed `bump` never stops
+ * the bot: it reads as `malformed`, which leaves the merge to a maintainer,
+ * since it may be a misspelt opt-out (`{ "automerge": false }`). The validate
+ * step reports it.
+ */
+export function readAutoMerge(manifest: unknown): AutoMergeSetting {
+  if (!isRecord(manifest)) {
+    return "malformed";
   }
-  return manifest.bump.autoMerge === true;
+  if (manifest.bump === undefined) {
+    return "on";
+  }
+  if (!isRecord(manifest.bump)) {
+    return "malformed";
+  }
+  const { autoMerge, ...rest } = manifest.bump;
+  if (Object.keys(rest).length > 0) {
+    return "malformed";
+  }
+  if (autoMerge === undefined || autoMerge === true) {
+    return "on";
+  }
+  return autoMerge === false ? "off" : "malformed";
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -57,12 +81,13 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 }
 
 /**
- * Whether the bump pull request for `pin` merges itself. An entry that states
- * `source.version` never does: a person has to set the new version first, or
- * publish refuses the moved pin.
+ * Whether the bump pull request for `pin` merges itself: only for an
+ * `artifact` tier entry, the one tier the install check covers, whose `bump`
+ * setting does not opt out and which does not state `source.version` (a
+ * person has to set the new version first, or publish refuses the moved pin).
  */
 export function autoMerges(pin: AppPin): boolean {
-  return pin.autoMerge && pin.source.version === undefined;
+  return pin.tier === "artifact" && pin.autoMerge === "on" && pin.source.version === undefined;
 }
 
 /** A pin that moved upstream. */
@@ -345,38 +370,62 @@ export function renderBumpBody(
         "publish refuses a moved pin under a `source.version` that is already released.",
     );
   }
-  lines.push(
-    "",
-    "The verify workflow packs this pin, checks the artifact's hashes, and installs it into " +
-      "the CI account.",
-    "",
-    mergePathText(pin),
-  );
+  lines.push("", checksText(pin.tier), "", mergePathText(pin));
   return `${lines.join("\n")}\n`;
 }
 
-/** The pull request body's closing paragraph: who merges it, why, and when it publishes. */
+/** What the verify workflow checks for an entry of `tier`. */
+function checksText(tier: string): string {
+  if (tier === "sandbox") {
+    return "The verify workflow packs this pin to show that it builds. CI does not install sandbox tier entries.";
+  }
+  if (tier === "self-deploying") {
+    return "The verify workflow validates this entry. CI does not build or install self-deploying entries.";
+  }
+  return "The verify workflow packs this pin, checks the artifact's hashes, and installs it into the CI account.";
+}
+
+/**
+ * The pull request body's closing paragraph: who merges it, why, and when it
+ * publishes. The catalog checks that a release builds and installs; it does
+ * not review upstream's code, so no case promises that review.
+ */
 function mergePathText(pin: AppPin): string {
   const manifest = `\`apps/${pin.slug}/appflare.jsonc\``;
   if (autoMerges(pin)) {
     return (
-      `**This pull request merges itself.** ${manifest} sets \`bump.autoMerge\`, so it ` +
-      "squash-merges once the required checks pass, the install check included, and the " +
-      "next nightly bump run publishes the new version. To stop that, disable auto-merge " +
-      "here or close the pull request."
+      "**This pull request merges itself.** It squash-merges once the required checks pass, " +
+      "the install check included, and the next nightly bump run publishes the new version. " +
+      "The catalog checks that the new release builds, matches its hashes and installs; it " +
+      "does not review upstream's code, and each user decides whether to update. To stop " +
+      "this bump, disable auto-merge here or close the pull request. To have a maintainer " +
+      `merge every bump of this app, set \`"bump": { "autoMerge": false }\` in ${manifest}, ` +
+      "for example in a commit on this pull request's branch."
     );
   }
-  if (pin.autoMerge) {
+  const head = "**A maintainer merges this pull request.**";
+  const tail = "Merging publishes the new version.";
+  if (pin.tier !== "artifact") {
     return (
-      `**A maintainer merges this pull request.** ${manifest} sets \`bump.autoMerge\`, but ` +
-      "it also sets `source.version`, which has to be updated by hand first, so this " +
-      "pull request does not merge itself. Merging publishes the new version."
+      `${head} ${manifest} is a \`${pin.tier}\` tier entry, which CI does not install, so ` +
+      `none of its bumps merges itself. ${tail}`
+    );
+  }
+  if (pin.source.version !== undefined) {
+    return (
+      `${head} ${manifest} sets \`source.version\`, which has to be updated by hand first, ` +
+      `so this pull request does not merge itself. ${tail}`
+    );
+  }
+  if (pin.autoMerge === "off") {
+    return (
+      `${head} ${manifest} sets \`bump.autoMerge\` to \`false\`, so its bumps wait for a ` +
+      `maintainer instead of merging themselves once the checks pass. ${tail}`
     );
   }
   return (
-    "**A maintainer merges this pull request** after reviewing the upstream changes. " +
-    "Merging publishes the new version. An entry whose maintainers trust upstream's tags " +
-    "can set `bump.autoMerge` so bumps merge themselves once the checks pass."
+    `${head} The bump bot cannot read the \`bump\` setting in ${manifest}, so it leaves ` +
+    `the merge to a maintainer; \`pnpm validate\` says what is wrong. ${tail}`
   );
 }
 

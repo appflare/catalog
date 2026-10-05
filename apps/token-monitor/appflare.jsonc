@@ -12,6 +12,9 @@
   "repo": "Javis603/token-monitor",
   "license": "MIT",
   "categories": ["ai", "monitoring"],
+  // The formatting of URLs in the notes changed after this release was published:
+  // a revision, no new build.
+  "revision": 2,
   "authors": [{ "name": "Javis", "url": "https://javis-ai.com", "github": "Javis603" }],
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v0.66.0", "sha": "e7bac3aff6a1bc7cf74fd149a26d2730cfe32de8" },
@@ -51,7 +54,7 @@
   "postInstall": [
     {
       "type": "markdown",
-      "content": "In each Token Monitor widget, open Settings, Multi-device Sync, and enter the hub URL {{appUrl}} and the hub secret from this app's settings. The status pill turns from Local to Live once it connects."
+      "content": "In each Token Monitor widget, open Settings, Multi-device Sync, and enter the hub URL `{{appUrl}}` and the hub secret from this app's settings. The status pill turns from Local to Live once it connects."
     },
     {
       "type": "markdown",

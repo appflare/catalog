@@ -18,8 +18,8 @@ body template. Licensed Apache-2.0.
 - **Secrets in the configuration.** `${NAME}` in the configuration is replaced with the
   Worker's binding of that name. The entry offers `AUTH_TOKEN`, `TELEGRAM_BOT_TOKEN` and
   `TELEGRAM_CHAT_ID`, the names upstream's examples use, as optional secrets.
-- **Status page access.** Basic auth with the username and password you enter, or
-  public when **Public status page** is set.
+- **Status page access.** Basic auth with the username you enter and a generated
+  password (or one you enter), or public when **Public status page** is set.
 - **Crons.** Two cron triggers (every minute, and hourly), out of the 5 an account has on
   the Workers Free plan.
 - **Build.** The status page is built before the Worker is bundled, as upstream's deploy

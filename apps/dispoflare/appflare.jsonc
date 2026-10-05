@@ -13,6 +13,10 @@
   "repo": "LeoColomb/dispoflare",
   "license": "MIT",
   "categories": ["email", "privacy"],
+  // The tag the entry pins has not moved since the released build, so the Access
+  // protection below (revision 2) and the field links (revision 3) are revisions
+  // of that build.
+  "revision": 3,
   "authors": [
     {
       "name": "Léo Colombaro",
@@ -43,7 +47,14 @@
   // Email Routing and one cron trigger (of the free plan's five per
   // account); no storage.
   "plan": "free",
-  "requires": ["zone", "email-routing"],
+  // "access": the app installs only behind Cloudflare Access (below).
+  "requires": ["zone", "email-routing", "access"],
+  // No sign-in at all, and anyone who reaches the app can list the verified
+  // destination addresses and create or delete forwarding rules; upstream
+  // expects Cloudflare Access in front of the whole app, so protection is
+  // required. The cron trigger is not a request, so Access does not stand in
+  // its way, and nothing else must stay public.
+  "access": { "mode": "required" },
   "secrets": [
     {
       "name": "CLOUDFLARE_API_TOKEN",
@@ -63,17 +74,21 @@
       "name": "SENTRY_DSN",
       "label": "Sentry DSN",
       "help": "Reports the Worker's errors to Sentry. Leave empty to only log them.",
+      "link": {
+        "label": "Find your DSN",
+        "url": "https://docs.sentry.io/concepts/key-terms/dsn-explainer/"
+      },
       "optional": true
     }
   ],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "**Dispoflare has no sign-in: protect it with Cloudflare Access before you use it.** Until then anyone who finds {{appUrl}} can list your verified destination addresses and create or delete forwarding addresses on your domains. In the Cloudflare dashboard, open Workers & Pages, select this Worker, open Settings, Domains & Routes, and turn on Cloudflare Access for its workers.dev address."
+      "content": "**Dispoflare has no sign-in of its own**, so Appflare keeps it behind Cloudflare Access: only the people who use this Appflare can reach {{appUrl}}, list your verified destination addresses, and create or delete forwarding addresses on your domains."
     },
     {
       "type": "markdown",
-      "content": "Then open {{appUrl}}. It lists the zones where Email Routing is on and the destination addresses verified under Email Routing, Destination addresses; add and verify your own inbox there first. Create an address, pick the inbox it forwards to and its expiry date, and see them all under Manage."
+      "content": "Open {{appUrl}} and sign in through Cloudflare Access. It lists the zones where Email Routing is on and the destination addresses verified under Email Routing, Destination addresses; add and verify your own inbox there first. Create an address, pick the inbox it forwards to and its expiry date, and see them all under Manage."
     },
     {
       "type": "markdown",
