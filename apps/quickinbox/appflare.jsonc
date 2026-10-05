@@ -12,8 +12,9 @@
   "repo": "DivinPrince/quickinbox",
   "license": "MIT",
   "categories": ["email"],
-  // Generated secrets added after this release was published: a revision, no new build.
-  "revision": 2,
+  // Generated secrets (revision 2) and field links (revision 3) came after this
+  // release was published: revisions, no new build.
+  "revision": 3,
   "authors": [
     { "name": "Irasubiza Divin Prince", "url": "https://divinprince.com", "github": "DivinPrince" }
   ],
@@ -36,30 +37,35 @@
       "name": "RESEND_API_KEY",
       "label": "Resend API key",
       "help": "For the Resend provider: an API key with full access (sending, domains and receiving) from resend.com/api-keys. Not needed with Cloudflare Email Service.",
+      "link": { "label": "Get a key", "url": "https://resend.com/api-keys" },
       "optional": true
     },
     {
       "name": "RESEND_WEBHOOK_SECRET",
       "label": "Resend webhook signing secret",
       "help": "For the Resend provider: the whsec_ secret Resend shows once when you create the webhook for this app. Set it here after installing.",
+      "link": { "label": "Add a webhook", "url": "https://resend.com/webhooks" },
       "optional": true
     },
     {
       "name": "TYPESAFE_API_KEY",
       "label": "TypeSafe API key",
       "help": "Sorts incoming mail into Primary, Social, Promotions, Updates and Forums tabs, and spam. Without it everything stays in Primary.",
+      "link": { "label": "Get a key", "url": "https://console.typesafe.ai/" },
       "optional": true
     },
     {
       "name": "TELEGRAM_BOT_TOKEN",
       "label": "Telegram bot token",
       "help": "From @BotFather. With the chat id below, every incoming message is announced in that chat.",
+      "link": { "label": "Create a bot", "url": "https://t.me/BotFather" },
       "optional": true
     },
     {
       "name": "TELEGRAM_CHAT_ID",
       "label": "Telegram chat id",
       "help": "From @userinfobot; negative for groups.",
+      "link": { "label": "Find your chat ID", "url": "https://t.me/userinfobot" },
       "optional": true
     },
     {

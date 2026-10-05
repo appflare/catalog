@@ -16,8 +16,9 @@
   // version" grant; package.json and the README say AGPL-3.0.
   "license": "AGPL-3.0-only",
   "categories": ["media"],
-  // Help text edited after this release was published: a revision, no new build.
-  "revision": 2,
+  // Edited help text (revision 2) and field links (revision 3) came after this
+  // release was published: revisions, no new build.
+  "revision": 3,
   "authors": [{ "name": "chthollyphile", "github": "chthollyphile" }],
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v0.7.13", "sha": "74f77594799d5b97fd872c340f143459943525d7" },
@@ -38,6 +39,7 @@
       "name": "GEMINI_API_KEY",
       "label": "Gemini API key",
       "help": "A Google Gemini API key for the AI colour themes and lyric word segmentation. Without it those features are off and everything else works.",
+      "link": { "label": "Get a key", "url": "https://aistudio.google.com/app/apikey" },
       "optional": true
     }
   ],

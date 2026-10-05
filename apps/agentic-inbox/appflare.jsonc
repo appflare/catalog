@@ -8,9 +8,9 @@
   "license": "Apache-2.0",
   "categories": ["email", "ai"],
   // Upstream has not moved since the released pin, so the Access protection
-  // below (revision 2) and the edited help text (revision 3) are revisions of
-  // that build.
-  "revision": 3,
+  // below (revision 2), the edited help text (revision 3) and the formatting of
+  // URLs in the notes (revision 4) are revisions of that build.
+  "revision": 4,
   "authors": [
     { "name": "Cloudflare", "url": "https://www.cloudflare.com", "github": "cloudflare" }
   ],
@@ -92,7 +92,7 @@
     },
     {
       "type": "markdown",
-      "content": "Every Appflare user can sign in and open every mailbox, including through the MCP server at {{appUrl}}/mcp, so install it only on an Appflare whose users should read all of them."
+      "content": "Every Appflare user can sign in and open every mailbox, including through the MCP server at `{{appUrl}}/mcp`, so install it only on an Appflare whose users should read all of them."
     }
   ]
 }
