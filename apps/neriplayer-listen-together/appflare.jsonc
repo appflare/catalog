@@ -21,7 +21,7 @@
   "authors": [{ "name": "TheSmallHanCat", "github": "TheSmallHanCat" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no tags; the pin follows the default branch.
-  "source": { "ref": "main", "sha": "5ec8a8b0748f685ccb4b6890e6fc6f297b9df8f7" },
+  "source": { "ref": "main", "sha": "d83f9e2f6b12d0f020fd23145ace10c71e3de777" },
   "install": {
     "packageManager": "npm",
     // Plain JavaScript: no build step.
