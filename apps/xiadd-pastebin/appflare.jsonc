@@ -7,7 +7,6 @@
   "name": "xiadd Pastebin",
   "summary": "A pastebin with syntax highlighting, Markdown, password-protected pastes, expiry times and file uploads up to 25 MB, on D1 and R2, with a JSON API.",
   "tagline": "Share text and files with links that can expire or use a password",
-  "homepage": "https://github.com/xiadd/pastebin-worker",
   "repo": "xiadd/pastebin-worker",
   "license": "MIT",
   "categories": ["sharing", "developer-tools"],
@@ -16,7 +15,6 @@
   // Upstream publishes no release tags; the pin tracks main.
   "source": { "ref": "main", "sha": "5af66e42e4174c6e69223502bd46aafbeffbd0f5" },
   "install": {
-    "tier": "artifact",
     // Classic yarn: upstream ships a yarn 1 lockfile.
     "packageManager": "yarn",
     // The root config has no `main`: TanStack Start builds through Nitro's
@@ -36,24 +34,21 @@
   // refused.
   "plan": "free",
   "requires": ["r2"],
-  "secrets": [],
   // ENVIRONMENT keeps upstream's value, production.
   "vars": [
     {
       "name": "BASE_URL",
       "label": "Public URL",
-      "help": "The address links to pastes and files are built from, without a trailing slash: the Worker's workers.dev address, or your custom domain.",
+      "help": "The address links to pastes and files are built from, without a trailing slash.",
       // Newer managers fill in the Worker's workers.dev address here; older
       // ones show the placeholder as is, and it must be replaced by hand.
-      "default": "{{workerUrl}}",
-      "required": true
+      "default": "{{appUrl}}"
     }
   ],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Open {{workerUrl}} to post a paste or upload a file. There is no sign-in: anyone who finds the address can post, and every upload is stored in your account's R2 bucket."
+      "content": "Open {{appUrl}} to post a paste or upload a file. There is no sign-in: anyone who finds the address can post, and every upload is stored in your account's R2 bucket."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

@@ -7,42 +7,39 @@
   "name": "Cap Worker",
   "summary": "A self-hosted backend for Cap, the privacy-friendly proof-of-work CAPTCHA: your sites get challenges and verify tokens against your own Worker, with no tracking.",
   "tagline": "Protect your site from bots without tracking visitors",
-  "homepage": "https://github.com/xyTom/cap-worker",
   "repo": "xyTom/cap-worker",
   // The repository has no LICENSE file; its README states "This project is
   // licensed under the MIT License."
   "license": "MIT",
   "categories": ["security", "developer-tools"],
+  // The formatting of URLs in the notes changed after this release was published:
+  // a revision, no new build.
+  "revision": 2,
   "authors": [{ "name": "xyTom", "github": "xyTom" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no tags; the pin follows the default branch.
   "source": { "ref": "main", "sha": "39eb690b47eddeb1f348cdb19e06e8c023f72e6b" },
   "install": {
-    "tier": "artifact",
     "packageManager": "npm",
     // TypeScript that wrangler bundles, plus a static docs page and the Cap
     // widget script in public/: no build step. Upstream's `workers_dev: false`
     // is dropped like any route setting; the manager decides the address.
-    "wranglerConfig": "wrangler.jsonc",
-    "workerName": "cap-worker"
+    "wranglerConfig": "wrangler.jsonc"
   },
   // A SQLite-backed Durable Object and static assets fit the free plan; the
   // cleanup alarm adds about 1,440 Durable Object requests a day.
   "plan": "free",
-  "requires": [],
   // The Worker reads no secrets or settings. Its API is open to any site, as
   // upstream's is: a token proves that a challenge was solved, not where.
   "secrets": [],
-  "vars": [],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Point the Cap widget at this install: load {{workerUrl}}/cap.min.js and set `data-cap-api-endpoint=\"{{workerUrl}}/api/\"` on `<cap-widget>`. Your server then checks each token with `POST {{workerUrl}}/api/validate`."
+      "content": "Point the Cap widget at this install: load `{{appUrl}}/cap.min.js` and set `data-cap-api-endpoint=\"{{appUrl}}/api/\"` on `<cap-widget>`. Your server then checks each token with `POST {{appUrl}}/api/validate`."
     },
     {
       "type": "markdown",
-      "content": "The page at {{workerUrl}} is upstream's documentation. Its live demo and code samples use upstream's public server, captcha.gurl.eu.org, not this install; replace that address with {{workerUrl}} when you copy them."
+      "content": "The page at {{appUrl}} is upstream's documentation. Its live demo and code samples use upstream's public server, captcha.gurl.eu.org, not this install; replace that address with `{{appUrl}}` when you copy them."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

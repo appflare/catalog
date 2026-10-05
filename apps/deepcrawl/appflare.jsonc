@@ -8,25 +8,29 @@
   "repo": "lumpinif/deepcrawl",
   "license": "MIT",
   "categories": ["developer-tools", "ai"],
+  // Field links (revision 2) and the formatting of URLs in the notes (revision 3)
+  // came after this release was published: revisions, no new build.
+  "revision": 3,
   "authors": [{ "name": "Felix Lu", "github": "lumpinif", "x": "felixlu1018" }],
   "maintainers": ["MendyLanda"],
   // Upstream's release tags (deepcrawl@X.Y.Z) version the project's
   // TypeScript SDK, the package named deepcrawl, which is released together
   // with the API Worker; the Worker's own package carries no version. So the
-  // version comes from install.version, and the bump bot, which reads no
+  // version comes from source.version, and the bump bot, which reads no
   // deepcrawl@ prefix as a version, cannot move this pin: move source to the
-  // newest deepcrawl@ tag and install.version with it by hand.
-  "source": { "ref": "deepcrawl@0.5.5", "sha": "c40e8e567b7d85b36bf45aa6b5d828249e1831ba" },
+  // newest deepcrawl@ tag and source.version with it by hand.
+  "source": {
+    "ref": "deepcrawl@0.5.5",
+    "sha": "c40e8e567b7d85b36bf45aa6b5d828249e1831ba",
+    "version": "0.5.5"
+  },
   "install": {
-    "tier": "artifact",
     "packageManager": "pnpm",
     // The API Worker alone. Upstream's full platform adds a Better Auth Worker
     // and a Next.js dashboard with a Postgres database; the API also runs
     // without them, checking a signed token on each request (AUTH_MODE jwt),
     // which is how this entry installs it.
     "wranglerConfig": "apps/workers/v0/wrangler.jsonc",
-    "workerName": "deepcrawl",
-    "version": "0.5.5",
     // No build: wrangler bundles src/index.ts and the workspace packages it
     // imports, which ship as TypeScript source.
     // The config binds upstream's Better Auth Worker (AUTH_WORKER), which is
@@ -52,24 +56,25 @@
   // logs), all with free tiers. Pages are fetched with plain fetch: no Browser
   // Rendering or Workers AI.
   "plan": "free",
-  "requires": [],
   "secrets": [
     {
       "name": "JWT_SECRET",
       "label": "Token signing secret",
       "help": "Clients sign their API tokens with it (HS256). Setting a new value makes every token issued so far invalid.",
-      "generate": true
+      "generate": "password"
     },
     {
       "name": "UPSTASH_REDIS_REST_URL",
       "label": "Upstash Redis REST URL",
       "help": "Turns on per-client rate limiting of the API, with the token below. Without both, requests are not rate limited.",
+      "link": { "label": "Create a database", "url": "https://console.upstash.com/redis" },
       "optional": true
     },
     {
       "name": "UPSTASH_REDIS_REST_TOKEN",
       "label": "Upstash Redis REST token",
       "help": "The REST token of the Upstash database above.",
+      "link": { "label": "Create a database", "url": "https://console.upstash.com/redis" },
       "optional": true
     }
   ],
@@ -81,26 +86,28 @@
       "name": "AUTH_MODE",
       "label": "Authentication mode",
       "help": "Keep jwt: the API then accepts only tokens signed with the token signing secret. The other modes need upstream's auth Worker or leave the API open to anyone.",
-      "default": "jwt",
-      "required": true
+      "default": "jwt"
     },
     {
       "name": "JWT_ISSUER",
       "label": "Token issuer",
       "help": "When set, a token's iss claim must equal it. Leave empty to accept any issuer.",
-      "default": ""
+      "default": "",
+      "optional": true
     },
     {
       "name": "JWT_AUDIENCE",
       "label": "Token audience",
       "help": "When set, a token's aud claim must include it. Leave empty to accept any audience.",
-      "default": ""
+      "default": "",
+      "optional": true
     },
     {
       "name": "API_URL",
       "label": "API URL",
       "help": "Where clients reach the API, shown as the server in the OpenAPI document.",
-      "default": "{{workerUrl}}"
+      "default": "{{appUrl}}",
+      "optional": true
     },
     {
       "name": "WORKER_NODE_ENV",
@@ -111,7 +118,8 @@
         { "value": "production", "label": "Production" },
         { "value": "development", "label": "Development" }
       ],
-      "default": "production"
+      "default": "production",
+      "optional": true
     }
   ],
   "postInstall": [
@@ -121,8 +129,7 @@
     },
     {
       "type": "markdown",
-      "content": "Then read a page as Markdown:\n\n```sh\ncurl '{{workerUrl}}/read?url=https://example.com' -H 'Authorization: Bearer <token>'\n```\n\n`POST /read` returns the full result with metadata, and `/links` the page's link tree. The API reference is at {{workerUrl}}/docs and the OpenAPI document at {{workerUrl}}/openapi, both behind the same token. Point the `deepcrawl` SDK at {{workerUrl}} with the token as its API key."
+      "content": "Then read a page as Markdown:\n\n```sh\ncurl '{{appUrl}}/read?url=https://example.com' -H 'Authorization: Bearer <token>'\n```\n\n`POST /read` returns the full result with metadata, and `/links` the page's link tree. The API reference is at `{{appUrl}}/docs` and the OpenAPI document at `{{appUrl}}/openapi`, both behind the same token. Point the `deepcrawl` SDK at `{{appUrl}}` with the token as its API key."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

@@ -1,136 +1,209 @@
 {
-  // OpenSEO deploys itself with an Alchemy stack (alchemy.run.ts): two Workers
-  // (the app and its site-audit Worker), D1, R2, two KV namespaces, Durable
-  // Objects, Workflows, a rate limit, cron triggers, and a Cloudflare Access
-  // application in front of the app. The sandbox Worker runs that stack with a
-  // token the admin creates for it; Appflare records what it made.
+  // OpenSEO deploys itself with an Alchemy stack (deploy/alchemy/alchemy.run.ts),
+  // but the stack only reads the repository's wrangler configs and deploys the
+  // Vite build: two Workers (the app and its site-audit Worker), D1, R2, two KV
+  // namespaces, Durable Objects, two Workflows, a rate limit and cron triggers.
+  // This entry installs that same build from upstream's own wrangler configs,
+  // with the rate limit and the R2 lifecycle rule the stack adds. Cloudflare
+  // Access, which the stack also sets up, is Appflare's own here.
   "$schema": "https://appflare.github.io/catalog/schema/v1.json",
   "slug": "open-seo",
   "name": "OpenSEO",
   "summary": "Self-hosted SEO research: keywords, rankings, backlinks and site audits, on your own Cloudflare account and behind Cloudflare Access.",
   "tagline": "Find search terms, track rankings, and check your site's health",
-  "homepage": "https://github.com/every-app/open-seo",
   "repo": "every-app/open-seo",
   "license": "MIT",
   "categories": ["marketing", "analytics"],
+  // Edited help text (revision 2), field links (revision 3) and the formatting of
+  // URLs in the notes (revision 4) came after this release was published:
+  // revisions, no new build.
+  "revision": 4,
   "authors": [
     { "name": "Ben Senescu", "github": "bensenescu", "x": "bensenescu" },
     { "name": "Every App", "url": "https://everyapp.dev", "github": "every-app" }
   ],
   "maintainers": ["MendyLanda"],
-  "source": { "ref": "v0.1.9", "sha": "84e4705503ceaef54d1b284c167de9942563cdae" },
+  "source": { "ref": "v0.1.10", "sha": "95c4d10c1c1d7bf57ad7328a682a86e16eec2f06" },
   "install": {
-    "tier": "self-deploying",
     "packageManager": "pnpm",
-    // Not read by this tier (the Alchemy stack reads it itself); required by the schema.
     "wranglerConfig": "wrangler.jsonc",
-    "workerName": "open-seo",
-    // The same build as `pnpm deploy:selfhost`, minus its type check; runs
-    // without credentials before the installer.
+    // The Vite build of `pnpm deploy:selfhost`, without its type check and
+    // without credentials. Cloudflare's Vite plugin builds both Workers (the
+    // audit Worker is its auxiliary Worker) and writes their deploy configs to
+    // dist/server and dist/open_seo_audit; the packer packs each from the
+    // config it came from. The repository's .npmrc gives Node the 4 GiB heap
+    // the build needs. --mode selfhost loads no file in a fresh checkout; it
+    // keeps the build identical to upstream's self-host one, whose telemetry
+    // runs only in the production and selfhost modes
+    // (src/server/lib/self-host-telemetry.ts).
     "buildCommand": "pnpm exec vite build --mode selfhost",
-    // Unauthenticated in the app, but the Access application covers the whole
-    // hostname, so the probe only sees Access's redirect.
-    "healthPath": "/api/health",
-    "healthMode": "status-only",
-    // One installer run: the dependency install, the Vite build of about 7,400
-    // modules, then the deploy. The repository's .npmrc gives Node a 4 GiB
-    // heap because the build needs more than the default, which leaves no
-    // room on standard-1 (4 GiB in all), so it runs on standard-2. A live
-    // run measured 2.9 minutes for the install and 3.7 for the destroy; this
-    // is the longer of the two, rounded up, with some headroom.
-    "sandbox": { "expectedMinutes": 5, "instanceType": "standard-2" },
-    "selfDeploying": {
-      "tool": "alchemy",
-      // `pnpm alchemy` is the package's script, which adds --experimental-strip-types.
-      // --yes also deploys Alchemy's state store on the first run.
-      "deployCommand": ["pnpm", "alchemy", "deploy", "--yes"],
-      "destroyCommand": ["pnpm", "alchemy", "destroy", "--yes"],
-      "stateStore": "cloudflare",
-      // alchemy.access.ts: workerName(stage) = `open-seo-${stage}`; the audit
-      // Worker is `${workerName(stage)}-audit` (alchemy.run.ts).
-      "workers": ["open-seo-{{stage}}", "open-seo-{{stage}}-audit"]
-    }
+    "workers": [
+      {
+        "name": "app",
+        "wranglerConfig": "wrangler.jsonc",
+        "primary": true,
+        // The stack adds this binding to every stage (alchemy.run.ts,
+        // MCP_RATE_LIMIT); the wrangler config leaves it out. It limits MCP
+        // sign-ins with API keys (src/server/mcp/api-key-auth.ts), which only
+        // the hosted mode uses, so it is here to match the stack.
+        "configPatch": {
+          "ratelimits": [
+            {
+              "name": "MCP_RATE_LIMIT",
+              "namespace_id": "1001",
+              "simple": { "limit": 5000, "period": 60 }
+            }
+          ]
+        }
+      },
+      // The site-audit engine: the SiteAuditWorkflow and its scratchpad
+      // Durable Object. The app starts audits through its cross-Worker
+      // SITE_AUDIT_WORKFLOW binding and cancels them through the AUDIT_ENGINE
+      // service binding; both are pointed at this Worker as installed.
+      // Upstream's config keeps it off workers.dev, and nothing else calls it.
+      { "name": "audit", "wranglerConfig": "wrangler.audit.jsonc", "workersDev": false }
+    ],
+    // Answers 200 with the app's configuration checks, its database status and
+    // package.json's version, which an update's check of the new version
+    // requires (src/routes/api/health.ts). Appflare's health checks pass
+    // Access with the app's own service token.
+    "health": { "path": "/api/health" }
   },
-  // The app itself runs on Workers Free, but its installer runs in the sandbox
-  // Worker's container, which needs Workers Paid.
-  "plan": "paid",
-  "requires": ["r2", "containers"],
+  // Upstream says the Cloudflare self-host works on Cloudflare's free plan
+  // (README.md, docs/SELF_HOSTING_CLOUDFLARE.md), and its own deploy sets no
+  // CPU limit. The two Workers and two cron triggers fit Workers Free. Site
+  // audits fetch and parse up to 200 pages per Workflow step
+  // (src/server/workflows/siteAuditWorkflowCrawl.ts), which comes close to
+  // Workers Free's Workflow limits: 10 ms of CPU and 50 external subrequests
+  // per Workflow run. If audits fail on Free, this becomes "paid".
+  "plan": "free",
+  "requires": ["r2", "access"],
+  // The only sign-in OpenSEO has besides Access is its hosted mode (email
+  // sign-up with billing), so it installs only behind Appflare's Access
+  // application. Nothing stays public: in this mode the MCP endpoint (/mcp)
+  // signs people in with Access too (src/server/mcp/transport.ts
+  // handleSelfHostedOpenSeoMcpRequest), the Google OAuth callbacks are
+  // browser redirects that carry the Access session, the billing webhook is
+  // routed in the hosted mode only (src/server.ts), and the GDPR erasure
+  // endpoint takes only requests signed with a secret of the hosted product
+  // (src/server/gdpr/storage-erasure.ts).
+  "access": { "mode": "required" },
   "secrets": [
     {
       "name": "DATAFORSEO_API_KEY",
       "label": "DataForSEO API key",
-      "help": "The Base64 credentials DataForSEO sends by email (app.dataforseo.com, API Access, Send by email): the Base64 of your DataForSEO email:password. See docs/DATAFORSEO_API_KEY.md in the OpenSEO repository."
+      "help": "The Base64 credentials DataForSEO sends by email (app.dataforseo.com, API Access, Send by email): the Base64 of your DataForSEO email:password. See docs/DATAFORSEO_API_KEY.md in the OpenSEO repository.",
+      "link": { "label": "Get a key", "url": "https://app.dataforseo.com/api-access?aff=255379" }
+    },
+    {
+      "name": "OPENROUTER_API_KEY",
+      "label": "OpenRouter API key",
+      "help": "Turns on SAM, the in-app SEO agent. Create a key at openrouter.ai/settings/keys; OpenRouter bills the agent's requests. Leave empty to hide SAM.",
+      "link": { "label": "Get a key", "url": "https://openrouter.ai/settings/keys" },
+      "optional": true,
+      "workers": ["app"]
+    },
+    {
+      "name": "GOOGLE_CLIENT_SECRET",
+      "label": "Google OAuth client secret",
+      "help": "For Google Search Console and Google Analytics, with the client ID below. Leave both empty to skip them.",
+      "link": {
+        "label": "Create an OAuth client",
+        "url": "https://console.cloud.google.com/apis/credentials"
+      },
+      "optional": true,
+      "workers": ["app"]
+    },
+    {
+      // OpenSEO encrypts stored Google tokens with it and turns the Google
+      // integrations off while it is shorter than 32 characters
+      // (src/server/features/google/oauth-config.ts). Upstream suggests
+      // `openssl rand -base64 32`, which is exactly this kind of value.
+      "name": "BETTER_AUTH_SECRET",
+      "label": "Token encryption key",
+      "help": "Encrypts the Google tokens OpenSEO stores. Changing it later disconnects Search Console and Analytics until you connect them again.",
+      "generate": "base64-key-32",
+      "workers": ["app"]
     }
   ],
   "vars": [
     {
-      "name": "ACCESS_ALLOWED_EMAILS",
-      "label": "Allowed emails",
-      "help": "Comma-separated emails Cloudflare Access lets in. The installer puts an Access application with exactly these in front of OpenSEO; dashboard edits to its policy are overwritten on the next update.",
-      "required": true
+      // src/lib/auth-mode.ts: cloudflare_access trusts only Access's signed
+      // JWT. It is also the app's default, but the stack sets it on both
+      // Workers, and /api/health reports it as unset otherwise.
+      "name": "AUTH_MODE",
+      "label": "Sign-in mode",
+      "help": "Leave it as cloudflare_access: OpenSEO then signs people in through the Cloudflare Access protection Appflare puts in front of it.",
+      "default": "cloudflare_access"
+    },
+    {
+      // src/shared/selfhost-checks.ts validateTeamDomain: a full https URL.
+      // The app uses its origin as the JWT issuer and fetches the keys from
+      // <origin>/cdn-cgi/access/certs
+      // (src/middleware/ensure-user/cloudflareAccess.ts).
+      "name": "TEAM_DOMAIN",
+      "label": "Cloudflare Access team domain",
+      "help": "Filled in by Appflare from the app's Cloudflare Access protection: your Zero Trust team's address. OpenSEO checks each sign-in's Access token against it.",
+      "default": "https://{{accessTeamDomain}}",
+      "workers": ["app"]
+    },
+    {
+      "name": "POLICY_AUD",
+      "label": "Cloudflare Access audience (AUD) tag",
+      "help": "Filled in by Appflare: the audience tag of the app's Cloudflare Access application.",
+      "default": "{{accessAud}}",
+      "workers": ["app"]
+    },
+    {
+      "name": "GOOGLE_CLIENT_ID",
+      "label": "Google OAuth client ID",
+      "help": "A Web application client from the Google Cloud Console with the Search Console API (and, for Analytics, the Analytics APIs) enabled. Its authorized redirect URIs are the app's address plus /api/gsc/oauth/callback and /api/ga4/oauth/callback.",
+      "link": {
+        "label": "Create an OAuth client",
+        "url": "https://console.cloud.google.com/apis/credentials"
+      },
+      "optional": true,
+      "workers": ["app"]
+    },
+    {
+      "name": "OPENROUTER_MODEL",
+      "label": "SAM model",
+      "help": "The OpenRouter model id SAM uses, for example openai/gpt-5.6-luna. Leave empty for OpenSEO's default.",
+      "link": { "label": "Browse models", "url": "https://openrouter.ai/models" },
+      "optional": true,
+      "workers": ["app"]
     },
     {
       "name": "OPENSEO_TELEMETRY_DISABLED",
       "label": "Disable anonymous telemetry",
       "help": "Set to 1 to opt out of OpenSEO's anonymized telemetry.",
-      "required": false
+      "optional": true,
+      "workers": ["app"]
     }
   ],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Open {{workerUrl}} and sign in through Cloudflare Access with one of the allowed emails. If the account had no Zero Trust team, the installer created one named after your workers.dev subdomain. {{workerUrl}}/api/health reports OpenSEO's configuration checks once you are signed in."
+      "content": "Open {{appUrl}} and sign in through Cloudflare Access with the email of your Appflare account. Every Appflare user can sign in, and all of them work in one shared workspace with the same projects. The database is already migrated."
+    },
+    {
+      "type": "markdown",
+      "content": "{{appUrl}}/api/health lists OpenSEO's configuration checks (DataForSEO, Search Console, SAM) once you are signed in. For Search Console or Analytics, add `{{appUrl}}/api/gsc/oauth/callback` and `{{appUrl}}/api/ga4/oauth/callback` as redirect URIs of your Google OAuth client; they change if you give the app a custom domain."
+    },
+    {
+      "type": "markdown",
+      "content": "The MCP server at `{{appUrl}}/mcp` sits behind Cloudflare Access too. MCP clients sign in with Access's Managed OAuth, which you turn on in the Zero Trust dashboard on the app's Access application (Additional settings, OAuth), as upstream's [operations guide](https://github.com/every-app/open-seo/blob/main/docs/SELF_HOSTING_CLOUDFLARE_OPERATIONS.md) describes."
     }
   ],
-  // docs/SELF_HOSTING_CLOUDFLARE.md and docs/PREVIEW_DEPLOYMENTS.md (v0.1.9):
-  // Workers Scripts/KV/D1/R2/Workflows write, Secrets Store and Account Settings
-  // for Alchemy's state store, and Access for the self-host login gate. Their CI
-  // token has Secrets Store read because its store already exists; a fresh
-  // account's first deploy bootstraps it (alchemy 2.0.0-beta.61
-  // src/Cloudflare/StateStore/State.ts), which needs Edit. "Secrets Store" has
-  // no key in Cloudflare's token template docs, so the manager lists it for
-  // the admin to add by hand.
-  "tokenPermissions": [
-    // Also covers the two Workflows: Cloudflare's API accepts Workers Scripts Edit for them, and no Workflows token group exists.
-    {
-      "name": "Workers Scripts",
-      "scope": "account",
-      "description": "Deploy the two Workers, their Durable Objects, cron triggers and workers.dev routes; on a first deploy also Alchemy's alchemy-state-store Worker (with a workers.dev route) and the temporary preview Worker its login uses."
-    },
-    {
-      "name": "Workers KV Storage",
-      "scope": "account",
-      "description": "Create the app's two KV namespaces."
-    },
-    {
-      "name": "D1",
-      "scope": "account",
-      "description": "Create the database and apply its migrations."
-    },
-    {
-      "name": "Workers R2 Storage",
-      "scope": "account",
-      "description": "Create the cache bucket and its lifecycle rule."
-    },
-    {
-      "name": "Secrets Store:Edit",
-      "scope": "account",
-      "description": "Edit, not Read: on an account without Alchemy's state store, the first deploy creates the Secrets Store and puts the state store's token and encryption key in it; later runs read them."
-    },
-    {
-      "name": "Account Settings:Read",
-      "scope": "account",
-      "description": "Alchemy's state-store login reads the account."
-    },
-    {
-      "name": "Access: Apps and Policies",
-      "scope": "account",
-      "description": "Create the Access application and allow policy in front of OpenSEO."
-    },
-    {
-      "name": "Access: Organizations, Identity Providers, and Groups",
-      "scope": "account",
-      "description": "Read the Zero Trust team domain, and create a team if the account has none."
+  "resources": {
+    "r2": {
+      "R2": {
+        // As the stack sets it (alchemy.run.ts): cached DataForSEO responses
+        // (src/server/lib/r2-cache.ts) are deleted after 7 days.
+        "lifecycle": [
+          { "id": "dataforseo-cache-expiry", "prefix": "dataforseo-cache/", "deleteAfterDays": 7 }
+        ]
+      }
     }
-  ]
+  }
 }

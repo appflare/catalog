@@ -9,15 +9,16 @@
   "name": "child-video",
   "summary": "A private, ad-free video and audiobook library for children: you upload to your own R2 bucket, and upstream's native apps play only what you put there, with daily limits and allowed hours.",
   "tagline": "Your own ad-free video and audiobook library for children",
-  "homepage": "https://github.com/bitoceango/civideo",
   "repo": "bitoceango/civideo",
   "license": "MIT",
   "categories": ["media", "family"],
+  // Field links (revision 2) and the formatting of URLs in the notes (revision 3)
+  // came after this release was published: revisions, no new build.
+  "revision": 3,
   "authors": [{ "name": "bitoceango", "github": "bitoceango" }],
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v0.2.0", "sha": "272d45d7e0d41a844795e1d76ffc138f1ad4a7ad" },
   "install": {
-    "tier": "artifact",
     "packageManager": "npm",
     // The Worker is its own npm project in worker/, beside the native apps;
     // the repository has no root package.json.
@@ -25,9 +26,8 @@
     // Upstream's setup script copies this file to wrangler.jsonc and fills in
     // the database id; the bindings are the same without it.
     "wranglerConfig": "worker/wrangler.example.jsonc",
-    "workerName": "civideo",
     // Answers without a device token.
-    "healthPath": "/api/health"
+    "health": { "path": "/api/health" }
   },
   // R2 and D1 fit the free plan; R2 bills storage beyond its free 10 GB, and
   // serving the videos costs no egress.
@@ -46,7 +46,7 @@
       "name": "ACTIVATION_KEY",
       "label": "Activation key",
       "help": "Entered once on each child's device, with this app's address, to activate it.",
-      "generate": true
+      "generate": "password"
     },
     {
       "name": "PARENT_PIN",
@@ -57,12 +57,20 @@
       "name": "R2_ACCESS_KEY_ID",
       "label": "R2 access key id",
       "help": "For uploads from the parents' desktop app: an R2 API token (S3 credentials) with Object Read & Write on this app's bucket. The app never sees it; the Worker signs each upload with it. Leave it unset to upload only with upstream's command-line tool.",
+      "link": {
+        "label": "Create a token",
+        "url": "https://dash.cloudflare.com/?to=/:account/r2/overview"
+      },
       "optional": true
     },
     {
       "name": "R2_SECRET_ACCESS_KEY",
       "label": "R2 secret access key",
       "help": "The secret of the same R2 API token.",
+      "link": {
+        "label": "Create a token",
+        "url": "https://dash.cloudflare.com/?to=/:account/r2/overview"
+      },
       "optional": true
     }
   ],
@@ -71,24 +79,25 @@
       "name": "R2_ACCOUNT_ID",
       "label": "R2 account id",
       "help": "The account that holds the bucket, for signed uploads: this one.",
-      "default": "{{accountId}}"
+      "default": "{{accountId}}",
+      "optional": true
     },
     {
       "name": "R2_BUCKET",
       "label": "R2 bucket",
       "help": "The bucket signed uploads go to: the one Appflare created for this app.",
-      "default": "{{workerName}}-bucket"
+      "default": "{{workerName}}-bucket",
+      "optional": true
     }
   ],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Install upstream's player on each child's device from its GitHub releases (iPhone and iPad through SideStore), then enter {{workerUrl}} and the activation key on its first screen."
+      "content": "Install upstream's player on each child's device from its GitHub releases (iPhone and iPad through SideStore), then enter `{{appUrl}}` and the activation key on its first screen."
     },
     {
       "type": "markdown",
       "content": "Add videos with upstream's `cpv` command-line tool (in `cli/`), or from the parent area of the Windows or macOS app once the R2 upload keys are set. Both need an R2 API token for the bucket `{{workerName}}-bucket`, created under R2, Manage API tokens."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

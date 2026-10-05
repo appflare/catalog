@@ -146,13 +146,14 @@ runMain(async () => {
     );
   }
   const zipPath = path.join(outDir, `${slug}-${artifact.version}.zip`);
-  const count = (lists: Record<string, unknown[]> | undefined): number =>
-    Object.values(lists ?? {}).reduce((n, l) => n + l.length, 0);
-  const schemaFiles = count(artifact.d1Schema);
-  const postDeploy = count(artifact.d1PostDeploy);
-  const baselines = count(artifact.d1Baseline);
+  const d1 = Object.values(artifact.d1);
+  const count = (of: (sql: (typeof d1)[number]) => number): number =>
+    d1.reduce((n, sql) => n + of(sql), 0);
+  const schemaFiles = count((sql) => sql.schema.length);
+  const postDeploy = count((sql) => sql.postDeploy.length);
+  const baselines = count((sql) => (sql.baseline === undefined ? 0 : 1));
   const migrations = [
-    String(count(artifact.d1Migrations)),
+    String(count((sql) => sql.migrations.length)),
     ...(schemaFiles > 0 ? [`${schemaFiles} schema file(s)`] : []),
     ...(postDeploy > 0 ? [`${postDeploy} post-deploy`] : []),
     ...(baselines > 0 ? [`${baselines} baseline(s)`] : []),
@@ -164,7 +165,7 @@ runMain(async () => {
   process.stdout.write(
     [
       `${slug}@${artifact.version} (keyId=${artifact.keyId}, not signed)`,
-      `  source:     ${artifact.source.repo}@${artifact.source.sha} (${artifact.source.ref})`,
+      `  source:     ${artifact.catalog.repo}@${artifact.catalog.source.sha} (${artifact.catalog.source.ref})`,
       ...workerSummaryLines(artifact, sizeLine),
       `  migrations: ${migrations}`,
       `  zip:        ${zipPath} (${statSync(zipPath).size} bytes)`,

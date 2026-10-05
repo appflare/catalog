@@ -9,7 +9,6 @@
   "name": "Alle",
   "summary": "One inbox for all your mail: forward your Gmail, Outlook and other accounts to your domain and read them together, with attachments, plus throwaway addresses on the same domain.",
   "tagline": "Read mail from all your accounts in one inbox",
-  "homepage": "https://github.com/bestruirui/Alle",
   "repo": "bestruirui/Alle",
   // The repository has no LICENSE file and declares no licence anywhere, so
   // the catalog shows it as unlicensed.
@@ -21,7 +20,6 @@
   // v2, by commit.
   "source": { "ref": "v2", "sha": "9fce68a40d4a886523c93caa73ca4c22fd73bad7" },
   "install": {
-    "tier": "artifact",
     "packageManager": "pnpm",
     // Cloudflare's Vite plugin writes the bundled Worker and its deploy
     // config under dist/ and points wrangler at it; the packer follows that
@@ -29,12 +27,11 @@
     // where upstream's `wrangler d1 migrations apply` reads them. The
     // config's database id is upstream's own and is dropped when packing.
     "wranglerConfig": "wrangler.jsonc",
-    "workerName": "alle",
     // Upstream's build script (tsc -b, then vite build).
     "buildCommand": "pnpm run build",
     // Worker code that answers at once: 401 until you sign in. (/ is the
     // static app.)
-    "healthPath": "/api/auth",
+    "health": { "path": "/api/auth" },
     // Every address of the chosen zone goes to the app: the forwarding
     // addresses you give your other mailboxes, and any throwaway address.
     "emailRouting": { "catchAll": true }
@@ -49,15 +46,13 @@
       "name": "SECRET",
       "label": "Sign-in password",
       "help": "The only password of the app, and the key that signs its sign-in cookie. Copy it now: you sign in with it. Setting a new value signs you out everywhere.",
-      "generate": true
+      "generate": "password"
     }
   ],
-  "vars": [],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Open {{workerUrl}} and sign in with the password. Then, in each mailbox you want to read here, turn on automatic forwarding to an address on the zone you chose, for example `gmail@<your domain>`. Alle files each message under the account it was forwarded from, and creates that account on its first message. Mail sent straight to any other address of the zone shows up too."
+      "content": "Open {{appUrl}} and sign in with the password. Then, in each mailbox you want to read here, turn on automatic forwarding to an address on the zone you chose, for example `gmail@<your domain>`. Alle files each message under the account it was forwarded from, and creates that account on its first message. Mail sent straight to any other address of the zone shows up too."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

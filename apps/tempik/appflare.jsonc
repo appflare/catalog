@@ -7,7 +7,6 @@
   "name": "Tempik",
   "summary": "A disposable email service on your own domain: pick or generate an address in the browser and read the mail sent to it, received by Email Routing and kept in D1.",
   "tagline": "Disposable email addresses on your own domain",
-  "homepage": "https://github.com/hirotomasato/tempik",
   "repo": "hirotomasato/tempik",
   "license": "MIT",
   "categories": ["email", "privacy"],
@@ -16,12 +15,10 @@
   // Upstream has no release tags, so the entry follows the default branch by commit.
   "source": { "ref": "main", "sha": "36d05edc7010039664716559acd3d623d5738188" },
   "install": {
-    "tier": "artifact",
     "packageManager": "npm",
     "wranglerConfig": "wrangler.toml",
-    "workerName": "tempik",
     // Answers without a session.
-    "healthPath": "/api/config",
+    "health": { "path": "/api/config" },
     // Upstream's setup sends every address of the domain to the Worker
     // through the zone's catch-all rule.
     "emailRouting": { "catchAll": true }
@@ -29,7 +26,6 @@
   // D1, static assets and receiving mail fit the free plan.
   "plan": "free",
   "requires": ["zone", "email-routing"],
-  "secrets": [],
   "vars": [
     {
       "name": "MAIL_DOMAIN",
@@ -37,26 +33,25 @@
       "help": "The domain addresses are made in, the zone you pick for Email Routing, for example example.com. Several are allowed, comma separated; the first is the default.",
       // The wrangler config's value is upstream's placeholder; an empty
       // default makes the form ask for the real domain.
-      "default": "",
-      "required": true
+      "default": ""
     },
     {
       "name": "APP_NAME",
       "label": "App name",
-      "help": "Shown in the web page's header."
+      "help": "Shown in the web page's header.",
+      "optional": true
     }
   ],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Open {{workerUrl}}, choose New, and create an address. Mail sent to it shows up after a refresh."
+      "content": "Open {{appUrl}}, choose New, and create an address. Mail sent to it shows up after a refresh."
     },
     {
       "type": "markdown",
-      "content": "Every address of the mail domain now arrives here, and anyone who can open {{workerUrl}} can claim any address and read its mail. Use a domain kept for throwaway mail, never one that receives mail you care about."
+      "content": "Every address of the mail domain now arrives here, and anyone who can open {{appUrl}} can claim any address and read its mail. Use a domain kept for throwaway mail, never one that receives mail you care about."
     }
   ],
-  "tokenPermissions": [],
   "resources": {
     "d1": {
       // Upstream applies this file by hand (npm run db:migrate); every

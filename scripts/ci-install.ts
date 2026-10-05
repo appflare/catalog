@@ -26,9 +26,11 @@ import {
   appSummaryLines,
   attachQueueConsumers,
   type CfRequest,
+  CI_ACCOUNT_PLAN,
   type CiAppPlan,
   type CiEntryHelpers,
   type CiWorkerResult,
+  ciAccountPlan,
   ciWorkerName,
   cleanupCiApp,
   createCfRequest,
@@ -49,12 +51,14 @@ import {
   needsR2LifecycleHelpers,
   needsSeedHelpers,
   POST_DEPLOY_CONFIG,
+  paidPlanSkip,
   planCiApp,
   postDeployConfig,
   runSeed,
   seedFunctions,
   seedValues,
   setR2LifecycleRules,
+  skipNotice,
   skippedSummaryLines,
   unpackArtifact,
   waitForHealth,
@@ -81,8 +85,9 @@ deploy   Unpacks the artifact (checking every file's sha256), removes anything
          and the Worker's exports, cache block and Worker Loaders as recorded;
          Vectorize indexes and queues are created first through the API, and
          each rate limit gets a random namespace id; vars as the manager sets
-         them, JSON vars kept as JSON and {{workerUrl}}, {{workerName}} and
-         {{accountId}} filled in for the CI Worker; a service binding to the app's own
+         them, JSON vars kept as JSON and {{appUrl}}, {{workerUrl}}, their
+         hostnames, {{workerName}} and {{accountId}} filled in for the CI
+         Worker, which is served at its workers.dev URL; a service binding to the app's own
          Worker aimed at the CI Worker, any other refused; no cron triggers,
          which the run summary notes), runs wrangler deploy --strict, attaches the recorded queue consumers through the API,
          runs each D1 database's SQL as the manager does (its migrations
@@ -96,7 +101,7 @@ deploy   Unpacks the artifact (checking every file's sha256), removes anything
          migration in d1_migrations without running them;
          then each seed through the D1 API, one /query call per statement
          with its values as params, where it says beforeSchema before the
-         schema files instead; each statement must add exactly one row),
+         schema files instead; each statement must add at least one row),
          sets each catalog secret to a random value
          (a new VAPID private key for generate: "vapid-private-key", 32
          random bytes as base64 for generate: "base64-key-32", and a
@@ -105,17 +110,18 @@ deploy   Unpacks the artifact (checking every file's sha256), removes anything
          seed-only secrets and vars get values for the seed and are never
          set on a Worker),
          and waits up to 60 s for
-         https://<worker>.<subdomain>.workers.dev<healthPath> to answer
-         (install.healthPath from the catalog manifest, else /). A failed
+         https://<worker>.<subdomain>.workers.dev<path> to answer
+         (install.health.path from the catalog manifest, else /; read as
+         install.health.mode says). A failed
          deploy may still have uploaded the Worker; cleanup deletes it.
 
-         A Worker of static assets only (format 5: no modules and no main
-         module) is deployed with its assets and compatibility settings
+         A Worker of static assets only (no modules and no main module)
+         is deployed with its assets and compatibility settings
          alone: the config names no main, and no module rules. _redirects
          and _headers, which the artifact records as text in its assets
          config, are written as files at the root of the assets directory.
 
-         Format 6 settings are applied as the manager applies them: each
+         Resource settings are applied as the manager applies them: each
          Vectorize index's metadata indexes are created through the API
          right after the index, and each R2 bucket's lifecycle rules are
          merged into the bucket's own (keeping Cloudflare's default rule for
@@ -143,13 +149,21 @@ deploy   Unpacks the artifact (checking every file's sha256), removes anything
          to a throwaway test database of the protocol the catalog manifest
          declares; without it (or with one of another protocol) nothing is
          deployed, the run summary says why, and the command succeeds.
+
+         An entry whose catalog manifest says plan "paid" is not deployed
+         when CI_ACCOUNT_PLAN is free (the default when it is unset or
+         empty): it may use what the free plan refuses at upload, such as a
+         CPU limit. The command prints a GitHub Actions notice naming the
+         app, the run summary says why, the step output skipped is set to
+         paid-plan, and the command succeeds.
 cleanup  Removes the queue consumers of every Worker, deletes every Worker
          and every resource the deploy may have created, and fails unless
          all of them are gone.
 
-Needs CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID, and APPFLARE_DIR (the
-packer bundle, for @appflare/schema and wrangler). Runs only the artifact's
-prebuilt output; nothing from the app's repository.
+Needs CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID, CI_ACCOUNT_PLAN set to paid
+when the account is on Workers Paid, and APPFLARE_DIR (the packer bundle, for
+@appflare/schema and wrangler). Runs only the artifact's prebuilt output;
+nothing from the app's repository.
 `;
 
 function credentials(): { token: string; accountId: string } {
@@ -388,7 +402,7 @@ async function deployAndCheck(
       throw new Error(`${step.database} has a seed, and no seed functions were loaded`);
     } else {
       const count = await runSeed(request, step, seedInput, seeds);
-      info(`seeded ${step.database} (${step.binding}): ${count} statement(s), one row each`);
+      info(`seeded ${step.database} (${step.binding}): ${count} statement(s), each adding its row`);
     }
   }
   for (const [i, w] of app.workers.entries()) {
@@ -405,9 +419,7 @@ async function deployAndCheck(
     results.push({
       worker: check.worker,
       health:
-        "skipped" in check
-          ? check.skipped
-          : await probe(check.url, check.timeoutMs, app.healthMode),
+        "skipped" in check ? check.skipped : await probe(check.url, check.timeoutMs, app.probeMode),
     });
   }
   const failed = results.filter((r) => !r.health.ok);
@@ -448,6 +460,18 @@ runMain(async () => {
   }
   if (command !== "deploy") {
     throw new Error(`unknown command "${command}"`);
+  }
+  // A Workers Paid entry may use what a free account refuses at upload (a CPU
+  // limit, say), so on a free CI account its deploy says nothing about the app.
+  const paidOnly = paidPlanSkip(manifest.catalog, ciAccountPlan(process.env[CI_ACCOUNT_PLAN]));
+  if (paidOnly !== null) {
+    process.stdout.write(`${skipNotice(manifest, paidOnly)}\n`);
+    summary(skippedSummaryLines(manifest, name, paidOnly));
+    // The nightly run records no verification for an app it did not deploy.
+    if (process.env.GITHUB_OUTPUT) {
+      appendFileSync(process.env.GITHUB_OUTPUT, "skipped=paid-plan\n");
+    }
+    return 0;
   }
   // Var values may hold {{workerUrl}}, which needs the account's subdomain.
   const subdomain = await workersSubdomain(request);

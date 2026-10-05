@@ -102,7 +102,7 @@ describe("planCiInstall with resources.d1", () => {
   it("leaves out a database with no SQL at all", () => {
     const m = artifactManifestFixture({ app: "hello", version: "1.2.3", sha: PIN });
     (m.worker as Record<string, unknown>).bindings = [{ type: "d1", name: "DB" }];
-    m.d1Migrations = { DB: [] };
+    m.d1 = { DB: { migrations: [], schema: [], postDeploy: [] } };
     const bare = planCiInstall(m as unknown as ArtifactManifest, "ci-hello-pr1");
     expect(bare.d1).toEqual([]);
     expect(bare.config.d1_databases).toEqual([{ binding: "DB", database_name: "ci-hello-pr1-db" }]);
@@ -197,17 +197,18 @@ describe("unpackArtifact with D1 schema files and post-deploy migrations", () =>
       return e;
     };
     const m = artifactManifestFixture({ app: "ledger", version: "1.0.0", sha: PIN });
-    m.format = 3;
     const worker = m.worker as Record<string, unknown>;
     worker.modules = [{ name: "index.js", type: "esm", ...entry("main") }];
-    m.d1Migrations = {
-      DB: [
-        { name: "20240101_init/migration.sql", ...entry("init") },
-        { name: "20240302_tags/migration.sql", ...entry("tags") },
-      ],
+    m.d1 = {
+      DB: {
+        migrations: [
+          { name: "20240101_init/migration.sql", ...entry("init") },
+          { name: "20240302_tags/migration.sql", ...entry("tags") },
+        ],
+        schema: [{ name: "db/views.sql", ...entry("views") }],
+        postDeploy: [{ name: "0100_drop_legacy.sql", ...entry("drop") }],
+      },
     };
-    m.d1Schema = { DB: [{ name: "db/views.sql", ...entry("views") }] };
-    m.d1PostDeploy = { DB: [{ name: "0100_drop_legacy.sql", ...entry("drop") }] };
     writeFileSync(path.join(dir, "a.zip"), Buffer.concat(parts));
     const out = path.join(dir, "out");
     unpackArtifact(m as unknown as ArtifactManifest, path.join(dir, "a.zip"), out);
@@ -226,18 +227,11 @@ describe("unpackArtifact with D1 schema files and post-deploy migrations", () =>
   });
 });
 
-describe.skipIf(!appflareAvailable)("format 3 with the real @appflare/schema", () => {
-  it("accepts the D1 artifact as format 3 and refuses it as format 1", async () => {
+describe.skipIf(!appflareAvailable)("D1 SQL with the real @appflare/schema", () => {
+  it("accepts the D1 artifact", async () => {
     const schema = await loadAppflareSchema(appflareDir);
-    expect(schema.artifactManifest.safeParse(d1ArtifactManifestFixture({ sha: PIN })).success).toBe(
-      true,
-    );
-    const old = { ...d1ArtifactManifestFixture({ sha: PIN }), format: 1 };
-    const refused = schema.artifactManifest.safeParse(old);
-    expect(refused.success).toBe(false);
-    if (!refused.success) {
-      expect(refused.error.issues.map((i) => i.message).join("\n")).toMatch(/needs format 3/);
-    }
+    const parsed = schema.artifactManifest.safeParse(d1ArtifactManifestFixture({ sha: PIN }));
+    expect(parsed.success ? null : parsed.error.issues).toBeNull();
   });
 
   it("runs the SQL of an app of several Workers once, from the first Worker that binds it", async (ctx) => {
@@ -246,9 +240,10 @@ describe.skipIf(!appflareAvailable)("format 3 with the real @appflare/schema", (
     const schema = await loadAppflareSchema(appflareDir);
     const duo = duoArtifactManifestFixture({ sha: PIN });
     const hex64 = "a".repeat(64);
-    duo.format = 3;
-    duo.d1Schema = {
-      DB: [
+    const d1 = duo.d1 as Record<string, Record<string, unknown>>;
+    d1.DB = {
+      ...d1.DB,
+      schema: [
         {
           name: "db/views.sql",
           path: "d1-schema/DB/db/views.sql",

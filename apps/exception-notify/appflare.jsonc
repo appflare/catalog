@@ -11,7 +11,6 @@
   "name": "Exception-Notify workspace",
   "summary": "The AI analysis page for Exception-Notify alerts from Spring Boot: open an exception from DingTalk, Feishu or WeChat Work and work through it with your own AI provider.",
   "tagline": "Read error alerts and work through fixes with AI",
-  "homepage": "https://github.com/GuangYiDing/exception-notify",
   "repo": "GuangYiDing/exception-notify",
   // The repository has no LICENSE file; its README and pom.xml both declare
   // Apache License 2.0.
@@ -24,7 +23,6 @@
   // web/ changes.
   "source": { "ref": "main", "sha": "990d2e6ad2ddb2eae62c1c46f4b4fcd44ca6ebdd" },
   "install": {
-    "tier": "artifact",
     // web/ holds both lockfiles; upstream's own deploy workflow installs
     // from package-lock.json.
     "packageManager": "npm",
@@ -34,24 +32,19 @@
     // The config's ${...} placeholders are filled in by upstream's deploy
     // workflow; the ids are the install's own here.
     "wranglerConfig": "web/wrangler.toml",
-    "workerName": "exception-notify",
     // OpenNext builds the Next.js app into web/.open-next/.
     "buildCommand": "npm --prefix web run build:opennextjs"
   },
   // Workers, KV and D1 fit the free plan.
   "plan": "free",
-  "requires": [],
-  "secrets": [],
-  "vars": [],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Point the library at this app in your Spring Boot configuration:\n\n```yaml\nexception:\n  notify:\n    ai:\n      enabled: true\n      analysis-page-url: {{workerUrl}}\n```\n\nAlerts then carry an **Open AI Analysis** link to {{workerUrl}}. Set your AI provider's endpoint and key in the page's settings; they stay in your browser."
+      "content": "Point the library at this app in your Spring Boot configuration:\n\n```yaml\nexception:\n  notify:\n    ai:\n      enabled: true\n      analysis-page-url: {{appUrl}}\n```\n\nAlerts then carry an **Open AI Analysis** link to {{appUrl}}. Set your AI provider's endpoint and key in the page's settings; they stay in your browser."
     },
     {
       "type": "markdown",
       "content": "`/api/compress` accepts any JSON without a sign-in, as the library needs it to, and each new payload is a KV write (the free plan allows 1,000 a day). Anyone with a link can read that payload for 30 days."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

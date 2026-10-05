@@ -141,5 +141,5 @@ dialog shows the fingerprint of the pasted key back; an admin compares the two
 before saving.
 
 For how admins add, browse and remove catalogs, see
-[Custom catalogs](https://appflare-docs.appflare-dev.workers.dev/guides/custom-catalogs/)
+[Custom catalogs](https://appflare.dev/guides/custom-catalogs/)
 in the Appflare docs.

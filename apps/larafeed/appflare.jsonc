@@ -4,7 +4,6 @@
   "name": "Larafeed",
   "summary": "A private feed reader with passkey-only sign-in: RSS and Atom subscriptions refreshed on a schedule through Queues, OPML import and export, full-article extraction, favicons, and reader-client APIs, on D1, KV and Queues.",
   "tagline": "Keep up with your favorite websites in one private feed",
-  "homepage": "https://github.com/angristan/larafeed",
   "repo": "angristan/larafeed",
   "license": "MIT",
   "categories": ["productivity"],
@@ -20,32 +19,29 @@
   // Upstream has no release tags, so the entry follows the default branch by commit.
   "source": { "ref": "main", "sha": "eedbc8b9f6ec44229a8ed75efd0e6a1dc3945266" },
   "install": {
-    "tier": "artifact",
     "packageManager": "bun",
     // The config's default environment is upstream's portable template for
     // self-hosting (its KV and D1 ids are placeholders, dropped when the
     // artifact is packed). The `production` and `vitest` environments are
     // upstream's own deployment and tests and are not used.
     "wranglerConfig": "wrangler.jsonc",
-    "workerName": "larafeed",
     // Upstream's `build` script: Vite with the Cloudflare plugin builds the
     // React app and the Worker together, then removes the local .dev.vars
     // copies the plugin leaves in the output.
     "buildCommand": "bun run build",
     // Answered by the Worker without a sign-in.
-    "healthPath": "/up"
+    "health": { "path": "/up" }
   },
   // D1, KV, three Queues, two rate limits, the Images binding (5,000 unique
   // transformations a month) and one cron trigger every ten minutes all fit
   // the free plan.
   "plan": "free",
-  "requires": [],
   "secrets": [
     {
       "name": "AUTH_OPERATOR_SECRET",
       "label": "Operator secret",
       "help": "Creates the first administrator's sign-in link (see below) and recovers an administrator who lost every passkey. Keep a copy.",
-      "generate": true
+      "generate": "password"
     }
   ],
   // The Worker routes each queue's messages by comparing the queue's name
@@ -55,30 +51,26 @@
     {
       "name": "AUTH_ORIGIN",
       "label": "Origin",
-      "help": "The exact https address people open the reader at, without a path or trailing slash. Passkeys are bound to its hostname, so changing it later means registering them again.",
-      "default": "{{workerUrl}}",
-      "required": true
+      "help": "The exact https address people open the reader at, without a path or trailing slash. Passkeys are bound to its hostname, so changing the address later (a custom domain added or removed) invalidates them, and people register them again.",
+      "default": "{{appUrl}}"
     },
     {
       "name": "FEED_REFRESH_QUEUE_NAME",
       "label": "Feed refresh queue name",
       "help": "The name of the app's feed refresh queue, which Appflare creates. Leave it as it is.",
-      "default": "{{workerName}}-feed-refresh-queue",
-      "required": true
+      "default": "{{workerName}}-feed-refresh-queue"
     },
     {
       "name": "OPML_IMPORT_QUEUE_NAME",
       "label": "OPML import queue name",
       "help": "The name of the app's OPML import queue, which Appflare creates. Leave it as it is.",
-      "default": "{{workerName}}-opml-import-queue",
-      "required": true
+      "default": "{{workerName}}-opml-import-queue"
     },
     {
       "name": "FAVICON_REFRESH_QUEUE_NAME",
       "label": "Favicon refresh queue name",
       "help": "The name of the app's favicon queue, which Appflare creates. Leave it as it is.",
-      "default": "{{workerName}}-favicon-refresh-queue",
-      "required": true
+      "default": "{{workerName}}-favicon-refresh-queue"
     },
     {
       "name": "IMAGES_ENABLED",
@@ -86,7 +78,8 @@
       "help": "Proxies and resizes article images with the Images binding, so feeds never see your readers' addresses.",
       "type": "select",
       "options": [{ "value": "false", "label": "Off" }, { "value": "true", "label": "On" }],
-      "default": "false"
+      "default": "false",
+      "optional": true
     },
     {
       "name": "FAVICON_REFRESH_ENABLED",
@@ -94,18 +87,18 @@
       "help": "Finds each feed's favicon and stores a sanitized copy in D1.",
       "type": "select",
       "options": [{ "value": "false", "label": "Off" }, { "value": "true", "label": "On" }],
-      "default": "false"
+      "default": "false",
+      "optional": true
     }
   ],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Create the first administrator: send `curl -X POST {{workerUrl}}/api/auth/operator/access-link -H \"Authorization: Bearer <operator secret>\" -H \"Content-Type: application/json\" -d '{\"mode\":\"initial-admin\",\"username\":\"admin\",\"email\":\"you@example.com\",\"displayName\":\"Admin\"}'`, open the URL it returns within 30 minutes, and register a passkey."
+      "content": "Create the first administrator: send `curl -X POST {{appUrl}}/api/auth/operator/access-link -H \"Authorization: Bearer <operator secret>\" -H \"Content-Type: application/json\" -d '{\"mode\":\"initial-admin\",\"username\":\"admin\",\"email\":\"you@example.com\",\"displayName\":\"Admin\"}'`, open the URL it returns within 30 minutes, and register a passkey."
     },
     {
       "type": "markdown",
-      "content": "Invite and recover other users at {{workerUrl}}/admin/users. Import subscriptions at {{workerUrl}}/settings/opml."
+      "content": "Invite and recover other users at {{appUrl}}/admin/users. Import subscriptions at {{appUrl}}/settings/opml."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

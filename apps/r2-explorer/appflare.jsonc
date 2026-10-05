@@ -8,8 +8,10 @@
   "repo": "cloudflare/templates",
   "license": "MIT",
   "categories": ["files"],
-  // The category changed after this release was published: a revision, no new build.
-  "revision": 2,
+  // The category changed after this release was published, and the Access
+  // protection below came later still: revisions, no new build (the template is
+  // unchanged in the repository's newer tags).
+  "revision": 3,
   "authors": [
     {
       "name": "Gabriel Massadas",
@@ -23,39 +25,44 @@
   // The Deploy-button template lives in a subdirectory of cloudflare/templates;
   // wranglerConfig points into it. The repository's semver tags cover every
   // template, so a bump can move the pin while this template is unchanged.
-  "source": { "ref": "v11.0.0", "sha": "47645c985c10aa8afc2f837b983a3678a36a60cb" },
-  "install": {
-    "tier": "artifact",
-    "packageManager": "pnpm",
-    "wranglerConfig": "r2-explorer-template/wrangler.json",
-    "workerName": "r2-explorer",
+  "source": {
+    "ref": "v11.0.0",
+    "sha": "47645c985c10aa8afc2f837b983a3678a36a60cb",
     // The cloudflare/templates tag numbers the whole monorepo; this is the
     // R2 Explorer release the template ships. Change it whenever source moves.
-    "version": "1.1.10",
+    "version": "1.1.10"
+  },
+  "install": {
+    "packageManager": "pnpm",
+    "wranglerConfig": "r2-explorer-template/wrangler.json",
     // Runs Worker code (the static dashboard at / would answer even if the Worker
     // failed) and needs no credentials.
-    "healthPath": "/api/server/config"
+    "health": { "path": "/api/server/config" }
   },
   // R2's free tier covers this app, but R2 has to be enabled on the account
   // first, which needs a payment method on file.
   "plan": "free",
-  "requires": ["r2"],
+  // "access": the app installs only behind Cloudflare Access (below).
+  "requires": ["r2", "access"],
+  // The template sets no authentication and cannot be given any through
+  // secrets or vars: unprotected, anyone with the URL lists and downloads
+  // every file in the bucket. So protection is required; nothing must stay
+  // public.
+  "access": { "mode": "required" },
   // The template configures authentication in code, not through secrets or vars.
   "secrets": [],
-  "vars": [],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Open {{workerUrl}} to browse the new R2 bucket. It is read-only: upload files with the Cloudflare dashboard or `wrangler r2 object put`."
+      "content": "Open {{appUrl}} to browse the new R2 bucket. It is read-only: upload files with the Cloudflare dashboard or `wrangler r2 object put`."
     },
     {
       "type": "markdown",
-      "content": "**Anyone with the URL can list and download every file in the bucket until you protect it.** In the Cloudflare dashboard, open Workers & Pages, select this Worker, open the Access tab, choose Protect this Worker behind Access, select All traffic, and pick who may sign in. Access needs Zero Trust turned on for the account; its free plan is enough."
+      "content": "**R2 Explorer has no sign-in of its own**, so Appflare keeps it behind Cloudflare Access: only the people who use this Appflare can list and download the files in the bucket."
     },
     {
       "type": "markdown",
       "content": "R2 must be enabled on the account before installing, which needs a payment method on file even though R2's free tier covers typical use."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

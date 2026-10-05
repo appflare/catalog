@@ -24,7 +24,7 @@ import type { VersionResolver } from "./versions.ts";
  * - a complete release whose embedded catalog manifest equals the current one:
  *   up to date, skip;
  * - a complete release built from another commit while the manifest sets
- *   `install.version`: error; the pin moved but `install.version` did not, and
+ *   `source.version`: error; the pin moved but `source.version` did not, and
  *   the version must change with the pin;
  * - a complete release with a different catalog manifest (a metadata-only edit
  *   under the same pin) and a `revision` above the release's: a revision
@@ -37,7 +37,7 @@ import type { VersionResolver } from "./versions.ts";
  *   next revision: a signed revision never changes);
  * - a complete release with a different catalog manifest and no revision
  *   above the release's: error; the author must re-pin `source`, or raise
- *   `revision` when only the form and copy changed. Fields in
+ *   `revision` when only the form, the copy or Cloudflare Access changed. Fields in
  *   {@link INDEX_ONLY_FIELDS} do not count: the index reads them from the
  *   current manifest, so they need no new release;
  * - a draft, prerelease, or incomplete release: the lookup throws, naming it.
@@ -51,15 +51,15 @@ import type { VersionResolver } from "./versions.ts";
  * Catalog manifest fields that change only what the index shows, never what an
  * artifact installs. The index is built from the current manifest, so an edit
  * to these alone is published by regenerating `index.json` and needs no new
- * release; releases packed after the edit carry the new value anyway.
+ * release; releases packed after the edit carry the new value anyway. The
+ * same list as `INDEX_ONLY_CATALOG_FIELDS` in `@appflare/schema`, which a test
+ * holds this to.
  *
  * - `authors`: the catalog card and app page.
  * - `tagline`: the line under the name on a catalog tile. Managers read it
  *   from the index row only; nothing about an installed app uses it.
  * - `licenseNote`: shown next to the license. Managers read it from the index
- *   row, which always carries `license`; they read the release's copy only
- *   for a row without `license` (an index written before rows had it), and
- *   an installed app does not use it.
+ *   row, and an installed app does not use it.
  */
 export const INDEX_ONLY_FIELDS: readonly string[] = ["authors", "tagline", "licenseNote"];
 
@@ -103,17 +103,18 @@ export async function decide(
     JSON.parse(release.manifestBytes.toString("utf8")),
     label,
   );
-  const installVersion = manifest.install.version;
-  if (installVersion !== undefined && published.source.sha !== manifest.source.sha) {
+  const statedVersion = manifest.source.version;
+  const releasedSource = published.catalog.source;
+  if (statedVersion !== undefined && releasedSource.sha !== manifest.source.sha) {
     return {
       slug,
       tag,
       action: "error",
       message:
         `apps/${slug}/appflare.jsonc pins ${manifest.source.ref}@${manifest.source.sha.slice(0, 7)}, ` +
-        `but install.version is still ${installVersion}, and ${tag} is already released from ` +
-        `${published.source.ref}@${published.source.sha.slice(0, 7)}. Releases are immutable: ` +
-        "bump install.version to the app's version at the new pin.",
+        `but source.version is still ${statedVersion}, and ${tag} is already released from ` +
+        `${releasedSource.ref}@${releasedSource.sha.slice(0, 7)}. Releases are immutable: ` +
+        "bump source.version to the app's version at the new pin.",
     };
   }
   const released = releasedCatalog(published);
@@ -125,7 +126,7 @@ export async function decide(
     baseRevision,
     previous !== undefined &&
       previous.version === version &&
-      previous.digest === sha256Hex(release.manifestBytes)
+      previous.artifacts?.digest === sha256Hex(release.manifestBytes)
       ? revisionOf(previous)
       : baseRevision,
   );
@@ -158,12 +159,12 @@ export async function decide(
     message:
       `apps/${slug}/appflare.jsonc changed (${changed.join(", ")}) but its pin still packs to ` +
       `${tag}, which is already released with the old manifest. Releases are immutable: ` +
-      (installVersion === undefined
+      (statedVersion === undefined
         ? "re-pin `source` (a new source.sha, or a new tag in source.ref) to publish the change"
-        : "this entry's version comes from install.version, so bump it (and re-pin `source` " +
+        : "this entry's version comes from source.version, so bump it (and re-pin `source` " +
           "if the app changed) to publish the change") +
       (revisionBlocker === null
-        ? `, or bump revision to ${next}: only the form and copy changed, so no new build is needed.`
+        ? `, or bump revision to ${next}: only what a revision may change changed (the form, the copy, Cloudflare Access), so no new build is needed.`
         : `. Bumping revision cannot publish it: ${revisionBlocker}.`),
   };
 }

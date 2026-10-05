@@ -4,20 +4,19 @@
   "name": "FODI",
   "summary": "A fast index of your OneDrive: browse, preview and download files from a web page, with password-protected folders, signed download links, uploads and WebDAV, on Workers KV.",
   "tagline": "Browse and preview your OneDrive files in a web page",
-  "homepage": "https://github.com/vcheckzen/FODI",
   "repo": "vcheckzen/FODI",
   // The LICENSE file is the GNU GPL version 3 with no "or any later version" grant.
   "license": "GPL-3.0-only",
   "categories": ["files", "sharing"],
+  // Generated secrets added after this release was published: a revision, no new build.
+  "revision": 2,
   "authors": [{ "name": "LOGI", "url": "https://logi.im", "github": "vcheckzen" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags, so the entry follows the default branch by commit.
   "source": { "ref": "master", "sha": "20a227aec48d2c1ab1856030669d38e482cb151d" },
   "install": {
-    "tier": "artifact",
     "packageManager": "pnpm",
     "wranglerConfig": "wrangler.jsonc",
-    "workerName": "fodi",
     // No build: wrangler bundles back-end-cf/index.ts, and the web page is the
     // static front-end/ directory.
     // The config leaves the KV namespace id as an empty string for the
@@ -31,7 +30,6 @@
   // the OneDrive token. The free plan allows 5 cron triggers per account and
   // WebDAV uploads of up to 100 MB per request.
   "plan": "free",
-  "requires": [],
   // The wrangler config keeps its settings in JSON vars. OAUTH holds upstream's
   // shared Microsoft app registration (its client id and the client secret
   // upstream publishes in the config), which works for personal OneDrive
@@ -39,9 +37,14 @@
   // stay as well.
   "secrets": [
     {
+      // The folder password (back-end-cf/services/authUtils.ts:151), the HMAC
+      // key of download links (:120,142) and the WebDAV password inside
+      // btoa(USERNAME:PASSWORD) (:78), which needs Latin-1 and no colon; a
+      // generated one is ASCII letters and digits.
       "name": "PASSWORD",
       "label": "Password",
       "help": "Opens folders that ask for a password, signs download links (an HMAC-SHA256 of path, scopes and expiry), and with the WebDAV username below signs in to WebDAV. Without it, folders are protected only by the password files you put in OneDrive, and WebDAV stays off.",
+      "generate": "password",
       "optional": true
     }
   ],
@@ -49,26 +52,25 @@
     {
       "name": "USERNAME",
       "label": "WebDAV username",
-      "help": "Turns on WebDAV at the app's address, together with the password above."
+      "help": "Turns on WebDAV at the app's address, together with the password above.",
+      "optional": true
     },
     {
       // An object in the wrangler config, so the Worker gets it as JSON and
       // the form takes JSON text; the form starts with the config's value.
       "name": "PROTECTED",
       "label": "Access settings",
-      "help": "JSON. EXPOSE_PATH: the OneDrive folder to show, such as \"/Media\". REQUIRE_AUTH: true to ask for the password everywhere, in which case AUTH_PATHS lists the public folders; false to leave everything open, in which case AUTH_PATHS lists the protected folders. PASSWD_FILENAME: the file whose SHA-256 password hash protects its folder. PROXY_KEYWORD: when set, downloads under /<keyword>/ pass through the Worker instead of redirecting to OneDrive.",
-      "required": true
+      "help": "JSON. EXPOSE_PATH: the OneDrive folder to show, such as \"/Media\". REQUIRE_AUTH: true to ask for the password everywhere, in which case AUTH_PATHS lists the public folders; false to leave everything open, in which case AUTH_PATHS lists the protected folders. PASSWD_FILENAME: the file whose SHA-256 password hash protects its folder. PROXY_KEYWORD: when set, downloads under /<keyword>/ pass through the Worker instead of redirecting to OneDrive."
     }
   ],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Open {{workerUrl}}/deployfodi right away and sign in to Microsoft: the first OneDrive linked there is the one the index shows, and the page closes after it. Microsoft then sends you to a localhost address that does not load; copy that whole address into the form on the page. The index is at {{workerUrl}}/fodi."
+      "content": "Open {{appUrl}}/deployfodi right away and sign in to Microsoft: the first OneDrive linked there is the one the index shows, and the page closes after it. Microsoft then sends you to a localhost address that does not load; copy that whole address into the form on the page. The index is at {{appUrl}}/fodi."
     },
     {
       "type": "markdown",
       "content": "Everything under the shown folder is public unless you protect it: put a file named `.password` holding the SHA-256 hash of a password in a folder, or change the access settings. To allow uploads into a folder, create an empty `.upload` file in it."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

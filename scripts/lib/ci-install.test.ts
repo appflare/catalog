@@ -83,16 +83,20 @@ describe("planCiInstall", () => {
           { type: "ai", name: "AI" },
           { type: "plain_text", name: "MODE", text: "prod" },
         ];
-        m.d1Migrations = {
-          DB: [
-            {
-              name: "0001_init.sql",
-              path: "d1/DB/0001_init.sql",
-              size: 1,
-              sha256: "a".repeat(64),
-              offset: 0,
-            },
-          ],
+        m.d1 = {
+          DB: {
+            migrations: [
+              {
+                name: "0001_init.sql",
+                path: "d1/DB/0001_init.sql",
+                size: 1,
+                sha256: "a".repeat(64),
+                offset: 0,
+              },
+            ],
+            schema: [],
+            postDeploy: [],
+          },
         };
       }),
       "ci-hello-pr1",
@@ -202,11 +206,11 @@ describe("planCiInstall", () => {
     const plan = planCiInstall(
       manifest((m) => {
         const catalog = m.catalog as Record<string, unknown>;
-        catalog.secrets = [{ name: "ADMIN_PASSWORD", label: "Admin", generate: true }];
+        catalog.secrets = [{ name: "ADMIN_PASSWORD", label: "Admin", generate: "password" }];
         catalog.vars = [
-          { name: "HOME_PAGE", label: "Home", required: false },
-          { name: "REGION", label: "Region", default: "eu", required: false },
-          { name: "API_URL", label: "API", required: true },
+          { name: "HOME_PAGE", label: "Home", optional: true },
+          { name: "REGION", label: "Region", default: "eu", optional: true },
+          { name: "API_URL", label: "API" },
         ];
       }),
       "ci-hello-pr1",
@@ -224,12 +228,12 @@ describe("planCiInstall", () => {
       manifest((m) => {
         const catalog = m.catalog as Record<string, unknown>;
         catalog.secrets = [
-          { name: "ADMIN_PASSWORD", label: "Admin", generate: true },
+          { name: "ADMIN_PASSWORD", label: "Admin", generate: "password" },
           { name: "SMTP_PASSWORD", label: "SMTP", optional: true },
         ];
         catalog.vars = [
-          { name: "HOME_PAGE", label: "Home", required: true, type: "select", options },
-          { name: "MODE", label: "Mode", required: false, type: "select", options },
+          { name: "HOME_PAGE", label: "Home", type: "select", options },
+          { name: "MODE", label: "Mode", optional: true, type: "select", options },
           { name: "SIZE", label: "Size", default: "404", type: "select", options },
         ];
       }),
@@ -251,7 +255,7 @@ describe("planCiInstall", () => {
         ];
         (m.catalog as Record<string, unknown>).vars = [
           { name: "EMAIL_ADDRESSES", label: "Addresses", default: '["a@example.com"]' },
-          { name: "RETRIES", label: "Retries", required: true },
+          { name: "RETRIES", label: "Retries" },
           { name: "MODE", label: "Mode", default: "[1]" },
         ];
       }),
@@ -342,6 +346,47 @@ describe("planCiInstall", () => {
     });
   });
 
+  it("fills in the Cloudflare Access placeholders empty: the check never protects the app", () => {
+    const edit = (m: Record<string, unknown>) => {
+      worker(m).bindings = [
+        { type: "plain_text", name: "TEAM_DOMAIN", text: "https://{{accessTeamDomain}}" },
+        { type: "plain_text", name: "TEAM", text: "{{ accessTeamName }}" },
+        { type: "json", name: "ACCESS", json: { certs: "{{ accessCertsUrl }}" } },
+      ];
+      const catalog = m.catalog as Record<string, unknown>;
+      catalog.requires = ["access"];
+      catalog.vars = [{ name: "POLICY_AUD", label: "Audience", default: "{{accessAud}}" }];
+    };
+    expect(
+      planCiInstall(manifest(edit), "ci-hello-pr1", { subdomain: "acme" }).config.vars,
+    ).toEqual({
+      TEAM_DOMAIN: "https://",
+      TEAM: "",
+      ACCESS: { certs: "" },
+      POLICY_AUD: "",
+    });
+  });
+
+  it("fills in {{appUrl}} and the hostnames with the workers.dev address", () => {
+    const edit = (m: Record<string, unknown>) => {
+      worker(m).bindings = [{ type: "plain_text", name: "HOST", text: "{{appHostname}}" }];
+      (m.catalog as Record<string, unknown>).vars = [
+        { name: "APP_URL", label: "Address", default: "{{appUrl}}" },
+        { name: "WORKER_HOST", label: "Worker host", default: "{{workerHostname}}" },
+      ];
+    };
+    expect(
+      planCiInstall(manifest(edit), "ci-hello-pr1", { subdomain: "acme" }).config.vars,
+    ).toEqual({
+      HOST: "ci-hello-pr1.acme.workers.dev",
+      APP_URL: "https://ci-hello-pr1.acme.workers.dev",
+      WORKER_HOST: "ci-hello-pr1.acme.workers.dev",
+    });
+    expect(planCiInstall(manifest(edit), "ci-hello-pr1").config.vars).toMatchObject({
+      APP_URL: "{{appUrl}}",
+    });
+  });
+
   it("lists derived secrets apart, with the secret they are computed from", () => {
     const plan = planCiInstall(
       manifest((m) => {
@@ -352,7 +397,7 @@ describe("planCiInstall", () => {
             label: "Admin password hash",
             derive: { from: "CF_PASSWORD", method: "bcrypt" },
           },
-          { name: "CF_JWT_SECRET", label: "Session key", generate: true },
+          { name: "CF_JWT_SECRET", label: "Session key", generate: "password" },
         ];
       }),
       "ci-hello-pr1",
@@ -369,7 +414,7 @@ describe("planCiInstall", () => {
         const catalog = m.catalog as Record<string, unknown>;
         catalog.secrets = [
           { name: "VAPID_PRIVATE_KEY", label: "Push key", generate: "vapid-private-key" },
-          { name: "TOKEN", label: "Token", generate: true },
+          { name: "TOKEN", label: "Token", generate: "password" },
         ];
         catalog.vars = [
           {
@@ -391,17 +436,17 @@ describe("planCiInstall", () => {
     );
   });
 
-  it("probes the catalog's install.healthPath, else /", () => {
-    expect(planCiInstall(manifest(), "ci-hello-pr1").healthPath).toBe("/");
+  it("probes the catalog's install.health.path, else /", () => {
+    expect(planCiInstall(manifest(), "ci-hello-pr1").probePath).toBe("/");
     const plan = planCiInstall(
       manifest((m) => {
         const install = (m.catalog as { install: Record<string, unknown> }).install;
-        install.healthPath = "/v1/chat/completions";
+        install.health = { path: "/v1/chat/completions", mode: "no-server-errors" };
       }),
       "ci-hello-pr1",
     );
-    expect(plan.healthPath).toBe("/v1/chat/completions");
-    expect(healthUrl(plan.name, "acme", plan.healthPath)).toBe(
+    expect(plan.probePath).toBe("/v1/chat/completions");
+    expect(healthUrl(plan.name, "acme", plan.probePath)).toBe(
       "https://ci-hello-pr1.acme.workers.dev/v1/chat/completions",
     );
     expect(healthUrl("ci-cut-pr1", "acme", "/")).toBe("https://ci-cut-pr1.acme.workers.dev/");
@@ -409,29 +454,32 @@ describe("planCiInstall", () => {
 
   it("refuses a health path the schema would reject", () => {
     for (const bad of ["health", "/a?b=1", "/a#b", "/a b", "", 42]) {
-      expect(() => catalogHealthPath({ install: { healthPath: bad } })).toThrow(
-        /install\.healthPath .* is not a URL path/,
+      expect(() => catalogHealthPath({ install: { health: { path: bad } } })).toThrow(
+        /install\.health\.path .* is not a URL path/,
       );
     }
     expect(catalogHealthPath(null)).toBe("/");
     expect(catalogHealthPath({ install: {} })).toBe("/");
+    expect(catalogHealthPath({ install: { health: {} } })).toBe("/");
   });
 
-  it("reads install.healthMode loosely, defaulting to default", () => {
-    expect(planCiInstall(manifest(), "ci-hello-pr1").healthMode).toBe("default");
+  it("reads install.health.mode, defaulting to no-server-errors", () => {
+    expect(planCiInstall(manifest(), "ci-hello-pr1").probeMode).toBe("no-server-errors");
     const plan = planCiInstall(
       manifest((m) => {
         const install = (m.catalog as { install: Record<string, unknown> }).install;
-        install.healthMode = "status-only";
+        install.health = { path: "/", mode: "any-response" };
       }),
       "ci-hello-pr1",
     );
-    expect(plan.healthMode).toBe("status-only");
-    expect(catalogHealthMode(null)).toBe("default");
-    expect(catalogHealthMode({ install: { healthMode: "default" } })).toBe("default");
-    for (const bad of ["status", "", 1, null]) {
-      expect(() => catalogHealthMode({ install: { healthMode: bad } })).toThrow(
-        /install\.healthMode .* is not "default" or "status-only"/,
+    expect(plan.probeMode).toBe("any-response");
+    expect(catalogHealthMode(null)).toBe("no-server-errors");
+    expect(catalogHealthMode({ install: { health: { mode: "no-server-errors" } } })).toBe(
+      "no-server-errors",
+    );
+    for (const bad of ["status-only", "default", "", 1, null]) {
+      expect(() => catalogHealthMode({ install: { health: { mode: bad } } })).toThrow(
+        /install\.health\.mode .* is not "no-server-errors" or "any-response"/,
       );
     }
   });
@@ -756,7 +804,9 @@ describe("unpackArtifact", () => {
         binding: null,
         files: [{ route: "/docs/index.html", hash: "b".repeat(32), ...e.page }],
       };
-      m.d1Migrations = { DB: [{ name: "0001_init.sql", ...e.sql }] };
+      m.d1 = {
+        DB: { migrations: [{ name: "0001_init.sql", ...e.sql }], schema: [], postDeploy: [] },
+      };
     });
     const out = path.join(dir, "out");
     unpackArtifact(m, path.join(dir, "a.zip"), out);
@@ -792,16 +842,16 @@ describe("health", () => {
     expect(classifyProbe({ error: "ECONNRESET" })).toBe("retry");
   });
 
-  it("counts any answer of the Worker itself under status-only", () => {
+  it("counts any answer of the Worker itself under any-response", () => {
     const own = { status: 500, body: "Cloudflare Access must be configured in production." };
     expect(classifyProbe(own)).toBe("retry");
-    expect(classifyProbe(own, "status-only")).toBe("ok");
-    expect(classifyProbe({ status: 403, body: "Missing JWT" }, "status-only")).toBe("ok");
+    expect(classifyProbe(own, "any-response")).toBe("ok");
+    expect(classifyProbe({ status: 403, body: "Missing JWT" }, "any-response")).toBe("ok");
     // Cloudflare's own pages and connection errors are still not an answer.
-    expect(classifyProbe({ status: 500, body: "error code: 1101" }, "status-only")).toBe("retry");
-    expect(classifyProbe({ status: 404, body: "error code: 1042" }, "status-only")).toBe("retry");
-    expect(classifyProbe({ status: 404, body: "Not found" }, "status-only")).toBe("soft-404");
-    expect(classifyProbe({ error: "ECONNRESET" }, "status-only")).toBe("retry");
+    expect(classifyProbe({ status: 500, body: "error code: 1101" }, "any-response")).toBe("retry");
+    expect(classifyProbe({ status: 404, body: "error code: 1042" }, "any-response")).toBe("retry");
+    expect(classifyProbe({ status: 404, body: "Not found" }, "any-response")).toBe("soft-404");
+    expect(classifyProbe({ error: "ECONNRESET" }, "any-response")).toBe("retry");
   });
 
   function clock(probes: Probe[]) {
@@ -829,12 +879,12 @@ describe("health", () => {
     expect(await waitForHealth(c.probe, c.options)).toEqual({ ok: true, detail: "HTTP 200" });
   });
 
-  it("passes a Worker behind a sign-in that answers 5xx under status-only", async () => {
+  it("passes a Worker behind a sign-in that answers 5xx under any-response", async () => {
     const c = clock([
       { status: 404, body: "error code: 1042" },
       { status: 500, body: "sign-in not configured" },
     ]);
-    expect(await waitForHealth(c.probe, { ...c.options, mode: "status-only" })).toEqual({
+    expect(await waitForHealth(c.probe, { ...c.options, mode: "any-response" })).toEqual({
       ok: true,
       detail: "HTTP 500",
     });
@@ -1006,8 +1056,8 @@ describe("cleanupCiInstall", () => {
       { queue: "ci-hello-pr1-tasks", deadLetterQueue: "ci-hello-pr1-dlq", settings: {} },
     ],
     notes: [],
-    healthPath: "/",
-    healthMode: "default",
+    probePath: "/",
+    probeMode: "no-server-errors",
     resources: [
       { type: "kv", name: "ci-hello-pr1-cut-kv", binding: "CUT_KV" },
       { type: "d1", name: "ci-hello-pr1-db", binding: "DB" },
@@ -1355,16 +1405,34 @@ describe.skipIf(!appflareAvailable)("placeholders match @appflare/schema", () =>
       7,
     ];
     texts.push("{{accountId}}/{{ accountId }}", "{{accountid}}");
-    jsons.push({ a: ["{{accountId}}"] });
+    texts.push("{{appUrl}}/x {{ appHostname }} {{workerHostname}}", "{{wildcardHostname}}");
+    jsons.push({ a: ["{{accountId}}"] }, { b: ["{{appUrl}}", "{{appHostname}}"] });
+    texts.push(
+      "https://{{accessTeamDomain}} {{ accessAud }} {{accessCertsUrl}}",
+      "https://{{accessTeamName}}.cloudflareaccess.com",
+      "{{accessaud}}",
+    );
+    jsons.push({ c: ["{{accessAud}}", "{{ accessCertsUrl }}", "{{ accessTeamName }}"] });
+    const url = "https://w.acme.workers.dev";
+    const access = {
+      teamDomain: "acme.cloudflareaccess.com",
+      teamName: "acme",
+      aud: "0".repeat(64),
+      certsUrl: "https://acme.cloudflareaccess.com/cdn-cgi/access/certs",
+    };
     for (const values of [
-      { workerUrl: "https://w.acme.workers.dev", workerName: "w" },
-      { workerUrl: null, workerName: "w" },
+      { workerUrl: url, appUrl: url, workerName: "w", access },
+      { workerUrl: url, appUrl: url, workerName: "w", access: null },
+      { workerUrl: url, appUrl: url, workerName: "w" },
+      { workerUrl: null, appUrl: null, workerName: "w" },
+      { workerUrl: url, appUrl: "https://links.example.com", workerName: "w" },
       {
-        workerUrl: "https://w.acme.workers.dev",
+        workerUrl: url,
+        appUrl: url,
         workerName: "w",
         accountId: "0123456789abcdef0123456789abcdef",
       },
-      { workerUrl: null, workerName: "w", accountId: null },
+      { workerUrl: null, appUrl: null, workerName: "w", accountId: null },
     ]) {
       for (const text of texts) {
         expect(renderPlaceholders(text, values)).toBe(schema.renderPlaceholders(text, values));
@@ -1422,10 +1490,20 @@ describe("planCiApp for an app of one Worker", () => {
         { type: "d1", name: "DB" },
         { type: "ratelimit", name: "LIMIT", simple: { limit: 1, period: 10 } },
       ];
-      m.d1Migrations = {
-        DB: [
-          { name: "0001.sql", path: "d1/DB/0001.sql", size: 1, sha256: "a".repeat(64), offset: 0 },
-        ],
+      m.d1 = {
+        DB: {
+          migrations: [
+            {
+              name: "0001.sql",
+              path: "d1/DB/0001.sql",
+              size: 1,
+              sha256: "a".repeat(64),
+              offset: 0,
+            },
+          ],
+          schema: [],
+          postDeploy: [],
+        },
       };
     });
     const options = { subdomain: "acme", accountId: "abc", namespaceId: () => "7" };

@@ -8,6 +8,9 @@
   "repo": "mibgb65-cloud/OmniMail",
   "license": "MIT",
   "categories": ["email"],
+  // Generated secrets (revision 2), edited help text (revision 3) and field links
+  // (revision 4) came after this release was published: revisions, no new build.
+  "revision": 4,
   "authors": [
     {
       "name": "OmniMail contributors",
@@ -22,7 +25,6 @@
   // The bump bot reads only v-prefixed semver tags, which are the web ones.
   "source": { "ref": "v1.1.4", "sha": "daa18a98494c2f9e7dd28c994dadfce0d6e5ab82" },
   "install": {
-    "tier": "artifact",
     "packageManager": "npm",
     "wranglerConfig": "wrangler.jsonc",
     "workerName": "omni-mail",
@@ -30,7 +32,7 @@
     // script runs its lint and type checks first; the bundle is the same.
     "buildCommand": "vite build",
     // Answers without a sign-in, after the API has checked the D1 schema.
-    "healthPath": "/api/config",
+    "health": { "path": "/api/config" },
     // Upstream's guide points the zone's catch-all at the Worker. Mail to an
     // address that is not a mailbox in the app is refused during the SMTP
     // exchange and never stored.
@@ -50,56 +52,72 @@
   // Worker's settings to turn them on.
   "secrets": [
     {
+      // Upstream refuses a token under 32 UTF-8 bytes
+      // (email-worker/src/features/auth/setup/setup-security.ts:3,13-16). A
+      // generated password is 32 ASCII characters, exactly the minimum, so it
+      // only works while the manager generates at least 32. Once setup has
+      // run, the first-run endpoint refuses before it reads the token
+      // (email-worker/src/features/auth/setup/setup-api.ts:39-41).
       "name": "SETUP_TOKEN",
       "label": "Setup token",
-      "help": "At least 32 random characters. You paste it on the first-run page to create the super administrator; remove it from the app's settings once that is done."
+      "help": "You paste it on the first-run page to create the super administrator. After that the first-run page refuses to run again, so the token no longer opens anything. A value of your own needs at least 32 characters.",
+      "generate": "password"
     },
     {
       "name": "MAIL_CREDENTIALS_KEY",
       "label": "Mail credentials key",
       "help": "Encrypts the passwords and tokens of connected external mailboxes (Gmail, Microsoft, QQ, NAVER, Yandex, iCloud, Linux DO). Changing it makes saved credentials unreadable.",
-      "generate": true
+      "generate": "password"
     },
     {
       "name": "TOTP_ENCRYPTION_KEY",
       "label": "Two-factor encryption key",
       "help": "Encrypts administrators' authenticator secrets. Have administrators turn two-factor off before you change it.",
-      "generate": true
+      "generate": "password"
     },
     {
       "name": "RESEND_DOMAIN_CONFIGS",
       "label": "Resend configuration",
-      "help": "Optional, for sending. JSON with one entry per sender domain, for example {\"example.com\":{\"apiKey\":\"re_...\"}}. Without a sending provider the app still receives mail.",
+      "help": "For sending: JSON with one entry per sender domain, for example {\"example.com\":{\"apiKey\":\"re_...\"}}. Without a sending provider the app still receives mail.",
+      "link": { "label": "Get a key", "url": "https://resend.com/api-keys" },
       "optional": true
     },
     {
       "name": "RESEND_WEBHOOK_SECRETS",
       "label": "Resend webhook signing secrets",
-      "help": "Optional. A JSON array of the signing secrets of the Resend webhooks pointed at /api/webhooks/resend, to show delivery, bounce and complaint status.",
+      "help": "A JSON array of the signing secrets of the Resend webhooks pointed at /api/webhooks/resend, to show delivery, bounce and complaint status.",
+      "link": { "label": "Add a webhook", "url": "https://resend.com/webhooks" },
       "optional": true
     },
     {
       "name": "SENDFLARE_API_KEY",
       "label": "SendFlare API key",
-      "help": "Optional. Sends through SendFlare instead of Resend, from the address in SendFlare sender below.",
+      "help": "Sends through SendFlare instead of Resend, from the address in SendFlare sender below.",
+      "link": { "label": "Get a key", "url": "https://sendflare.com/" },
       "optional": true
     },
     {
       "name": "SENDFLARE_DOMAIN_CONFIGS",
       "label": "SendFlare configuration",
-      "help": "Optional. JSON with one entry per sender domain, for example {\"example.com\":{\"apiKey\":\"sf_...\",\"from\":\"mail@example.com\"}}; a matching entry wins over Resend for that domain.",
+      "help": "JSON with one entry per sender domain, for example {\"example.com\":{\"apiKey\":\"sf_...\",\"from\":\"mail@example.com\"}}; a matching entry wins over Resend for that domain.",
+      "link": { "label": "Get a key", "url": "https://sendflare.com/" },
       "optional": true
     },
     {
       "name": "TURNSTILE_SECRET_KEY",
       "label": "Turnstile secret key",
-      "help": "Optional, with the site key below. Needed for public registration with email and password, and for invitations several people can use.",
+      "help": "Set it with the site key below. Needed for public registration with email and password, and for invitations several people can use.",
+      "link": {
+        "label": "Create a widget",
+        "url": "https://dash.cloudflare.com/?to=/:account/turnstile"
+      },
       "optional": true
     },
     {
       "name": "LINUX_DO_CLIENT_SECRET",
       "label": "Linux DO Connect client secret",
-      "help": "Optional, with the client ID below, for signing in with Linux DO.",
+      "help": "With the client ID below, for signing in with Linux DO.",
+      "link": { "label": "Create an OAuth app", "url": "https://connect.linux.do/" },
       "optional": true
     }
   ],
@@ -107,40 +125,50 @@
     {
       "name": "SUPER_ADMIN_EMAIL",
       "label": "Super administrator email",
-      "help": "The sign-in address of the one super administrator, for example owner@example.com.",
-      "required": true
+      "help": "The sign-in address of the one super administrator, for example owner@example.com."
     },
     {
       "name": "APP_NAME",
       "label": "Site name",
       "help": "Shown in the app and in authenticator apps.",
-      "default": "OmniMail"
+      "default": "OmniMail",
+      "optional": true
     },
     {
       "name": "TURNSTILE_SITE_KEY",
       "label": "Turnstile site key",
-      "help": "Optional. The public key of the Turnstile widget whose secret key is set above."
+      "help": "The public key of the Turnstile widget whose secret key is set above.",
+      "link": {
+        "label": "Create a widget",
+        "url": "https://dash.cloudflare.com/?to=/:account/turnstile"
+      },
+      "optional": true
     },
     {
       "name": "SENDFLARE_FROM",
       "label": "SendFlare sender",
-      "help": "Optional. A verified sender address for SendFlare, without a display name."
+      "help": "A verified sender address for SendFlare, without a display name.",
+      "link": { "label": "Open SendFlare", "url": "https://sendflare.com/" },
+      "optional": true
     },
     {
       "name": "LINUX_DO_CLIENT_ID",
       "label": "Linux DO Connect client ID",
-      "help": "Optional. Register {{workerUrl}}/api/auth/linux-do/callback as the callback URL."
+      "help": "Register the app's address followed by /api/auth/linux-do/callback as the callback URL.",
+      "link": { "label": "Create an OAuth app", "url": "https://connect.linux.do/" },
+      "optional": true
     },
     {
       "name": "APP_ORIGINS",
       "label": "Extra allowed origins",
-      "help": "Optional. Comma-separated exact origins of other front ends or browser extensions (chrome-extension://<id>) that may call the API. The app's own address never needs listing."
+      "help": "Comma-separated exact origins of other front ends or browser extensions (chrome-extension://<id>) that may call the API. The app's own address never needs listing.",
+      "optional": true
     }
   ],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Open {{workerUrl}}. The first-run page checks D1, R2, the mail queue, the super administrator email and the setup token; enter a display name, a password and the setup token to create the super administrator. The database is already migrated."
+      "content": "Open {{appUrl}}. The first-run page checks D1, R2, the mail queue, the super administrator email and the setup token; enter a display name, a password and the setup token to create the super administrator. The database is already migrated."
     },
     {
       "type": "markdown",
@@ -150,6 +178,5 @@
       "type": "markdown",
       "content": "Sending needs a Resend or SendFlare account with a verified sender domain; set its configuration in this app's settings."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

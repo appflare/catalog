@@ -1,13 +1,14 @@
 import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
+import { pathToFileURL } from "node:url";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import {
   artifactManifestFixture,
   duoArtifactManifestFixture,
 } from "../fixtures/artifact-manifest.ts";
 import { sandboxFixture, selfDeployingFixture } from "../fixtures/sandbox-manifest.ts";
-import { appflareAvailable, testSchema } from "../fixtures/schema.ts";
+import { appflareAvailable, appflareDir, testSchema } from "../fixtures/schema.ts";
 import {
   type AppflareSchema,
   type AppServicesOf,
@@ -21,12 +22,14 @@ import {
   buildIndexApps,
   finalizeIndex,
   type IndexBuildOptions,
+  indexAccessOffer,
   lastVerifiedFor,
   rowFacts,
   serializeIndex,
   sha256Hex,
   verifiedDigest,
 } from "./index-builder.ts";
+import { appflarePaths } from "./paths.ts";
 import { publishedManifestBytes } from "./sandbox-entry.ts";
 import type { ArtifactManifest, CatalogManifest, IndexApp } from "./types.ts";
 import type { VersionResolver } from "./versions.ts";
@@ -34,6 +37,8 @@ import type { VersionResolver } from "./versions.ts";
 const fixtureApps = path.join(import.meta.dirname, "..", "fixtures", "apps");
 const PIN = "0123456789abcdef0123456789abcdef01234567";
 const OTHER_SHA = "fedcba9876543210fedcba9876543210fedcba98";
+/** When the tests' indexes are built: the addedAt of an entry without a known first commit. */
+const BUILT_AT = "2026-09-28T12:00:00.000Z";
 
 let schema: AppflareSchema;
 let hello: CatalogManifest;
@@ -112,6 +117,7 @@ function options(overrides: Partial<IndexBuildOptions> = {}): IndexBuildOptions 
     artifactManifest: schema.artifactManifest,
     warn: (m) => warnings.push(m),
     sandboxDefaults: schema.sandboxDefaults,
+    builtAt: BUILT_AT,
     services: echoServices,
     revisionProblem: schema.revisionProblem,
     ...overrides,
@@ -120,10 +126,11 @@ function options(overrides: Partial<IndexBuildOptions> = {}): IndexBuildOptions 
 
 describe("artifactUrls", () => {
   it("follows the <slug>@<version> release naming", () => {
-    expect(artifactUrls("appflare/catalog", "cut", "0.1.0")).toEqual({
+    expect(artifactUrls("appflare/catalog", "cut", "0.1.0", "d".repeat(64))).toEqual({
       zip: "https://github.com/appflare/catalog/releases/download/cut@0.1.0/cut-0.1.0.zip",
       manifest: "https://github.com/appflare/catalog/releases/download/cut@0.1.0/manifest.json",
       sig: "https://github.com/appflare/catalog/releases/download/cut@0.1.0/manifest.sig",
+      digest: "d".repeat(64),
     });
   });
 });
@@ -142,9 +149,10 @@ describe("buildIndexApps", () => {
       slug: "hello",
       name: "Hello",
       summary: "Fixture app for the catalog scripts' tests.",
+      tagline: "A fixture for the catalog's tests",
+      addedAt: BUILT_AT,
       version: "1.2.3",
-      artifacts: artifactUrls("appflare/catalog", "hello", "1.2.3"),
-      digest: sha256Hex(bytes),
+      artifacts: artifactUrls("appflare/catalog", "hello", "1.2.3", sha256Hex(bytes)),
       tier: "artifact",
       plan: "free",
       requires: ["r2"],
@@ -157,8 +165,38 @@ describe("buildIndexApps", () => {
       categories: ["utilities"],
       license: "MIT",
       revision: 1,
+      // Without an `access` block, protection is offered, switched off.
+      accessOffer: "offered",
     });
     expect(warnings.join("\n")).toMatch(/UNSIGNED/);
+  });
+
+  it("lists requires verbatim, Cloudflare Access included, so older managers leave the entry out", () => {
+    writeLocal(artifactManifestFixture({ app: "hello", version: "1.2.3", sha: PIN }));
+    const protectedHello: CatalogManifest = {
+      ...hello,
+      requires: ["r2", "access"],
+      access: { mode: "required", bypass: ["/s/*"] },
+    };
+    const [row] = buildIndexApps([protectedHello], options());
+    expect(row?.requires).toEqual(["r2", "access"]);
+    expect(row?.services).toEqual(["binding:kv_namespace", "requires:r2", "requires:access"]);
+    expect(row?.accessOffer).toBe("required");
+  });
+
+  it("writes accessOffer from the entry's access mode, for artifact and sandbox entries", () => {
+    writeLocal(artifactManifestFixture({ app: "hello", version: "1.2.3", sha: PIN }));
+    const recommended: CatalogManifest = {
+      ...hello,
+      requires: ["r2", "access"],
+      access: { mode: "recommended" },
+    };
+    const built = { ...sandboxFixture(hello, schema), access: { bypass: ["/api/webhook"] } };
+    const rows = buildIndexApps([built, recommended], options());
+    expect(rows.map((r) => [r.slug, r.accessOffer])).toEqual([
+      ["built", "offered"],
+      ["hello", "recommended"],
+    ]);
   });
 
   it("works out services from the release's artifact manifest", () => {
@@ -195,7 +233,7 @@ describe("buildIndexApps", () => {
     const releases = releasesOf(releaseOf("1.2.2"), current, releaseOf("9.0.0"));
     const rows = buildIndexApps([hello], options({ distDir: null, releases }));
     expect(releases.asked).toEqual(["hello@1.2.3"]);
-    expect(rows.map((r) => [r.version, r.digest])).toEqual([
+    expect(rows.map((r) => [r.version, r.artifacts?.digest])).toEqual([
       ["1.2.3", sha256Hex(current.manifestBytes)],
     ]);
   });
@@ -204,7 +242,7 @@ describe("buildIndexApps", () => {
     writeLocal(artifactManifestFixture({ app: "hello", version: "1.0.0", sha: OTHER_SHA }));
     const release = releaseOf("1.2.3");
     const rows = buildIndexApps([hello], options({ releases: releasesOf(release) }));
-    expect(rows.map((r) => r.digest)).toEqual([sha256Hex(release.manifestBytes)]);
+    expect(rows.map((r) => r.artifacts?.digest)).toEqual([sha256Hex(release.manifestBytes)]);
     expect(warnings.join("\n")).toMatch(/not the current pin/);
   });
 
@@ -212,7 +250,7 @@ describe("buildIndexApps", () => {
     writeLocal(artifactManifestFixture({ app: "hello", version: "1.2.3", sha: PIN }));
     const release = releaseOf("1.2.3");
     const rows = buildIndexApps([hello], options({ distDir: null, releases: releasesOf(release) }));
-    expect(rows[0]?.digest).toBe(sha256Hex(release.manifestBytes));
+    expect(rows[0]?.artifacts?.digest).toBe(sha256Hex(release.manifestBytes));
   });
 
   it("omits the app when the release for its tag was built from another sha", () => {
@@ -314,12 +352,18 @@ describe.skipIf(!appflareAvailable)("with the real @appflare/schema", () => {
   it("rejects an index row with a malformed digest", () => {
     writeLocal(artifactManifestFixture({ app: "hello", version: "1.2.3", sha: PIN }));
     const [row] = buildIndexApps([hello], options());
-    if (!row) {
-      throw new Error("expected a row");
+    const artifacts = row?.artifacts;
+    if (!row || !artifacts) {
+      throw new Error("expected a row with artifacts");
     }
     expect(() =>
-      finalizeIndex([{ ...row, digest: "nope" }], null, new Date(), schema.indexJson),
-    ).toThrow(/apps\.0\.digest/);
+      finalizeIndex(
+        [{ ...row, artifacts: { ...artifacts, digest: "nope" } }],
+        null,
+        new Date(),
+        schema.indexJson,
+      ),
+    ).toThrow(/apps\.0\.artifacts\.digest/);
   });
 
   it("rejects a local artifact manifest that is not schema-valid", () => {
@@ -334,9 +378,9 @@ describe.skipIf(!appflareAvailable)("with the real @appflare/schema", () => {
     const opts = options({ services: schema.appServices });
     const edited = selfDeployingFixture(hello, schema, {
       tokenPermissions: [
-        { name: "Workers Scripts", scope: "account" },
-        { name: "D1", scope: "account" },
-        { name: "Zone.DNS", scope: "zone" },
+        { group: "Workers Scripts", scope: "account", access: "edit", reason: "Deploys it." },
+        { group: "D1", scope: "account", access: "edit", reason: "Creates its database." },
+        { group: "DNS", scope: "zone", access: "edit", reason: "Adds its records." },
       ],
     });
     const rows = buildIndexApps([hello, sandboxFixture(hello, schema), edited], opts);
@@ -363,9 +407,10 @@ describe("lastVerified", () => {
     slug: "hello",
     name: "Hello",
     summary: "s",
+    tagline: "t",
+    addedAt: BUILT_AT,
     version: "1.2.3",
-    artifacts: artifactUrls("appflare/catalog", "hello", "1.2.3"),
-    digest: "d".repeat(64),
+    artifacts: artifactUrls("appflare/catalog", "hello", "1.2.3", "d".repeat(64)),
     tier: "artifact",
     plan: "free",
     requires: [],
@@ -373,20 +418,25 @@ describe("lastVerified", () => {
     authors: [{ name: "octocat", github: "octocat" }],
     maintainers: ["octocat"],
     services: [],
-    categories: [],
+    categories: ["utilities"],
+    license: "MIT",
+    revision: 1,
     ...over,
   });
 
   it("carries the previous value while version and digest are unchanged, and resets otherwise", () => {
     expect(lastVerifiedFor("hello", artifact, [row({})])).toBe("2026-09-01T00:00:00.000Z");
     expect(lastVerifiedFor("hello", artifact, [row({ version: "1.2.2" })])).toBe(null);
-    expect(lastVerifiedFor("hello", artifact, [row({ digest: "e".repeat(64) })])).toBe(null);
+    const otherBuild = artifactUrls("appflare/catalog", "hello", "1.2.3", "e".repeat(64));
+    expect(lastVerifiedFor("hello", artifact, [row({ artifacts: otherBuild })])).toBe(null);
     expect(lastVerifiedFor("hello", artifact, [])).toBe(null);
   });
 
   it("is carried into rebuilt rows by buildIndexApps", () => {
     const bytes = writeLocal(artifactManifestFixture({ app: "hello", version: "1.2.3", sha: PIN }));
-    const previousApps = [row({ digest: sha256Hex(bytes) })];
+    const previousApps = [
+      row({ artifacts: artifactUrls("appflare/catalog", "hello", "1.2.3", sha256Hex(bytes)) }),
+    ];
     const [r] = buildIndexApps([hello], options({ previousApps }));
     expect(r?.lastVerified).toBe("2026-09-01T00:00:00.000Z");
   });
@@ -407,6 +457,8 @@ describe("sandbox tier entries", () => {
         slug: "built",
         name: "Hello",
         summary: "Fixture app for the catalog scripts' tests.",
+        tagline: "A fixture for the catalog's tests",
+        addedAt: BUILT_AT,
         version: "1.2.3",
         tier: "sandbox",
         plan: "paid",
@@ -426,10 +478,10 @@ describe("sandbox tier entries", () => {
         categories: ["utilities"],
         license: "MIT",
         revision: 1,
+        accessOffer: "offered",
       },
     ]);
     expect(rows[0]).not.toHaveProperty("artifacts");
-    expect(rows[0]).not.toHaveProperty("digest");
     expect(warnings).toEqual([]);
   });
 
@@ -441,9 +493,10 @@ describe("sandbox tier entries", () => {
       slug: "hello",
       name: "Hello",
       summary: "Fixture app for the catalog scripts' tests.",
+      tagline: "A fixture for the catalog's tests",
+      addedAt: BUILT_AT,
       version: "1.2.3",
-      artifacts: artifactUrls("appflare/catalog", "hello", "1.2.3"),
-      digest: sha256Hex(bytes),
+      artifacts: artifactUrls("appflare/catalog", "hello", "1.2.3", sha256Hex(bytes)),
       tier: "artifact",
       plan: "free",
       requires: ["r2"],
@@ -454,6 +507,7 @@ describe("sandbox tier entries", () => {
       categories: ["utilities"],
       license: "MIT",
       revision: 1,
+      accessOffer: "offered",
     });
   });
 
@@ -518,6 +572,8 @@ describe("self-deploying tier entries", () => {
         slug: "seo",
         name: "Hello",
         summary: "Fixture app for the catalog scripts' tests.",
+        tagline: "A fixture for the catalog's tests",
+        addedAt: BUILT_AT,
         version: "1.2.3",
         tier: "self-deploying",
         plan: "paid",
@@ -539,7 +595,8 @@ describe("self-deploying tier entries", () => {
       },
     ]);
     expect(rows[0]).not.toHaveProperty("artifacts");
-    expect(rows[0]).not.toHaveProperty("digest");
+    // A self-deploying app cannot be protected with Cloudflare Access.
+    expect(rows[0]).not.toHaveProperty("accessOffer");
     expect(warnings).toEqual([]);
   });
 
@@ -561,8 +618,8 @@ describe("self-deploying tier entries", () => {
     expect(same?.lastVerified).toBe("2026-09-01T00:00:00.000Z");
     const edited = selfDeployingFixture(hello, schema, {
       tokenPermissions: [
-        { name: "Workers Scripts", scope: "account" },
-        { name: "D1", scope: "account" },
+        { group: "Workers Scripts", scope: "account", access: "edit", reason: "Deploys it." },
+        { group: "D1", scope: "account", access: "edit", reason: "Creates its database." },
       ],
     });
     const [changed] = buildIndexApps([edited], options({ previousApps: [verified] }));
@@ -577,7 +634,7 @@ describe("self-deploying tier entries", () => {
     const withSeo = buildIndexApps([built, selfDeployingFixture(hello, schema), hello], options());
     expect(withSeo.map((r) => r.slug)).toEqual(["built", "hello", "seo"]);
     expect(withSeo.filter((r) => r.slug !== "seo")).toEqual(without);
-    expect(without[1]?.digest).toBe(sha256Hex(bytes));
+    expect(without[1]?.artifacts?.digest).toBe(sha256Hex(bytes));
   });
 });
 
@@ -600,7 +657,7 @@ describe("revisions of artifact tier entries", () => {
   const selectVar = {
     name: "MODE",
     label: "Mode",
-    required: false,
+    optional: true,
     type: "select",
     options: [
       { value: "a", label: "First" },
@@ -650,8 +707,12 @@ describe("revisions of artifact tier entries", () => {
     );
     expect(row).toMatchObject({
       version: "1.2.3",
-      digest: sha256Hex(release.manifestBytes),
-      artifacts: artifactUrls("appflare/catalog", "hello", "1.2.3"),
+      artifacts: artifactUrls(
+        "appflare/catalog",
+        "hello",
+        "1.2.3",
+        sha256Hex(release.manifestBytes),
+      ),
       revision: 2,
       catalogManifest: {
         url: "https://appflare.github.io/catalog/apps/hello/manifest.json",
@@ -704,6 +765,38 @@ describe("revisions of artifact tier entries", () => {
   });
 
   it.skipIf(!appflareAvailable)(
+    "list a revision that asks for Cloudflare Access, with the revised entry's accessOffer",
+    () => {
+      const release = releasedWith(hello);
+      const revised: CatalogManifest = {
+        ...hello,
+        requires: [...hello.requires, "access"],
+        access: { mode: "required", bypass: ["/s/*"] },
+        revision: 2,
+      };
+      const [row] = buildIndexApps(
+        [revised],
+        options({
+          distDir: null,
+          releases: releasesOf(release),
+          revisionSignatures: signed(revised),
+        }),
+      );
+      expect(warnings).toEqual([]);
+      expect(row).toMatchObject({
+        version: "1.2.3",
+        revision: 2,
+        requires: ["r2", "access"],
+        accessOffer: "required",
+      });
+      expect(row?.catalogManifest?.sha256).toBe(sha256Hex(publishedManifestBytes(revised)));
+      expect(finalizeIndex([row as IndexApp], null, new Date(), schema.indexJson).apps).toEqual([
+        row,
+      ]);
+    },
+  );
+
+  it.skipIf(!appflareAvailable)(
     "omit an entry whose revision changes what only a new build can, or fail when strict",
     () => {
       const release = releasedWith(hello);
@@ -714,14 +807,14 @@ describe("revisions of artifact tier entries", () => {
       );
       expect(rows).toEqual([]);
       expect(warnings.join("\n")).toMatch(
-        /hello: omitted: .*revision 2 of hello@1\.2\.3, but it changes requires, which only a new build can change/,
+        /hello: omitted: .*revision 2 of hello@1\.2\.3, but it removes "r2" from requires, which only a new build can change/,
       );
       expect(() =>
         buildIndexApps(
           [moved],
           options({ distDir: null, releases: releasesOf(release), strictReleases: true }),
         ),
-      ).toThrow(/it changes requires/);
+      ).toThrow(/it removes "r2" from requires/);
     },
   );
 
@@ -792,26 +885,20 @@ describe("license, tagline and addedAt", () => {
     expect(sandboxRow).toMatchObject({ license: "BUSL-1.1", tagline: expect.any(String) });
   });
 
-  it("writes license alone when the entry has no note or tagline", () => {
+  it("writes no licenseNote when the entry has none", () => {
     writeLocal(artifactManifestFixture({ app: "hello", version: "1.2.3", sha: PIN }));
     const [row] = buildIndexApps([hello], options());
     expect(row?.license).toBe("MIT");
+    expect(row?.tagline).toBe("A fixture for the catalog's tests");
     expect(row).not.toHaveProperty("licenseNote");
-    expect(row).not.toHaveProperty("tagline");
   });
 
-  it("keeps a license that is no SPDX expression as it is written", () => {
-    writeLocal(artifactManifestFixture({ app: "hello", version: "1.2.3", sha: PIN }));
-    const [row] = buildIndexApps([{ ...hello, license: "Custom terms" }], options());
-    expect(row?.license).toBe("Custom terms");
-  });
-
-  it("writes addedAt for the entries whose first commit is known", () => {
+  it("writes addedAt from the first commit, else the time the index is built", () => {
     writeLocal(artifactManifestFixture({ app: "hello", version: "1.2.3", sha: PIN }));
     const addedAt = new Map([["built", "2026-09-01T10:00:00+02:00"]]);
     const rows = buildIndexApps([hello, sandboxFixture(hello, schema)], options({ addedAt }));
     expect(rows.find((r) => r.slug === "built")?.addedAt).toBe("2026-09-01T10:00:00+02:00");
-    expect(rows.find((r) => r.slug === "hello")).not.toHaveProperty("addedAt");
+    expect(rows.find((r) => r.slug === "hello")?.addedAt).toBe(BUILT_AT);
   });
 
   it("passes the index schema with every new field", () => {
@@ -824,5 +911,25 @@ describe("license, tagline and addedAt", () => {
       license: "BUSL-1.1",
       tagline: "Short links on your own domain",
     });
+  });
+});
+
+describe.skipIf(!appflareAvailable)("indexAccessOffer and @appflare/schema", () => {
+  it("follow the same rule as indexAccessOffer()", async () => {
+    const mod = (await import(pathToFileURL(appflarePaths(appflareDir).schemaDist).href)) as {
+      indexAccessOffer?: typeof indexAccessOffer;
+    };
+    expect(typeof mod.indexAccessOffer).toBe("function");
+    for (const tier of ["artifact", "sandbox", "self-deploying"] as const) {
+      for (const access of [
+        undefined,
+        { bypass: ["/s/*"] },
+        { mode: "recommended" as const },
+        { mode: "required" as const, bypass: ["/api/webhook"] },
+      ]) {
+        const manifest = { install: { tier }, ...(access === undefined ? {} : { access }) };
+        expect(indexAccessOffer(manifest)).toEqual(mod.indexAccessOffer?.(manifest));
+      }
+    }
   });
 });

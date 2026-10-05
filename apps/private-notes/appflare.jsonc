@@ -9,32 +9,33 @@
   "name": "Private Notes",
   "summary": "A private notebook behind one password: notes encrypted in the browser before they reach D1, search that runs in the browser, separate vaults per password, and one-time share links that burn after reading.",
   "tagline": "Keep encrypted notes behind a password",
-  "homepage": "https://github.com/tao-t356/private-notes",
   "repo": "tao-t356/private-notes",
   "license": "NONE",
   "categories": ["notes", "privacy"],
+  // Generated secrets added after this release was published: a revision, no new build.
+  "revision": 2,
   "authors": [{ "name": "tao-t356", "github": "tao-t356" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags, so the entry follows the default branch by commit.
   "source": { "ref": "main", "sha": "4ba41635273e7f3d51659e0c8f92db677a15ebc2" },
   "install": {
-    "tier": "artifact",
     "packageManager": "npm",
     // No build step: the Worker is TypeScript wrangler bundles, and public/
     // holds the page's hand-written JavaScript and CSS.
     "wranglerConfig": "wrangler.jsonc",
-    "workerName": "private-notes",
     // Answers without a session.
-    "healthPath": "/api/session"
+    "health": { "path": "/api/session" }
   },
   // One Worker, static assets and D1 fit the free plan. No cron triggers.
   "plan": "free",
-  "requires": [],
   "secrets": [
     {
+      // Any value up to 1024 characters except upstream's example
+      // (src/auth.ts:10,20,189-191).
       "name": "APP_PASSWORD",
       "label": "Password",
-      "help": "Signs you in and, in the browser, derives the key that encrypts your notes. Use a long, unique password and keep it in a password manager: notes cannot be decrypted without it, and it cannot be recovered from the app."
+      "help": "Signs you in and, in the browser, derives the key that encrypts your notes. Keep it in a password manager: notes cannot be decrypted without it, and it cannot be recovered from the app.",
+      "generate": "password"
     },
     {
       "name": "APP_PASSWORDS",
@@ -53,24 +54,26 @@
     {
       "name": "APP_NAME",
       "label": "App name",
-      "help": "Shown in the page title and when the app is added to a phone's home screen. Leave empty for Private Notes."
+      "help": "Shown in the page title and when the app is added to a phone's home screen. Leave empty for Private Notes.",
+      "optional": true
     },
     {
       "name": "APP_SHORT_NAME",
       "label": "Short name",
-      "help": "The name under the home-screen icon. Leave empty for upstream's Chinese default, 我的笔记."
+      "help": "The name under the home-screen icon. Leave empty for upstream's Chinese default, 我的笔记.",
+      "optional": true
     },
     {
       "name": "APP_DESCRIPTION",
       "label": "Description",
-      "help": "The description in the web app manifest. Leave empty for upstream's, in Chinese."
+      "help": "The description in the web app manifest. Leave empty for upstream's, in Chinese.",
+      "optional": true
     }
   ],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Open {{workerUrl}} and sign in with the password from this install. Each password opens its own vault; a share link lets one person read a copy of one note once, within the time you choose."
+      "content": "Open {{appUrl}} and sign in with the password from this install. Each password opens its own vault; a share link lets one person read a copy of one note once, within the time you choose."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

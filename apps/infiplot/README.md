@@ -15,7 +15,9 @@ browser and can be shared as `.infiplot` files. Licensed AGPL-3.0.
   come from Runware or an OpenAI-compatible image API. The defaults are upstream's
   suggestions (DeepSeek, Runware's FLUX.2 [klein], Xiaomi MiMo). Speech is optional.
 - **Access control.** The game has no sign-in in this build, and every scene is paid
-  for with your keys. Put it behind Cloudflare Access before you share the address.
+  for with your keys, so the install form puts it behind Cloudflare Access by default,
+  as upstream recommends for a private instance. Only the people who use this Appflare
+  get in, and the account needs a Zero Trust organization.
 
 ## Notes
 

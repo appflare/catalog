@@ -1,5 +1,5 @@
-import { execFileSync } from "node:child_process";
 import { z } from "zod";
+import { GhNotFoundError, type GhRunner, runGh } from "./gh-api.ts";
 
 /** One app version's release, as found on GitHub. */
 export interface ReleaseArtifact {
@@ -76,100 +76,85 @@ export function manifestAssetId(release: GitHubRelease): number {
   return id;
 }
 
-/** Thrown by a {@link GhRunner} when gh reports HTTP 404. */
-export class GhNotFoundError extends Error {}
-
-/** Runs `gh` and returns stdout. Throws with gh's stderr (which never holds the token). */
-export type GhRunner = (args: string[]) => Buffer;
-
-export const runGh: GhRunner = (args) => {
-  try {
-    return execFileSync("gh", args, {
-      maxBuffer: 256 * 1024 * 1024,
-      stdio: ["ignore", "pipe", "pipe"],
-    });
-  } catch (err) {
-    const e = err as NodeJS.ErrnoException & { stderr?: Buffer };
-    if (e.code === "ENOENT") {
-      throw new Error("the GitHub CLI (gh) is not installed");
-    }
-    const stderr = e.stderr?.toString("utf8").trim() ?? "";
-    if (/HTTP 404/.test(stderr)) {
-      throw new GhNotFoundError(`gh ${args.slice(0, 2).join(" ")}: ${stderr}`);
-    }
-    throw new Error(`gh ${args.slice(0, 2).join(" ")} failed${stderr ? `: ${stderr}` : ""}`);
-  }
-};
-
 /**
- * Release lookup backed by read-only `gh api` calls. Only a 404 for the tag
- * itself means "absent", and only after the repository is confirmed reachable
- * (a 404 for the repository is an error) and no draft uses the tag. Drafts are
- * visible only to tokens with write access; the release job re-checks with one.
+ * Release lookup backed by read-only GitHub API calls. The repository's
+ * releases (drafts included, which only a token with write access sees) are
+ * listed once, 100 per page, and answer every tag they hold; a tag the listing
+ * lacks (a release created after it was taken) is asked for by name, and only
+ * a 404 for it means "absent", once the repository is confirmed reachable (a
+ * 404 for the repository is an error). The release job re-checks drafts with a
+ * token that can see them. A failed listing fails every later lookup with the
+ * same error rather than listing again, so an outage costs one set of retries.
  */
 export function createGhReleaseLookup(repo: string, run: GhRunner = runGh): ReleaseLookup {
-  let repoChecked = false;
-  let drafts: GitHubRelease[] | null = null;
-  const assertRepo = () => {
-    if (repoChecked) {
-      return;
-    }
-    try {
-      run(["api", `repos/${repo}`, "--jq", ".full_name"]);
-    } catch (err) {
-      if (err instanceof GhNotFoundError) {
-        throw new Error(`repository ${repo} was not found or the token cannot read it`);
+  let listing: Map<string, GitHubRelease> | Error | null = null;
+  const listed = (): Map<string, GitHubRelease> => {
+    if (listing === null) {
+      try {
+        run({ path: `repos/${repo}`, jq: ".full_name" });
+        const lines = run({
+          path: `repos/${repo}/releases?per_page=100`,
+          paginate: true,
+          jq: `.[] | ${RELEASE_JQ} | @json`,
+        })
+          .toString("utf8")
+          .split("\n")
+          .filter((l) => l.trim());
+        const byTag = new Map<string, GitHubRelease>();
+        for (const line of lines) {
+          const release = releaseSchema.parse(JSON.parse(line));
+          const seen = byTag.get(release.tag_name);
+          // A published release wins over a draft that names the same tag.
+          if (seen === undefined || (seen.draft && !release.draft)) {
+            byTag.set(release.tag_name, release);
+          }
+        }
+        listing = byTag;
+      } catch (err) {
+        listing =
+          err instanceof GhNotFoundError
+            ? new Error(`repository ${repo} was not found or the token cannot read it`)
+            : new Error(`listing the releases of ${repo}: ${message(err)}`, { cause: err });
       }
-      throw err;
     }
-    repoChecked = true;
-  };
-  const listDrafts = (): GitHubRelease[] => {
-    if (drafts === null) {
-      const out = run([
-        "api",
-        "--paginate",
-        `repos/${repo}/releases?per_page=100`,
-        "--jq",
-        `.[] | select(.draft) | ${RELEASE_JQ} | @json`,
-      ]).toString("utf8");
-      drafts = out
-        .split("\n")
-        .filter((l) => l.trim())
-        .map((l) => releaseSchema.parse(JSON.parse(l)));
+    if (listing instanceof Error) {
+      throw listing;
     }
-    return drafts;
+    return listing;
   };
   return {
     byTag(tag) {
-      assertRepo();
-      let release: GitHubRelease;
-      try {
-        const out = run([
-          "api",
-          `repos/${repo}/releases/tags/${encodeURIComponent(tag)}`,
-          "--jq",
-          RELEASE_JQ,
-        ]);
-        release = releaseSchema.parse(JSON.parse(out.toString("utf8")));
-      } catch (err) {
-        if (!(err instanceof GhNotFoundError)) {
-          throw err;
+      let release = listed().get(tag);
+      if (release === undefined) {
+        try {
+          const out = run({
+            path: `repos/${repo}/releases/tags/${encodeURIComponent(tag)}`,
+            jq: RELEASE_JQ,
+          });
+          release = releaseSchema.parse(JSON.parse(out.toString("utf8")));
+        } catch (err) {
+          if (err instanceof GhNotFoundError) {
+            return null;
+          }
+          throw new Error(`looking up release ${tag}: ${message(err)}`, { cause: err });
         }
-        const draft = listDrafts().find((d) => d.tag_name === tag);
-        if (draft) {
-          manifestAssetId(draft); // throws IncompleteReleaseError naming the draft
-        }
-        return null;
       }
       const assetId = manifestAssetId(release);
-      const manifestBytes = run([
-        "api",
-        "-H",
-        "Accept: application/octet-stream",
-        `repos/${repo}/releases/assets/${assetId}`,
-      ]);
-      return { tag, manifestBytes };
+      try {
+        const manifestBytes = run({
+          path: `repos/${repo}/releases/assets/${assetId}`,
+          accept: "application/octet-stream",
+        });
+        return { tag, manifestBytes };
+      } catch (err) {
+        throw new Error(`downloading manifest.json of release ${tag}: ${message(err)}`, {
+          cause: err,
+        });
+      }
     },
   };
+}
+
+function message(err: unknown): string {
+  return err instanceof Error ? err.message : String(err);
 }

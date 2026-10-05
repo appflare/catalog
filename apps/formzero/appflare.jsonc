@@ -8,7 +8,6 @@
   "name": "FormZero",
   "summary": "A form backend for static sites: send HTML forms or JSON to your own endpoint and browse, chart and export the submissions from a dashboard.",
   "tagline": "Collect form submissions and see them in your own dashboard",
-  "homepage": "https://github.com/BohdanPetryshyn/formzero",
   "repo": "BohdanPetryshyn/formzero",
   "license": "MIT",
   "categories": ["business", "utilities"],
@@ -18,10 +17,8 @@
   // ships updates from main through its Deploy button.
   "source": { "ref": "main", "sha": "a4ddde255457d1e6ddf55b5f24b51809d18501f3" },
   "install": {
-    "tier": "artifact",
     "packageManager": "npm",
     "wranglerConfig": "wrangler.jsonc",
-    "workerName": "formzero",
     // React Router through the Cloudflare Vite plugin, which writes the
     // Worker and the config wrangler deploys from to build/server/. The D1
     // migrations stay in migrations/, beside wrangler.jsonc, where upstream's
@@ -31,21 +28,18 @@
   // D1 and Workers both fit the free plan; upstream sizes it at about 100,000
   // submissions a day.
   "plan": "free",
-  "requires": [],
   "secrets": [
     {
       "name": "BETTER_AUTH_SECRET",
       "label": "Session secret",
       "help": "Signs the dashboard's sign-in sessions. Setting a new value signs you out.",
-      "generate": true
+      "generate": "password"
     }
   ],
-  "vars": [],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Open {{workerUrl}} now and create your account: FormZero has a single account, and sign-up closes as soon as it exists. Then create a form and copy its endpoint into your site's form `action`."
+      "content": "Open {{appUrl}} now and create your account: FormZero has a single account, and sign-up closes as soon as it exists. Then create a form and copy its endpoint into your site's form `action`."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

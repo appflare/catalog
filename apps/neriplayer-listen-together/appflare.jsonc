@@ -9,47 +9,44 @@
   "name": "NeriPlayer Listen Together",
   "summary": "Your own listen-together server for the NeriPlayer Android app: create a room, share the invite, and everyone's playback, queue and track changes stay in sync.",
   "tagline": "Keep music playback in sync while listening with friends",
-  "homepage": "https://github.com/TheSmallHanCat/NeriPlayer-LTW",
   "repo": "TheSmallHanCat/NeriPlayer-LTW",
   // The repository has no LICENSE file and states no licence in its README or
   // package.json. The NeriPlayer app, which includes it as a submodule, is
   // GPL-3.0, but that licence does not extend to this separate repository.
   "license": "NONE",
   "categories": ["media", "sync"],
+  // The formatting of URLs in the notes changed after this release was published:
+  // a revision, no new build.
+  "revision": 2,
   "authors": [{ "name": "TheSmallHanCat", "github": "TheSmallHanCat" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no tags; the pin follows the default branch.
   "source": { "ref": "main", "sha": "5ec8a8b0748f685ccb4b6890e6fc6f297b9df8f7" },
   "install": {
-    "tier": "artifact",
     "packageManager": "npm",
     // Plain JavaScript: no build step.
     "wranglerConfig": "wrangler.toml",
-    "workerName": "neriplayer-listen-together",
     // Upstream's public health endpoint, answered by the Worker's own code.
-    "healthPath": "/healthz"
+    "health": { "path": "/healthz" }
   },
   // A SQLite-backed Durable Object fits the free plan.
   "plan": "free",
-  "requires": [],
   "secrets": [
     {
       "name": "LISTEN_TOGETHER_TOKEN_SECRET",
       "label": "Room token secret",
       "help": "Signs the 24-hour tokens that let room members control playback and connect. Replacing it signs everyone out of open rooms.",
-      "generate": true
+      "generate": "password"
     }
   ],
-  "vars": [],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "In NeriPlayer, open Settings, go to the listen-together server settings, enter {{workerUrl}}, and run the availability test. Then create a room or join one from an invite link."
+      "content": "In NeriPlayer, open Settings, go to the listen-together server settings, enter `{{appUrl}}`, and run the availability test. Then create a room or join one from an invite link."
     },
     {
       "type": "markdown",
       "content": "Anyone who knows the address can create rooms; joining a room needs its invite link."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

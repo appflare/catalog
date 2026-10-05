@@ -17,20 +17,20 @@
   "repo": "idhamsy/openshortlink",
   "license": "AGPL-3.0-only",
   "categories": ["utilities", "analytics"],
+  // openPath added after this release was published: a revision, no new build.
+  "revision": 2,
   "authors": [
     { "name": "OpenShort.link contributors", "url": "https://openshort.link", "github": "idhamsy" }
   ],
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v0.10.0", "sha": "bd337fcf45f237087373e9a837bb884d02e7eb4f" },
   "install": {
-    "tier": "artifact",
     // Upstream documents npm, but its unpinned ranges no longer resolve with
     // npm's strict peer checks (today's wrangler wants @cloudflare/workers-types
     // 5 as an optional peer, the package pins 4), so a fresh `npm install`
     // fails. pnpm resolves the same ranges and warns about the peer instead.
     "packageManager": "pnpm",
     "wranglerConfig": "wrangler.toml",
-    "workerName": "openshortlink",
     "installDirs": [{ "path": ".", "lockfile": "none" }],
     // The committed config leaves the D1 database id and the KV namespace id
     // as empty strings for the self-hoster to fill in, and wrangler refuses an
@@ -41,7 +41,7 @@
       "kv_namespaces": [{ "binding": "CACHE", "preview_id": "" }]
     },
     // Answers without a sign-in; every other path is a short link or the dashboard.
-    "healthPath": "/dashboard/health"
+    "health": { "path": "/dashboard/health" }
   },
   // D1, KV, Analytics Engine and two cron triggers fit the free plan, whose
   // accounts have five cron triggers in all.
@@ -53,13 +53,14 @@
       "name": "SETUP_TOKEN",
       "label": "Setup token",
       "help": "Enter it once on /dashboard/setup to create the owner account. It is not checked again after that.",
-      "generate": true
+      "generate": "password"
     },
     {
       "name": "CLOUDFLARE_API_TOKEN",
       "label": "Analytics API token",
       "help": "A Cloudflare API token with Account Analytics Read on this account. The dashboard reads recent clicks with it through the Analytics Engine SQL API. Without it short links still redirect and daily totals are kept, but the detailed charts stay empty.",
-      "optional": true
+      "optional": true,
+      "cloudflareToken": true
     }
   ],
   "vars": [
@@ -67,8 +68,7 @@
       "name": "CLOUDFLARE_ACCOUNT_ID",
       "label": "Cloudflare account ID",
       "help": "The account whose Analytics Engine data the dashboard reads: this one. Filled in on every install and update.",
-      "default": "{{accountId}}",
-      "required": true
+      "default": "{{accountId}}"
     },
     {
       // The code falls back to a dataset called `link-clicks` when this is
@@ -77,14 +77,14 @@
       "name": "ANALYTICS_DATASET_NAME",
       "label": "Analytics Engine dataset",
       "help": "The dataset the dashboard queries. Keep it the same as the dataset the Worker writes clicks to.",
-      "default": "openshortlink-analytics",
-      "required": true
+      "default": "openshortlink-analytics"
     }
   ],
+  "openPath": "/dashboard",
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Open {{workerUrl}}/dashboard/setup, enter the setup token, and create the owner account. Then add your domain under **Domains** with the routes the dashboard shows."
+      "content": "Open {{appUrl}}/dashboard/setup, enter the setup token, and create the owner account. Then add your domain under **Domains** with the routes the dashboard shows."
     },
     {
       "type": "markdown",
@@ -97,9 +97,10 @@
   ],
   "tokenPermissions": [
     {
-      "name": "Account.Account Analytics:Read",
+      "group": "Account Analytics",
       "scope": "account",
-      "description": "Query clicks through the Analytics Engine SQL API (CLOUDFLARE_API_TOKEN)."
+      "access": "read",
+      "reason": "Optional: shows recent clicks on the dashboard, read through the Analytics Engine SQL API."
     }
   ]
 }

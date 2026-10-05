@@ -1,8 +1,7 @@
 import { describe, expect, it } from "vitest";
+import { GhApiError, GhNotFoundError, type GhRequest, type GhRunner } from "./gh-api.ts";
 import {
   createGhReleaseLookup,
-  GhNotFoundError,
-  type GhRunner,
   type GitHubRelease,
   IncompleteReleaseError,
   manifestAssetId,
@@ -26,34 +25,41 @@ const notFound = () => {
   throw new GhNotFoundError("gh: Not Found (HTTP 404)");
 };
 
-/** A fake gh: routes by the API path in args[1] (or args[2] with --paginate). */
+/** A fake gh: routes by the request's API path. */
 function fakeGh(routes: {
   repo?: () => Buffer;
   tag?: (path: string) => Buffer;
   list?: () => Buffer;
   asset?: () => Buffer;
-}): GhRunner & { calls: string[][] } {
-  const calls: string[][] = [];
-  const fn = ((args: string[]) => {
-    calls.push(args);
-    const target = args[1] === "--paginate" ? args[2] : args[1] === "-H" ? args[3] : args[1];
+}): GhRunner & { calls: GhRequest[] } {
+  const calls: GhRequest[] = [];
+  const fn = ((request: GhRequest) => {
+    calls.push(request);
+    const target = request.path;
     if (target === "repos/appflare/catalog") {
       return (routes.repo ?? (() => Buffer.from("appflare/catalog")))();
     }
-    if (target?.includes("/releases/tags/")) {
+    if (target.includes("/releases/tags/")) {
       return (routes.tag ?? notFound)(target);
     }
-    if (target?.includes("/releases/assets/")) {
+    if (target.includes("/releases/assets/")) {
+      expect(request.accept).toBe("application/octet-stream");
       return (routes.asset ?? (() => Buffer.from('{"app":"cut"}')))();
     }
-    if (target?.includes("/releases?")) {
+    if (target.includes("/releases?")) {
+      expect(request.paginate).toBe(true);
       return (routes.list ?? (() => Buffer.from("")))();
     }
-    throw new Error(`unexpected gh call ${args.join(" ")}`);
-  }) as GhRunner & { calls: string[][] };
+    throw new Error(`unexpected gh call ${target}`);
+  }) as GhRunner & { calls: GhRequest[] };
   fn.calls = calls;
   return fn;
 }
+
+const listing =
+  (...releases: GitHubRelease[]) =>
+  () =>
+    Buffer.from(releases.map((r) => `${JSON.stringify(r)}\n`).join(""));
 
 describe("parseTag", () => {
   it("splits <slug>@<version> at the first @", () => {
@@ -88,14 +94,28 @@ describe("manifestAssetId", () => {
 });
 
 describe("createGhReleaseLookup", () => {
-  it("gets the release by exact tag and downloads its manifest.json", () => {
-    const gh = fakeGh({ tag: () => Buffer.from(JSON.stringify(release("cut@0.1.0"))) });
-    expect(createGhReleaseLookup("appflare/catalog", gh).byTag("cut@0.1.0")).toEqual({
+  it("answers from one listing of the releases and downloads the manifest.json", () => {
+    const gh = fakeGh({ list: listing(release("cut@0.1.0"), release("glance@1.0.0")) });
+    const lookup = createGhReleaseLookup("appflare/catalog", gh);
+    expect(lookup.byTag("cut@0.1.0")).toEqual({
       tag: "cut@0.1.0",
       manifestBytes: Buffer.from('{"app":"cut"}'),
     });
-    expect(gh.calls.map((c) => (c[1] === "-H" ? c[3] : c[1]))).toEqual([
+    expect(lookup.byTag("glance@1.0.0")?.tag).toBe("glance@1.0.0");
+    expect(gh.calls.map((c) => c.path)).toEqual([
       "repos/appflare/catalog",
+      "repos/appflare/catalog/releases?per_page=100",
+      "repos/appflare/catalog/releases/assets/2",
+      "repos/appflare/catalog/releases/assets/2",
+    ]);
+  });
+
+  it("asks for a tag the listing lacks by name", () => {
+    const gh = fakeGh({ tag: () => Buffer.from(JSON.stringify(release("cut@0.1.0"))) });
+    expect(createGhReleaseLookup("appflare/catalog", gh).byTag("cut@0.1.0")?.tag).toBe("cut@0.1.0");
+    expect(gh.calls.map((c) => c.path)).toEqual([
+      "repos/appflare/catalog",
+      "repos/appflare/catalog/releases?per_page=100",
       "repos/appflare/catalog/releases/tags/cut%400.1.0",
       "repos/appflare/catalog/releases/assets/2",
     ]);
@@ -111,16 +131,43 @@ describe("createGhReleaseLookup", () => {
     expect(() => lookup.byTag("cut@9.9.9")).toThrow(/repository appflare\/catalog was not found/);
   });
 
-  it("fails on any other API error", () => {
+  it("fails on any other API error, naming the release", () => {
     const lookup = createGhReleaseLookup(
       "appflare/catalog",
       fakeGh({
         tag: () => {
-          throw new Error("gh api failed: HTTP 502");
+          throw new GhApiError("gh api GET repos/x failed after 5 attempts: HTTP 502", 502, 5);
         },
       }),
     );
-    expect(() => lookup.byTag("cut@9.9.9")).toThrow(/HTTP 502/);
+    expect(() => lookup.byTag("cut@9.9.9")).toThrow(/looking up release cut@9\.9\.9: .*HTTP 502/);
+  });
+
+  it("names the release whose manifest.json download failed", () => {
+    const lookup = createGhReleaseLookup(
+      "appflare/catalog",
+      fakeGh({
+        list: listing(release("cut@0.1.0")),
+        asset: () => {
+          throw new GhApiError("gh api GET repos/x failed after 5 attempts: HTTP 502", 502, 5);
+        },
+      }),
+    );
+    expect(() => lookup.byTag("cut@0.1.0")).toThrow(
+      /^downloading manifest\.json of release cut@0\.1\.0: gh api GET/,
+    );
+  });
+
+  it("lists once: a failed listing fails every later lookup without calling gh again", () => {
+    const gh = fakeGh({
+      list: () => {
+        throw new GhApiError("gh api GET repos/x failed after 5 attempts: HTTP 502", 502, 5);
+      },
+    });
+    const lookup = createGhReleaseLookup("appflare/catalog", gh);
+    expect(() => lookup.byTag("cut@0.1.0")).toThrow(/listing the releases of appflare\/catalog/);
+    expect(() => lookup.byTag("glance@1.0.0")).toThrow(/listing the releases/);
+    expect(gh.calls).toHaveLength(2);
   });
 
   it("fails, naming the release, when the tag belongs to an incomplete release", () => {
@@ -134,10 +181,17 @@ describe("createGhReleaseLookup", () => {
 
   it("fails when a draft uses the tag (the tag endpoint does not return drafts)", () => {
     const draft = release("cut@0.1.0", { draft: true });
+    const lookup = createGhReleaseLookup("appflare/catalog", fakeGh({ list: listing(draft) }));
+    expect(() => lookup.byTag("cut@0.1.0")).toThrow(/cut@0\.1\.0 .* is a draft/);
+  });
+
+  it("prefers the published release when a draft names the same tag", () => {
     const lookup = createGhReleaseLookup(
       "appflare/catalog",
-      fakeGh({ list: () => Buffer.from(`${JSON.stringify(draft)}\n`) }),
+      fakeGh({
+        list: listing(release("cut@0.1.0", { draft: true }), release("cut@0.1.0")),
+      }),
     );
-    expect(() => lookup.byTag("cut@0.1.0")).toThrow(/cut@0\.1\.0 .* is a draft/);
+    expect(lookup.byTag("cut@0.1.0")?.tag).toBe("cut@0.1.0");
   });
 });

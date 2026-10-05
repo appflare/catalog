@@ -4,20 +4,19 @@
   "name": "Mailflare",
   "summary": "A self-hosted email service for your own domains: mailboxes, forwarding rules, and a web inbox, on Email Routing, D1, R2, Queues, and Durable Objects.",
   "tagline": "Email and shared inboxes for your own domain",
-  "homepage": "https://github.com/hieunc229/mailflare",
   "repo": "hieunc229/mailflare",
   // The LICENSE file is the GNU AGPL version 3 with no "or any later version" grant.
   "license": "AGPL-3.0-only",
   "categories": ["email"],
+  // Help text edited after this release was published: a revision, no new build.
+  "revision": 2,
   "authors": [{ "name": "Hieu Nguyen", "github": "hieunc229", "x": "hieuSSR" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags, so the entry follows the default branch by commit.
   "source": { "ref": "main", "sha": "1bf70d2ef2771360a546704182752eb7a1ff63f2" },
   "install": {
-    "tier": "artifact",
     "packageManager": "npm",
     "wranglerConfig": "wrangler.jsonc",
-    "workerName": "mailflare",
     // The app creates its Email Routing rules for the Worker named "mailflare"
     // (getEmailWorkerName() in src/lib/cloudflare-api-utils.ts returns the
     // literal), so mail only reaches an install under that name. Its
@@ -31,7 +30,7 @@
     "buildCommand": "opennextjs-cloudflare build",
     // Unauthenticated, reads D1 (so it also shows the migrations were applied),
     // and answers 200 before the first admin exists.
-    "healthPath": "/api/setup/status"
+    "health": { "path": "/api/setup/status" }
     // No `emailRouting`: the app turns Email Routing on and creates its rules
     // itself, per domain and mailbox, with CF_TOKEN.
   },
@@ -46,7 +45,8 @@
     {
       "name": "CF_TOKEN",
       "label": "Cloudflare API token for Mailflare",
-      "help": "A token you create for the app, separate from Appflare's, with the permissions listed below: Zone Read, DNS Edit, Zone Settings Edit, and Email Routing Rules Edit on the zones you will connect, plus the account's Email Sending Edit to send mail. Paste the token secret only, without \"Bearer\"."
+      "help": "A token you create for the app, separate from Appflare's, with the permissions listed below: Zone Read, DNS Edit, Zone Settings Edit, and Email Routing Rules Edit on the zones you will connect, plus the account's Email Sending Edit to send mail. Paste the token secret only, without \"Bearer\".",
+      "cloudflareToken": true
     }
     // Not asked for: TURNSTILE_SECRET_KEY needs NEXT_PUBLIC_TURNSTILE_SITE_KEY
     // at build time, which a catalog build does not have, so setting it would
@@ -58,14 +58,14 @@
     {
       "name": "APP_URL",
       "label": "Public URL",
-      "help": "Optional. The address people open the app at, used in password-reset links and JMAP. Leave it empty to use the address of each request.",
-      "required": false
+      "help": "The address people open the app at, used in password-reset links and JMAP. Leave it empty to use the address of each request.",
+      "optional": true
     }
   ],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Open {{workerUrl}}/setup to check the configuration and create the first admin account. The database is already migrated."
+      "content": "Open {{appUrl}}/setup to check the configuration and create the first admin account. The database is already migrated."
     },
     {
       "type": "markdown",
@@ -84,29 +84,34 @@
   // Routing Addresses, which the app never calls.
   "tokenPermissions": [
     {
-      "name": "Zone.Zone:Read",
-      "description": "Finds the zone of each domain you connect.",
-      "scope": "zone"
+      "group": "Zone",
+      "scope": "zone",
+      "access": "read",
+      "reason": "Finds the zone of each domain you connect."
     },
     {
-      "name": "Zone.DNS:Edit",
-      "description": "Writes the MX and sending records, replacing conflicting MX records after you confirm.",
-      "scope": "zone"
+      "group": "DNS",
+      "scope": "zone",
+      "access": "edit",
+      "reason": "Writes the MX and sending records, replacing conflicting MX records after you confirm."
     },
     {
-      "name": "Zone.Zone Settings:Edit",
-      "description": "Turns Email Routing on for a connected domain.",
-      "scope": "zone"
+      "group": "Zone Settings",
+      "scope": "zone",
+      "access": "edit",
+      "reason": "Turns Email Routing on for a connected domain."
     },
     {
-      "name": "Zone.Email Routing Rules:Edit",
-      "description": "Routes each mailbox address, or the catch-all, to the Worker.",
-      "scope": "zone"
+      "group": "Email Routing Rules",
+      "scope": "zone",
+      "access": "edit",
+      "reason": "Routes each mailbox address, or the catch-all, to the Worker."
     },
     {
-      "name": "Account.Email Sending:Edit",
-      "description": "Optional, for outbound mail. Sets the domain up for Email Sending.",
-      "scope": "account"
+      "group": "Email Sending",
+      "scope": "account",
+      "access": "edit",
+      "reason": "Optional: sets the domain up for outbound mail through Email Sending."
     }
   ]
 }

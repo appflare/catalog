@@ -10,7 +10,7 @@ Checks artifacts against the publish plan written by \`publish-plan --out\`:
 <root> must hold exactly one <prefix><slug>/ per slug (the one --slug, or every
 planned app) and nothing else; each must hold exactly <slug>-<version>.zip,
 manifest.json, and with --signed manifest.sig; and each manifest.json's app,
-version, source, keyId, and catalog must equal the plan. Prints every
+version, keyId, and catalog (which holds the pin) must equal the plan. Prints every
 difference and exits 1 on any. Needs no dependencies (plain node).
 `;
 
