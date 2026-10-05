@@ -1,0 +1,9 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+# CodeRabbit runs on its defaults, with one exception.
+reviews:
+  auto_review:
+    # Skip the bump bot's pull requests. Each moves one pin in an appflare.jsonc,
+    # the upstream changes behind it are not in the diff, and they would use up
+    # CodeRabbit's hourly review limit. See "Keeping pins current" in
+    # CONTRIBUTING.md.
+    ignore_usernames: ["github-actions[bot]"]

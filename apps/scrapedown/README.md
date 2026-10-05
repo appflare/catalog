@@ -8,8 +8,10 @@ MIT.
 ## Notes
 
 - **Open endpoint.** Upstream has no access key, so anyone who knows the Worker's
-  address can use it to fetch pages. Keep the address private or put the Worker behind
-  Cloudflare Access; each use counts toward your Workers requests.
+  address can use it to fetch pages; each use counts toward your Workers requests. Keep
+  the address private. Appflare's Cloudflare Access protection is offered but off: it
+  admits only people signed in through a browser, so the programs that call the API
+  could no longer reach it.
 - **Fetching.** The Worker fetches pages with a Googlebot user agent, as upstream does.
   Some sites answer that differently from a browser or refuse it, and pages that need
   JavaScript to show their text come back empty.

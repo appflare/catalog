@@ -8,6 +8,8 @@
   "repo": "linkcraftstudio/feedlog",
   "license": "MIT",
   "categories": ["business", "productivity"],
+  // Field links added after this release was published: a revision, no new build.
+  "revision": 2,
   "authors": [
     { "name": "LinkCraft Studio", "url": "https://feedlog.ai", "github": "linkcraftstudio" },
     { "name": "guoliim", "github": "guoliim" },
@@ -58,24 +60,34 @@
       "name": "GOOGLE_CLIENT_SECRET",
       "label": "Google OAuth client secret",
       "help": "For Google sign-in, with the client ID below. The OAuth client's redirect URI is the app's address followed by /api/auth/callback/google.",
+      "link": {
+        "label": "Create an OAuth client",
+        "url": "https://console.cloud.google.com/apis/credentials"
+      },
       "optional": true
     },
     {
       "name": "GITHUB_CLIENT_SECRET",
       "label": "GitHub OAuth client secret",
       "help": "For GitHub sign-in, with the client ID below. The OAuth app's callback URL is the app's address followed by /api/auth/callback/github.",
+      "link": {
+        "label": "Create an OAuth app",
+        "url": "https://github.com/settings/applications/new"
+      },
       "optional": true
     },
     {
       "name": "OPENAI_API_KEY",
       "label": "OpenAI API key",
       "help": "Turns on similar-idea detection and AI-drafted changelog entries. Any OpenAI-compatible API works; see the base URL below.",
+      "link": { "label": "Get a key", "url": "https://platform.openai.com/api-keys" },
       "optional": true
     },
     {
       "name": "RESEND_API_KEY",
       "label": "Resend API key",
       "help": "Sends password-reset and verification mail through Resend, from the sender address below. Setting it also turns on email verification at sign-up. Without it, mail is only logged.",
+      "link": { "label": "Get a key", "url": "https://resend.com/api-keys" },
       "optional": true
     }
   ],
@@ -91,12 +103,20 @@
       "name": "GOOGLE_CLIENT_ID",
       "label": "Google OAuth client ID",
       "help": "For Google sign-in. With neither Google nor GitHub set up, email and password sign-in is on.",
+      "link": {
+        "label": "Create an OAuth client",
+        "url": "https://console.cloud.google.com/apis/credentials"
+      },
       "optional": true
     },
     {
       "name": "GITHUB_CLIENT_ID",
       "label": "GitHub OAuth client ID",
       "help": "For GitHub sign-in.",
+      "link": {
+        "label": "Create an OAuth app",
+        "url": "https://github.com/settings/applications/new"
+      },
       "optional": true
     },
     {

@@ -11,7 +11,6 @@ card's URL. Licensed MIT.
 - **API key.** The Worker needs a Last.fm API key; the shared secret is not used.
 - **Caching.** Cards go through the Workers cache in front of the Worker; Last.fm data is
   kept 60 seconds and album art a day, as upstream sets them.
-- **Pin.** Upstream has no release tags, so the pin follows the default branch and each
-  bump is reviewed by a maintainer.
+- **Pin.** Upstream has no release tags, so the pin follows the default branch.
 - No images: the repository's only image files are Last.fm's own logo and icon
   references.

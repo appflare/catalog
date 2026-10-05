@@ -7,6 +7,9 @@
   "repo": "Defiabell/shotsync",
   "license": "MIT",
   "categories": ["files", "sharing"],
+  // The formatting of URLs in the notes changed after this release was published:
+  // a revision, no new build.
+  "revision": 2,
   "authors": [{ "name": "Jinkun Sun", "github": "Defiabell" }],
   "maintainers": ["MendyLanda"],
   // The newest release tag. The commits after it add upstream's hosted,
@@ -42,7 +45,7 @@
     },
     {
       "type": "markdown",
-      "content": "Upstream also has a Mac menu-bar app that uploads every screenshot, and an iOS Shortcut for the share sheet (`mac/` and `shortcut/` in the repository); point them at {{appUrl}} with the same token."
+      "content": "Upstream also has a Mac menu-bar app that uploads every screenshot, and an iOS Shortcut for the share sheet (`mac/` and `shortcut/` in the repository); point them at `{{appUrl}}` with the same token."
     }
   ]
 }

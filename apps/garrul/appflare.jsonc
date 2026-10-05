@@ -11,6 +11,9 @@
   "repo": "KingPin/Garrul",
   "license": "Apache-2.0",
   "categories": ["community"],
+  // openPath and field links added after this release was published: a revision,
+  // no new build.
+  "revision": 2,
   "authors": [{ "name": "KingPin", "url": "https://sumguy.com", "github": "KingPin" }],
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v2.34.0", "sha": "0e0552dcc61958f058688e816f1dd1eead977abb" },
@@ -41,12 +44,20 @@
     {
       "name": "TURNSTILE_SITE_KEY",
       "label": "Turnstile site key",
-      "help": "Anonymous comments pass a Turnstile check. Create a widget under Turnstile in the Cloudflare dashboard with this app's hostname, then paste its site key here."
+      "help": "Anonymous comments pass a Turnstile check. Create a widget under Turnstile in the Cloudflare dashboard with this app's hostname, then paste its site key here.",
+      "link": {
+        "label": "Create a widget",
+        "url": "https://dash.cloudflare.com/?to=/:account/turnstile"
+      }
     },
     {
       "name": "TURNSTILE_SECRET",
       "label": "Turnstile secret key",
-      "help": "The secret key of the same Turnstile widget."
+      "help": "The secret key of the same Turnstile widget.",
+      "link": {
+        "label": "Create a widget",
+        "url": "https://dash.cloudflare.com/?to=/:account/turnstile"
+      }
     },
     {
       "name": "JWT_SECRET",
@@ -64,39 +75,64 @@
       "name": "GH_CLIENT_ID",
       "label": "GitHub OAuth client ID",
       "help": "For GitHub sign-in, from github.com/settings/developers, with the callback path /api/v1/auth/github/callback on this app's address. The admin pages need at least one sign-in provider.",
+      "link": {
+        "label": "Create an OAuth app",
+        "url": "https://github.com/settings/applications/new"
+      },
       "optional": true
     },
     {
       "name": "GH_CLIENT_SECRET",
       "label": "GitHub OAuth client secret",
+      "link": {
+        "label": "Create an OAuth app",
+        "url": "https://github.com/settings/applications/new"
+      },
       "optional": true
     },
     {
       "name": "GOOGLE_CLIENT_ID",
       "label": "Google OAuth client ID",
       "help": "For Google sign-in, with the callback path /api/v1/auth/google/callback on this app's address.",
+      "link": {
+        "label": "Create an OAuth client",
+        "url": "https://console.cloud.google.com/apis/credentials"
+      },
       "optional": true
     },
     {
       "name": "GOOGLE_CLIENT_SECRET",
       "label": "Google OAuth client secret",
+      "link": {
+        "label": "Create an OAuth client",
+        "url": "https://console.cloud.google.com/apis/credentials"
+      },
       "optional": true
     },
     {
       "name": "DISCORD_CLIENT_ID",
       "label": "Discord OAuth client ID",
       "help": "For Discord sign-in, with the callback path /api/v1/auth/discord/callback on this app's address.",
+      "link": {
+        "label": "Create an OAuth app",
+        "url": "https://discord.com/developers/applications"
+      },
       "optional": true
     },
     {
       "name": "DISCORD_CLIENT_SECRET",
       "label": "Discord OAuth client secret",
+      "link": {
+        "label": "Create an OAuth app",
+        "url": "https://discord.com/developers/applications"
+      },
       "optional": true
     },
     {
       "name": "RESEND_API_KEY",
       "label": "Resend API key",
       "help": "Turns on reply notification emails, from resend.com/api-keys. Set the sender address below too.",
+      "link": { "label": "Get a key", "url": "https://resend.com/api-keys" },
       "optional": true
     },
     {
@@ -151,6 +187,7 @@
       "optional": true
     }
   ],
+  "openPath": "/admin",
   "postInstall": [
     {
       "type": "markdown",

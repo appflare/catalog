@@ -8,6 +8,8 @@
   // The LICENSE file is MIT; package.json still carries npm's default "ISC".
   "license": "MIT",
   "categories": ["developer-tools", "sharing"],
+  // Help text edited after this release was published: a revision, no new build.
+  "revision": 2,
   "authors": [
     { "name": "Frad Lee", "url": "https://frad.me", "github": "FradSer", "x": "FradSer" },
     { "name": "code0", "url": "https://coda0.com", "github": "coda0HQ" }
@@ -42,7 +44,7 @@
     {
       "name": "PUBLIC_URL",
       "label": "Public URL",
-      "help": "Optional. The address links should use, for example a custom domain, without a trailing path. Leave it empty to use the address each request arrives at.",
+      "help": "The address links should use, for example a custom domain, without a trailing path. Leave it empty to use the address each request arrives at.",
       "default": "",
       "optional": true
     },
