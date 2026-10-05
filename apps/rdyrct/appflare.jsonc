@@ -8,6 +8,9 @@
   "repo": "baronunread/rdyrct",
   "license": "MIT",
   "categories": ["utilities", "analytics"],
+  // Edited help text (revision 2) and field links (revision 3) came after this
+  // release was published: revisions, no new build.
+  "revision": 3,
   "authors": [
     {
       "name": "Andrea Bruno",
@@ -53,7 +56,8 @@
     {
       "name": "RESEND_API_KEY",
       "label": "Resend API key",
-      "help": "From resend.com. Sign-up and password reset send a one-time code by email, so without a working key nobody can create an account with a password."
+      "help": "From resend.com. Sign-up and password reset send a one-time code by email, so without a working key nobody can create an account with a password.",
+      "link": { "label": "Get a key", "url": "https://resend.com/api-keys" }
     },
     {
       "name": "CAP_SECRET",
@@ -64,31 +68,44 @@
     {
       "name": "GOOGLE_CLIENT_ID",
       "label": "Google OAuth client ID",
-      "help": "Optional, with the secret below, for \"Continue with Google\". Authorized redirect URI: the app's address followed by /api/auth/callback/google.",
+      "help": "With the secret below, for \"Continue with Google\". Authorized redirect URI: the app's address followed by /api/auth/callback/google.",
+      "link": {
+        "label": "Create an OAuth client",
+        "url": "https://console.cloud.google.com/apis/credentials"
+      },
       "optional": true
     },
     {
       "name": "GOOGLE_CLIENT_SECRET",
       "label": "Google OAuth client secret",
-      "help": "Optional. The secret of the Google OAuth client above.",
+      "help": "The secret of the Google OAuth client above.",
+      "link": {
+        "label": "Create an OAuth client",
+        "url": "https://console.cloud.google.com/apis/credentials"
+      },
       "optional": true
     },
     {
       "name": "POLAR_ACCESS_TOKEN",
       "label": "Polar access token",
-      "help": "Optional. Only to sell the Hobby and Pro plans through Polar (scopes checkouts:write and customer_sessions:write), with the product ids below.",
+      "help": "Only to sell the Hobby and Pro plans through Polar (scopes checkouts:write and customer_sessions:write), with the product ids below.",
+      "link": { "label": "Create a token", "url": "https://polar.sh/docs/integrate/oat" },
       "optional": true
     },
     {
       "name": "POLAR_WEBHOOK_SECRET",
       "label": "Polar webhook secret",
-      "help": "Optional. Signing secret of the Polar webhook pointed at the app's address followed by /api/webhooks/polar.",
+      "help": "Signing secret of the Polar webhook pointed at the app's address followed by /api/webhooks/polar.",
+      "link": {
+        "label": "Add a webhook",
+        "url": "https://polar.sh/docs/integrate/webhooks/endpoints"
+      },
       "optional": true
     },
     {
       "name": "CF_API_TOKEN",
       "label": "Cloudflare token for custom domains",
-      "help": "Optional. Lets organizations on a paid plan use their own domains through Cloudflare for SaaS: a token with Zone, SSL and Certificates, Edit on the zone below.",
+      "help": "Lets organizations on a paid plan use their own domains through Cloudflare for SaaS: a token with Zone, SSL and Certificates, Edit on the zone below.",
       "optional": true,
       "cloudflareToken": true
     }
@@ -118,14 +135,22 @@
     {
       "name": "SENTRY_DSN",
       "label": "Sentry DSN",
-      "help": "Optional. Your own Sentry project's DSN for Worker error reports. Leave it empty to send none.",
+      "help": "Your own Sentry project's DSN for Worker error reports. Leave it empty to send none.",
+      "link": {
+        "label": "Find your DSN",
+        "url": "https://docs.sentry.io/concepts/key-terms/dsn-explainer/"
+      },
       "default": "",
       "optional": true
     },
     {
       "name": "CF_ZONE_ID",
       "label": "Custom domains zone ID",
-      "help": "Optional. The zone with Cloudflare for SaaS set up for customer domains.",
+      "help": "The zone with Cloudflare for SaaS set up for customer domains.",
+      "link": {
+        "label": "Find your zone ID",
+        "url": "https://developers.cloudflare.com/fundamentals/account/find-account-and-zone-ids/"
+      },
       "default": "",
       "optional": true
     },
@@ -143,14 +168,16 @@
     {
       "name": "POLAR_PRO_PRODUCT_ID",
       "label": "Polar Pro product ID",
-      "help": "Optional. The recurring Pro product in your Polar organization.",
+      "help": "The recurring Pro product in your Polar organization.",
+      "link": { "label": "Open the dashboard", "url": "https://polar.sh/dashboard" },
       "default": "",
       "optional": true
     },
     {
       "name": "POLAR_HOBBY_PRODUCT_ID",
       "label": "Polar Hobby product ID",
-      "help": "Optional. The recurring Hobby product in your Polar organization.",
+      "help": "The recurring Hobby product in your Polar organization.",
+      "link": { "label": "Open the dashboard", "url": "https://polar.sh/dashboard" },
       "default": "",
       "optional": true
     }

@@ -14,8 +14,9 @@
   "repo": "ooyyh/Cloudflare-Clist",
   "license": "MIT",
   "categories": ["files"],
-  // The category changed after this release was published: a revision, no new build.
-  "revision": 2,
+  // The category (revision 2) and the formatting of URLs in the notes (revision 3)
+  // came after this release was published: revisions, no new build.
+  "revision": 3,
   "authors": [{ "name": "ooyyh", "url": "https://blog.ooyyh.top", "github": "ooyyh" }],
   "maintainers": ["MendyLanda"],
   // Pinned to master: the latest tag, v1.2.0, predates the repository's
@@ -94,7 +95,7 @@
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Open {{appUrl}}, sign in with the admin user name and password, and add a storage. With WebDAV on, point a client at {{appUrl}}/dav/0/ (keep the trailing slash)."
+      "content": "Open {{appUrl}}, sign in with the admin user name and password, and add a storage. With WebDAV on, point a client at `{{appUrl}}/dav/0/` (keep the trailing slash)."
     }
   ]
 }

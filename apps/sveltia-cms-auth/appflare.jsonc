@@ -7,6 +7,9 @@
   "repo": "sveltia/sveltia-cms-auth",
   "license": "MIT",
   "categories": ["cms", "developer-tools"],
+  // Field links (revision 2) and the formatting of URLs in the notes (revision 3)
+  // came after this release was published: revisions, no new build.
+  "revision": 3,
   "authors": [
     { "name": "Sveltia", "github": "sveltia" },
     { "name": "Kohei Yoshino", "github": "kyoshino" }
@@ -28,12 +31,20 @@
       "name": "GITHUB_CLIENT_SECRET",
       "label": "GitHub client secret",
       "help": "The client secret of the GitHub OAuth app whose callback URL is the app's address followed by /callback.",
+      "link": {
+        "label": "Create an OAuth app",
+        "url": "https://github.com/settings/applications/new"
+      },
       "optional": true
     },
     {
       "name": "GITLAB_CLIENT_SECRET",
       "label": "GitLab secret",
       "help": "The secret of the GitLab application whose redirect URI is the app's address followed by /callback. Only for GitLab.",
+      "link": {
+        "label": "Create an OAuth app",
+        "url": "https://gitlab.com/-/user_settings/applications"
+      },
       "optional": true
     }
   ],
@@ -47,6 +58,10 @@
       "name": "GITHUB_CLIENT_ID",
       "label": "GitHub client ID",
       "help": "The client ID of the GitHub OAuth app.",
+      "link": {
+        "label": "Create an OAuth app",
+        "url": "https://github.com/settings/applications/new"
+      },
       "default": "",
       "optional": true
     },
@@ -61,6 +76,10 @@
       "name": "GITLAB_CLIENT_ID",
       "label": "GitLab application ID",
       "help": "The application ID of the GitLab application. Only for GitLab.",
+      "link": {
+        "label": "Create an OAuth app",
+        "url": "https://gitlab.com/-/user_settings/applications"
+      },
       "default": "",
       "optional": true
     },
@@ -75,7 +94,7 @@
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Register a GitHub OAuth app at https://github.com/settings/applications/new with the authorization callback URL {{appUrl}}/callback, then set its client ID and client secret in this app's settings. For GitLab, register an application with the redirect URI {{appUrl}}/callback, confidential, scope `api`."
+      "content": "Register a GitHub OAuth app at https://github.com/settings/applications/new with the authorization callback URL `{{appUrl}}/callback`, then set its client ID and client secret in this app's settings. For GitLab, register an application with the redirect URI `{{appUrl}}/callback`, confidential, scope `api`."
     },
     {
       "type": "markdown",

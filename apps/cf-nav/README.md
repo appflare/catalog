@@ -20,6 +20,5 @@ interface is in Chinese.
 - **Third parties.** Link icons are loaded from faviconextractor.com, which so learns
   the domains on your page, and the description helper fetches the linked page from
   the Worker.
-- **Pin.** Upstream has no release tags, so the pin follows the default branch and each
-  bump is reviewed by a maintainer.
+- **Pin.** Upstream has no release tags, so the pin follows the default branch.
 - No images: the screenshots in the repository are not covered by a licence.
