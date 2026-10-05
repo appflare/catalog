@@ -13,6 +13,9 @@
   "repo": "zhihui-hu/one-ip",
   "license": "AGPL-3.0-only",
   "categories": ["networking", "utilities"],
+  // Edited help text (revision 2) and field links (revision 3) came after this
+  // release was published: revisions, no new build.
+  "revision": 3,
   "authors": [{ "name": "Hu Zhihui", "url": "https://huzhihui.com", "github": "zhihui-hu" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags, so the entry follows the default branch by commit.
@@ -40,25 +43,37 @@
     {
       "name": "TURNSTILE_SECRET",
       "label": "Turnstile secret key",
-      "help": "Optional. The secret key of a Cloudflare Turnstile widget, for the verification page. Needs the site key and hostnames below too.",
+      "help": "The secret key of a Cloudflare Turnstile widget, for the verification page. Needs the site key and hostnames below too.",
+      "link": {
+        "label": "Create a widget",
+        "url": "https://dash.cloudflare.com/?to=/:account/turnstile"
+      },
       "optional": true
     },
     {
       "name": "TURNSTILE_NONINTERACTIVE_SECRET",
       "label": "Non-interactive Turnstile secret key",
-      "help": "Optional. The secret key of a second Turnstile widget in Non-interactive mode. Needs its site key and hostnames below too.",
+      "help": "The secret key of a second Turnstile widget in Non-interactive mode. Needs its site key and hostnames below too.",
+      "link": {
+        "label": "Create a widget",
+        "url": "https://dash.cloudflare.com/?to=/:account/turnstile"
+      },
       "optional": true
     },
     {
       "name": "RECAPTCHA_SECRET",
       "label": "reCAPTCHA v3 secret key",
-      "help": "Optional. The secret key of a Google reCAPTCHA v3 site, for the verification page. Needs the site key and hostnames below too.",
+      "help": "The secret key of a Google reCAPTCHA v3 site, for the verification page. Needs the site key and hostnames below too.",
+      "link": {
+        "label": "Register a site",
+        "url": "https://www.google.com/recaptcha/admin/create"
+      },
       "optional": true
     },
     {
       "name": "TIANDITU_TOKEN",
       "label": "Tianditu map token",
-      "help": "Optional. A Tianditu browser token, for maps that load in mainland China. Without it the map uses OpenStreetMap. The token is handed to the browser.",
+      "help": "A Tianditu browser token, for maps that load in mainland China. Without it the map uses OpenStreetMap. The token is handed to the browser.",
       "optional": true
     }
   ],
@@ -66,42 +81,54 @@
     {
       "name": "TURNSTILE_SITE_KEY",
       "label": "Turnstile site key",
-      "help": "Optional. The site key of the Turnstile widget.",
+      "help": "The site key of the Turnstile widget.",
+      "link": {
+        "label": "Create a widget",
+        "url": "https://dash.cloudflare.com/?to=/:account/turnstile"
+      },
       "default": "",
       "optional": true
     },
     {
       "name": "TURNSTILE_HOSTNAMES",
       "label": "Turnstile hostnames",
-      "help": "Optional. The hostnames the Turnstile widget is shown on, comma-separated, for example this app's workers.dev host name.",
+      "help": "The hostnames the Turnstile widget is shown on, comma-separated, for example this app's workers.dev host name.",
       "default": "",
       "optional": true
     },
     {
       "name": "TURNSTILE_NONINTERACTIVE_SITE_KEY",
       "label": "Non-interactive Turnstile site key",
-      "help": "Optional. The site key of the Non-interactive Turnstile widget.",
+      "help": "The site key of the Non-interactive Turnstile widget.",
+      "link": {
+        "label": "Create a widget",
+        "url": "https://dash.cloudflare.com/?to=/:account/turnstile"
+      },
       "default": "",
       "optional": true
     },
     {
       "name": "TURNSTILE_NONINTERACTIVE_HOSTNAMES",
       "label": "Non-interactive Turnstile hostnames",
-      "help": "Optional. The hostnames the Non-interactive widget is shown on, comma-separated.",
+      "help": "The hostnames the Non-interactive widget is shown on, comma-separated.",
       "default": "",
       "optional": true
     },
     {
       "name": "RECAPTCHA_SITE_KEY",
       "label": "reCAPTCHA v3 site key",
-      "help": "Optional. The site key of the reCAPTCHA v3 site.",
+      "help": "The site key of the reCAPTCHA v3 site.",
+      "link": {
+        "label": "Register a site",
+        "url": "https://www.google.com/recaptcha/admin/create"
+      },
       "default": "",
       "optional": true
     },
     {
       "name": "RECAPTCHA_HOSTNAMES",
       "label": "reCAPTCHA hostnames",
-      "help": "Optional. The hostnames reCAPTCHA is shown on, comma-separated.",
+      "help": "The hostnames reCAPTCHA is shown on, comma-separated.",
       "default": "",
       "optional": true
     }

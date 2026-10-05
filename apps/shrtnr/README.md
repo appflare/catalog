@@ -13,11 +13,15 @@ Apache-2.0.
 
 ## Notes
 
-- **Access after the install.** Access can only be turned on for the Worker once it
-  exists. Turn it on for the workers.dev address in the Worker's Domains & Routes
-  settings, then set the audience tag (`ACCESS_AUD`) and your team's key URL
-  (`ACCESS_JWKS_URL`) in the app's settings in Appflare. Until both are set, the admin
-  pages show setup steps.
+- **Access after the install.** In the Zero Trust dashboard, add a self-hosted Access
+  application for the app's address with the path `_/admin/*` (upstream's
+  `docs/access-control.md`), then set its audience tag (`ACCESS_AUD`) and your team's
+  key URL (`ACCESS_JWKS_URL`) in the app's settings in Appflare. Until both are set,
+  the admin pages show setup steps.
+- **Leave Appflare's Cloudflare Access protection off.** It covers every path of every
+  address of the app, and the short links sit at the root (`/<slug>`), where no public
+  path can be carved out, so every short link would ask visitors to sign in. The
+  one-click Access for the workers.dev address in the Worker's settings does the same.
 - **MCP.** The MCP server needs its own subdomain and a second Access application with
   Managed OAuth (`MCP_ACCESS_AUD`), as upstream's `docs/mcp.md` explains. Without it the
   Worker serves no MCP.

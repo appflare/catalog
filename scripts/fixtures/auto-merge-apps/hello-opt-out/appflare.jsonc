@@ -1,13 +1,13 @@
 // Test fixture for scripts/lib/bump.test.ts: an entry whose bump pull requests
-// merge themselves. Kept out of fixtures/apps so the other tests' app list stays
-// the same. Not a real catalog app.
+// wait for a maintainer. Kept out of fixtures/apps so the other tests' app list
+// stays the same. Not a real catalog app.
 {
   "$schema": "https://appflare.github.io/catalog/schema/v1.json",
-  "slug": "hello-auto",
-  "name": "Hello Auto",
+  "slug": "hello-opt-out",
+  "name": "Hello Opt Out",
   "summary": "Fixture app for the bump bot's auto-merge tests.",
   "tagline": "A fixture for the catalog's tests",
-  "repo": "example/hello-auto",
+  "repo": "example/hello-opt-out",
   "license": "MIT",
   "categories": ["utilities"],
   "maintainers": ["octocat"],
@@ -17,6 +17,6 @@
     "wranglerConfig": "wrangler.jsonc"
   },
   "plan": "free",
-  // The maintainers trust upstream's tags.
-  "bump": { "autoMerge": true }
+  // Upstream's releases need a migration guide; a maintainer merges each bump.
+  "bump": { "autoMerge": false }
 }
