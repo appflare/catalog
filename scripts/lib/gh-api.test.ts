@@ -134,9 +134,14 @@ describe("createGhRunner retries", () => {
         stderr: "gh: No common ancestor between a and b. (HTTP 404)\n",
       }),
       http(404, '{"message":"Not Found"}'),
+      http(404, "not json"),
     ]);
     expect(() => run({ path: compare })).toThrow(
       `gh api GET ${compare}: HTTP 404 (gh: No common ancestor between a and b. (HTTP 404))`,
+    );
+    // With only gh's status line, the reason comes from the body.
+    expect(() => run({ path: compare })).toThrow(
+      new GhNotFoundError(`gh api GET ${compare}: HTTP 404 (Not Found)`),
     );
     expect(() => run({ path: compare })).toThrow(
       new GhNotFoundError(`gh api GET ${compare}: HTTP 404`),
