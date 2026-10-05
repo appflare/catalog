@@ -8,8 +8,6 @@
   "repo": "GagnDeep/mailysend",
   "license": "MIT",
   "categories": ["email", "marketing"],
-  // Help text edited after this release was published: a revision, no new build.
-  "revision": 2,
   "authors": [{ "name": "Gagandeep Singh", "github": "GagnDeep" }],
   "maintainers": ["MendyLanda"],
   // MailySend has no release tags yet; the pin tracks main.
@@ -47,7 +45,7 @@
     {
       "name": "MS_OWNER_EMAIL",
       "label": "Owner email",
-      "help": "Only this address may claim the instance at /setup. Without it, the first person to open /setup becomes the owner.",
+      "help": "Optional. Only this address may claim the instance at /setup. Without it, the first person to open /setup becomes the owner.",
       "optional": true
     }
   ],
