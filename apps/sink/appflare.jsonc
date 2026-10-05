@@ -13,8 +13,9 @@
   "repo": "miantiao-me/Sink",
   "license": "AGPL-3.0-only",
   "categories": ["utilities", "analytics"],
-  // Generated secrets added after this release was published: a revision, no new build.
-  "revision": 2,
+  // Generated secrets (revision 2) and openPath (revision 3) came after this
+  // release was published: revisions, no new build.
+  "revision": 3,
   "authors": [
     {
       "name": "miantiao",
@@ -92,6 +93,7 @@
       "optional": true
     }
   ],
+  "openPath": "/dashboard",
   "postInstall": [
     {
       "type": "markdown",

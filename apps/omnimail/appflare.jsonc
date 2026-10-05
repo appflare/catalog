@@ -8,9 +8,9 @@
   "repo": "mibgb65-cloud/OmniMail",
   "license": "MIT",
   "categories": ["email"],
-  // Generated secrets (revision 2) and edited help text (revision 3) came after
-  // this release was published: revisions, no new build.
-  "revision": 3,
+  // Generated secrets (revision 2), edited help text (revision 3) and field links
+  // (revision 4) came after this release was published: revisions, no new build.
+  "revision": 4,
   "authors": [
     {
       "name": "OmniMail contributors",
@@ -79,36 +79,45 @@
       "name": "RESEND_DOMAIN_CONFIGS",
       "label": "Resend configuration",
       "help": "For sending: JSON with one entry per sender domain, for example {\"example.com\":{\"apiKey\":\"re_...\"}}. Without a sending provider the app still receives mail.",
+      "link": { "label": "Get a key", "url": "https://resend.com/api-keys" },
       "optional": true
     },
     {
       "name": "RESEND_WEBHOOK_SECRETS",
       "label": "Resend webhook signing secrets",
       "help": "A JSON array of the signing secrets of the Resend webhooks pointed at /api/webhooks/resend, to show delivery, bounce and complaint status.",
+      "link": { "label": "Add a webhook", "url": "https://resend.com/webhooks" },
       "optional": true
     },
     {
       "name": "SENDFLARE_API_KEY",
       "label": "SendFlare API key",
       "help": "Sends through SendFlare instead of Resend, from the address in SendFlare sender below.",
+      "link": { "label": "Get a key", "url": "https://sendflare.com/" },
       "optional": true
     },
     {
       "name": "SENDFLARE_DOMAIN_CONFIGS",
       "label": "SendFlare configuration",
       "help": "JSON with one entry per sender domain, for example {\"example.com\":{\"apiKey\":\"sf_...\",\"from\":\"mail@example.com\"}}; a matching entry wins over Resend for that domain.",
+      "link": { "label": "Get a key", "url": "https://sendflare.com/" },
       "optional": true
     },
     {
       "name": "TURNSTILE_SECRET_KEY",
       "label": "Turnstile secret key",
       "help": "Set it with the site key below. Needed for public registration with email and password, and for invitations several people can use.",
+      "link": {
+        "label": "Create a widget",
+        "url": "https://dash.cloudflare.com/?to=/:account/turnstile"
+      },
       "optional": true
     },
     {
       "name": "LINUX_DO_CLIENT_SECRET",
       "label": "Linux DO Connect client secret",
       "help": "With the client ID below, for signing in with Linux DO.",
+      "link": { "label": "Create an OAuth app", "url": "https://connect.linux.do/" },
       "optional": true
     }
   ],
@@ -129,18 +138,24 @@
       "name": "TURNSTILE_SITE_KEY",
       "label": "Turnstile site key",
       "help": "The public key of the Turnstile widget whose secret key is set above.",
+      "link": {
+        "label": "Create a widget",
+        "url": "https://dash.cloudflare.com/?to=/:account/turnstile"
+      },
       "optional": true
     },
     {
       "name": "SENDFLARE_FROM",
       "label": "SendFlare sender",
       "help": "A verified sender address for SendFlare, without a display name.",
+      "link": { "label": "Open SendFlare", "url": "https://sendflare.com/" },
       "optional": true
     },
     {
       "name": "LINUX_DO_CLIENT_ID",
       "label": "Linux DO Connect client ID",
       "help": "Register the app's address followed by /api/auth/linux-do/callback as the callback URL.",
+      "link": { "label": "Create an OAuth app", "url": "https://connect.linux.do/" },
       "optional": true
     },
     {

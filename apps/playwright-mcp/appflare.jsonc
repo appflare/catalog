@@ -11,6 +11,9 @@
   "repo": "cloudflare/playwright-mcp",
   "license": "Apache-2.0",
   "categories": ["ai", "developer-tools"],
+  // The formatting of URLs in the notes changed after this release was published:
+  // a revision, no new build.
+  "revision": 2,
   "authors": [
     {
       "name": "Cloudflare",
@@ -39,7 +42,7 @@
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Add the server to an MCP client with the URL {{appUrl}}/mcp (Streamable HTTP) or {{appUrl}}/sse (SSE), for example `claude mcp add --transport http playwright {{appUrl}}/mcp`, or in VS Code `code --add-mcp '{\"name\":\"playwright\",\"type\":\"sse\",\"url\":\"{{appUrl}}/sse\"}'`."
+      "content": "Add the server to an MCP client with the URL `{{appUrl}}/mcp` (Streamable HTTP) or `{{appUrl}}/sse` (SSE), for example `claude mcp add --transport http playwright {{appUrl}}/mcp`, or in VS Code `code --add-mcp '{\"name\":\"playwright\",\"type\":\"sse\",\"url\":\"{{appUrl}}/sse\"}'`."
     },
     {
       "type": "markdown",

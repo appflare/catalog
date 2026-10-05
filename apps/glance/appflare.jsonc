@@ -7,8 +7,9 @@
   "repo": "plivo-labs/glance",
   "license": "MIT",
   "categories": ["developer-tools"],
-  // Generated secrets added after this release was published: a revision, no new build.
-  "revision": 2,
+  // Generated secrets (revision 2) and field links (revision 3) came after this
+  // release was published: revisions, no new build.
+  "revision": 3,
   "authors": [{ "name": "Plivo", "url": "https://www.plivo.com", "github": "plivo-labs" }],
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v0.14.0", "sha": "caaed8f60a5365a652a9d519f77bfcb489016585" },
@@ -69,6 +70,10 @@
       "name": "GOOGLE_CLIENT_ID",
       "label": "Google OAuth client ID",
       "help": "For Google Workspace sign-in, with the client secret below. Leave both unset to sign in with the first sign-in token alone; the Google button then stays hidden.",
+      "link": {
+        "label": "Create an OAuth client",
+        "url": "https://console.cloud.google.com/apis/credentials"
+      },
       "optional": true,
       "workers": ["app"]
     },
@@ -76,6 +81,10 @@
       "name": "GOOGLE_CLIENT_SECRET",
       "label": "Google OAuth client secret",
       "help": "The secret of the Google OAuth client above.",
+      "link": {
+        "label": "Create an OAuth client",
+        "url": "https://console.cloud.google.com/apis/credentials"
+      },
       "optional": true,
       "workers": ["app"]
     }
