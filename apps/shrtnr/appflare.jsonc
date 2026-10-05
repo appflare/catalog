@@ -8,6 +8,10 @@
   "repo": "oddbit/shrtnr",
   "license": "Apache-2.0",
   "categories": ["utilities", "analytics"],
+  // The changed first step after installing (revision 2), openPath and field
+  // links (revision 3) and the formatting of URLs in the notes (revision 4) came
+  // after this release was published: revisions, no new build.
+  "revision": 4,
   "authors": [
     { "name": "Oddbit", "url": "https://oddbit.id", "github": "oddbit", "x": "evenbit" },
     {
@@ -19,28 +23,28 @@
   ],
   "maintainers": ["MendyLanda"],
   // Upstream tags the app as app-vX.Y.Z and its SDKs as sdk-vX.Y.Z in the same
-  // repository, so the version comes from install.version. The bump bot reads
+  // repository, so the version comes from source.version. The bump bot reads
   // neither prefix as a version: move source to the newest app-v tag and
-  // install.version with it by hand.
-  "source": { "ref": "app-v0.42.1", "sha": "bf99dafaf7f164800f9327a341d160c7862b51f7" },
+  // source.version with it by hand.
+  "source": {
+    "ref": "app-v0.42.1",
+    "sha": "bf99dafaf7f164800f9327a341d160c7862b51f7",
+    "version": "0.42.1"
+  },
   "install": {
-    "tier": "artifact",
     // Classic yarn (packageManager yarn@1.22.22).
     "packageManager": "yarn",
     "wranglerConfig": "wrangler.jsonc",
-    "workerName": "shrtnr",
-    "version": "0.42.1",
     // No build: the D1 migrations the Worker applies itself are committed as
     // src/db/migrations.generated.ts, and wrangler bundles the rest.
     // Answers without a sign-in and reports package.json's version, which is
-    // install.version; 503 when a migration failed.
-    "healthPath": "/_/health"
+    // source.version; 503 when a migration failed.
+    "health": { "path": "/_/health" }
   },
   // D1, KV and a SQLite-backed Durable Object (the MCP sessions) all have
   // free tiers; upstream sizes the app for them. Cloudflare Access is free for
   // up to 50 users.
   "plan": "free",
-  "requires": [],
   // ACCESS_AUD and ACCESS_JWKS_URL come from Cloudflare Access, which can only
   // be turned on for the Worker after it exists, so they are optional here and
   // set afterwards in the app's settings. DEV_MODE and DEV_IDENTITY are for
@@ -50,41 +54,52 @@
       "name": "ACCESS_AUD",
       "label": "Access application audience (AUD) tag",
       "help": "From the Cloudflare Access application that protects this Worker. Until it and the key URL below are set, the admin pages show setup steps and short links keep redirecting. Several tags may be given, comma separated.",
+      "link": {
+        "label": "Find your AUD tag",
+        "url": "https://developers.cloudflare.com/cloudflare-one/access-controls/applications/http-apps/authorization-cookie/validating-json/"
+      },
       "optional": true
     },
     {
       "name": "ACCESS_JWKS_URL",
       "label": "Access key URL",
       "help": "Your Zero Trust team's signing keys: https://<team>.cloudflareaccess.com/cdn-cgi/access/certs",
+      "link": {
+        "label": "Find your key URL",
+        "url": "https://developers.cloudflare.com/cloudflare-one/access-controls/applications/http-apps/authorization-cookie/validating-json/"
+      },
       "optional": true
     },
     {
       "name": "MCP_ACCESS_AUD",
       "label": "MCP Access audience (AUD) tag",
       "help": "Only for the MCP server, which needs its own subdomain and a second Access application with Managed OAuth. Without it the Worker serves no MCP.",
+      "link": {
+        "label": "Find your AUD tag",
+        "url": "https://developers.cloudflare.com/cloudflare-one/access-controls/applications/http-apps/authorization-cookie/validating-json/"
+      },
       "optional": true
     },
     {
       "name": "FP_SALT",
       "label": "Visitor fingerprint salt",
       "help": "Mixed into the daily salt that counts unique visitors without storing IP addresses. Without it the salt is predictable.",
-      "generate": true
+      "generate": "password"
     }
   ],
-  "vars": [],
+  "openPath": "/_/admin/dashboard",
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Short links redirect right away, but the admin pages open only behind Cloudflare Access. In the Cloudflare dashboard, open Workers & Pages, select this Worker, open Settings, Domains & Routes, and turn on Cloudflare Access for its workers.dev address. The dialog shows the application audience (AUD) tag and your team domain."
+      "content": "Short links redirect right away, but the admin pages open only behind Cloudflare Access. In the Zero Trust dashboard, under Access, Applications, add a self-hosted application for `{{appHostname}}` with the path `_/admin/*`, and copy its Application Audience (AUD) tag. Protect only that path: Appflare's Cloudflare Access protection, and the one-click Access in the Worker's settings, cover every path, short links included."
     },
     {
       "type": "markdown",
-      "content": "In this app's settings in Appflare, set **Access application audience (AUD) tag** to that tag and **Access key URL** to `https://<team>.cloudflareaccess.com/cdn-cgi/access/certs`. Then open {{workerUrl}}/_/admin/dashboard and sign in through Access."
+      "content": "In this app's settings in Appflare, set **Access application audience (AUD) tag** to that tag and **Access key URL** to `https://<team>.cloudflareaccess.com/cdn-cgi/access/certs`. Then open {{appUrl}}/_/admin/dashboard and sign in through Access."
     },
     {
       "type": "markdown",
-      "content": "Everyone who passes the Access policy can sign in, read every link, and create their own. The API reference is at {{workerUrl}}/_/api/docs; API keys are created per user in the admin pages. The MCP server needs a subdomain of its own and a second Access application, as upstream's docs/mcp.md describes."
+      "content": "Everyone who passes the Access policy can sign in, read every link, and create their own. The API reference is at {{appUrl}}/_/api/docs; API keys are created per user in the admin pages. The MCP server needs a subdomain of its own and a second Access application, as upstream's docs/mcp.md describes."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

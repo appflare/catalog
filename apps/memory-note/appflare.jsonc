@@ -4,21 +4,21 @@
   "name": "Memory Note",
   "summary": "A small notes and to-do API behind one token: push, list, edit, move and delete notes over REST from Siri Shortcuts, Alfred, a home screen widget or any script, stored in Workers KV or a Notion database.",
   "tagline": "Notes and to-dos you can reach from shortcuts, widgets and scripts",
-  "homepage": "https://github.com/azu/memory-note",
   "repo": "azu/memory-note",
   "license": "MIT",
   "categories": ["notes", "productivity", "developer-tools"],
+  // Edited help text (revision 2) and field links (revision 3) came after this
+  // release was published: revisions, no new build.
+  "revision": 3,
   "authors": [{ "name": "azu", "url": "https://efcl.info", "github": "azu", "x": "azu_re" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags, so the entry follows the default branch by
   // commit. Its last commit is from August 2023.
   "source": { "ref": "master", "sha": "c07fdc0fe03a4f3e93ae9d40cb56f6d40a5e934b" },
   "install": {
-    "tier": "artifact",
     // yarn.lock is a classic (v1) lockfile.
     "packageManager": "yarn",
     "wranglerConfig": "wrangler.toml",
-    "workerName": "memory-note",
     // No build: wrangler bundles src/index.tsx (Hono with its JSX). The config
     // names no entrypoint, because upstream's deploy script passes it to
     // `wrangler deploy` on the command line; the patch sets it in the config.
@@ -30,18 +30,21 @@
   // One Worker and Workers KV. The free plan allows 1,000 KV writes a day;
   // each new, edited, moved or deleted note is one or two.
   "plan": "free",
-  "requires": [],
   "secrets": [
     {
       "name": "MEMORY_NOTE_TOKEN",
       "label": "Access token",
       "help": "Every request passes it as ?token=<this token>. Anyone who has it can read and change your notes.",
-      "generate": true
+      "generate": "password"
     },
     {
       "name": "NOTION_TOKEN",
       "label": "Notion integration token",
       "help": "Only for the Notion storage: the internal integration token of a Notion integration that the database is shared with.",
+      "link": {
+        "label": "Create an integration",
+        "url": "https://www.notion.so/profile/integrations"
+      },
       "optional": true
     }
   ],
@@ -58,26 +61,28 @@
         { "value": "cloudflare", "label": "Workers KV" },
         { "value": "notion", "label": "Notion" }
       ],
-      "default": "cloudflare"
+      "default": "cloudflare",
+      "optional": true
     },
     {
       "name": "NOTION_MESSAGE_PROPERTY_NAME",
       "label": "Notion title property",
-      "help": "Only for the Notion storage: the name of the database's title property, which holds each note's text."
+      "help": "Only for the Notion storage: the name of the database's title property, which holds each note's text.",
+      "optional": true
     },
     {
       // Not in the wrangler config: the Worker gets this text as it is and
       // parses it as JSON itself.
       "name": "NOTION_FILTER_OPTIONS",
       "label": "Notion filters",
-      "help": "Optional, only for the Notion storage. A JSON list of filters that must all match, for example [{\"name\":\"Status\",\"type\":\"status\",\"value\":\"Open\"}]. Types: checkbox, relation, select and status; select and status also take \"op\": \"does_not_equal\"."
+      "help": "Only for the Notion storage. A JSON list of filters that must all match, for example [{\"name\":\"Status\",\"type\":\"status\",\"value\":\"Open\"}]. Types: checkbox, relation, select and status; select and status also take \"op\": \"does_not_equal\".",
+      "optional": true
     }
   ],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Every request needs the access token from this app's settings. A list id is any name you choose:\n\n```sh\ncurl -X POST '{{workerUrl}}/notes/todo/new?token=<token>' -H 'Content-Type: application/json' -d '{\"message\": \"Buy milk\"}'\ncurl '{{workerUrl}}/notes/todo?token=<token>'\n```\n\n`/notes/<list>/txt` returns plain text and `/notes/<list>/widget` an HTML page for a home screen widget. Upstream's README describes the Siri Shortcuts and Alfred setups."
+      "content": "Every request needs the access token from this app's settings. A list id is any name you choose:\n\n```sh\ncurl -X POST '{{appUrl}}/notes/todo/new?token=<token>' -H 'Content-Type: application/json' -d '{\"message\": \"Buy milk\"}'\ncurl '{{appUrl}}/notes/todo?token=<token>'\n```\n\n`/notes/<list>/txt` returns plain text and `/notes/<list>/widget` an HTML page for a home screen widget. Upstream's README describes the Siri Shortcuts and Alfred setups."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

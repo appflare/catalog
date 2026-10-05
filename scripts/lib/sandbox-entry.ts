@@ -23,7 +23,7 @@ export function runsInSandbox(tier: InstallTier): boolean {
   return SANDBOX_RUN_TIERS.includes(tier);
 }
 
-/** Defaults `@appflare/schema` fills in when `install.sandbox` omits a field. */
+/** Defaults `@appflare/schema` fills in when `install.container` omits a field. */
 export interface SandboxDefaults {
   expectedMinutes: number;
   instanceType: SandboxInstanceType;
@@ -68,7 +68,7 @@ export function sandboxBuild(
   defaults: SandboxDefaults,
 ): IndexBuild {
   const bytes = publishedManifestBytes(manifest);
-  const { buildCommand, sandbox } = manifest.install;
+  const { buildCommand, container } = manifest.install;
   return {
     pin: manifest.source.sha,
     manifest: publishedManifestUrl(repo, manifest.slug),
@@ -80,8 +80,8 @@ export function sandboxBuild(
       : {
           buildCommand: typeof buildCommand === "string" ? buildCommand : buildCommand.join(" && "),
         }),
-    expectedMinutes: sandbox?.expectedMinutes ?? defaults.expectedMinutes,
-    instanceType: sandbox?.instanceType ?? defaults.instanceType,
+    expectedMinutes: container?.expectedMinutes ?? defaults.expectedMinutes,
+    instanceType: container?.instanceType ?? defaults.instanceType,
   };
 }
 

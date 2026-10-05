@@ -8,13 +8,12 @@ import type { ArtifactManifest } from "./types.ts";
 const PIN = "0123456789abcdef0123456789abcdef01234567";
 
 /**
- * A format 3 artifact whose Worker declares a Durable Object and an
+ * An artifact whose Worker declares a Durable Object and an
  * entrypoint in `exports`, a `cache` block, and a Worker Loader (a Workers
  * Paid binding, so the catalog manifest says `plan: "paid"`).
  */
 function withSettings(): Record<string, unknown> {
   const m = artifactManifestFixture({ app: "sandboxed", version: "1.0.0", sha: PIN });
-  m.format = 3;
   const worker = m.worker as Record<string, unknown>;
   worker.bindings = [
     { type: "durable_object_namespace", name: "ROOMS", class_name: "Room" },
@@ -63,12 +62,9 @@ describe("planCiInstall with a Worker's exports, cache and Worker Loaders", () =
 describe.skipIf(!appflareAvailable)(
   "exports, cache and loaders with the real @appflare/schema",
   () => {
-    it("accepts them as format 3 and refuses them as format 1", async () => {
+    it("accepts them", async () => {
       const schema = await loadAppflareSchema(appflareDir);
       expect(schema.artifactManifest.safeParse(withSettings()).success).toBe(true);
-      expect(schema.artifactManifest.safeParse({ ...withSettings(), format: 1 }).success).toBe(
-        false,
-      );
     });
 
     it("refuses a Worker Loader in an app that does not say it needs Workers Paid", async () => {

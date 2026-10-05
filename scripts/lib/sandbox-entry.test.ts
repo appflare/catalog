@@ -64,9 +64,9 @@ describe("sandboxBuild", () => {
     });
   });
 
-  it("takes expected minutes and the container size from install.sandbox", () => {
+  it("takes expected minutes and the container size from install.container", () => {
     const bigger = sandboxFixture(built, schema, {
-      sandbox: { expectedMinutes: 25, instanceType: "standard-2" },
+      container: { expectedMinutes: 25, instanceType: "standard-2" },
     });
     expect(sandboxBuild(bigger, "appflare/catalog", schema.sandboxDefaults)).toMatchObject({
       expectedMinutes: 25,

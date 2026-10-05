@@ -28,7 +28,7 @@ prerelease, or incomplete. Needs gh (read-only) and APPFLARE_DIR; reads
 index.json for the revisions it publishes already. New releases are planned
 with the catalog's key id (${PUBLIC_KEY_ENV}; see scripts/signing-key.ts).
 
-  --out <file>   also write the plan (expected app, version, source, keyId, and
+  --out <file>   also write the plan (expected app, version, keyId, and
                  catalog per slug, and each revision's version, revision,
                  sha256 and key id) for check-manifest-plan and sign-revisions
   --only <slugs> consider only these comma-separated apps (an unknown slug is an

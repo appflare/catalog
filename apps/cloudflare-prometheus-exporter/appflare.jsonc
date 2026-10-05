@@ -4,10 +4,13 @@
   "name": "Cloudflare Prometheus Exporter",
   "summary": "Export Cloudflare analytics as Prometheus metrics: requests, bandwidth, threats, Workers, load balancers, certificates, Magic Transit and more, for every account and zone your API token can read, refreshed each minute by Durable Objects.",
   "tagline": "Send Cloudflare traffic and security metrics to Prometheus",
-  "homepage": "https://github.com/cloudflare/cloudflare-prometheus-exporter",
   "repo": "cloudflare/cloudflare-prometheus-exporter",
   "license": "MIT",
   "categories": ["monitoring", "analytics", "developer-tools"],
+  // Edited help text (revision 2), field links (revision 3) and the formatting of
+  // URLs in the notes (revision 4) came after this release was published:
+  // revisions, no new build.
+  "revision": 4,
   "authors": [
     { "name": "Cloudflare", "url": "https://www.cloudflare.com", "github": "cloudflare" }
   ],
@@ -16,10 +19,8 @@
   // metric storage and more metrics) but has not been released.
   "source": { "ref": "v0.0.1-beta.15", "sha": "1fdb6c7a2cae3bc8725bed7485aea3e011116faa" },
   "install": {
-    "tier": "artifact",
     "packageManager": "bun",
     "wranglerConfig": "wrangler.jsonc",
-    "workerName": "cloudflare-prometheus-exporter",
     // No build: wrangler bundles src/worker.tsx.
     // The config leaves the KV namespace id (runtime config overrides) as an
     // empty string for the self-hoster to fill in, and wrangler refuses an
@@ -30,7 +31,7 @@
     },
     // Answers 401 without the Prometheus credentials, which the health check
     // counts as the Worker answering.
-    "healthPath": "/health"
+    "health": { "path": "/health" }
   },
   // Three SQLite-backed Durable Object classes, KV and a rate limit, no cron
   // trigger. Each account gets a coordinator and about 20 metric exporters,
@@ -41,18 +42,18 @@
   // Larger setups fit the free plan with a longer refresh and scrape interval
   // or fewer zones, or need Workers Paid.
   "plan": "free",
-  "requires": [],
   "secrets": [
     {
       "name": "CLOUDFLARE_API_TOKEN",
       "label": "Cloudflare API token",
-      "help": "A token with Zone Analytics Read, Account Analytics Read and Workers Scripts Read on the accounts and zones to export (the permissions listed on this page). The exporter finds every account and zone the token can read."
+      "help": "A token with Zone Analytics Read, Account Analytics Read and Workers Scripts Read on the accounts and zones to export (the permissions listed on this page). The exporter finds every account and zone the token can read.",
+      "cloudflareToken": true
     },
     {
       "name": "BASIC_AUTH_PASSWORD",
       "label": "Prometheus password",
       "help": "HTTP Basic password for every page of the exporter, the metrics and the runtime config API included. Without it and the username below, anyone who knows the address can read the metrics and change the config.",
-      "generate": true
+      "generate": "password"
     }
   ],
   "vars": [
@@ -60,78 +61,94 @@
       "name": "BASIC_AUTH_USER",
       "label": "Prometheus username",
       "help": "HTTP Basic username, used with the password above.",
-      "default": "prometheus",
-      "required": true
+      "default": "prometheus"
     },
     {
       "name": "CF_ZONES",
       "label": "Zones",
-      "help": "Optional. Comma-separated zone ids to export; empty exports every zone the token can read."
+      "help": "Comma-separated zone ids to export; empty exports every zone the token can read.",
+      "link": {
+        "label": "Find account and zone IDs",
+        "url": "https://developers.cloudflare.com/fundamentals/account/find-account-and-zone-ids/"
+      },
+      "optional": true
     },
     {
       "name": "CF_ACCOUNTS",
       "label": "Accounts",
-      "help": "Optional. Comma-separated account ids to export; empty exports every account the token can read."
+      "help": "Comma-separated account ids to export; empty exports every account the token can read.",
+      "link": {
+        "label": "Find account and zone IDs",
+        "url": "https://developers.cloudflare.com/fundamentals/account/find-account-and-zone-ids/"
+      },
+      "optional": true
     },
     {
       // A number in the wrangler config, so the Worker gets it as JSON and the
       // form takes JSON text; the form starts with the config's value.
       "name": "METRIC_REFRESH_INTERVAL_SECONDS",
       "label": "Refresh interval (seconds)",
-      "help": "How often each metric is fetched from Cloudflare. Every exporter wakes once per interval, so a longer interval means fewer Durable Object requests.",
-      "required": true
+      "help": "How often each metric is fetched from Cloudflare. Every exporter wakes once per interval, so a longer interval means fewer Durable Object requests."
     }
   ],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Add a scrape job to Prometheus with the username and password from this app's settings:\n\n```yaml\nscrape_configs:\n  - job_name: cloudflare\n    scrape_interval: 60s\n    scrape_timeout: 30s\n    scheme: https\n    basic_auth:\n      username: prometheus\n      password: <password>\n    static_configs:\n      - targets: ['{{workerName}}.<your-subdomain>.workers.dev']\n```\n\nMetrics are at {{workerUrl}}/metrics. The first values appear a few minutes after install: metrics are fetched five minutes behind, while Cloudflare's analytics settle."
+      "content": "Add a scrape job to Prometheus with the username and password from this app's settings:\n\n```yaml\nscrape_configs:\n  - job_name: cloudflare\n    scrape_interval: 60s\n    scrape_timeout: 30s\n    scheme: https\n    basic_auth:\n      username: prometheus\n      password: <password>\n    static_configs:\n      - targets: ['{{workerName}}.<your-subdomain>.workers.dev']\n```\n\nMetrics are at {{appUrl}}/metrics. The first values appear a few minutes after install: metrics are fetched five minutes behind, while Cloudflare's analytics settle."
     },
     {
       "type": "markdown",
-      "content": "Settings can also be changed at runtime through {{workerUrl}}/config (for example `curl -u prometheus:<password> -X PUT {{workerUrl}}/config/logLevel -H 'Content-Type: application/json' -d '{\"value\": \"debug\"}'`); overrides are kept in KV and win over this app's settings."
+      "content": "Settings can also be changed at runtime through `{{appUrl}}/config` (for example `curl -u prometheus:<password> -X PUT {{appUrl}}/config/logLevel -H 'Content-Type: application/json' -d '{\"value\": \"debug\"}'`); overrides are kept in KV and win over this app's settings."
     }
   ],
   "tokenPermissions": [
     {
-      "name": "Zone.Analytics:Read",
+      "group": "Analytics",
       "scope": "zone",
-      "description": "Zone request, bandwidth, threat, cache and error metrics through the GraphQL Analytics API."
+      "access": "read",
+      "reason": "Reads each zone's requests, bandwidth, threats, cache and errors through the GraphQL Analytics API."
     },
     {
-      "name": "Account.Account Analytics:Read",
+      "group": "Account Analytics",
       "scope": "account",
-      "description": "Account-level metrics through the GraphQL Analytics API."
+      "access": "read",
+      "reason": "Reads the account's metrics through the GraphQL Analytics API."
     },
     {
-      "name": "Account.Workers Scripts:Read",
+      "group": "Workers Scripts",
       "scope": "account",
-      "description": "Worker request, error, CPU time and duration metrics."
+      "access": "read",
+      "reason": "Reads each Worker's requests, errors, CPU time and duration."
     },
     {
-      "name": "Zone.SSL and Certificates:Read",
+      "group": "SSL and Certificates",
       "scope": "zone",
-      "description": "Optional: certificate expiry metrics."
+      "access": "read",
+      "reason": "Optional: reports when certificates expire."
     },
     {
-      "name": "Zone.Firewall Services:Read",
+      "group": "Firewall Services",
       "scope": "zone",
-      "description": "Optional: firewall event metrics."
+      "access": "read",
+      "reason": "Optional: reports firewall events."
     },
     {
-      "name": "Zone.Load Balancers:Read",
+      "group": "Load Balancers",
       "scope": "zone",
-      "description": "Optional: load balancer and pool metrics."
+      "access": "read",
+      "reason": "Optional: reports load balancer and pool health."
     },
     {
-      "name": "Account.Logs:Read",
+      "group": "Logs",
       "scope": "account",
-      "description": "Optional: failed Logpush job metrics."
+      "access": "read",
+      "reason": "Optional: reports Logpush jobs that failed."
     },
     {
-      "name": "Account.Magic Transit:Read",
+      "group": "Magic Transit",
       "scope": "account",
-      "description": "Optional: Magic Transit tunnel health and traffic metrics."
+      "access": "read",
+      "reason": "Optional: reports Magic Transit tunnel health and traffic."
     }
   ]
 }

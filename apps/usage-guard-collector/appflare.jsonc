@@ -4,24 +4,26 @@
   "name": "Usage Guard Collector",
   "summary": "Usage surge alerts for your Cloudflare account: reads daily Workers, D1, Durable Objects, KV, R2 and Queues counts into D1 and pings Discord or Slack when a meter jumps.",
   "tagline": "Get alerts when your Cloudflare usage suddenly jumps",
-  "homepage": "https://github.com/HowardZlh/usage-guard-collector",
   "repo": "HowardZlh/usage-guard-collector",
   "license": "MIT",
   "categories": ["monitoring", "utilities"],
+  // Field links added after this release was published: a revision, no new build.
+  "revision": 2,
   "authors": [{ "name": "Howard", "url": "https://www.guushu.com", "github": "HowardZlh" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags; the pin tracks the default branch, main.
-  "source": { "ref": "main", "sha": "c5f9e9d539e5d9b6e9b178eb3646774380e6829a" },
+  "source": { "ref": "main", "sha": "f9809bb41ba54beaa668c5eadb3d33c3875b99f0" },
   "install": {
-    "tier": "artifact",
     "packageManager": "pnpm",
-    "wranglerConfig": "wrangler.jsonc",
-    "workerName": "usage-guard-collector"
+    "wranglerConfig": "wrangler.jsonc"
   },
   // One cron every 6 hours, two GraphQL requests a run and a few dozen D1
   // rows: well inside the free plan.
   "plan": "free",
-  "requires": [],
+  // The status page (GET /, the only route: src/index.ts) has no sign-in and
+  // shows the account's usage, so protection starts switched on. The cron is
+  // not a request, so Access does not stand in its way.
+  "access": { "mode": "recommended" },
   // Seeded from upstream's .dev.vars.example and the webhooks its wrangler
   // config names as optional. Upstream asks for CF_ACCOUNT_ID as a secret;
   // it is not secret, so here it is a var filled in with this account's id.
@@ -29,18 +31,27 @@
     {
       "name": "CF_API_TOKEN",
       "label": "Analytics API token",
-      "help": "A Cloudflare API token with Account Analytics Read on this account and nothing else. The Worker reads usage through the GraphQL Analytics API with it and never logs it."
+      "help": "A Cloudflare API token with Account Analytics Read on this account and nothing else. The Worker reads usage through the GraphQL Analytics API with it and never logs it.",
+      "cloudflareToken": true
     },
     {
       "name": "DISCORD_WEBHOOK_URL",
       "label": "Discord webhook URL",
       "help": "Where surge alerts are posted in Discord. Without a webhook, surges show only on the status page.",
+      "link": {
+        "label": "Create a webhook",
+        "url": "https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks"
+      },
       "optional": true
     },
     {
       "name": "SLACK_WEBHOOK_URL",
       "label": "Slack webhook URL",
       "help": "Where surge alerts are posted in Slack (an incoming webhook).",
+      "link": {
+        "label": "Create a webhook",
+        "url": "https://docs.slack.dev/messaging/sending-messages-using-incoming-webhooks/"
+      },
       "optional": true
     }
   ],
@@ -49,30 +60,31 @@
       "name": "CF_ACCOUNT_ID",
       "label": "Cloudflare account ID",
       "help": "The account whose usage is watched: this one. Filled in on every install and update.",
-      "default": "{{accountId}}",
-      "required": true
+      "default": "{{accountId}}"
     },
     {
       "name": "THRESHOLDS_JSON",
       "label": "Alert floors",
-      "help": "Optional JSON object of per-metric minimums a surge must reach, for example {\"d1.rows_read\": 5000000}. Metric names are those on the status page. Leave empty for upstream's defaults."
+      "help": "Optional JSON object of per-metric minimums a surge must reach, for example {\"d1.rows_read\": 5000000}. Metric names are those on the status page. Leave empty for upstream's defaults.",
+      "optional": true
     }
   ],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "The first collection runs at the next 00:00, 06:00, 12:00 or 18:00 UTC; open {{workerUrl}} afterwards for the last 7 days of usage and the current surges. The first day flags nothing, since there is no baseline yet."
+      "content": "The first collection runs at the next 00:00, 06:00, 12:00 or 18:00 UTC; open {{appUrl}} afterwards for the last 7 days of usage and the current surges. The first day flags nothing, since there is no baseline yet."
     },
     {
       "type": "markdown",
-      "content": "The status page has no sign-in, so anyone with the address can see your usage table. To keep it private, put the Worker behind Cloudflare Access; the cron is unaffected."
+      "content": "The status page has no sign-in of its own. Behind Cloudflare Access only Appflare's users see it; without it, anyone with the address can see your usage table. The cron runs either way."
     }
   ],
   "tokenPermissions": [
     {
-      "name": "Account.Account Analytics:Read",
+      "group": "Account Analytics",
       "scope": "account",
-      "description": "Read the account's daily usage through the GraphQL Analytics API (CF_API_TOKEN)."
+      "access": "read",
+      "reason": "Reads the account's daily usage through the GraphQL Analytics API."
     }
   ]
 }

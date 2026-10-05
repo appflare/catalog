@@ -28,7 +28,7 @@ describe("healthProbes", () => {
     const probes = healthProbes(
       {
         workers: [worker("ci-duo-pr1-jobs", false, true), worker("ci-duo-pr1", true, true)],
-        healthPath: "/healthz",
+        probePath: "/healthz",
       },
       "acme",
     );
@@ -41,7 +41,7 @@ describe("healthProbes", () => {
   it("skips a Worker kept off workers.dev, which then counts as passing", () => {
     const jobs = worker("ci-duo-pr1-jobs", false, false);
     const probes = healthProbes(
-      { workers: [jobs, worker("ci-duo-pr1", true, true)], healthPath: "/" },
+      { workers: [jobs, worker("ci-duo-pr1", true, true)], probePath: "/" },
       "acme",
     );
     expect(probes).toEqual([
@@ -91,15 +91,10 @@ describe.skipIf(entryHelpers === null)("an app with a Worker kept off workers.de
     });
   }
 
-  it("is format 4, which the schema refuses as format 3", async () => {
+  it("is accepted by the schema", async () => {
     const schema = await loadAppflareSchema(appflareDir);
     const fixture = privateDuoArtifactManifestFixture({ sha: PIN });
-    expect(parseOrThrow(schema.artifactManifest, fixture, "private duo").format).toBe(4);
-    const old = schema.artifactManifest.safeParse({ ...fixture, format: 3 });
-    expect(old.success).toBe(false);
-    if (!old.success) {
-      expect(old.error.issues.map((i) => i.message).join("\n")).toMatch(/needs format 4/);
-    }
+    expect(parseOrThrow(schema.artifactManifest, fixture, "private duo").app).toBe("duo");
   });
 
   it("deploys that Worker with workers.dev off, and the primary with it on", async () => {

@@ -4,16 +4,17 @@
   "name": "RSSWorker",
   "summary": "A small RSS feed generator: RSS and Atom feeds for Bilibili dynamics and videos, Telegram channels, Weibo users and Xiaohongshu users, one URL per feed.",
   "tagline": "RSS feeds for Bilibili, Telegram, Weibo and Xiaohongshu updates",
-  "homepage": "https://github.com/yllhwa/RSSWorker",
   "repo": "yllhwa/RSSWorker",
   "license": "MIT",
   "categories": ["utilities"],
+  // Field links (revision 2) and the formatting of URLs in the notes (revision 3)
+  // came after this release was published: revisions, no new build.
+  "revision": 3,
   "authors": [{ "name": "hwa", "url": "https://blog.yllhwa.com", "github": "yllhwa" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags; the pin is the head of main.
   "source": { "ref": "main", "sha": "b4057baefdbc8ecab951cd51d6e0f5e72109b8c9" },
   "install": {
-    "tier": "artifact",
     "packageManager": "npm",
     "wranglerConfig": "wrangler.toml",
     "workerName": "rss-worker",
@@ -24,21 +25,19 @@
   },
   // One Worker without storage.
   "plan": "free",
-  "requires": [],
   "secrets": [
     {
       "name": "WEIBO_COOKIE",
       "label": "Weibo cookie",
       "help": "The Cookie header of a signed-in m.weibo.cn request. Weibo feeds need it; the other feeds do not.",
+      "link": { "label": "Sign in to Weibo", "url": "https://m.weibo.cn/" },
       "optional": true
     }
   ],
-  "vars": [],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Feeds are under {{workerUrl}}/rss/, for example {{workerUrl}}/rss/bilibili/user/video/<uid>, {{workerUrl}}/rss/telegram/channel/<username>, {{workerUrl}}/rss/weibo/user/<uid> and {{workerUrl}}/rss/xiaohongshu/user/<user id>. The page at {{workerUrl}} lists every route."
+      "content": "Feeds are under `{{appUrl}}/rss/`, for example `{{appUrl}}/rss/bilibili/user/video/<uid>`, `{{appUrl}}/rss/telegram/channel/<username>`, `{{appUrl}}/rss/weibo/user/<uid>` and `{{appUrl}}/rss/xiaohongshu/user/<user id>`. The page at {{appUrl}} lists every route."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

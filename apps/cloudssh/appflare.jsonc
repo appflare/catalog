@@ -4,47 +4,51 @@
   "name": "CloudSSH",
   "summary": "A web SSH terminal on Workers: connect to your servers from the browser with multiple sessions, SFTP file management, jump hosts, saved servers, and a bring-your-own-key AI assistant.",
   "tagline": "Connect to your servers through a browser",
-  "homepage": "https://github.com/newbietan/CloudSSH",
   "repo": "newbietan/CloudSSH",
   "license": "Apache-2.0",
   "categories": ["remote-access", "developer-tools"],
+  // Field links (revision 2) and the formatting of URLs in the notes (revision 3)
+  // came after this release was published: revisions, no new build.
+  "revision": 3,
   "authors": [{ "name": "TanXin", "url": "https://tanxin.me", "github": "newbietan" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags; the pin tracks main.
   "source": { "ref": "main", "sha": "25852ca23d90b78a6ca23eb95cb6f5336ed7116d" },
   "install": {
-    "tier": "artifact",
     "packageManager": "pnpm",
     // No build step: upstream commits the web client, built and inlined into
     // src/worker/html.ts, with every change to it.
-    "wranglerConfig": "wrangler.toml",
-    "workerName": "cloudssh"
+    "wranglerConfig": "wrangler.toml"
   },
   // Three SQLite-backed Durable Object classes and outbound TCP sockets, all on
   // the free plan. An idle session closes after the idle timeout, which keeps
   // Durable Object time inside the free allowance.
   "plan": "free",
-  "requires": [],
   "secrets": [
     {
       "name": "ADMIN_PASSWORD_HASH",
       "label": "Admin password hash",
       "help": "Enables single-admin password sign-in, instead of GitHub. Not the password itself: a pbkdf2$sha256$... hash made on the app's own page at /#password-setup (the password never leaves your browser). Takes precedence over GitHub sign-in.",
-      "generate": false,
       "optional": true
     },
     {
       "name": "GITHUB_CLIENT_SECRET",
       "label": "GitHub OAuth client secret",
       "help": "From your GitHub OAuth app, together with its client ID below.",
-      "generate": false,
+      "link": {
+        "label": "Create an OAuth app",
+        "url": "https://github.com/settings/applications/new"
+      },
       "optional": true
     },
     {
       "name": "TURNSTILE_SECRET",
       "label": "Turnstile secret key",
       "help": "Adds Cloudflare Turnstile bot checks to sign-in and connections, together with the site key below.",
-      "generate": false,
+      "link": {
+        "label": "Create a widget",
+        "url": "https://dash.cloudflare.com/?to=/:account/turnstile"
+      },
       "optional": true
     }
   ],
@@ -54,7 +58,7 @@
       "name": "REQUIRE_GITHUB_AUTH",
       "label": "Who can connect",
       "help": "Anonymous connections let anyone who finds the address use your Worker to open SSH connections. Requiring sign-in needs the admin password hash or a GitHub OAuth app.",
-      "required": false,
+      "optional": true,
       "type": "select",
       "options": [
         { "value": "true", "label": "Only signed-in users" },
@@ -68,13 +72,17 @@
       "name": "GITHUB_CLIENT_ID",
       "label": "GitHub OAuth client ID",
       "help": "Enables GitHub sign-in and saved servers. Create an OAuth app at github.com/settings/developers with <public URL>/api/auth/callback as its callback URL.",
-      "required": false
+      "link": {
+        "label": "Create an OAuth app",
+        "url": "https://github.com/settings/applications/new"
+      },
+      "optional": true
     },
     {
       "name": "GITHUB_ALLOWED_USER_IDS",
       "label": "Allowed GitHub users",
       "help": "Numeric GitHub user ids that may sign in, comma separated (the id field of api.github.com/users/<name>). Leave empty to let any GitHub account sign in.",
-      "required": false
+      "optional": true
     },
     {
       "name": "BASE_URL",
@@ -82,26 +90,30 @@
       "help": "The address you open the app at, without a trailing slash; GitHub sign-in sends people back here.",
       // Newer managers fill in the Worker's workers.dev address here; older ones
       // show the placeholder as is, and it must be replaced by hand.
-      "default": "{{workerUrl}}",
-      "required": false
+      "default": "{{appUrl}}",
+      "optional": true
     },
     {
       "name": "TURNSTILE_SITEKEY",
       "label": "Turnstile site key",
-      "required": false
+      "link": {
+        "label": "Create a widget",
+        "url": "https://dash.cloudflare.com/?to=/:account/turnstile"
+      },
+      "optional": true
     },
     {
       "name": "IDLE_TIMEOUT",
       "label": "Idle timeout",
       "help": "Closes a session after this long without input, for example 30m, 1h, or 1800s; 0 never closes it.",
       "default": "30m",
-      "required": false
+      "optional": true
     },
     {
       "name": "ENABLE_SSH_SHARING",
       "label": "One-time sharing",
       "help": "Lets signed-in users hand out audited one-time links that open a session on a saved server.",
-      "required": false,
+      "optional": true,
       "type": "select",
       "options": [
         { "value": "true", "label": "Allow sharing" },
@@ -113,12 +125,11 @@
   "postInstall": [
     {
       "type": "markdown",
-      "content": "To sign in with a password: open {{workerUrl}}/#password-setup, choose a password of at least 10 characters, and copy the hash it makes. Paste the hash into Admin password hash in the app's settings; after the update, sign in at {{workerUrl}} with the password."
+      "content": "To sign in with a password: open {{appUrl}}/#password-setup, choose a password of at least 10 characters, and copy the hash it makes. Paste the hash into Admin password hash in the app's settings; after the update, sign in at {{appUrl}} with the password."
     },
     {
       "type": "markdown",
-      "content": "To sign in with GitHub instead, create an OAuth app with {{workerUrl}}/api/auth/callback as its callback URL, and set its client ID and secret, and your numeric user id under Allowed GitHub users, in the app's settings."
+      "content": "To sign in with GitHub instead, create an OAuth app with `{{appUrl}}/api/auth/callback` as its callback URL, and set its client ID and secret, and your numeric user id under Allowed GitHub users, in the app's settings."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

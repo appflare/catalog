@@ -4,10 +4,12 @@
   "name": "Workers Firecrawl",
   "summary": "A Firecrawl-compatible search, scrape and map API on Browser Rendering: point the Firecrawl SDKs at your own Worker and get pages as Markdown, HTML, links or screenshots.",
   "tagline": "Search the web and turn pages into readable text",
-  "homepage": "https://github.com/G4brym/workers-firecrawl",
   "repo": "G4brym/workers-firecrawl",
   "license": "MIT",
   "categories": ["developer-tools", "ai"],
+  // The formatting of URLs in the notes changed after this release was published:
+  // a revision, no new build.
+  "revision": 2,
   "authors": [
     { "name": "Gabriel Massadas", "url": "https://massadas.com", "github": "G4brym", "x": "G4brym" }
   ],
@@ -16,7 +18,6 @@
   // one); the pin is the head of main.
   "source": { "ref": "main", "sha": "f53a0dc01502401bf790ccb382d41014b8713afb" },
   "install": {
-    "tier": "artifact",
     "packageManager": "npm",
     "wranglerConfig": "wrangler.toml",
     "workerName": "firecrawl"
@@ -34,19 +35,17 @@
       "name": "AUTHORIZATION_KEY",
       "label": "API key",
       "help": "Callers send it as `Authorization: Bearer <key>`; it is the API key you give the Firecrawl SDK. Every route checks it, the API docs page at / included. Copy it now.",
-      "generate": true
+      "generate": "password"
     }
   ],
-  "vars": [],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Point a Firecrawl SDK at {{workerUrl}} with the API key, for example `new FirecrawlApp({ apiKey: \"<API key>\", apiUrl: \"{{workerUrl}}\" })`. The endpoints are `POST /v1/search` (web search through DuckDuckGo, with each result scraped), `POST /v1/scrape` and `POST /v1/map`."
+      "content": "Point a Firecrawl SDK at `{{appUrl}}` with the API key, for example `new FirecrawlApp({ apiKey: \"<API key>\", apiUrl: \"{{appUrl}}\" })`. The endpoints are `POST /v1/search` (web search through DuckDuckGo, with each result scraped), `POST /v1/scrape` and `POST /v1/map`."
     },
     {
       "type": "markdown",
-      "content": "The OpenAPI docs at {{workerUrl}} need the same `Authorization` header, so a plain browser visit answers 401. Browser Rendering on the free plan allows 10 minutes of browser time a day."
+      "content": "The OpenAPI docs at `{{appUrl}}` need the same `Authorization` header, so a plain browser visit answers 401. Browser Rendering on the free plan allows 10 minutes of browser time a day."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

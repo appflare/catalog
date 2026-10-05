@@ -8,6 +8,9 @@
   "repo": "baronunread/rdyrct",
   "license": "MIT",
   "categories": ["utilities", "analytics"],
+  // Edited help text (revision 2) and field links (revision 3) came after this
+  // release was published: revisions, no new build.
+  "revision": 3,
   "authors": [
     {
       "name": "Andrea Bruno",
@@ -20,19 +23,17 @@
   // Upstream has no release tags, so the entry follows the default branch by commit.
   "source": { "ref": "main", "sha": "d0ece6ee7a8ff8ae6188f07fe749c881b9d415e2" },
   "install": {
-    "tier": "artifact",
     "packageManager": "bun",
     // The config's KV, D1 and zone ids are upstream's production resources;
     // the ids are dropped when the artifact is packed, and the vars that name
     // upstream's own services are replaced below. The `playwright`
     // environment is for upstream's browser tests and is not used.
     "wranglerConfig": "wrangler.jsonc",
-    "workerName": "rdyrct",
     // Upstream's `build` script: Vite with the Cloudflare plugin builds the
     // React app and the Worker together, and wrangler deploys the output.
     "buildCommand": "vite build",
     // Public deployment config, answered by the Worker without a sign-in.
-    "healthPath": "/api/config"
+    "health": { "path": "/api/config" }
   },
   // KV, D1, R2, Queues, Workflows, a SQLite-backed Durable Object (the click
   // buffer) and rate limiting all run on Workers Free, which upstream designs
@@ -45,7 +46,7 @@
       "name": "BETTER_AUTH_SECRET",
       "label": "Session signing secret",
       "help": "Signs sessions and tokens. Setting a new value signs everyone out.",
-      "generate": true
+      "generate": "password"
     },
     {
       "name": "SUPERADMIN_EMAIL",
@@ -55,43 +56,58 @@
     {
       "name": "RESEND_API_KEY",
       "label": "Resend API key",
-      "help": "From resend.com. Sign-up and password reset send a one-time code by email, so without a working key nobody can create an account with a password."
+      "help": "From resend.com. Sign-up and password reset send a one-time code by email, so without a working key nobody can create an account with a password.",
+      "link": { "label": "Get a key", "url": "https://resend.com/api-keys" }
     },
     {
       "name": "CAP_SECRET",
       "label": "Proof-of-work secret",
       "help": "Signs the Cap proof-of-work challenge in front of sign-up and password reset; the check is skipped without it.",
-      "generate": true
+      "generate": "password"
     },
     {
       "name": "GOOGLE_CLIENT_ID",
       "label": "Google OAuth client ID",
-      "help": "Optional, with the secret below, for \"Continue with Google\". Authorized redirect URI: {{workerUrl}}/api/auth/callback/google.",
+      "help": "With the secret below, for \"Continue with Google\". Authorized redirect URI: the app's address followed by /api/auth/callback/google.",
+      "link": {
+        "label": "Create an OAuth client",
+        "url": "https://console.cloud.google.com/apis/credentials"
+      },
       "optional": true
     },
     {
       "name": "GOOGLE_CLIENT_SECRET",
       "label": "Google OAuth client secret",
-      "help": "Optional. The secret of the Google OAuth client above.",
+      "help": "The secret of the Google OAuth client above.",
+      "link": {
+        "label": "Create an OAuth client",
+        "url": "https://console.cloud.google.com/apis/credentials"
+      },
       "optional": true
     },
     {
       "name": "POLAR_ACCESS_TOKEN",
       "label": "Polar access token",
-      "help": "Optional. Only to sell the Hobby and Pro plans through Polar (scopes checkouts:write and customer_sessions:write), with the product ids below.",
+      "help": "Only to sell the Hobby and Pro plans through Polar (scopes checkouts:write and customer_sessions:write), with the product ids below.",
+      "link": { "label": "Create a token", "url": "https://polar.sh/docs/integrate/oat" },
       "optional": true
     },
     {
       "name": "POLAR_WEBHOOK_SECRET",
       "label": "Polar webhook secret",
-      "help": "Optional. Signing secret of the Polar webhook pointed at {{workerUrl}}/api/webhooks/polar.",
+      "help": "Signing secret of the Polar webhook pointed at the app's address followed by /api/webhooks/polar.",
+      "link": {
+        "label": "Add a webhook",
+        "url": "https://polar.sh/docs/integrate/webhooks/endpoints"
+      },
       "optional": true
     },
     {
       "name": "CF_API_TOKEN",
       "label": "Cloudflare token for custom domains",
-      "help": "Optional. Lets organizations on a paid plan use their own domains through Cloudflare for SaaS: a token with Zone, SSL and Certificates, Edit on the zone below.",
-      "optional": true
+      "help": "Lets organizations on a paid plan use their own domains through Cloudflare for SaaS: a token with Zone, SSL and Certificates, Edit on the zone below.",
+      "optional": true,
+      "cloudflareToken": true
     }
   ],
   // Every var the wrangler config sets names upstream's own deployment
@@ -102,34 +118,41 @@
       "name": "APP_URL",
       "label": "App URL",
       "help": "The address people open the app at, without a trailing slash. Sign-in only accepts requests from it, and emails link to it.",
-      "default": "{{workerUrl}}",
-      "required": true
+      "default": "{{appUrl}}"
     },
     {
       "name": "APP_HOST",
       "label": "Short link host",
       "help": "The host part of the App URL, for example rdyrct.<your subdomain>.workers.dev or go.example.com. Short links are shown under it.",
-      "default": "",
-      "required": true
+      "default": ""
     },
     {
       "name": "MAIL_FROM",
       "label": "Sender address",
       "help": "The From of sign-up and notification emails, at a domain verified in Resend, for example rdyrct <no-reply@mail.example.com>.",
-      "default": "",
-      "required": true
+      "default": ""
     },
     {
       "name": "SENTRY_DSN",
       "label": "Sentry DSN",
-      "help": "Optional. Your own Sentry project's DSN for Worker error reports. Leave it empty to send none.",
-      "default": ""
+      "help": "Your own Sentry project's DSN for Worker error reports. Leave it empty to send none.",
+      "link": {
+        "label": "Find your DSN",
+        "url": "https://docs.sentry.io/concepts/key-terms/dsn-explainer/"
+      },
+      "default": "",
+      "optional": true
     },
     {
       "name": "CF_ZONE_ID",
       "label": "Custom domains zone ID",
-      "help": "Optional. The zone with Cloudflare for SaaS set up for customer domains.",
-      "default": ""
+      "help": "The zone with Cloudflare for SaaS set up for customer domains.",
+      "link": {
+        "label": "Find your zone ID",
+        "url": "https://developers.cloudflare.com/fundamentals/account/find-account-and-zone-ids/"
+      },
+      "default": "",
+      "optional": true
     },
     {
       "name": "POLAR_SERVER",
@@ -139,25 +162,30 @@
         { "value": "production", "label": "Production" },
         { "value": "sandbox", "label": "Sandbox" }
       ],
-      "default": "production"
+      "default": "production",
+      "optional": true
     },
     {
       "name": "POLAR_PRO_PRODUCT_ID",
       "label": "Polar Pro product ID",
-      "help": "Optional. The recurring Pro product in your Polar organization.",
-      "default": ""
+      "help": "The recurring Pro product in your Polar organization.",
+      "link": { "label": "Open the dashboard", "url": "https://polar.sh/dashboard" },
+      "default": "",
+      "optional": true
     },
     {
       "name": "POLAR_HOBBY_PRODUCT_ID",
       "label": "Polar Hobby product ID",
-      "help": "Optional. The recurring Hobby product in your Polar organization.",
-      "default": ""
+      "help": "The recurring Hobby product in your Polar organization.",
+      "link": { "label": "Open the dashboard", "url": "https://polar.sh/dashboard" },
+      "default": "",
+      "optional": true
     }
   ],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Open {{workerUrl}} and sign up with the platform admin email. The sign-up code arrives through Resend from the sender address you set."
+      "content": "Open {{appUrl}} and sign up with the platform admin email. The sign-up code arrives through Resend from the sender address you set."
     },
     {
       "type": "markdown",
@@ -166,9 +194,10 @@
   ],
   "tokenPermissions": [
     {
-      "name": "Zone.SSL and Certificates:Edit",
+      "group": "SSL and Certificates",
       "scope": "zone",
-      "description": "Optional, for customer custom domains through Cloudflare for SaaS (CF_API_TOKEN)."
+      "access": "edit",
+      "reason": "Optional: lets organizations use their own domains through Cloudflare for SaaS."
     }
   ]
 }

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { GhNotFoundError, type GhRunner } from "./github-releases.ts";
+import { GhNotFoundError, type GhRequest, type GhRunner } from "./gh-api.ts";
 import {
   COMPARE_FILES_LIMIT,
   compareSemver,
@@ -68,8 +68,8 @@ describe("pickUpstreamTarget", () => {
 describe("createGhUpstream", () => {
   function gh(routes: Record<string, string>): GhRunner & { calls: string[] } {
     const calls: string[] = [];
-    const fn = ((args: string[]) => {
-      const target = args[1] === "--paginate" ? (args[2] as string) : (args[1] as string);
+    const fn = ((request: GhRequest) => {
+      const target = request.path;
       calls.push(target);
       const body = routes[target];
       if (body === undefined) {
@@ -126,8 +126,8 @@ describe("isPrereleaseTag", () => {
 
 describe("relation", () => {
   it("reads ahead_by and behind_by from the compare API", () => {
-    const run = ((args: string[]) => {
-      expect(args.slice(0, 2)).toEqual(["api", `repos/o/r/compare/${sha("a")}...${sha("b")}`]);
+    const run = ((request: GhRequest) => {
+      expect(request.path).toBe(`repos/o/r/compare/${sha("a")}...${sha("b")}`);
       return Buffer.from("0 3\n");
     }) as GhRunner;
     expect(createGhUpstream(run).relation("o/r", sha("a"), sha("b"))).toEqual({
@@ -149,8 +149,8 @@ describe("changedFiles", () => {
     (() => Buffer.from(`${JSON.stringify({ count, paths })}\n`)) as GhRunner;
 
   it("reads file names from the compare API", () => {
-    const run = ((args: string[]) => {
-      expect(args.slice(0, 2)).toEqual(["api", `repos/o/r/compare/${sha("a")}...${sha("b")}`]);
+    const run = ((request: GhRequest) => {
+      expect(request.path).toBe(`repos/o/r/compare/${sha("a")}...${sha("b")}`);
       return Buffer.from(JSON.stringify({ count: 2, paths: ["a/x.ts", "b/y.ts", "a/old.ts"] }));
     }) as GhRunner;
     expect(createGhUpstream(run).changedFiles("o/r", sha("a"), sha("b"))).toEqual({

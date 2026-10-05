@@ -6,30 +6,29 @@
   "name": "cf-nav",
   "summary": "A card-style start page: your links in categories with a search box, public and private links, drag-and-drop ordering, and JSON export and import, stored in KV.",
   "tagline": "Organize your favorite links on a searchable start page",
-  "homepage": "https://github.com/djkyc/cf-nav",
   "repo": "djkyc/cf-nav",
   // The repository has no LICENSE file and declares no licence anywhere, so
   // the catalog shows it as unlicensed.
   "license": "NONE",
   "categories": ["productivity", "utilities"],
+  // Edited help text (revision 2) and field links (revision 3) came after this
+  // release was published: revisions, no new build.
+  "revision": 3,
   "authors": [{ "name": "djkyc", "github": "djkyc" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags; the pin is the head of main.
   "source": { "ref": "main", "sha": "6e83733af9ba3d49a5b8b0a5299bcd32817e0746" },
   "install": {
-    "tier": "artifact",
     "packageManager": "npm",
     // Upstream ships no lockfile; the pack log records the hash of the one
     // the install writes. The only dependency is wrangler.
     "installDirs": [{ "path": ".", "lockfile": "none" }],
     // One JavaScript file that carries the page as a string: no build step.
     // Upstream's own KV namespace id is left out; the install creates one.
-    "wranglerConfig": "wrangler.toml",
-    "workerName": "cf-nav"
+    "wranglerConfig": "wrangler.toml"
   },
   // One Worker and one KV namespace; each save is one KV write.
   "plan": "free",
-  "requires": [],
   // The wrangler config sets both as [vars] with placeholder values ("root"
   // and a dummy key); as secrets here, those vars are left out of the
   // artifact.
@@ -38,21 +37,20 @@
       "name": "ADMIN_PASSWORD",
       "label": "Admin password",
       "help": "Signs you in to add, edit, reorder, export and import links. The browser keeps it in local storage after you sign in.",
-      "generate": true
+      "generate": "password"
     },
     {
       "name": "AI_API_KEY",
       "label": "OpenAI API key",
-      "help": "Optional. Fills in a new link's name and description with gpt-4o-mini; it must start with sk-. The endpoint that uses it needs no sign-in, so anyone who finds this address can spend the key: set a spending limit on it. Without a key the page derives a name from the domain.",
+      "help": "Fills in a new link's name and description with gpt-4o-mini; it must start with sk-. The endpoint that uses it needs no sign-in, so anyone who finds this address can spend the key: set a spending limit on it. Without a key the page derives a name from the domain.",
+      "link": { "label": "Get a key", "url": "https://platform.openai.com/api-keys" },
       "optional": true
     }
   ],
-  "vars": [],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Open {{workerUrl}}, sign in with the admin password, and add your links. Links marked private are shown only after signing in; everything else is visible to anyone with the address."
+      "content": "Open {{appUrl}}, sign in with the admin password, and add your links. Links marked private are shown only after signing in; everything else is visible to anyone with the address."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

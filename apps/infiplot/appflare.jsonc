@@ -15,15 +15,17 @@
   "repo": "zonghaoyuan/infiplot",
   "license": "AGPL-3.0-only",
   "categories": ["ai", "games"],
+  // Upstream has not moved since the released pin, so the Access protection
+  // below (revision 2), the edited help text (revision 3) and the field links
+  // (revision 4) are revisions of that build.
+  "revision": 4,
   "authors": [{ "name": "Zonghao Yuan", "url": "https://yzh.im", "github": "zonghaoyuan" }],
   "maintainers": ["MendyLanda"],
   // InfiPlot publishes no release tags; the pin tracks main.
   "source": { "ref": "main", "sha": "a60e18bc663caaa134d9323a2b89159b7cc9bd05" },
   "install": {
-    "tier": "artifact",
     "packageManager": "pnpm",
     "wranglerConfig": "wrangler.jsonc",
-    "workerName": "infiplot",
     // Upstream's Cloudflare build: `next build --webpack` with standalone
     // output, then OpenNext turns it into .open-next/.
     "buildCommand": "pnpm run build:cf"
@@ -31,27 +33,35 @@
   // Upstream: "Cloudflare deployment requires the Workers Paid Plan because
   // the scene pipeline needs longer CPU time" than the free plan allows.
   "plan": "paid",
-  "requires": [],
+  // No sign-in in this build, and every scene is paid for with the admin's
+  // keys, so protection starts switched on, as upstream recommends for a
+  // private instance. Stories are saved in the browser; nothing must stay
+  // public.
+  "access": { "mode": "recommended" },
   "secrets": [
     {
       "name": "TEXT_API_KEY",
       "label": "Text model API key",
-      "help": "API key for the text model's endpoint below."
+      "help": "API key for the text model's endpoint below.",
+      "link": { "label": "Get a DeepSeek key", "url": "https://platform.deepseek.com/api_keys" }
     },
     {
       "name": "IMAGE_API_KEY",
       "label": "Image model API key",
-      "help": "API key for the image model's endpoint below, for example a Runware key."
+      "help": "API key for the image model's endpoint below, for example a Runware key.",
+      "link": { "label": "Get a Runware key", "url": "https://my.runware.ai/keys" }
     },
     {
       "name": "VISION_API_KEY",
       "label": "Vision model API key",
-      "help": "API key for the vision model's endpoint below."
+      "help": "API key for the vision model's endpoint below.",
+      "link": { "label": "Get a MiMo key", "url": "https://platform.xiaomimimo.com/" }
     },
     {
       "name": "TTS_API_KEY",
       "label": "Speech API key",
       "help": "API key for text to speech. Leave empty, with the speech endpoint or model, to play without voices.",
+      "link": { "label": "Get a MiMo key", "url": "https://platform.xiaomimimo.com/" },
       "optional": true
     }
   ],
@@ -60,58 +70,55 @@
       "name": "TEXT_BASE_URL",
       "label": "Text model endpoint",
       "help": "Any OpenAI-compatible endpoint: DeepSeek, OpenAI, OpenRouter, Gemini's OpenAI-compatible endpoint, and so on.",
-      "default": "https://api.deepseek.com/v1",
-      "required": true
+      "default": "https://api.deepseek.com/v1"
     },
     {
       "name": "TEXT_MODEL",
       "label": "Text model",
       "help": "The model that writes the story.",
-      "default": "deepseek-v4-flash",
-      "required": true
+      "default": "deepseek-v4-flash"
     },
     {
       "name": "IMAGE_BASE_URL",
       "label": "Image model endpoint",
       "help": "Runware (detected from the address) or an OpenAI-compatible image endpoint.",
-      "default": "https://api.runware.ai/v1",
-      "required": true
+      "default": "https://api.runware.ai/v1"
     },
     {
       "name": "IMAGE_MODEL",
       "label": "Image model",
       "help": "The model that paints each scene. runware:400@6 is FLUX.2 [klein] 9B.",
-      "default": "runware:400@6",
-      "required": true
+      "default": "runware:400@6"
     },
     {
       "name": "IMAGE_PROVIDER",
       "label": "Image protocol",
-      "help": "Leave empty to detect it from the endpoint. Set runware, openai (gpt-image, with reference images) or openai_compatible to force one."
+      "help": "Leave empty to detect it from the endpoint. Set runware, openai (gpt-image, with reference images) or openai_compatible to force one.",
+      "optional": true
     },
     {
       "name": "VISION_BASE_URL",
       "label": "Vision model endpoint",
       "help": "An OpenAI-compatible endpoint with a multimodal model; it reads what you click in a scene.",
-      "default": "https://token-plan-sgp.xiaomimimo.com/v1",
-      "required": true
+      "default": "https://token-plan-sgp.xiaomimimo.com/v1"
     },
     {
       "name": "VISION_MODEL",
       "label": "Vision model",
-      "default": "mimo-v2.5",
-      "required": true
+      "default": "mimo-v2.5"
     },
     {
       "name": "TTS_BASE_URL",
       "label": "Speech endpoint",
       "help": "Xiaomi MiMo or StepFun (detected from the address). Leave empty to play without voices.",
-      "default": "https://token-plan-sgp.xiaomimimo.com/v1"
+      "default": "https://token-plan-sgp.xiaomimimo.com/v1",
+      "optional": true
     },
     {
       "name": "TTS_SPEECH_MODEL",
       "label": "Speech model",
-      "default": "mimo-v2.5-tts"
+      "default": "mimo-v2.5-tts",
+      "optional": true
     },
     {
       "name": "MOCK_IMAGE",
@@ -122,24 +129,26 @@
         { "value": "false", "label": "Generate images" },
         { "value": "true", "label": "Placeholder images" }
       ],
-      "default": "false"
+      "default": "false",
+      "optional": true
     },
     {
       "name": "IMAGE_TIMEOUT_MS",
       "label": "Image timeout (ms)",
-      "help": "Optional deadline per image request; a request that runs out is retried. Upstream suggests 30000 for Runware."
+      "help": "Optional deadline per image request; a request that runs out is retried. Upstream suggests 30000 for Runware.",
+      "optional": true
     },
     {
       "name": "IMAGE_HEDGE_MS",
       "label": "Image hedge (ms)",
-      "help": "Optional: when a scene image is still not done after this long, a second identical request races it (the provider may bill both). Upstream suggests 15000 for Runware."
+      "help": "When a scene image is still not done after this long, a second identical request races it (the provider may bill both). Upstream suggests 15000 for Runware.",
+      "optional": true
     }
   ],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Open {{workerUrl}} and start a story. **There is no sign-in**: anyone who can reach the address plays on your API keys. Put the app behind Cloudflare Access, as upstream recommends for private instances, before you share the link."
+      "content": "Open {{appUrl}} and start a story. **The game has no sign-in of its own**: behind Cloudflare Access only Appflare's users play; without it, anyone who can reach the address plays on your API keys."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

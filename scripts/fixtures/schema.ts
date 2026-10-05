@@ -1,5 +1,6 @@
 import { type AppflareSchema, loadAppflareSchema, type Parser } from "../lib/appflare-schema.ts";
 import { isAppflareBuilt, resolveAppflareDir } from "../lib/paths.ts";
+import type { CatalogManifest } from "../lib/types.ts";
 
 /** Whether a built appflare checkout is available (`APPFLARE_DIR` or `../appflare`). */
 export const appflareDir = resolveAppflareDir();
@@ -11,6 +12,37 @@ function passthrough<T>(): Parser<T> {
 }
 
 /**
+ * Stands in for the catalog manifest schema: accepts anything, and fills in
+ * the defaults the catalog scripts read (the tier, the revision, the empty
+ * lists and the health check), as the schema's parse would.
+ */
+function catalogPassthrough(): Parser<CatalogManifest> {
+  return {
+    safeParse: (input) => {
+      const m = input as Partial<CatalogManifest> & {
+        install?: Partial<CatalogManifest["install"]>;
+      };
+      const data = {
+        requires: [],
+        secrets: [],
+        vars: [],
+        postInstall: [],
+        tokenPermissions: [],
+        maintainers: [],
+        revision: 1,
+        ...m,
+        install: {
+          tier: "artifact",
+          health: { path: "/", mode: "no-server-errors" },
+          ...m.install,
+        },
+      };
+      return { success: true, data: data as CatalogManifest };
+    },
+  };
+}
+
+/**
  * The real `@appflare/schema` validators when a built checkout is available,
  * otherwise pass-through parsers so the catalog's own logic is still tested.
  */
@@ -19,7 +51,7 @@ export async function testSchema(): Promise<AppflareSchema> {
     return loadAppflareSchema(appflareDir);
   }
   return {
-    catalogManifest: passthrough(),
+    catalogManifest: catalogPassthrough(),
     artifactManifest: passthrough(),
     indexJson: passthrough(),
     featuredItem: passthrough(),
@@ -40,7 +72,5 @@ export async function testSchema(): Promise<AppflareSchema> {
       throw new Error("no @appflare/schema build to verify signatures with");
     },
     signingKeys: [],
-    // Places every license: tests of the warning run only with the real schema.
-    licenseWarning: () => null,
   };
 }

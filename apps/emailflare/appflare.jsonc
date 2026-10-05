@@ -11,7 +11,6 @@
   "name": "EmailFlare",
   "summary": "Transactional email on Cloudflare Email Sending: a sending API with templates, API keys, logs, suppressions and one-click unsubscribe, plus a team inbox and lightweight CRM on Email Routing.",
   "tagline": "Send emails and manage replies in a shared inbox",
-  "homepage": "https://github.com/0xdps/emailflare",
   "repo": "0xdps/emailflare",
   "license": "MIT",
   "categories": ["email", "business"],
@@ -21,12 +20,10 @@
   // (it has neither Worker config).
   "source": { "ref": "main", "sha": "d448ea205937a5e82683f89013d4c23159da5b7d" },
   "install": {
-    "tier": "artifact",
     "packageManager": "pnpm",
     // Upstream's tracked configs; its setup script fills in the resource ids,
     // which the artifact does not carry.
     "wranglerConfig": "services/email-worker/wrangler.example.jsonc",
-    "workerName": "emailflare",
     // Upstream's Workers deploy: the shared packages, then each dashboard,
     // which its Worker serves as static assets.
     "buildCommand": ["pnpm run build:shared", "pnpm run build:email-ui", "pnpm run build:inbox-ui"],
@@ -39,7 +36,7 @@
       { "name": "inbox", "wranglerConfig": "services/inbox-worker/wrangler.example.jsonc" }
     ],
     // Answers without a sign-in, from the Worker's own code.
-    "healthPath": "/health"
+    "health": { "path": "/health" }
   },
   // D1, KV, R2, a queue, a SQLite Durable Object and one cron trigger fit the
   // free plan, but sending is what the app is for, and Cloudflare Email
@@ -51,19 +48,20 @@
       "name": "ADMIN_TOKEN",
       "label": "Admin token",
       "help": "Sign in to the sending API's dashboard with it.",
-      "generate": true,
+      "generate": "password",
       "workers": ["api"]
     },
     {
       "name": "SESSION_SECRET",
       "label": "Session secret",
       "help": "Signs dashboard sessions of both Workers. Setting a new value signs everyone out.",
-      "generate": true
+      "generate": "password"
     },
     {
       "name": "CF_API_TOKEN",
       "label": "Cloudflare API token for EmailFlare",
-      "help": "A token you create for the app, separate from Appflare's, with the permissions listed below. The app sends mail through Email Sending with it, sets up sending domains, and points a domain's Email Routing at the inbox."
+      "help": "A token you create for the app, separate from Appflare's, with the permissions listed below. The app sends mail through Email Sending with it, sets up sending domains, and points a domain's Email Routing at the inbox.",
+      "cloudflareToken": true
     }
   ],
   "vars": [
@@ -71,14 +69,14 @@
       "name": "CF_ACCOUNT_ID",
       "label": "Cloudflare account ID",
       "help": "The account the app sends mail from: this one. Filled in on every install and update.",
-      "default": "{{accountId}}",
-      "required": true
+      "default": "{{accountId}}"
     },
     {
       "name": "PUBLIC_URL",
       "label": "Public URL",
       "help": "Where one-click unsubscribe links point. Both Workers answer them from the shared database. Without it, lists get no unsubscribe header.",
-      "default": "{{workerUrl}}"
+      "default": "{{appUrl}}",
+      "optional": true
     },
     {
       "name": "INBOX_WORKER_NAME",
@@ -91,11 +89,11 @@
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Open the inbox at {{workerUrl:inbox}} right away: while it has no users, anyone who opens it can create the first account, which becomes its super admin."
+      "content": "Open the inbox at {{appUrl:inbox}} right away: while it has no users, anyone who opens it can create the first account, which becomes its super admin."
     },
     {
       "type": "markdown",
-      "content": "The sending API's dashboard is at {{workerUrl}}; sign in with the admin token. Add a sending domain there, then create an API key and send with `POST {{workerUrl}}/v1/send`."
+      "content": "The sending API's dashboard is at {{appUrl}}; sign in with the admin token. Add a sending domain there, then create an API key and send with `POST {{appUrl}}/v1/send`."
     },
     {
       "type": "markdown",
@@ -107,29 +105,34 @@
   // catch-all rule, and sending through Email Sending.
   "tokenPermissions": [
     {
-      "name": "Zone.Zone:Read",
-      "description": "Finds the zone of each domain you add.",
-      "scope": "zone"
+      "group": "Zone",
+      "scope": "zone",
+      "access": "read",
+      "reason": "Finds the zone of each domain you add."
     },
     {
-      "name": "Zone.DNS:Edit",
-      "description": "Reads and writes the records a sending domain needs.",
-      "scope": "zone"
+      "group": "DNS",
+      "scope": "zone",
+      "access": "edit",
+      "reason": "Reads and writes the records a sending domain needs."
     },
     {
-      "name": "Zone.Zone Settings:Edit",
-      "description": "Turns Email Routing on for an inbox's domain.",
-      "scope": "zone"
+      "group": "Zone Settings",
+      "scope": "zone",
+      "access": "edit",
+      "reason": "Turns Email Routing on for an inbox's domain."
     },
     {
-      "name": "Zone.Email Routing Rules:Edit",
-      "description": "Points the domain's catch-all rule at the inbox Worker.",
-      "scope": "zone"
+      "group": "Email Routing Rules",
+      "scope": "zone",
+      "access": "edit",
+      "reason": "Points the domain's catch-all rule at the inbox Worker."
     },
     {
-      "name": "Account.Email Sending:Edit",
-      "description": "Sets up sending domains and sends mail.",
-      "scope": "account"
+      "group": "Email Sending",
+      "scope": "account",
+      "access": "edit",
+      "reason": "Sets up sending domains and sends mail."
     }
   ]
 }

@@ -10,7 +10,7 @@ import {
 } from "./ci-install.ts";
 import { verifiedDigest } from "./index-builder.ts";
 import { SANDBOX_RUN_TIERS } from "./sandbox-entry.ts";
-import type { CatalogManifest, IndexApp, IndexJson } from "./types.ts";
+import { type CatalogManifest, catalogWorkerName, type IndexApp, type IndexJson } from "./types.ts";
 
 /**
  * The manual install check of entries CI never installs (`sandbox` and
@@ -26,9 +26,9 @@ import type { CatalogManifest, IndexApp, IndexJson } from "./types.ts";
  *    `SANDBOX_WORKER_NAME` in `@appflare/schema`), so the install was
  *    built there;
  * 3. the app's Worker exists and passes the same health check as the other
- *    install checks, on its `install.healthPath` with its `install.healthMode`.
+ *    install checks, on its `install.health` path and mode.
  *    For a `self-deploying` entry that is the first of
- *    `install.selfDeploying.workers`, named after the install's stage, so the
+ *    `install.selfDeploying.workerNames`, named after the install's stage, so the
  *    maintainer passes its name, which must fit that template.
  *
  * It cannot tell which commit the running Worker was built from; the
@@ -134,14 +134,14 @@ export function fitsWorkerTemplate(
 
 /**
  * The Worker whose health the check probes: `worker` when given, else the
- * manifest's `install.workerName`. A `self-deploying` entry's Worker is named
+ * manifest's Worker name (`install.workerName`, else the slug). A `self-deploying` entry's Worker is named
  * after the install's stage, which only the maintainer's manager knows, so it
  * needs `worker`, and `worker` must fit the entry's first Worker template.
  */
 export function checkedWorker(manifest: CatalogManifest, worker: string | undefined): string {
-  const [template, ...others] = manifest.install.selfDeploying?.workers ?? [];
+  const [template, ...others] = manifest.install.selfDeploying?.workerNames ?? [];
   if (manifest.install.tier !== "self-deploying" || template === undefined) {
-    return worker ?? manifest.install.workerName;
+    return worker ?? catalogWorkerName(manifest);
   }
   if (worker === undefined) {
     throw new Error(

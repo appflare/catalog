@@ -33,6 +33,14 @@ export interface Parser<T> {
 
 /** The `@appflare/schema` validators the catalog scripts need. */
 export interface AppflareSchema {
+  /**
+   * `strictCatalogManifestSchema`: the catalog manifest as the tools that
+   * write one check it. Beyond what a manager reads, it refuses unknown keys
+   * (a misspelled field would otherwise be dropped without a word), fields
+   * renamed since, a license that is not an SPDX expression of current ids,
+   * categories off the fixed list, and token permission groups Appflare
+   * cannot select.
+   */
   catalogManifest: Parser<CatalogManifest>;
   artifactManifest: Parser<ArtifactManifest>;
   indexJson: Parser<IndexJson>;
@@ -40,7 +48,7 @@ export interface AppflareSchema {
   featuredItem: Parser<FeaturedItem>;
   /** `stats.json`. */
   catalogStats: Parser<CatalogStats>;
-  /** What a sandbox tier entry's `install.sandbox` defaults to. */
+  /** What a sandbox tier entry's `install.container` defaults to. */
   sandboxDefaults: SandboxDefaults;
   /**
    * The Cloudflare services an app uses (`appServices`), from its catalog
@@ -69,16 +77,7 @@ export interface AppflareSchema {
   verifySignature: VerifySignatureOf;
   /** The trusted signing keys embedded in `@appflare/schema` (the ones managers trust). */
   signingKeys: readonly SigningKey[];
-  /**
-   * `licenseWarning` from `@appflare/schema`: the packer's warning for a
-   * `license` that is not an SPDX expression, `NONE` or `SEE LICENSE IN
-   * <file>`, or null. Any text parses; this only says it cannot be placed.
-   */
-  licenseWarning: LicenseWarningOf;
 }
-
-/** `licenseWarning` from `@appflare/schema`. */
-export type LicenseWarningOf = (license: string) => string | null;
 
 /** A trusted signing key: its id and base64 raw Ed25519 public key. */
 export interface SigningKey {
@@ -122,10 +121,12 @@ export interface EntryWorkerHelpers {
   entryScriptName(installWorkerName: string, name: string, primary: boolean): string;
   /** The entry Worker `{{workerName:<name>}}` names, or null. */
   entryWorkerRefName(value: unknown): string | null;
-  /** `text` with `{{workerUrl:<name>}}` and `{{workerName:<name>}}` filled in. */
+  /** `text` with the per-Worker placeholders (`{{appUrl:<name>}}`, `{{workerName:<name>}}`, ...) filled in. */
   renderEntryWorkerPlaceholders(
     text: string,
-    workers: Readonly<Record<string, { workerName: string; workerUrl: string | null }>>,
+    workers: Readonly<
+      Record<string, { workerName: string; workerUrl: string | null; appUrl: string | null }>
+    >,
   ): string;
 }
 
@@ -279,7 +280,7 @@ export async function loadAppflareSchema(appflareDir: string): Promise<AppflareS
   assertAppflareBuilt(appflareDir);
   const mod: unknown = await import(pathToFileURL(appflarePaths(appflareDir).schemaDist).href);
   return {
-    catalogManifest: pickParser<CatalogManifest>(mod, "catalogManifestSchema"),
+    catalogManifest: pickParser<CatalogManifest>(mod, "strictCatalogManifestSchema"),
     artifactManifest: pickParser<ArtifactManifest>(mod, "artifactManifestSchema"),
     indexJson: pickParser<IndexJson>(mod, "indexJsonSchema"),
     featuredItem: pickParser<FeaturedItem>(mod, "featuredItemSchema"),
@@ -293,7 +294,6 @@ export async function loadAppflareSchema(appflareDir: string): Promise<AppflareS
     revisionProblem: pickFunction<RevisionProblemOf>(mod, "revisedArtifactProblem"),
     verifySignature: pickFunction<VerifySignatureOf>(mod, "verifySignature"),
     signingKeys: pickSigningKeys(mod, "signingKeys"),
-    licenseWarning: pickFunction<LicenseWarningOf>(mod, "licenseWarning"),
   };
 }
 
