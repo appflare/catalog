@@ -16,8 +16,9 @@
   "license": "AGPL-3.0-only",
   "categories": ["ai", "games"],
   // Upstream has not moved since the released pin, so the Access protection
-  // below is a revision of that build.
-  "revision": 2,
+  // below (revision 2) and the edited help text (revision 3) are revisions of
+  // that build.
+  "revision": 3,
   "authors": [{ "name": "Zonghao Yuan", "url": "https://yzh.im", "github": "zonghaoyuan" }],
   "maintainers": ["MendyLanda"],
   // InfiPlot publishes no release tags; the pin tracks main.
@@ -136,7 +137,7 @@
     {
       "name": "IMAGE_HEDGE_MS",
       "label": "Image hedge (ms)",
-      "help": "Optional: when a scene image is still not done after this long, a second identical request races it (the provider may bill both). Upstream suggests 15000 for Runware.",
+      "help": "When a scene image is still not done after this long, a second identical request races it (the provider may bill both). Upstream suggests 15000 for Runware.",
       "optional": true
     }
   ],

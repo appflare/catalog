@@ -9,8 +9,9 @@
   "repo": "CaoMeiYouRen/rsshub-never-die",
   "license": "MIT",
   "categories": ["utilities", "networking"],
-  // Generated secrets added after this release was published: a revision, no new build.
-  "revision": 2,
+  // Generated secrets (revision 2) and edited help text (revision 3) came after
+  // this release was published: revisions, no new build.
+  "revision": 3,
   "authors": [{ "name": "CaoMeiYouRen", "url": "https://blog.cmyr.ltd", "github": "CaoMeiYouRen" }],
   "maintainers": ["MendyLanda"],
   // The newest release tag. The commits after it on master bump
@@ -36,7 +37,7 @@
       // ?authCode= (src/routes/index.ts:19-30); a generated value is URL-safe.
       "name": "AUTH_KEY",
       "label": "Access key",
-      "help": "Optional, and not RSSHub's own ACCESS_KEY. When set, every request needs ?authKey=<this key>, or ?authCode= with the hex HMAC-SHA256 of the path keyed with it. Without it anyone who finds the address can use your Worker's requests.",
+      "help": "Not RSSHub's own ACCESS_KEY. When set, every request needs ?authKey=<this key>, or ?authCode= with the hex HMAC-SHA256 of the path keyed with it. Without it anyone who finds the address can use your Worker's requests.",
       "generate": "password",
       "optional": true
     }

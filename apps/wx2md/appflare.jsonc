@@ -7,6 +7,8 @@
   "repo": "loadchange/wx2md-worker",
   "license": "MIT",
   "categories": ["utilities", "ai"],
+  // Help text edited after this release was published: a revision, no new build.
+  "revision": 2,
   "authors": [{ "name": "Asa", "github": "loadchange" }],
   "maintainers": ["MendyLanda"],
   // Upstream publishes no tags; the pin is the head of main.
@@ -28,7 +30,7 @@
     {
       "name": "R2_PUBLIC_URL",
       "label": "Public image address",
-      "help": "Optional. The public address of this install's R2 bucket (its r2.dev URL or a custom domain, without a trailing slash). When set, article images are copied to the bucket and linked from there, since WeChat blocks hotlinking. Leave empty to keep the original image links.",
+      "help": "The public address of this install's R2 bucket (its r2.dev URL or a custom domain, without a trailing slash). When set, article images are copied to the bucket and linked from there, since WeChat blocks hotlinking. Leave empty to keep the original image links.",
       "default": "",
       "optional": true
     }

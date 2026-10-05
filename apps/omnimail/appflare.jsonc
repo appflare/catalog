@@ -8,8 +8,9 @@
   "repo": "mibgb65-cloud/OmniMail",
   "license": "MIT",
   "categories": ["email"],
-  // Generated secrets added after this release was published: a revision, no new build.
-  "revision": 2,
+  // Generated secrets (revision 2) and edited help text (revision 3) came after
+  // this release was published: revisions, no new build.
+  "revision": 3,
   "authors": [
     {
       "name": "OmniMail contributors",
@@ -77,37 +78,37 @@
     {
       "name": "RESEND_DOMAIN_CONFIGS",
       "label": "Resend configuration",
-      "help": "Optional, for sending. JSON with one entry per sender domain, for example {\"example.com\":{\"apiKey\":\"re_...\"}}. Without a sending provider the app still receives mail.",
+      "help": "For sending: JSON with one entry per sender domain, for example {\"example.com\":{\"apiKey\":\"re_...\"}}. Without a sending provider the app still receives mail.",
       "optional": true
     },
     {
       "name": "RESEND_WEBHOOK_SECRETS",
       "label": "Resend webhook signing secrets",
-      "help": "Optional. A JSON array of the signing secrets of the Resend webhooks pointed at /api/webhooks/resend, to show delivery, bounce and complaint status.",
+      "help": "A JSON array of the signing secrets of the Resend webhooks pointed at /api/webhooks/resend, to show delivery, bounce and complaint status.",
       "optional": true
     },
     {
       "name": "SENDFLARE_API_KEY",
       "label": "SendFlare API key",
-      "help": "Optional. Sends through SendFlare instead of Resend, from the address in SendFlare sender below.",
+      "help": "Sends through SendFlare instead of Resend, from the address in SendFlare sender below.",
       "optional": true
     },
     {
       "name": "SENDFLARE_DOMAIN_CONFIGS",
       "label": "SendFlare configuration",
-      "help": "Optional. JSON with one entry per sender domain, for example {\"example.com\":{\"apiKey\":\"sf_...\",\"from\":\"mail@example.com\"}}; a matching entry wins over Resend for that domain.",
+      "help": "JSON with one entry per sender domain, for example {\"example.com\":{\"apiKey\":\"sf_...\",\"from\":\"mail@example.com\"}}; a matching entry wins over Resend for that domain.",
       "optional": true
     },
     {
       "name": "TURNSTILE_SECRET_KEY",
       "label": "Turnstile secret key",
-      "help": "Optional, with the site key below. Needed for public registration with email and password, and for invitations several people can use.",
+      "help": "Set it with the site key below. Needed for public registration with email and password, and for invitations several people can use.",
       "optional": true
     },
     {
       "name": "LINUX_DO_CLIENT_SECRET",
       "label": "Linux DO Connect client secret",
-      "help": "Optional, with the client ID below, for signing in with Linux DO.",
+      "help": "With the client ID below, for signing in with Linux DO.",
       "optional": true
     }
   ],
@@ -127,25 +128,25 @@
     {
       "name": "TURNSTILE_SITE_KEY",
       "label": "Turnstile site key",
-      "help": "Optional. The public key of the Turnstile widget whose secret key is set above.",
+      "help": "The public key of the Turnstile widget whose secret key is set above.",
       "optional": true
     },
     {
       "name": "SENDFLARE_FROM",
       "label": "SendFlare sender",
-      "help": "Optional. A verified sender address for SendFlare, without a display name.",
+      "help": "A verified sender address for SendFlare, without a display name.",
       "optional": true
     },
     {
       "name": "LINUX_DO_CLIENT_ID",
       "label": "Linux DO Connect client ID",
-      "help": "Optional. Register the app's address followed by /api/auth/linux-do/callback as the callback URL.",
+      "help": "Register the app's address followed by /api/auth/linux-do/callback as the callback URL.",
       "optional": true
     },
     {
       "name": "APP_ORIGINS",
       "label": "Extra allowed origins",
-      "help": "Optional. Comma-separated exact origins of other front ends or browser extensions (chrome-extension://<id>) that may call the API. The app's own address never needs listing.",
+      "help": "Comma-separated exact origins of other front ends or browser extensions (chrome-extension://<id>) that may call the API. The app's own address never needs listing.",
       "optional": true
     }
   ],

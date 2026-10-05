@@ -8,8 +8,9 @@
   "repo": "dcarrillo/atalaya",
   "license": "Apache-2.0",
   "categories": ["monitoring", "developer-tools"],
-  // Generated secrets added after this release was published: a revision, no new build.
-  "revision": 2,
+  // Generated secrets (revision 2) and edited help text (revision 3) came after
+  // this release was published: revisions, no new build.
+  "revision": 3,
   "authors": [
     {
       "name": "Daniel Carrillo",
@@ -65,19 +66,19 @@
     {
       "name": "AUTH_TOKEN",
       "label": "Alert webhook token",
-      "help": "Optional. Referenced as ${AUTH_TOKEN} in the monitors configuration, for example in an alert's Authorization header.",
+      "help": "Referenced as ${AUTH_TOKEN} in the monitors configuration, for example in an alert's Authorization header.",
       "optional": true
     },
     {
       "name": "TELEGRAM_BOT_TOKEN",
       "label": "Telegram bot token",
-      "help": "Optional. Referenced as ${TELEGRAM_BOT_TOKEN} in a webhook alert that posts to the Telegram Bot API.",
+      "help": "Referenced as ${TELEGRAM_BOT_TOKEN} in a webhook alert that posts to the Telegram Bot API.",
       "optional": true
     },
     {
       "name": "TELEGRAM_CHAT_ID",
       "label": "Telegram chat ID",
-      "help": "Optional. Referenced as ${TELEGRAM_CHAT_ID} in the Telegram alert's body.",
+      "help": "Referenced as ${TELEGRAM_CHAT_ID} in the Telegram alert's body.",
       "optional": true
     }
   ],
@@ -103,13 +104,13 @@
     {
       "name": "STATUS_BANNER_URL",
       "label": "Banner image URL",
-      "help": "Optional. An image shown instead of the title at the top of the status page.",
+      "help": "An image shown instead of the title at the top of the status page.",
       "optional": true
     },
     {
       "name": "STATUS_BANNER_LINK",
       "label": "Banner link",
-      "help": "Optional. Where a click on the banner image goes.",
+      "help": "Where a click on the banner image goes.",
       "optional": true
     }
   ],

@@ -7,6 +7,8 @@
   "repo": "cloudflare/cloudflare-prometheus-exporter",
   "license": "MIT",
   "categories": ["monitoring", "analytics", "developer-tools"],
+  // Help text edited after this release was published: a revision, no new build.
+  "revision": 2,
   "authors": [
     { "name": "Cloudflare", "url": "https://www.cloudflare.com", "github": "cloudflare" }
   ],
@@ -62,13 +64,13 @@
     {
       "name": "CF_ZONES",
       "label": "Zones",
-      "help": "Optional. Comma-separated zone ids to export; empty exports every zone the token can read.",
+      "help": "Comma-separated zone ids to export; empty exports every zone the token can read.",
       "optional": true
     },
     {
       "name": "CF_ACCOUNTS",
       "label": "Accounts",
-      "help": "Optional. Comma-separated account ids to export; empty exports every account the token can read.",
+      "help": "Comma-separated account ids to export; empty exports every account the token can read.",
       "optional": true
     },
     {

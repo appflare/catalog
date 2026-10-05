@@ -7,6 +7,8 @@
   "repo": "TooonyChen/AuthInbox",
   "license": "MIT",
   "categories": ["email", "ai"],
+  // Help text edited after this release was published: a revision, no new build.
+  "revision": 2,
   "authors": [{ "name": "Tony Chen", "url": "https://tonychen.net", "github": "TooonyChen" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags, so the entry follows the default branch by commit.
@@ -51,7 +53,7 @@
     {
       "name": "AI_FALLBACK_API_KEY",
       "label": "Fallback AI API key",
-      "help": "Optional. The key for a second provider, used after the primary one fails three times. The fallback also needs its base URL and model below.",
+      "help": "The key for a second provider, used after the primary one fails three times. The fallback also needs its base URL and model below.",
       "optional": true
     }
   ],
@@ -84,7 +86,7 @@
     {
       "name": "AI_FALLBACK_BASE_URL",
       "label": "Fallback AI base URL",
-      "help": "Optional. The base URL of the fallback provider.",
+      "help": "The base URL of the fallback provider.",
       "optional": true
     },
     {
@@ -103,7 +105,7 @@
     {
       "name": "AI_FALLBACK_MODEL",
       "label": "Fallback AI model",
-      "help": "Optional. The model ID of the fallback provider.",
+      "help": "The model ID of the fallback provider.",
       "optional": true
     },
     {
