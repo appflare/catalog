@@ -8,6 +8,9 @@
   "repo": "maypaz/md.page",
   "license": "MIT",
   "categories": ["sharing", "developer-tools"],
+  // The formatting of URLs in the notes changed after this release was published:
+  // a revision, no new build.
+  "revision": 2,
   "authors": [
     { "name": "Or May-Paz", "github": "maypaz" },
     { "name": "Matan Lachmish", "url": "https://www.thebigfatninja.xyz", "github": "mlachmish" }
@@ -46,7 +49,7 @@
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Open {{appUrl}} and paste Markdown, or publish from a script:\n\n```sh\ncurl -X POST {{appUrl}}/api/publish -H 'Content-Type: application/json' -d '{\"markdown\": \"# Hello\"}'\n```\n\nPages expire after 24 hours. The API is described at {{appUrl}}/openapi.json, and MCP clients connect to {{appUrl}}/mcp."
+      "content": "Open {{appUrl}} and paste Markdown, or publish from a script:\n\n```sh\ncurl -X POST {{appUrl}}/api/publish -H 'Content-Type: application/json' -d '{\"markdown\": \"# Hello\"}'\n```\n\nPages expire after 24 hours. The API is described at {{appUrl}}/openapi.json, and MCP clients connect to `{{appUrl}}/mcp`."
     },
     {
       "type": "markdown",

@@ -20,9 +20,10 @@ through the Analytics Engine SQL API. Licensed MIT.
   `metricsDataset`, the name the dashboard's queries use. Dataset names are shared by
   the whole account, so a second install would read and write the same data. One
   install tracks any number of sites, each under its own `data-site-id`.
-- **Password.** You enter the dashboard password; Appflare stores its bcrypt hash as
-  `CF_PASSWORD_HASH`, which is what Counterscale checks, and computes it again when
-  you change the password in the app's settings. `CF_JWT_SECRET` is generated.
+- **Password.** The dashboard password is generated at install (copy it then, or enter
+  your own); Appflare stores its bcrypt hash as `CF_PASSWORD_HASH`, which is what
+  Counterscale checks, and computes it again when you change the password in the app's
+  settings. `CF_JWT_SECRET` is generated.
 - **The account id** (`CF_ACCOUNT_ID`) is filled in with the id of the account the app
   is installed in.
 - **Retention.** Analytics Engine keeps 90 days. A cron job at 02:00 UTC copies each

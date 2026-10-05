@@ -13,6 +13,8 @@
   "repo": "pleaseai/statusbeam",
   "license": "MIT",
   "categories": ["monitoring", "utilities"],
+  // Field links added after this release was published: a revision, no new build.
+  "revision": 2,
   "authors": [{ "name": "pleaseai", "url": "https://pleaseai.dev", "github": "pleaseai" }],
   "maintainers": ["MendyLanda"],
   // The monorepo tags each package on its own (web-v0.1.1, worker-v0.1.1,
@@ -58,6 +60,10 @@
       "name": "SENTRY_AUTH_TOKEN",
       "label": "Sentry auth token",
       "help": "Read access to Sentry issues, so sites with a sentry block are also polled on each cron run.",
+      "link": {
+        "label": "Create a token",
+        "url": "https://sentry.io/settings/account/api/auth-tokens/"
+      },
       "optional": true,
       "workers": ["checker"]
     },
@@ -73,6 +79,10 @@
       "name": "CF_ZONE_ID",
       "label": "Zone id",
       "help": "The zone of the custom domain that serves the page.",
+      "link": {
+        "label": "Find your zone ID",
+        "url": "https://developers.cloudflare.com/fundamentals/account/find-account-and-zone-ids/"
+      },
       "optional": true,
       "workers": ["checker"]
     }

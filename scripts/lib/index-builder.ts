@@ -23,6 +23,7 @@ import {
 } from "./revision.ts";
 import { runsInSandbox, type SandboxDefaults, sandboxBuild } from "./sandbox-entry.ts";
 import type {
+  AccessOffer,
   ArtifactManifest,
   CatalogManifest,
   FeaturedItem,
@@ -334,7 +335,28 @@ export function toIndexApp(
     ...mediaBlock(manifest, options),
     ...rowFacts(manifest, artifact.manifest, options.services, options.workerFacts),
     ...revision,
+    ...accessOfferBlock(manifest),
   };
+}
+
+/**
+ * The index row's `accessOffer` for a catalog manifest (the current one, which
+ * is the revised one when the entry has a revision): its `access.mode`, or
+ * `"offered"` without one; undefined for a self-deploying entry, which cannot
+ * be protected. The same rule as `indexAccessOffer()` in `@appflare/schema`;
+ * a test checks the two agree whenever a built appflare checkout is available.
+ */
+export function indexAccessOffer(
+  manifest: Pick<CatalogManifest, "access"> & { install: Pick<CatalogManifest["install"], "tier"> },
+): AccessOffer | undefined {
+  return manifest.install.tier === "self-deploying"
+    ? undefined
+    : (manifest.access?.mode ?? "offered");
+}
+
+function accessOfferBlock(manifest: CatalogManifest): { accessOffer?: AccessOffer } {
+  const offer = indexAccessOffer(manifest);
+  return offer === undefined ? {} : { accessOffer: offer };
 }
 
 /**
@@ -429,6 +451,7 @@ export function toSandboxIndexApp(
     ...rowFacts(manifest, null, options.services),
     // No release to revise: every edit publishes the current manifest in `build`.
     revision: revisionOf(manifest),
+    ...accessOfferBlock(manifest),
   };
 }
 

@@ -17,4 +17,4 @@ Stored in D1. Licensed AGPL-3.0.
   install uses the workers.dev address instead, and a custom domain can be added in
   Appflare.
 - **Pin.** The repository's only tag releases the Chrome extension, so the pin follows
-  `main` and each bump is reviewed by a maintainer.
+  `main`.

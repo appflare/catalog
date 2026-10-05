@@ -790,6 +790,13 @@ export interface PlaceholderValues {
   workerName: string;
   /** The account's id; absent or null keeps `{{accountId}}` as written. */
   accountId?: string | null;
+  /**
+   * What `{{accessTeamDomain}}`, `{{accessTeamName}}`, `{{accessAud}}` and
+   * `{{accessCertsUrl}}` become. Null fills all four in empty, as the manager
+   * does for an app it does not protect with Cloudflare Access; absent keeps
+   * them as written.
+   */
+  access?: { teamDomain: string; teamName: string; aud: string; certsUrl: string } | null;
 }
 
 /** A JSON value: what a `json` var holds. */
@@ -805,7 +812,7 @@ export type JsonValue =
 // allowed, and anything else in double braces is left as written. A test
 // checks these copies against the schema package's own functions.
 const PLACEHOLDER_PATTERN =
-  /\{\{\s*(appUrl|appHostname|workerUrl|workerHostname|workerName|accountId)\s*\}\}/g;
+  /\{\{\s*(appUrl|appHostname|workerUrl|workerHostname|workerName|accountId|accessTeamDomain|accessTeamName|accessAud|accessCertsUrl)\s*\}\}/g;
 
 /** The hostname of an https:// URL. */
 function hostnameOf(url: string): string {
@@ -813,9 +820,10 @@ function hostnameOf(url: string): string {
 }
 
 /**
- * `text` with the address placeholders, `{{workerName}}` and `{{accountId}}`
- * filled in, as the manager does. `{{wildcardHostname}}` is kept as written:
- * the install check gives no app a wildcard domain.
+ * `text` with the address placeholders, `{{workerName}}`, `{{accountId}}` and
+ * the Cloudflare Access ones filled in, as the manager does.
+ * `{{wildcardHostname}}` is kept as written: the install check gives no app a
+ * wildcard domain.
  */
 export function renderPlaceholders(text: string, values: PlaceholderValues): string {
   return text.replace(PLACEHOLDER_PATTERN, (match, key: string) => {
@@ -824,6 +832,14 @@ export function renderPlaceholders(text: string, values: PlaceholderValues): str
         return values.workerName;
       case "accountId":
         return values.accountId ?? match;
+      case "accessTeamDomain":
+        return values.access === undefined ? match : (values.access?.teamDomain ?? "");
+      case "accessTeamName":
+        return values.access === undefined ? match : (values.access?.teamName ?? "");
+      case "accessAud":
+        return values.access === undefined ? match : (values.access?.aud ?? "");
+      case "accessCertsUrl":
+        return values.access === undefined ? match : (values.access?.certsUrl ?? "");
       case "appUrl":
         return values.appUrl ?? match;
       case "appHostname":
@@ -923,6 +939,10 @@ export function planCiInstall(
     workerUrl: appUrl,
     appUrl,
     accountId: options.accountId ?? null,
+    // The CI account has no Zero Trust organization, and the check deploys
+    // the app unprotected, so the Access placeholders are empty, as the
+    // manager fills them in for an app it does not protect.
+    access: null,
   };
   const resources: CiResource[] = [];
   const kv: Record<string, string>[] = [];
