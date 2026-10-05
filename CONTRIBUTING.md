@@ -1833,9 +1833,10 @@ How this differs from installing with the manager:
 - **Inputs.** A real install uses the values the user entered. Here secrets are
   random and vars use their defaults, so this checks that the Worker deploys and
   starts, not that the app is fully configured.
-- **Binding kinds.** Hyperdrive and mTLS certificates are not supported by the
-  check yet. An app that uses them fails the check with a message naming the
-  binding.
+- **Binding kinds.** mTLS certificates are not supported by the check yet. An
+  app that uses one fails the check with a message naming the binding. An app
+  that binds Hyperdrive is installed against the `HYPERDRIVE_TEST_URL` test
+  database (see "Publishing"), and skipped without it.
 - **Service bindings.** The only one an app may have is a binding to its own
   Worker (OpenNext's `WORKER_SELF_REFERENCE`), which the packer records as
   service `"self"`. The check aims it at the CI Worker, as the manager aims it at
@@ -1887,3 +1888,10 @@ When only `record results` or `deploy Pages` is red, the checks ran but the new
 dates did not reach the published `index.json`; re-run the failed jobs. After the
 deploy, the `docs` job starts a rebuild of appflare.dev so its app pages show the
 new dates too (see `DOCS_REBUILD_TOKEN` under "Publishing").
+
+Some apps are skipped rather than installed, and the summary gives the reason: an
+entry with `plan: "paid"` while the CI account is on the free plan, a Worker
+that binds an Analytics Engine dataset while Analytics Engine is off on the CI
+account, or a Worker that binds Hyperdrive without a usable `HYPERDRIVE_TEST_URL`.
+A skipped app is neither passed nor failed: nothing was installed, so it keeps
+its previous `lastVerified`.

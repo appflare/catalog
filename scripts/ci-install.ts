@@ -29,6 +29,7 @@ import {
   CI_ACCOUNT_PLAN,
   type CiAppPlan,
   type CiEntryHelpers,
+  type CiSkip,
   type CiWorkerResult,
   ciAccountPlan,
   ciWorkerName,
@@ -58,8 +59,7 @@ import {
   seedFunctions,
   seedValues,
   setR2LifecycleRules,
-  skipNotice,
-  skippedSummaryLines,
+  skipReport,
   unpackArtifact,
   waitForHealth,
   withHyperdriveIds,
@@ -141,21 +141,21 @@ deploy   Unpacks the artifact (checking every file's sha256), removes anything
          workers.dev (workersDev: false), which is deployed with workers_dev
          off and not probed.
 
-         When a Worker binds an Analytics Engine dataset and the account has
-         Analytics Engine off, nothing is deployed: the run summary says
-         "skipped: Analytics Engine not enabled" and the command succeeds.
-         A Worker that binds Hyperdrive gets a Hyperdrive configuration
-         created through the API from HYPERDRIVE_TEST_URL, a connection string
-         to a throwaway test database of the protocol the catalog manifest
-         declares; without it (or with one of another protocol) nothing is
-         deployed, the run summary says why, and the command succeeds.
-
          An entry whose catalog manifest says plan "paid" is not deployed
          when CI_ACCOUNT_PLAN is free (the default when it is unset or
          empty): it may use what the free plan refuses at upload, such as a
-         CPU limit. The command prints a GitHub Actions notice naming the
-         app, the run summary says why, the step output skipped is set to
-         paid-plan, and the command succeeds.
+         CPU limit. When a Worker binds an Analytics Engine dataset and the
+         account has Analytics Engine off, nothing is deployed either. A
+         Worker that binds Hyperdrive gets a Hyperdrive configuration
+         created through the API from HYPERDRIVE_TEST_URL, a connection string
+         to a throwaway test database of the protocol the catalog manifest
+         declares; without it (or with one of another protocol) nothing is
+         deployed.
+
+         A skipped deploy prints a GitHub Actions notice naming the app, says
+         why in the run summary, sets the step output skipped to paid-plan,
+         analytics-engine or hyperdrive and skip-reason to the summary's
+         reason, and succeeds.
 cleanup  Removes the queue consumers of every Worker, deletes every Worker
          and every resource the deploy may have created, and fails unless
          all of them are gone.
@@ -251,6 +251,21 @@ function summary(lines: string[]): void {
   if (process.env.GITHUB_STEP_SUMMARY) {
     appendFileSync(process.env.GITHUB_STEP_SUMMARY, text);
   }
+}
+
+/**
+ * Reports a deploy the check skips (see `skipReport`) and returns the exit
+ * code: the notice, the run summary's SKIP line and the step outputs, which
+ * keep the nightly run from recording a verification for the app.
+ */
+function skipDeploy(manifest: ArtifactManifest, name: string, skip: CiSkip): number {
+  const report = skipReport(manifest, name, skip);
+  process.stdout.write(`${report.notice}\n`);
+  summary(report.summary);
+  if (process.env.GITHUB_OUTPUT) {
+    appendFileSync(process.env.GITHUB_OUTPUT, report.outputs.map((line) => `${line}\n`).join(""));
+  }
+  return 0;
 }
 
 function message(err: unknown): string {
@@ -465,13 +480,7 @@ runMain(async () => {
   // limit, say), so on a free CI account its deploy says nothing about the app.
   const paidOnly = paidPlanSkip(manifest.catalog, ciAccountPlan(process.env[CI_ACCOUNT_PLAN]));
   if (paidOnly !== null) {
-    process.stdout.write(`${skipNotice(manifest, paidOnly)}\n`);
-    summary(skippedSummaryLines(manifest, name, paidOnly));
-    // The nightly run records no verification for an app it did not deploy.
-    if (process.env.GITHUB_OUTPUT) {
-      appendFileSync(process.env.GITHUB_OUTPUT, "skipped=paid-plan\n");
-    }
-    return 0;
+    return skipDeploy(manifest, name, paidOnly);
   }
   // Var values may hold {{workerUrl}}, which needs the account's subdomain.
   const subdomain = await workersSubdomain(request);
@@ -481,22 +490,17 @@ runMain(async () => {
     ...(helpers ? { helpers } : {}),
   });
   // Cloudflare refuses every deploy that binds a dataset while Analytics
-  // Engine is off on the account; that says nothing about the app.
-  const skip = await analyticsEngineSkip(
-    app.workers.map((w) => w.plan),
-    () => analyticsEngineState(token, accountId),
-  );
-  if (skip !== null) {
-    summary(skippedSummaryLines(manifest, app.name, skip));
-    return 0;
-  }
-  // A Hyperdrive binding needs a database; the CI account has none of the
+  // Engine is off on the account; that says nothing about the app. A
+  // Hyperdrive binding needs a database; the CI account has none of the
   // app's own, only the test database the secret names, when it is set.
   const testDatabase = process.env[HYPERDRIVE_TEST_URL];
-  const noDatabase = hyperdriveSkip(app, testDatabase);
-  if (noDatabase !== null) {
-    summary(skippedSummaryLines(manifest, app.name, noDatabase));
-    return 0;
+  const skip =
+    (await analyticsEngineSkip(
+      app.workers.map((w) => w.plan),
+      () => analyticsEngineState(token, accountId),
+    )) ?? hyperdriveSkip(app, testDatabase);
+  if (skip !== null) {
+    return skipDeploy(manifest, app.name, skip);
   }
 
   const bin = wranglerBin(resolveAppflareDir());

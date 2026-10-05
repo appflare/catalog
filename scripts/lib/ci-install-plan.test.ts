@@ -4,8 +4,7 @@ import {
   ciAccountPlan,
   PAID_PLAN_SKIP,
   paidPlanSkip,
-  skipNotice,
-  skippedSummaryLines,
+  skipReport,
 } from "./ci-install.ts";
 
 describe("Workers plan in the install check", () => {
@@ -33,13 +32,17 @@ describe("Workers plan in the install check", () => {
     expect(paidPlanSkip(null, "free")).toBeNull();
   });
 
-  it("names the app and the reason in the notice and the summary", () => {
-    const manifest = { app: "dgit", version: "0.0.8" };
-    expect(skipNotice(manifest, PAID_PLAN_SKIP)).toBe(
-      "::notice title=Install check skipped::dgit@0.0.8: skipped: the entry needs Workers Paid and CI_ACCOUNT_PLAN is free",
-    );
-    expect(skippedSummaryLines(manifest, "ci-dgit-pr1", PAID_PLAN_SKIP)).toEqual([
-      "SKIP dgit@0.0.8 as ci-dgit-pr1: skipped: the entry needs Workers Paid and CI_ACCOUNT_PLAN is free",
-    ]);
+  it("names the app and the reason in the notice, the summary and the step outputs", () => {
+    expect(skipReport({ app: "dgit", version: "0.0.8" }, "ci-dgit-pr1", PAID_PLAN_SKIP)).toEqual({
+      notice:
+        "::notice title=Install check skipped::dgit@0.0.8: skipped: the entry needs Workers Paid and CI_ACCOUNT_PLAN is free",
+      summary: [
+        "SKIP dgit@0.0.8 as ci-dgit-pr1: skipped: the entry needs Workers Paid and CI_ACCOUNT_PLAN is free",
+      ],
+      outputs: [
+        "skipped=paid-plan",
+        "skip-reason=skipped: the entry needs Workers Paid and CI_ACCOUNT_PLAN is free",
+      ],
+    });
   });
 });

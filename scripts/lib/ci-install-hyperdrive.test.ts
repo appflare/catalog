@@ -10,7 +10,7 @@ import {
   hyperdriveSkip,
   planCiApp,
   planCiInstall,
-  skippedSummaryLines,
+  skipReport,
   testDatabaseOrigin,
   withHyperdriveIds,
 } from "./ci-install.ts";
@@ -19,6 +19,7 @@ import type { ArtifactManifest } from "./types.ts";
 const PIN = "0123456789abcdef0123456789abcdef01234567";
 const PASSWORD = "test-db-pass-NEVER-PRINTED";
 const TEST_URL = `postgres://ci:${PASSWORD}@db.example.com:6543/appflare_ci`;
+const MYSQL_URL = `mysql://ci:${PASSWORD}@db.example.com/appflare_ci`;
 
 /** The hello fixture binding Hyperdrive as HYPERDRIVE, declared with `protocol`. */
 function manifest(protocol?: "postgres" | "mysql"): ArtifactManifest {
@@ -29,7 +30,7 @@ function manifest(protocol?: "postgres" | "mysql"): ArtifactManifest {
   ];
   if (protocol !== undefined) {
     const catalog = m.catalog as Record<string, unknown>;
-    catalog.resources = { hyperdrive: [{ binding: "HYPERDRIVE", protocol }] };
+    catalog.resources = { hyperdrive: { HYPERDRIVE: { protocol } } };
   }
   return m as unknown as ArtifactManifest;
 }
@@ -92,22 +93,74 @@ describe("Hyperdrive in the install check", () => {
     expect(declaredProtocol({}, "HYPERDRIVE")).toBe("postgres");
   });
 
+  it("reads each binding's protocol from resources.hyperdrive, keyed by the binding's name", () => {
+    const m = artifactManifestFixture({ app: "hello", version: "1.2.3", sha: PIN });
+    (m.worker as Record<string, unknown>).bindings = [
+      { type: "hyperdrive", name: "MAIN" },
+      { type: "hyperdrive", name: "LEGACY" },
+    ];
+    (m.catalog as Record<string, unknown>).resources = {
+      hyperdrive: {
+        MAIN: { protocol: "postgres", label: "Main database" },
+        LEGACY: { protocol: "mysql", help: "MySQL 8 or later." },
+      },
+    };
+    expect(declaredProtocol(m.catalog, "LEGACY")).toBe("mysql");
+    expect(declaredProtocol(m.catalog, "OTHER")).toBe("postgres");
+    const app = planCiApp(m as unknown as ArtifactManifest, "ci-hello-pr1");
+    expect(app.hyperdriveConfigs.map((c) => [c.binding, c.protocol])).toEqual([
+      ["MAIN", "postgres"],
+      ["LEGACY", "mysql"],
+    ]);
+    // One test database cannot stand in for both.
+    expect(hyperdriveSkip(app, TEST_URL)?.reason).toBe(
+      "skipped: HYPERDRIVE_TEST_URL is not a MySQL database",
+    );
+    expect(hyperdriveSkip(app, MYSQL_URL)?.reason).toBe(
+      "skipped: HYPERDRIVE_TEST_URL is not a PostgreSQL database",
+    );
+  });
+
+  it("skips a MySQL binding on a PostgreSQL test database, and installs it on a MySQL one", async () => {
+    const app = planCiApp(manifest("mysql"), "ci-hello-pr1");
+    expect(hyperdriveSkip(app, TEST_URL)?.kind).toBe("hyperdrive");
+    expect(hyperdriveSkip(app, MYSQL_URL)).toBeNull();
+    const account = fakeAccount();
+    expect(await createHyperdriveConfigs(account.request, app, MYSQL_URL)).toEqual({
+      HYPERDRIVE: "hd-1",
+    });
+    expect(account.bodies).toEqual([
+      {
+        name: "ci-hello-pr1-hyperdrive",
+        origin: {
+          scheme: "mysql",
+          host: "db.example.com",
+          port: 3306,
+          database: "appflare_ci",
+          user: "ci",
+          password: PASSWORD,
+        },
+      },
+    ]);
+  });
+
   it("skips without HYPERDRIVE_TEST_URL, or with a database of another protocol", () => {
     const app = planCiApp(manifest("postgres"), "ci-hello-pr1");
     expect(hyperdriveSkip(app, undefined)).toBe(HYPERDRIVE_SKIP);
     expect(hyperdriveSkip(app, "  ")).toBe(HYPERDRIVE_SKIP);
     expect(hyperdriveSkip(app, TEST_URL)).toBeNull();
     const mysql = planCiApp(manifest("mysql"), "ci-hello-pr1");
-    expect(hyperdriveSkip(mysql, TEST_URL)).toBe(
-      "skipped: HYPERDRIVE_TEST_URL is not a MySQL database",
-    );
+    expect(hyperdriveSkip(mysql, TEST_URL)).toEqual({
+      kind: "hyperdrive",
+      reason: "skipped: HYPERDRIVE_TEST_URL is not a MySQL database",
+    });
     // An app without Hyperdrive never skips for it.
     const plain = artifactManifestFixture({ app: "hello", version: "1.2.3", sha: PIN });
     expect(
       hyperdriveSkip(planCiApp(plain as unknown as ArtifactManifest, "ci-hello-pr1"), undefined),
     ).toBeNull();
     expect(
-      skippedSummaryLines({ app: "hello", version: "1.2.3" }, "ci-hello-pr1", HYPERDRIVE_SKIP),
+      skipReport({ app: "hello", version: "1.2.3" }, "ci-hello-pr1", HYPERDRIVE_SKIP).summary,
     ).toEqual([
       "SKIP hello@1.2.3 as ci-hello-pr1: skipped: Hyperdrive binding and no HYPERDRIVE_TEST_URL",
     ]);
