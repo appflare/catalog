@@ -13,9 +13,10 @@
   "repo": "LeoColomb/dispoflare",
   "license": "MIT",
   "categories": ["email", "privacy"],
-  // The tag the entry pins has not moved since the released build, so the
-  // Access protection below ships as a revision of that build.
-  "revision": 2,
+  // The tag the entry pins has not moved since the released build, so the Access
+  // protection below (revision 2) and the field links (revision 3) are revisions
+  // of that build.
+  "revision": 3,
   "authors": [
     {
       "name": "Léo Colombaro",
@@ -73,6 +74,10 @@
       "name": "SENTRY_DSN",
       "label": "Sentry DSN",
       "help": "Reports the Worker's errors to Sentry. Leave empty to only log them.",
+      "link": {
+        "label": "Find your DSN",
+        "url": "https://docs.sentry.io/concepts/key-terms/dsn-explainer/"
+      },
       "optional": true
     }
   ],

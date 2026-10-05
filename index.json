@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-05T11:15:23.655Z",
+  "generatedAt": "2026-10-05T14:52:49.482Z",
   "apps": [
     {
       "slug": "2fa",
@@ -114,7 +114,13 @@
         "productivity"
       ],
       "license": "AGPL-3.0-only",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/888wiki/manifest.json",
+        "sha256": "b7aec664c918d040290f4e62509236ed285a82c17d72ce48d9f239639213ac12",
+        "keyId": "catalog-2026-09",
+        "signature": "9bEgcO2EZzxKjAJxCt/PRhcz02nnrvMZxQrCVCucKtdMdvMSS75PnTJVYB2bpi65UrVGmtoM4RIK9R6F4vrqCw=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -176,12 +182,12 @@
         "ai"
       ],
       "license": "Apache-2.0",
-      "revision": 3,
+      "revision": 4,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/agentic-inbox/manifest.json",
-        "sha256": "0dcf5b5b58c230edefac92043711e0105e3d69c8e2850d338e4f960d8af2f006",
+        "sha256": "6180608334fa63c3effdf4da770e2cc3b2d9b4db4e9f747e605737fcc9a31404",
         "keyId": "catalog-2026-09",
-        "signature": "0cLAD7YqDGDbjlMYWnXd1xS/cAevxnZHxEtRROnqBtgO7/u2+uNoiCGKN0HGq6iQlykt3d7xNgvpj2V6hMNdDg=="
+        "signature": "mBr9YyuZ7QF57deYFZSVhimfSnTYhKCoaXuAjspRlD+KIPQENt1Y2kZzX/22dO+gOesy4JPaDvzRwYdKh2OyDw=="
       },
       "accessOffer": "required"
     },
@@ -325,12 +331,12 @@
         "developer-tools"
       ],
       "license": "Apache-2.0",
-      "revision": 3,
+      "revision": 4,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/atalaya/manifest.json",
-        "sha256": "ecc282961f1b8777d49d1ad2b4d7789ec32d195ef746646ad8e467bed9c4f5b3",
+        "sha256": "38f7f0cfc76cf9337474568c5eb0575c5a0d620a4931715aac1993c003a17011",
         "keyId": "catalog-2026-09",
-        "signature": "TFqt/mPOlt+VmEIcSXbm11zv3pSw6+TC+ggLK1iSZKUkpGu0s7tqxdsaCIzB0dH7XDF/sXQC4rxMIAOD2G+jCw=="
+        "signature": "63jHvtHAsCtnPg2oh8NsvlFMBTbxaBwAi397WxniS3zhqw+U3F0s7KF0UwTHzrVrgblhJ5ket4iWeAiAwbczBQ=="
       },
       "accessOffer": "offered"
     },
@@ -388,12 +394,12 @@
         "ai"
       ],
       "license": "MIT",
-      "revision": 2,
+      "revision": 4,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/auth-inbox/manifest.json",
-        "sha256": "c3499c8ab5ebe423aa5dfaaa581a89cb6508cc8c2f4dff062058cb806bcea99c",
+        "sha256": "03282d31f6006909041b5e9cf80a7f1db85d4b81db797ae09a2890f68207ca9d",
         "keyId": "catalog-2026-09",
-        "signature": "GLjkgyqRa+nqtEO+OZs04T52gpbyq8e1cQhRxbWmVIC1PMStI6hviSPXWBzDoPlmRDMR8/gTa+KDd+W+xyZxCg=="
+        "signature": "/wkpGrq67oY9iSLLGA1M+jIdrKx9QBnNfVmNrrGgo1blA+DAe66v5EOrqPmxgrHGAQIMbbyw+hXWCyrKOZK/DA=="
       },
       "accessOffer": "offered"
     },
@@ -444,7 +450,13 @@
         "chat"
       ],
       "license": "MIT",
-      "revision": 1,
+      "revision": 3,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/auto-reaction-bot/manifest.json",
+        "sha256": "b8c5b05816e032afb99e7d2640be7862ac38916573318765037bfc2ccd7d35ac",
+        "keyId": "catalog-2026-09",
+        "signature": "zekbEYKxY84hbnzDDaYGrJhQQZ/beEBrXMz+MxpqFwjSDER3/dvbNWlSJRcun3Q3omC6u/N9A9JU29HoBpyODw=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -480,7 +492,13 @@
         "notifications"
       ],
       "license": "GPL-3.0-only",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/bark-worker/manifest.json",
+        "sha256": "0ae39be0ddfc92ffc066c06a9ca45b0f744ac21c3f85743ff56bda0c8291dcd8",
+        "keyId": "catalog-2026-09",
+        "signature": "sDqaiwEP8vYLuAndAwMaeAZnlkjakQig2Xw/YR6LJSTQYx0Naj4W8cLiUBdkjNCZ1oaJj13k/Mo3y7R6XafyAQ=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -635,7 +653,13 @@
         "utilities"
       ],
       "license": "MIT",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/blobatar/manifest.json",
+        "sha256": "25d5ae3f90a5d1a37a1659e6eb6dd1af5a9709acddbe76bbfb3cb7668d9845cf",
+        "keyId": "catalog-2026-09",
+        "signature": "7W5ecYTmheZMtPKJE37W3AWVHIAlFizqmsUJcsnOB93rgX3uvU0VRyXiGgSSUwtN+NQNNqCchfrG+HtTXOPODQ=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -698,12 +722,12 @@
         "productivity"
       ],
       "license": "MIT",
-      "revision": 2,
+      "revision": 3,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/bookshelf/manifest.json",
-        "sha256": "b04724b4854ae141d9b03bdf3440ed8aaecb249d8fe57badba868f3d90b58d0b",
+        "sha256": "15dc292e2c6cad744956978c951abc935ab0c2767f2c7df03c64b60fb0bdcfe4",
         "keyId": "catalog-2026-09",
-        "signature": "lI118SxmYgrDn/wHO7S6NIFGE6/6BP+69vnjgAmU+gz93Tb772QiFbsZrZer3/rVVl5besMjn859bDHP+wQ6DQ=="
+        "signature": "R6YWhYYV/6q6uxKVt6TpfpQhKLeFlJmJkxOQJULgiBjDOMzCh6rRwZtBHvZPXGRQYNiqaVqgBsDassyhPYueBA=="
       },
       "accessOffer": "recommended"
     },
@@ -748,7 +772,13 @@
         "remote-access"
       ],
       "license": "MIT",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/browser-relay/manifest.json",
+        "sha256": "b859564cbfe9064b5e185eaca321e2e1a407a16ac05c8472e5294803ef23fd86",
+        "keyId": "catalog-2026-09",
+        "signature": "8fEjjk4R1aIe3f+/nOw/Av0/qmBsCIw3TSUwXRPIM11hVHbu0pAJF4cx7eSSxl6Sep99hhOtEszK35UKujPlAA=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -785,7 +815,13 @@
         "developer-tools"
       ],
       "license": "MIT",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/cap-worker/manifest.json",
+        "sha256": "dbb69f9b57886e5d2e4f0282aab7240771a354b06e24052659bdcd541b6a3f9d",
+        "keyId": "catalog-2026-09",
+        "signature": "7wzzxnocGC6vC7RHx5MwVS0zP03QJKTVVNv0mPH+Xhc9fWkYZF8lS4NjOed1bILJub0wDyF2Ixxq8IRvmm8RDQ=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -836,7 +872,13 @@
         "files"
       ],
       "license": "GPL-3.0-only",
-      "revision": 2,
+      "revision": 3,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/cattopic/manifest.json",
+        "sha256": "67bed11277b07b34560787e2f04d0ee1240d49ecc08618d7cadf14b028634fed",
+        "keyId": "catalog-2026-09",
+        "signature": "2WzUBylV9bvvpdJg29nl5KqFN7wICEv9SkRlgS8LioRCMP7d9Y4ljJJGk/fIvZpi1qwc/Y6JP/ReUxxEur7WCQ=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -880,12 +922,12 @@
         "utilities"
       ],
       "license": "NONE",
-      "revision": 2,
+      "revision": 3,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/cf-nav/manifest.json",
-        "sha256": "e8ed6f8704c378843bdea6a1fcd933aa674ee453dfd6f6829586ab5174b3efc4",
+        "sha256": "a6b4bfb9b62fb5f74d6c0f245cf45336cf5c3d6f0b38588968561d9171a3438b",
         "keyId": "catalog-2026-09",
-        "signature": "kaByqws1qER1jEMy1navGtuhORi7gMnqTxQYw5niucQlUvHOXjxH0QGYW3YOsP1VTvzB55QgjcFyu7DrWBbMAQ=="
+        "signature": "BAzqM5/6OqeSHDEJfPq5di7gMvT93H6F9qn2rO/dbtZLcz/pU1mbmO1eDLz61L91CgXeuurtkTzkAZtpbnCZDQ=="
       },
       "accessOffer": "offered"
     },
@@ -998,7 +1040,13 @@
         "bots"
       ],
       "license": "MIT",
-      "revision": 1,
+      "revision": 3,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/cftgsx/manifest.json",
+        "sha256": "e0a11ad9ed0ffc2e61173973d96329ed9f4a0b1b63c1d4b933eb3fb1a41ff7df",
+        "keyId": "catalog-2026-09",
+        "signature": "UcTPdinwgQZrc4jT6q9YiVAiHfBWnN2yVop4GPbX7i75N5xqdc67WMhZdGYVWWIL2L2BUSniYT/WG3UMAkbKCA=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -1047,7 +1095,13 @@
         "bots"
       ],
       "license": "MIT",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/chatgpt-telegram-workers/manifest.json",
+        "sha256": "f24af8f6058dadbb950c08ef2e27aefb01dbb867548f8362e142c057d4702e2a",
+        "keyId": "catalog-2026-09",
+        "signature": "KcPEub0oEGMUktEgs57SCBOKBYI+1cvT9FuXIBH9wZSSOTbhjR0lmvMu5huGMDqGzDupf71t2ymM9CRHtWtxDQ=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -1094,7 +1148,13 @@
         "family"
       ],
       "license": "MIT",
-      "revision": 1,
+      "revision": 3,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/civideo/manifest.json",
+        "sha256": "b6ba50a9b0343fee7b7d56e545da3bb51ce2e6df225fe7b7431acf0d7cd1c1f8",
+        "keyId": "catalog-2026-09",
+        "signature": "4AEElgeeldvwJyCMadFvzCVzjdwYtXoSyQSX5QZXsUY+Cz1yhothrSgJ4/Zrszn2dAj7MS8kWXP6RFKrZGxpAA=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -1138,7 +1198,13 @@
         "files"
       ],
       "license": "MIT",
-      "revision": 2,
+      "revision": 3,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/clist/manifest.json",
+        "sha256": "3b7e81b5514e99278d296f13912f3d486cc05b77340ac0bc349b556732e1dfb4",
+        "keyId": "catalog-2026-09",
+        "signature": "KuXpyA1aWmxACpHYSFr98Q9TM/+Us9TTfdvT8mvixVlweWkI2j/HCUdNjM0isOf1Swb1CS1hQXlWKb4KgadsAQ=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -1188,12 +1254,12 @@
         "developer-tools"
       ],
       "license": "MIT",
-      "revision": 2,
+      "revision": 4,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/cloudflare-prometheus-exporter/manifest.json",
-        "sha256": "6b172d7d8225a8bb5359e35ad2da222b7af6bd377a4a97759a18ede20b494f70",
+        "sha256": "76abde9bf662d309426ab54020a27d761662f4c261399427548aca35a96b0057",
         "keyId": "catalog-2026-09",
-        "signature": "8y2zYbB5pcdLsVSwT1ocmompgiCMx7xhwpQmxDhSicNsODBMHSP5X42fIstKfUDdI1YalOrCglUJjCJPp/fPBQ=="
+        "signature": "GSTOd5T/KTZkJq8OgPBlR8nLMs1hkazbBVmHsOeMsueLJs0eNX532mnAGW9AE/Z+Sv2+2tfA2ZaOqOplfXLdDg=="
       },
       "accessOffer": "offered"
     },
@@ -1301,7 +1367,13 @@
         "utilities"
       ],
       "license": "AGPL-3.0-only",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/cloudmark/manifest.json",
+        "sha256": "bd085c1d959b28338723c29a16691c9110cbf6d25c57eb10ced6d19ec2f0f36f",
+        "keyId": "catalog-2026-09",
+        "signature": "sbtHAzh9dcy2uikzjQuo9kzVfMkxfswSTU7aL5vPBQk1xY5tm6pAZ68cKu11/MR/aX1lUSo3UaMDBr4GsDeTAA=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -1346,7 +1418,13 @@
         "developer-tools"
       ],
       "license": "Apache-2.0",
-      "revision": 1,
+      "revision": 3,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/cloudssh/manifest.json",
+        "sha256": "4eb6ee58b4996abb9db6535302da900dc646f1a5a4e95e98b082eb489509878a",
+        "keyId": "catalog-2026-09",
+        "signature": "1av3KHW4h+m7WlU3uEA+Qpi9QVGhqYIVlrZ31QfQsggzGfcRGMlWcbmcmI3UEOYyDppiBfRqNlWmTaGWqk9NAQ=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -1490,7 +1568,13 @@
         "utilities"
       ],
       "license": "MIT",
-      "revision": 3,
+      "revision": 4,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/cut/manifest.json",
+        "sha256": "6e6d6ca353700a8eed65767ccc9b8ba0c3f89641b8f547f5c8f10f236f5becd6",
+        "keyId": "catalog-2026-09",
+        "signature": "o2Dff9PxwKNoG8XEXZhGNIKEMrmBefyEns9e3TAkZKlHlgEoRus4gPeFrL3Rcwcgz43EsE2/6nxhWuTaXOInDw=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -1536,7 +1620,13 @@
         "ai"
       ],
       "license": "MIT",
-      "revision": 1,
+      "revision": 3,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/deepcrawl/manifest.json",
+        "sha256": "b4e075ba0451c4dc6d079c2dc382aa8af2c84a1be3f933a28f1e3aedba432f8c",
+        "keyId": "catalog-2026-09",
+        "signature": "D+hCdT7CQsDZW66oaZdnz/RPJUF7GEQRy8mV8IQTXDeaCySSUb4QKiTjDOfrEr3mFQ2VgQeE1SNvlx9DCdBdDQ=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -1585,7 +1675,13 @@
         "ai"
       ],
       "license": "NONE",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/dictdeck/manifest.json",
+        "sha256": "1b84ea2cef2d6d1c8abe53dbb2a9cb2d6915d785a94dac3f32432c5c13fffec3",
+        "keyId": "catalog-2026-09",
+        "signature": "frCOAERmKI/juRq1AWGO0fE/ljRiMdHwQBb1FsTchRARNmsy+cy+MNhACTJzWAO0/VcWnD71NjEeInExsjiYBQ=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -1631,12 +1727,12 @@
         "privacy"
       ],
       "license": "MIT",
-      "revision": 2,
+      "revision": 3,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/dispoflare/manifest.json",
-        "sha256": "0a65b652a2b24ec3d347bb8342d94f5476940099315b4886601158030ee9ff7b",
+        "sha256": "bfd8eaec1df1ad713e8b19990a30d6ba59805cbe52416a54f943154624f973fb",
         "keyId": "catalog-2026-09",
-        "signature": "+BmOCnAue/GiAzasBM0MDukMEzeZTtNISrTkd5nZs59p6WdMCquWdw/c7x4T+4RAePNJDPP+4wVnNH+tfJv1Ag=="
+        "signature": "4xSIi0PtpXpRJduXUapB1UQERa/Llo2+pbRlJ9FTqn9kCdRTU/dHqhQ/Aq1YpFzcSqtaT6nM9ythxC0v3d2uDg=="
       },
       "accessOffer": "required"
     },
@@ -1842,7 +1938,13 @@
         "ecommerce"
       ],
       "license": "MIT",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/edgekey/manifest.json",
+        "sha256": "dcf7020469ae32dbdb178acc0ef3b37c15fad0c03ac7325a25f05b0762d8e1ed",
+        "keyId": "catalog-2026-09",
+        "signature": "i4L129jT597U1CnyJ8BHjS//HKmY8okNlo99SChNnAQYhEbIp7t+NiHx4ASmzkeSdtOev2Ch3HdspOYtEDcYDA=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -2121,7 +2223,13 @@
         "cms"
       ],
       "license": "MIT",
-      "revision": 2,
+      "revision": 3,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/emdash/manifest.json",
+        "sha256": "1e7f784c7f094664bb7a1c0704abf453663f6f56f669b456fcc793c7027390d2",
+        "keyId": "catalog-2026-09",
+        "signature": "cnkbE1+RoRaciI1TkqIq36FRptELbiRCuv9Q2zOdD/csEhhx/y8tKt5IZcNFoC73FSC0qqH3a3tWbQjxPoZnDA=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -2259,7 +2367,13 @@
         "productivity"
       ],
       "license": "MIT",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/feedlog/manifest.json",
+        "sha256": "60703bedbd7b35caa97dac1de19263be122f63ef31e0112665b841512ad94c31",
+        "keyId": "catalog-2026-09",
+        "signature": "LCZymKIC/IyekpjvYF3RA9Ge3sYGYxpSNMqriY1LVt5xfyD147suPqF4S6dt2o9mgCezVSSecEWxlEAOgQsdAg=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -2369,7 +2483,13 @@
         "notes"
       ],
       "license": "AGPL-3.0-only",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/flaremo/manifest.json",
+        "sha256": "f14fb3480340131616fa9833beb7db5ff193fc4d93851cb5699a63dde583aaa7",
+        "keyId": "catalog-2026-09",
+        "signature": "qHzP+tgpRuKSM2wO7mmpsEIWhGbQyGM1D7GaAe/HcswWkYdLyNbI/VxpJr2nM3uZ9Kff7AUb6p6nzwKJXOnWCg=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -2462,12 +2582,12 @@
         "media"
       ],
       "license": "AGPL-3.0-only",
-      "revision": 2,
+      "revision": 3,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/folia/manifest.json",
-        "sha256": "3275f78a916b51be3c8218381a870154cebbad3c3f1ede0a85ed9dbad21688c0",
+        "sha256": "421b474d5eaa62bd4d2877b35dcf032c5cffaf2130dfa58b3591aa8ed8d7c1f0",
         "keyId": "catalog-2026-09",
-        "signature": "Z9NHQnHIgQ4ylniOEe4kkIQj9m4nylV1Zo2X6U+zZFt+/24ILX19C7xnRztb+1KbmbkpVLdOIfr5G6jRNqAjDA=="
+        "signature": "Fp435E1LH74mCbT4QAKB5EYS9zgdov2MX7YtLJ+Iy7OUhquTO2JGuvn9JXlnu/ayqbrCAHDGIL9PIwwSclRJDQ=="
       },
       "accessOffer": "offered"
     },
@@ -2611,12 +2731,12 @@
         "privacy"
       ],
       "license": "Apache-2.0",
-      "revision": 2,
+      "revision": 3,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/freemail/manifest.json",
-        "sha256": "0fb7251c33fca9382a24e85f5f614c4553cb7810060b03ad7263708b49b3fc26",
+        "sha256": "6ef4c96f5a28df6baad62258e5a24640a6ec9616e4e3a7c58a51ed14fca4ff12",
         "keyId": "catalog-2026-09",
-        "signature": "+lD9wKxtmdoX7UUPnRXDLJPgxtKKu4wQJ9P5w50fEJWL+S2E7HehNLzXcjirLRgA7kjkt+CnHK9GWyqtPiqMBg=="
+        "signature": "a7f+X9WSlqsQObIK/w5BW3nES/OoB2N5hWGpHtbRW+wmWNhOFiXPPGGKTg0UgzR2U5iPFMojTuIqK1Wo2nZXCg=="
       },
       "accessOffer": "offered"
     },
@@ -2654,7 +2774,13 @@
         "utilities"
       ],
       "license": "MIT",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/fxtiktok/manifest.json",
+        "sha256": "effcafebef102e8b7592148fcc87e092fd2e8cc9b006c6e676efc4737520a25f",
+        "keyId": "catalog-2026-09",
+        "signature": "lvQe6cd9L8n67KUcz8FRVlfUN4E5HD/rlr3dy9vQrnwEfHkN6PI9cXe6GSWn6QtpC/jhbY9S88zFaAsmbwtaCg=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -2748,7 +2874,13 @@
         "community"
       ],
       "license": "Apache-2.0",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/garrul/manifest.json",
+        "sha256": "09285893a50d0cf22675213a520e86cde89291b70d5ae38cdcf1e6c9c9a11e9c",
+        "keyId": "catalog-2026-09",
+        "signature": "BO1CNi7z4Am8xWOsOk3IIA73Yf4drobf0bDALpt282CxTbejI7mYr3vQkJhhYF07hRT1pjaBb+czKGqF817UCw=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -2843,12 +2975,12 @@
         "developer-tools"
       ],
       "license": "MIT",
-      "revision": 2,
+      "revision": 3,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/glance/manifest.json",
-        "sha256": "a540d44104615fb7e085b92866c6f60b3a485da3d09c787063cd5bb82fce3420",
+        "sha256": "3f03e378bd1205c6ec22bff2f73c26833b0219b9d4f42076cab318a674407c96",
         "keyId": "catalog-2026-09",
-        "signature": "r40hpbj/Rj+743ZXUMmOov9Vg+y4Y7xZFEaxZ+CLJnNS0CW4nRCgR/vZdXu28vUzyE/eHmTF8FsBULB7zD6EBQ=="
+        "signature": "ESFOakgLMWzEqv7+eE39ak/egRE39TEV2UObGgWJjmuFFw1ZI9ONTb+oBXW41onzN9vpQySN7ja+AVwGnmHBDQ=="
       },
       "accessOffer": "offered"
     },
@@ -2902,7 +3034,13 @@
         "business"
       ],
       "license": "GPL-3.0-or-later",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/gmshop/manifest.json",
+        "sha256": "f64e9fd0a118d3c64cb5050d6ee773620e0defe9e56a594af324fc5075d696ec",
+        "keyId": "catalog-2026-09",
+        "signature": "+xOMh93Gf5LA3zw29qSMtwHl8NyzdOND+UT7Pvz+cOEx4iOf5o547sceNSar94Xu4dkajj1glJnIQAckQJgpBg=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -2958,7 +3096,13 @@
         "business"
       ],
       "license": "Apache-2.0",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/hashpay/manifest.json",
+        "sha256": "f9b8400168daaa938045ede12f1a75ac3c64259ddc2b07ffbebdab91224435ac",
+        "keyId": "catalog-2026-09",
+        "signature": "M6trXbOIj9jC3LrYcqNliHLvmgJPTsdUwQdfgJgwFwdK3xR/IomvNam/eh85AeaR9V4HvyDuL1pjKnsQycinDQ=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -3080,12 +3224,12 @@
         "sharing"
       ],
       "license": "MIT",
-      "revision": 2,
+      "revision": 4,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/imgbed/manifest.json",
-        "sha256": "f5857edcb0369414c1822da5014db299aa4b016fc35d84b60d61b6dad6b7b67a",
+        "sha256": "aa3d8f3b0c01625af23b9269527f04978fbd04f32fe368e621764bc9d0f837e8",
         "keyId": "catalog-2026-09",
-        "signature": "FxKsF8j//D/1K8ke/y0+3SgQJcWBYM0kbN2jXrDHzA0XioqDehcBcpjDvkO6duADYKZyDr1Ihd+PcMZgHOtRAg=="
+        "signature": "i135Yhvi/i+fMEDCcMQlMWzSed6WegB2tdim07MXGXOuGwrTfgtpRAp6CyRyfOU0OUYTr7YHSnzzapwrk/qzAQ=="
       },
       "accessOffer": "offered"
     },
@@ -3160,12 +3304,12 @@
         "games"
       ],
       "license": "AGPL-3.0-only",
-      "revision": 3,
+      "revision": 4,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/infiplot/manifest.json",
-        "sha256": "036a4ae972d84b36758974d8b4773be7e37e9db79d9b0a5f7e5e0b0275091df2",
+        "sha256": "86ab6dd983f418569b65ccdabd4583b2203f895237df80e2648d30f75f0ad212",
         "keyId": "catalog-2026-09",
-        "signature": "7nV9Q8PzUvXoijuQZH2PjLYT8zQPnahYM96x5D+EOe3iCvnDH35jZh2+fkgsHbE6cD48p9hazMN5beEjShtJAQ=="
+        "signature": "arzrY7uunpxmPhdcaLsC2xWTuFSLqB7PwamYrukZFgA89KxUY2Eajpc7uKaelSMazCmyVZ53u9Wj0Fbl2CL2DA=="
       },
       "accessOffer": "recommended"
     },
@@ -3351,7 +3495,13 @@
         "monitoring"
       ],
       "license": "MIT",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/isupmap/manifest.json",
+        "sha256": "5ea7cac4cada88085c90eade414956052e2ebbf64e69381f60c4d60f4ea3cd19",
+        "keyId": "catalog-2026-09",
+        "signature": "4HzqoG1I6ZHj7K28qpEiBfD7B6gACv4+g9cFVJsrTeBhJqSJaCdt68U+rY6Ye2g7oZXGSTqkLxmulVn0W1bPAQ=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -3410,12 +3560,12 @@
         "community"
       ],
       "license": "AGPL-3.0-or-later",
-      "revision": 3,
+      "revision": 4,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/jant/manifest.json",
-        "sha256": "9cef59cf0d5ceafceb6e9fc78e7a8bb336c838b3d71d9bddc1f6c1956ed419da",
+        "sha256": "6d39b583958bd6b9145b78982064ae6601714402ce77001a6a4d233348169a31",
         "keyId": "catalog-2026-09",
-        "signature": "YOrwdFjrBD74fynI5VnomDyykV1pd222OKSAYpCTYgTt1SisGs1tostYI3EceAspMHSrDk77LAsAs1paCaA2DQ=="
+        "signature": "v3qrnYOekae+7M8y2VidWFQ23oHFK2GoifDUta2OZCCNN1K4FN6G6z04S9zM8l0l1777sXur2vQ7sIIysBr1Cg=="
       },
       "accessOffer": "offered"
     },
@@ -3453,7 +3603,13 @@
         "developer-tools"
       ],
       "license": "Apache-2.0",
-      "revision": 1,
+      "revision": 3,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/jina-mcp/manifest.json",
+        "sha256": "60b89f20afc14ba6bfc46ed59435a220bfe11aef49246959cddb46be06ef82a7",
+        "keyId": "catalog-2026-09",
+        "signature": "8ejpb1FZgV4bfYpNtaqGKWmAI9jjZWinIWSUFT6Rn+B1/l311ZKUlaI6uoGNO15L/BxPaZ+0gacFKgzn5vzqDA=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -3492,7 +3648,13 @@
         "utilities"
       ],
       "license": "MIT",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/kiss-worker/manifest.json",
+        "sha256": "4dba99ddee9d9efa6c07797f2a04ae525b6bf3a4f1dbea48c9c1f7100ef8043f",
+        "keyId": "catalog-2026-09",
+        "signature": "AZC9VV9Dc2NhAm8EHzGC2ug2D0a9kb2St75VK08MO2JbOpN2CgjI1s4E/1YTe2lZQ9u27VKB5qTqu3LP2vZECg=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -3629,7 +3791,13 @@
         "utilities"
       ],
       "license": "MIT",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/lastfm-recently-played/manifest.json",
+        "sha256": "a0c35740125117d82ac7dee17f8782fbb3220024c0f5a2db173f66f7b22c3b65",
+        "keyId": "catalog-2026-09",
+        "signature": "zHC6xL6c2/4PttzZEAaCYonC7W20EbTbZoi1W1zZkRnaO/7i514TlgU306w7QxBAIc+tEBYxYbKpcUbt4ZdqDw=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -3665,7 +3833,13 @@
         "developer-tools"
       ],
       "license": "GPL-3.0-only",
-      "revision": 1,
+      "revision": 3,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/llm-api-proxy/manifest.json",
+        "sha256": "9eb034e9af46a4353f76d15bfb0538e98102163ad61a0f2f7098745a1607ac12",
+        "keyId": "catalog-2026-09",
+        "signature": "to3rEeK12l3Hh4jpM+s2pz1nODdEDFfysKRuUUuZmubImdiNneYcBmfmUfCIvL6JYhfgF46F0SX9aJ8XikQiBQ=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -3722,7 +3896,13 @@
         "bots"
       ],
       "license": "MIT",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/mail2telegram/manifest.json",
+        "sha256": "8a30a27278054ff51c908a1120c957690ca621e2736982da49ac93cbb8bb9871",
+        "keyId": "catalog-2026-09",
+        "signature": "GM2vpAg8e6IiOekru4LMy0j4QlOvNG1ucEu1wAwp9qyXn7tcLmOow4YKgSnxCh8Qk/Z6jEVuMKESsmjHDCG0Dw=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -3775,7 +3955,13 @@
         "ai"
       ],
       "license": "MIT",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/mailclaw/manifest.json",
+        "sha256": "75c7267e54eac469f0ebf53c13e0fdb944c0a046ad2a11f2b889c0025459b878",
+        "keyId": "catalog-2026-09",
+        "signature": "HONbCgnr3BcR0TGWoEuVBdrkzqnJqX3udSumfGcq/Smb8xOPXNNUH+6NHrJGo2FzcqdsP8Vrr5reG6SbJGrNDA=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -3856,94 +4042,6 @@
       "accessOffer": "offered"
     },
     {
-      "slug": "mailysend",
-      "name": "MailySend",
-      "summary": "A Resend-compatible email platform in your own account: transactional sending, broadcasts, automations, inbound mail and deliverability analytics, over Cloudflare Email Service, Amazon SES, Resend or SMTP.",
-      "tagline": "Send emails and campaigns from your own Cloudflare account",
-      "addedAt": "2026-09-27T05:18:00+03:00",
-      "version": "0.0.0-20260921.3708d2f",
-      "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/mailysend@0.0.0-20260921.3708d2f/mailysend-0.0.0-20260921.3708d2f.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/mailysend@0.0.0-20260921.3708d2f/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/mailysend@0.0.0-20260921.3708d2f/manifest.sig",
-        "digest": "d62d111572a30220d509bc2da329818f34161b39a5aadc9ac7ff96d6d3ca24c9"
-      },
-      "tier": "artifact",
-      "plan": "free",
-      "requires": [
-        "r2"
-      ],
-      "lastVerified": null,
-      "authors": [
-        {
-          "name": "Gagandeep Singh",
-          "github": "GagnDeep"
-        }
-      ],
-      "maintainers": [
-        "MendyLanda"
-      ],
-      "media": {
-        "icon": {
-          "url": "https://appflare.github.io/catalog/apps/mailysend/icon.svg",
-          "sha256": "cb9f0b8f7c27830a8f6ccce92b1169c3d02a2205efaa3e3944d17f0c38cefb2b"
-        },
-        "screenshots": [
-          {
-            "url": "https://appflare.github.io/catalog/apps/mailysend/screenshots/01-dashboard-overview.png",
-            "sha256": "b9f4875a6220bcb56b94bb5b8c5d2b01726755b55f4f0dea8a9b6cee36c37fe2",
-            "alt": "MailySend: Dashboard overview"
-          },
-          {
-            "url": "https://appflare.github.io/catalog/apps/mailysend/screenshots/02-broadcast.png",
-            "sha256": "05c75bc3f8ec207a2ea12e03d3547827f8b1ed5b737c3985adb480702c45350f",
-            "alt": "MailySend: Broadcast"
-          },
-          {
-            "url": "https://appflare.github.io/catalog/apps/mailysend/screenshots/03-analytics.png",
-            "sha256": "d480005700295e8c0ce603633050cc2daa37775d8c26640a682a5ac49eff6207",
-            "alt": "MailySend: Analytics"
-          },
-          {
-            "url": "https://appflare.github.io/catalog/apps/mailysend/screenshots/04-message-logs.png",
-            "sha256": "52deb00d662fc80753b821254580195ba96c80a1b854d222f44654d7b9969dee",
-            "alt": "MailySend: Message logs"
-          },
-          {
-            "url": "https://appflare.github.io/catalog/apps/mailysend/screenshots/05-domain-records.png",
-            "sha256": "a7610b4730e7dbb4746fee3c88d7f2e1a705209579c0c0b72f82467a2ed12714",
-            "alt": "MailySend: Domain records"
-          },
-          {
-            "url": "https://appflare.github.io/catalog/apps/mailysend/screenshots/06-audience-contacts.png",
-            "sha256": "add3ca10ce310da98cfbca5945edf7720977c7e2694778c522331c9b714fceae",
-            "alt": "MailySend: Audience contacts"
-          },
-          {
-            "url": "https://appflare.github.io/catalog/apps/mailysend/screenshots/07-message-search.png",
-            "sha256": "704b6d591b97f8a004844e18e03d62ef000d37a96ddefd89cb6056d4c05dc0cc",
-            "alt": "MailySend: Message search"
-          }
-        ]
-      },
-      "services": [
-        "kv",
-        "d1",
-        "r2",
-        "durable-objects",
-        "queues",
-        "cron",
-        "email-routing"
-      ],
-      "categories": [
-        "email",
-        "marketing"
-      ],
-      "license": "MIT",
-      "revision": 1,
-      "accessOffer": "offered"
-    },
-    {
       "slug": "md-page",
       "name": "md.page",
       "summary": "Turn Markdown into a shareable web page with one request: an API, an MCP server for coding agents, and pages that expire after 24 hours, on Workers KV.",
@@ -4009,7 +4107,13 @@
         "developer-tools"
       ],
       "license": "MIT",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/md-page/manifest.json",
+        "sha256": "0805173ddbceb778f18a17b87e67cb290826394f1d0c58f03710815b6e6e5fac",
+        "keyId": "catalog-2026-09",
+        "signature": "vpr/mNdMVFIuLGk8d4vIWirMSWe8mMAWkPN4hI1lYJ9W+F3FaJTwqynYOOCc7hTnVcWHFwE/GVTaol78W+vlAA=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -4049,12 +4153,12 @@
         "developer-tools"
       ],
       "license": "MIT",
-      "revision": 2,
+      "revision": 3,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/memory-note/manifest.json",
-        "sha256": "374421663b9881ad4e011b79188966b365e3243e2dec3f1e6222a53dcf5c19a9",
+        "sha256": "d569bb2b4f6825b3ebbce8a54b5addfb1cd1426911212f3912eb1e6d09a62acd",
         "keyId": "catalog-2026-09",
-        "signature": "ZR8uhWkcpFpdYFo8FMXAEGKgQmUTyy3DkjTVCfo3XAS6sbKPJ4B9rtpt/1Bt/u8Q2h82NCf9MmQ4kCaUYb+CCg=="
+        "signature": "4dov9RLHNbQJUCbg+O6t4PLM4Goj1cyt8kSmVwzKDb7VcCn/wGUbpB/Lpxc3DIU8fUKL8R0wXtu+ywU0bsJxAA=="
       },
       "accessOffer": "offered"
     },
@@ -4116,7 +4220,13 @@
         "media"
       ],
       "license": "AGPL-3.0-only",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/microfeed/manifest.json",
+        "sha256": "fc0a7469cddbfdd92c0c4acd211ead4fc08d01d0df9d7653c66cbf7aa8c1313a",
+        "keyId": "catalog-2026-09",
+        "signature": "2nYtCjQBSAyFKpbftj4+gzREVaJS8NRQ2G9cAwtrcH7JawLM5QjjJTcpE8O11Guf+D+zcNZbKrdPYJqQqXyNDg=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -4191,7 +4301,13 @@
         "finance"
       ],
       "license": "MIT",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/minshop/manifest.json",
+        "sha256": "bf72000a9f4dd54126912caf2f7c35aa86c17147c967ecba78c53995e84ebef8",
+        "keyId": "catalog-2026-09",
+        "signature": "D10hSQY9MGNgOrSrTaqGuJmWm2Cf/UKsCYiTIwn+0J2P32+kEY5xU2YbH1y1soVwARQmoA6nJr7pMxwNhhRkDw=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -4266,12 +4382,12 @@
         "finance"
       ],
       "license": "MIT",
-      "revision": 3,
+      "revision": 4,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/minvoice/manifest.json",
-        "sha256": "63405c5f2501839c81a683b00e7bfa0bfa61b1091709c7f0e4047fb7b7a94368",
+        "sha256": "304b53c204e176b81503c4dc10e6a415d90a175b049df8d50a77e0f911ef1af9",
         "keyId": "catalog-2026-09",
-        "signature": "YpzYzOeSSEvizK/kNcla/BKrMT3WQU7ABawc44OsoM0tEIh0/u3XjLpP3+HP7iEJjoldj3FhejJhni0HFyOfBg=="
+        "signature": "kkXfFd5RaD/zn6uT9Qwam2X68GPdIB6ltXAftNXOuPA4G9IJ/8PdK0L39HohTttcxg+VYjN21qoUthxT4Yr5DQ=="
       },
       "accessOffer": "offered"
     },
@@ -4376,7 +4492,13 @@
         "utilities"
       ],
       "license": "MIT",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/nabiz/manifest.json",
+        "sha256": "24149c370a1a693972fcc2f6a0c84c9d09aeb2138526bf19a22b05d3ddbba4d2",
+        "keyId": "catalog-2026-09",
+        "signature": "u0n2gChbVbyH3jylulIKj3mpslEnOpOY8t5qK+bZKWLlf5Sr/YI+A6pErSkkqrEaG2OjdZe07QXEOS38wQ+eCw=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -4420,7 +4542,13 @@
         "sync"
       ],
       "license": "NONE",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/neriplayer-listen-together/manifest.json",
+        "sha256": "664e55518e7c422f2e3a1342011bc66f00674827099b5124447df229d9fca887",
+        "keyId": "catalog-2026-09",
+        "signature": "OZX6rwtNxuts2+R0Rm8R8b9+osKbB+JmOmWT/W9SOWPUrXYBmy8+PQASLTRj1V5TBeExAnjxh2VQNJ22jtqsDw=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -4559,7 +4687,13 @@
         "passwords"
       ],
       "license": "LGPL-3.0-only",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/nodewarden/manifest.json",
+        "sha256": "8f846cbc208b9f35789c297cdf9cc694a0158bec9244ead5211bbc0274d21096",
+        "keyId": "catalog-2026-09",
+        "signature": "SujN+aQal6hdg1wOETZUNO4ZOowHquR+vndovoPkvwrPZqWbh95z7NRkvATFD0GDTaZbm/rXv2cdfUuY8f4HDQ=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -4675,12 +4809,12 @@
         "email"
       ],
       "license": "MIT",
-      "revision": 3,
+      "revision": 4,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/omnimail/manifest.json",
-        "sha256": "76eca087a107c5707a363574cb7df8eccc40fbb37694666a42a2798929d2a957",
+        "sha256": "8583bd781a2004846393b1f1d5ecd9f0321b1c24182a924fad8efc73c80ddf8f",
         "keyId": "catalog-2026-09",
-        "signature": "8/gm2P+fX8GJiAW6odJOfnjrdkJs08z6dDyznFgEIH65hAN3jXncvhL1TiX/d37Gvuulg4bX1VYklVsdpgUICQ=="
+        "signature": "MYCmayPOqi6MP1go3XixZrB42hZuPW6K+a7goxHfQ0AUXaqUwh/Q57RWe8PcfCo4PHrsi1U4/fnFUE/lhSVbAw=="
       },
       "accessOffer": "offered"
     },
@@ -4735,12 +4869,12 @@
         "utilities"
       ],
       "license": "AGPL-3.0-only",
-      "revision": 2,
+      "revision": 3,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/one-ip/manifest.json",
-        "sha256": "f9e8f11d23ba59658173bb14b8b745267f6b1cba51c0eb60d0fc9cbdf53a623e",
+        "sha256": "266142588867f30281a9feae6bf2308a24216d7116d5fc24e72501a89482bac8",
         "keyId": "catalog-2026-09",
-        "signature": "G9jPBUPfVLbIGJ/cTWKc0N6lZ0pX0+VlbwSjiTpNAnlerjL9zQ62dn+OMSH72VdjEMxJkOGRF9EUoHYXMLYdBQ=="
+        "signature": "a8uOlGaa+duXNEQtIHE8cQjD+tZ5fWCQ5poTOb7nAsSJnleMiWEEJIvVg2iZfjOKtB/X3RVXCJO4bTN2FkzTBA=="
       },
       "accessOffer": "offered"
     },
@@ -4871,12 +5005,12 @@
         "analytics"
       ],
       "license": "MIT",
-      "revision": 2,
+      "revision": 4,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/open-seo/manifest.json",
-        "sha256": "50ed54fb3940c289af700e0ad56d9b4db7d426ddd58746dcf40eab31698504de",
+        "sha256": "86ede81187d43e48fcfa804b09ba8427e0c3b5d72386a9cb6f16b9f5af7f8f21",
         "keyId": "catalog-2026-09",
-        "signature": "vdO7X4ycj5J/wsRzDUVfKqIwUaFXOe8V8WUgx9zS3vGYgTa4/cQtez8l2RfqA/IyoJC+FeJzX8bQvSXrpyT4Cg=="
+        "signature": "57kQxeQ7cGT2hTsgBJzXBp/EhuDf5RQAJPXxbgxCX7fmEBv6qkXL3RjfCSoeHXB7hwFkLuzh8ZG9UDpHOwdMCg=="
       },
       "accessOffer": "required"
     },
@@ -4911,7 +5045,13 @@
         "ai"
       ],
       "license": "MIT",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/openai-gemini/manifest.json",
+        "sha256": "a33eba599ca7fcc70c46373363222cb2f0af1fc040fb42bb686c389475991719",
+        "keyId": "catalog-2026-09",
+        "signature": "6O1wM5q3w39iDPbdA2ALCd7OLRNlmDcNqqNagDd/hX6Ypph1KrVbwWqSGcjuBOKiAbxURb5mtbgzdfKt5If2AA=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -4961,7 +5101,13 @@
         "analytics"
       ],
       "license": "AGPL-3.0-only",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/openshortlink/manifest.json",
+        "sha256": "ecc20b95cb137f6722775513ba753af1ffad9bdf96a19098d31a276a1a1c9cff",
+        "keyId": "catalog-2026-09",
+        "signature": "HSJD9bHuajNboNJ/fal1q4Ef9AbdIdl+0nlz4a7kevTtA//4vCwD86Vx1xobYxjTqJtFbBMiD16i8sSfBPzvBQ=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -5020,12 +5166,12 @@
         "media"
       ],
       "license": "MIT",
-      "revision": 2,
+      "revision": 3,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/openstory/manifest.json",
-        "sha256": "677c91c951ab48563d6cb8a919986f1dca4876aafaa90b8e15505f0af4676d40",
+        "sha256": "acb5be3ac303e946e9acd8c1df95c51c066daf16a511cbeb6c154fbebccbc8f4",
         "keyId": "catalog-2026-09",
-        "signature": "Jn5ANRaLjdhEtJlT5o9LmmHbgJgZqQrX+0nbgB1JmIfxz+u4kpO4pankGAwd5jztDHCQOLwsCMIr8KLb3oRDDQ=="
+        "signature": "55gLHv5jtkZRlrn3ylpoL6CEV1WnLElGO/8wZaeQLvfUu1h6pOSFv1NUtGJdk+CNDk7N/nhBtM6KrQjkmZUPDg=="
       },
       "accessOffer": "offered"
     },
@@ -5172,7 +5318,13 @@
         "developer-tools"
       ],
       "license": "Apache-2.0",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/playwright-mcp/manifest.json",
+        "sha256": "44ccb6edef49d2c0febfe4ae9778199eaadf1ea0b3405f8af8f514e90b8fc71e",
+        "keyId": "catalog-2026-09",
+        "signature": "KuFbufJQc920TKMsPL1N0/9/AkR+SbYNSl/jGTWd/S7tHohI3zRz/niDx+eNROz0wOfmMOjQmVPx6QJLh/COAg=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -5349,7 +5501,13 @@
         "scheduling"
       ],
       "license": "MIT",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/punctual/manifest.json",
+        "sha256": "02aab1fbed6d5e3b3e97a7991dd56890781e08cdda04e182bfc55ba0477e15ee",
+        "keyId": "catalog-2026-09",
+        "signature": "Bc07khRM2+ZOhua7wzekUuqCy+Znq2bdu66FPB3rkzTF88hL66MI2Bn6lZfveWzOlX2Pdopaciqh7nkiZ7M5DQ=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -5428,12 +5586,12 @@
         "email"
       ],
       "license": "MIT",
-      "revision": 2,
+      "revision": 3,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/quickinbox/manifest.json",
-        "sha256": "546a703e61a667ab6209af68327f92421b3f6c85a0243f97d41460d20354ca37",
+        "sha256": "59df5d9ae55a02d98986512e6e50a601f9ec55f37b3ed8e30974d172e90aea7d",
         "keyId": "catalog-2026-09",
-        "signature": "gUIVNxaFlHf5grtLc2TNoKM8yIrk5mwKbAJqJF67uO53GY0o64qZLBGitpEcSKiiP7aBcUtdXsNRGX2b6W4gCA=="
+        "signature": "1WJO/R/OuONXHvdB/a5g84S/2TfC0W+McRFIz5nY26j0T7+5pEBcLAMpsBzJrcrvKz5txYX0Ql2sTOdQWUZzDA=="
       },
       "accessOffer": "offered"
     },
@@ -5542,7 +5700,13 @@
         "files"
       ],
       "license": "NONE",
-      "revision": 2,
+      "revision": 3,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/r2-webdav/manifest.json",
+        "sha256": "98676d1922d2f7dbd3476a88ce06328b7a3f4008c4c8cdd8f598bfc6dcec0ac4",
+        "keyId": "catalog-2026-09",
+        "signature": "tdaY3J/h2s0BOv1iyyn6qnr6gBODJ3s9kcs6IC/9AsGJ98k4TcDpn2E3j+M4wEs7AF1GXELIxgWAd9pu+qcnDQ=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -5601,12 +5765,12 @@
         "analytics"
       ],
       "license": "MIT",
-      "revision": 2,
+      "revision": 3,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/rdyrct/manifest.json",
-        "sha256": "5310881125eb8c11e2e91bf2555bd8f95c908b467b6b30bd523d9c5e9660171c",
+        "sha256": "169888f467deee71855f97c2e7656972dedd47de3248cb76d75303bee65612c9",
         "keyId": "catalog-2026-09",
-        "signature": "kZTCWd6OMuCKJWvhs+VwCzAi/B0lZfHBhAy1Idg9gLryRqjybEA0F85WzSb+C0EFMUSG5hIEeqeXth450qRnDw=="
+        "signature": "e7DtkC2xlR9PFZXzaDIiR+xnxfhljciRRYASnh0R0D7vES2V9gpF5wPNb58KbEqSjdDSIChSFJM2weCiZsWNAg=="
       },
       "accessOffer": "offered"
     },
@@ -5644,12 +5808,12 @@
         "analytics"
       ],
       "license": "MIT",
-      "revision": 2,
+      "revision": 3,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/relay/manifest.json",
-        "sha256": "4c9995b2746f9b32e66de862c727674f6ff30a33731ab10b89dfe9e9ed7a1b17",
+        "sha256": "9991e3d1b6aa29b503dfbef796a2ad30910a7c99bf7fe8403f5abd0286354994",
         "keyId": "catalog-2026-09",
-        "signature": "hIlyRfyJuzvJqu0mAP6gGLpMZ/jxFf8sJVscKMHTc7k5yhIQ58K8AVjrQzyHutmobEXuxCnbGs+Rdb4eWOqRDw=="
+        "signature": "+eY6Jv2ai9mjTMUm5oSr4xc4wYxcE6AryQ/0c2Lze552eWUNF5PRzZL6NpGECuJXCJCPxB6ZHTBjiVDcJmVbAQ=="
       },
       "accessOffer": "offered"
     },
@@ -5704,7 +5868,13 @@
         "developer-tools"
       ],
       "license": "AGPL-3.0-or-later",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/reminal/manifest.json",
+        "sha256": "07b906abc0b98887f0221971516e252930ce815722c3d73f88ad685c946f69a5",
+        "keyId": "catalog-2026-09",
+        "signature": "x+EMq+CR5kx9+W6Gg9DWyP12cbjVhsfyX+OJFNWDIppVG/fMIHDmN901xxtdF+NE7X7IKPHSOa+pIoB0ue0XBg=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -5897,12 +6067,12 @@
       ],
       "license": "LicenseRef-ResolveHQ-Source-Available",
       "licenseNote": "Source-available: free to run for personal or internal use; selling it, hosting it for others or sharing copies needs the author's permission",
-      "revision": 3,
+      "revision": 4,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/resolvehq/manifest.json",
-        "sha256": "99aca979b60b8bf50be216ec116f1bf75aaf05186b7830e5aceeef324382faa8",
+        "sha256": "711b9e2bf20ad00eddf8e91c3f605ef245b7a295dd274e7fba18fda2a7c7a46f",
         "keyId": "catalog-2026-09",
-        "signature": "ZBMNp5dh5x/s5uKXmnTDqgb0yRgUfnQKSJFJdGD2DOnj75w8SvxKzCAsxHQHkUaJjOJCjR8BAeLX7SdvXWnHAw=="
+        "signature": "SQa0yQoqnSsZkXfJ4fiZbW1z98+KxCPqLg+kXtWQ5vP9GFjdG6dStPFcJprCA4c5ckqrFn1Y5hkyUObzv2G+Dg=="
       },
       "accessOffer": "offered"
     },
@@ -5939,12 +6109,12 @@
         "networking"
       ],
       "license": "MIT",
-      "revision": 3,
+      "revision": 4,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/rsshub-never-die/manifest.json",
-        "sha256": "dd9516259c4f6cbc15a3e270a856d7ba3af22403994c4161786ab311cdd3cc8a",
+        "sha256": "b3b9f47b3c584e3d383e6cb1642e30d61f9bdf0e391ad7d801651b0c6bcf63a6",
         "keyId": "catalog-2026-09",
-        "signature": "OnQlLqKkhcpocL1QBtWC9FcCMQI5pT2m8iVFVmCyD5mVClj5J8jvfOCdLotkojg7IJcDrmdnsuVjDmI99ZzUCw=="
+        "signature": "iq2pnAvEw3duZurdeE0oj/mBBdBHzk39i9gsDWSXpYiIoXSc4h89a2W3dtEHH+dvBvIj2P1UUCLcfEM7p1//Ag=="
       },
       "accessOffer": "offered"
     },
@@ -5980,7 +6150,13 @@
         "utilities"
       ],
       "license": "MIT",
-      "revision": 1,
+      "revision": 3,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/rssworker/manifest.json",
+        "sha256": "223194d530b5f81291656bac5c19a038684a839e33b1fc6ceaa76f115d9d252b",
+        "keyId": "catalog-2026-09",
+        "signature": "HL9VsY3MEOJ6JujzZ0s7l4iO7C/R5waKU2YQaLDqmQiS/DiwE08lskw4AtlbQ2svyCRPD1bF+AhV5ic50o3BDw=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -6060,7 +6236,13 @@
         "media"
       ],
       "license": "AGPL-3.0-only",
-      "revision": 2,
+      "revision": 3,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/screencapture-live/manifest.json",
+        "sha256": "b5f01a2e752561fb2dce1d1f88c7d3951a858de2f6d1c265eabbf570bd6099b7",
+        "keyId": "catalog-2026-09",
+        "signature": "/AfvJKN11BM6PFy4OmcOq2z8vZOm6/vY39OBdKhf0s1td3f7PHBr7WRIb7y78TIfkbby6lDhjN8FEUoNIJjbCg=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -6108,7 +6290,13 @@
         "media"
       ],
       "license": "MIT",
-      "revision": 1,
+      "revision": 3,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/screendrop/manifest.json",
+        "sha256": "7fb4040a72f23a796680e3ff01050f685ab7136b5cd3404e0bf7b379f0a0b4ad",
+        "keyId": "catalog-2026-09",
+        "signature": "qv6o9kbK0qeQwQBJ8LzORxAS+s6I2DGPh/HOG2gdZCPo5vpxIfKiHyr5ZrxKLxxoK+4KB4YuR+kSec52k87UBA=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -6249,12 +6437,12 @@
         "business"
       ],
       "license": "MIT",
-      "revision": 2,
+      "revision": 3,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/seeder/manifest.json",
-        "sha256": "2e6d3452c2c9f3157ee653773de5d57a26da19b5730d585364c4138d9da72e4c",
+        "sha256": "0638b35dfb62bac4224d27276ace0ea7d79be65b1003a93ba883b13a7d770b8f",
         "keyId": "catalog-2026-09",
-        "signature": "Gu9hmdxKwUU/Zrx6jcPLuCHe5fnFsyVFB45rkFFe5MbBj4gyTQkM37BzPuDhVDNYikgGmIkkg9WsmaZ2Pix9Dw=="
+        "signature": "7DP2x+RN/aiQ39ChJQSQVsRbsb57iJSYCUN3SxRwLietRwubrhUsGZE+JWbcyt36QYPzpIz352R6qLJzeO6xBQ=="
       },
       "accessOffer": "offered"
     },
@@ -6427,7 +6615,13 @@
         "sharing"
       ],
       "license": "MIT",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/shotsync/manifest.json",
+        "sha256": "726a9c25312867cc111f87c558c75aa716fa9917142f26cdf2bc019f734ec930",
+        "keyId": "catalog-2026-09",
+        "signature": "Gk9sWSJjFkN+qM36upBZJaAjEwtx0/t8cY1eq8XtQnPXfo6ZfKU39andBKjo1iiTn0K+ldKgP3EKjDc1hf1SCA=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -6503,12 +6697,12 @@
         "analytics"
       ],
       "license": "Apache-2.0",
-      "revision": 2,
+      "revision": 4,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/shrtnr/manifest.json",
-        "sha256": "e23124775da921ee06c5e9671f2c5b1bac1770eea4f61dbd7b54c2e8ef0f3a72",
+        "sha256": "323d0d15d1abbe73a9a964f40d8317d1946c508cc5fe9bb5fefe243044eeb1c8",
         "keyId": "catalog-2026-09",
-        "signature": "NElV9KNRVI47AgU6VknXbkrDXr2qixCE8KsA6//JMj5RGTpkE6BkUX5xrBwYSm/umz3KNw+hsWtRPU24nsP+DQ=="
+        "signature": "PbSHU8G0sQcacIyioh9OPEVMn4qLiZSVKj8AzNItVGdpTinLVyFDOc+TmasiB4md+uLUybcBvhmNawVIIhGeAA=="
       },
       "accessOffer": "offered"
     },
@@ -6578,12 +6772,12 @@
         "analytics"
       ],
       "license": "AGPL-3.0-only",
-      "revision": 2,
+      "revision": 3,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/sink/manifest.json",
-        "sha256": "76d2a81044ecd3b33b2da8f60cfc72444a5722c7480574b4bb94786a2cf69646",
+        "sha256": "d6f3be08363b1d813c202bc30c5c3bd2cd403b50efeed795e938e080b06f8c12",
         "keyId": "catalog-2026-09",
-        "signature": "8FP/SD9aD7trXhWRuOnDkV9cQOTkVUapvQKyfXEC7D2+5k99K6SD0OskmhFfNiTNdrriN5wzjHs2+dKmyqW+BQ=="
+        "signature": "Enb/uVdzMJq7oXtXFozMaM5zsHFB5lJvZR+ABHe3B25qCWEbSsYdu9jh8sCCg7lka64J0mYMm4CITlabctjiAA=="
       },
       "accessOffer": "offered"
     },
@@ -6628,7 +6822,13 @@
         "utilities"
       ],
       "license": "MIT",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/skland-attendance/manifest.json",
+        "sha256": "ab7727ffe977c8b3482fd476582ab39163dfa988096c8f73e0e68062b58b3f95",
+        "keyId": "catalog-2026-09",
+        "signature": "/f22lJqRBhJuOqnhSYKP1nO+8vMeJ+MITeMH4UpCn4nmasgoyjReD1iCcDpxgDmbfYi6ji6siN8HekBDlTl4BQ=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -6681,7 +6881,13 @@
         "utilities"
       ],
       "license": "MIT",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/statusbeam/manifest.json",
+        "sha256": "0c62f7363e23004dc4138e88f8728adf4b924ada922404fff8cdbae08d709d66",
+        "keyId": "catalog-2026-09",
+        "signature": "jJQfFi2xMBUkYZQTAR12NowroWHfrGkr5IVALDBUQX9PwnBiB4ji6DhfxTgSwCLpW2wkIyzO1JspkptO4idlCQ=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -6720,7 +6926,13 @@
         "developer-tools"
       ],
       "license": "MIT",
-      "revision": 1,
+      "revision": 3,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/sveltia-cms-auth/manifest.json",
+        "sha256": "b3900b869ced12a9cbc9bef01f806b75464604e793fc1a62c2488287a742dbab",
+        "keyId": "catalog-2026-09",
+        "signature": "JzDar6QrjVZJ9rAZMq2IFpiYe3JwonCJyzCXoa29Zzf0dTfB6tuKLEActYxlVthsnT4eAcF8SAAsmKgTyPFTDQ=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -6970,7 +7182,13 @@
         "monitoring"
       ],
       "license": "MIT",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/token-monitor/manifest.json",
+        "sha256": "93db685766254a4045861066a3db450a1758be2ba8f0096bf5ab28ce23658c81",
+        "keyId": "catalog-2026-09",
+        "signature": "XqKHCqNRB56jYexA0cfDAP/ElqyCQueL4F1PNyGOiH6ix4SbFvlq+20vDaiU8RMnbJphkSbw5v0Nb5SRb0lsAQ=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -7055,7 +7273,13 @@
         "networking"
       ],
       "license": "MIT",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/unifi-ddns/manifest.json",
+        "sha256": "654bcae175e45a38605b37f63303b740a1c8766a4cdd6a6d939c28bec092b441",
+        "keyId": "catalog-2026-09",
+        "signature": "pnadTwWJ+IMQ4B2JAnr/FYvZRjVN5rOSFZylbKC8VcsWdH5kT9KNGNBH3Ghh05DoY3bzfo4S2XMCKfeX0RqwDA=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -7094,7 +7318,13 @@
         "utilities"
       ],
       "license": "MIT",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/usage-guard-collector/manifest.json",
+        "sha256": "e14d431be559fc083550f554e013bbf3c25fc7671c1e9f4fd84ad07c456d5471",
+        "keyId": "catalog-2026-09",
+        "signature": "ZNtVYg7oGkjFMoDhE7tft5RBXoA+pnlhMn3npJ+8Cbir4BJ46HSy15FrUqdyfhlgTMAHiHdjwEJ52aE0PllNBQ=="
+      },
       "accessOffer": "recommended"
     },
     {
@@ -7139,7 +7369,13 @@
         "chat"
       ],
       "license": "NONE",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/veet/manifest.json",
+        "sha256": "ed465adaedb484a0b6fbe9275e5e775883e4701f264558700e479a3525cab42a",
+        "keyId": "catalog-2026-09",
+        "signature": "FXMVczvPpHADGIlhZ34sgnYQKEYlgO4Z1tcIlb0Ci/zJtrUycVASliCuE336X9OqdJA2waUYp9mvr8ud8hl7CQ=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -7225,7 +7461,13 @@
         "sync"
       ],
       "license": "GPL-3.0-or-later",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/webrtc-turn/manifest.json",
+        "sha256": "41f231e59eea91ce477a4b3e91cd2e314c46610849769bbcd8cebb0c27bc1f11",
+        "keyId": "catalog-2026-09",
+        "signature": "5UWD/myz9aDWI+zw8RCQikOb+qhN9LrnkqWLfnaV2hnpSryJ0I1IFT6z16CzDNDg3bz+xRQ0zco3X6VPmACCCg=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -7266,7 +7508,13 @@
         "ai"
       ],
       "license": "MIT",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/workers-firecrawl/manifest.json",
+        "sha256": "aacc433dcd17ba6c188c60828ebf3a458fd545fe9d881182e4a70bcb64fe3b6b",
+        "keyId": "catalog-2026-09",
+        "signature": "Pw0KYJi4A7Ip5IuFYvvou/YRc0vUPjkF7ZJV5Uo7fF9Hx/jWO1aJ5iqw4IVRkJzXa//ASkHP2O3fY0XrC0vbAg=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -7307,12 +7555,12 @@
         "ai"
       ],
       "license": "MIT",
-      "revision": 2,
+      "revision": 4,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/wx2md/manifest.json",
-        "sha256": "9b8e5923cd8092e03af06d050f2292d66bad5d612d6a285d151d56246180defd",
+        "sha256": "a2342e15a3be5709c4d954683a3a6df17159196b08fa56afdfe78f961bf32c50",
         "keyId": "catalog-2026-09",
-        "signature": "QxTrKH1Tavr/smugo8rgc8A5CVeYrdg8FbZnF6TVD6RTWHYNZ1NotoGU6B9ZJ5GiF0t0xTNYseA6esMsskcoCg=="
+        "signature": "o6g2tIbBY5+WQeQTaI9G6e7F3D/2cK/IbtkxnNPiTJ4guyUYQ49OrSp8XBVT33tAxEGXa4tJLmuG8WzVet8JDw=="
       },
       "accessOffer": "offered"
     },

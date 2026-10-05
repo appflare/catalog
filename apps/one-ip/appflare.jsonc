@@ -13,8 +13,9 @@
   "repo": "zhihui-hu/one-ip",
   "license": "AGPL-3.0-only",
   "categories": ["networking", "utilities"],
-  // Help text edited after this release was published: a revision, no new build.
-  "revision": 2,
+  // Edited help text (revision 2) and field links (revision 3) came after this
+  // release was published: revisions, no new build.
+  "revision": 3,
   "authors": [{ "name": "Hu Zhihui", "url": "https://huzhihui.com", "github": "zhihui-hu" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags, so the entry follows the default branch by commit.
@@ -43,18 +44,30 @@
       "name": "TURNSTILE_SECRET",
       "label": "Turnstile secret key",
       "help": "The secret key of a Cloudflare Turnstile widget, for the verification page. Needs the site key and hostnames below too.",
+      "link": {
+        "label": "Create a widget",
+        "url": "https://dash.cloudflare.com/?to=/:account/turnstile"
+      },
       "optional": true
     },
     {
       "name": "TURNSTILE_NONINTERACTIVE_SECRET",
       "label": "Non-interactive Turnstile secret key",
       "help": "The secret key of a second Turnstile widget in Non-interactive mode. Needs its site key and hostnames below too.",
+      "link": {
+        "label": "Create a widget",
+        "url": "https://dash.cloudflare.com/?to=/:account/turnstile"
+      },
       "optional": true
     },
     {
       "name": "RECAPTCHA_SECRET",
       "label": "reCAPTCHA v3 secret key",
       "help": "The secret key of a Google reCAPTCHA v3 site, for the verification page. Needs the site key and hostnames below too.",
+      "link": {
+        "label": "Register a site",
+        "url": "https://www.google.com/recaptcha/admin/create"
+      },
       "optional": true
     },
     {
@@ -69,6 +82,10 @@
       "name": "TURNSTILE_SITE_KEY",
       "label": "Turnstile site key",
       "help": "The site key of the Turnstile widget.",
+      "link": {
+        "label": "Create a widget",
+        "url": "https://dash.cloudflare.com/?to=/:account/turnstile"
+      },
       "default": "",
       "optional": true
     },
@@ -83,6 +100,10 @@
       "name": "TURNSTILE_NONINTERACTIVE_SITE_KEY",
       "label": "Non-interactive Turnstile site key",
       "help": "The site key of the Non-interactive Turnstile widget.",
+      "link": {
+        "label": "Create a widget",
+        "url": "https://dash.cloudflare.com/?to=/:account/turnstile"
+      },
       "default": "",
       "optional": true
     },
@@ -97,6 +118,10 @@
       "name": "RECAPTCHA_SITE_KEY",
       "label": "reCAPTCHA v3 site key",
       "help": "The site key of the reCAPTCHA v3 site.",
+      "link": {
+        "label": "Register a site",
+        "url": "https://www.google.com/recaptcha/admin/create"
+      },
       "default": "",
       "optional": true
     },

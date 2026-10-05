@@ -7,6 +7,9 @@
   "repo": "jina-ai/MCP",
   "license": "Apache-2.0",
   "categories": ["ai", "developer-tools"],
+  // Field links (revision 2) and the formatting of URLs in the notes (revision 3)
+  // came after this release was published: revisions, no new build.
+  "revision": 3,
   "authors": [{ "name": "Jina AI", "url": "https://jina.ai", "github": "jina-ai", "x": "JinaAI_" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags; the pin is the head of main.
@@ -24,17 +27,18 @@
       "name": "JINA_API_KEY",
       "label": "Jina API key",
       "help": "Used for every call that sends no Authorization header of its own. Anyone who knows this Worker's address can then spend it, so leave it unset and have each client send its own key unless the address stays private. Free keys at https://jina.ai.",
+      "link": { "label": "Get a key", "url": "https://jina.ai/api-dashboard/key-manager" },
       "optional": true
     }
   ],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Add the server to an MCP client with the URL {{appUrl}}/v1 and the header `Authorization: Bearer <your Jina API key>`, for example `claude mcp add --transport http jina {{appUrl}}/v1 --header \"Authorization: Bearer <key>\"`. Reading pages and the date and primer tools work without a key, at Jina's lower rate limits."
+      "content": "Add the server to an MCP client with the URL `{{appUrl}}/v1` and the header `Authorization: Bearer <your Jina API key>`, for example `claude mcp add --transport http jina {{appUrl}}/v1 --header \"Authorization: Bearer <key>\"`. Reading pages and the date and primer tools work without a key, at Jina's lower rate limits."
     },
     {
       "type": "markdown",
-      "content": "The `search_jina_blog` tool needs a key for Jina's own blog that only Jina's hosted server has; leave it out with {{appUrl}}/v1?exclude_tools=search_jina_blog."
+      "content": "The `search_jina_blog` tool needs a key for Jina's own blog that only Jina's hosted server has; leave it out with `{{appUrl}}/v1?exclude_tools=search_jina_blog`."
     }
   ]
 }

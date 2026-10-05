@@ -8,9 +8,9 @@
   "repo": "dcarrillo/atalaya",
   "license": "Apache-2.0",
   "categories": ["monitoring", "developer-tools"],
-  // Generated secrets (revision 2) and edited help text (revision 3) came after
-  // this release was published: revisions, no new build.
-  "revision": 3,
+  // Generated secrets (revision 2), edited help text (revision 3) and field links
+  // (revision 4) came after this release was published: revisions, no new build.
+  "revision": 4,
   "authors": [
     {
       "name": "Daniel Carrillo",
@@ -73,12 +73,14 @@
       "name": "TELEGRAM_BOT_TOKEN",
       "label": "Telegram bot token",
       "help": "Referenced as ${TELEGRAM_BOT_TOKEN} in a webhook alert that posts to the Telegram Bot API.",
+      "link": { "label": "Create a bot", "url": "https://t.me/BotFather" },
       "optional": true
     },
     {
       "name": "TELEGRAM_CHAT_ID",
       "label": "Telegram chat ID",
       "help": "Referenced as ${TELEGRAM_CHAT_ID} in the Telegram alert's body.",
+      "link": { "label": "Find your chat ID", "url": "https://t.me/userinfobot" },
       "optional": true
     }
   ],
