@@ -20,5 +20,4 @@ client back in for an hour. Everything else goes straight through. Licensed Apac
   requests.
 - **Bot Management filtering** (humans free, bots pay) works only on a custom domain
   in a zone with Bot Management for Enterprise; on workers.dev every client pays.
-- **Pin.** Upstream has no release tags, so the pin follows the default branch and each
-  bump is reviewed by a maintainer.
+- **Pin.** Upstream has no release tags, so the pin follows the default branch.

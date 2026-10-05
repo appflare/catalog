@@ -7,6 +7,10 @@
   "repo": "cloudflare/cloudflare-prometheus-exporter",
   "license": "MIT",
   "categories": ["monitoring", "analytics", "developer-tools"],
+  // Edited help text (revision 2), field links (revision 3) and the formatting of
+  // URLs in the notes (revision 4) came after this release was published:
+  // revisions, no new build.
+  "revision": 4,
   "authors": [
     { "name": "Cloudflare", "url": "https://www.cloudflare.com", "github": "cloudflare" }
   ],
@@ -62,13 +66,21 @@
     {
       "name": "CF_ZONES",
       "label": "Zones",
-      "help": "Optional. Comma-separated zone ids to export; empty exports every zone the token can read.",
+      "help": "Comma-separated zone ids to export; empty exports every zone the token can read.",
+      "link": {
+        "label": "Find account and zone IDs",
+        "url": "https://developers.cloudflare.com/fundamentals/account/find-account-and-zone-ids/"
+      },
       "optional": true
     },
     {
       "name": "CF_ACCOUNTS",
       "label": "Accounts",
-      "help": "Optional. Comma-separated account ids to export; empty exports every account the token can read.",
+      "help": "Comma-separated account ids to export; empty exports every account the token can read.",
+      "link": {
+        "label": "Find account and zone IDs",
+        "url": "https://developers.cloudflare.com/fundamentals/account/find-account-and-zone-ids/"
+      },
       "optional": true
     },
     {
@@ -86,7 +98,7 @@
     },
     {
       "type": "markdown",
-      "content": "Settings can also be changed at runtime through {{appUrl}}/config (for example `curl -u prometheus:<password> -X PUT {{appUrl}}/config/logLevel -H 'Content-Type: application/json' -d '{\"value\": \"debug\"}'`); overrides are kept in KV and win over this app's settings."
+      "content": "Settings can also be changed at runtime through `{{appUrl}}/config` (for example `curl -u prometheus:<password> -X PUT {{appUrl}}/config/logLevel -H 'Content-Type: application/json' -d '{\"value\": \"debug\"}'`); overrides are kept in KV and win over this app's settings."
     }
   ],
   "tokenPermissions": [

@@ -7,6 +7,9 @@
   "repo": "azu/memory-note",
   "license": "MIT",
   "categories": ["notes", "productivity", "developer-tools"],
+  // Edited help text (revision 2) and field links (revision 3) came after this
+  // release was published: revisions, no new build.
+  "revision": 3,
   "authors": [{ "name": "azu", "url": "https://efcl.info", "github": "azu", "x": "azu_re" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags, so the entry follows the default branch by
@@ -38,6 +41,10 @@
       "name": "NOTION_TOKEN",
       "label": "Notion integration token",
       "help": "Only for the Notion storage: the internal integration token of a Notion integration that the database is shared with.",
+      "link": {
+        "label": "Create an integration",
+        "url": "https://www.notion.so/profile/integrations"
+      },
       "optional": true
     }
   ],
@@ -68,7 +75,7 @@
       // parses it as JSON itself.
       "name": "NOTION_FILTER_OPTIONS",
       "label": "Notion filters",
-      "help": "Optional, only for the Notion storage. A JSON list of filters that must all match, for example [{\"name\":\"Status\",\"type\":\"status\",\"value\":\"Open\"}]. Types: checkbox, relation, select and status; select and status also take \"op\": \"does_not_equal\".",
+      "help": "Only for the Notion storage. A JSON list of filters that must all match, for example [{\"name\":\"Status\",\"type\":\"status\",\"value\":\"Open\"}]. Types: checkbox, relation, select and status; select and status also take \"op\": \"does_not_equal\".",
       "optional": true
     }
   ],

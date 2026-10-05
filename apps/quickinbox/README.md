@@ -22,5 +22,6 @@ server for scripts and AI agents. Licensed MIT.
 - **Cloudflare Email Service.** Point the zone's catch-all rule at the app's Worker in
   the Email Routing dashboard. Appflare does not set up routing for this app, since
   Resend installs need none.
-- **Optional:** TypeSafe inbox tabs, Telegram notifications, and desktop push (generate
-  a VAPID key pair once and keep it).
+- **Optional:** TypeSafe inbox tabs, Telegram notifications, and desktop push. The VAPID
+  key pair is generated at install; push turns on once the push contact is set. An
+  install made before the key was generated sets it with **Set new value** in Settings.

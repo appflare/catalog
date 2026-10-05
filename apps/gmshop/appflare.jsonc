@@ -9,6 +9,8 @@
   // later version".
   "license": "GPL-3.0-or-later",
   "categories": ["ecommerce", "business"],
+  // openPath added after this release was published: a revision, no new build.
+  "revision": 2,
   "authors": [
     {
       "name": "GM Wallet",
@@ -40,6 +42,7 @@
   // None: the Better Auth secret, the shop's address and every provider
   // credential are created or entered in the admin console and stored in D1.
   "secrets": [],
+  "openPath": "/admin",
   "postInstall": [
     {
       "type": "markdown",
