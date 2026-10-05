@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-05T11:15:23.655Z",
+  "generatedAt": "2026-10-05T12:40:19.126Z",
   "apps": [
     {
       "slug": "2fa",
@@ -3853,94 +3853,6 @@
         "keyId": "catalog-2026-09",
         "signature": "tgJxnXAJo04+MRrji3BkqByKJY9TqwE992gPVCCkjGDVPf/uQH0i0xUQq57/YEQol48e0xh2Zaz80swEr+kzDA=="
       },
-      "accessOffer": "offered"
-    },
-    {
-      "slug": "mailysend",
-      "name": "MailySend",
-      "summary": "A Resend-compatible email platform in your own account: transactional sending, broadcasts, automations, inbound mail and deliverability analytics, over Cloudflare Email Service, Amazon SES, Resend or SMTP.",
-      "tagline": "Send emails and campaigns from your own Cloudflare account",
-      "addedAt": "2026-09-27T05:18:00+03:00",
-      "version": "0.0.0-20260921.3708d2f",
-      "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/mailysend@0.0.0-20260921.3708d2f/mailysend-0.0.0-20260921.3708d2f.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/mailysend@0.0.0-20260921.3708d2f/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/mailysend@0.0.0-20260921.3708d2f/manifest.sig",
-        "digest": "d62d111572a30220d509bc2da329818f34161b39a5aadc9ac7ff96d6d3ca24c9"
-      },
-      "tier": "artifact",
-      "plan": "free",
-      "requires": [
-        "r2"
-      ],
-      "lastVerified": null,
-      "authors": [
-        {
-          "name": "Gagandeep Singh",
-          "github": "GagnDeep"
-        }
-      ],
-      "maintainers": [
-        "MendyLanda"
-      ],
-      "media": {
-        "icon": {
-          "url": "https://appflare.github.io/catalog/apps/mailysend/icon.svg",
-          "sha256": "cb9f0b8f7c27830a8f6ccce92b1169c3d02a2205efaa3e3944d17f0c38cefb2b"
-        },
-        "screenshots": [
-          {
-            "url": "https://appflare.github.io/catalog/apps/mailysend/screenshots/01-dashboard-overview.png",
-            "sha256": "b9f4875a6220bcb56b94bb5b8c5d2b01726755b55f4f0dea8a9b6cee36c37fe2",
-            "alt": "MailySend: Dashboard overview"
-          },
-          {
-            "url": "https://appflare.github.io/catalog/apps/mailysend/screenshots/02-broadcast.png",
-            "sha256": "05c75bc3f8ec207a2ea12e03d3547827f8b1ed5b737c3985adb480702c45350f",
-            "alt": "MailySend: Broadcast"
-          },
-          {
-            "url": "https://appflare.github.io/catalog/apps/mailysend/screenshots/03-analytics.png",
-            "sha256": "d480005700295e8c0ce603633050cc2daa37775d8c26640a682a5ac49eff6207",
-            "alt": "MailySend: Analytics"
-          },
-          {
-            "url": "https://appflare.github.io/catalog/apps/mailysend/screenshots/04-message-logs.png",
-            "sha256": "52deb00d662fc80753b821254580195ba96c80a1b854d222f44654d7b9969dee",
-            "alt": "MailySend: Message logs"
-          },
-          {
-            "url": "https://appflare.github.io/catalog/apps/mailysend/screenshots/05-domain-records.png",
-            "sha256": "a7610b4730e7dbb4746fee3c88d7f2e1a705209579c0c0b72f82467a2ed12714",
-            "alt": "MailySend: Domain records"
-          },
-          {
-            "url": "https://appflare.github.io/catalog/apps/mailysend/screenshots/06-audience-contacts.png",
-            "sha256": "add3ca10ce310da98cfbca5945edf7720977c7e2694778c522331c9b714fceae",
-            "alt": "MailySend: Audience contacts"
-          },
-          {
-            "url": "https://appflare.github.io/catalog/apps/mailysend/screenshots/07-message-search.png",
-            "sha256": "704b6d591b97f8a004844e18e03d62ef000d37a96ddefd89cb6056d4c05dc0cc",
-            "alt": "MailySend: Message search"
-          }
-        ]
-      },
-      "services": [
-        "kv",
-        "d1",
-        "r2",
-        "durable-objects",
-        "queues",
-        "cron",
-        "email-routing"
-      ],
-      "categories": [
-        "email",
-        "marketing"
-      ],
-      "license": "MIT",
-      "revision": 1,
       "accessOffer": "offered"
     },
     {
