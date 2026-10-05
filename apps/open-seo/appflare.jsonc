@@ -14,6 +14,8 @@
   "repo": "every-app/open-seo",
   "license": "MIT",
   "categories": ["marketing", "analytics"],
+  // Help text edited after this release was published: a revision, no new build.
+  "revision": 2,
   "authors": [
     { "name": "Ben Senescu", "github": "bensenescu", "x": "bensenescu" },
     { "name": "Every App", "url": "https://everyapp.dev", "github": "every-app" }
@@ -147,14 +149,14 @@
     {
       "name": "GOOGLE_CLIENT_ID",
       "label": "Google OAuth client ID",
-      "help": "Optional. A Web application client from the Google Cloud Console with the Search Console API (and, for Analytics, the Analytics APIs) enabled. Its authorized redirect URIs are the app's address plus /api/gsc/oauth/callback and /api/ga4/oauth/callback.",
+      "help": "A Web application client from the Google Cloud Console with the Search Console API (and, for Analytics, the Analytics APIs) enabled. Its authorized redirect URIs are the app's address plus /api/gsc/oauth/callback and /api/ga4/oauth/callback.",
       "optional": true,
       "workers": ["app"]
     },
     {
       "name": "OPENROUTER_MODEL",
       "label": "SAM model",
-      "help": "Optional. The OpenRouter model id SAM uses, for example openai/gpt-5.6-luna. Leave empty for OpenSEO's default.",
+      "help": "The OpenRouter model id SAM uses, for example openai/gpt-5.6-luna. Leave empty for OpenSEO's default.",
       "optional": true,
       "workers": ["app"]
     },

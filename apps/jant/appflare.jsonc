@@ -16,8 +16,9 @@
   "repo": "jant-me/jant-starter",
   "license": "AGPL-3.0-or-later",
   "categories": ["cms", "community"],
-  // The category changed after this release was published: a revision, no new build.
-  "revision": 2,
+  // The category changed in revision 2, which this release was built with. Help
+  // text edited after it was published: a revision, no new build.
+  "revision": 3,
   "authors": [{ "name": "Jant", "url": "https://jant.me", "github": "jant-me" }],
   "maintainers": ["MendyLanda"],
   // The starter has no tags; upstream commits to main with each Jant release
@@ -54,13 +55,13 @@
     {
       "name": "R2_PUBLIC_URL",
       "label": "Public media URL",
-      "help": "Optional. A public address of the app's R2 bucket (a custom domain on it), for example https://media.example.com, so media is served from there instead of through the Worker.",
+      "help": "A public address of the app's R2 bucket (a custom domain on it), for example https://media.example.com, so media is served from there instead of through the Worker.",
       "optional": true
     },
     {
       "name": "IMAGE_TRANSFORM_URL",
       "label": "Image transformations URL",
-      "help": "Optional. The /cdn-cgi/image endpoint of a zone with Cloudflare Image Transformations on, for example https://example.com/cdn-cgi/image, for thumbnails and resized images.",
+      "help": "The /cdn-cgi/image endpoint of a zone with Cloudflare Image Transformations on, for example https://example.com/cdn-cgi/image, for thumbnails and resized images.",
       "optional": true
     }
   ],

@@ -8,6 +8,8 @@
   "repo": "baronunread/rdyrct",
   "license": "MIT",
   "categories": ["utilities", "analytics"],
+  // Help text edited after this release was published: a revision, no new build.
+  "revision": 2,
   "authors": [
     {
       "name": "Andrea Bruno",
@@ -64,31 +66,31 @@
     {
       "name": "GOOGLE_CLIENT_ID",
       "label": "Google OAuth client ID",
-      "help": "Optional, with the secret below, for \"Continue with Google\". Authorized redirect URI: the app's address followed by /api/auth/callback/google.",
+      "help": "With the secret below, for \"Continue with Google\". Authorized redirect URI: the app's address followed by /api/auth/callback/google.",
       "optional": true
     },
     {
       "name": "GOOGLE_CLIENT_SECRET",
       "label": "Google OAuth client secret",
-      "help": "Optional. The secret of the Google OAuth client above.",
+      "help": "The secret of the Google OAuth client above.",
       "optional": true
     },
     {
       "name": "POLAR_ACCESS_TOKEN",
       "label": "Polar access token",
-      "help": "Optional. Only to sell the Hobby and Pro plans through Polar (scopes checkouts:write and customer_sessions:write), with the product ids below.",
+      "help": "Only to sell the Hobby and Pro plans through Polar (scopes checkouts:write and customer_sessions:write), with the product ids below.",
       "optional": true
     },
     {
       "name": "POLAR_WEBHOOK_SECRET",
       "label": "Polar webhook secret",
-      "help": "Optional. Signing secret of the Polar webhook pointed at the app's address followed by /api/webhooks/polar.",
+      "help": "Signing secret of the Polar webhook pointed at the app's address followed by /api/webhooks/polar.",
       "optional": true
     },
     {
       "name": "CF_API_TOKEN",
       "label": "Cloudflare token for custom domains",
-      "help": "Optional. Lets organizations on a paid plan use their own domains through Cloudflare for SaaS: a token with Zone, SSL and Certificates, Edit on the zone below.",
+      "help": "Lets organizations on a paid plan use their own domains through Cloudflare for SaaS: a token with Zone, SSL and Certificates, Edit on the zone below.",
       "optional": true,
       "cloudflareToken": true
     }
@@ -118,14 +120,14 @@
     {
       "name": "SENTRY_DSN",
       "label": "Sentry DSN",
-      "help": "Optional. Your own Sentry project's DSN for Worker error reports. Leave it empty to send none.",
+      "help": "Your own Sentry project's DSN for Worker error reports. Leave it empty to send none.",
       "default": "",
       "optional": true
     },
     {
       "name": "CF_ZONE_ID",
       "label": "Custom domains zone ID",
-      "help": "Optional. The zone with Cloudflare for SaaS set up for customer domains.",
+      "help": "The zone with Cloudflare for SaaS set up for customer domains.",
       "default": "",
       "optional": true
     },
@@ -143,14 +145,14 @@
     {
       "name": "POLAR_PRO_PRODUCT_ID",
       "label": "Polar Pro product ID",
-      "help": "Optional. The recurring Pro product in your Polar organization.",
+      "help": "The recurring Pro product in your Polar organization.",
       "default": "",
       "optional": true
     },
     {
       "name": "POLAR_HOBBY_PRODUCT_ID",
       "label": "Polar Hobby product ID",
-      "help": "Optional. The recurring Hobby product in your Polar organization.",
+      "help": "The recurring Hobby product in your Polar organization.",
       "default": "",
       "optional": true
     }

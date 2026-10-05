@@ -7,6 +7,8 @@
   "repo": "azu/memory-note",
   "license": "MIT",
   "categories": ["notes", "productivity", "developer-tools"],
+  // Help text edited after this release was published: a revision, no new build.
+  "revision": 2,
   "authors": [{ "name": "azu", "url": "https://efcl.info", "github": "azu", "x": "azu_re" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags, so the entry follows the default branch by
@@ -68,7 +70,7 @@
       // parses it as JSON itself.
       "name": "NOTION_FILTER_OPTIONS",
       "label": "Notion filters",
-      "help": "Optional, only for the Notion storage. A JSON list of filters that must all match, for example [{\"name\":\"Status\",\"type\":\"status\",\"value\":\"Open\"}]. Types: checkbox, relation, select and status; select and status also take \"op\": \"does_not_equal\".",
+      "help": "Only for the Notion storage. A JSON list of filters that must all match, for example [{\"name\":\"Status\",\"type\":\"status\",\"value\":\"Open\"}]. Types: checkbox, relation, select and status; select and status also take \"op\": \"does_not_equal\".",
       "optional": true
     }
   ],

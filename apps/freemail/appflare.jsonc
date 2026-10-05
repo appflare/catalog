@@ -12,6 +12,8 @@
   "repo": "idinging/freemail",
   "license": "Apache-2.0",
   "categories": ["email", "privacy"],
+  // Help text edited after this release was published: a revision, no new build.
+  "revision": 2,
   "authors": [{ "name": "iding", "url": "https://blog.iding.qzz.io", "github": "idinging" }],
   "maintainers": ["MendyLanda"],
   // The newest release tag, not the default branch: every commit after it on
@@ -53,25 +55,25 @@
     {
       "name": "GUEST_PASSWORD",
       "label": "Guest password",
-      "help": "Optional. Lets anyone sign in as the user name guest with this password to try the interface on demo data; guests never see real mail.",
+      "help": "Lets anyone sign in as the user name guest with this password to try the interface on demo data; guests never see real mail.",
       "optional": true
     },
     {
       "name": "RESEND_API_KEY",
       "label": "Resend API key",
-      "help": "Optional, for sending. One key for every domain, or domain=key pairs separated by commas (example.com=re_1,example.org=re_2).",
+      "help": "For sending: one key for every domain, or domain=key pairs separated by commas (example.com=re_1,example.org=re_2).",
       "optional": true
     },
     {
       "name": "SENDFLARE_API_KEY",
       "label": "SendFlare API key",
-      "help": "Optional, for sending through SendFlare, in the same formats as the Resend key.",
+      "help": "For sending through SendFlare, in the same formats as the Resend key.",
       "optional": true
     },
     {
       "name": "CYBERPERSONS_API_KEY",
       "label": "Cyberpersons API key",
-      "help": "Optional, for sending through Cyberpersons, in the same formats as the Resend key.",
+      "help": "For sending through Cyberpersons, in the same formats as the Resend key.",
       "optional": true
     }
   ],
@@ -100,7 +102,7 @@
     {
       "name": "FORWARD_RULES",
       "label": "Forwarding rules",
-      "help": "Optional. Forward mail by the address's local part to verified Email Routing destination addresses, for example vip=a@example.com,*=b@example.com. Mailboxes can also set their own forwarding address in the app.",
+      "help": "Forward mail by the address's local part to verified Email Routing destination addresses, for example vip=a@example.com,*=b@example.com. Mailboxes can also set their own forwarding address in the app.",
       "optional": true
     }
   ],

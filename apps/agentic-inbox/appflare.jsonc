@@ -8,8 +8,9 @@
   "license": "Apache-2.0",
   "categories": ["email", "ai"],
   // Upstream has not moved since the released pin, so the Access protection
-  // below is a revision of that build.
-  "revision": 2,
+  // below (revision 2) and the edited help text (revision 3) are revisions of
+  // that build.
+  "revision": 3,
   "authors": [
     { "name": "Cloudflare", "url": "https://www.cloudflare.com", "github": "cloudflare" }
   ],
@@ -76,7 +77,7 @@
       // form takes JSON text; the form starts with the config's empty list.
       "name": "EMAIL_ADDRESSES",
       "label": "Allowed addresses",
-      "help": "Optional. A JSON list of the only addresses that may have a mailbox, for example [\"hello@example.com\", \"sales@example.com\"]. Mail to any other address is dropped. Leave [] to allow any address in your domain.",
+      "help": "A JSON list of the only addresses that may have a mailbox, for example [\"hello@example.com\", \"sales@example.com\"]. Mail to any other address is dropped. Leave [] to allow any address in your domain.",
       "optional": true
     }
   ],
