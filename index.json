@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-05T18:25:10.948Z",
+  "generatedAt": "2026-10-05T18:33:44.475Z",
   "apps": [
     {
       "slug": "2fa",
@@ -1819,6 +1819,54 @@
       "accessOffer": "offered"
     },
     {
+      "slug": "edgeever",
+      "name": "EdgeEver",
+      "summary": "An Evernote-style notes and knowledge base with a three-pane layout, full-text search, public note sharing, AI features and a built-in MCP server, on D1 and R2.",
+      "tagline": "Notes you can organize, search, and share from your own account",
+      "addedAt": "2026-09-27T05:18:00+03:00",
+      "version": "1.100.0",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/edgeever@1.100.0/edgeever-1.100.0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/edgeever@1.100.0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/edgeever@1.100.0/manifest.sig",
+        "digest": "3e8f0bd1997408b673d92203f9145311cbab96929292bdb7b99476ea5e1adc9e"
+      },
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "r2"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "tianma-if",
+          "github": "tianma-if",
+          "x": "tianma_if"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/edgeever/icon.svg",
+          "sha256": "1f13ba9f2ac4ea325eddce44a427eed4e98b64b9078b23de067ed23e67fe7257"
+        },
+        "screenshots": []
+      },
+      "services": [
+        "d1",
+        "r2"
+      ],
+      "categories": [
+        "notes",
+        "productivity"
+      ],
+      "license": "AGPL-3.0-only",
+      "revision": 3,
+      "accessOffer": "offered"
+    },
+    {
       "slug": "edgekey",
       "name": "EdgeKey",
       "summary": "A shop for digital goods: sell card keys and codes, take payment through USDT, Epay, Alipay or Stripe, and deliver each order automatically by page and email.",
@@ -2091,6 +2139,67 @@
       ],
       "license": "MIT",
       "revision": 1,
+      "accessOffer": "offered"
+    },
+    {
+      "slug": "emdash",
+      "name": "EmDash",
+      "summary": "A full-stack TypeScript CMS built on Astro, the spiritual successor to WordPress: this is its blog template, with posts, pages, categories and tags, search, RSS and an admin editor, on D1 and R2.",
+      "tagline": "Create a blog with built-in search and an editor",
+      "addedAt": "2026-09-27T06:14:13+03:00",
+      "version": "0.0.0-20260928.1930243",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/emdash@0.0.0-20260928.1930243/emdash-0.0.0-20260928.1930243.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/emdash@0.0.0-20260928.1930243/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/emdash@0.0.0-20260928.1930243/manifest.sig",
+        "digest": "79efcd70e49d302da05ab3877ee001e1ad77c0eee5602b313e52dbd6d44abf2c"
+      },
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "r2"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "EmDash",
+          "url": "https://emdashcms.com",
+          "github": "emdash-cms"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/emdash/icon.svg",
+          "sha256": "323512d1d707c4a7e07a1a8a9234a740a14c9aa5f479672cdf66188d0109da77"
+        },
+        "screenshots": [
+          {
+            "url": "https://appflare.github.io/catalog/apps/emdash/screenshots/01-home-page.png",
+            "sha256": "88653dc93f80f8a20113422dc5e7de8f3cab5fe6aed8b0d1f65ea8a55bd738eb",
+            "alt": "EmDash: Home page"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/emdash/screenshots/02-a-post.png",
+            "sha256": "ea9814577576e524c5fe33db508a77da3caf28275aefd879b90eac012d15c762",
+            "alt": "EmDash: A post"
+          }
+        ]
+      },
+      "services": [
+        "kv",
+        "d1",
+        "r2",
+        "cron",
+        "images"
+      ],
+      "categories": [
+        "cms"
+      ],
+      "license": "MIT",
+      "revision": 3,
       "accessOffer": "offered"
     },
     {
@@ -3778,6 +3887,78 @@
       "accessOffer": "offered"
     },
     {
+      "slug": "mailflare",
+      "name": "Mailflare",
+      "summary": "A self-hosted email service for your own domains: mailboxes, forwarding rules, and a web inbox, on Email Routing, D1, R2, Queues, and Durable Objects.",
+      "tagline": "Email and shared inboxes for your own domain",
+      "addedAt": "2026-09-24T07:29:19+03:00",
+      "version": "0.0.0-20261002.c2043e1",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261002.c2043e1/mailflare-0.0.0-20261002.c2043e1.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261002.c2043e1/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261002.c2043e1/manifest.sig",
+        "digest": "b871c754753aa29095e3b937b1b40b0415eae60393f2462b32ab916408e54e59"
+      },
+      "tier": "artifact",
+      "plan": "paid",
+      "requires": [
+        "zone",
+        "email-routing",
+        "r2"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Hieu Nguyen",
+          "github": "hieunc229",
+          "x": "hieuSSR"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/mailflare/icon.png",
+          "sha256": "99e25176a3c443b584503fe07a5ed66fe2e06413b7e1c605e52649ed57bdc493"
+        },
+        "screenshots": [
+          {
+            "url": "https://appflare.github.io/catalog/apps/mailflare/screenshots/01-inbox.png",
+            "sha256": "6d6116e232cb8f762303de24ce6cf818eeacb3f4a5e4d903be4adc0492865e14",
+            "alt": "Mailflare: Inbox"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/mailflare/screenshots/02-domains.png",
+            "sha256": "b2db3790cee7e45bc347f36889455cc7cf5f6a30280135921fbfb476f0e4de76",
+            "alt": "Mailflare: Domains"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/mailflare/screenshots/03-mailboxes.png",
+            "sha256": "450ffbebdd462fe98789d8e6c13a0757807726fad5bef16ce3751a0f23dcdbfb",
+            "alt": "Mailflare: Mailboxes"
+          }
+        ]
+      },
+      "services": [
+        "d1",
+        "r2",
+        "durable-objects",
+        "queues",
+        "cron",
+        "workers-ai",
+        "images",
+        "email-routing",
+        "zone"
+      ],
+      "categories": [
+        "email"
+      ],
+      "license": "AGPL-3.0-only",
+      "revision": 2,
+      "accessOffer": "offered"
+    },
+    {
       "slug": "md-page",
       "name": "md.page",
       "summary": "Turn Markdown into a shareable web page with one request: an API, an MCP server for coding agents, and pages that expire after 24 hours, on Workers KV.",
@@ -4475,6 +4656,65 @@
       ],
       "license": "MIT",
       "revision": 1,
+      "accessOffer": "offered"
+    },
+    {
+      "slug": "omnimail",
+      "name": "OmniMail",
+      "summary": "Self-hosted multi-domain webmail on one Worker: mailboxes and users on your own domains through Email Routing, sending through Resend or SendFlare, and external Gmail, Microsoft and other accounts in one place. The interface is in Chinese.",
+      "tagline": "Mail for your domains and other inboxes in one place",
+      "addedAt": "2026-09-27T04:47:37+03:00",
+      "version": "1.2.0",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/omnimail@1.2.0/omnimail-1.2.0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/omnimail@1.2.0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/omnimail@1.2.0/manifest.sig",
+        "digest": "72578ee22b70c86945427e902a460d555e50aeed39f31f94fb7b02c37607c0a4"
+      },
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "zone",
+        "email-routing",
+        "r2"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "OmniMail contributors",
+          "url": "https://omnimail.aicnos.com",
+          "github": "mibgb65-cloud"
+        },
+        {
+          "name": "mimanchi412",
+          "github": "mimanchi412"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/omnimail/icon.svg",
+          "sha256": "a0bf76d88fa98bae3253efe1e8f5772a64901b56f8ecdb8f234205f632d23007"
+        },
+        "screenshots": []
+      },
+      "services": [
+        "d1",
+        "r2",
+        "queues",
+        "workflows",
+        "cron",
+        "workers-ai",
+        "email-routing",
+        "zone"
+      ],
+      "categories": [
+        "email"
+      ],
+      "license": "MIT",
+      "revision": 4,
       "accessOffer": "offered"
     },
     {
