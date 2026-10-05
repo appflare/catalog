@@ -15,6 +15,8 @@
   "repo": "microfeed/microfeed",
   "license": "AGPL-3.0-only",
   "categories": ["cms", "media"],
+  // openPath added after this release was published: a revision, no new build.
+  "revision": 2,
   "authors": [
     { "name": "Listen Notes", "url": "https://www.listennotes.com", "github": "microfeed" }
   ],
@@ -109,6 +111,9 @@
       "optional": true
     }
   ],
+  // The default of MICROFEED_ADMIN_PATH. Open still goes here after an admin
+  // changes that var.
+  "openPath": "/admin/",
   "postInstall": [
     {
       "type": "markdown",
