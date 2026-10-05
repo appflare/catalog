@@ -1562,7 +1562,9 @@ Repository settings the maintainer has to make:
 - Protect `main` with a branch ruleset that requires the status checks `verify
   passed` (from `verify.yml`) and `commit messages` (from `conventions.yml`), with
   **Repository admin** and **Deploy keys** in its bypass list (deploy keys, so the
-  `index.json` pushes above get through).
+  `index.json` pushes above get through). Leave each check's source as **any
+  source**: on bump pull requests both arrive as commit statuses, not as check
+  runs of the GitHub Actions app (see "Keeping pins current").
   Auto-merge waits only for required checks, and a required check needs a fixed
   name, which the per-app `pack <slug>` and `install check <slug>` jobs do not
   have. `verify passed` fails unless every other `verify.yml` job succeeded;
@@ -1600,9 +1602,12 @@ A bump only ever moves forward:
   is on the pinned commit or on a later one that contains it, meaning GitHub's
   compare API reports `behind_by == 0` from the pin to the tag. A tag pin gives
   the app a semver version instead of a date-based one. A tag on an older or
-  unrelated commit is refused.
+  unrelated commit is refused, including a tag that shares no history with the
+  pin because upstream rewrote its history (`apps/clist`).
 - Without stable tags, a pin on a branch moves to the new head when the head is
-  ahead of the pinned commit (`ahead_by > 0`).
+  ahead of the pinned commit (`ahead_by > 0`). A head that shares no history
+  with the pin is not bumped: the app is reported (below) for a maintainer to
+  choose the new pin.
 
 An app whose `install.wranglerConfig` is in a subdirectory of its repository
 (`r2-explorer-template/wrangler.json`) moves only when GitHub's compare API lists
@@ -1629,14 +1634,32 @@ Cadence and cleanup:
   opened in the last seven days is still open, newer commits wait.
 - A new bump pull request closes the app's older open ones, with a comment
   pointing at the new one, and deletes their branches.
-- If an app's upstream cannot be read, it is listed in the run summary and the
-  others still get their pull requests. The run then fails so the problem is
-  seen.
+- If an app's upstream cannot be read, or its pull request cannot be opened, the
+  app is skipped with a warning and the others still get their pull requests;
+  the run does not fail for it. A superseded pull request that cannot be closed
+  is reported the same way.
+- Each run also looks for stuck bumps: a `bump/` branch without a pull request
+  (the workflow pushed it but could not open the pull request, and the target
+  counts as proposed, so no run proposes it again), and an open bump pull
+  request whose head commit still lacks `verify passed` or `commit messages`
+  six hours after it was opened (its checks never started or never reported,
+  so it cannot merge). Each is reported with what to do.
+- The run summary lists all of these, and a full run (no `apps` input) keeps
+  one open issue, **Bump workflow: apps that need a maintainer**, listing them.
+  Each full run rewrites the list, and the first full run that finds nothing
+  left closes the issue.
 
-Pull requests opened with the workflow's own token do not start `pull_request`
-workflows. `bump.yml` therefore starts `verify.yml` and `conventions.yml` on each
-new branch with `workflow_dispatch`. Their checks attach to the pull request's
-commit, so required checks can pass.
+Pull requests opened with the workflow's own token get `pull_request` runs that
+wait for a maintainer to approve them (the "approve workflows to run" banner),
+and check runs from a `workflow_dispatch` run do not count among a pull
+request's checks, so they cannot satisfy `main`'s required checks. `bump.yml`
+therefore starts `verify.yml` and `conventions.yml` on each new branch with
+`workflow_dispatch`, and those runs set their results as commit statuses named
+`verify passed` and `commit messages` on the branch head, which the required
+checks accept. Nobody has to approve the held runs; approving them, or updating
+the branch, runs the same checks as `pull_request` runs. The bump job does not
+push with the `CATALOG_PUSH_KEY` deploy key instead: that key bypasses `main`'s
+rules, and the pull request would still be opened by the workflow token.
 
 ### Who merges a bump
 

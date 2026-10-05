@@ -136,6 +136,54 @@ describe("relation", () => {
     });
   });
 
+  describe("when the compare API answers 404", () => {
+    const COMPARE = `repos/o/r/compare/${sha("a")}...${sha("b")}`;
+    const runner = (found: string[]) => {
+      const calls: string[] = [];
+      const run = ((request: GhRequest) => {
+        calls.push(request.path);
+        if (request.path === COMPARE) {
+          throw new GhNotFoundError(`gh api GET ${COMPARE}: HTTP 404 (gh: No common ancestor)`);
+        }
+        const commit = /^repos\/o\/r\/commits\/([0-9a-f]{40})$/.exec(request.path)?.[1];
+        if (commit && found.includes(commit)) {
+          expect(request.jq).toBe(".sha");
+          return Buffer.from(`${commit}\n`);
+        }
+        throw new GhNotFoundError(`gh api GET ${request.path}: HTTP 404`);
+      }) as GhRunner;
+      return { run, calls };
+    };
+
+    it("is null when both commits exist: they share no history", () => {
+      const { run, calls } = runner([sha("a"), sha("b")]);
+      expect(createGhUpstream(run).relation("o/r", sha("a"), sha("b"))).toBe(null);
+      expect(calls).toEqual([
+        COMPARE,
+        `repos/o/r/commits/${sha("a")}`,
+        `repos/o/r/commits/${sha("b")}`,
+      ]);
+    });
+
+    it("throws the compare error when either commit is gone", () => {
+      for (const found of [[sha("a")], [sha("b")], []]) {
+        expect(() =>
+          createGhUpstream(runner(found).run).relation("o/r", sha("a"), sha("b")),
+        ).toThrow("No common ancestor");
+      }
+    });
+
+    it("throws any other failure while checking the commits", () => {
+      const run = ((request: GhRequest) => {
+        if (request.path === COMPARE) {
+          throw new GhNotFoundError("HTTP 404");
+        }
+        throw new Error("HTTP 502");
+      }) as GhRunner;
+      expect(() => createGhUpstream(run).relation("o/r", sha("a"), sha("b"))).toThrow("HTTP 502");
+    });
+  });
+
   it("rejects an unexpected answer", () => {
     const run = (() => Buffer.from("null null")) as GhRunner;
     expect(() => createGhUpstream(run).relation("o/r", sha("a"), sha("b"))).toThrow(

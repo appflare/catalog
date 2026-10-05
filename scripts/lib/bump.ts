@@ -148,14 +148,17 @@ export const TAG_PIN_NOTE = "a tag pin gives the app a semver version instead of
  * - a prerelease tag pin is left alone (someone chose it on purpose);
  * - a branch pin moves to a stable tag whose commit is the pinned commit or
  *   contains it (`behind_by === 0` in the compare API); a tag on an older or
- *   unrelated commit is refused;
+ *   unrelated commit is refused (`relation` is null for commits that share no
+ *   history);
  * - a branch pin moves to a newer branch head when the head is ahead of the
  *   pinned commit (`ahead_by > 0`; this also covers histories that diverged).
+ *   A head that shares no history with the pin throws: upstream rewrote its
+ *   history, and someone has to choose the new pin.
  */
 export function decideBump(
   pin: AppPin,
   target: UpstreamTarget,
-  relation: (base: string, head: string) => CommitRelation,
+  relation: (base: string, head: string) => CommitRelation | null,
 ): BumpDecision {
   const { ref, sha } = pin.source;
   if (target.sha === sha && target.ref === ref) {
@@ -179,10 +182,18 @@ export function decideBump(
     return { action: "bump", bump: bumpFor(pin, target) };
   }
   if (target.kind === "tag") {
-    if (target.sha !== sha && relation(sha, target.sha).behind > 0) {
+    const tag = `tag ${target.ref}@${shortSha(target.sha)}`;
+    const related = target.sha === sha ? { ahead: 0, behind: 0 } : relation(sha, target.sha);
+    if (related === null) {
       return {
         action: "skip",
-        reason: `tag ${target.ref}@${shortSha(target.sha)} does not contain the pinned ${shortSha(sha)}`,
+        reason: `${tag} shares no history with the pinned ${shortSha(sha)}`,
+      };
+    }
+    if (related.behind > 0) {
+      return {
+        action: "skip",
+        reason: `${tag} does not contain the pinned ${shortSha(sha)}`,
       };
     }
     return { action: "bump", bump: { ...bumpFor(pin, target), note: TAG_PIN_NOTE } };
@@ -190,7 +201,14 @@ export function decideBump(
   if (target.sha === sha) {
     return { action: "skip", reason: "upstream still points at the pinned commit" };
   }
-  if (relation(sha, target.sha).ahead <= 0) {
+  const related = relation(sha, target.sha);
+  if (related === null) {
+    throw new Error(
+      `${target.ref}@${shortSha(target.sha)} shares no history with the pinned ` +
+        `${shortSha(sha)} (upstream rewrote its history); choose the new pin by hand`,
+    );
+  }
+  if (related.ahead <= 0) {
     return {
       action: "skip",
       reason: `${target.ref}@${shortSha(target.sha)} is not ahead of the pinned ${shortSha(sha)}`,
@@ -275,6 +293,8 @@ export function planBumps(apps: readonly AppEntry[], upstream: UpstreamSource): 
 export interface BumpPr {
   number: number;
   head: string;
+  /** The head commit. */
+  headSha: string;
   state: "open" | "closed";
   createdAt: string;
 }
@@ -435,4 +455,71 @@ export function applyBump(text: string, to: { ref: string; sha: string }): strin
     { path: ["source", "ref"], value: to.ref },
     { path: ["source", "sha"], value: to.sha },
   ]);
+}
+
+/**
+ * The status checks main's ruleset requires, with the workflow that reports
+ * each on a bump branch: the bump workflow starts both with workflow_dispatch,
+ * and they set their result as a commit status of that name.
+ */
+export const REQUIRED_CHECKS = [
+  { context: "verify passed", workflow: "verify.yml" },
+  { context: "commit messages", workflow: "conventions.yml" },
+] as const;
+
+/**
+ * How long an open bump pull request may go without a required check on its
+ * head before it needs a person. Far longer than a verify run takes.
+ */
+export const CHECKS_GRACE_MS = 6 * 60 * 60 * 1000;
+
+/**
+ * What in an app's existing bumps needs a person, one line each. Both would
+ * otherwise wait forever, with nothing in the run to say so:
+ *
+ * - a bump branch without any pull request (the bump workflow pushed it but
+ *   could not open the pull request): `gateBump` counts the target as proposed,
+ *   so no run proposes it again;
+ * - an open bump pull request, opened at least {@link CHECKS_GRACE_MS} ago,
+ *   whose head commit lacks a required check (its checks never started, or
+ *   never reported): it cannot merge. `reported(sha)` names the checks the pull
+ *   request sees on that commit.
+ *
+ * Pull requests in `skip` (this run supersedes them) are left out.
+ */
+export function outstandingBumps(
+  existing: { branches: readonly string[]; prs: readonly BumpPr[] },
+  reported: (sha: string) => readonly string[],
+  now: Date,
+  skip: ReadonlySet<number> = new Set(),
+): string[] {
+  const lines: string[] = [];
+  for (const branch of existing.branches) {
+    if (!existing.prs.some((p) => p.head === branch)) {
+      lines.push(
+        `${branch} has no pull request, so no bump run proposes its target again; ` +
+          "open the pull request by hand, or delete the branch",
+      );
+    }
+  }
+  for (const pr of existing.prs) {
+    if (
+      pr.state !== "open" ||
+      skip.has(pr.number) ||
+      now.getTime() - Date.parse(pr.createdAt) < CHECKS_GRACE_MS
+    ) {
+      continue;
+    }
+    const seen = reported(pr.headSha);
+    const missing = REQUIRED_CHECKS.filter((c) => !seen.includes(c.context));
+    if (missing.length > 0) {
+      const hours = CHECKS_GRACE_MS / 3_600_000;
+      lines.push(
+        `#${pr.number} (${pr.head}) has no ${missing.map((c) => `"${c.context}"`).join(" or ")} ` +
+          `on ${shortSha(pr.headSha)} after ${hours} hours, so it cannot merge; start ` +
+          missing.map((c) => `gh workflow run ${c.workflow} --ref ${pr.head}`).join(" and "),
+      );
+    }
+  }
+  return lines;
 }

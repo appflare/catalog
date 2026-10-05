@@ -176,7 +176,7 @@ const RATE_LIMITED = /rate limit/i;
 
 type Verdict =
   | { kind: "ok"; response: GhResponse }
-  | { kind: "not-found"; response: GhResponse }
+  | { kind: "not-found"; reason: string; response: GhResponse }
   | { kind: "retry"; reason: string; response: GhResponse | null; rateLimited: boolean }
   | { kind: "fail"; reason: string; response: GhResponse | null };
 
@@ -215,7 +215,8 @@ export function classify(method: HttpMethod, result: GhProcessResult): Verdict {
       : { kind: "fail", reason, response };
   }
   if (status === 404) {
-    return { kind: "not-found", response };
+    // GitHub's message says which 404 this is ("Not Found", "No common ancestor ...").
+    return { kind: "not-found", reason: `HTTP 404${detail}`, response };
   }
   const reason = `HTTP ${status}${detail}`;
   const limited =
@@ -344,7 +345,7 @@ export function createGhRunner(options: GhApiOptions = {}): GhRunner {
         return verdict.response;
       }
       if (verdict.kind === "not-found") {
-        throw new GhNotFoundError(`${label}: HTTP 404`);
+        throw new GhNotFoundError(`${label}: ${verdict.reason}`);
       }
       const tries = `${attempt} attempt${attempt === 1 ? "" : "s"}`;
       const failure = `${verdict.reason}${bodyNote(verdict.response)}`;

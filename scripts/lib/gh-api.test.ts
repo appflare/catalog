@@ -127,6 +127,22 @@ describe("createGhRunner retries", () => {
     expect(calls).toHaveLength(1);
   });
 
+  it("names GitHub's reason for a 404", () => {
+    const compare = "repos/o/r/compare/a...b";
+    const { run } = scripted([
+      http(404, '{"message":"No common ancestor between a and b."}', {
+        stderr: "gh: No common ancestor between a and b. (HTTP 404)\n",
+      }),
+      http(404, '{"message":"Not Found"}'),
+    ]);
+    expect(() => run({ path: compare })).toThrow(
+      `gh api GET ${compare}: HTTP 404 (gh: No common ancestor between a and b. (HTTP 404))`,
+    );
+    expect(() => run({ path: compare })).toThrow(
+      new GhNotFoundError(`gh api GET ${compare}: HTTP 404`),
+    );
+  });
+
   it.each([400, 401, 403, 422])("does not retry HTTP %i", (status) => {
     const { run, calls } = scripted([
       http(status, '{"message":"no"}', { stderr: `gh: no (HTTP ${status})\n` }),

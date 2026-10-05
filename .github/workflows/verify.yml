@@ -29,12 +29,16 @@ name: verify
 # only. pack, which runs the app's install and build, gets none. Fork pull
 # requests get no secrets, so build-packer fails and install is skipped.
 #
-# Pull requests opened by the bump workflow (with the workflow token) do not
-# trigger pull_request runs, so that workflow starts this one with
-# workflow_dispatch on the bump branch; changed apps are then diffed against main.
+# Pull requests opened by the bump workflow (with the workflow token) get
+# pull_request runs that wait for a maintainer's approval, so that workflow
+# starts this one with workflow_dispatch on the bump branch; changed apps are
+# then diffed against main.
 #
 # The last job, "verify passed", sums up the others under one fixed name, so a
-# branch ruleset can require it however many apps a pull request touches.
+# branch ruleset can require it however many apps a pull request touches. A
+# pull request's checks leave out check runs of workflow_dispatch runs, so a
+# dispatched run also sets a commit status named "verify passed" on the commit
+# it verified; the ruleset accepts a status or a check run of that name.
 
 on:
   pull_request:
@@ -303,9 +307,12 @@ jobs:
     if: always()
     runs-on: ubuntu-24.04
     timeout-minutes: 5
-    permissions: {}
+    permissions:
+      # The commit status of a dispatched run; this job checks nothing out.
+      statuses: write
     steps:
       - name: Require every verify job to have succeeded
+        id: result
         working-directory: .
         env:
           RESULTS: ${{ toJSON(needs) }}
@@ -340,3 +347,25 @@ jobs:
             status=1
           fi
           exit "${status}"
+      # A pull request's checks and its branch rules ignore the check runs of a
+      # workflow_dispatch run (the bump workflow's runs), so the result is also
+      # set as a commit status under the same name on the commit this run
+      # verified. A cancelled run sets none: the run that replaced it does.
+      - name: Report the result on the commit
+        if: github.event_name == 'workflow_dispatch' && !cancelled()
+        working-directory: .
+        env:
+          GH_TOKEN: ${{ github.token }}
+          OUTCOME: ${{ steps.result.outcome }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          set -euo pipefail
+          if [ "${OUTCOME}" = "success" ]; then
+            state=success description="Every verify job succeeded"
+          else
+            state=failure description="A verify job did not succeed"
+          fi
+          gh api --method POST "repos/${GITHUB_REPOSITORY}/statuses/${GITHUB_SHA}" \
+            -f state="${state}" -f context="verify passed" \
+            -f description="${description}" -f target_url="${RUN_URL}" > /dev/null
+          echo "set verify passed: ${state} on ${GITHUB_SHA}"
