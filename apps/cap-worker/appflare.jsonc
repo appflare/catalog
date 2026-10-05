@@ -12,6 +12,9 @@
   // licensed under the MIT License."
   "license": "MIT",
   "categories": ["security", "developer-tools"],
+  // The formatting of URLs in the notes changed after this release was published:
+  // a revision, no new build.
+  "revision": 2,
   "authors": [{ "name": "xyTom", "github": "xyTom" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no tags; the pin follows the default branch.
@@ -32,11 +35,11 @@
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Point the Cap widget at this install: load {{appUrl}}/cap.min.js and set `data-cap-api-endpoint=\"{{appUrl}}/api/\"` on `<cap-widget>`. Your server then checks each token with `POST {{appUrl}}/api/validate`."
+      "content": "Point the Cap widget at this install: load `{{appUrl}}/cap.min.js` and set `data-cap-api-endpoint=\"{{appUrl}}/api/\"` on `<cap-widget>`. Your server then checks each token with `POST {{appUrl}}/api/validate`."
     },
     {
       "type": "markdown",
-      "content": "The page at {{appUrl}} is upstream's documentation. Its live demo and code samples use upstream's public server, captcha.gurl.eu.org, not this install; replace that address with {{appUrl}} when you copy them."
+      "content": "The page at {{appUrl}} is upstream's documentation. Its live demo and code samples use upstream's public server, captcha.gurl.eu.org, not this install; replace that address with `{{appUrl}}` when you copy them."
     }
   ]
 }

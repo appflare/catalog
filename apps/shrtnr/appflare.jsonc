@@ -8,9 +8,10 @@
   "repo": "oddbit/shrtnr",
   "license": "Apache-2.0",
   "categories": ["utilities", "analytics"],
-  // The first step after installing changed after this release was published:
-  // a revision, no new build.
-  "revision": 2,
+  // The changed first step after installing (revision 2), openPath and field
+  // links (revision 3) and the formatting of URLs in the notes (revision 4) came
+  // after this release was published: revisions, no new build.
+  "revision": 4,
   "authors": [
     { "name": "Oddbit", "url": "https://oddbit.id", "github": "oddbit", "x": "evenbit" },
     {
@@ -53,18 +54,30 @@
       "name": "ACCESS_AUD",
       "label": "Access application audience (AUD) tag",
       "help": "From the Cloudflare Access application that protects this Worker. Until it and the key URL below are set, the admin pages show setup steps and short links keep redirecting. Several tags may be given, comma separated.",
+      "link": {
+        "label": "Find your AUD tag",
+        "url": "https://developers.cloudflare.com/cloudflare-one/access-controls/applications/http-apps/authorization-cookie/validating-json/"
+      },
       "optional": true
     },
     {
       "name": "ACCESS_JWKS_URL",
       "label": "Access key URL",
       "help": "Your Zero Trust team's signing keys: https://<team>.cloudflareaccess.com/cdn-cgi/access/certs",
+      "link": {
+        "label": "Find your key URL",
+        "url": "https://developers.cloudflare.com/cloudflare-one/access-controls/applications/http-apps/authorization-cookie/validating-json/"
+      },
       "optional": true
     },
     {
       "name": "MCP_ACCESS_AUD",
       "label": "MCP Access audience (AUD) tag",
       "help": "Only for the MCP server, which needs its own subdomain and a second Access application with Managed OAuth. Without it the Worker serves no MCP.",
+      "link": {
+        "label": "Find your AUD tag",
+        "url": "https://developers.cloudflare.com/cloudflare-one/access-controls/applications/http-apps/authorization-cookie/validating-json/"
+      },
       "optional": true
     },
     {
@@ -74,10 +87,11 @@
       "generate": "password"
     }
   ],
+  "openPath": "/_/admin/dashboard",
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Short links redirect right away, but the admin pages open only behind Cloudflare Access. In the Zero Trust dashboard, under Access, Applications, add a self-hosted application for {{appHostname}} with the path `_/admin/*`, and copy its Application Audience (AUD) tag. Protect only that path: Appflare's Cloudflare Access protection, and the one-click Access in the Worker's settings, cover every path, short links included."
+      "content": "Short links redirect right away, but the admin pages open only behind Cloudflare Access. In the Zero Trust dashboard, under Access, Applications, add a self-hosted application for `{{appHostname}}` with the path `_/admin/*`, and copy its Application Audience (AUD) tag. Protect only that path: Appflare's Cloudflare Access protection, and the one-click Access in the Worker's settings, cover every path, short links included."
     },
     {
       "type": "markdown",

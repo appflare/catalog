@@ -17,6 +17,8 @@
   "repo": "idhamsy/openshortlink",
   "license": "AGPL-3.0-only",
   "categories": ["utilities", "analytics"],
+  // openPath added after this release was published: a revision, no new build.
+  "revision": 2,
   "authors": [
     { "name": "OpenShort.link contributors", "url": "https://openshort.link", "github": "idhamsy" }
   ],
@@ -78,6 +80,7 @@
       "default": "openshortlink-analytics"
     }
   ],
+  "openPath": "/dashboard",
   "postInstall": [
     {
       "type": "markdown",
