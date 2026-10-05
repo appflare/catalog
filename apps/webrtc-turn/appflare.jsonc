@@ -10,40 +10,46 @@
   "name": "AndroMeld TURN Relay",
   "summary": "Your own TURN relay for AndroMeld: when your phone, Mac and browser cannot connect directly, they relay their encrypted traffic through Cloudflare Realtime TURN in your account.",
   "tagline": "Keep AndroMeld connected when a direct connection fails",
-  "homepage": "https://github.com/heruoxin/webrtc_turn",
   "repo": "heruoxin/webrtc_turn",
   "license": "GPL-3.0-or-later",
   "categories": ["networking", "sync"],
+  // Field links added after this release was published: a revision, no new build.
+  "revision": 2,
   "authors": [{ "name": "little_cup", "url": "https://www.1ittlecup.com", "github": "heruoxin" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no tags; the pin follows the default branch.
   "source": { "ref": "main", "sha": "500651a0fa12f96acbc73362fe3b6dc3d751ffd1" },
   "install": {
-    "tier": "artifact",
     "packageManager": "npm",
     // The Worker is its own npm project in cloudflare/, beside a Docker
     // variant; the repository has no root package.json. Upstream ships no
     // lockfile for it (its only dependency is wrangler), so the pack log
     // records the one the install resolves. Plain JavaScript: no build step.
     "installDirs": [{ "path": "cloudflare", "lockfile": "none" }],
-    "wranglerConfig": "cloudflare/wrangler.jsonc",
-    "workerName": "webrtc-turn"
+    "wranglerConfig": "cloudflare/wrangler.jsonc"
   },
   // One stateless Worker. Relayed traffic is billed by Cloudflare Realtime:
   // the first 1,000 GB of egress each month is free, then $0.05 per GB, and
   // upstream notes that Cloudflare asks for a payment method first.
   "plan": "free",
-  "requires": [],
   "secrets": [
     {
       "name": "TURN_KEY_ID",
       "label": "TURN key ID",
-      "help": "The ID of a TURN key you create in the Cloudflare dashboard under Realtime, TURN Keys: the shorter of the two values."
+      "help": "The ID of a TURN key you create in the Cloudflare dashboard under Realtime, TURN Keys: the shorter of the two values.",
+      "link": {
+        "label": "Create a TURN key",
+        "url": "https://dash.cloudflare.com/?to=/:account/calls"
+      }
     },
     {
       "name": "TURN_KEY_API_TOKEN",
       "label": "TURN key API token",
-      "help": "The API token of the same TURN key. Cloudflare shows it once, when you create the key."
+      "help": "The API token of the same TURN key. Cloudflare shows it once, when you create the key.",
+      "link": {
+        "label": "Create a TURN key",
+        "url": "https://dash.cloudflare.com/?to=/:account/calls"
+      }
     },
     {
       "name": "ACCESS_TOKEN",
@@ -52,16 +58,14 @@
       "optional": true
     }
   ],
-  "vars": [],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Open {{workerUrl}} within 30 minutes of installing and copy the relay URL it shows. In AndroMeld on your Android device, paste it under Remote access, Relay server."
+      "content": "Open {{appUrl}} within 30 minutes of installing and copy the relay URL it shows. In AndroMeld on your Android device, paste it under Remote access, Relay server."
     },
     {
       "type": "markdown",
       "content": "The page closes 30 minutes after each deployment; updating the app or changing its settings opens it again. The relay URL carries a private token: anyone who has it can relay traffic on your Realtime allowance."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

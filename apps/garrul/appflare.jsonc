@@ -11,17 +11,18 @@
   "repo": "KingPin/Garrul",
   "license": "Apache-2.0",
   "categories": ["community"],
+  // openPath and field links added after this release was published: a revision,
+  // no new build.
+  "revision": 2,
   "authors": [{ "name": "KingPin", "url": "https://sumguy.com", "github": "KingPin" }],
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v2.29.0", "sha": "30cb07d9f003585010b9734f04bc55f5ce307176" },
   "install": {
-    "tier": "artifact",
     "packageManager": "npm",
     // Upstream keeps only this example config in the repository (the real one
     // holds each deployment's ids). Its placeholder ids are dropped at pack
     // time, as every binding id is.
     "wranglerConfig": "wrangler.example.toml",
-    "workerName": "garrul",
     // Upstream's build:assets, one step per script: npm runs no pre hooks
     // here, and build:embed's prebuild:embed is build:styles. They write the
     // widget bundle, the /AGENTS.md text and the version module the Worker
@@ -33,7 +34,7 @@
       "npm run build:version"
     ],
     // Answers without a sign-in.
-    "healthPath": "/api/v1/health"
+    "health": { "path": "/api/v1/health" }
   },
   // D1, four KV namespaces, Analytics Engine and one cron trigger fit the free
   // plan; upstream sizes the app for it.
@@ -43,69 +44,103 @@
     {
       "name": "TURNSTILE_SITE_KEY",
       "label": "Turnstile site key",
-      "help": "Anonymous comments pass a Turnstile check. Create a widget under Turnstile in the Cloudflare dashboard with this app's hostname, then paste its site key here."
+      "help": "Anonymous comments pass a Turnstile check. Create a widget under Turnstile in the Cloudflare dashboard with this app's hostname, then paste its site key here.",
+      "link": {
+        "label": "Create a widget",
+        "url": "https://dash.cloudflare.com/?to=/:account/turnstile"
+      }
     },
     {
       "name": "TURNSTILE_SECRET",
       "label": "Turnstile secret key",
-      "help": "The secret key of the same Turnstile widget."
+      "help": "The secret key of the same Turnstile widget.",
+      "link": {
+        "label": "Create a widget",
+        "url": "https://dash.cloudflare.com/?to=/:account/turnstile"
+      }
     },
     {
       "name": "JWT_SECRET",
       "label": "Sign-in state key",
       "help": "Signs the short-lived state of each OAuth sign-in.",
-      "generate": true
+      "generate": "password"
     },
     {
       "name": "IP_HASH_SECRET",
       "label": "IP hash key",
       "help": "Garrul stores a keyed hash of each commenter's IP, never the IP. Keep it: a new value makes every stored hash unmatchable.",
-      "generate": true
+      "generate": "password"
     },
     {
       "name": "GH_CLIENT_ID",
       "label": "GitHub OAuth client ID",
       "help": "For GitHub sign-in, from github.com/settings/developers, with the callback path /api/v1/auth/github/callback on this app's address. The admin pages need at least one sign-in provider.",
+      "link": {
+        "label": "Create an OAuth app",
+        "url": "https://github.com/settings/applications/new"
+      },
       "optional": true
     },
     {
       "name": "GH_CLIENT_SECRET",
       "label": "GitHub OAuth client secret",
+      "link": {
+        "label": "Create an OAuth app",
+        "url": "https://github.com/settings/applications/new"
+      },
       "optional": true
     },
     {
       "name": "GOOGLE_CLIENT_ID",
       "label": "Google OAuth client ID",
       "help": "For Google sign-in, with the callback path /api/v1/auth/google/callback on this app's address.",
+      "link": {
+        "label": "Create an OAuth client",
+        "url": "https://console.cloud.google.com/apis/credentials"
+      },
       "optional": true
     },
     {
       "name": "GOOGLE_CLIENT_SECRET",
       "label": "Google OAuth client secret",
+      "link": {
+        "label": "Create an OAuth client",
+        "url": "https://console.cloud.google.com/apis/credentials"
+      },
       "optional": true
     },
     {
       "name": "DISCORD_CLIENT_ID",
       "label": "Discord OAuth client ID",
       "help": "For Discord sign-in, with the callback path /api/v1/auth/discord/callback on this app's address.",
+      "link": {
+        "label": "Create an OAuth app",
+        "url": "https://discord.com/developers/applications"
+      },
       "optional": true
     },
     {
       "name": "DISCORD_CLIENT_SECRET",
       "label": "Discord OAuth client secret",
+      "link": {
+        "label": "Create an OAuth app",
+        "url": "https://discord.com/developers/applications"
+      },
       "optional": true
     },
     {
       "name": "RESEND_API_KEY",
       "label": "Resend API key",
       "help": "Turns on reply notification emails, from resend.com/api-keys. Set the sender address below too.",
+      "link": { "label": "Get a key", "url": "https://resend.com/api-keys" },
       "optional": true
     },
     {
       "name": "CF_API_TOKEN",
       "label": "Usage page API token",
       "help": "Turns on the admin usage page: a Cloudflare API token for this account with Account Analytics Read, D1 Read and Workers KV Storage Read.",
-      "optional": true
+      "optional": true,
+      "cloudflareToken": true
     }
   ],
   "vars": [
@@ -115,49 +150,52 @@
       "help": "The origins of the sites that show the widget, comma separated, without a trailing slash, for example https://blog.example.com.",
       // The wrangler config's value is upstream's placeholder; an empty
       // default makes the form ask for the real origins.
-      "default": "",
-      "required": true
+      "default": ""
     },
     {
       "name": "ADMIN_EMAILS",
       "label": "Admin emails",
       "help": "Comma separated. Whoever signs in through OAuth with one of these addresses becomes an admin.",
-      "default": "",
-      "required": true
+      "default": ""
     },
     {
       "name": "PUBLIC_BASE_URL",
       "label": "Public URL",
       "help": "The app's address, used in comment permalinks and in emails.",
-      "default": "{{workerUrl}}"
+      "default": "{{appUrl}}",
+      "optional": true
     },
     {
       "name": "OAUTH_CALLBACK_BASE",
       "label": "OAuth callback base",
       "help": "The address the OAuth providers send readers back to; the same as the public URL unless the app sits behind a proxy.",
-      "default": "{{workerUrl}}"
+      "default": "{{appUrl}}",
+      "optional": true
     },
     {
       "name": "EMAIL_FROM",
       "label": "Sender address",
       "help": "For reply notification emails, on a domain verified in Resend, for example Garrul <comments@example.com>.",
-      "default": ""
+      "default": "",
+      "optional": true
     },
     {
       "name": "CF_ACCOUNT_ID",
       "label": "Cloudflare account ID",
       "help": "The account the usage page reads, with the usage page API token: this one. Filled in on every install and update.",
-      "default": "{{accountId}}"
+      "default": "{{accountId}}",
+      "optional": true
     }
   ],
+  "openPath": "/admin",
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Add the widget to a page of a site listed under Sites that embed the comments:\n\n```html\n<div id=\"garrul\" data-slug=\"hello-world\" data-api=\"{{workerUrl}}\"></div>\n<script src=\"{{workerUrl}}/embed.js\" defer></script>\n```"
+      "content": "Add the widget to a page of a site listed under Sites that embed the comments:\n\n```html\n<div id=\"garrul\" data-slug=\"hello-world\" data-api=\"{{appUrl}}\"></div>\n<script src=\"{{appUrl}}/embed.js\" defer></script>\n```"
     },
     {
       "type": "markdown",
-      "content": "Open {{workerUrl}}/admin and sign in through an OAuth provider with an address listed under Admin emails. Without a provider set, only anonymous comments work."
+      "content": "Open {{appUrl}}/admin and sign in through an OAuth provider with an address listed under Admin emails. Without a provider set, only anonymous comments work."
     },
     {
       "type": "markdown",
@@ -166,9 +204,22 @@
   ],
   "tokenPermissions": [
     {
-      "name": "Account.Account Analytics:Read",
+      "group": "Account Analytics",
       "scope": "account",
-      "description": "Optional: the admin usage page (CF_API_TOKEN), with D1 Read and Workers KV Storage Read."
+      "access": "read",
+      "reason": "Optional: shows the Worker's requests on the admin usage page."
+    },
+    {
+      "group": "D1",
+      "scope": "account",
+      "access": "read",
+      "reason": "Optional: shows the database's usage on the admin usage page."
+    },
+    {
+      "group": "Workers KV Storage",
+      "scope": "account",
+      "access": "read",
+      "reason": "Optional: shows the KV namespace's usage on the admin usage page."
     }
   ],
   "resources": {

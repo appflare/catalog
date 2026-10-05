@@ -1,3 +1,24 @@
+/** A sha256 hex digest that stands in for every file's. */
+const HEX64 = "a".repeat(64);
+
+/** A D1 SQL file of an artifact, as the packer records it. */
+type D1File = { name: string; path: string; size: number; sha256: string; offset: number };
+
+/** One binding's D1 SQL (`d1[binding]`), with the lists it leaves out empty. */
+function d1Binding(sql: {
+  migrations?: D1File[];
+  schema?: D1File[];
+  postDeploy?: D1File[];
+  baseline?: D1File;
+}): Record<string, unknown> {
+  return {
+    migrations: sql.migrations ?? [],
+    schema: sql.schema ?? [],
+    postDeploy: sql.postDeploy ?? [],
+    ...(sql.baseline === undefined ? {} : { baseline: sql.baseline }),
+  };
+}
+
 /**
  * Builds a schema-valid artifact `manifest.json` for tests, modeled
  * on the packer's output for Cut.
@@ -9,17 +30,17 @@ export function artifactManifestFixture(opts: {
   ref?: string;
   keyId?: string;
 }): Record<string, unknown> {
-  const hex64 = "a".repeat(64);
+  const hex64 = HEX64;
   return {
     format: 1,
     app: opts.app,
     version: opts.version,
-    source: { repo: `example/${opts.app}`, sha: opts.sha, ref: opts.ref ?? `v${opts.version}` },
     builtAt: "2026-09-22T12:00:00.000Z",
     builder: "@appflare/pack@0.0.0",
     keyId: opts.keyId ?? "unsigned",
     worker: {
       name: opts.app,
+      wranglerConfig: { declared: "wrangler.jsonc", effective: "wrangler.jsonc" },
       mainModule: "index.js",
       compatibilityDate: "2024-12-30",
       compatibilityFlags: ["nodejs_compat"],
@@ -41,15 +62,16 @@ export function artifactManifestFixture(opts: {
       limits: null,
     },
     assets: { config: {}, binding: null, files: [] },
-    d1Migrations: {},
+    d1: {},
     catalog: {
       slug: opts.app,
       name: "Hello",
       summary: "Fixture.",
+      tagline: "A fixture",
       homepage: "https://github.com/example/hello",
       repo: `example/${opts.app}`,
       license: "MIT",
-      categories: [],
+      categories: ["utilities"],
       maintainers: ["octocat"],
       source: { ref: opts.ref ?? `v${opts.version}`, sha: opts.sha },
       install: {
@@ -69,8 +91,7 @@ export function artifactManifestFixture(opts: {
 }
 
 /**
- * A schema-valid artifact `manifest.json` of an app of two Workers (format
- * 2), shaped like the packer's output for its two-Worker fixture: the primary
+ * A schema-valid artifact `manifest.json` of an app of two Workers, shaped like the packer's output for its two-Worker fixture: the primary
  * Worker `web` binds the `jobs` Worker (a service binding with an entrypoint
  * and a Durable Object class it implements), sends to a queue `jobs`
  * consumes, and both share a D1 database, a KV namespace and a rate limit.
@@ -81,6 +102,10 @@ export function duoArtifactManifestFixture(opts: { sha: string }): Record<string
   const file = (path: string, offset: number) => ({ path, size: 1, sha256: hex64, offset });
   const worker = (name: string, modulePath: string, offset: number) => ({
     name,
+    wranglerConfig: {
+      declared: `${name.slice("duo-".length)}/wrangler.jsonc`,
+      effective: `${name.slice("duo-".length)}/wrangler.jsonc`,
+    },
     mainModule: "index.js",
     compatibilityDate: "2024-12-30",
     compatibilityFlags: [],
@@ -96,7 +121,6 @@ export function duoArtifactManifestFixture(opts: { sha: string }): Record<string
     { type: "kv_namespace", name: "CACHE" },
     { type: "ratelimit", name: "LIMIT", namespace_id: "1001", simple: { limit: 10, period: 60 } },
   ];
-  m.format = 2;
   m.worker = {
     ...worker("duo-web", "worker/index.js", 0),
     bindings: [
@@ -134,7 +158,9 @@ export function duoArtifactManifestFixture(opts: { sha: string }): Record<string
       assets: { config: {}, binding: null, files: [] },
     },
   ];
-  m.d1Migrations = { DB: [{ name: "0001_init.sql", ...file("d1/DB/0001_init.sql", 3) }] };
+  m.d1 = {
+    DB: d1Binding({ migrations: [{ name: "0001_init.sql", ...file("d1/DB/0001_init.sql", 3) }] }),
+  };
   const catalog = m.catalog as Record<string, unknown>;
   m.catalog = {
     ...catalog,
@@ -147,8 +173,8 @@ export function duoArtifactManifestFixture(opts: { sha: string }): Record<string
       ],
     },
     secrets: [
-      { name: "SESSION_SECRET", label: "Session secret", generate: true, workers: ["web"] },
-      { name: "SHARED_KEY", label: "Shared key", generate: true },
+      { name: "SESSION_SECRET", label: "Session secret", generate: "password", workers: ["web"] },
+      { name: "SHARED_KEY", label: "Shared key", generate: "password" },
     ],
     vars: [
       { name: "JOBS_URL", label: "Jobs URL", default: "{{workerUrl:jobs}}" },
@@ -159,7 +185,7 @@ export function duoArtifactManifestFixture(opts: { sha: string }): Record<string
 }
 
 /**
- * A schema-valid artifact `manifest.json` of format 3 whose D1 bindings cover
+ * A schema-valid artifact `manifest.json` whose D1 bindings cover
  * every layout the catalog manifest's `resources.d1` can declare: `DB` has
  * migrations from a glob (named by their path from the glob's folder, as
  * wrangler names them), a schema file and a post-deploy migration; `LOGS`
@@ -177,37 +203,37 @@ export function d1ArtifactManifestFixture(opts: { sha: string }): Record<string,
     sha256: hex64,
     offset: offset++,
   });
-  m.format = 3;
   (m.worker as Record<string, unknown>).bindings = [
     { type: "d1", name: "DB" },
     { type: "d1", name: "LOGS" },
     { type: "d1", name: "SEEDS" },
     { type: "d1", name: "AUDIT" },
   ];
-  // The packer records every D1 binding's migrations, an empty list included.
-  m.d1Migrations = {
-    DB: [
-      file("d1", "DB", "20240101_init/migration.sql"),
-      file("d1", "DB", "20240302_tags/migration.sql"),
-    ],
-    LOGS: [file("d1", "LOGS", "0001_logs.sql")],
-    SEEDS: [],
-    AUDIT: [],
-  };
-  m.d1Schema = {
-    DB: [file("d1-schema", "DB", "db/views.sql")],
-    SEEDS: [file("d1-schema", "SEEDS", "db/seed.sql"), file("d1-schema", "SEEDS", "db/more.sql")],
-  };
-  m.d1PostDeploy = {
-    DB: [file("d1-post-deploy", "DB", "0100_drop_legacy.sql")],
-    AUDIT: [file("d1-post-deploy", "AUDIT", "0001_audit.sql")],
+  // The packer records every D1 binding, one without migrations included.
+  m.d1 = {
+    DB: d1Binding({
+      migrations: [
+        file("d1", "DB", "20240101_init/migration.sql"),
+        file("d1", "DB", "20240302_tags/migration.sql"),
+      ],
+      schema: [file("d1-schema", "DB", "db/views.sql")],
+      postDeploy: [file("d1-post-deploy", "DB", "0100_drop_legacy.sql")],
+    }),
+    LOGS: d1Binding({ migrations: [file("d1", "LOGS", "0001_logs.sql")] }),
+    SEEDS: d1Binding({
+      schema: [
+        file("d1-schema", "SEEDS", "db/seed.sql"),
+        file("d1-schema", "SEEDS", "db/more.sql"),
+      ],
+    }),
+    AUDIT: d1Binding({ postDeploy: [file("d1-post-deploy", "AUDIT", "0001_audit.sql")] }),
   };
   m.catalog = {
     ...(m.catalog as Record<string, unknown>),
     resources: {
       d1: {
         DB: {
-          migrations: "prisma/migrations/*/migration.sql",
+          migrationsGlob: "prisma/migrations/*/migration.sql",
           schema: ["db/views.sql"],
           postDeployMigrationsDir: "db/post-deploy",
         },
@@ -221,7 +247,7 @@ export function d1ArtifactManifestFixture(opts: { sha: string }): Record<string,
 }
 
 /**
- * A schema-valid artifact `manifest.json` of format 4 that seeds two D1
+ * A schema-valid artifact `manifest.json` that seeds two D1
  * databases from the install form. `DB` has a migration, a schema file and a
  * post-deploy migration, and a seed that runs before its schema file
  * (`beforeSchema`), with a PBKDF2 hash and salt of the seed-only
@@ -241,25 +267,29 @@ export function seedArtifactManifestFixture(opts: { sha: string }): Record<strin
     sha256: hex64,
     offset: offset++,
   });
-  m.format = 4;
   (m.worker as Record<string, unknown>).bindings = [
     { type: "d1", name: "DB" },
     { type: "d1", name: "AUTH" },
     { type: "plain_text", name: "SITE_NAME", text: "Upstream" },
   ];
-  m.d1Migrations = { DB: [file("d1", "DB", "0001_init.sql")], AUTH: [] };
-  m.d1Schema = { DB: [file("d1-schema", "DB", "db/defaults.sql")] };
-  m.d1PostDeploy = { DB: [file("d1-post-deploy", "DB", "0100_cleanup.sql")] };
+  m.d1 = {
+    DB: d1Binding({
+      migrations: [file("d1", "DB", "0001_init.sql")],
+      schema: [file("d1-schema", "DB", "db/defaults.sql")],
+      postDeploy: [file("d1-post-deploy", "DB", "0100_cleanup.sql")],
+    }),
+    AUTH: d1Binding({}),
+  };
   m.catalog = {
     ...(m.catalog as Record<string, unknown>),
     secrets: [
       { name: "API_TOKEN", label: "API token" },
       { name: "SESSION_KEY", label: "Session key", generate: "base64-key-32" },
-      { name: "ADMIN_PASSWORD", label: "Admin password", generate: true, seedOnly: true },
+      { name: "ADMIN_PASSWORD", label: "Admin password", generate: "password", seedOnly: true },
     ],
     vars: [
       { name: "SITE_NAME", label: "Site name", default: "Seeded" },
-      { name: "ADMIN_USERNAME", label: "Admin user name", required: true, seedOnly: true },
+      { name: "ADMIN_USERNAME", label: "Admin user name", seedOnly: true },
       {
         name: "ADMIN_EMAIL",
         label: "Admin email",
@@ -316,15 +346,13 @@ export function seedArtifactManifestFixture(opts: { sha: string }): Record<strin
 
 /**
  * {@link duoArtifactManifestFixture} with its `jobs` Worker kept off
- * workers.dev (`install.workers[].workersDev: false`), which makes it format
- * 4. Only `web` reaches `jobs`, through its bindings, so no var names the
+ * workers.dev (`install.workers[].workersDev: false`). Only `web` reaches `jobs`, through its bindings, so no var names the
  * URL of `jobs` any more, only its Worker name.
  */
 export function privateDuoArtifactManifestFixture(opts: { sha: string }): Record<string, unknown> {
   const m = duoArtifactManifestFixture(opts);
   const catalog = m.catalog as Record<string, unknown>;
   const install = catalog.install as Record<string, unknown>;
-  m.format = 4;
   m.catalog = {
     ...catalog,
     install: {
@@ -343,7 +371,7 @@ export function privateDuoArtifactManifestFixture(opts: { sha: string }): Record
 }
 
 /**
- * A schema-valid artifact `manifest.json` of format 5 whose D1 binding `DB`
+ * A schema-valid artifact `manifest.json` whose D1 binding `DB`
  * has a baseline (`db/schema.sql`), two migrations and a post-deploy
  * migration: on a new database the baseline runs and the three are recorded
  * in `d1_migrations` without running.
@@ -359,13 +387,14 @@ export function baselineArtifactManifestFixture(opts: { sha: string }): Record<s
     sha256: hex64,
     offset: offset++,
   });
-  m.format = 5;
   (m.worker as Record<string, unknown>).bindings = [{ type: "d1", name: "DB" }];
-  m.d1Migrations = {
-    DB: [file("d1", "0001_init.sql"), file("d1", "0002_add_o'clock.sql")],
+  m.d1 = {
+    DB: d1Binding({
+      migrations: [file("d1", "0001_init.sql"), file("d1", "0002_add_o'clock.sql")],
+      postDeploy: [file("d1-post-deploy", "0100_cleanup.sql")],
+      baseline: file("d1-baseline", "db/schema.sql"),
+    }),
   };
-  m.d1PostDeploy = { DB: [file("d1-post-deploy", "0100_cleanup.sql")] };
-  m.d1Baseline = { DB: [file("d1-baseline", "db/schema.sql")] };
   m.catalog = {
     ...(m.catalog as Record<string, unknown>),
     resources: {
@@ -376,7 +405,7 @@ export function baselineArtifactManifestFixture(opts: { sha: string }): Record<s
 }
 
 /**
- * A schema-valid artifact `manifest.json` of format 5 for a Worker of static
+ * A schema-valid artifact `manifest.json` for a Worker of static
  * assets only: a wrangler config with `assets` and no `main`, so no modules,
  * no `mainModule`, no bindings, and two asset files.
  */
@@ -385,7 +414,6 @@ export function assetsOnlyArtifactManifestFixture(opts: { sha: string }): Record
   const hex64 = "a".repeat(64);
   const worker = { ...(m.worker as Record<string, unknown>) };
   delete worker.mainModule;
-  m.format = 5;
   m.worker = { ...worker, modules: [], bindings: [] };
   m.assets = {
     config: { not_found_handling: "single-page-application" },
@@ -413,13 +441,13 @@ export function assetsOnlyArtifactManifestFixture(opts: { sha: string }): Record
 }
 
 /**
- * A schema-valid artifact `manifest.json` of format 6: a Vectorize binding
+ * A schema-valid artifact `manifest.json` with resource settings: a Vectorize binding
  * `VECTORS` with two metadata indexes and an R2 binding `FILES` with two
  * lifecycle rules, both declared in the catalog manifest's `resources` and
  * carried on the bindings as the packer records them, plus `_redirects` and
  * `_headers` in the assets config.
  */
-export function format6ArtifactManifestFixture(opts: { sha: string }): Record<string, unknown> {
+export function resourcesArtifactManifestFixture(opts: { sha: string }): Record<string, unknown> {
   const m = artifactManifestFixture({ app: "search", version: "3.0.0", sha: opts.sha });
   const metadataIndexes = [
     { propertyName: "url", type: "string" },
@@ -429,7 +457,6 @@ export function format6ArtifactManifestFixture(opts: { sha: string }): Record<st
     { id: "Delete temporary files", prefix: "tmp/", deleteAfterDays: 7 },
     { id: "Archive exports", prefix: "exports/", infrequentAccessAfterDays: 30 },
   ];
-  m.format = 6;
   (m.worker as Record<string, unknown>).bindings = [
     { type: "vectorize", name: "VECTORS", dimensions: 768, metric: "cosine", metadataIndexes },
     { type: "r2_bucket", name: "FILES", lifecycle },

@@ -13,7 +13,7 @@ name: verify tier
 #      version (the one index.json lists) with the Appflare manager there.
 #   2. Actions > verify tier > Run workflow, with the slug, that version, and
 #      the Worker name it was installed under when it is not the manifest's
-#      install.workerName. A self-deploying entry always needs it: its
+#      (install.workerName, else the slug). A self-deploying entry always needs it: its
 #      installer names the Worker after the install's stage.
 #   3. Uninstall it again in the manager.
 #
@@ -41,7 +41,7 @@ on:
         type: string
         required: true
       worker:
-        description: The Worker name it was installed under. Empty means the manifest's install.workerName; required for a self-deploying entry.
+        description: The Worker name it was installed under. Empty means the manifest's Worker name (install.workerName, else the slug); required for a self-deploying entry.
         type: string
         required: false
         default: ""

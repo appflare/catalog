@@ -18,5 +18,4 @@ your list: every private message, posts in channels it administers, and group me
   sends a Telegram Stars invoice for your bot.
 - **Emojis.** Telegram accepts only its own set of reaction emojis and refuses a
   reaction with any other.
-- **Pin.** Upstream has no release tags, so the pin follows the default branch and each
-  bump is reviewed by a maintainer.
+- **Pin.** Upstream has no release tags, so the pin follows the default branch.

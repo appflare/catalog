@@ -14,10 +14,10 @@ The manual install check of a sandbox or self-deploying tier entry, which CI
 never installs. Install <slug> <version> with an Appflare manager in a Workers
 Paid account that has sandbox builds enabled first. This then checks that the
 index lists that version, that the account has the appflare-sandbox Worker,
-and that the app's Worker (the manifest's workerName, or --worker) passes the
+and that the app's Worker (the manifest's Worker name, or --worker) passes the
 health check, and writes the passing check for record-verified to <checks.json>.
 A self-deploying entry's Worker is named after the install's stage, so it
-needs --worker: the first of install.selfDeploying.workers with {{stage}}
+needs --worker: the first of install.selfDeploying.workerNames with {{stage}}
 replaced by the stage the manager's app page shows for the install.
 
 Needs CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID of that account (Workers

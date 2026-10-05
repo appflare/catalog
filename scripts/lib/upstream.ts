@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { type GhRunner, runGh } from "./github-releases.ts";
+import { type GhRequest, type GhRunner, runGh } from "./gh-api.ts";
 
 /**
  * Where an app's upstream is now, for the bump workflow. A repository with
@@ -116,49 +116,43 @@ export interface UpstreamSource {
 }
 
 export function createGhUpstream(run: GhRunner = runGh): UpstreamSource {
-  const text = (args: string[]) => run(args).toString("utf8").trim();
+  const text = (request: GhRequest) => run(request).toString("utf8").trim();
   return {
     resolve(repo) {
-      const tags = text([
-        "api",
-        "--paginate",
-        `repos/${repo}/tags?per_page=100`,
-        "--jq",
-        ".[] | {name, sha: .commit.sha} | @json",
-      ])
+      const tags = text({
+        path: `repos/${repo}/tags?per_page=100`,
+        paginate: true,
+        jq: ".[] | {name, sha: .commit.sha} | @json",
+      })
         .split("\n")
         .filter((l) => l.trim())
         .map((l) => tagSchema.parse(JSON.parse(l)));
       if (newestStableTag(tags)) {
         return pickUpstreamTarget(tags, { name: "", sha: "" });
       }
-      const branch = text(["api", `repos/${repo}`, "--jq", ".default_branch"]);
+      const branch = text({ path: `repos/${repo}`, jq: ".default_branch" });
       if (!branch) {
         throw new Error(`${repo} has no default branch`);
       }
       const sha = shaSchema.parse(
-        text(["api", `repos/${repo}/commits/${encodeURIComponent(branch)}`, "--jq", ".sha"]),
+        text({ path: `repos/${repo}/commits/${encodeURIComponent(branch)}`, jq: ".sha" }),
       );
       return { ref: branch, sha, kind: "branch" };
     },
     compare(repo, from, to) {
       const out = JSON.parse(
-        text([
-          "api",
-          `repos/${repo}/compare/${from}...${to}`,
-          "--jq",
-          '{total: .total_commits, subjects: [.commits[].commit.message | split("\\n")[0]]}',
-        ]),
+        text({
+          path: `repos/${repo}/compare/${from}...${to}`,
+          jq: '{total: .total_commits, subjects: [.commits[].commit.message | split("\\n")[0]]}',
+        }),
       ) as { total: number; subjects: string[] };
       return out;
     },
     relation(repo, base, head) {
-      const [ahead, behind] = text([
-        "api",
-        `repos/${repo}/compare/${base}...${head}`,
-        "--jq",
-        '"\\(.ahead_by) \\(.behind_by)"',
-      ])
+      const [ahead, behind] = text({
+        path: `repos/${repo}/compare/${base}...${head}`,
+        jq: '"\\(.ahead_by) \\(.behind_by)"',
+      })
         .split(" ")
         .map(Number);
       const count = (n: number | undefined): n is number =>
@@ -171,13 +165,12 @@ export function createGhUpstream(run: GhRunner = runGh): UpstreamSource {
     changedFiles(repo, base, head) {
       const out = changedFilesSchema.parse(
         JSON.parse(
-          text([
-            "api",
-            `repos/${repo}/compare/${base}...${head}`,
-            "--jq",
-            "{count: (if .files == null then null else (.files | length) end), " +
+          text({
+            path: `repos/${repo}/compare/${base}...${head}`,
+            jq:
+              "{count: (if .files == null then null else (.files | length) end), " +
               "paths: [.files[]? | .filename, (.previous_filename // empty)]}",
-          ]),
+          }),
         ),
       );
       return {

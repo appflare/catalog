@@ -7,49 +7,54 @@
   "name": "Relay",
   "summary": "A link shortener with cookieless click and conversion analytics: A/B splits, device and country routing, per-channel suffixes, retargeting pixels, QR codes and CSV export, on D1.",
   "tagline": "Short links you control, with cookieless click and conversion stats",
-  "homepage": "https://github.com/YuriCrystal/relay",
   "repo": "YuriCrystal/relay",
   "license": "MIT",
   "categories": ["utilities", "analytics"],
+  // Generated secrets (revision 2) and field links (revision 3) came after this
+  // release was published: revisions, no new build.
+  "revision": 3,
   "authors": [{ "name": "Yuri", "github": "YuriCrystal" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags, so the entry follows the default branch by commit.
   "source": { "ref": "main", "sha": "7fb2f441e19e7ba446bfbd0cd0e3ca0f53edfb45" },
   "install": {
-    "tier": "artifact",
     "packageManager": "npm",
     "wranglerConfig": "wrangler.toml",
-    "workerName": "relay",
     // Upstream ships no lockfile: the package has no dependencies, and the
     // Worker is one plain module wrangler bundles as it is.
     "installDirs": [{ "path": ".", "lockfile": "none" }]
   },
   // One Worker and D1 fit the free plan.
   "plan": "free",
-  "requires": [],
   "secrets": [
     {
       "name": "ADMIN_TOKEN",
       "label": "Admin key",
       "help": "Every /api request needs it as a Bearer token; the dashboard asks for it once and keeps it in the browser.",
-      "generate": true
+      "generate": "password"
     },
     {
       "name": "SALT",
       "label": "Visitor hash salt",
       "help": "Salts the daily hash that counts unique visitors (IPs are never stored). Without it Relay salts with the admin key, so changing the key would restart the counts.",
-      "generate": true
+      "generate": "password"
     },
     {
+      // Compared with plain equality (worker.js:214-217), so any value works.
       "name": "CONVERSION_TOKEN",
       "label": "Conversion token",
       "help": "When set, conversion reports to /track must carry it; without it anyone can report a conversion.",
+      "generate": "password",
       "optional": true
     },
     {
       "name": "SAFEBROWSING_KEY",
       "label": "Google Safe Browsing API key",
       "help": "Checks each new destination against Google Safe Browsing and refuses malicious ones.",
+      "link": {
+        "label": "Get a key",
+        "url": "https://developers.google.com/safe-browsing/v4/get-started"
+      },
       "optional": true
     }
   ],
@@ -57,35 +62,38 @@
     {
       "name": "DASH_ORIGIN",
       "label": "Dashboard origin",
-      "help": "The origin the dashboard runs on, for CORS, for example https://relay-admin.example.com. * allows any origin; the API still needs the admin key."
+      "help": "The origin the dashboard runs on, for CORS, for example https://relay-admin.example.com. * allows any origin; the API still needs the admin key.",
+      "optional": true
     },
     {
       "name": "TZ_OFFSET",
       "label": "Time zone offset",
-      "help": "Hours from UTC for the dashboard's daily and hourly charts, for example 0, -5 or 8."
+      "help": "Hours from UTC for the dashboard's daily and hourly charts, for example 0, -5 or 8.",
+      "optional": true
     },
     {
       "name": "BLOCKLIST",
       "label": "Blocked destination domains",
-      "help": "Comma separated, subdomains included, for example bit.ly,grabify.link. Leave empty to block none."
+      "help": "Comma separated, subdomains included, for example bit.ly,grabify.link. Leave empty to block none.",
+      "optional": true
     },
     {
       "name": "RESPECT_DNT",
       "label": "Honour Do Not Track",
-      "help": "Set to 1 to record no click from visitors who send Do Not Track or Global Privacy Control."
+      "help": "Set to 1 to record no click from visitors who send Do Not Track or Global Privacy Control.",
+      "optional": true
     }
   ],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Download the dashboard, [index.html](https://raw.githubusercontent.com/YuriCrystal/relay/7fb2f441e19e7ba446bfbd0cd0e3ca0f53edfb45/index.html), and open it in a browser (or put it on any static host). Under Settings, enter `{{workerUrl}}` as the Worker API URL and the admin key from this install, then choose Test connection."
+      "content": "Download the dashboard, [index.html](https://raw.githubusercontent.com/YuriCrystal/relay/7fb2f441e19e7ba446bfbd0cd0e3ca0f53edfb45/index.html), and open it in a browser (or put it on any static host). Under Settings, enter `{{appUrl}}` as the Worker API URL and the admin key from this install, then choose Test connection."
     },
     {
       "type": "markdown",
-      "content": "Short links answer at `{{workerUrl}}/<slug>`, and `{{workerUrl}}/<slug>/<suffix>` counts each suffix as its own source."
+      "content": "Short links answer at `{{appUrl}}/<slug>`, and `{{appUrl}}/<slug>/<suffix>` counts each suffix as its own source."
     }
   ],
-  "tokenPermissions": [],
   "resources": {
     "d1": {
       // Upstream applies this file by hand after deploying; every statement

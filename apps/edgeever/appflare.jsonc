@@ -6,22 +6,23 @@
   "tagline": "Notes you can organize, search, and share from your own account",
   "homepage": "https://edgeever.org",
   "repo": "tianma-if/edgeever",
-  "license": "AGPL-3.0",
+  "license": "AGPL-3.0-only",
   "categories": ["notes", "productivity"],
+  // Generated secrets (revision 2) and edited help text (revision 3) came after
+  // this release was published: revisions, no new build.
+  "revision": 3,
   "authors": [{ "name": "tianma-if", "github": "tianma-if", "x": "tianma_if" }],
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v1.88.0", "sha": "3cfccb872ea68dea9007204a090fdc1bac60d322" },
   "install": {
-    "tier": "artifact",
     "packageManager": "bun",
     "wranglerConfig": "wrangler.toml",
-    "workerName": "edgeever",
     // The web app the Worker serves from apps/web/dist. The wrangler config's
     // own build command then bundles the API Worker into an entry module and
     // on-demand chunks that wrangler uploads as they are.
     "buildCommand": "bun run build:web",
     // Answers without a sign-in.
-    "healthPath": "/api/health"
+    "health": { "path": "/api/health" }
   },
   // D1 and R2 fit the free plan. No cron triggers.
   "plan": "free",
@@ -31,12 +32,17 @@
       "name": "EDGE_EVER_AUTH_PASSWORD",
       "label": "Admin password",
       "help": "Sign in with it and the admin username below. Upstream recommends at least 32 characters. Unless the credentials encryption key is set, the saved AI provider keys are encrypted with a key derived from it.",
-      "generate": true
+      "generate": "password"
     },
     {
+      // Any non-empty string: upstream trims it and uses it as key material
+      // (apps/api/src/ai-service.ts:73-90). Keys saved before it is set stay
+      // readable, since the admin password's key stays in the decryption ring
+      // (:98-105).
       "name": "EDGE_EVER_CREDENTIALS_ENCRYPTION_KEY",
       "label": "Credentials encryption key",
-      "help": "Optional. Encrypts the AI provider keys you save in the app, instead of a key derived from the admin password, so the password can change without re-entering them.",
+      "help": "Encrypts the AI provider keys you save in the app, instead of a key derived from the admin password, so the password can change without re-entering them.",
+      "generate": "password",
       "optional": true
     }
   ],
@@ -45,14 +51,14 @@
       "name": "EDGE_EVER_AUTH_USERNAME",
       "label": "Admin username",
       "help": "The username to sign in with.",
-      "default": "admin"
+      "default": "admin",
+      "optional": true
     }
   ],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Open {{workerUrl}} and sign in with the admin username and the admin password from this app's settings."
+      "content": "Open {{appUrl}} and sign in with the admin username and the admin password from this app's settings."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

@@ -4,7 +4,6 @@
   "name": "NodeCrypt",
   "summary": "End-to-end encrypted chat rooms in the browser: no accounts and no stored history, with private messages, images, and files, relayed by a Durable Object that never sees plaintext.",
   "tagline": "Private chat rooms without accounts or message history",
-  "homepage": "https://github.com/shuaiplus/nodecrypt",
   "repo": "shuaiplus/nodecrypt",
   "license": "ISC",
   "categories": ["chat", "privacy"],
@@ -13,28 +12,22 @@
   // Upstream has no release tags; the pin tracks main.
   "source": { "ref": "main", "sha": "54ed04903182799895e98af365cf4172f7b2f3f3" },
   "install": {
-    "tier": "artifact",
     "packageManager": "npm",
     "wranglerConfig": "wrangler.toml",
-    "workerName": "nodecrypt",
     // The config serves dist but has no build.command; upstream's deploy steps
     // build the web client with this (Vite).
     "buildCommand": "npm run build"
   },
   // One SQLite-backed Durable Object class; rooms live in memory only.
   "plan": "free",
-  "requires": [],
-  "secrets": [],
-  "vars": [],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Open {{workerUrl}}, pick a name, a room name, and an optional room password, and share the room name and password with the people you want to talk to. The password is part of the encryption key, so a wrong one cannot read the room."
+      "content": "Open {{appUrl}}, pick a name, a room name, and an optional room password, and share the room name and password with the people you want to talk to. The password is part of the encryption key, so a wrong one cannot read the room."
     },
     {
       "type": "markdown",
       "content": "Nothing is stored: messages pass through the Worker encrypted and only in memory, so people who join later see no earlier messages."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

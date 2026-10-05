@@ -8,10 +8,12 @@
   "name": "Playwright MCP",
   "summary": "A remote MCP server that lets AI assistants browse for you: navigate, click, type, read page snapshots and take screenshots in a headless browser from Cloudflare Browser Rendering.",
   "tagline": "Let your AI assistant browse websites and take screenshots",
-  "homepage": "https://github.com/cloudflare/playwright-mcp",
   "repo": "cloudflare/playwright-mcp",
   "license": "Apache-2.0",
   "categories": ["ai", "developer-tools"],
+  // The formatting of URLs in the notes changed after this release was published:
+  // a revision, no new build.
+  "revision": 2,
   "authors": [
     {
       "name": "Cloudflare",
@@ -26,30 +28,25 @@
   // commits after it move the example to 0.0.5, the release the tag names.
   "source": { "ref": "main", "sha": "ee81e278966626f9ad72d94bdb16f949d06744e5" },
   "install": {
-    "tier": "artifact",
     "packageManager": "npm",
     // The deployable server is the example in cloudflare/example, its own npm
     // project with its own lockfile; it takes the MCP library from npm rather
     // than from the library sources at the root. No build step.
     "installDirs": [{ "path": "cloudflare/example" }],
-    "wranglerConfig": "cloudflare/example/wrangler.toml",
-    "workerName": "playwright-mcp"
+    "wranglerConfig": "cloudflare/example/wrangler.toml"
   },
   // Browser Rendering is on the free plan with 10 minutes of browser time a
   // day and 3 browsers at once; Workers Paid raises both, billed by use.
   "plan": "free",
   "requires": ["browser-rendering"],
-  "secrets": [],
-  "vars": [],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Add the server to an MCP client with the URL {{workerUrl}}/mcp (Streamable HTTP) or {{workerUrl}}/sse (SSE), for example `claude mcp add --transport http playwright {{workerUrl}}/mcp`, or in VS Code `code --add-mcp '{\"name\":\"playwright\",\"type\":\"sse\",\"url\":\"{{workerUrl}}/sse\"}'`."
+      "content": "Add the server to an MCP client with the URL `{{appUrl}}/mcp` (Streamable HTTP) or `{{appUrl}}/sse` (SSE), for example `claude mcp add --transport http playwright {{appUrl}}/mcp`, or in VS Code `code --add-mcp '{\"name\":\"playwright\",\"type\":\"sse\",\"url\":\"{{appUrl}}/sse\"}'`."
     },
     {
       "type": "markdown",
       "content": "The server has no sign-in: anyone who knows the address can run browsers on your Browser Rendering allowance. Keep the address private."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

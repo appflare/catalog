@@ -8,16 +8,18 @@
   "repo": "MarSeventh/CloudFlare-ImgBed",
   "license": "MIT",
   "categories": ["files", "sharing"],
+  // Generated secrets (revision 2), field links (revision 3) and the formatting of
+  // URLs in the notes (revision 4) came after this release was published:
+  // revisions, no new build.
+  "revision": 4,
   "authors": [{ "name": "MarSeventh", "url": "https://home.sanyue.site", "github": "MarSeventh" }],
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v2.7.6", "sha": "bf9d8211ce6daa3af7b5b60685250bebcb2f681a" },
   "install": {
-    "tier": "artifact",
     "packageManager": "npm",
     // Upstream's Workers deployment. The Worker wraps the Pages Functions in
     // functions/ and serves the prebuilt front end committed in frontend-dist.
     "wranglerConfig": "deploy/worker/wrangler.toml",
-    "workerName": "imgbed",
     // Upstream's deploy script regenerates the route table from functions/
     // before every deploy. The committed table matches the pinned functions;
     // regenerating keeps it so on later pins.
@@ -54,24 +56,28 @@
       "name": "BASIC_PASS",
       "label": "Admin password",
       "help": "Signs in to the admin panel at /adminLogin. Without it the admin panel is open to anyone. A password saved later under System Settings > Security Settings takes precedence over this one.",
-      "generate": true
+      "generate": "password"
     },
     {
       "name": "AUTH_CODE",
       "label": "Upload password",
       "help": "What visitors enter on the login page before they can upload. Without it anyone can upload. A password saved later under System Settings > Security Settings takes precedence over this one.",
-      "generate": true
+      "generate": "password"
     },
     {
+      // Any string, ideally a complex one (functions/api/auth/resetAuth.js:8-9),
+      // sent as ?key= (:28-29), so it must be URL-safe; a generated one is.
       "name": "RESET_KEY",
       "label": "Sign-in reset key",
       "help": "Opening /api/auth/resetAuth?key=<this key> clears the passwords saved in the admin panel and signs everyone out, so the admin and upload passwords above apply again. Leave unset unless you need it.",
+      "generate": "password",
       "optional": true
     },
     {
       "name": "TG_BOT_TOKEN",
       "label": "Telegram bot token",
       "help": "Adds a Telegram storage channel. Channels can also be added in the admin panel instead.",
+      "link": { "label": "Create a bot", "url": "https://t.me/BotFather" },
       "optional": true
     }
   ],
@@ -80,12 +86,15 @@
       "name": "BASIC_USER",
       "label": "Admin username",
       "help": "The username for the admin panel.",
-      "default": "admin"
+      "default": "admin",
+      "optional": true
     },
     {
       "name": "TG_CHAT_ID",
       "label": "Telegram chat id",
-      "help": "The channel or chat the Telegram bot stores files in, for example -1001234567890. Used only with a Telegram bot token."
+      "help": "The channel or chat the Telegram bot stores files in, for example -1001234567890. Used only with a Telegram bot token.",
+      "link": { "label": "Find your chat ID", "url": "https://t.me/userinfobot" },
+      "optional": true
     },
     {
       "name": "disable_telemetry",
@@ -93,18 +102,18 @@
       "help": "Upstream reports errors and a sample of requests, with their headers and location, to its Sentry project unless this is turned off. It can also be changed later under System Settings > Other Settings.",
       "type": "select",
       "options": [{ "value": "true", "label": "Off" }, { "value": "false", "label": "On" }],
-      "default": "true"
+      "default": "true",
+      "optional": true
     }
   ],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Open {{workerUrl}}/adminLogin and sign in with the admin username and password from this app's settings. The R2 bucket is already set up as a storage channel, so {{workerUrl}} accepts uploads once you enter the upload password there."
+      "content": "Open {{appUrl}}/adminLogin and sign in with the admin username and password from this app's settings. The R2 bucket is already set up as a storage channel, so {{appUrl}} accepts uploads once you enter the upload password there."
     },
     {
       "type": "markdown",
-      "content": "Add more storage channels (Telegram, Discord, S3, Hugging Face, WebDAV) under System Settings > Upload Settings. Files are served from {{workerUrl}}/file/…; to serve R2 files from a public bucket domain instead, set its address on the R2 channel."
+      "content": "Add more storage channels (Telegram, Discord, S3, Hugging Face, WebDAV) under System Settings > Upload Settings. Files are served from `{{appUrl}}/file/…`; to serve R2 files from a public bucket domain instead, set its address on the R2 channel."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

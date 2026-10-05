@@ -14,7 +14,6 @@
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v0.1.2", "sha": "e415766d2b246f7c248f55f065060bad7fa79bd9" },
   "install": {
-    "tier": "artifact",
     // npm workspaces (apps/*, workers/*, packages/*, durable-objects/*) with
     // one package-lock.json at the root.
     "packageManager": "npm",
@@ -23,7 +22,6 @@
     // workers/api config adds an Analytics Engine dataset that only the
     // hosted elm.chat uses.
     "wranglerConfig": "wrangler.jsonc",
-    "workerName": "elm-chat",
     // Upstream's `build` script: a check that both wrangler configs agree,
     // then the web workspace's build (Vite, then the sitemap, the prerendered
     // marketing pages and the feed, all run by the workspace script itself).
@@ -34,22 +32,19 @@
   // One Worker, static assets and a SQLite-backed Durable Object per room, all
   // on the free plan; rooms keep nothing once they are destroyed or expire.
   "plan": "free",
-  "requires": [],
   // Not asked for: TURNSTILE_SECRET turns on the bot check for room creation
   // only together with VITE_TURNSTILE_SITE_KEY, which is read at build time. A
   // catalog build has no site key, so the secret alone would make every room
   // creation fail the check.
   "secrets": [],
-  "vars": [],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Open {{workerUrl}}, choose how long messages and the room last, and create a private conversation. Share the single-use invite with the person you want to talk to."
+      "content": "Open {{appUrl}}, choose how long messages and the room last, and create a private conversation. Share the single-use invite with the person you want to talk to."
     },
     {
       "type": "markdown",
       "content": "Anyone who can reach this address can create rooms. Upstream's abuse policy asks operators to publish their own contact for reports and to keep room and message lifetimes short."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

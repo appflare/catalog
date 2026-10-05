@@ -15,16 +15,16 @@
   "repo": "Jaironlanda/isupmap",
   "license": "MIT",
   "categories": ["monitoring"],
+  // Field links added after this release was published: a revision, no new build.
+  "revision": 2,
   "authors": [
     { "name": "Jairon Landa", "url": "https://jaironlanda.com", "github": "Jaironlanda" }
   ],
   "maintainers": ["MendyLanda"],
   "source": { "ref": "main", "sha": "17bb6884b4d4fabfd4cecfb4bf8254b155cb6dea" },
   "install": {
-    "tier": "artifact",
     "packageManager": "npm",
-    "wranglerConfig": "wrangler.jsonc",
-    "workerName": "isupmap"
+    "wranglerConfig": "wrangler.jsonc"
   },
   // D1, KV, a queue, rate limits, Analytics Engine and one cron trigger fit
   // the free plan. Each poll round spends one subrequest per service.
@@ -35,32 +35,38 @@
       "name": "VOTE_SALT",
       "label": "Report IP hash salt",
       "help": "Salts the hash of each reporter's IP. Community reports are refused without it.",
-      "generate": true
+      "generate": "password"
     }
   ],
   "vars": [
     {
       "name": "PROTOMAPS_KEY",
       "label": "Protomaps API key",
-      "help": "Shows a world map of where reports come from on each service's page. Free keys at protomaps.com. The key is sent to visitors' browsers, which load the map tiles with it."
+      "help": "Shows a world map of where reports come from on each service's page. Free keys at protomaps.com. The key is sent to visitors' browsers, which load the map tiles with it.",
+      "link": { "label": "Get a key", "url": "https://protomaps.com/account" },
+      "optional": true
     },
     {
       "name": "GA_ID",
       "label": "Google Analytics measurement ID",
-      "help": "A GA4 measurement ID (G-...) to count visitors with Google Analytics. Leave empty to load no analytics."
+      "help": "A GA4 measurement ID (G-...) to count visitors with Google Analytics. Leave empty to load no analytics.",
+      "link": {
+        "label": "Find your measurement ID",
+        "url": "https://support.google.com/analytics/answer/12270356"
+      },
+      "optional": true
     }
   ],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Open {{workerUrl}}. Services show as pending until the first poll, which runs within five minutes."
+      "content": "Open {{appUrl}}. Services show as pending until the first poll, which runs within five minutes."
     },
     {
       "type": "markdown",
       "content": "isupmap writes every upstream fetch to the Analytics Engine dataset `isupmap_fetches`, whose name is shared by the whole account: a second install in this account writes to the same dataset."
     }
   ],
-  "tokenPermissions": [],
   "resources": {
     "d1": {
       "DB": { "schema": ["schema.sql"] },

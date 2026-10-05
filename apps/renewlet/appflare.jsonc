@@ -12,12 +12,10 @@
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v0.3.27", "sha": "e7ae44aed1e749b2e43ed60b56738319afe16d50" },
   "install": {
-    "tier": "artifact",
     // A pnpm 11 workspace: the Worker in apps/worker, the React app in
     // apps/web, both installed from the root lockfile.
     "packageManager": "pnpm",
     "wranglerConfig": "wrangler.jsonc",
-    "workerName": "renewlet",
     // Upstream's Cloudflare build: the React app built for the Worker API
     // (the script sets VITE_RENEWLET_RUNTIME=cloudflare, which a build command
     // here cannot) into apps/web/dist, the assets directory, then a
@@ -25,7 +23,7 @@
     "buildCommand": "pnpm run build:cloudflare",
     // Reads D1 without a session: it answers whether the first admin still
     // has to be created.
-    "healthPath": "/api/app/status"
+    "health": { "path": "/api/app/status" }
   },
   // D1, R2 and Queues all have free tiers. One cron trigger, every minute:
   // it sends the reminders due in each user's own timezone.
@@ -40,18 +38,17 @@
       "name": "SESSION_TTL_DAYS",
       "label": "Session length in days",
       "help": "How long a sign-in lasts. Leave empty for 30 days.",
-      "required": false
+      "optional": true
     }
   ],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Open {{workerUrl}}/setup right away and create the admin account: until someone does, the first visitor can."
+      "content": "Open {{appUrl}}/setup right away and create the admin account: until someone does, the first visitor can."
     },
     {
       "type": "markdown",
       "content": "Set up email (SMTP), Telegram, Bark, webhooks and the other reminder channels under **Settings > Notifications**. Uploaded logos are stored in this app's R2 bucket."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

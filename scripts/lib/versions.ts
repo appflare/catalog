@@ -10,7 +10,7 @@ import type { CatalogManifest } from "./types.ts";
 /**
  * The version an app's current pin packs to, computed before packing with the
  * packer's own `deriveVersion`, so the plan and the pack cannot disagree:
- * `install.version` when the manifest sets it, else the `source.ref` semver tag
+ * `source.version` when the manifest sets it, else the `source.ref` semver tag
  * without its `v`, else `0.0.0-<commit date>.<sha7>`. The release tag
  * `<slug>@<version>` is what publish and the index key on.
  */
@@ -18,7 +18,7 @@ import type { CatalogManifest } from "./types.ts";
 /** The slice of `@appflare/pack` used to derive versions. */
 export interface PackerVersioning {
   deriveVersion(input: {
-    installVersion?: string | undefined;
+    sourceVersion?: string | undefined;
     ref: string;
     sha: string;
     commitDate: string | null;
@@ -93,28 +93,27 @@ export function createVersionResolver(
   const cache = new Map<string, string>();
   return {
     versionOf(manifest) {
-      const { ref, sha } = manifest.source;
-      const installVersion = manifest.install.version;
-      const key = `${manifest.repo}@${sha}@${ref}@${installVersion ?? ""}`;
+      const { ref, sha, version: sourceVersion } = manifest.source;
+      const key = `${manifest.repo}@${sha}@${ref}@${sourceVersion ?? ""}`;
       let version = cache.get(key);
       if (version === undefined) {
-        // install.version and a semver ref never need the commit date; skip the fetch.
+        // source.version and a semver ref never need the commit date; skip the fetch.
         const date =
-          installVersion !== undefined || packer.semverFromRef(ref)
+          sourceVersion !== undefined || packer.semverFromRef(ref)
             ? null
             : commitDate(manifest.repo, sha);
         version = packer.deriveVersion({
-          installVersion,
+          sourceVersion,
           ref,
           sha,
           commitDate: date,
           buildDate: packer.formatBuildDate(new Date()),
         });
-        if (installVersion !== undefined && version !== installVersion) {
-          // A packer build from before install.version ignores it; publishing
+        if (sourceVersion !== undefined && version !== sourceVersion) {
+          // A packer build from before source.version ignores it; publishing
           // with it would tag the release with the repository's version.
           throw new Error(
-            `${manifest.slug} sets install.version ${installVersion}, but the @appflare/pack ` +
+            `${manifest.slug} sets source.version ${sourceVersion}, but the @appflare/pack ` +
               `build in APPFLARE_DIR derives ${version}; build the appflare checkout at ` +
               "the commit in .appflare-ref",
           );

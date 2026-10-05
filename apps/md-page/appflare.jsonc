@@ -8,6 +8,9 @@
   "repo": "maypaz/md.page",
   "license": "MIT",
   "categories": ["sharing", "developer-tools"],
+  // The formatting of URLs in the notes changed after this release was published:
+  // a revision, no new build.
+  "revision": 2,
   "authors": [
     { "name": "Or May-Paz", "github": "maypaz" },
     { "name": "Matan Lachmish", "url": "https://www.thebigfatninja.xyz", "github": "mlachmish" }
@@ -16,13 +19,11 @@
   // Upstream has no release tags, so the entry follows the default branch by commit.
   "source": { "ref": "main", "sha": "54bbbd18b8a18197b02d87712ad0dcae7e7614da" },
   "install": {
-    "tier": "artifact",
     "packageManager": "npm",
     // Upstream keeps only a template config; its self-hosting guide copies it
     // to wrangler.toml. Its route to upstream's own domain is not part of the
     // artifact, so the app answers at its workers.dev address.
     "wranglerConfig": "wrangler.toml.example",
-    "workerName": "md-page",
     // No build: wrangler bundles src/index.ts directly.
     // The template leaves the KV namespace id and the R2 bucket name as empty
     // strings for the self-hoster to fill in, and wrangler refuses an empty
@@ -45,11 +46,10 @@
   // needs none, and accounts, API keys and permanent pages belong to
   // upstream's hosted service.
   "secrets": [],
-  "vars": [],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Open {{workerUrl}} and paste Markdown, or publish from a script:\n\n```sh\ncurl -X POST {{workerUrl}}/api/publish -H 'Content-Type: application/json' -d '{\"markdown\": \"# Hello\"}'\n```\n\nPages expire after 24 hours. The API is described at {{workerUrl}}/openapi.json, and MCP clients connect to {{workerUrl}}/mcp."
+      "content": "Open {{appUrl}} and paste Markdown, or publish from a script:\n\n```sh\ncurl -X POST {{appUrl}}/api/publish -H 'Content-Type: application/json' -d '{\"markdown\": \"# Hello\"}'\n```\n\nPages expire after 24 hours. The API is described at {{appUrl}}/openapi.json, and MCP clients connect to `{{appUrl}}/mcp`."
     },
     {
       "type": "markdown",
@@ -59,6 +59,5 @@
       "type": "markdown",
       "content": "Events go to the Analytics Engine dataset `md_page_events`, whose name is shared by the whole account, so two installs in one account write to the same dataset. The landing page's demo video is read from the R2 bucket as `lp.mp4`; the page works without it."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

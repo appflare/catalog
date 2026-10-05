@@ -19,6 +19,11 @@ name: verify
 # install list, so a pull request that changes only self-deploying entries
 # skips both jobs, which "verify passed" allows because both lists are empty.
 #
+# The install check runs on the CI account's Workers plan, which the
+# CI_ACCOUNT_PLAN repository variable names (free when unset): on free, an
+# artifact tier entry with plan "paid" is packed but not deployed, and its
+# install check job passes with a notice saying so.
+#
 # Secrets: build-packer gets APPFLARE_DEPLOY_KEY; install gets the CI account's
 # CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID in its deploy and cleanup steps
 # only. pack, which runs the app's install and build, gets none. Fork pull
@@ -225,6 +230,11 @@ jobs:
       contents: read
     strategy:
       fail-fast: false
+      # The CI account is on the free plan, which allows 10 D1 databases per
+      # account; wrangler creates each app's databases during its deploy and
+      # the cleanup step deletes them. Six installs at a time stay under the
+      # limit even when most of them bind a database or two.
+      max-parallel: 6
       matrix:
         app: ${{ fromJSON(needs.changes.outputs.install) }}
     # One install per Worker name at a time, never cancelled: a superseded
@@ -269,6 +279,11 @@ jobs:
           # Optional: a throwaway test database for apps that bind Hyperdrive;
           # without it such an app is skipped.
           HYPERDRIVE_TEST_URL: ${{ secrets.HYPERDRIVE_TEST_URL }}
+          # The CI account's Workers plan, from the CI_ACCOUNT_PLAN repository
+          # variable: free (the default) or paid. On free, an entry with
+          # plan "paid" is skipped with a notice naming it, since it may use
+          # what the free plan refuses at upload, such as a CPU limit.
+          CI_ACCOUNT_PLAN: ${{ vars.CI_ACCOUNT_PLAN || 'free' }}
         run: node scripts/ci-install.ts deploy "dist/${APP}" --suffix "${SUFFIX}"
       - name: Delete the CI Worker and its resources
         if: always() && steps.download.outcome == 'success'
