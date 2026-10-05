@@ -25,8 +25,17 @@
     // is upstream's hosted service (billing, queues, email) and is not used.
     "wranglerConfig": "apps/api/wrangler.jsonc",
     "workerName": "synch-api",
-    // No build: public/ holds tracked files, and wrangler bundles the Worker
-    // with the Durable Object's SQL migrations as text modules.
+    // Vite builds the sign-in and vault pages into apps/api/public/, the
+    // assets directory; wrangler bundles the Worker with the Durable Object's
+    // SQL migrations as text modules.
+    "buildCommand": "pnpm --dir apps/api run build:public",
+    // The config's own build runs the same script, but wrangler runs a custom
+    // build in the directory it was started in, which is apps/api for
+    // upstream and the repository root for the packer, where no such script
+    // exists. The build command above runs it in apps/api instead. Upstream's
+    // config is right for how upstream deploys, so there is nothing to change
+    // there.
+    "configPatch": { "build": null },
     // Answers without a sign-in, from the Worker itself.
     "health": { "path": "/health" }
   },
