@@ -10,7 +10,7 @@
   "categories": ["finance", "productivity"],
   "authors": [{ "name": "zhiyingzhou", "url": "https://renewlet.cc", "github": "zhiyingzzhou" }],
   "maintainers": ["MendyLanda"],
-  "source": { "ref": "v0.3.27", "sha": "e7ae44aed1e749b2e43ed60b56738319afe16d50" },
+  "source": { "ref": "v0.3.28", "sha": "2b3e89dbf7168b5266370c3095676f32f12cbeea" },
   "install": {
     // A pnpm 11 workspace: the Worker in apps/worker, the React app in
     // apps/web, both installed from the root lockfile.

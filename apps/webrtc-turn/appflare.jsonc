@@ -13,6 +13,8 @@
   "repo": "heruoxin/webrtc_turn",
   "license": "GPL-3.0-or-later",
   "categories": ["networking", "sync"],
+  // Field links added after this release was published: a revision, no new build.
+  "revision": 2,
   "authors": [{ "name": "little_cup", "url": "https://www.1ittlecup.com", "github": "heruoxin" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no tags; the pin follows the default branch.
@@ -34,12 +36,20 @@
     {
       "name": "TURN_KEY_ID",
       "label": "TURN key ID",
-      "help": "The ID of a TURN key you create in the Cloudflare dashboard under Realtime, TURN Keys: the shorter of the two values."
+      "help": "The ID of a TURN key you create in the Cloudflare dashboard under Realtime, TURN Keys: the shorter of the two values.",
+      "link": {
+        "label": "Create a TURN key",
+        "url": "https://dash.cloudflare.com/?to=/:account/calls"
+      }
     },
     {
       "name": "TURN_KEY_API_TOKEN",
       "label": "TURN key API token",
-      "help": "The API token of the same TURN key. Cloudflare shows it once, when you create the key."
+      "help": "The API token of the same TURN key. Cloudflare shows it once, when you create the key.",
+      "link": {
+        "label": "Create a TURN key",
+        "url": "https://dash.cloudflare.com/?to=/:account/calls"
+      }
     },
     {
       "name": "ACCESS_TOKEN",

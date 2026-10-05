@@ -9,11 +9,14 @@
   // GitHub does not detect the licence, but the LICENSE file is the MIT licence.
   "license": "MIT",
   "categories": ["media", "utilities"],
+  // The formatting of URLs in the notes changed after this release was published:
+  // a revision, no new build.
+  "revision": 2,
   "authors": [{ "name": "dargy", "url": "https://dar.gy", "github": "okdargy", "x": "okdargy" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags; the pin is the head of its default branch,
   // hono-rewrite.
-  "source": { "ref": "hono-rewrite", "sha": "66fbae3ff37421db854517d3de1ce48eb7f733b0" },
+  "source": { "ref": "hono-rewrite", "sha": "5c3e70b0abb549dda2b034c09533fc4565674eba" },
   "install": {
     // package.json pins pnpm, but upstream commits no lockfile, so the packer
     // resolves package.json's ranges at pack time; the pack log records the
@@ -40,7 +43,7 @@
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Replace `https://www.tiktok.com` in a TikTok link with {{appUrl}}, for example {{appUrl}}/@user/video/<id>, and chat apps show the video in the preview. Add `?isDirect=true` for the media file itself, or `?hq=true` for the higher quality video."
+      "content": "Replace `https://www.tiktok.com` in a TikTok link with `{{appUrl}}`, for example `{{appUrl}}/@user/video/<id>`, and chat apps show the video in the preview. Add `?isDirect=true` for the media file itself, or `?hq=true` for the higher quality video."
     }
   ]
 }

@@ -11,10 +11,12 @@
   "repo": "tbdavid2019/888wiki",
   "license": "AGPL-3.0-only",
   "categories": ["notes", "productivity"],
+  // Field links added after this release was published: a revision, no new build.
+  "revision": 2,
   "authors": [{ "name": "DAVID888", "github": "tbdavid2019" }],
   "maintainers": ["MendyLanda"],
   // 888wiki publishes no release tags; the pin tracks main.
-  "source": { "ref": "main", "sha": "acf210e734e45d53e156bddb3a84114676baaf28" },
+  "source": { "ref": "main", "sha": "fead93e66d7019c641c366746205a1e566ca575b" },
   "install": {
     "packageManager": "npm",
     "wranglerConfig": "wrangler.toml",
@@ -56,6 +58,7 @@
       "name": "GROQ_API_KEY",
       "label": "Groq API key",
       "help": "Turns on AI writing (format, rewrite, translate) and audio transcription through Groq. Leave it unset to go without them.",
+      "link": { "label": "Get a key", "url": "https://console.groq.com/keys" },
       "optional": true
     }
   ],

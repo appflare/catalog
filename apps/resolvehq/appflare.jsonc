@@ -14,11 +14,12 @@
   "licenseNote": "Source-available: free to run for personal or internal use; selling it, hosting it for others or sharing copies needs the author's permission",
   "categories": ["business", "email"],
   // APP_URL starts at the app's address since revision 2, which this release was
-  // built with. Help text edited after it was published: a revision, no new build.
-  "revision": 3,
+  // built with. Edited help text (revision 3) and field links (revision 4) came
+  // after it was published: revisions, no new build.
+  "revision": 4,
   "authors": [{ "name": "Rizvi", "github": "mirza-rizvi", "x": "mirza_rizvi" }],
   "maintainers": ["MendyLanda"],
-  "source": { "ref": "v0.3.3", "sha": "1750133fd4b5f2a078c4dd71ce82ec9f85fddd24" },
+  "source": { "ref": "v0.3.4", "sha": "427e7b061c68b4bc1ea5bd08be1c809e282529bd" },
   "install": {
     "packageManager": "npm",
     "wranglerConfig": "wrangler.jsonc",
@@ -52,24 +53,31 @@
       "name": "RESEND_API_KEY",
       "label": "Resend API key",
       "help": "From resend.com. Replies, password resets and invitations are sent through Resend; without a key they show as failed.",
+      "link": { "label": "Get a key", "url": "https://resend.com/api-keys" },
       "optional": true
     },
     {
       "name": "RESEND_WEBHOOK_SECRET",
       "label": "Resend webhook secret",
       "help": "Signing secret of a Resend webhook pointed at this app, so delivery and bounce events reach tickets.",
+      "link": { "label": "Add a webhook", "url": "https://resend.com/webhooks" },
       "optional": true
     },
     {
       "name": "OPENAI_API_KEY",
       "label": "OpenAI API key",
       "help": "Turns on AI assistance and translation with OpenAI. Each workspace still opts in under Settings > AI assistance.",
+      "link": { "label": "Get a key", "url": "https://platform.openai.com/api-keys" },
       "optional": true
     },
     {
       "name": "TURNSTILE_SECRET_KEY",
       "label": "Turnstile secret key",
       "help": "Together with the Turnstile site key below: a Turnstile challenge on sign-in, sign-up and password reset.",
+      "link": {
+        "label": "Create a widget",
+        "url": "https://dash.cloudflare.com/?to=/:account/turnstile"
+      },
       "optional": true
     }
   ],
@@ -94,6 +102,10 @@
       "name": "TURNSTILE_SITE_KEY",
       "label": "Turnstile site key",
       "help": "The public key of a Managed Turnstile widget for this app's hostname; set it together with the Turnstile secret key.",
+      "link": {
+        "label": "Create a widget",
+        "url": "https://dash.cloudflare.com/?to=/:account/turnstile"
+      },
       "default": "",
       "optional": true
     },

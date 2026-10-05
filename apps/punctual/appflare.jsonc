@@ -8,6 +8,9 @@
   "repo": "CCCrafts/punctual",
   "license": "MIT",
   "categories": ["business", "scheduling"],
+  // openPath and field links added after this release was published: a revision,
+  // no new build.
+  "revision": 2,
   "authors": [
     {
       "name": "Creative Content Crafts",
@@ -54,34 +57,52 @@
       "name": "RESEND_API_KEY",
       "label": "Resend API key",
       "help": "Sends sign-in links, confirmations, and reminders through Resend. Without Resend or Brevo, email is written to the Worker's logs instead of being sent.",
+      "link": { "label": "Get a key", "url": "https://resend.com/api-keys" },
       "optional": true
     },
     {
       "name": "BREVO_API_KEY",
       "label": "Brevo API key",
       "help": "The other email provider. Resend is used when both are set.",
+      "link": { "label": "Get a key", "url": "https://app.brevo.com/settings/keys/api" },
       "optional": true
     },
     {
       "name": "GOOGLE_CLIENT_ID",
       "label": "Google OAuth client ID",
       "help": "Your own Google Cloud OAuth client (web application) with the Google Calendar API enabled. Register <public URL>/auth/google/callback?purpose=identity and <public URL>/auth/google/callback?purpose=calendar as its redirect URIs.",
+      "link": {
+        "label": "Create an OAuth client",
+        "url": "https://console.cloud.google.com/apis/credentials"
+      },
       "optional": true
     },
     {
       "name": "GOOGLE_CLIENT_SECRET",
       "label": "Google OAuth client secret",
+      "link": {
+        "label": "Create an OAuth client",
+        "url": "https://console.cloud.google.com/apis/credentials"
+      },
       "optional": true
     },
     {
       "name": "MICROSOFT_CLIENT_ID",
       "label": "Microsoft app client ID",
       "help": "Your own Entra ID app registration for Microsoft 365 calendars, with <public URL>/auth/microsoft/callback/identity and <public URL>/auth/microsoft/callback/calendar as its redirect URIs.",
+      "link": {
+        "label": "Create an OAuth app",
+        "url": "https://entra.microsoft.com/#view/Microsoft_AAD_RegisteredApps/ApplicationsListBlade"
+      },
       "optional": true
     },
     {
       "name": "MICROSOFT_CLIENT_SECRET",
       "label": "Microsoft app client secret",
+      "link": {
+        "label": "Create an OAuth app",
+        "url": "https://entra.microsoft.com/#view/Microsoft_AAD_RegisteredApps/ApplicationsListBlade"
+      },
       "optional": true
     }
   ],
@@ -146,6 +167,7 @@
       "default": "0"
     }
   ],
+  "openPath": "/dashboard",
   "postInstall": [
     {
       "type": "markdown",

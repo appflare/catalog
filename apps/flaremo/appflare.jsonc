@@ -7,9 +7,12 @@
   "repo": "realchendahuang/FlareMo",
   "license": "AGPL-3.0-only",
   "categories": ["productivity", "notes"],
+  // The formatting of URLs in the notes changed after this release was published:
+  // a revision, no new build.
+  "revision": 2,
   "authors": [{ "name": "realchendahuang", "github": "realchendahuang" }],
   "maintainers": ["MendyLanda"],
-  "source": { "ref": "v0.20.1", "sha": "f87c98ee528848fb8c200ca538cd82d1db03505c" },
+  "source": { "ref": "v0.22.0", "sha": "f507923497128e3dc2bb349355a7cafd95e657f9" },
   "install": {
     "packageManager": "pnpm",
     // The button-ready config. Upstream's wrangler.jsonc is a local, untracked
@@ -83,7 +86,7 @@
     },
     {
       "type": "markdown",
-      "content": "Memos clients and scripts connect with a personal access token from Settings. MCP clients connect to {{appUrl}}/mcp. The API is described at {{appUrl}}/openapi.json."
+      "content": "Memos clients and scripts connect with a personal access token from Settings. MCP clients connect to `{{appUrl}}/mcp`. The API is described at {{appUrl}}/openapi.json."
     }
   ],
   // Both indexes are created before the Worker is uploaded, and their shape

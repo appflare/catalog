@@ -10,7 +10,7 @@
   "categories": ["productivity", "developer-tools", "ai"],
   "authors": [{ "name": "Thomas Dickson", "url": "https://tom-dickson.com", "github": "TAJD" }],
   "maintainers": ["MendyLanda"],
-  "source": { "ref": "v0.7.6", "sha": "f25010ebd7fc68249f3038ab16041d9ca61283da" },
+  "source": { "ref": "v0.7.7", "sha": "ed74080921623c1017248c2f61688c676cba0f02" },
   "install": {
     "packageManager": "pnpm",
     // The API Worker, which also serves the web app as static assets.

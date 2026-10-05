@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-05T11:15:23.655Z",
+  "generatedAt": "2026-10-05T18:15:34.136Z",
   "apps": [
     {
       "slug": "2fa",
@@ -44,76 +44,6 @@
         "utilities"
       ],
       "license": "MIT",
-      "revision": 1,
-      "accessOffer": "offered"
-    },
-    {
-      "slug": "888wiki",
-      "name": "888wiki",
-      "summary": "A Markdown-first notepad and wiki: write in Markdown, Block, Canvas or Whiteboard, publish password-protected or timed shares, and present notes as slides or books.",
-      "tagline": "Write notes and share them with passwords or time limits",
-      "addedAt": "2026-09-27T06:02:01+03:00",
-      "version": "0.0.0-20260923.acf210e",
-      "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20260923.acf210e/888wiki-0.0.0-20260923.acf210e.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20260923.acf210e/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20260923.acf210e/manifest.sig",
-        "digest": "14ef5a6643bdf9c7648fd2c8fd4761cdb1e9f6c24742c77ff0c731f0dde7e6e9"
-      },
-      "tier": "artifact",
-      "plan": "free",
-      "requires": [
-        "r2"
-      ],
-      "lastVerified": "2026-10-05T10:52:40.000Z",
-      "authors": [
-        {
-          "name": "DAVID888",
-          "github": "tbdavid2019"
-        }
-      ],
-      "maintainers": [
-        "MendyLanda"
-      ],
-      "media": {
-        "icon": {
-          "url": "https://appflare.github.io/catalog/apps/888wiki/icon.svg",
-          "sha256": "25f8838549f4e6f9459497108d92cdc59aafe9bb418a5ab7ca05d476e039ef3a"
-        },
-        "screenshots": [
-          {
-            "url": "https://appflare.github.io/catalog/apps/888wiki/screenshots/01-markdown-editor.png",
-            "sha256": "60a45cbbca38cda3bfd3ac83f5c1f9e1a1fb92d4313f08c4eb8d22fa70944d5d",
-            "alt": "888wiki: Markdown editor"
-          },
-          {
-            "url": "https://appflare.github.io/catalog/apps/888wiki/screenshots/02-paragraph-annotations.png",
-            "sha256": "87dfe84ef81e2f8dd115ad748dba4e5499c8820bf1c7f27cd9ce61d3e0be66fb",
-            "alt": "888wiki: Paragraph annotations"
-          },
-          {
-            "url": "https://appflare.github.io/catalog/apps/888wiki/screenshots/03-slide-presentation.png",
-            "sha256": "1e00a0c4cec2f7f10659703fca2bad1bf49545be44616cb9686230c66b0786b9",
-            "alt": "888wiki: Slide presentation"
-          },
-          {
-            "url": "https://appflare.github.io/catalog/apps/888wiki/screenshots/04-seal-settings.png",
-            "sha256": "5634e55c85b74f02bfc23d4b7cf1f52ece35444c54104929d996e4e47704fce9",
-            "alt": "888wiki: Seal settings"
-          }
-        ]
-      },
-      "services": [
-        "kv",
-        "d1",
-        "r2",
-        "cron"
-      ],
-      "categories": [
-        "notes",
-        "productivity"
-      ],
-      "license": "AGPL-3.0-only",
       "revision": 1,
       "accessOffer": "offered"
     },
@@ -176,12 +106,12 @@
         "ai"
       ],
       "license": "Apache-2.0",
-      "revision": 3,
+      "revision": 4,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/agentic-inbox/manifest.json",
-        "sha256": "0dcf5b5b58c230edefac92043711e0105e3d69c8e2850d338e4f960d8af2f006",
+        "sha256": "6180608334fa63c3effdf4da770e2cc3b2d9b4db4e9f747e605737fcc9a31404",
         "keyId": "catalog-2026-09",
-        "signature": "0cLAD7YqDGDbjlMYWnXd1xS/cAevxnZHxEtRROnqBtgO7/u2+uNoiCGKN0HGq6iQlykt3d7xNgvpj2V6hMNdDg=="
+        "signature": "mBr9YyuZ7QF57deYFZSVhimfSnTYhKCoaXuAjspRlD+KIPQENt1Y2kZzX/22dO+gOesy4JPaDvzRwYdKh2OyDw=="
       },
       "accessOffer": "required"
     },
@@ -281,60 +211,6 @@
       "accessOffer": "offered"
     },
     {
-      "slug": "atalaya",
-      "name": "Atalaya",
-      "summary": "Uptime monitoring and a status page on one Worker: HTTP, TCP and DNS checks every minute, optionally from chosen Cloudflare regions, webhook alerts, and 90 days of history in D1.",
-      "tagline": "Check if your sites are up and share a status page",
-      "addedAt": "2026-09-27T04:47:37+03:00",
-      "version": "0.0.0-20260926.5437d1c",
-      "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/atalaya@0.0.0-20260926.5437d1c/atalaya-0.0.0-20260926.5437d1c.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/atalaya@0.0.0-20260926.5437d1c/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/atalaya@0.0.0-20260926.5437d1c/manifest.sig",
-        "digest": "89d44e4655e5f08243679b4812f9a76e0256fffacd45544f3d80e1d154fc4f02"
-      },
-      "tier": "artifact",
-      "plan": "free",
-      "requires": [],
-      "lastVerified": "2026-10-05T10:52:23.000Z",
-      "authors": [
-        {
-          "name": "Daniel Carrillo",
-          "url": "https://dcarrillo.es",
-          "github": "dcarrillo",
-          "x": "dani_carrillo"
-        }
-      ],
-      "maintainers": [
-        "MendyLanda"
-      ],
-      "media": {
-        "icon": {
-          "url": "https://appflare.github.io/catalog/apps/atalaya/icon.svg",
-          "sha256": "b5432407e161c711bf4dceacbed3366d4602207e73a5193b85ef5ba5080881d1"
-        },
-        "screenshots": []
-      },
-      "services": [
-        "d1",
-        "durable-objects",
-        "cron"
-      ],
-      "categories": [
-        "monitoring",
-        "developer-tools"
-      ],
-      "license": "Apache-2.0",
-      "revision": 3,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/atalaya/manifest.json",
-        "sha256": "ecc282961f1b8777d49d1ad2b4d7789ec32d195ef746646ad8e467bed9c4f5b3",
-        "keyId": "catalog-2026-09",
-        "signature": "TFqt/mPOlt+VmEIcSXbm11zv3pSw6+TC+ggLK1iSZKUkpGu0s7tqxdsaCIzB0dH7XDF/sXQC4rxMIAOD2G+jCw=="
-      },
-      "accessOffer": "offered"
-    },
-    {
       "slug": "auth-inbox",
       "name": "Auth Inbox",
       "summary": "An inbox for sign-up and verification mail: Email Routing delivers it, an AI model of your choice pulls out codes and links and sorts each mail, and a dashboard, per-user grants and a remote MCP server let people and agents read them.",
@@ -388,12 +264,12 @@
         "ai"
       ],
       "license": "MIT",
-      "revision": 2,
+      "revision": 4,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/auth-inbox/manifest.json",
-        "sha256": "c3499c8ab5ebe423aa5dfaaa581a89cb6508cc8c2f4dff062058cb806bcea99c",
+        "sha256": "03282d31f6006909041b5e9cf80a7f1db85d4b81db797ae09a2890f68207ca9d",
         "keyId": "catalog-2026-09",
-        "signature": "GLjkgyqRa+nqtEO+OZs04T52gpbyq8e1cQhRxbWmVIC1PMStI6hviSPXWBzDoPlmRDMR8/gTa+KDd+W+xyZxCg=="
+        "signature": "/wkpGrq67oY9iSLLGA1M+jIdrKx9QBnNfVmNrrGgo1blA+DAe66v5EOrqPmxgrHGAQIMbbyw+hXWCyrKOZK/DA=="
       },
       "accessOffer": "offered"
     },
@@ -444,7 +320,13 @@
         "chat"
       ],
       "license": "MIT",
-      "revision": 1,
+      "revision": 3,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/auto-reaction-bot/manifest.json",
+        "sha256": "b8c5b05816e032afb99e7d2640be7862ac38916573318765037bfc2ccd7d35ac",
+        "keyId": "catalog-2026-09",
+        "signature": "zekbEYKxY84hbnzDDaYGrJhQQZ/beEBrXMz+MxpqFwjSDER3/dvbNWlSJRcun3Q3omC6u/N9A9JU29HoBpyODw=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -480,7 +362,13 @@
         "notifications"
       ],
       "license": "GPL-3.0-only",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/bark-worker/manifest.json",
+        "sha256": "0ae39be0ddfc92ffc066c06a9ca45b0f744ac21c3f85743ff56bda0c8291dcd8",
+        "keyId": "catalog-2026-09",
+        "signature": "sDqaiwEP8vYLuAndAwMaeAZnlkjakQig2Xw/YR6LJSTQYx0Naj4W8cLiUBdkjNCZ1oaJj13k/Mo3y7R6XafyAQ=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -635,7 +523,13 @@
         "utilities"
       ],
       "license": "MIT",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/blobatar/manifest.json",
+        "sha256": "25d5ae3f90a5d1a37a1659e6eb6dd1af5a9709acddbe76bbfb3cb7668d9845cf",
+        "keyId": "catalog-2026-09",
+        "signature": "7W5ecYTmheZMtPKJE37W3AWVHIAlFizqmsUJcsnOB93rgX3uvU0VRyXiGgSSUwtN+NQNNqCchfrG+HtTXOPODQ=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -698,12 +592,12 @@
         "productivity"
       ],
       "license": "MIT",
-      "revision": 2,
+      "revision": 3,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/bookshelf/manifest.json",
-        "sha256": "b04724b4854ae141d9b03bdf3440ed8aaecb249d8fe57badba868f3d90b58d0b",
+        "sha256": "15dc292e2c6cad744956978c951abc935ab0c2767f2c7df03c64b60fb0bdcfe4",
         "keyId": "catalog-2026-09",
-        "signature": "lI118SxmYgrDn/wHO7S6NIFGE6/6BP+69vnjgAmU+gz93Tb772QiFbsZrZer3/rVVl5besMjn859bDHP+wQ6DQ=="
+        "signature": "R6YWhYYV/6q6uxKVt6TpfpQhKLeFlJmJkxOQJULgiBjDOMzCh6rRwZtBHvZPXGRQYNiqaVqgBsDassyhPYueBA=="
       },
       "accessOffer": "recommended"
     },
@@ -748,7 +642,13 @@
         "remote-access"
       ],
       "license": "MIT",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/browser-relay/manifest.json",
+        "sha256": "b859564cbfe9064b5e185eaca321e2e1a407a16ac05c8472e5294803ef23fd86",
+        "keyId": "catalog-2026-09",
+        "signature": "8fEjjk4R1aIe3f+/nOw/Av0/qmBsCIw3TSUwXRPIM11hVHbu0pAJF4cx7eSSxl6Sep99hhOtEszK35UKujPlAA=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -785,7 +685,13 @@
         "developer-tools"
       ],
       "license": "MIT",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/cap-worker/manifest.json",
+        "sha256": "dbb69f9b57886e5d2e4f0282aab7240771a354b06e24052659bdcd541b6a3f9d",
+        "keyId": "catalog-2026-09",
+        "signature": "7wzzxnocGC6vC7RHx5MwVS0zP03QJKTVVNv0mPH+Xhc9fWkYZF8lS4NjOed1bILJub0wDyF2Ixxq8IRvmm8RDQ=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -836,7 +742,13 @@
         "files"
       ],
       "license": "GPL-3.0-only",
-      "revision": 2,
+      "revision": 3,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/cattopic/manifest.json",
+        "sha256": "67bed11277b07b34560787e2f04d0ee1240d49ecc08618d7cadf14b028634fed",
+        "keyId": "catalog-2026-09",
+        "signature": "2WzUBylV9bvvpdJg29nl5KqFN7wICEv9SkRlgS8LioRCMP7d9Y4ljJJGk/fIvZpi1qwc/Y6JP/ReUxxEur7WCQ=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -880,12 +792,12 @@
         "utilities"
       ],
       "license": "NONE",
-      "revision": 2,
+      "revision": 3,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/cf-nav/manifest.json",
-        "sha256": "e8ed6f8704c378843bdea6a1fcd933aa674ee453dfd6f6829586ab5174b3efc4",
+        "sha256": "a6b4bfb9b62fb5f74d6c0f245cf45336cf5c3d6f0b38588968561d9171a3438b",
         "keyId": "catalog-2026-09",
-        "signature": "kaByqws1qER1jEMy1navGtuhORi7gMnqTxQYw5niucQlUvHOXjxH0QGYW3YOsP1VTvzB55QgjcFyu7DrWBbMAQ=="
+        "signature": "BAzqM5/6OqeSHDEJfPq5di7gMvT93H6F9qn2rO/dbtZLcz/pU1mbmO1eDLz61L91CgXeuurtkTzkAZtpbnCZDQ=="
       },
       "accessOffer": "offered"
     },
@@ -998,7 +910,13 @@
         "bots"
       ],
       "license": "MIT",
-      "revision": 1,
+      "revision": 3,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/cftgsx/manifest.json",
+        "sha256": "e0a11ad9ed0ffc2e61173973d96329ed9f4a0b1b63c1d4b933eb3fb1a41ff7df",
+        "keyId": "catalog-2026-09",
+        "signature": "UcTPdinwgQZrc4jT6q9YiVAiHfBWnN2yVop4GPbX7i75N5xqdc67WMhZdGYVWWIL2L2BUSniYT/WG3UMAkbKCA=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -1047,7 +965,13 @@
         "bots"
       ],
       "license": "MIT",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/chatgpt-telegram-workers/manifest.json",
+        "sha256": "f24af8f6058dadbb950c08ef2e27aefb01dbb867548f8362e142c057d4702e2a",
+        "keyId": "catalog-2026-09",
+        "signature": "KcPEub0oEGMUktEgs57SCBOKBYI+1cvT9FuXIBH9wZSSOTbhjR0lmvMu5huGMDqGzDupf71t2ymM9CRHtWtxDQ=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -1094,7 +1018,13 @@
         "family"
       ],
       "license": "MIT",
-      "revision": 1,
+      "revision": 3,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/civideo/manifest.json",
+        "sha256": "b6ba50a9b0343fee7b7d56e545da3bb51ce2e6df225fe7b7431acf0d7cd1c1f8",
+        "keyId": "catalog-2026-09",
+        "signature": "4AEElgeeldvwJyCMadFvzCVzjdwYtXoSyQSX5QZXsUY+Cz1yhothrSgJ4/Zrszn2dAj7MS8kWXP6RFKrZGxpAA=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -1138,7 +1068,13 @@
         "files"
       ],
       "license": "MIT",
-      "revision": 2,
+      "revision": 3,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/clist/manifest.json",
+        "sha256": "3b7e81b5514e99278d296f13912f3d486cc05b77340ac0bc349b556732e1dfb4",
+        "keyId": "catalog-2026-09",
+        "signature": "KuXpyA1aWmxACpHYSFr98Q9TM/+Us9TTfdvT8mvixVlweWkI2j/HCUdNjM0isOf1Swb1CS1hQXlWKb4KgadsAQ=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -1188,12 +1124,12 @@
         "developer-tools"
       ],
       "license": "MIT",
-      "revision": 2,
+      "revision": 4,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/cloudflare-prometheus-exporter/manifest.json",
-        "sha256": "6b172d7d8225a8bb5359e35ad2da222b7af6bd377a4a97759a18ede20b494f70",
+        "sha256": "76abde9bf662d309426ab54020a27d761662f4c261399427548aca35a96b0057",
         "keyId": "catalog-2026-09",
-        "signature": "8y2zYbB5pcdLsVSwT1ocmompgiCMx7xhwpQmxDhSicNsODBMHSP5X42fIstKfUDdI1YalOrCglUJjCJPp/fPBQ=="
+        "signature": "GSTOd5T/KTZkJq8OgPBlR8nLMs1hkazbBVmHsOeMsueLJs0eNX532mnAGW9AE/Z+Sv2+2tfA2ZaOqOplfXLdDg=="
       },
       "accessOffer": "offered"
     },
@@ -1301,52 +1237,13 @@
         "utilities"
       ],
       "license": "AGPL-3.0-only",
-      "revision": 1,
-      "accessOffer": "offered"
-    },
-    {
-      "slug": "cloudssh",
-      "name": "CloudSSH",
-      "summary": "A web SSH terminal on Workers: connect to your servers from the browser with multiple sessions, SFTP file management, jump hosts, saved servers, and a bring-your-own-key AI assistant.",
-      "tagline": "Connect to your servers through a browser",
-      "addedAt": "2026-09-26T23:19:31+03:00",
-      "version": "0.0.0-20260924.25852ca",
-      "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20260924.25852ca/cloudssh-0.0.0-20260924.25852ca.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20260924.25852ca/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20260924.25852ca/manifest.sig",
-        "digest": "7fb14d0af075605f3f50dffa001784b134e82bd411075f02e11f250fd0fa8166"
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/cloudmark/manifest.json",
+        "sha256": "bd085c1d959b28338723c29a16691c9110cbf6d25c57eb10ced6d19ec2f0f36f",
+        "keyId": "catalog-2026-09",
+        "signature": "sbtHAzh9dcy2uikzjQuo9kzVfMkxfswSTU7aL5vPBQk1xY5tm6pAZ68cKu11/MR/aX1lUSo3UaMDBr4GsDeTAA=="
       },
-      "tier": "artifact",
-      "plan": "free",
-      "requires": [],
-      "lastVerified": "2026-10-05T10:54:59.000Z",
-      "authors": [
-        {
-          "name": "TanXin",
-          "url": "https://tanxin.me",
-          "github": "newbietan"
-        }
-      ],
-      "maintainers": [
-        "MendyLanda"
-      ],
-      "media": {
-        "icon": {
-          "url": "https://appflare.github.io/catalog/apps/cloudssh/icon.svg",
-          "sha256": "7798d8bc82566ea4bf5ad4f7088a9b3c0135dae4ad9fa83a1b52b8340db3daf3"
-        },
-        "screenshots": []
-      },
-      "services": [
-        "durable-objects"
-      ],
-      "categories": [
-        "remote-access",
-        "developer-tools"
-      ],
-      "license": "Apache-2.0",
-      "revision": 1,
       "accessOffer": "offered"
     },
     {
@@ -1490,7 +1387,13 @@
         "utilities"
       ],
       "license": "MIT",
-      "revision": 3,
+      "revision": 4,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/cut/manifest.json",
+        "sha256": "6e6d6ca353700a8eed65767ccc9b8ba0c3f89641b8f547f5c8f10f236f5becd6",
+        "keyId": "catalog-2026-09",
+        "signature": "o2Dff9PxwKNoG8XEXZhGNIKEMrmBefyEns9e3TAkZKlHlgEoRus4gPeFrL3Rcwcgz43EsE2/6nxhWuTaXOInDw=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -1536,7 +1439,13 @@
         "ai"
       ],
       "license": "MIT",
-      "revision": 1,
+      "revision": 3,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/deepcrawl/manifest.json",
+        "sha256": "b4e075ba0451c4dc6d079c2dc382aa8af2c84a1be3f933a28f1e3aedba432f8c",
+        "keyId": "catalog-2026-09",
+        "signature": "D+hCdT7CQsDZW66oaZdnz/RPJUF7GEQRy8mV8IQTXDeaCySSUb4QKiTjDOfrEr3mFQ2VgQeE1SNvlx9DCdBdDQ=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -1585,7 +1494,13 @@
         "ai"
       ],
       "license": "NONE",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/dictdeck/manifest.json",
+        "sha256": "1b84ea2cef2d6d1c8abe53dbb2a9cb2d6915d785a94dac3f32432c5c13fffec3",
+        "keyId": "catalog-2026-09",
+        "signature": "frCOAERmKI/juRq1AWGO0fE/ljRiMdHwQBb1FsTchRARNmsy+cy+MNhACTJzWAO0/VcWnD71NjEeInExsjiYBQ=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -1631,12 +1546,12 @@
         "privacy"
       ],
       "license": "MIT",
-      "revision": 2,
+      "revision": 3,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/dispoflare/manifest.json",
-        "sha256": "0a65b652a2b24ec3d347bb8342d94f5476940099315b4886601158030ee9ff7b",
+        "sha256": "bfd8eaec1df1ad713e8b19990a30d6ba59805cbe52416a54f943154624f973fb",
         "keyId": "catalog-2026-09",
-        "signature": "+BmOCnAue/GiAzasBM0MDukMEzeZTtNISrTkd5nZs59p6WdMCquWdw/c7x4T+4RAePNJDPP+4wVnNH+tfJv1Ag=="
+        "signature": "4xSIi0PtpXpRJduXUapB1UQERa/Llo2+pbRlJ9FTqn9kCdRTU/dHqhQ/Aq1YpFzcSqtaT6nM9ythxC0v3d2uDg=="
       },
       "accessOffer": "required"
     },
@@ -1741,60 +1656,6 @@
       "accessOffer": "offered"
     },
     {
-      "slug": "edgeever",
-      "name": "EdgeEver",
-      "summary": "An Evernote-style notes and knowledge base with a three-pane layout, full-text search, public note sharing, AI features and a built-in MCP server, on D1 and R2.",
-      "tagline": "Notes you can organize, search, and share from your own account",
-      "addedAt": "2026-09-27T05:18:00+03:00",
-      "version": "1.88.0",
-      "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/edgeever@1.88.0/edgeever-1.88.0.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/edgeever@1.88.0/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/edgeever@1.88.0/manifest.sig",
-        "digest": "f718a5a68b9348acdbe7ece4ea0a008a3189647156355940572d45c41500be2b"
-      },
-      "tier": "artifact",
-      "plan": "free",
-      "requires": [
-        "r2"
-      ],
-      "lastVerified": "2026-10-04T10:10:45.000Z",
-      "authors": [
-        {
-          "name": "tianma-if",
-          "github": "tianma-if",
-          "x": "tianma_if"
-        }
-      ],
-      "maintainers": [
-        "MendyLanda"
-      ],
-      "media": {
-        "icon": {
-          "url": "https://appflare.github.io/catalog/apps/edgeever/icon.svg",
-          "sha256": "1f13ba9f2ac4ea325eddce44a427eed4e98b64b9078b23de067ed23e67fe7257"
-        },
-        "screenshots": []
-      },
-      "services": [
-        "d1",
-        "r2"
-      ],
-      "categories": [
-        "notes",
-        "productivity"
-      ],
-      "license": "AGPL-3.0-only",
-      "revision": 3,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/edgeever/manifest.json",
-        "sha256": "bd3f7cd70569fd01fc8bf4cfd295f093d8044c43f2d0e9f1fd44d0ae1e773f5c",
-        "keyId": "catalog-2026-09",
-        "signature": "vfiVAiDd19uTTbE1LmLYMGTOajw0SIhwdO3TpdxYatqBCkzJ9hfMxoyk5aTK52rOeaJOQ/7ROEQOO+8CceU4Dg=="
-      },
-      "accessOffer": "offered"
-    },
-    {
       "slug": "edgekey",
       "name": "EdgeKey",
       "summary": "A shop for digital goods: sell card keys and codes, take payment through USDT, Epay, Alipay or Stripe, and deliver each order automatically by page and email.",
@@ -1842,7 +1703,13 @@
         "ecommerce"
       ],
       "license": "MIT",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/edgekey/manifest.json",
+        "sha256": "dcf7020469ae32dbdb178acc0ef3b37c15fad0c03ac7325a25f05b0762d8e1ed",
+        "keyId": "catalog-2026-09",
+        "signature": "i4L129jT597U1CnyJ8BHjS//HKmY8okNlo99SChNnAQYhEbIp7t+NiHx4ASmzkeSdtOev2Ch3HdspOYtEDcYDA=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -2121,7 +1988,13 @@
         "cms"
       ],
       "license": "MIT",
-      "revision": 2,
+      "revision": 3,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/emdash/manifest.json",
+        "sha256": "1e7f784c7f094664bb7a1c0704abf453663f6f56f669b456fcc793c7027390d2",
+        "keyId": "catalog-2026-09",
+        "signature": "cnkbE1+RoRaciI1TkqIq36FRptELbiRCuv9Q2zOdD/csEhhx/y8tKt5IZcNFoC73FSC0qqH3a3tWbQjxPoZnDA=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -2259,7 +2132,13 @@
         "productivity"
       ],
       "license": "MIT",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/feedlog/manifest.json",
+        "sha256": "60703bedbd7b35caa97dac1de19263be122f63ef31e0112665b841512ad94c31",
+        "keyId": "catalog-2026-09",
+        "signature": "LCZymKIC/IyekpjvYF3RA9Ge3sYGYxpSNMqriY1LVt5xfyD147suPqF4S6dt2o9mgCezVSSecEWxlEAOgQsdAg=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -2303,73 +2182,6 @@
         "keyId": "catalog-2026-09",
         "signature": "rjLzkvnwlFvSMnQaudPNM6sgB2UcG7yzOG0qqLGzYAYqL19rPl3HZKnB9cmR+Z+ZfFbl0e5hc7pf2ZU+FKA8CQ=="
       },
-      "accessOffer": "offered"
-    },
-    {
-      "slug": "flaremo",
-      "name": "FlareMo",
-      "summary": "A Memos-compatible notes app for quick capture: timeline, tags, attachments, semantic search, and an MCP server, on D1, R2, and Vectorize.",
-      "tagline": "Capture notes and find them when you need them",
-      "addedAt": "2026-09-23T20:44:39+03:00",
-      "version": "0.20.1",
-      "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/flaremo@0.20.1/flaremo-0.20.1.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/flaremo@0.20.1/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/flaremo@0.20.1/manifest.sig",
-        "digest": "40795245450013f111a16a4311a25a12ab8173d011113e962798daaaff1f4c1c"
-      },
-      "tier": "artifact",
-      "plan": "free",
-      "requires": [
-        "r2",
-        "workers-ai"
-      ],
-      "lastVerified": "2026-10-05T10:57:44.000Z",
-      "authors": [
-        {
-          "name": "realchendahuang",
-          "github": "realchendahuang"
-        }
-      ],
-      "maintainers": [
-        "MendyLanda"
-      ],
-      "media": {
-        "icon": {
-          "url": "https://appflare.github.io/catalog/apps/flaremo/icon.png",
-          "sha256": "33faa4d7cd1069cbbd27bf78bf6fbe7098f02112ccdf25bf28304b82268e720a"
-        },
-        "cover": {
-          "url": "https://appflare.github.io/catalog/apps/flaremo/cover.png",
-          "sha256": "c78c5c4c3b2c2d47d39a2c6767bae01293e658c6efcec7dc7d0b703ffdc21cff"
-        },
-        "screenshots": [
-          {
-            "url": "https://appflare.github.io/catalog/apps/flaremo/screenshots/01-notes-timeline.png",
-            "sha256": "7d5f451001e5f742d1f7bb1ac6ed6c7041f187b5e0bf1546d7ccad7a41fa0a32",
-            "alt": "FlareMo: Notes timeline"
-          },
-          {
-            "url": "https://appflare.github.io/catalog/apps/flaremo/screenshots/02-on-a-phone.png",
-            "sha256": "107c66d7099537767b45a56ea2a7459a323f1573e6a62fb887e785f2d081ddc9",
-            "alt": "FlareMo: On a phone"
-          }
-        ]
-      },
-      "services": [
-        "d1",
-        "r2",
-        "vectorize",
-        "queues",
-        "cron",
-        "workers-ai"
-      ],
-      "categories": [
-        "productivity",
-        "notes"
-      ],
-      "license": "AGPL-3.0-only",
-      "revision": 1,
       "accessOffer": "offered"
     },
     {
@@ -2421,53 +2233,6 @@
         "sha256": "f8b5035dc59fee929c7aabd610a5d50ee7331f3712fca0949afe4ea9b3c9be75",
         "keyId": "catalog-2026-09",
         "signature": "NPLO7riTdNhmOVGf4HdaKJlmwPGQg36BhfBaDgI5+gJmEcRqODypP44sYWogJZsEuj3Kxr4FtSeWDmKoZQJ6AQ=="
-      },
-      "accessOffer": "offered"
-    },
-    {
-      "slug": "folia",
-      "name": "Folia",
-      "summary": "A web music player built around full-screen animated lyrics, for your local library or a Navidrome server, with automatic lyric matching and AI colour themes from your own Gemini key.",
-      "tagline": "Play your music with full-screen animated lyrics",
-      "addedAt": "2026-09-27T10:46:59+03:00",
-      "version": "0.7.9",
-      "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/folia@0.7.9/folia-0.7.9.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/folia@0.7.9/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/folia@0.7.9/manifest.sig",
-        "digest": "59fa4efa53f670c772633d1f1c5df94cf917b0cc03a022359dca76c699462964"
-      },
-      "tier": "artifact",
-      "plan": "free",
-      "requires": [],
-      "lastVerified": "2026-10-05T10:57:25.000Z",
-      "authors": [
-        {
-          "name": "chthollyphile",
-          "github": "chthollyphile"
-        }
-      ],
-      "maintainers": [
-        "MendyLanda"
-      ],
-      "media": {
-        "icon": {
-          "url": "https://appflare.github.io/catalog/apps/folia/icon.svg",
-          "sha256": "0045ede40bee2e9ac4f40a3a803b16febbf75ab9beca6c438bfbd1e6cd5529a8"
-        },
-        "screenshots": []
-      },
-      "services": [],
-      "categories": [
-        "media"
-      ],
-      "license": "AGPL-3.0-only",
-      "revision": 2,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/folia/manifest.json",
-        "sha256": "3275f78a916b51be3c8218381a870154cebbad3c3f1ede0a85ed9dbad21688c0",
-        "keyId": "catalog-2026-09",
-        "signature": "Z9NHQnHIgQ4ylniOEe4kkIQj9m4nylV1Zo2X6U+zZFt+/24ILX19C7xnRztb+1KbmbkpVLdOIfr5G6jRNqAjDA=="
       },
       "accessOffer": "offered"
     },
@@ -2611,12 +2376,12 @@
         "privacy"
       ],
       "license": "Apache-2.0",
-      "revision": 2,
+      "revision": 3,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/freemail/manifest.json",
-        "sha256": "0fb7251c33fca9382a24e85f5f614c4553cb7810060b03ad7263708b49b3fc26",
+        "sha256": "6ef4c96f5a28df6baad62258e5a24640a6ec9616e4e3a7c58a51ed14fca4ff12",
         "keyId": "catalog-2026-09",
-        "signature": "+lD9wKxtmdoX7UUPnRXDLJPgxtKKu4wQJ9P5w50fEJWL+S2E7HehNLzXcjirLRgA7kjkt+CnHK9GWyqtPiqMBg=="
+        "signature": "a7f+X9WSlqsQObIK/w5BW3nES/OoB2N5hWGpHtbRW+wmWNhOFiXPPGGKTg0UgzR2U5iPFMojTuIqK1Wo2nZXCg=="
       },
       "accessOffer": "offered"
     },
@@ -2626,17 +2391,17 @@
       "summary": "Fixes TikTok embeds on Discord and other chat apps: swap tiktok.com for your own address in a link and it previews the video or slideshow inline, with the author, caption and counts.",
       "tagline": "Make TikTok links preview videos and slideshows in chat",
       "addedAt": "2026-09-27T10:43:20+03:00",
-      "version": "0.0.0-20260906.66fbae3",
+      "version": "0.0.0-20261004.5c3e70b",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/fxtiktok@0.0.0-20260906.66fbae3/fxtiktok-0.0.0-20260906.66fbae3.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/fxtiktok@0.0.0-20260906.66fbae3/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/fxtiktok@0.0.0-20260906.66fbae3/manifest.sig",
-        "digest": "84a1e56d7f240239fbee8b5106d217cee352cbf93a51656e83df05c7a15dec0c"
+        "zip": "https://github.com/appflare/catalog/releases/download/fxtiktok@0.0.0-20261004.5c3e70b/fxtiktok-0.0.0-20261004.5c3e70b.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/fxtiktok@0.0.0-20261004.5c3e70b/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/fxtiktok@0.0.0-20261004.5c3e70b/manifest.sig",
+        "digest": "a3f78994581f806baf06d65900682497e888d55fd6433d0432b1e8822cf9c93c"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-10-05T10:57:58.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "dargy",
@@ -2654,101 +2419,7 @@
         "utilities"
       ],
       "license": "MIT",
-      "revision": 1,
-      "accessOffer": "offered"
-    },
-    {
-      "slug": "garrul",
-      "name": "Garrul",
-      "summary": "Self-hosted comments for static sites and blogs: an embeddable widget with threads, reactions and votes, OAuth or anonymous posting behind Turnstile, a moderation queue, and reply emails.",
-      "tagline": "Comments and reactions for your website, hosted in your account",
-      "addedAt": "2026-09-27T05:55:55+03:00",
-      "version": "2.29.0",
-      "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/garrul@2.29.0/garrul-2.29.0.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/garrul@2.29.0/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/garrul@2.29.0/manifest.sig",
-        "digest": "2b6f35520bf73094c61299b4a14aff432e6a5439cd7d10934a57da5f75da449f"
-      },
-      "tier": "artifact",
-      "plan": "free",
-      "requires": [
-        "analytics-engine"
-      ],
-      "lastVerified": "2026-10-05T10:58:51.000Z",
-      "authors": [
-        {
-          "name": "KingPin",
-          "url": "https://sumguy.com",
-          "github": "KingPin"
-        }
-      ],
-      "maintainers": [
-        "MendyLanda"
-      ],
-      "media": {
-        "icon": {
-          "url": "https://appflare.github.io/catalog/apps/garrul/icon.png",
-          "sha256": "b6c98bbadfa8a210065c149e0c132aad782d48a488c7644526d0a5ffcefacdbe"
-        },
-        "cover": {
-          "url": "https://appflare.github.io/catalog/apps/garrul/cover.png",
-          "sha256": "b33f9c6f01bf256ba10abcaab5ba1f3caebdf6789196460296c35dc30e972b76"
-        },
-        "screenshots": [
-          {
-            "url": "https://appflare.github.io/catalog/apps/garrul/screenshots/01-comment-widget.png",
-            "sha256": "ab81387782fbc7b45d31a3ceab33db4b0bb163e9b38b2d61cd02c91429efde37",
-            "alt": "Garrul: Comment widget"
-          },
-          {
-            "url": "https://appflare.github.io/catalog/apps/garrul/screenshots/02-admin-dashboard.png",
-            "sha256": "55ba18e439c63f839230fe6379f5fc779c1d0c581b380140143dc7fbae7b0e04",
-            "alt": "Garrul: Admin dashboard"
-          },
-          {
-            "url": "https://appflare.github.io/catalog/apps/garrul/screenshots/03-moderation-queue.png",
-            "sha256": "08e2b19ea6e83ba1ef2c28f27d180b546341b1ac7366d11056679e3bbf09fb7e",
-            "alt": "Garrul: Moderation queue"
-          },
-          {
-            "url": "https://appflare.github.io/catalog/apps/garrul/screenshots/04-feature-settings.png",
-            "sha256": "af1b43d2ba30ea0294d6ac61324f6457737641fc30eb27c888b5fd8635f7afdf",
-            "alt": "Garrul: Feature settings"
-          },
-          {
-            "url": "https://appflare.github.io/catalog/apps/garrul/screenshots/05-comment-detail.png",
-            "sha256": "fa0fb3cccc458ed822b9bbd26becc245412dfc260a97ff35e1095a71c57e2431",
-            "alt": "Garrul: Comment detail"
-          },
-          {
-            "url": "https://appflare.github.io/catalog/apps/garrul/screenshots/06-user-list.png",
-            "sha256": "922004c364648397f8bd24f6339992a5fde0ab1b54db8a4f53543e51f294ed0b",
-            "alt": "Garrul: User list"
-          },
-          {
-            "url": "https://appflare.github.io/catalog/apps/garrul/screenshots/07-webhook-status.png",
-            "sha256": "d101ea68614b4c89d6fd513be1adc8c2ffb30cd2186a7b048205da30c6c76812",
-            "alt": "Garrul: Webhook status"
-          },
-          {
-            "url": "https://appflare.github.io/catalog/apps/garrul/screenshots/08-audit-log.png",
-            "sha256": "edc798c2d450ae6f0bad40cbc9418b9ccf51018c87f908f134d3e03a6a8cba33",
-            "alt": "Garrul: Audit log"
-          }
-        ]
-      },
-      "services": [
-        "kv",
-        "d1",
-        "analytics-engine",
-        "cron"
-      ],
-      "categories": [
-        "community"
-      ],
-      "license": "Apache-2.0",
-      "revision": 1,
+      "revision": 2,
       "accessOffer": "offered"
     },
     {
@@ -2843,122 +2514,13 @@
         "developer-tools"
       ],
       "license": "MIT",
-      "revision": 2,
+      "revision": 3,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/glance/manifest.json",
-        "sha256": "a540d44104615fb7e085b92866c6f60b3a485da3d09c787063cd5bb82fce3420",
+        "sha256": "3f03e378bd1205c6ec22bff2f73c26833b0219b9d4f42076cab318a674407c96",
         "keyId": "catalog-2026-09",
-        "signature": "r40hpbj/Rj+743ZXUMmOov9Vg+y4Y7xZFEaxZ+CLJnNS0CW4nRCgR/vZdXu28vUzyE/eHmTF8FsBULB7zD6EBQ=="
+        "signature": "ESFOakgLMWzEqv7+eE39ak/egRE39TEV2UObGgWJjmuFFw1ZI9ONTb+oBXW41onzN9vpQySN7ja+AVwGnmHBDQ=="
       },
-      "accessOffer": "offered"
-    },
-    {
-      "slug": "gmshop",
-      "name": "GMShop Edge",
-      "summary": "A single-tenant digital-goods shop: stock items such as licence keys delivered on payment, private downloads from R2, entitlements, coupons and refunds, guest or account checkout, and an admin console with roles, on D1, KV, R2 and Queues.",
-      "tagline": "Sell digital goods with automatic delivery from your own shop",
-      "addedAt": "2026-09-27T12:03:21+03:00",
-      "version": "1.0.2",
-      "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/gmshop@1.0.2/gmshop-1.0.2.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/gmshop@1.0.2/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/gmshop@1.0.2/manifest.sig",
-        "digest": "dd5b384cbf71620024684d225e96da5b561bedcc0cb936a4a7496ffabe0471f4"
-      },
-      "tier": "artifact",
-      "plan": "paid",
-      "requires": [
-        "r2"
-      ],
-      "lastVerified": null,
-      "authors": [
-        {
-          "name": "GM Wallet",
-          "url": "https://gmwallet.app",
-          "github": "GMWalletApp",
-          "x": "GMwalletApp"
-        }
-      ],
-      "maintainers": [
-        "MendyLanda"
-      ],
-      "media": {
-        "icon": {
-          "url": "https://appflare.github.io/catalog/apps/gmshop/icon.png",
-          "sha256": "a5672ae3ae7fa7809b01e0554e283e59857c0f291eeb591770a09b8fc18c8608"
-        },
-        "screenshots": []
-      },
-      "services": [
-        "kv",
-        "d1",
-        "r2",
-        "queues",
-        "cron",
-        "email-routing"
-      ],
-      "categories": [
-        "ecommerce",
-        "business"
-      ],
-      "license": "GPL-3.0-or-later",
-      "revision": 1,
-      "accessOffer": "offered"
-    },
-    {
-      "slug": "hashpay",
-      "name": "HashPay",
-      "summary": "A crypto payment gateway run from your own Telegram bot: take USDT, USDC and native coins on eight chains or through Binance, OKX and OKPay, with a signed order API, merchant callbacks and an admin console.",
-      "tagline": "Accept crypto payments through your Telegram bot",
-      "addedAt": "2026-09-27T10:46:59+03:00",
-      "version": "0.0.0-20260919.599ef7f",
-      "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/hashpay@0.0.0-20260919.599ef7f/hashpay-0.0.0-20260919.599ef7f.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/hashpay@0.0.0-20260919.599ef7f/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/hashpay@0.0.0-20260919.599ef7f/manifest.sig",
-        "digest": "e6b24fa51183e9b032625ebefcd0222955139bb34e9e2c275c77555e3849b903"
-      },
-      "tier": "artifact",
-      "plan": "free",
-      "requires": [],
-      "lastVerified": "2026-10-05T10:58:44.000Z",
-      "authors": [
-        {
-          "name": "TGDash",
-          "github": "TGDash"
-        }
-      ],
-      "maintainers": [
-        "MendyLanda"
-      ],
-      "media": {
-        "icon": {
-          "url": "https://appflare.github.io/catalog/apps/hashpay/icon.svg",
-          "sha256": "848db8344f264004d2ac6be76a8e5d5350c2bcd11aad024ad47d2eb2b9237208"
-        },
-        "cover": {
-          "url": "https://appflare.github.io/catalog/apps/hashpay/cover.png",
-          "sha256": "92dd5009ce87b364ff86b375e84bd09654a6745f35f54bbdb56a75e89f3c7d08"
-        },
-        "screenshots": [
-          {
-            "url": "https://appflare.github.io/catalog/apps/hashpay/screenshots/01-admin-overview.png",
-            "sha256": "c7023d3e5c84a78ea3a15fedded3fd631213b8a525d6a185d6018f31e16345f1",
-            "alt": "HashPay: Admin overview"
-          }
-        ]
-      },
-      "services": [
-        "d1",
-        "queues",
-        "cron"
-      ],
-      "categories": [
-        "finance",
-        "business"
-      ],
-      "license": "Apache-2.0",
-      "revision": 1,
       "accessOffer": "offered"
     },
     {
@@ -3080,12 +2642,12 @@
         "sharing"
       ],
       "license": "MIT",
-      "revision": 2,
+      "revision": 4,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/imgbed/manifest.json",
-        "sha256": "f5857edcb0369414c1822da5014db299aa4b016fc35d84b60d61b6dad6b7b67a",
+        "sha256": "aa3d8f3b0c01625af23b9269527f04978fbd04f32fe368e621764bc9d0f837e8",
         "keyId": "catalog-2026-09",
-        "signature": "FxKsF8j//D/1K8ke/y0+3SgQJcWBYM0kbN2jXrDHzA0XioqDehcBcpjDvkO6duADYKZyDr1Ihd+PcMZgHOtRAg=="
+        "signature": "i135Yhvi/i+fMEDCcMQlMWzSed6WegB2tdim07MXGXOuGwrTfgtpRAp6CyRyfOU0OUYTr7YHSnzzapwrk/qzAQ=="
       },
       "accessOffer": "offered"
     },
@@ -3160,12 +2722,12 @@
         "games"
       ],
       "license": "AGPL-3.0-only",
-      "revision": 3,
+      "revision": 4,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/infiplot/manifest.json",
-        "sha256": "036a4ae972d84b36758974d8b4773be7e37e9db79d9b0a5f7e5e0b0275091df2",
+        "sha256": "86ab6dd983f418569b65ccdabd4583b2203f895237df80e2648d30f75f0ad212",
         "keyId": "catalog-2026-09",
-        "signature": "7nV9Q8PzUvXoijuQZH2PjLYT8zQPnahYM96x5D+EOe3iCvnDH35jZh2+fkgsHbE6cD48p9hazMN5beEjShtJAQ=="
+        "signature": "arzrY7uunpxmPhdcaLsC2xWTuFSLqB7PwamYrukZFgA89KxUY2Eajpc7uKaelSMazCmyVZ53u9Wj0Fbl2CL2DA=="
       },
       "accessOffer": "recommended"
     },
@@ -3305,121 +2867,6 @@
       "accessOffer": "offered"
     },
     {
-      "slug": "isupmap",
-      "name": "isupmap",
-      "summary": "A live up/down heatmap for 40+ popular internet services, polled every five minutes, with history and community outage reports.",
-      "tagline": "See which popular online services are up or down",
-      "addedAt": "2026-09-27T06:14:13+03:00",
-      "version": "0.0.0-20260904.17bb688",
-      "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/isupmap@0.0.0-20260904.17bb688/isupmap-0.0.0-20260904.17bb688.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/isupmap@0.0.0-20260904.17bb688/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/isupmap@0.0.0-20260904.17bb688/manifest.sig",
-        "digest": "6e452d1e9f5b899e70563efb4a0da611065509a678ef792e04cfb9446cb93168"
-      },
-      "tier": "artifact",
-      "plan": "free",
-      "requires": [
-        "analytics-engine"
-      ],
-      "lastVerified": "2026-10-05T10:59:45.000Z",
-      "authors": [
-        {
-          "name": "Jairon Landa",
-          "url": "https://jaironlanda.com",
-          "github": "Jaironlanda"
-        }
-      ],
-      "maintainers": [
-        "MendyLanda"
-      ],
-      "media": {
-        "icon": {
-          "url": "https://appflare.github.io/catalog/apps/isupmap/icon.png",
-          "sha256": "d97c8e9f9185e2366acbcc5c64f3545f9a7e660e09914e41ef6c00d4e3e3693b"
-        },
-        "screenshots": []
-      },
-      "services": [
-        "kv",
-        "d1",
-        "analytics-engine",
-        "queues",
-        "cron"
-      ],
-      "categories": [
-        "monitoring"
-      ],
-      "license": "MIT",
-      "revision": 1,
-      "accessOffer": "offered"
-    },
-    {
-      "slug": "jant",
-      "name": "Jant",
-      "summary": "A personal microblog as smooth as Threads and Tumblr: notes, links and quotes in threads and collections, media on R2, full-text search, RSS, an API and an MCP endpoint for agents, on D1.",
-      "tagline": "Your own blog for notes, links, quotes, and threads",
-      "addedAt": "2026-09-27T12:14:18+03:00",
-      "version": "0.0.0-20260926.d55c0f8",
-      "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/jant@0.0.0-20260926.d55c0f8/jant-0.0.0-20260926.d55c0f8.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/jant@0.0.0-20260926.d55c0f8/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/jant@0.0.0-20260926.d55c0f8/manifest.sig",
-        "digest": "aea622374eb8e577a30f519051872c71ab8b8095812a48cd1c0a7ce4d72f4cb2"
-      },
-      "tier": "artifact",
-      "plan": "free",
-      "requires": [
-        "r2"
-      ],
-      "lastVerified": "2026-10-05T11:00:15.000Z",
-      "authors": [
-        {
-          "name": "Jant",
-          "url": "https://jant.me",
-          "github": "jant-me"
-        }
-      ],
-      "maintainers": [
-        "MendyLanda"
-      ],
-      "media": {
-        "icon": {
-          "url": "https://appflare.github.io/catalog/apps/jant/icon.svg",
-          "sha256": "a8bb8340623a2e38f2e1e5bd9cd8b63aef4614d75d6ca2ab515d121d50dfe013"
-        },
-        "screenshots": [
-          {
-            "url": "https://appflare.github.io/catalog/apps/jant/screenshots/01-blog-home.png",
-            "sha256": "81ba4957635e52bd5ec7253cc1f07b5dbff94f6f6edacdbac95797b426fd6ac8",
-            "alt": "Jant: Blog home"
-          },
-          {
-            "url": "https://appflare.github.io/catalog/apps/jant/screenshots/02-writing-a-post.png",
-            "sha256": "320b1274a6e751aa6cec4493a07b3017690a01f2d9565f9fec75b37900d769bb",
-            "alt": "Jant: Writing a post"
-          }
-        ]
-      },
-      "services": [
-        "d1",
-        "r2"
-      ],
-      "categories": [
-        "cms",
-        "community"
-      ],
-      "license": "AGPL-3.0-or-later",
-      "revision": 3,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/jant/manifest.json",
-        "sha256": "9cef59cf0d5ceafceb6e9fc78e7a8bb336c838b3d71d9bddc1f6c1956ed419da",
-        "keyId": "catalog-2026-09",
-        "signature": "YOrwdFjrBD74fynI5VnomDyykV1pd222OKSAYpCTYgTt1SisGs1tostYI3EceAspMHSrDk77LAsAs1paCaA2DQ=="
-      },
-      "accessOffer": "offered"
-    },
-    {
       "slug": "jina-mcp",
       "name": "Jina AI MCP Server",
       "summary": "Jina AI's remote MCP server on your own Worker: read pages and PDFs as Markdown, take screenshots, search the web, arXiv and SSRN, and rerank or deduplicate text with Jina's Reader, Search, Embeddings and Reranker APIs.",
@@ -3453,7 +2900,13 @@
         "developer-tools"
       ],
       "license": "Apache-2.0",
-      "revision": 1,
+      "revision": 3,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/jina-mcp/manifest.json",
+        "sha256": "60b89f20afc14ba6bfc46ed59435a220bfe11aef49246959cddb46be06ef82a7",
+        "keyId": "catalog-2026-09",
+        "signature": "8ejpb1FZgV4bfYpNtaqGKWmAI9jjZWinIWSUFT6Rn+B1/l311ZKUlaI6uoGNO15L/BxPaZ+0gacFKgzn5vzqDA=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -3492,7 +2945,13 @@
         "utilities"
       ],
       "license": "MIT",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/kiss-worker/manifest.json",
+        "sha256": "4dba99ddee9d9efa6c07797f2a04ae525b6bf3a4f1dbea48c9c1f7100ef8043f",
+        "keyId": "catalog-2026-09",
+        "signature": "AZC9VV9Dc2NhAm8EHzGC2ug2D0a9kb2St75VK08MO2JbOpN2CgjI1s4E/1YTe2lZQ9u27VKB5qTqu3LP2vZECg=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -3543,61 +3002,6 @@
       "accessOffer": "offered"
     },
     {
-      "slug": "larafeed",
-      "name": "Larafeed",
-      "summary": "A private feed reader with passkey-only sign-in: RSS and Atom subscriptions refreshed on a schedule through Queues, OPML import and export, full-article extraction, favicons, and reader-client APIs, on D1, KV and Queues.",
-      "tagline": "Keep up with your favorite websites in one private feed",
-      "addedAt": "2026-09-27T12:03:21+03:00",
-      "version": "0.0.0-20260924.eedbc8b",
-      "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/larafeed@0.0.0-20260924.eedbc8b/larafeed-0.0.0-20260924.eedbc8b.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/larafeed@0.0.0-20260924.eedbc8b/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/larafeed@0.0.0-20260924.eedbc8b/manifest.sig",
-        "digest": "97dacef613e9e554d0224951111a876118482966dee48a757a78d92de335d2fc"
-      },
-      "tier": "artifact",
-      "plan": "free",
-      "requires": [],
-      "lastVerified": "2026-10-05T11:01:14.000Z",
-      "authors": [
-        {
-          "name": "Stanislas",
-          "url": "https://stanislas.blog",
-          "github": "angristan",
-          "x": "fuolpit"
-        }
-      ],
-      "maintainers": [
-        "MendyLanda"
-      ],
-      "media": {
-        "icon": {
-          "url": "https://appflare.github.io/catalog/apps/larafeed/icon.png",
-          "sha256": "901ec1bf7586628584a8e6695b9846c83b46dbd3763429340364ec0d9b3e7af8"
-        },
-        "screenshots": [
-          {
-            "url": "https://appflare.github.io/catalog/apps/larafeed/screenshots/01-reader-view.png",
-            "sha256": "2511e4ccfad4943961d7aa2ffc90dd61e0c3ab765a2915e47edf9d495c708d13",
-            "alt": "Larafeed: Reader view"
-          }
-        ]
-      },
-      "services": [
-        "kv",
-        "d1",
-        "queues",
-        "cron",
-        "images"
-      ],
-      "categories": [
-        "productivity"
-      ],
-      "license": "MIT",
-      "revision": 1,
-      "accessOffer": "offered"
-    },
-    {
       "slug": "lastfm-recently-played",
       "name": "Last.fm Recently Played",
       "summary": "An SVG card of your recent Last.fm scrobbles for a GitHub profile README, with themes, artwork, stats and loved tracks, plus a configurator page to build the card's URL.",
@@ -3629,7 +3033,13 @@
         "utilities"
       ],
       "license": "MIT",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/lastfm-recently-played/manifest.json",
+        "sha256": "a0c35740125117d82ac7dee17f8782fbb3220024c0f5a2db173f66f7b22c3b65",
+        "keyId": "catalog-2026-09",
+        "signature": "zHC6xL6c2/4PttzZEAaCYonC7W20EbTbZoi1W1zZkRnaO/7i514TlgU306w7QxBAIc+tEBYxYbKpcUbt4ZdqDw=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -3665,7 +3075,13 @@
         "developer-tools"
       ],
       "license": "GPL-3.0-only",
-      "revision": 1,
+      "revision": 3,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/llm-api-proxy/manifest.json",
+        "sha256": "9eb034e9af46a4353f76d15bfb0538e98102163ad61a0f2f7098745a1607ac12",
+        "keyId": "catalog-2026-09",
+        "signature": "to3rEeK12l3Hh4jpM+s2pz1nODdEDFfysKRuUUuZmubImdiNneYcBmfmUfCIvL6JYhfgF46F0SX9aJ8XikQiBQ=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -3722,7 +3138,13 @@
         "bots"
       ],
       "license": "MIT",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/mail2telegram/manifest.json",
+        "sha256": "8a30a27278054ff51c908a1120c957690ca621e2736982da49ac93cbb8bb9871",
+        "keyId": "catalog-2026-09",
+        "signature": "GM2vpAg8e6IiOekru4LMy0j4QlOvNG1ucEu1wAwp9qyXn7tcLmOow4YKgSnxCh8Qk/Z6jEVuMKESsmjHDCG0Dw=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -3775,7 +3197,13 @@
         "ai"
       ],
       "license": "MIT",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/mailclaw/manifest.json",
+        "sha256": "75c7267e54eac469f0ebf53c13e0fdb944c0a046ad2a11f2b889c0025459b878",
+        "keyId": "catalog-2026-09",
+        "signature": "HONbCgnr3BcR0TGWoEuVBdrkzqnJqX3udSumfGcq/Smb8xOPXNNUH+6NHrJGo2FzcqdsP8Vrr5reG6SbJGrNDA=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -3856,94 +3284,6 @@
       "accessOffer": "offered"
     },
     {
-      "slug": "mailysend",
-      "name": "MailySend",
-      "summary": "A Resend-compatible email platform in your own account: transactional sending, broadcasts, automations, inbound mail and deliverability analytics, over Cloudflare Email Service, Amazon SES, Resend or SMTP.",
-      "tagline": "Send emails and campaigns from your own Cloudflare account",
-      "addedAt": "2026-09-27T05:18:00+03:00",
-      "version": "0.0.0-20260921.3708d2f",
-      "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/mailysend@0.0.0-20260921.3708d2f/mailysend-0.0.0-20260921.3708d2f.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/mailysend@0.0.0-20260921.3708d2f/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/mailysend@0.0.0-20260921.3708d2f/manifest.sig",
-        "digest": "d62d111572a30220d509bc2da329818f34161b39a5aadc9ac7ff96d6d3ca24c9"
-      },
-      "tier": "artifact",
-      "plan": "free",
-      "requires": [
-        "r2"
-      ],
-      "lastVerified": null,
-      "authors": [
-        {
-          "name": "Gagandeep Singh",
-          "github": "GagnDeep"
-        }
-      ],
-      "maintainers": [
-        "MendyLanda"
-      ],
-      "media": {
-        "icon": {
-          "url": "https://appflare.github.io/catalog/apps/mailysend/icon.svg",
-          "sha256": "cb9f0b8f7c27830a8f6ccce92b1169c3d02a2205efaa3e3944d17f0c38cefb2b"
-        },
-        "screenshots": [
-          {
-            "url": "https://appflare.github.io/catalog/apps/mailysend/screenshots/01-dashboard-overview.png",
-            "sha256": "b9f4875a6220bcb56b94bb5b8c5d2b01726755b55f4f0dea8a9b6cee36c37fe2",
-            "alt": "MailySend: Dashboard overview"
-          },
-          {
-            "url": "https://appflare.github.io/catalog/apps/mailysend/screenshots/02-broadcast.png",
-            "sha256": "05c75bc3f8ec207a2ea12e03d3547827f8b1ed5b737c3985adb480702c45350f",
-            "alt": "MailySend: Broadcast"
-          },
-          {
-            "url": "https://appflare.github.io/catalog/apps/mailysend/screenshots/03-analytics.png",
-            "sha256": "d480005700295e8c0ce603633050cc2daa37775d8c26640a682a5ac49eff6207",
-            "alt": "MailySend: Analytics"
-          },
-          {
-            "url": "https://appflare.github.io/catalog/apps/mailysend/screenshots/04-message-logs.png",
-            "sha256": "52deb00d662fc80753b821254580195ba96c80a1b854d222f44654d7b9969dee",
-            "alt": "MailySend: Message logs"
-          },
-          {
-            "url": "https://appflare.github.io/catalog/apps/mailysend/screenshots/05-domain-records.png",
-            "sha256": "a7610b4730e7dbb4746fee3c88d7f2e1a705209579c0c0b72f82467a2ed12714",
-            "alt": "MailySend: Domain records"
-          },
-          {
-            "url": "https://appflare.github.io/catalog/apps/mailysend/screenshots/06-audience-contacts.png",
-            "sha256": "add3ca10ce310da98cfbca5945edf7720977c7e2694778c522331c9b714fceae",
-            "alt": "MailySend: Audience contacts"
-          },
-          {
-            "url": "https://appflare.github.io/catalog/apps/mailysend/screenshots/07-message-search.png",
-            "sha256": "704b6d591b97f8a004844e18e03d62ef000d37a96ddefd89cb6056d4c05dc0cc",
-            "alt": "MailySend: Message search"
-          }
-        ]
-      },
-      "services": [
-        "kv",
-        "d1",
-        "r2",
-        "durable-objects",
-        "queues",
-        "cron",
-        "email-routing"
-      ],
-      "categories": [
-        "email",
-        "marketing"
-      ],
-      "license": "MIT",
-      "revision": 1,
-      "accessOffer": "offered"
-    },
-    {
       "slug": "md-page",
       "name": "md.page",
       "summary": "Turn Markdown into a shareable web page with one request: an API, an MCP server for coding agents, and pages that expire after 24 hours, on Workers KV.",
@@ -4009,7 +3349,13 @@
         "developer-tools"
       ],
       "license": "MIT",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/md-page/manifest.json",
+        "sha256": "0805173ddbceb778f18a17b87e67cb290826394f1d0c58f03710815b6e6e5fac",
+        "keyId": "catalog-2026-09",
+        "signature": "vpr/mNdMVFIuLGk8d4vIWirMSWe8mMAWkPN4hI1lYJ9W+F3FaJTwqynYOOCc7hTnVcWHFwE/GVTaol78W+vlAA=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -4049,12 +3395,12 @@
         "developer-tools"
       ],
       "license": "MIT",
-      "revision": 2,
+      "revision": 3,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/memory-note/manifest.json",
-        "sha256": "374421663b9881ad4e011b79188966b365e3243e2dec3f1e6222a53dcf5c19a9",
+        "sha256": "d569bb2b4f6825b3ebbce8a54b5addfb1cd1426911212f3912eb1e6d09a62acd",
         "keyId": "catalog-2026-09",
-        "signature": "ZR8uhWkcpFpdYFo8FMXAEGKgQmUTyy3DkjTVCfo3XAS6sbKPJ4B9rtpt/1Bt/u8Q2h82NCf9MmQ4kCaUYb+CCg=="
+        "signature": "4dov9RLHNbQJUCbg+O6t4PLM4Goj1cyt8kSmVwzKDb7VcCn/wGUbpB/Lpxc3DIU8fUKL8R0wXtu+ywU0bsJxAA=="
       },
       "accessOffer": "offered"
     },
@@ -4116,7 +3462,13 @@
         "media"
       ],
       "license": "AGPL-3.0-only",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/microfeed/manifest.json",
+        "sha256": "fc0a7469cddbfdd92c0c4acd211ead4fc08d01d0df9d7653c66cbf7aa8c1313a",
+        "keyId": "catalog-2026-09",
+        "signature": "2nYtCjQBSAyFKpbftj4+gzREVaJS8NRQ2G9cAwtrcH7JawLM5QjjJTcpE8O11Guf+D+zcNZbKrdPYJqQqXyNDg=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -4191,7 +3543,13 @@
         "finance"
       ],
       "license": "MIT",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/minshop/manifest.json",
+        "sha256": "bf72000a9f4dd54126912caf2f7c35aa86c17147c967ecba78c53995e84ebef8",
+        "keyId": "catalog-2026-09",
+        "signature": "D10hSQY9MGNgOrSrTaqGuJmWm2Cf/UKsCYiTIwn+0J2P32+kEY5xU2YbH1y1soVwARQmoA6nJr7pMxwNhhRkDw=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -4266,12 +3624,12 @@
         "finance"
       ],
       "license": "MIT",
-      "revision": 3,
+      "revision": 4,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/minvoice/manifest.json",
-        "sha256": "63405c5f2501839c81a683b00e7bfa0bfa61b1091709c7f0e4047fb7b7a94368",
+        "sha256": "304b53c204e176b81503c4dc10e6a415d90a175b049df8d50a77e0f911ef1af9",
         "keyId": "catalog-2026-09",
-        "signature": "YpzYzOeSSEvizK/kNcla/BKrMT3WQU7ABawc44OsoM0tEIh0/u3XjLpP3+HP7iEJjoldj3FhejJhni0HFyOfBg=="
+        "signature": "kkXfFd5RaD/zn6uT9Qwam2X68GPdIB6ltXAftNXOuPA4G9IJ/8PdK0L39HohTttcxg+VYjN21qoUthxT4Yr5DQ=="
       },
       "accessOffer": "offered"
     },
@@ -4376,51 +3734,13 @@
         "utilities"
       ],
       "license": "MIT",
-      "revision": 1,
-      "accessOffer": "offered"
-    },
-    {
-      "slug": "neriplayer-listen-together",
-      "name": "NeriPlayer Listen Together",
-      "summary": "Your own listen-together server for the NeriPlayer Android app: create a room, share the invite, and everyone's playback, queue and track changes stay in sync.",
-      "tagline": "Keep music playback in sync while listening with friends",
-      "addedAt": "2026-09-27T10:43:47+03:00",
-      "version": "0.0.0-20260817.5ec8a8b",
-      "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/neriplayer-listen-together@0.0.0-20260817.5ec8a8b/neriplayer-listen-together-0.0.0-20260817.5ec8a8b.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/neriplayer-listen-together@0.0.0-20260817.5ec8a8b/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/neriplayer-listen-together@0.0.0-20260817.5ec8a8b/manifest.sig",
-        "digest": "7dc8aaea5428d2d91b0dfb5507cb11f209afc9dc76cbd2af36c7133e665d18fa"
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/nabiz/manifest.json",
+        "sha256": "24149c370a1a693972fcc2f6a0c84c9d09aeb2138526bf19a22b05d3ddbba4d2",
+        "keyId": "catalog-2026-09",
+        "signature": "u0n2gChbVbyH3jylulIKj3mpslEnOpOY8t5qK+bZKWLlf5Sr/YI+A6pErSkkqrEaG2OjdZe07QXEOS38wQ+eCw=="
       },
-      "tier": "artifact",
-      "plan": "free",
-      "requires": [],
-      "lastVerified": "2026-10-05T11:02:33.000Z",
-      "authors": [
-        {
-          "name": "TheSmallHanCat",
-          "github": "TheSmallHanCat"
-        }
-      ],
-      "maintainers": [
-        "MendyLanda"
-      ],
-      "media": {
-        "icon": {
-          "url": "https://appflare.github.io/catalog/apps/neriplayer-listen-together/icon.svg",
-          "sha256": "9b56f20089e0fe5655a661f609487dadd86e8eb9b8d21e656fd9bfdb1e75f9f9"
-        },
-        "screenshots": []
-      },
-      "services": [
-        "durable-objects"
-      ],
-      "categories": [
-        "media",
-        "sync"
-      ],
-      "license": "NONE",
-      "revision": 1,
       "accessOffer": "offered"
     },
     {
@@ -4518,19 +3838,19 @@
       "summary": "A Bitwarden-compatible password manager server: the official Bitwarden apps and browser extensions sync to it, with a web vault, attachments, Send, and passkey sign-in, on D1 and R2.",
       "tagline": "A password vault that syncs with your Bitwarden apps",
       "addedAt": "2026-09-26T23:19:31+03:00",
-      "version": "1.8.0",
+      "version": "1.8.1",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/nodewarden@1.8.0/nodewarden-1.8.0.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/nodewarden@1.8.0/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/nodewarden@1.8.0/manifest.sig",
-        "digest": "bb0fd857ac91255da33c1f241837c11c7348f251f64cb0af3aa271780cb021d9"
+        "zip": "https://github.com/appflare/catalog/releases/download/nodewarden@1.8.1/nodewarden-1.8.1.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/nodewarden@1.8.1/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/nodewarden@1.8.1/manifest.sig",
+        "digest": "7d6c64d0b5c6b0be013ec58182a36e5630773cb898396daa7edb9f930ddea037"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-10-05T11:03:05.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Shuai",
@@ -4559,7 +3879,7 @@
         "passwords"
       ],
       "license": "LGPL-3.0-only",
-      "revision": 1,
+      "revision": 2,
       "accessOffer": "offered"
     },
     {
@@ -4675,12 +3995,12 @@
         "email"
       ],
       "license": "MIT",
-      "revision": 3,
+      "revision": 4,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/omnimail/manifest.json",
-        "sha256": "76eca087a107c5707a363574cb7df8eccc40fbb37694666a42a2798929d2a957",
+        "sha256": "8583bd781a2004846393b1f1d5ecd9f0321b1c24182a924fad8efc73c80ddf8f",
         "keyId": "catalog-2026-09",
-        "signature": "8/gm2P+fX8GJiAW6odJOfnjrdkJs08z6dDyznFgEIH65hAN3jXncvhL1TiX/d37Gvuulg4bX1VYklVsdpgUICQ=="
+        "signature": "MYCmayPOqi6MP1go3XixZrB42hZuPW6K+a7goxHfQ0AUXaqUwh/Q57RWe8PcfCo4PHrsi1U4/fnFUE/lhSVbAw=="
       },
       "accessOffer": "offered"
     },
@@ -4735,12 +4055,12 @@
         "utilities"
       ],
       "license": "AGPL-3.0-only",
-      "revision": 2,
+      "revision": 3,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/one-ip/manifest.json",
-        "sha256": "f9e8f11d23ba59658173bb14b8b745267f6b1cba51c0eb60d0fc9cbdf53a623e",
+        "sha256": "266142588867f30281a9feae6bf2308a24216d7116d5fc24e72501a89482bac8",
         "keyId": "catalog-2026-09",
-        "signature": "G9jPBUPfVLbIGJ/cTWKc0N6lZ0pX0+VlbwSjiTpNAnlerjL9zQ62dn+OMSH72VdjEMxJkOGRF9EUoHYXMLYdBQ=="
+        "signature": "a8uOlGaa+duXNEQtIHE8cQjD+tZ5fWCQ5poTOb7nAsSJnleMiWEEJIvVg2iZfjOKtB/X3RVXCJO4bTN2FkzTBA=="
       },
       "accessOffer": "offered"
     },
@@ -4871,12 +4191,12 @@
         "analytics"
       ],
       "license": "MIT",
-      "revision": 2,
+      "revision": 4,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/open-seo/manifest.json",
-        "sha256": "50ed54fb3940c289af700e0ad56d9b4db7d426ddd58746dcf40eab31698504de",
+        "sha256": "86ede81187d43e48fcfa804b09ba8427e0c3b5d72386a9cb6f16b9f5af7f8f21",
         "keyId": "catalog-2026-09",
-        "signature": "vdO7X4ycj5J/wsRzDUVfKqIwUaFXOe8V8WUgx9zS3vGYgTa4/cQtez8l2RfqA/IyoJC+FeJzX8bQvSXrpyT4Cg=="
+        "signature": "57kQxeQ7cGT2hTsgBJzXBp/EhuDf5RQAJPXxbgxCX7fmEBv6qkXL3RjfCSoeHXB7hwFkLuzh8ZG9UDpHOwdMCg=="
       },
       "accessOffer": "required"
     },
@@ -4911,7 +4231,13 @@
         "ai"
       ],
       "license": "MIT",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/openai-gemini/manifest.json",
+        "sha256": "a33eba599ca7fcc70c46373363222cb2f0af1fc040fb42bb686c389475991719",
+        "keyId": "catalog-2026-09",
+        "signature": "6O1wM5q3w39iDPbdA2ALCd7OLRNlmDcNqqNagDd/hX6Ypph1KrVbwWqSGcjuBOKiAbxURb5mtbgzdfKt5If2AA=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -4961,7 +4287,13 @@
         "analytics"
       ],
       "license": "AGPL-3.0-only",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/openshortlink/manifest.json",
+        "sha256": "ecc20b95cb137f6722775513ba753af1ffad9bdf96a19098d31a276a1a1c9cff",
+        "keyId": "catalog-2026-09",
+        "signature": "HSJD9bHuajNboNJ/fal1q4Ef9AbdIdl+0nlz4a7kevTtA//4vCwD86Vx1xobYxjTqJtFbBMiD16i8sSfBPzvBQ=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -4970,12 +4302,12 @@
       "summary": "Turn a script into a storyboard and video: scene breakdown, consistent characters, locations and styles, AI-generated frames, motion, voices and music, with team libraries and an MCP server, on D1, R2, Workflows and Durable Objects. Brings your own AI provider keys.",
       "tagline": "Turn scripts into videos with consistent characters and scenes",
       "addedAt": "2026-09-27T12:03:21+03:00",
-      "version": "0.0.0-20260927.0311b1f",
+      "version": "0.0.0-20261005.60a994b",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20260927.0311b1f/openstory-0.0.0-20260927.0311b1f.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20260927.0311b1f/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20260927.0311b1f/manifest.sig",
-        "digest": "e93ae7a3a34813b07977659138bab5dad98ab574016d1f263d1e4be23ae4cc76"
+        "zip": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261005.60a994b/openstory-0.0.0-20261005.60a994b.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261005.60a994b/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261005.60a994b/manifest.sig",
+        "digest": "c7a97d1fa6ca2549bed28be37e14dff678e874c699abb39614a714960a3931bd"
       },
       "tier": "artifact",
       "plan": "paid",
@@ -5020,13 +4352,7 @@
         "media"
       ],
       "license": "MIT",
-      "revision": 2,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/openstory/manifest.json",
-        "sha256": "677c91c951ab48563d6cb8a919986f1dca4876aafaa90b8e15505f0af4676d40",
-        "keyId": "catalog-2026-09",
-        "signature": "Jn5ANRaLjdhEtJlT5o9LmmHbgJgZqQrX+0nbgB1JmIfxz+u4kpO4pankGAwd5jztDHCQOLwsCMIr8KLb3oRDDQ=="
-      },
+      "revision": 3,
       "accessOffer": "offered"
     },
     {
@@ -5172,7 +4498,13 @@
         "developer-tools"
       ],
       "license": "Apache-2.0",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/playwright-mcp/manifest.json",
+        "sha256": "44ccb6edef49d2c0febfe4ae9778199eaadf1ea0b3405f8af8f514e90b8fc71e",
+        "keyId": "catalog-2026-09",
+        "signature": "KuFbufJQc920TKMsPL1N0/9/AkR+SbYNSl/jGTWd/S7tHohI3zRz/niDx+eNROz0wOfmMOjQmVPx6QJLh/COAg=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -5231,12 +4563,12 @@
       "summary": "An issue tracker and wiki for teams and their AI coding agents: issues, boards, sprints and pages in the browser, and the same actions over MCP.",
       "tagline": "Track team issues and keep a wiki alongside AI coding agents",
       "addedAt": "2026-09-27T06:13:42+03:00",
-      "version": "0.7.6",
+      "version": "0.7.7",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/projektor@0.7.6/projektor-0.7.6.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/projektor@0.7.6/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/projektor@0.7.6/manifest.sig",
-        "digest": "f59c21932ddd814eb9c32dd620f41bc2d696d7a54be9c59de3edb84033fd5ee5"
+        "zip": "https://github.com/appflare/catalog/releases/download/projektor@0.7.7/projektor-0.7.7.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/projektor@0.7.7/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/projektor@0.7.7/manifest.sig",
+        "digest": "06aa2f86c5931277f38ae9ff1827bf4cf65ac10f63b077339bad788cc1969a0f"
       },
       "tier": "artifact",
       "plan": "free",
@@ -5244,7 +4576,7 @@
         "r2",
         "access"
       ],
-      "lastVerified": "2026-10-05T11:05:42.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Thomas Dickson",
@@ -5349,7 +4681,13 @@
         "scheduling"
       ],
       "license": "MIT",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/punctual/manifest.json",
+        "sha256": "02aab1fbed6d5e3b3e97a7991dd56890781e08cdda04e182bfc55ba0477e15ee",
+        "keyId": "catalog-2026-09",
+        "signature": "Bc07khRM2+ZOhua7wzekUuqCy+Znq2bdu66FPB3rkzTF88hL66MI2Bn6lZfveWzOlX2Pdopaciqh7nkiZ7M5DQ=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -5428,12 +4766,12 @@
         "email"
       ],
       "license": "MIT",
-      "revision": 2,
+      "revision": 3,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/quickinbox/manifest.json",
-        "sha256": "546a703e61a667ab6209af68327f92421b3f6c85a0243f97d41460d20354ca37",
+        "sha256": "59df5d9ae55a02d98986512e6e50a601f9ec55f37b3ed8e30974d172e90aea7d",
         "keyId": "catalog-2026-09",
-        "signature": "gUIVNxaFlHf5grtLc2TNoKM8yIrk5mwKbAJqJF67uO53GY0o64qZLBGitpEcSKiiP7aBcUtdXsNRGX2b6W4gCA=="
+        "signature": "1WJO/R/OuONXHvdB/a5g84S/2TfC0W+McRFIz5nY26j0T7+5pEBcLAMpsBzJrcrvKz5txYX0Ql2sTOdQWUZzDA=="
       },
       "accessOffer": "offered"
     },
@@ -5508,109 +4846,6 @@
       "accessOffer": "required"
     },
     {
-      "slug": "r2-webdav",
-      "name": "r2-webdav",
-      "summary": "A WebDAV server for an R2 bucket: mount it as a network drive in Finder, Windows Explorer or any WebDAV client, with locking and one user name and password.",
-      "tagline": "Access your R2 files as a network drive",
-      "addedAt": "2026-09-27T11:44:15+03:00",
-      "version": "0.0.0-20260713.d39f88f",
-      "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/r2-webdav@0.0.0-20260713.d39f88f/r2-webdav-0.0.0-20260713.d39f88f.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/r2-webdav@0.0.0-20260713.d39f88f/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/r2-webdav@0.0.0-20260713.d39f88f/manifest.sig",
-        "digest": "2431a28d366fb657addfb8fa569b0eccccfb3af1c6237a1d9b3264ca029ebfb5"
-      },
-      "tier": "artifact",
-      "plan": "free",
-      "requires": [
-        "r2"
-      ],
-      "lastVerified": "2026-10-05T11:05:33.000Z",
-      "authors": [
-        {
-          "name": "Aber",
-          "github": "abersheeran"
-        }
-      ],
-      "maintainers": [
-        "MendyLanda"
-      ],
-      "services": [
-        "r2"
-      ],
-      "categories": [
-        "files"
-      ],
-      "license": "NONE",
-      "revision": 2,
-      "accessOffer": "offered"
-    },
-    {
-      "slug": "rdyrct",
-      "name": "rdyrct",
-      "summary": "A URL shortener for teams: organizations with roles, branded short links and QR codes, click analytics that never store an IP, an MCP server, and a KV redirect path in front of D1.",
-      "tagline": "Branded short links, QR codes, and private click analytics for teams",
-      "addedAt": "2026-09-27T04:47:37+03:00",
-      "version": "0.0.0-20260925.d0ece6e",
-      "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/rdyrct@0.0.0-20260925.d0ece6e/rdyrct-0.0.0-20260925.d0ece6e.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/rdyrct@0.0.0-20260925.d0ece6e/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/rdyrct@0.0.0-20260925.d0ece6e/manifest.sig",
-        "digest": "e0d820a1c2bfa040a12ab49caffae6608c5c89fc1c4a8b2b50a39cff1b64b98d"
-      },
-      "tier": "artifact",
-      "plan": "free",
-      "requires": [
-        "r2"
-      ],
-      "lastVerified": "2026-10-05T11:07:25.000Z",
-      "authors": [
-        {
-          "name": "Andrea Bruno",
-          "url": "https://brnr.dev",
-          "github": "baronunread",
-          "x": "baronunread"
-        }
-      ],
-      "maintainers": [
-        "MendyLanda"
-      ],
-      "media": {
-        "icon": {
-          "url": "https://appflare.github.io/catalog/apps/rdyrct/icon.svg",
-          "sha256": "907ea837408ca4e6d5d4ee9af94908afe2ffd1abdc693a233d887ecae8e23aaf"
-        },
-        "cover": {
-          "url": "https://appflare.github.io/catalog/apps/rdyrct/cover.png",
-          "sha256": "7f78bd6ba457e75b893b57285674985ae7f851cb35383b416084038e09b0a98d"
-        },
-        "screenshots": []
-      },
-      "services": [
-        "kv",
-        "d1",
-        "r2",
-        "durable-objects",
-        "queues",
-        "workflows",
-        "cron",
-        "zone"
-      ],
-      "categories": [
-        "utilities",
-        "analytics"
-      ],
-      "license": "MIT",
-      "revision": 2,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/rdyrct/manifest.json",
-        "sha256": "5310881125eb8c11e2e91bf2555bd8f95c908b467b6b30bd523d9c5e9660171c",
-        "keyId": "catalog-2026-09",
-        "signature": "kZTCWd6OMuCKJWvhs+VwCzAi/B0lZfHBhAy1Idg9gLryRqjybEA0F85WzSb+C0EFMUSG5hIEeqeXth450qRnDw=="
-      },
-      "accessOffer": "offered"
-    },
-    {
       "slug": "relay",
       "name": "Relay",
       "summary": "A link shortener with cookieless click and conversion analytics: A/B splits, device and country routing, per-channel suffixes, retargeting pixels, QR codes and CSV export, on D1.",
@@ -5644,12 +4879,12 @@
         "analytics"
       ],
       "license": "MIT",
-      "revision": 2,
+      "revision": 3,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/relay/manifest.json",
-        "sha256": "4c9995b2746f9b32e66de862c727674f6ff30a33731ab10b89dfe9e9ed7a1b17",
+        "sha256": "9991e3d1b6aa29b503dfbef796a2ad30910a7c99bf7fe8403f5abd0286354994",
         "keyId": "catalog-2026-09",
-        "signature": "hIlyRfyJuzvJqu0mAP6gGLpMZ/jxFf8sJVscKMHTc7k5yhIQ58K8AVjrQzyHutmobEXuxCnbGs+Rdb4eWOqRDw=="
+        "signature": "+eY6Jv2ai9mjTMUm5oSr4xc4wYxcE6AryQ/0c2Lze552eWUNF5PRzZL6NpGECuJXCJCPxB6ZHTBjiVDcJmVbAQ=="
       },
       "accessOffer": "offered"
     },
@@ -5659,17 +4894,17 @@
       "summary": "Your own relay for reminal: reach the terminals, app windows and desktops of your machines from any browser, end-to-end encrypted, with nothing listening on the machines.",
       "tagline": "Reach your computers' windows and terminals from any browser",
       "addedAt": "2026-09-27T05:20:16+03:00",
-      "version": "3.14.19",
+      "version": "3.15.14",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/reminal@3.14.19/reminal-3.14.19.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/reminal@3.14.19/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/reminal@3.14.19/manifest.sig",
-        "digest": "09b6b89caaa8f8676c8458f17f07e380d5e2209e7b0aebb61762dc75602c0b37"
+        "zip": "https://github.com/appflare/catalog/releases/download/reminal@3.15.14/reminal-3.15.14.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/reminal@3.15.14/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/reminal@3.15.14/manifest.sig",
+        "digest": "8f550b64bc27cfb5ac9c5f49c811fe7c485fdb9379a422ccb1f48ee0b1ba981f"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-10-05T11:06:12.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Harshal Gajjar",
@@ -5704,7 +4939,7 @@
         "developer-tools"
       ],
       "license": "AGPL-3.0-or-later",
-      "revision": 1,
+      "revision": 2,
       "accessOffer": "offered"
     },
     {
@@ -5780,133 +5015,6 @@
       "accessOffer": "offered"
     },
     {
-      "slug": "renewlet",
-      "name": "Renewlet",
-      "summary": "Track recurring subscriptions and renewals: timezone-aware reminders over ten notification channels, calendar feeds, budgets, cost sharing and spending statistics, on D1, R2 and a queue.",
-      "tagline": "Track subscriptions and get reminders before they renew",
-      "addedAt": "2026-09-27T12:02:55+03:00",
-      "version": "0.3.27",
-      "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/renewlet@0.3.27/renewlet-0.3.27.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/renewlet@0.3.27/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/renewlet@0.3.27/manifest.sig",
-        "digest": "65afddd3b6635be7876911192c4ee697b349bd633c417d3ce0ad1b11fc75bd03"
-      },
-      "tier": "artifact",
-      "plan": "free",
-      "requires": [
-        "r2"
-      ],
-      "lastVerified": "2026-10-05T11:07:20.000Z",
-      "authors": [
-        {
-          "name": "zhiyingzhou",
-          "url": "https://renewlet.cc",
-          "github": "zhiyingzzhou"
-        }
-      ],
-      "maintainers": [
-        "MendyLanda"
-      ],
-      "media": {
-        "icon": {
-          "url": "https://appflare.github.io/catalog/apps/renewlet/icon.svg",
-          "sha256": "8272948127d2c3d778fde665791b1f9c42b68fee814c6658d725f45f856fa3fe"
-        },
-        "screenshots": [
-          {
-            "url": "https://appflare.github.io/catalog/apps/renewlet/screenshots/01-spending-statistics.png",
-            "sha256": "0598b86edd0ccc4f709b88be8ddc0810ce86c82d2d72296dc1627c6b4456d1be",
-            "alt": "Renewlet: Spending statistics"
-          },
-          {
-            "url": "https://appflare.github.io/catalog/apps/renewlet/screenshots/02-renewal-calendar.png",
-            "sha256": "4f830affd395e69c77afe0933e0bcbba99b9ca286b70481101bc6ae2847d3fd6",
-            "alt": "Renewlet: Renewal calendar"
-          },
-          {
-            "url": "https://appflare.github.io/catalog/apps/renewlet/screenshots/03-notification-settings.png",
-            "sha256": "fed131d3b42b03107d79b372f5be11c76a205e3c773857f7ec7871dc7a44a5c2",
-            "alt": "Renewlet: Notification settings"
-          }
-        ]
-      },
-      "services": [
-        "d1",
-        "r2",
-        "queues",
-        "cron"
-      ],
-      "categories": [
-        "finance",
-        "productivity"
-      ],
-      "license": "MIT",
-      "revision": 1,
-      "accessOffer": "offered"
-    },
-    {
-      "slug": "resolvehq",
-      "name": "ResolveHQ",
-      "summary": "A self-hosted helpdesk: a shared inbox fed by Email Routing, threaded tickets, SLAs and snoozes, a help center and knowledge base, customer ratings, reports, a scoped API and outbound webhooks, on D1, R2 and Queues.",
-      "tagline": "Manage customer emails and support tickets in your own account",
-      "addedAt": "2026-09-27T12:03:21+03:00",
-      "version": "0.3.3",
-      "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/resolvehq@0.3.3/resolvehq-0.3.3.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/resolvehq@0.3.3/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/resolvehq@0.3.3/manifest.sig",
-        "digest": "8fcea8aa990f3f296b35205ded894fd888d43c63061d251b36dd2426337fd247"
-      },
-      "tier": "artifact",
-      "plan": "free",
-      "requires": [
-        "zone",
-        "email-routing",
-        "r2"
-      ],
-      "lastVerified": "2026-10-05T11:07:47.000Z",
-      "authors": [
-        {
-          "name": "Rizvi",
-          "github": "mirza-rizvi",
-          "x": "mirza_rizvi"
-        }
-      ],
-      "maintainers": [
-        "MendyLanda"
-      ],
-      "media": {
-        "icon": {
-          "url": "https://appflare.github.io/catalog/apps/resolvehq/icon.svg",
-          "sha256": "9a5c89a8b0e5577066c826e7fa3f3e573416c6ae582b61ae2c260a0d8dee3ebc"
-        },
-        "screenshots": []
-      },
-      "services": [
-        "d1",
-        "r2",
-        "queues",
-        "cron",
-        "email-routing",
-        "zone"
-      ],
-      "categories": [
-        "business",
-        "email"
-      ],
-      "license": "LicenseRef-ResolveHQ-Source-Available",
-      "licenseNote": "Source-available: free to run for personal or internal use; selling it, hosting it for others or sharing copies needs the author's permission",
-      "revision": 3,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/resolvehq/manifest.json",
-        "sha256": "99aca979b60b8bf50be216ec116f1bf75aaf05186b7830e5aceeef324382faa8",
-        "keyId": "catalog-2026-09",
-        "signature": "ZBMNp5dh5x/s5uKXmnTDqgb0yRgUfnQKSJFJdGD2DOnj75w8SvxKzCAsxHQHkUaJjOJCjR8BAeLX7SdvXWnHAw=="
-      },
-      "accessOffer": "offered"
-    },
-    {
       "slug": "rsshub-never-die",
       "name": "RSSHub Never Die",
       "summary": "A stable RSSHub address for your feed reader: requests go to a pool of public RSSHub instances, by load balancing, failover to the next instance, or the fastest of several.",
@@ -5939,12 +5047,12 @@
         "networking"
       ],
       "license": "MIT",
-      "revision": 3,
+      "revision": 4,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/rsshub-never-die/manifest.json",
-        "sha256": "dd9516259c4f6cbc15a3e270a856d7ba3af22403994c4161786ab311cdd3cc8a",
+        "sha256": "b3b9f47b3c584e3d383e6cb1642e30d61f9bdf0e391ad7d801651b0c6bcf63a6",
         "keyId": "catalog-2026-09",
-        "signature": "OnQlLqKkhcpocL1QBtWC9FcCMQI5pT2m8iVFVmCyD5mVClj5J8jvfOCdLotkojg7IJcDrmdnsuVjDmI99ZzUCw=="
+        "signature": "iq2pnAvEw3duZurdeE0oj/mBBdBHzk39i9gsDWSXpYiIoXSc4h89a2W3dtEHH+dvBvIj2P1UUCLcfEM7p1//Ag=="
       },
       "accessOffer": "offered"
     },
@@ -5980,7 +5088,13 @@
         "utilities"
       ],
       "license": "MIT",
-      "revision": 1,
+      "revision": 3,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/rssworker/manifest.json",
+        "sha256": "223194d530b5f81291656bac5c19a038684a839e33b1fc6ceaa76f115d9d252b",
+        "keyId": "catalog-2026-09",
+        "signature": "HL9VsY3MEOJ6JujzZ0s7l4iO7C/R5waKU2YQaLDqmQiS/DiwE08lskw4AtlbQ2svyCRPD1bF+AhV5ic50o3BDw=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -6060,7 +5174,13 @@
         "media"
       ],
       "license": "AGPL-3.0-only",
-      "revision": 2,
+      "revision": 3,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/screencapture-live/manifest.json",
+        "sha256": "b5f01a2e752561fb2dce1d1f88c7d3951a858de2f6d1c265eabbf570bd6099b7",
+        "keyId": "catalog-2026-09",
+        "signature": "/AfvJKN11BM6PFy4OmcOq2z8vZOm6/vY39OBdKhf0s1td3f7PHBr7WRIb7y78TIfkbby6lDhjN8FEUoNIJjbCg=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -6108,7 +5228,13 @@
         "media"
       ],
       "license": "MIT",
-      "revision": 1,
+      "revision": 3,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/screendrop/manifest.json",
+        "sha256": "7fb4040a72f23a796680e3ff01050f685ab7136b5cd3404e0bf7b379f0a0b4ad",
+        "keyId": "catalog-2026-09",
+        "signature": "qv6o9kbK0qeQwQBJ8LzORxAS+s6I2DGPh/HOG2gdZCPo5vpxIfKiHyr5ZrxKLxxoK+4KB4YuR+kSec52k87UBA=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -6249,12 +5375,12 @@
         "business"
       ],
       "license": "MIT",
-      "revision": 2,
+      "revision": 3,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/seeder/manifest.json",
-        "sha256": "2e6d3452c2c9f3157ee653773de5d57a26da19b5730d585364c4138d9da72e4c",
+        "sha256": "0638b35dfb62bac4224d27276ace0ea7d79be65b1003a93ba883b13a7d770b8f",
         "keyId": "catalog-2026-09",
-        "signature": "Gu9hmdxKwUU/Zrx6jcPLuCHe5fnFsyVFB45rkFFe5MbBj4gyTQkM37BzPuDhVDNYikgGmIkkg9WsmaZ2Pix9Dw=="
+        "signature": "7DP2x+RN/aiQ39ChJQSQVsRbsb57iJSYCUN3SxRwLietRwubrhUsGZE+JWbcyt36QYPzpIz352R6qLJzeO6xBQ=="
       },
       "accessOffer": "offered"
     },
@@ -6427,7 +5553,13 @@
         "sharing"
       ],
       "license": "MIT",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/shotsync/manifest.json",
+        "sha256": "726a9c25312867cc111f87c558c75aa716fa9917142f26cdf2bc019f734ec930",
+        "keyId": "catalog-2026-09",
+        "signature": "Gk9sWSJjFkN+qM36upBZJaAjEwtx0/t8cY1eq8XtQnPXfo6ZfKU39andBKjo1iiTn0K+ldKgP3EKjDc1hf1SCA=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -6503,87 +5635,12 @@
         "analytics"
       ],
       "license": "Apache-2.0",
-      "revision": 2,
+      "revision": 4,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/shrtnr/manifest.json",
-        "sha256": "e23124775da921ee06c5e9671f2c5b1bac1770eea4f61dbd7b54c2e8ef0f3a72",
+        "sha256": "323d0d15d1abbe73a9a964f40d8317d1946c508cc5fe9bb5fefe243044eeb1c8",
         "keyId": "catalog-2026-09",
-        "signature": "NElV9KNRVI47AgU6VknXbkrDXr2qixCE8KsA6//JMj5RGTpkE6BkUX5xrBwYSm/umz3KNw+hsWtRPU24nsP+DQ=="
-      },
-      "accessOffer": "offered"
-    },
-    {
-      "slug": "sink",
-      "name": "Sink",
-      "summary": "Link shortener with visit analytics: custom slugs, expiring links, QR codes, AI slug suggestions and a realtime globe, all on Cloudflare.",
-      "tagline": "Create short links and track their visits",
-      "addedAt": "2026-09-27T01:13:10+03:00",
-      "version": "0.3.0",
-      "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/sink@0.3.0/sink-0.3.0.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/sink@0.3.0/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/sink@0.3.0/manifest.sig",
-        "digest": "ad58e8a120ee874b8bd65e5487aea51535311819c59044289f8eb7b313269eed"
-      },
-      "tier": "artifact",
-      "plan": "free",
-      "requires": [
-        "r2",
-        "workers-ai"
-      ],
-      "lastVerified": "2026-10-05T11:09:11.000Z",
-      "authors": [
-        {
-          "name": "miantiao",
-          "url": "https://miantiao.me",
-          "github": "miantiao-me",
-          "x": "miantiao_me"
-        }
-      ],
-      "maintainers": [
-        "MendyLanda"
-      ],
-      "media": {
-        "icon": {
-          "url": "https://appflare.github.io/catalog/apps/sink/icon.png",
-          "sha256": "07eb308b47d29f08f2d629285c20b138741630e0bbe6562c0b437ec5415ba5e4"
-        },
-        "cover": {
-          "url": "https://appflare.github.io/catalog/apps/sink/cover.png",
-          "sha256": "fb266928b6a876616d0f76bc01dc2d53939352f1cdd8861edae089feaf9610fd"
-        },
-        "screenshots": [
-          {
-            "url": "https://appflare.github.io/catalog/apps/sink/screenshots/01-analytics-dashboard.png",
-            "sha256": "c690fdfbb56f8671de5c63017b919f83bf64439d0c291cf8695a878e1637d626",
-            "alt": "Sink: Analytics dashboard"
-          },
-          {
-            "url": "https://appflare.github.io/catalog/apps/sink/screenshots/02-link-list.png",
-            "sha256": "dcef30afcfb5288e47f868b55da306225b7c9f2f56ce34a7359ce2a463135f10",
-            "alt": "Sink: Link list"
-          }
-        ]
-      },
-      "services": [
-        "kv",
-        "d1",
-        "r2",
-        "analytics-engine",
-        "cron",
-        "workers-ai"
-      ],
-      "categories": [
-        "utilities",
-        "analytics"
-      ],
-      "license": "AGPL-3.0-only",
-      "revision": 2,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/sink/manifest.json",
-        "sha256": "76d2a81044ecd3b33b2da8f60cfc72444a5722c7480574b4bb94786a2cf69646",
-        "keyId": "catalog-2026-09",
-        "signature": "8FP/SD9aD7trXhWRuOnDkV9cQOTkVUapvQKyfXEC7D2+5k99K6SD0OskmhFfNiTNdrriN5wzjHs2+dKmyqW+BQ=="
+        "signature": "PbSHU8G0sQcacIyioh9OPEVMn4qLiZSVKj8AzNItVGdpTinLVyFDOc+TmasiB4md+uLUybcBvhmNawVIIhGeAA=="
       },
       "accessOffer": "offered"
     },
@@ -6628,7 +5685,13 @@
         "utilities"
       ],
       "license": "MIT",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/skland-attendance/manifest.json",
+        "sha256": "ab7727ffe977c8b3482fd476582ab39163dfa988096c8f73e0e68062b58b3f95",
+        "keyId": "catalog-2026-09",
+        "signature": "/f22lJqRBhJuOqnhSYKP1nO+8vMeJ+MITeMH4UpCn4nmasgoyjReD1iCcDpxgDmbfYi6ji6siN8HekBDlTl4BQ=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -6681,46 +5744,13 @@
         "utilities"
       ],
       "license": "MIT",
-      "revision": 1,
-      "accessOffer": "offered"
-    },
-    {
-      "slug": "sveltia-cms-auth",
-      "name": "Sveltia CMS Authenticator",
-      "summary": "The OAuth helper that lets people sign in to Sveltia CMS (or Decap CMS) with GitHub or GitLab, for sites whose editors should not have to create access tokens.",
-      "tagline": "Let site editors sign in with GitHub without making access tokens",
-      "addedAt": "2026-09-27T10:43:20+03:00",
-      "version": "0.0.0-20260921.4fd08b5",
-      "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/sveltia-cms-auth@0.0.0-20260921.4fd08b5/sveltia-cms-auth-0.0.0-20260921.4fd08b5.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/sveltia-cms-auth@0.0.0-20260921.4fd08b5/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/sveltia-cms-auth@0.0.0-20260921.4fd08b5/manifest.sig",
-        "digest": "54c181a2237c60dc2696ad44d7d147fc5ccee3fa8a132915301f7399afa372cb"
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/statusbeam/manifest.json",
+        "sha256": "0c62f7363e23004dc4138e88f8728adf4b924ada922404fff8cdbae08d709d66",
+        "keyId": "catalog-2026-09",
+        "signature": "jJQfFi2xMBUkYZQTAR12NowroWHfrGkr5IVALDBUQX9PwnBiB4ji6DhfxTgSwCLpW2wkIyzO1JspkptO4idlCQ=="
       },
-      "tier": "artifact",
-      "plan": "free",
-      "requires": [],
-      "lastVerified": "2026-10-05T11:10:03.000Z",
-      "authors": [
-        {
-          "name": "Sveltia",
-          "github": "sveltia"
-        },
-        {
-          "name": "Kohei Yoshino",
-          "github": "kyoshino"
-        }
-      ],
-      "maintainers": [
-        "MendyLanda"
-      ],
-      "services": [],
-      "categories": [
-        "cms",
-        "developer-tools"
-      ],
-      "license": "MIT",
-      "revision": 1,
       "accessOffer": "offered"
     },
     {
@@ -6929,51 +5959,6 @@
       "accessOffer": "offered"
     },
     {
-      "slug": "token-monitor",
-      "name": "Token Monitor Hub",
-      "summary": "Your own sync hub for Token Monitor: combine the token use, costs and plan limits of Claude Code, Codex, Cursor and 40 more AI coding tools across all your machines, live in every widget.",
-      "tagline": "Sync your AI coding usage across all your devices",
-      "addedAt": "2026-09-27T11:42:03+03:00",
-      "version": "0.63.0",
-      "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/token-monitor@0.63.0/token-monitor-0.63.0.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/token-monitor@0.63.0/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/token-monitor@0.63.0/manifest.sig",
-        "digest": "f6415ce764f24a0a9d5a81dd82c0403c217d0da95d37621bb22b27255dc35e1f"
-      },
-      "tier": "artifact",
-      "plan": "free",
-      "requires": [],
-      "lastVerified": "2026-10-05T11:09:49.000Z",
-      "authors": [
-        {
-          "name": "Javis",
-          "url": "https://javis-ai.com",
-          "github": "Javis603"
-        }
-      ],
-      "maintainers": [
-        "MendyLanda"
-      ],
-      "media": {
-        "icon": {
-          "url": "https://appflare.github.io/catalog/apps/token-monitor/icon.png",
-          "sha256": "8d4a6d1592e5defd6bb69fa26000f96325b596ed01cdf87f310e378cb271834b"
-        },
-        "screenshots": []
-      },
-      "services": [
-        "durable-objects"
-      ],
-      "categories": [
-        "ai",
-        "monitoring"
-      ],
-      "license": "MIT",
-      "revision": 1,
-      "accessOffer": "offered"
-    },
-    {
       "slug": "turborepo-remote-cache",
       "name": "Turborepo Remote Cache",
       "summary": "A Turborepo remote cache server on Workers and R2: point turbo at it and share build outputs between your machines and CI, without Vercel.",
@@ -7055,7 +6040,13 @@
         "networking"
       ],
       "license": "MIT",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/unifi-ddns/manifest.json",
+        "sha256": "654bcae175e45a38605b37f63303b740a1c8766a4cdd6a6d939c28bec092b441",
+        "keyId": "catalog-2026-09",
+        "signature": "pnadTwWJ+IMQ4B2JAnr/FYvZRjVN5rOSFZylbKC8VcsWdH5kT9KNGNBH3Ghh05DoY3bzfo4S2XMCKfeX0RqwDA=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -7094,7 +6085,13 @@
         "utilities"
       ],
       "license": "MIT",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/usage-guard-collector/manifest.json",
+        "sha256": "e14d431be559fc083550f554e013bbf3c25fc7671c1e9f4fd84ad07c456d5471",
+        "keyId": "catalog-2026-09",
+        "signature": "ZNtVYg7oGkjFMoDhE7tft5RBXoA+pnlhMn3npJ+8Cbir4BJ46HSy15FrUqdyfhlgTMAHiHdjwEJ52aE0PllNBQ=="
+      },
       "accessOffer": "recommended"
     },
     {
@@ -7139,7 +6136,13 @@
         "chat"
       ],
       "license": "NONE",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/veet/manifest.json",
+        "sha256": "ed465adaedb484a0b6fbe9275e5e775883e4701f264558700e479a3525cab42a",
+        "keyId": "catalog-2026-09",
+        "signature": "FXMVczvPpHADGIlhZ34sgnYQKEYlgO4Z1tcIlb0Ci/zJtrUycVASliCuE336X9OqdJA2waUYp9mvr8ud8hl7CQ=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -7225,7 +6228,13 @@
         "sync"
       ],
       "license": "GPL-3.0-or-later",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/webrtc-turn/manifest.json",
+        "sha256": "41f231e59eea91ce477a4b3e91cd2e314c46610849769bbcd8cebb0c27bc1f11",
+        "keyId": "catalog-2026-09",
+        "signature": "5UWD/myz9aDWI+zw8RCQikOb+qhN9LrnkqWLfnaV2hnpSryJ0I1IFT6z16CzDNDg3bz+xRQ0zco3X6VPmACCCg=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -7266,7 +6275,13 @@
         "ai"
       ],
       "license": "MIT",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/workers-firecrawl/manifest.json",
+        "sha256": "aacc433dcd17ba6c188c60828ebf3a458fd545fe9d881182e4a70bcb64fe3b6b",
+        "keyId": "catalog-2026-09",
+        "signature": "Pw0KYJi4A7Ip5IuFYvvou/YRc0vUPjkF7ZJV5Uo7fF9Hx/jWO1aJ5iqw4IVRkJzXa//ASkHP2O3fY0XrC0vbAg=="
+      },
       "accessOffer": "offered"
     },
     {
@@ -7307,12 +6322,12 @@
         "ai"
       ],
       "license": "MIT",
-      "revision": 2,
+      "revision": 4,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/wx2md/manifest.json",
-        "sha256": "9b8e5923cd8092e03af06d050f2292d66bad5d612d6a285d151d56246180defd",
+        "sha256": "a2342e15a3be5709c4d954683a3a6df17159196b08fa56afdfe78f961bf32c50",
         "keyId": "catalog-2026-09",
-        "signature": "QxTrKH1Tavr/smugo8rgc8A5CVeYrdg8FbZnF6TVD6RTWHYNZ1NotoGU6B9ZJ5GiF0t0xTNYseA6esMsskcoCg=="
+        "signature": "o6g2tIbBY5+WQeQTaI9G6e7F3D/2cK/IbtkxnNPiTJ4guyUYQ49OrSp8XBVT33tAxEGXa4tJLmuG8WzVet8JDw=="
       },
       "accessOffer": "offered"
     },

@@ -14,8 +14,10 @@
   "repo": "every-app/open-seo",
   "license": "MIT",
   "categories": ["marketing", "analytics"],
-  // Help text edited after this release was published: a revision, no new build.
-  "revision": 2,
+  // Edited help text (revision 2), field links (revision 3) and the formatting of
+  // URLs in the notes (revision 4) came after this release was published:
+  // revisions, no new build.
+  "revision": 4,
   "authors": [
     { "name": "Ben Senescu", "github": "bensenescu", "x": "bensenescu" },
     { "name": "Every App", "url": "https://everyapp.dev", "github": "every-app" }
@@ -90,12 +92,14 @@
     {
       "name": "DATAFORSEO_API_KEY",
       "label": "DataForSEO API key",
-      "help": "The Base64 credentials DataForSEO sends by email (app.dataforseo.com, API Access, Send by email): the Base64 of your DataForSEO email:password. See docs/DATAFORSEO_API_KEY.md in the OpenSEO repository."
+      "help": "The Base64 credentials DataForSEO sends by email (app.dataforseo.com, API Access, Send by email): the Base64 of your DataForSEO email:password. See docs/DATAFORSEO_API_KEY.md in the OpenSEO repository.",
+      "link": { "label": "Get a key", "url": "https://app.dataforseo.com/api-access?aff=255379" }
     },
     {
       "name": "OPENROUTER_API_KEY",
       "label": "OpenRouter API key",
       "help": "Turns on SAM, the in-app SEO agent. Create a key at openrouter.ai/settings/keys; OpenRouter bills the agent's requests. Leave empty to hide SAM.",
+      "link": { "label": "Get a key", "url": "https://openrouter.ai/settings/keys" },
       "optional": true,
       "workers": ["app"]
     },
@@ -103,6 +107,10 @@
       "name": "GOOGLE_CLIENT_SECRET",
       "label": "Google OAuth client secret",
       "help": "For Google Search Console and Google Analytics, with the client ID below. Leave both empty to skip them.",
+      "link": {
+        "label": "Create an OAuth client",
+        "url": "https://console.cloud.google.com/apis/credentials"
+      },
       "optional": true,
       "workers": ["app"]
     },
@@ -150,6 +158,10 @@
       "name": "GOOGLE_CLIENT_ID",
       "label": "Google OAuth client ID",
       "help": "A Web application client from the Google Cloud Console with the Search Console API (and, for Analytics, the Analytics APIs) enabled. Its authorized redirect URIs are the app's address plus /api/gsc/oauth/callback and /api/ga4/oauth/callback.",
+      "link": {
+        "label": "Create an OAuth client",
+        "url": "https://console.cloud.google.com/apis/credentials"
+      },
       "optional": true,
       "workers": ["app"]
     },
@@ -157,6 +169,7 @@
       "name": "OPENROUTER_MODEL",
       "label": "SAM model",
       "help": "The OpenRouter model id SAM uses, for example openai/gpt-5.6-luna. Leave empty for OpenSEO's default.",
+      "link": { "label": "Browse models", "url": "https://openrouter.ai/models" },
       "optional": true,
       "workers": ["app"]
     },
@@ -175,11 +188,11 @@
     },
     {
       "type": "markdown",
-      "content": "{{appUrl}}/api/health lists OpenSEO's configuration checks (DataForSEO, Search Console, SAM) once you are signed in. For Search Console or Analytics, add {{appUrl}}/api/gsc/oauth/callback and {{appUrl}}/api/ga4/oauth/callback as redirect URIs of your Google OAuth client; they change if you give the app a custom domain."
+      "content": "{{appUrl}}/api/health lists OpenSEO's configuration checks (DataForSEO, Search Console, SAM) once you are signed in. For Search Console or Analytics, add `{{appUrl}}/api/gsc/oauth/callback` and `{{appUrl}}/api/ga4/oauth/callback` as redirect URIs of your Google OAuth client; they change if you give the app a custom domain."
     },
     {
       "type": "markdown",
-      "content": "The MCP server at {{appUrl}}/mcp sits behind Cloudflare Access too. MCP clients sign in with Access's Managed OAuth, which you turn on in the Zero Trust dashboard on the app's Access application (Additional settings, OAuth), as upstream's [operations guide](https://github.com/every-app/open-seo/blob/main/docs/SELF_HOSTING_CLOUDFLARE_OPERATIONS.md) describes."
+      "content": "The MCP server at `{{appUrl}}/mcp` sits behind Cloudflare Access too. MCP clients sign in with Access's Managed OAuth, which you turn on in the Zero Trust dashboard on the app's Access application (Additional settings, OAuth), as upstream's [operations guide](https://github.com/every-app/open-seo/blob/main/docs/SELF_HOSTING_CLOUDFLARE_OPERATIONS.md) describes."
     }
   ],
   "resources": {

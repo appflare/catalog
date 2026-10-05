@@ -12,8 +12,9 @@
   "repo": "danielsyauqi/Seeder",
   "license": "MIT",
   "categories": ["productivity", "business"],
-  // Generated secrets added after this release was published: a revision, no new build.
-  "revision": 2,
+  // Generated secrets (revision 2) and field links (revision 3) came after this
+  // release was published: revisions, no new build.
+  "revision": 3,
   "authors": [
     { "name": "Daniel Syauqi", "url": "https://danielsyauqi.site", "github": "danielsyauqi" },
     { "name": "Thaqif Rosdi", "github": "takippu" }
@@ -57,12 +58,20 @@
       "name": "GOOGLE_CLIENT_ID",
       "label": "Google OAuth client ID",
       "help": "Adds Google sign-in when set together with the client secret. Redirect URI: <app URL>/api/auth/callback/google.",
+      "link": {
+        "label": "Create an OAuth client",
+        "url": "https://console.cloud.google.com/apis/credentials"
+      },
       "optional": true
     },
     {
       "name": "GOOGLE_CLIENT_SECRET",
       "label": "Google OAuth client secret",
       "help": "The secret of the Google OAuth client above.",
+      "link": {
+        "label": "Create an OAuth client",
+        "url": "https://console.cloud.google.com/apis/credentials"
+      },
       "optional": true
     }
   ],

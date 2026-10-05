@@ -39,13 +39,14 @@
       "default": "default"
     }
   ],
+  "openPath": "/admin",
   "postInstall": [
     {
       "type": "markdown",
       "content": "Open {{appUrl}}/admin and sign in with the admin password to create your first link."
     }
   ],
-  // The HOME_PAGE select is a form change for the build v0.1.0 already
-  // released, so it is published as a revision rather than a new build.
-  "revision": 3
+  // The HOME_PAGE select came in revision 3, which this release was built with.
+  // openPath added after it was published: a revision, no new build.
+  "revision": 4
 }
