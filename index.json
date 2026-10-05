@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-05T14:52:49.482Z",
+  "generatedAt": "2026-10-05T18:15:34.136Z",
   "apps": [
     {
       "slug": "2fa",
@@ -45,82 +45,6 @@
       ],
       "license": "MIT",
       "revision": 1,
-      "accessOffer": "offered"
-    },
-    {
-      "slug": "888wiki",
-      "name": "888wiki",
-      "summary": "A Markdown-first notepad and wiki: write in Markdown, Block, Canvas or Whiteboard, publish password-protected or timed shares, and present notes as slides or books.",
-      "tagline": "Write notes and share them with passwords or time limits",
-      "addedAt": "2026-09-27T06:02:01+03:00",
-      "version": "0.0.0-20260923.acf210e",
-      "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20260923.acf210e/888wiki-0.0.0-20260923.acf210e.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20260923.acf210e/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20260923.acf210e/manifest.sig",
-        "digest": "14ef5a6643bdf9c7648fd2c8fd4761cdb1e9f6c24742c77ff0c731f0dde7e6e9"
-      },
-      "tier": "artifact",
-      "plan": "free",
-      "requires": [
-        "r2"
-      ],
-      "lastVerified": "2026-10-05T10:52:40.000Z",
-      "authors": [
-        {
-          "name": "DAVID888",
-          "github": "tbdavid2019"
-        }
-      ],
-      "maintainers": [
-        "MendyLanda"
-      ],
-      "media": {
-        "icon": {
-          "url": "https://appflare.github.io/catalog/apps/888wiki/icon.svg",
-          "sha256": "25f8838549f4e6f9459497108d92cdc59aafe9bb418a5ab7ca05d476e039ef3a"
-        },
-        "screenshots": [
-          {
-            "url": "https://appflare.github.io/catalog/apps/888wiki/screenshots/01-markdown-editor.png",
-            "sha256": "60a45cbbca38cda3bfd3ac83f5c1f9e1a1fb92d4313f08c4eb8d22fa70944d5d",
-            "alt": "888wiki: Markdown editor"
-          },
-          {
-            "url": "https://appflare.github.io/catalog/apps/888wiki/screenshots/02-paragraph-annotations.png",
-            "sha256": "87dfe84ef81e2f8dd115ad748dba4e5499c8820bf1c7f27cd9ce61d3e0be66fb",
-            "alt": "888wiki: Paragraph annotations"
-          },
-          {
-            "url": "https://appflare.github.io/catalog/apps/888wiki/screenshots/03-slide-presentation.png",
-            "sha256": "1e00a0c4cec2f7f10659703fca2bad1bf49545be44616cb9686230c66b0786b9",
-            "alt": "888wiki: Slide presentation"
-          },
-          {
-            "url": "https://appflare.github.io/catalog/apps/888wiki/screenshots/04-seal-settings.png",
-            "sha256": "5634e55c85b74f02bfc23d4b7cf1f52ece35444c54104929d996e4e47704fce9",
-            "alt": "888wiki: Seal settings"
-          }
-        ]
-      },
-      "services": [
-        "kv",
-        "d1",
-        "r2",
-        "cron"
-      ],
-      "categories": [
-        "notes",
-        "productivity"
-      ],
-      "license": "AGPL-3.0-only",
-      "revision": 2,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/888wiki/manifest.json",
-        "sha256": "b7aec664c918d040290f4e62509236ed285a82c17d72ce48d9f239639213ac12",
-        "keyId": "catalog-2026-09",
-        "signature": "9bEgcO2EZzxKjAJxCt/PRhcz02nnrvMZxQrCVCucKtdMdvMSS75PnTJVYB2bpi65UrVGmtoM4RIK9R6F4vrqCw=="
-      },
       "accessOffer": "offered"
     },
     {
@@ -284,60 +208,6 @@
       ],
       "license": "MIT",
       "revision": 1,
-      "accessOffer": "offered"
-    },
-    {
-      "slug": "atalaya",
-      "name": "Atalaya",
-      "summary": "Uptime monitoring and a status page on one Worker: HTTP, TCP and DNS checks every minute, optionally from chosen Cloudflare regions, webhook alerts, and 90 days of history in D1.",
-      "tagline": "Check if your sites are up and share a status page",
-      "addedAt": "2026-09-27T04:47:37+03:00",
-      "version": "0.0.0-20260926.5437d1c",
-      "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/atalaya@0.0.0-20260926.5437d1c/atalaya-0.0.0-20260926.5437d1c.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/atalaya@0.0.0-20260926.5437d1c/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/atalaya@0.0.0-20260926.5437d1c/manifest.sig",
-        "digest": "89d44e4655e5f08243679b4812f9a76e0256fffacd45544f3d80e1d154fc4f02"
-      },
-      "tier": "artifact",
-      "plan": "free",
-      "requires": [],
-      "lastVerified": "2026-10-05T10:52:23.000Z",
-      "authors": [
-        {
-          "name": "Daniel Carrillo",
-          "url": "https://dcarrillo.es",
-          "github": "dcarrillo",
-          "x": "dani_carrillo"
-        }
-      ],
-      "maintainers": [
-        "MendyLanda"
-      ],
-      "media": {
-        "icon": {
-          "url": "https://appflare.github.io/catalog/apps/atalaya/icon.svg",
-          "sha256": "b5432407e161c711bf4dceacbed3366d4602207e73a5193b85ef5ba5080881d1"
-        },
-        "screenshots": []
-      },
-      "services": [
-        "d1",
-        "durable-objects",
-        "cron"
-      ],
-      "categories": [
-        "monitoring",
-        "developer-tools"
-      ],
-      "license": "Apache-2.0",
-      "revision": 4,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/atalaya/manifest.json",
-        "sha256": "38f7f0cfc76cf9337474568c5eb0575c5a0d620a4931715aac1993c003a17011",
-        "keyId": "catalog-2026-09",
-        "signature": "63jHvtHAsCtnPg2oh8NsvlFMBTbxaBwAi397WxniS3zhqw+U3F0s7KF0UwTHzrVrgblhJ5ket4iWeAiAwbczBQ=="
-      },
       "accessOffer": "offered"
     },
     {
@@ -1377,57 +1247,6 @@
       "accessOffer": "offered"
     },
     {
-      "slug": "cloudssh",
-      "name": "CloudSSH",
-      "summary": "A web SSH terminal on Workers: connect to your servers from the browser with multiple sessions, SFTP file management, jump hosts, saved servers, and a bring-your-own-key AI assistant.",
-      "tagline": "Connect to your servers through a browser",
-      "addedAt": "2026-09-26T23:19:31+03:00",
-      "version": "0.0.0-20260924.25852ca",
-      "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20260924.25852ca/cloudssh-0.0.0-20260924.25852ca.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20260924.25852ca/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20260924.25852ca/manifest.sig",
-        "digest": "7fb14d0af075605f3f50dffa001784b134e82bd411075f02e11f250fd0fa8166"
-      },
-      "tier": "artifact",
-      "plan": "free",
-      "requires": [],
-      "lastVerified": "2026-10-05T10:54:59.000Z",
-      "authors": [
-        {
-          "name": "TanXin",
-          "url": "https://tanxin.me",
-          "github": "newbietan"
-        }
-      ],
-      "maintainers": [
-        "MendyLanda"
-      ],
-      "media": {
-        "icon": {
-          "url": "https://appflare.github.io/catalog/apps/cloudssh/icon.svg",
-          "sha256": "7798d8bc82566ea4bf5ad4f7088a9b3c0135dae4ad9fa83a1b52b8340db3daf3"
-        },
-        "screenshots": []
-      },
-      "services": [
-        "durable-objects"
-      ],
-      "categories": [
-        "remote-access",
-        "developer-tools"
-      ],
-      "license": "Apache-2.0",
-      "revision": 3,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/cloudssh/manifest.json",
-        "sha256": "4eb6ee58b4996abb9db6535302da900dc646f1a5a4e95e98b082eb489509878a",
-        "keyId": "catalog-2026-09",
-        "signature": "1av3KHW4h+m7WlU3uEA+Qpi9QVGhqYIVlrZ31QfQsggzGfcRGMlWcbmcmI3UEOYyDppiBfRqNlWmTaGWqk9NAQ=="
-      },
-      "accessOffer": "offered"
-    },
-    {
       "slug": "collection-down",
       "name": "Collection Down",
       "summary": "Browse Bilibili digital collections and decoration suits and download their videos, images and emoji packs, from a Nuxt app on your own Worker.",
@@ -1834,60 +1653,6 @@
       ],
       "license": "GPL-3.0-or-later",
       "revision": 1,
-      "accessOffer": "offered"
-    },
-    {
-      "slug": "edgeever",
-      "name": "EdgeEver",
-      "summary": "An Evernote-style notes and knowledge base with a three-pane layout, full-text search, public note sharing, AI features and a built-in MCP server, on D1 and R2.",
-      "tagline": "Notes you can organize, search, and share from your own account",
-      "addedAt": "2026-09-27T05:18:00+03:00",
-      "version": "1.88.0",
-      "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/edgeever@1.88.0/edgeever-1.88.0.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/edgeever@1.88.0/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/edgeever@1.88.0/manifest.sig",
-        "digest": "f718a5a68b9348acdbe7ece4ea0a008a3189647156355940572d45c41500be2b"
-      },
-      "tier": "artifact",
-      "plan": "free",
-      "requires": [
-        "r2"
-      ],
-      "lastVerified": "2026-10-04T10:10:45.000Z",
-      "authors": [
-        {
-          "name": "tianma-if",
-          "github": "tianma-if",
-          "x": "tianma_if"
-        }
-      ],
-      "maintainers": [
-        "MendyLanda"
-      ],
-      "media": {
-        "icon": {
-          "url": "https://appflare.github.io/catalog/apps/edgeever/icon.svg",
-          "sha256": "1f13ba9f2ac4ea325eddce44a427eed4e98b64b9078b23de067ed23e67fe7257"
-        },
-        "screenshots": []
-      },
-      "services": [
-        "d1",
-        "r2"
-      ],
-      "categories": [
-        "notes",
-        "productivity"
-      ],
-      "license": "AGPL-3.0-only",
-      "revision": 3,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/edgeever/manifest.json",
-        "sha256": "bd3f7cd70569fd01fc8bf4cfd295f093d8044c43f2d0e9f1fd44d0ae1e773f5c",
-        "keyId": "catalog-2026-09",
-        "signature": "vfiVAiDd19uTTbE1LmLYMGTOajw0SIhwdO3TpdxYatqBCkzJ9hfMxoyk5aTK52rOeaJOQ/7ROEQOO+8CceU4Dg=="
-      },
       "accessOffer": "offered"
     },
     {
@@ -2420,79 +2185,6 @@
       "accessOffer": "offered"
     },
     {
-      "slug": "flaremo",
-      "name": "FlareMo",
-      "summary": "A Memos-compatible notes app for quick capture: timeline, tags, attachments, semantic search, and an MCP server, on D1, R2, and Vectorize.",
-      "tagline": "Capture notes and find them when you need them",
-      "addedAt": "2026-09-23T20:44:39+03:00",
-      "version": "0.20.1",
-      "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/flaremo@0.20.1/flaremo-0.20.1.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/flaremo@0.20.1/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/flaremo@0.20.1/manifest.sig",
-        "digest": "40795245450013f111a16a4311a25a12ab8173d011113e962798daaaff1f4c1c"
-      },
-      "tier": "artifact",
-      "plan": "free",
-      "requires": [
-        "r2",
-        "workers-ai"
-      ],
-      "lastVerified": "2026-10-05T10:57:44.000Z",
-      "authors": [
-        {
-          "name": "realchendahuang",
-          "github": "realchendahuang"
-        }
-      ],
-      "maintainers": [
-        "MendyLanda"
-      ],
-      "media": {
-        "icon": {
-          "url": "https://appflare.github.io/catalog/apps/flaremo/icon.png",
-          "sha256": "33faa4d7cd1069cbbd27bf78bf6fbe7098f02112ccdf25bf28304b82268e720a"
-        },
-        "cover": {
-          "url": "https://appflare.github.io/catalog/apps/flaremo/cover.png",
-          "sha256": "c78c5c4c3b2c2d47d39a2c6767bae01293e658c6efcec7dc7d0b703ffdc21cff"
-        },
-        "screenshots": [
-          {
-            "url": "https://appflare.github.io/catalog/apps/flaremo/screenshots/01-notes-timeline.png",
-            "sha256": "7d5f451001e5f742d1f7bb1ac6ed6c7041f187b5e0bf1546d7ccad7a41fa0a32",
-            "alt": "FlareMo: Notes timeline"
-          },
-          {
-            "url": "https://appflare.github.io/catalog/apps/flaremo/screenshots/02-on-a-phone.png",
-            "sha256": "107c66d7099537767b45a56ea2a7459a323f1573e6a62fb887e785f2d081ddc9",
-            "alt": "FlareMo: On a phone"
-          }
-        ]
-      },
-      "services": [
-        "d1",
-        "r2",
-        "vectorize",
-        "queues",
-        "cron",
-        "workers-ai"
-      ],
-      "categories": [
-        "productivity",
-        "notes"
-      ],
-      "license": "AGPL-3.0-only",
-      "revision": 2,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/flaremo/manifest.json",
-        "sha256": "f14fb3480340131616fa9833beb7db5ff193fc4d93851cb5699a63dde583aaa7",
-        "keyId": "catalog-2026-09",
-        "signature": "qHzP+tgpRuKSM2wO7mmpsEIWhGbQyGM1D7GaAe/HcswWkYdLyNbI/VxpJr2nM3uZ9Kff7AUb6p6nzwKJXOnWCg=="
-      },
-      "accessOffer": "offered"
-    },
-    {
       "slug": "fodi",
       "name": "FODI",
       "summary": "A fast index of your OneDrive: browse, preview and download files from a web page, with password-protected folders, signed download links, uploads and WebDAV, on Workers KV.",
@@ -2541,53 +2233,6 @@
         "sha256": "f8b5035dc59fee929c7aabd610a5d50ee7331f3712fca0949afe4ea9b3c9be75",
         "keyId": "catalog-2026-09",
         "signature": "NPLO7riTdNhmOVGf4HdaKJlmwPGQg36BhfBaDgI5+gJmEcRqODypP44sYWogJZsEuj3Kxr4FtSeWDmKoZQJ6AQ=="
-      },
-      "accessOffer": "offered"
-    },
-    {
-      "slug": "folia",
-      "name": "Folia",
-      "summary": "A web music player built around full-screen animated lyrics, for your local library or a Navidrome server, with automatic lyric matching and AI colour themes from your own Gemini key.",
-      "tagline": "Play your music with full-screen animated lyrics",
-      "addedAt": "2026-09-27T10:46:59+03:00",
-      "version": "0.7.9",
-      "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/folia@0.7.9/folia-0.7.9.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/folia@0.7.9/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/folia@0.7.9/manifest.sig",
-        "digest": "59fa4efa53f670c772633d1f1c5df94cf917b0cc03a022359dca76c699462964"
-      },
-      "tier": "artifact",
-      "plan": "free",
-      "requires": [],
-      "lastVerified": "2026-10-05T10:57:25.000Z",
-      "authors": [
-        {
-          "name": "chthollyphile",
-          "github": "chthollyphile"
-        }
-      ],
-      "maintainers": [
-        "MendyLanda"
-      ],
-      "media": {
-        "icon": {
-          "url": "https://appflare.github.io/catalog/apps/folia/icon.svg",
-          "sha256": "0045ede40bee2e9ac4f40a3a803b16febbf75ab9beca6c438bfbd1e6cd5529a8"
-        },
-        "screenshots": []
-      },
-      "services": [],
-      "categories": [
-        "media"
-      ],
-      "license": "AGPL-3.0-only",
-      "revision": 3,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/folia/manifest.json",
-        "sha256": "421b474d5eaa62bd4d2877b35dcf032c5cffaf2130dfa58b3591aa8ed8d7c1f0",
-        "keyId": "catalog-2026-09",
-        "signature": "Fp435E1LH74mCbT4QAKB5EYS9zgdov2MX7YtLJ+Iy7OUhquTO2JGuvn9JXlnu/ayqbrCAHDGIL9PIwwSclRJDQ=="
       },
       "accessOffer": "offered"
     },
@@ -2746,17 +2391,17 @@
       "summary": "Fixes TikTok embeds on Discord and other chat apps: swap tiktok.com for your own address in a link and it previews the video or slideshow inline, with the author, caption and counts.",
       "tagline": "Make TikTok links preview videos and slideshows in chat",
       "addedAt": "2026-09-27T10:43:20+03:00",
-      "version": "0.0.0-20260906.66fbae3",
+      "version": "0.0.0-20261004.5c3e70b",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/fxtiktok@0.0.0-20260906.66fbae3/fxtiktok-0.0.0-20260906.66fbae3.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/fxtiktok@0.0.0-20260906.66fbae3/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/fxtiktok@0.0.0-20260906.66fbae3/manifest.sig",
-        "digest": "84a1e56d7f240239fbee8b5106d217cee352cbf93a51656e83df05c7a15dec0c"
+        "zip": "https://github.com/appflare/catalog/releases/download/fxtiktok@0.0.0-20261004.5c3e70b/fxtiktok-0.0.0-20261004.5c3e70b.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/fxtiktok@0.0.0-20261004.5c3e70b/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/fxtiktok@0.0.0-20261004.5c3e70b/manifest.sig",
+        "digest": "a3f78994581f806baf06d65900682497e888d55fd6433d0432b1e8822cf9c93c"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-10-05T10:57:58.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "dargy",
@@ -2775,112 +2420,6 @@
       ],
       "license": "MIT",
       "revision": 2,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/fxtiktok/manifest.json",
-        "sha256": "effcafebef102e8b7592148fcc87e092fd2e8cc9b006c6e676efc4737520a25f",
-        "keyId": "catalog-2026-09",
-        "signature": "lvQe6cd9L8n67KUcz8FRVlfUN4E5HD/rlr3dy9vQrnwEfHkN6PI9cXe6GSWn6QtpC/jhbY9S88zFaAsmbwtaCg=="
-      },
-      "accessOffer": "offered"
-    },
-    {
-      "slug": "garrul",
-      "name": "Garrul",
-      "summary": "Self-hosted comments for static sites and blogs: an embeddable widget with threads, reactions and votes, OAuth or anonymous posting behind Turnstile, a moderation queue, and reply emails.",
-      "tagline": "Comments and reactions for your website, hosted in your account",
-      "addedAt": "2026-09-27T05:55:55+03:00",
-      "version": "2.29.0",
-      "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/garrul@2.29.0/garrul-2.29.0.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/garrul@2.29.0/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/garrul@2.29.0/manifest.sig",
-        "digest": "2b6f35520bf73094c61299b4a14aff432e6a5439cd7d10934a57da5f75da449f"
-      },
-      "tier": "artifact",
-      "plan": "free",
-      "requires": [
-        "analytics-engine"
-      ],
-      "lastVerified": "2026-10-05T10:58:51.000Z",
-      "authors": [
-        {
-          "name": "KingPin",
-          "url": "https://sumguy.com",
-          "github": "KingPin"
-        }
-      ],
-      "maintainers": [
-        "MendyLanda"
-      ],
-      "media": {
-        "icon": {
-          "url": "https://appflare.github.io/catalog/apps/garrul/icon.png",
-          "sha256": "b6c98bbadfa8a210065c149e0c132aad782d48a488c7644526d0a5ffcefacdbe"
-        },
-        "cover": {
-          "url": "https://appflare.github.io/catalog/apps/garrul/cover.png",
-          "sha256": "b33f9c6f01bf256ba10abcaab5ba1f3caebdf6789196460296c35dc30e972b76"
-        },
-        "screenshots": [
-          {
-            "url": "https://appflare.github.io/catalog/apps/garrul/screenshots/01-comment-widget.png",
-            "sha256": "ab81387782fbc7b45d31a3ceab33db4b0bb163e9b38b2d61cd02c91429efde37",
-            "alt": "Garrul: Comment widget"
-          },
-          {
-            "url": "https://appflare.github.io/catalog/apps/garrul/screenshots/02-admin-dashboard.png",
-            "sha256": "55ba18e439c63f839230fe6379f5fc779c1d0c581b380140143dc7fbae7b0e04",
-            "alt": "Garrul: Admin dashboard"
-          },
-          {
-            "url": "https://appflare.github.io/catalog/apps/garrul/screenshots/03-moderation-queue.png",
-            "sha256": "08e2b19ea6e83ba1ef2c28f27d180b546341b1ac7366d11056679e3bbf09fb7e",
-            "alt": "Garrul: Moderation queue"
-          },
-          {
-            "url": "https://appflare.github.io/catalog/apps/garrul/screenshots/04-feature-settings.png",
-            "sha256": "af1b43d2ba30ea0294d6ac61324f6457737641fc30eb27c888b5fd8635f7afdf",
-            "alt": "Garrul: Feature settings"
-          },
-          {
-            "url": "https://appflare.github.io/catalog/apps/garrul/screenshots/05-comment-detail.png",
-            "sha256": "fa0fb3cccc458ed822b9bbd26becc245412dfc260a97ff35e1095a71c57e2431",
-            "alt": "Garrul: Comment detail"
-          },
-          {
-            "url": "https://appflare.github.io/catalog/apps/garrul/screenshots/06-user-list.png",
-            "sha256": "922004c364648397f8bd24f6339992a5fde0ab1b54db8a4f53543e51f294ed0b",
-            "alt": "Garrul: User list"
-          },
-          {
-            "url": "https://appflare.github.io/catalog/apps/garrul/screenshots/07-webhook-status.png",
-            "sha256": "d101ea68614b4c89d6fd513be1adc8c2ffb30cd2186a7b048205da30c6c76812",
-            "alt": "Garrul: Webhook status"
-          },
-          {
-            "url": "https://appflare.github.io/catalog/apps/garrul/screenshots/08-audit-log.png",
-            "sha256": "edc798c2d450ae6f0bad40cbc9418b9ccf51018c87f908f134d3e03a6a8cba33",
-            "alt": "Garrul: Audit log"
-          }
-        ]
-      },
-      "services": [
-        "kv",
-        "d1",
-        "analytics-engine",
-        "cron"
-      ],
-      "categories": [
-        "community"
-      ],
-      "license": "Apache-2.0",
-      "revision": 2,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/garrul/manifest.json",
-        "sha256": "09285893a50d0cf22675213a520e86cde89291b70d5ae38cdcf1e6c9c9a11e9c",
-        "keyId": "catalog-2026-09",
-        "signature": "BO1CNi7z4Am8xWOsOk3IIA73Yf4drobf0bDALpt282CxTbejI7mYr3vQkJhhYF07hRT1pjaBb+czKGqF817UCw=="
-      },
       "accessOffer": "offered"
     },
     {
@@ -2981,127 +2520,6 @@
         "sha256": "3f03e378bd1205c6ec22bff2f73c26833b0219b9d4f42076cab318a674407c96",
         "keyId": "catalog-2026-09",
         "signature": "ESFOakgLMWzEqv7+eE39ak/egRE39TEV2UObGgWJjmuFFw1ZI9ONTb+oBXW41onzN9vpQySN7ja+AVwGnmHBDQ=="
-      },
-      "accessOffer": "offered"
-    },
-    {
-      "slug": "gmshop",
-      "name": "GMShop Edge",
-      "summary": "A single-tenant digital-goods shop: stock items such as licence keys delivered on payment, private downloads from R2, entitlements, coupons and refunds, guest or account checkout, and an admin console with roles, on D1, KV, R2 and Queues.",
-      "tagline": "Sell digital goods with automatic delivery from your own shop",
-      "addedAt": "2026-09-27T12:03:21+03:00",
-      "version": "1.0.2",
-      "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/gmshop@1.0.2/gmshop-1.0.2.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/gmshop@1.0.2/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/gmshop@1.0.2/manifest.sig",
-        "digest": "dd5b384cbf71620024684d225e96da5b561bedcc0cb936a4a7496ffabe0471f4"
-      },
-      "tier": "artifact",
-      "plan": "paid",
-      "requires": [
-        "r2"
-      ],
-      "lastVerified": null,
-      "authors": [
-        {
-          "name": "GM Wallet",
-          "url": "https://gmwallet.app",
-          "github": "GMWalletApp",
-          "x": "GMwalletApp"
-        }
-      ],
-      "maintainers": [
-        "MendyLanda"
-      ],
-      "media": {
-        "icon": {
-          "url": "https://appflare.github.io/catalog/apps/gmshop/icon.png",
-          "sha256": "a5672ae3ae7fa7809b01e0554e283e59857c0f291eeb591770a09b8fc18c8608"
-        },
-        "screenshots": []
-      },
-      "services": [
-        "kv",
-        "d1",
-        "r2",
-        "queues",
-        "cron",
-        "email-routing"
-      ],
-      "categories": [
-        "ecommerce",
-        "business"
-      ],
-      "license": "GPL-3.0-or-later",
-      "revision": 2,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/gmshop/manifest.json",
-        "sha256": "f64e9fd0a118d3c64cb5050d6ee773620e0defe9e56a594af324fc5075d696ec",
-        "keyId": "catalog-2026-09",
-        "signature": "+xOMh93Gf5LA3zw29qSMtwHl8NyzdOND+UT7Pvz+cOEx4iOf5o547sceNSar94Xu4dkajj1glJnIQAckQJgpBg=="
-      },
-      "accessOffer": "offered"
-    },
-    {
-      "slug": "hashpay",
-      "name": "HashPay",
-      "summary": "A crypto payment gateway run from your own Telegram bot: take USDT, USDC and native coins on eight chains or through Binance, OKX and OKPay, with a signed order API, merchant callbacks and an admin console.",
-      "tagline": "Accept crypto payments through your Telegram bot",
-      "addedAt": "2026-09-27T10:46:59+03:00",
-      "version": "0.0.0-20260919.599ef7f",
-      "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/hashpay@0.0.0-20260919.599ef7f/hashpay-0.0.0-20260919.599ef7f.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/hashpay@0.0.0-20260919.599ef7f/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/hashpay@0.0.0-20260919.599ef7f/manifest.sig",
-        "digest": "e6b24fa51183e9b032625ebefcd0222955139bb34e9e2c275c77555e3849b903"
-      },
-      "tier": "artifact",
-      "plan": "free",
-      "requires": [],
-      "lastVerified": "2026-10-05T10:58:44.000Z",
-      "authors": [
-        {
-          "name": "TGDash",
-          "github": "TGDash"
-        }
-      ],
-      "maintainers": [
-        "MendyLanda"
-      ],
-      "media": {
-        "icon": {
-          "url": "https://appflare.github.io/catalog/apps/hashpay/icon.svg",
-          "sha256": "848db8344f264004d2ac6be76a8e5d5350c2bcd11aad024ad47d2eb2b9237208"
-        },
-        "cover": {
-          "url": "https://appflare.github.io/catalog/apps/hashpay/cover.png",
-          "sha256": "92dd5009ce87b364ff86b375e84bd09654a6745f35f54bbdb56a75e89f3c7d08"
-        },
-        "screenshots": [
-          {
-            "url": "https://appflare.github.io/catalog/apps/hashpay/screenshots/01-admin-overview.png",
-            "sha256": "c7023d3e5c84a78ea3a15fedded3fd631213b8a525d6a185d6018f31e16345f1",
-            "alt": "HashPay: Admin overview"
-          }
-        ]
-      },
-      "services": [
-        "d1",
-        "queues",
-        "cron"
-      ],
-      "categories": [
-        "finance",
-        "business"
-      ],
-      "license": "Apache-2.0",
-      "revision": 2,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/hashpay/manifest.json",
-        "sha256": "f9b8400168daaa938045ede12f1a75ac3c64259ddc2b07ffbebdab91224435ac",
-        "keyId": "catalog-2026-09",
-        "signature": "M6trXbOIj9jC3LrYcqNliHLvmgJPTsdUwQdfgJgwFwdK3xR/IomvNam/eh85AeaR9V4HvyDuL1pjKnsQycinDQ=="
       },
       "accessOffer": "offered"
     },
@@ -3449,127 +2867,6 @@
       "accessOffer": "offered"
     },
     {
-      "slug": "isupmap",
-      "name": "isupmap",
-      "summary": "A live up/down heatmap for 40+ popular internet services, polled every five minutes, with history and community outage reports.",
-      "tagline": "See which popular online services are up or down",
-      "addedAt": "2026-09-27T06:14:13+03:00",
-      "version": "0.0.0-20260904.17bb688",
-      "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/isupmap@0.0.0-20260904.17bb688/isupmap-0.0.0-20260904.17bb688.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/isupmap@0.0.0-20260904.17bb688/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/isupmap@0.0.0-20260904.17bb688/manifest.sig",
-        "digest": "6e452d1e9f5b899e70563efb4a0da611065509a678ef792e04cfb9446cb93168"
-      },
-      "tier": "artifact",
-      "plan": "free",
-      "requires": [
-        "analytics-engine"
-      ],
-      "lastVerified": "2026-10-05T10:59:45.000Z",
-      "authors": [
-        {
-          "name": "Jairon Landa",
-          "url": "https://jaironlanda.com",
-          "github": "Jaironlanda"
-        }
-      ],
-      "maintainers": [
-        "MendyLanda"
-      ],
-      "media": {
-        "icon": {
-          "url": "https://appflare.github.io/catalog/apps/isupmap/icon.png",
-          "sha256": "d97c8e9f9185e2366acbcc5c64f3545f9a7e660e09914e41ef6c00d4e3e3693b"
-        },
-        "screenshots": []
-      },
-      "services": [
-        "kv",
-        "d1",
-        "analytics-engine",
-        "queues",
-        "cron"
-      ],
-      "categories": [
-        "monitoring"
-      ],
-      "license": "MIT",
-      "revision": 2,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/isupmap/manifest.json",
-        "sha256": "5ea7cac4cada88085c90eade414956052e2ebbf64e69381f60c4d60f4ea3cd19",
-        "keyId": "catalog-2026-09",
-        "signature": "4HzqoG1I6ZHj7K28qpEiBfD7B6gACv4+g9cFVJsrTeBhJqSJaCdt68U+rY6Ye2g7oZXGSTqkLxmulVn0W1bPAQ=="
-      },
-      "accessOffer": "offered"
-    },
-    {
-      "slug": "jant",
-      "name": "Jant",
-      "summary": "A personal microblog as smooth as Threads and Tumblr: notes, links and quotes in threads and collections, media on R2, full-text search, RSS, an API and an MCP endpoint for agents, on D1.",
-      "tagline": "Your own blog for notes, links, quotes, and threads",
-      "addedAt": "2026-09-27T12:14:18+03:00",
-      "version": "0.0.0-20260926.d55c0f8",
-      "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/jant@0.0.0-20260926.d55c0f8/jant-0.0.0-20260926.d55c0f8.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/jant@0.0.0-20260926.d55c0f8/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/jant@0.0.0-20260926.d55c0f8/manifest.sig",
-        "digest": "aea622374eb8e577a30f519051872c71ab8b8095812a48cd1c0a7ce4d72f4cb2"
-      },
-      "tier": "artifact",
-      "plan": "free",
-      "requires": [
-        "r2"
-      ],
-      "lastVerified": "2026-10-05T11:00:15.000Z",
-      "authors": [
-        {
-          "name": "Jant",
-          "url": "https://jant.me",
-          "github": "jant-me"
-        }
-      ],
-      "maintainers": [
-        "MendyLanda"
-      ],
-      "media": {
-        "icon": {
-          "url": "https://appflare.github.io/catalog/apps/jant/icon.svg",
-          "sha256": "a8bb8340623a2e38f2e1e5bd9cd8b63aef4614d75d6ca2ab515d121d50dfe013"
-        },
-        "screenshots": [
-          {
-            "url": "https://appflare.github.io/catalog/apps/jant/screenshots/01-blog-home.png",
-            "sha256": "81ba4957635e52bd5ec7253cc1f07b5dbff94f6f6edacdbac95797b426fd6ac8",
-            "alt": "Jant: Blog home"
-          },
-          {
-            "url": "https://appflare.github.io/catalog/apps/jant/screenshots/02-writing-a-post.png",
-            "sha256": "320b1274a6e751aa6cec4493a07b3017690a01f2d9565f9fec75b37900d769bb",
-            "alt": "Jant: Writing a post"
-          }
-        ]
-      },
-      "services": [
-        "d1",
-        "r2"
-      ],
-      "categories": [
-        "cms",
-        "community"
-      ],
-      "license": "AGPL-3.0-or-later",
-      "revision": 4,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/jant/manifest.json",
-        "sha256": "6d39b583958bd6b9145b78982064ae6601714402ce77001a6a4d233348169a31",
-        "keyId": "catalog-2026-09",
-        "signature": "v3qrnYOekae+7M8y2VidWFQ23oHFK2GoifDUta2OZCCNN1K4FN6G6z04S9zM8l0l1777sXur2vQ7sIIysBr1Cg=="
-      },
-      "accessOffer": "offered"
-    },
-    {
       "slug": "jina-mcp",
       "name": "Jina AI MCP Server",
       "summary": "Jina AI's remote MCP server on your own Worker: read pages and PDFs as Markdown, take screenshots, search the web, arXiv and SSRN, and rerank or deduplicate text with Jina's Reader, Search, Embeddings and Reranker APIs.",
@@ -3699,61 +2996,6 @@
       ],
       "categories": [
         "notifications"
-      ],
-      "license": "MIT",
-      "revision": 1,
-      "accessOffer": "offered"
-    },
-    {
-      "slug": "larafeed",
-      "name": "Larafeed",
-      "summary": "A private feed reader with passkey-only sign-in: RSS and Atom subscriptions refreshed on a schedule through Queues, OPML import and export, full-article extraction, favicons, and reader-client APIs, on D1, KV and Queues.",
-      "tagline": "Keep up with your favorite websites in one private feed",
-      "addedAt": "2026-09-27T12:03:21+03:00",
-      "version": "0.0.0-20260924.eedbc8b",
-      "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/larafeed@0.0.0-20260924.eedbc8b/larafeed-0.0.0-20260924.eedbc8b.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/larafeed@0.0.0-20260924.eedbc8b/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/larafeed@0.0.0-20260924.eedbc8b/manifest.sig",
-        "digest": "97dacef613e9e554d0224951111a876118482966dee48a757a78d92de335d2fc"
-      },
-      "tier": "artifact",
-      "plan": "free",
-      "requires": [],
-      "lastVerified": "2026-10-05T11:01:14.000Z",
-      "authors": [
-        {
-          "name": "Stanislas",
-          "url": "https://stanislas.blog",
-          "github": "angristan",
-          "x": "fuolpit"
-        }
-      ],
-      "maintainers": [
-        "MendyLanda"
-      ],
-      "media": {
-        "icon": {
-          "url": "https://appflare.github.io/catalog/apps/larafeed/icon.png",
-          "sha256": "901ec1bf7586628584a8e6695b9846c83b46dbd3763429340364ec0d9b3e7af8"
-        },
-        "screenshots": [
-          {
-            "url": "https://appflare.github.io/catalog/apps/larafeed/screenshots/01-reader-view.png",
-            "sha256": "2511e4ccfad4943961d7aa2ffc90dd61e0c3ab765a2915e47edf9d495c708d13",
-            "alt": "Larafeed: Reader view"
-          }
-        ]
-      },
-      "services": [
-        "kv",
-        "d1",
-        "queues",
-        "cron",
-        "images"
-      ],
-      "categories": [
-        "productivity"
       ],
       "license": "MIT",
       "revision": 1,
@@ -4502,56 +3744,6 @@
       "accessOffer": "offered"
     },
     {
-      "slug": "neriplayer-listen-together",
-      "name": "NeriPlayer Listen Together",
-      "summary": "Your own listen-together server for the NeriPlayer Android app: create a room, share the invite, and everyone's playback, queue and track changes stay in sync.",
-      "tagline": "Keep music playback in sync while listening with friends",
-      "addedAt": "2026-09-27T10:43:47+03:00",
-      "version": "0.0.0-20260817.5ec8a8b",
-      "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/neriplayer-listen-together@0.0.0-20260817.5ec8a8b/neriplayer-listen-together-0.0.0-20260817.5ec8a8b.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/neriplayer-listen-together@0.0.0-20260817.5ec8a8b/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/neriplayer-listen-together@0.0.0-20260817.5ec8a8b/manifest.sig",
-        "digest": "7dc8aaea5428d2d91b0dfb5507cb11f209afc9dc76cbd2af36c7133e665d18fa"
-      },
-      "tier": "artifact",
-      "plan": "free",
-      "requires": [],
-      "lastVerified": "2026-10-05T11:02:33.000Z",
-      "authors": [
-        {
-          "name": "TheSmallHanCat",
-          "github": "TheSmallHanCat"
-        }
-      ],
-      "maintainers": [
-        "MendyLanda"
-      ],
-      "media": {
-        "icon": {
-          "url": "https://appflare.github.io/catalog/apps/neriplayer-listen-together/icon.svg",
-          "sha256": "9b56f20089e0fe5655a661f609487dadd86e8eb9b8d21e656fd9bfdb1e75f9f9"
-        },
-        "screenshots": []
-      },
-      "services": [
-        "durable-objects"
-      ],
-      "categories": [
-        "media",
-        "sync"
-      ],
-      "license": "NONE",
-      "revision": 2,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/neriplayer-listen-together/manifest.json",
-        "sha256": "664e55518e7c422f2e3a1342011bc66f00674827099b5124447df229d9fca887",
-        "keyId": "catalog-2026-09",
-        "signature": "OZX6rwtNxuts2+R0Rm8R8b9+osKbB+JmOmWT/W9SOWPUrXYBmy8+PQASLTRj1V5TBeExAnjxh2VQNJ22jtqsDw=="
-      },
-      "accessOffer": "offered"
-    },
-    {
       "slug": "ni-mail",
       "name": "ni-mail",
       "summary": "A minimal mail receiver for your own domain with an HTTP API: fetch the latest message, list, read and thread mail per address, with attachments kept in R2, for scripts and automation.",
@@ -4646,19 +3838,19 @@
       "summary": "A Bitwarden-compatible password manager server: the official Bitwarden apps and browser extensions sync to it, with a web vault, attachments, Send, and passkey sign-in, on D1 and R2.",
       "tagline": "A password vault that syncs with your Bitwarden apps",
       "addedAt": "2026-09-26T23:19:31+03:00",
-      "version": "1.8.0",
+      "version": "1.8.1",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/nodewarden@1.8.0/nodewarden-1.8.0.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/nodewarden@1.8.0/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/nodewarden@1.8.0/manifest.sig",
-        "digest": "bb0fd857ac91255da33c1f241837c11c7348f251f64cb0af3aa271780cb021d9"
+        "zip": "https://github.com/appflare/catalog/releases/download/nodewarden@1.8.1/nodewarden-1.8.1.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/nodewarden@1.8.1/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/nodewarden@1.8.1/manifest.sig",
+        "digest": "7d6c64d0b5c6b0be013ec58182a36e5630773cb898396daa7edb9f930ddea037"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-10-05T11:03:05.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Shuai",
@@ -4688,12 +3880,6 @@
       ],
       "license": "LGPL-3.0-only",
       "revision": 2,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/nodewarden/manifest.json",
-        "sha256": "8f846cbc208b9f35789c297cdf9cc694a0158bec9244ead5211bbc0274d21096",
-        "keyId": "catalog-2026-09",
-        "signature": "SujN+aQal6hdg1wOETZUNO4ZOowHquR+vndovoPkvwrPZqWbh95z7NRkvATFD0GDTaZbm/rXv2cdfUuY8f4HDQ=="
-      },
       "accessOffer": "offered"
     },
     {
@@ -5116,12 +4302,12 @@
       "summary": "Turn a script into a storyboard and video: scene breakdown, consistent characters, locations and styles, AI-generated frames, motion, voices and music, with team libraries and an MCP server, on D1, R2, Workflows and Durable Objects. Brings your own AI provider keys.",
       "tagline": "Turn scripts into videos with consistent characters and scenes",
       "addedAt": "2026-09-27T12:03:21+03:00",
-      "version": "0.0.0-20260927.0311b1f",
+      "version": "0.0.0-20261005.60a994b",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20260927.0311b1f/openstory-0.0.0-20260927.0311b1f.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20260927.0311b1f/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20260927.0311b1f/manifest.sig",
-        "digest": "e93ae7a3a34813b07977659138bab5dad98ab574016d1f263d1e4be23ae4cc76"
+        "zip": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261005.60a994b/openstory-0.0.0-20261005.60a994b.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261005.60a994b/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261005.60a994b/manifest.sig",
+        "digest": "c7a97d1fa6ca2549bed28be37e14dff678e874c699abb39614a714960a3931bd"
       },
       "tier": "artifact",
       "plan": "paid",
@@ -5167,12 +4353,6 @@
       ],
       "license": "MIT",
       "revision": 3,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/openstory/manifest.json",
-        "sha256": "acb5be3ac303e946e9acd8c1df95c51c066daf16a511cbeb6c154fbebccbc8f4",
-        "keyId": "catalog-2026-09",
-        "signature": "55gLHv5jtkZRlrn3ylpoL6CEV1WnLElGO/8wZaeQLvfUu1h6pOSFv1NUtGJdk+CNDk7N/nhBtM6KrQjkmZUPDg=="
-      },
       "accessOffer": "offered"
     },
     {
@@ -5383,12 +4563,12 @@
       "summary": "An issue tracker and wiki for teams and their AI coding agents: issues, boards, sprints and pages in the browser, and the same actions over MCP.",
       "tagline": "Track team issues and keep a wiki alongside AI coding agents",
       "addedAt": "2026-09-27T06:13:42+03:00",
-      "version": "0.7.6",
+      "version": "0.7.7",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/projektor@0.7.6/projektor-0.7.6.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/projektor@0.7.6/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/projektor@0.7.6/manifest.sig",
-        "digest": "f59c21932ddd814eb9c32dd620f41bc2d696d7a54be9c59de3edb84033fd5ee5"
+        "zip": "https://github.com/appflare/catalog/releases/download/projektor@0.7.7/projektor-0.7.7.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/projektor@0.7.7/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/projektor@0.7.7/manifest.sig",
+        "digest": "06aa2f86c5931277f38ae9ff1827bf4cf65ac10f63b077339bad788cc1969a0f"
       },
       "tier": "artifact",
       "plan": "free",
@@ -5396,7 +4576,7 @@
         "r2",
         "access"
       ],
-      "lastVerified": "2026-10-05T11:05:42.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Thomas Dickson",
@@ -5666,115 +4846,6 @@
       "accessOffer": "required"
     },
     {
-      "slug": "r2-webdav",
-      "name": "r2-webdav",
-      "summary": "A WebDAV server for an R2 bucket: mount it as a network drive in Finder, Windows Explorer or any WebDAV client, with locking and one user name and password.",
-      "tagline": "Access your R2 files as a network drive",
-      "addedAt": "2026-09-27T11:44:15+03:00",
-      "version": "0.0.0-20260713.d39f88f",
-      "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/r2-webdav@0.0.0-20260713.d39f88f/r2-webdav-0.0.0-20260713.d39f88f.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/r2-webdav@0.0.0-20260713.d39f88f/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/r2-webdav@0.0.0-20260713.d39f88f/manifest.sig",
-        "digest": "2431a28d366fb657addfb8fa569b0eccccfb3af1c6237a1d9b3264ca029ebfb5"
-      },
-      "tier": "artifact",
-      "plan": "free",
-      "requires": [
-        "r2"
-      ],
-      "lastVerified": "2026-10-05T11:05:33.000Z",
-      "authors": [
-        {
-          "name": "Aber",
-          "github": "abersheeran"
-        }
-      ],
-      "maintainers": [
-        "MendyLanda"
-      ],
-      "services": [
-        "r2"
-      ],
-      "categories": [
-        "files"
-      ],
-      "license": "NONE",
-      "revision": 3,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/r2-webdav/manifest.json",
-        "sha256": "98676d1922d2f7dbd3476a88ce06328b7a3f4008c4c8cdd8f598bfc6dcec0ac4",
-        "keyId": "catalog-2026-09",
-        "signature": "tdaY3J/h2s0BOv1iyyn6qnr6gBODJ3s9kcs6IC/9AsGJ98k4TcDpn2E3j+M4wEs7AF1GXELIxgWAd9pu+qcnDQ=="
-      },
-      "accessOffer": "offered"
-    },
-    {
-      "slug": "rdyrct",
-      "name": "rdyrct",
-      "summary": "A URL shortener for teams: organizations with roles, branded short links and QR codes, click analytics that never store an IP, an MCP server, and a KV redirect path in front of D1.",
-      "tagline": "Branded short links, QR codes, and private click analytics for teams",
-      "addedAt": "2026-09-27T04:47:37+03:00",
-      "version": "0.0.0-20260925.d0ece6e",
-      "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/rdyrct@0.0.0-20260925.d0ece6e/rdyrct-0.0.0-20260925.d0ece6e.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/rdyrct@0.0.0-20260925.d0ece6e/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/rdyrct@0.0.0-20260925.d0ece6e/manifest.sig",
-        "digest": "e0d820a1c2bfa040a12ab49caffae6608c5c89fc1c4a8b2b50a39cff1b64b98d"
-      },
-      "tier": "artifact",
-      "plan": "free",
-      "requires": [
-        "r2"
-      ],
-      "lastVerified": "2026-10-05T11:07:25.000Z",
-      "authors": [
-        {
-          "name": "Andrea Bruno",
-          "url": "https://brnr.dev",
-          "github": "baronunread",
-          "x": "baronunread"
-        }
-      ],
-      "maintainers": [
-        "MendyLanda"
-      ],
-      "media": {
-        "icon": {
-          "url": "https://appflare.github.io/catalog/apps/rdyrct/icon.svg",
-          "sha256": "907ea837408ca4e6d5d4ee9af94908afe2ffd1abdc693a233d887ecae8e23aaf"
-        },
-        "cover": {
-          "url": "https://appflare.github.io/catalog/apps/rdyrct/cover.png",
-          "sha256": "7f78bd6ba457e75b893b57285674985ae7f851cb35383b416084038e09b0a98d"
-        },
-        "screenshots": []
-      },
-      "services": [
-        "kv",
-        "d1",
-        "r2",
-        "durable-objects",
-        "queues",
-        "workflows",
-        "cron",
-        "zone"
-      ],
-      "categories": [
-        "utilities",
-        "analytics"
-      ],
-      "license": "MIT",
-      "revision": 3,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/rdyrct/manifest.json",
-        "sha256": "169888f467deee71855f97c2e7656972dedd47de3248cb76d75303bee65612c9",
-        "keyId": "catalog-2026-09",
-        "signature": "e7DtkC2xlR9PFZXzaDIiR+xnxfhljciRRYASnh0R0D7vES2V9gpF5wPNb58KbEqSjdDSIChSFJM2weCiZsWNAg=="
-      },
-      "accessOffer": "offered"
-    },
-    {
       "slug": "relay",
       "name": "Relay",
       "summary": "A link shortener with cookieless click and conversion analytics: A/B splits, device and country routing, per-channel suffixes, retargeting pixels, QR codes and CSV export, on D1.",
@@ -5823,17 +4894,17 @@
       "summary": "Your own relay for reminal: reach the terminals, app windows and desktops of your machines from any browser, end-to-end encrypted, with nothing listening on the machines.",
       "tagline": "Reach your computers' windows and terminals from any browser",
       "addedAt": "2026-09-27T05:20:16+03:00",
-      "version": "3.14.19",
+      "version": "3.15.14",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/reminal@3.14.19/reminal-3.14.19.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/reminal@3.14.19/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/reminal@3.14.19/manifest.sig",
-        "digest": "09b6b89caaa8f8676c8458f17f07e380d5e2209e7b0aebb61762dc75602c0b37"
+        "zip": "https://github.com/appflare/catalog/releases/download/reminal@3.15.14/reminal-3.15.14.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/reminal@3.15.14/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/reminal@3.15.14/manifest.sig",
+        "digest": "8f550b64bc27cfb5ac9c5f49c811fe7c485fdb9379a422ccb1f48ee0b1ba981f"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-10-05T11:06:12.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Harshal Gajjar",
@@ -5869,12 +4940,6 @@
       ],
       "license": "AGPL-3.0-or-later",
       "revision": 2,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/reminal/manifest.json",
-        "sha256": "07b906abc0b98887f0221971516e252930ce815722c3d73f88ad685c946f69a5",
-        "keyId": "catalog-2026-09",
-        "signature": "x+EMq+CR5kx9+W6Gg9DWyP12cbjVhsfyX+OJFNWDIppVG/fMIHDmN901xxtdF+NE7X7IKPHSOa+pIoB0ue0XBg=="
-      },
       "accessOffer": "offered"
     },
     {
@@ -5947,133 +5012,6 @@
       ],
       "license": "MIT",
       "revision": 1,
-      "accessOffer": "offered"
-    },
-    {
-      "slug": "renewlet",
-      "name": "Renewlet",
-      "summary": "Track recurring subscriptions and renewals: timezone-aware reminders over ten notification channels, calendar feeds, budgets, cost sharing and spending statistics, on D1, R2 and a queue.",
-      "tagline": "Track subscriptions and get reminders before they renew",
-      "addedAt": "2026-09-27T12:02:55+03:00",
-      "version": "0.3.27",
-      "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/renewlet@0.3.27/renewlet-0.3.27.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/renewlet@0.3.27/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/renewlet@0.3.27/manifest.sig",
-        "digest": "65afddd3b6635be7876911192c4ee697b349bd633c417d3ce0ad1b11fc75bd03"
-      },
-      "tier": "artifact",
-      "plan": "free",
-      "requires": [
-        "r2"
-      ],
-      "lastVerified": "2026-10-05T11:07:20.000Z",
-      "authors": [
-        {
-          "name": "zhiyingzhou",
-          "url": "https://renewlet.cc",
-          "github": "zhiyingzzhou"
-        }
-      ],
-      "maintainers": [
-        "MendyLanda"
-      ],
-      "media": {
-        "icon": {
-          "url": "https://appflare.github.io/catalog/apps/renewlet/icon.svg",
-          "sha256": "8272948127d2c3d778fde665791b1f9c42b68fee814c6658d725f45f856fa3fe"
-        },
-        "screenshots": [
-          {
-            "url": "https://appflare.github.io/catalog/apps/renewlet/screenshots/01-spending-statistics.png",
-            "sha256": "0598b86edd0ccc4f709b88be8ddc0810ce86c82d2d72296dc1627c6b4456d1be",
-            "alt": "Renewlet: Spending statistics"
-          },
-          {
-            "url": "https://appflare.github.io/catalog/apps/renewlet/screenshots/02-renewal-calendar.png",
-            "sha256": "4f830affd395e69c77afe0933e0bcbba99b9ca286b70481101bc6ae2847d3fd6",
-            "alt": "Renewlet: Renewal calendar"
-          },
-          {
-            "url": "https://appflare.github.io/catalog/apps/renewlet/screenshots/03-notification-settings.png",
-            "sha256": "fed131d3b42b03107d79b372f5be11c76a205e3c773857f7ec7871dc7a44a5c2",
-            "alt": "Renewlet: Notification settings"
-          }
-        ]
-      },
-      "services": [
-        "d1",
-        "r2",
-        "queues",
-        "cron"
-      ],
-      "categories": [
-        "finance",
-        "productivity"
-      ],
-      "license": "MIT",
-      "revision": 1,
-      "accessOffer": "offered"
-    },
-    {
-      "slug": "resolvehq",
-      "name": "ResolveHQ",
-      "summary": "A self-hosted helpdesk: a shared inbox fed by Email Routing, threaded tickets, SLAs and snoozes, a help center and knowledge base, customer ratings, reports, a scoped API and outbound webhooks, on D1, R2 and Queues.",
-      "tagline": "Manage customer emails and support tickets in your own account",
-      "addedAt": "2026-09-27T12:03:21+03:00",
-      "version": "0.3.3",
-      "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/resolvehq@0.3.3/resolvehq-0.3.3.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/resolvehq@0.3.3/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/resolvehq@0.3.3/manifest.sig",
-        "digest": "8fcea8aa990f3f296b35205ded894fd888d43c63061d251b36dd2426337fd247"
-      },
-      "tier": "artifact",
-      "plan": "free",
-      "requires": [
-        "zone",
-        "email-routing",
-        "r2"
-      ],
-      "lastVerified": "2026-10-05T11:07:47.000Z",
-      "authors": [
-        {
-          "name": "Rizvi",
-          "github": "mirza-rizvi",
-          "x": "mirza_rizvi"
-        }
-      ],
-      "maintainers": [
-        "MendyLanda"
-      ],
-      "media": {
-        "icon": {
-          "url": "https://appflare.github.io/catalog/apps/resolvehq/icon.svg",
-          "sha256": "9a5c89a8b0e5577066c826e7fa3f3e573416c6ae582b61ae2c260a0d8dee3ebc"
-        },
-        "screenshots": []
-      },
-      "services": [
-        "d1",
-        "r2",
-        "queues",
-        "cron",
-        "email-routing",
-        "zone"
-      ],
-      "categories": [
-        "business",
-        "email"
-      ],
-      "license": "LicenseRef-ResolveHQ-Source-Available",
-      "licenseNote": "Source-available: free to run for personal or internal use; selling it, hosting it for others or sharing copies needs the author's permission",
-      "revision": 4,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/resolvehq/manifest.json",
-        "sha256": "711b9e2bf20ad00eddf8e91c3f605ef245b7a295dd274e7fba18fda2a7c7a46f",
-        "keyId": "catalog-2026-09",
-        "signature": "SQa0yQoqnSsZkXfJ4fiZbW1z98+KxCPqLg+kXtWQ5vP9GFjdG6dStPFcJprCA4c5ckqrFn1Y5hkyUObzv2G+Dg=="
-      },
       "accessOffer": "offered"
     },
     {
@@ -6707,81 +5645,6 @@
       "accessOffer": "offered"
     },
     {
-      "slug": "sink",
-      "name": "Sink",
-      "summary": "Link shortener with visit analytics: custom slugs, expiring links, QR codes, AI slug suggestions and a realtime globe, all on Cloudflare.",
-      "tagline": "Create short links and track their visits",
-      "addedAt": "2026-09-27T01:13:10+03:00",
-      "version": "0.3.0",
-      "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/sink@0.3.0/sink-0.3.0.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/sink@0.3.0/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/sink@0.3.0/manifest.sig",
-        "digest": "ad58e8a120ee874b8bd65e5487aea51535311819c59044289f8eb7b313269eed"
-      },
-      "tier": "artifact",
-      "plan": "free",
-      "requires": [
-        "r2",
-        "workers-ai"
-      ],
-      "lastVerified": "2026-10-05T11:09:11.000Z",
-      "authors": [
-        {
-          "name": "miantiao",
-          "url": "https://miantiao.me",
-          "github": "miantiao-me",
-          "x": "miantiao_me"
-        }
-      ],
-      "maintainers": [
-        "MendyLanda"
-      ],
-      "media": {
-        "icon": {
-          "url": "https://appflare.github.io/catalog/apps/sink/icon.png",
-          "sha256": "07eb308b47d29f08f2d629285c20b138741630e0bbe6562c0b437ec5415ba5e4"
-        },
-        "cover": {
-          "url": "https://appflare.github.io/catalog/apps/sink/cover.png",
-          "sha256": "fb266928b6a876616d0f76bc01dc2d53939352f1cdd8861edae089feaf9610fd"
-        },
-        "screenshots": [
-          {
-            "url": "https://appflare.github.io/catalog/apps/sink/screenshots/01-analytics-dashboard.png",
-            "sha256": "c690fdfbb56f8671de5c63017b919f83bf64439d0c291cf8695a878e1637d626",
-            "alt": "Sink: Analytics dashboard"
-          },
-          {
-            "url": "https://appflare.github.io/catalog/apps/sink/screenshots/02-link-list.png",
-            "sha256": "dcef30afcfb5288e47f868b55da306225b7c9f2f56ce34a7359ce2a463135f10",
-            "alt": "Sink: Link list"
-          }
-        ]
-      },
-      "services": [
-        "kv",
-        "d1",
-        "r2",
-        "analytics-engine",
-        "cron",
-        "workers-ai"
-      ],
-      "categories": [
-        "utilities",
-        "analytics"
-      ],
-      "license": "AGPL-3.0-only",
-      "revision": 3,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/sink/manifest.json",
-        "sha256": "d6f3be08363b1d813c202bc30c5c3bd2cd403b50efeed795e938e080b06f8c12",
-        "keyId": "catalog-2026-09",
-        "signature": "Enb/uVdzMJq7oXtXFozMaM5zsHFB5lJvZR+ABHe3B25qCWEbSsYdu9jh8sCCg7lka64J0mYMm4CITlabctjiAA=="
-      },
-      "accessOffer": "offered"
-    },
-    {
       "slug": "skland-attendance",
       "name": "Skland Daily Attendance",
       "summary": "Claims the daily Skland sign-in rewards for your Arknights and Arknights: Endfield accounts on a schedule, with optional notifications of each run.",
@@ -6887,51 +5750,6 @@
         "sha256": "0c62f7363e23004dc4138e88f8728adf4b924ada922404fff8cdbae08d709d66",
         "keyId": "catalog-2026-09",
         "signature": "jJQfFi2xMBUkYZQTAR12NowroWHfrGkr5IVALDBUQX9PwnBiB4ji6DhfxTgSwCLpW2wkIyzO1JspkptO4idlCQ=="
-      },
-      "accessOffer": "offered"
-    },
-    {
-      "slug": "sveltia-cms-auth",
-      "name": "Sveltia CMS Authenticator",
-      "summary": "The OAuth helper that lets people sign in to Sveltia CMS (or Decap CMS) with GitHub or GitLab, for sites whose editors should not have to create access tokens.",
-      "tagline": "Let site editors sign in with GitHub without making access tokens",
-      "addedAt": "2026-09-27T10:43:20+03:00",
-      "version": "0.0.0-20260921.4fd08b5",
-      "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/sveltia-cms-auth@0.0.0-20260921.4fd08b5/sveltia-cms-auth-0.0.0-20260921.4fd08b5.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/sveltia-cms-auth@0.0.0-20260921.4fd08b5/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/sveltia-cms-auth@0.0.0-20260921.4fd08b5/manifest.sig",
-        "digest": "54c181a2237c60dc2696ad44d7d147fc5ccee3fa8a132915301f7399afa372cb"
-      },
-      "tier": "artifact",
-      "plan": "free",
-      "requires": [],
-      "lastVerified": "2026-10-05T11:10:03.000Z",
-      "authors": [
-        {
-          "name": "Sveltia",
-          "github": "sveltia"
-        },
-        {
-          "name": "Kohei Yoshino",
-          "github": "kyoshino"
-        }
-      ],
-      "maintainers": [
-        "MendyLanda"
-      ],
-      "services": [],
-      "categories": [
-        "cms",
-        "developer-tools"
-      ],
-      "license": "MIT",
-      "revision": 3,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/sveltia-cms-auth/manifest.json",
-        "sha256": "b3900b869ced12a9cbc9bef01f806b75464604e793fc1a62c2488287a742dbab",
-        "keyId": "catalog-2026-09",
-        "signature": "JzDar6QrjVZJ9rAZMq2IFpiYe3JwonCJyzCXoa29Zzf0dTfB6tuKLEActYxlVthsnT4eAcF8SAAsmKgTyPFTDQ=="
       },
       "accessOffer": "offered"
     },
@@ -7137,57 +5955,6 @@
         "sha256": "1c74d016b2301c43f821905272fcb16d518ab340a4970812ca3304a59d36d201",
         "keyId": "catalog-2026-09",
         "signature": "sU15C18nFhX4R5c3gHRNV5tJH26hUCdWXGG+CqV1fmUiKSiMfJYxNquncPKFqIIWP3NGHYcgdxrOLcsuDHT9BA=="
-      },
-      "accessOffer": "offered"
-    },
-    {
-      "slug": "token-monitor",
-      "name": "Token Monitor Hub",
-      "summary": "Your own sync hub for Token Monitor: combine the token use, costs and plan limits of Claude Code, Codex, Cursor and 40 more AI coding tools across all your machines, live in every widget.",
-      "tagline": "Sync your AI coding usage across all your devices",
-      "addedAt": "2026-09-27T11:42:03+03:00",
-      "version": "0.63.0",
-      "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/token-monitor@0.63.0/token-monitor-0.63.0.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/token-monitor@0.63.0/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/token-monitor@0.63.0/manifest.sig",
-        "digest": "f6415ce764f24a0a9d5a81dd82c0403c217d0da95d37621bb22b27255dc35e1f"
-      },
-      "tier": "artifact",
-      "plan": "free",
-      "requires": [],
-      "lastVerified": "2026-10-05T11:09:49.000Z",
-      "authors": [
-        {
-          "name": "Javis",
-          "url": "https://javis-ai.com",
-          "github": "Javis603"
-        }
-      ],
-      "maintainers": [
-        "MendyLanda"
-      ],
-      "media": {
-        "icon": {
-          "url": "https://appflare.github.io/catalog/apps/token-monitor/icon.png",
-          "sha256": "8d4a6d1592e5defd6bb69fa26000f96325b596ed01cdf87f310e378cb271834b"
-        },
-        "screenshots": []
-      },
-      "services": [
-        "durable-objects"
-      ],
-      "categories": [
-        "ai",
-        "monitoring"
-      ],
-      "license": "MIT",
-      "revision": 2,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/token-monitor/manifest.json",
-        "sha256": "93db685766254a4045861066a3db450a1758be2ba8f0096bf5ab28ce23658c81",
-        "keyId": "catalog-2026-09",
-        "signature": "XqKHCqNRB56jYexA0cfDAP/ElqyCQueL4F1PNyGOiH6ix4SbFvlq+20vDaiU8RMnbJphkSbw5v0Nb5SRb0lsAQ=="
       },
       "accessOffer": "offered"
     },
