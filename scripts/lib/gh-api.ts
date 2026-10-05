@@ -215,8 +215,10 @@ export function classify(method: HttpMethod, result: GhProcessResult): Verdict {
       : { kind: "fail", reason, response };
   }
   if (status === 404) {
-    // GitHub's message says which 404 this is ("Not Found", "No common ancestor ...").
-    return { kind: "not-found", reason: `HTTP 404${detail}`, response };
+    // GitHub's message says which 404 this is ("Not Found", "No common ancestor ...");
+    // when gh printed only its status line, it is in the body.
+    const said = detail || bodyMessage(response.body);
+    return { kind: "not-found", reason: `HTTP 404${said}`, response };
   }
   const reason = `HTTP ${status}${detail}`;
   const limited =
@@ -394,3 +396,17 @@ export function createGhRunner(options: GhApiOptions = {}): GhRunner {
 
 /** The default runner: real `gh`, real waits, retries logged to stderr. */
 export const runGh: GhRunner = createGhRunner();
+
+/** GitHub's `message` in a JSON error body, as " (message)", or "" without one. */
+function bodyMessage(body: Buffer): string {
+  try {
+    const parsed: unknown = JSON.parse(body.toString("utf8"));
+    if (parsed !== null && typeof parsed === "object" && "message" in parsed) {
+      const { message } = parsed;
+      if (typeof message === "string" && message.trim() !== "") return ` (${message.trim()})`;
+    }
+  } catch {
+    // Not JSON: no message to add.
+  }
+  return "";
+}
