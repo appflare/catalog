@@ -12,6 +12,9 @@
   "repo": "DivinPrince/quickinbox",
   "license": "MIT",
   "categories": ["email"],
+  // Generated secrets (revision 2) and field links (revision 3) came after this
+  // release was published: revisions, no new build.
+  "revision": 3,
   "authors": [
     { "name": "Irasubiza Divin Prince", "url": "https://divinprince.com", "github": "DivinPrince" }
   ],
@@ -34,30 +37,35 @@
       "name": "RESEND_API_KEY",
       "label": "Resend API key",
       "help": "For the Resend provider: an API key with full access (sending, domains and receiving) from resend.com/api-keys. Not needed with Cloudflare Email Service.",
+      "link": { "label": "Get a key", "url": "https://resend.com/api-keys" },
       "optional": true
     },
     {
       "name": "RESEND_WEBHOOK_SECRET",
       "label": "Resend webhook signing secret",
       "help": "For the Resend provider: the whsec_ secret Resend shows once when you create the webhook for this app. Set it here after installing.",
+      "link": { "label": "Add a webhook", "url": "https://resend.com/webhooks" },
       "optional": true
     },
     {
       "name": "TYPESAFE_API_KEY",
       "label": "TypeSafe API key",
       "help": "Sorts incoming mail into Primary, Social, Promotions, Updates and Forums tabs, and spam. Without it everything stays in Primary.",
+      "link": { "label": "Get a key", "url": "https://console.typesafe.ai/" },
       "optional": true
     },
     {
       "name": "TELEGRAM_BOT_TOKEN",
       "label": "Telegram bot token",
       "help": "From @BotFather. With the chat id below, every incoming message is announced in that chat.",
+      "link": { "label": "Create a bot", "url": "https://t.me/BotFather" },
       "optional": true
     },
     {
       "name": "TELEGRAM_CHAT_ID",
       "label": "Telegram chat id",
       "help": "From @userinfobot; negative for groups.",
+      "link": { "label": "Find your chat ID", "url": "https://t.me/userinfobot" },
       "optional": true
     },
     {
@@ -67,16 +75,22 @@
       "optional": true
     },
     {
-      "name": "VAPID_PUBLIC_KEY",
-      "label": "Push public key (VAPID)",
-      "help": "Desktop notifications: generate a key pair once with `bunx web-push generate-vapid-keys`. Do not change it after people subscribe.",
-      "optional": true
-    },
-    {
+      // Upstream base64url-decodes both keys, checks that they are a P-256
+      // pair, and turns push on only when VAPID_SUBJECT is set as well
+      // (src/lib/server/push-notifications.ts:92-110,151-157). A derived
+      // secret cannot be optional, so both are required now. At runtime that
+      // changes nothing, since push stays off until the contact below is set;
+      // an install that left both unset shows "Not set" in Settings, and its
+      // next update asks for the key (prefilled), so it does not run on its own.
       "name": "VAPID_PRIVATE_KEY",
       "label": "Push private key (VAPID)",
-      "help": "The private key of the same pair.",
-      "optional": true
+      "help": "Signs desktop notifications, once the push contact below is set. Do not change it after people subscribe: they would have to turn notifications on again.",
+      "generate": "vapid-private-key"
+    },
+    {
+      "name": "VAPID_PUBLIC_KEY",
+      "label": "Push public key (VAPID)",
+      "derive": { "from": "VAPID_PRIVATE_KEY", "method": "vapid-public-key" }
     },
     {
       "name": "VAPID_SUBJECT",

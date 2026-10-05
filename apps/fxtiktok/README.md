@@ -15,7 +15,7 @@ links back to TikTok. Licensed MIT.
   name containing `d.` or `hq.`, so an account whose workers.dev subdomain ends in `d`
   gets direct links by default.
 - **Pin.** Upstream has no release tags, so the pin follows the default branch,
-  `hono-rewrite`, and each bump is reviewed by a maintainer. Upstream commits no
-  lockfile, so dependencies are resolved at pack time.
+  `hono-rewrite`. Upstream commits no lockfile, so dependencies are resolved at pack
+  time.
 - No images: the README's screenshots show Discord and TikTok branding and other
   people's videos.

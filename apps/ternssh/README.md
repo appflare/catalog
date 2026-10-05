@@ -12,8 +12,10 @@ outbound TCP sockets. Licensed GPL-3.0-or-later.
 - **Sign-in.** Until someone sets a username and password on the first visit, the
   app asks the visitor to set them, so open it right after the install. After that
   every request needs them; three failed attempts lock the IP address out for an
-  hour. With `ACCESS_TEAM_DOMAIN` and `ACCESS_AUD` set, it trusts Cloudflare Access
-  sign-in instead.
+  hour. Appflare can put the app behind Cloudflare Access instead (switched off by
+  default; only then does the account need a Zero Trust organization): it fills in
+  `ACCESS_TEAM_DOMAIN` and `ACCESS_AUD`, and ternssh then trusts the Access sign-in of
+  every Appflare user instead of a username and password of its own.
 - **Build.** Upstream's root `postinstall` installs `web/` and `server/`; install
   scripts do not run here, so both are installed from their own lockfiles, then the
   web app is built into `server/public`.

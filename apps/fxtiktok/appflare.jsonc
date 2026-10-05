@@ -9,6 +9,9 @@
   // GitHub does not detect the licence, but the LICENSE file is the MIT licence.
   "license": "MIT",
   "categories": ["media", "utilities"],
+  // The formatting of URLs in the notes changed after this release was published:
+  // a revision, no new build.
+  "revision": 2,
   "authors": [{ "name": "dargy", "url": "https://dar.gy", "github": "okdargy", "x": "okdargy" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags; the pin is the head of its default branch,
@@ -40,7 +43,7 @@
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Replace `https://www.tiktok.com` in a TikTok link with {{appUrl}}, for example {{appUrl}}/@user/video/<id>, and chat apps show the video in the preview. Add `?isDirect=true` for the media file itself, or `?hq=true` for the higher quality video."
+      "content": "Replace `https://www.tiktok.com` in a TikTok link with `{{appUrl}}`, for example `{{appUrl}}/@user/video/<id>`, and chat apps show the video in the preview. Add `?isDirect=true` for the media file itself, or `?hq=true` for the higher quality video."
     }
   ]
 }

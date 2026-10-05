@@ -7,6 +7,9 @@
   "repo": "willswire/unifi-ddns",
   "license": "MIT",
   "categories": ["networking"],
+  // The formatting of URLs in the notes changed after this release was published:
+  // a revision, no new build.
+  "revision": 2,
   "authors": [{ "name": "Will Walker", "url": "https://willswire.com", "github": "willswire" }],
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v3.3.1", "sha": "c3f1f1bf59378582c977fbed8c97b19cc9143736" },
@@ -29,7 +32,7 @@
     },
     {
       "type": "markdown",
-      "content": "In the UniFi controller, open **Settings > Internet > WAN > Dynamic DNS** and create an entry:\n\n- **Service:** `custom`\n- **Hostname:** the record to update, for example `home.example.com` (several, comma-separated, are allowed)\n- **Username:** your Cloudflare account email\n- **Password:** the API token\n- **Server:** {{appUrl}} without `https://`, followed by `/update?ip=%i&hostname=%h`\n\nOlder gateways (USG, USG Pro) take the host name alone in **Server**, without the path."
+      "content": "In the UniFi controller, open **Settings > Internet > WAN > Dynamic DNS** and create an entry:\n\n- **Service:** `custom`\n- **Hostname:** the record to update, for example `home.example.com` (several, comma-separated, are allowed)\n- **Username:** your Cloudflare account email\n- **Password:** the API token\n- **Server:** `{{appUrl}}` without `https://`, followed by `/update?ip=%i&hostname=%h`\n\nOlder gateways (USG, USG Pro) take the host name alone in **Server**, without the path."
     }
   ],
   "tokenPermissions": [

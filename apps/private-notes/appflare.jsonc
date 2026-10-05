@@ -12,6 +12,8 @@
   "repo": "tao-t356/private-notes",
   "license": "NONE",
   "categories": ["notes", "privacy"],
+  // Generated secrets added after this release was published: a revision, no new build.
+  "revision": 2,
   "authors": [{ "name": "tao-t356", "github": "tao-t356" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags, so the entry follows the default branch by commit.
@@ -28,9 +30,12 @@
   "plan": "free",
   "secrets": [
     {
+      // Any value up to 1024 characters except upstream's example
+      // (src/auth.ts:10,20,189-191).
       "name": "APP_PASSWORD",
       "label": "Password",
-      "help": "Signs you in and, in the browser, derives the key that encrypts your notes. Use a long, unique password and keep it in a password manager: notes cannot be decrypted without it, and it cannot be recovered from the app."
+      "help": "Signs you in and, in the browser, derives the key that encrypts your notes. Keep it in a password manager: notes cannot be decrypted without it, and it cannot be recovered from the app.",
+      "generate": "password"
     },
     {
       "name": "APP_PASSWORDS",

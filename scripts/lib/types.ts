@@ -182,6 +182,12 @@ export interface CatalogManifest {
   bump?: { autoMerge: boolean };
   /** Which edit of the entry's form and copy this is for its build (1 when the file omits it). */
   revision: number;
+  /**
+   * How the app goes with Cloudflare Access: `mode` `"required"` or
+   * `"recommended"` (offered, switched off, without one), and the paths that
+   * stay public while it is protected.
+   */
+  access?: { mode?: "required" | "recommended"; bypass?: string[] };
 }
 
 /**
@@ -411,7 +417,18 @@ export interface IndexApp {
    * managers use in place of the release's copy for the forms and copy.
    */
   catalogManifest?: IndexCatalogManifest;
+  /**
+   * How the entry offers Cloudflare Access protection, from its current
+   * (revised) catalog manifest: `"required"`, `"recommended"` or `"offered"`;
+   * absent for a self-deploying entry, which cannot be protected. Managers
+   * read it to tell an app that needs Cloudflare Access only while protected
+   * from one that always does.
+   */
+  accessOffer?: AccessOffer;
 }
+
+/** How an entry offers Cloudflare Access protection: its `access.mode`, or `"offered"` without one. */
+export type AccessOffer = "required" | "recommended" | "offered";
 
 /** `IndexCatalogManifest`, in full: a signed revised catalog manifest on the Pages site. */
 export interface IndexCatalogManifest extends IndexMediaFile, RevisionSignature {}

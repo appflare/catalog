@@ -11,6 +11,9 @@
   // the catalog shows it as unlicensed.
   "license": "NONE",
   "categories": ["productivity", "utilities"],
+  // Edited help text (revision 2) and field links (revision 3) came after this
+  // release was published: revisions, no new build.
+  "revision": 3,
   "authors": [{ "name": "djkyc", "github": "djkyc" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags; the pin is the head of main.
@@ -39,7 +42,8 @@
     {
       "name": "AI_API_KEY",
       "label": "OpenAI API key",
-      "help": "Optional. Fills in a new link's name and description with gpt-4o-mini; it must start with sk-. The endpoint that uses it needs no sign-in, so anyone who finds this address can spend the key: set a spending limit on it. Without a key the page derives a name from the domain.",
+      "help": "Fills in a new link's name and description with gpt-4o-mini; it must start with sk-. The endpoint that uses it needs no sign-in, so anyone who finds this address can spend the key: set a spending limit on it. Without a key the page derives a name from the domain.",
+      "link": { "label": "Get a key", "url": "https://platform.openai.com/api-keys" },
       "optional": true
     }
   ],
