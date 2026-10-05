@@ -2804,6 +2804,58 @@ async function cleanupWorkers(
 }
 
 // ---------------------------------------------------------------------------
+// Skipped deploys
+
+/**
+ * Why the check deploys nothing for an app, as the step output `skipped`
+ * names it: the entry needs Workers Paid and the CI account is on the free
+ * plan ({@link paidPlanSkip}), a Worker binds an Analytics Engine dataset and
+ * the account has Analytics Engine off ({@link analyticsEngineSkip}), or a
+ * Worker binds Hyperdrive and there is no test database for it
+ * ({@link hyperdriveSkip}). None of them is the app's fault, so the command
+ * succeeds.
+ */
+export type CiSkipKind = "paid-plan" | "analytics-engine" | "hyperdrive";
+
+/** A deploy the check skips: its kind, and the run summary's words for it. */
+export interface CiSkip {
+  readonly kind: CiSkipKind;
+  /** One of the fixed skip reasons, which hold no value from the account or a secret. */
+  readonly reason: string;
+}
+
+/** What a skipped deploy reports; see {@link skipReport}. */
+export interface CiSkipReport {
+  /** A GitHub Actions notice, so the skip shows on the run's page and never passes silently. */
+  notice: string;
+  /** The run summary's SKIP line. */
+  summary: string[];
+  /** `key=value` lines for `$GITHUB_OUTPUT`: `skipped` (the kind) and `skip-reason`. */
+  outputs: string[];
+}
+
+/**
+ * Everything a skipped deploy reports, built in one place so that no skip can
+ * leave any of it out. The nightly run records a verification for every app
+ * whose deploy step succeeded without setting `skipped`, so a skip that left
+ * it unset would date an install check that never ran.
+ */
+export function skipReport(
+  manifest: Pick<ArtifactManifest, "app" | "version">,
+  name: string,
+  skip: CiSkip,
+): CiSkipReport {
+  // A workflow command, a summary line and an output value are one line each.
+  const reason = skip.reason.replace(/\s*[\r\n]+\s*/g, " ");
+  const app = `${manifest.app}@${manifest.version}`;
+  return {
+    notice: `::notice title=Install check skipped::${app}: ${reason}`,
+    summary: [`SKIP ${app} as ${name}: ${reason}`],
+    outputs: [`skipped=${skip.kind}`, `skip-reason=${reason}`],
+  };
+}
+
+// ---------------------------------------------------------------------------
 // Analytics Engine
 
 /**
@@ -2814,8 +2866,11 @@ async function cleanupWorkers(
  */
 export type AnalyticsEngineState = "enabled" | "not-enabled" | "unknown";
 
-/** The run summary's word for a deploy the account cannot take. */
-export const ANALYTICS_ENGINE_SKIP = "skipped: Analytics Engine not enabled";
+/** The skip for a deploy the account cannot take. */
+export const ANALYTICS_ENGINE_SKIP: CiSkip = {
+  kind: "analytics-engine",
+  reason: "skipped: Analytics Engine not enabled",
+};
 
 /** Whether any of the Worker configs binds an Analytics Engine dataset. */
 export function needsAnalyticsEngine(plans: ReadonlyArray<Pick<CiInstallPlan, "config">>): boolean {
@@ -2869,18 +2924,9 @@ export async function analyticsEngineState(
 export async function analyticsEngineSkip(
   plans: ReadonlyArray<Pick<CiInstallPlan, "config">>,
   state: () => Promise<AnalyticsEngineState>,
-): Promise<string | null> {
+): Promise<CiSkip | null> {
   if (!needsAnalyticsEngine(plans)) return null;
   return (await state()) === "not-enabled" ? ANALYTICS_ENGINE_SKIP : null;
-}
-
-/** The run summary for a deploy that was skipped rather than run. */
-export function skippedSummaryLines(
-  manifest: Pick<ArtifactManifest, "app" | "version">,
-  name: string,
-  reason: string,
-): string[] {
-  return [`SKIP ${manifest.app}@${manifest.version} as ${name}: ${reason}`];
 }
 
 // ---------------------------------------------------------------------------
@@ -2902,8 +2948,11 @@ export function ciAccountPlan(value: string | undefined): Plan {
   throw new Error(`${CI_ACCOUNT_PLAN} ${JSON.stringify(plan)} is not "free" or "paid"`);
 }
 
-/** The run summary's word for an entry that needs Workers Paid on a free CI account. */
-export const PAID_PLAN_SKIP = `skipped: the entry needs Workers Paid and ${CI_ACCOUNT_PLAN} is free`;
+/** The skip for an entry that needs Workers Paid on a free CI account. */
+export const PAID_PLAN_SKIP: CiSkip = {
+  kind: "paid-plan",
+  reason: `skipped: the entry needs Workers Paid and ${CI_ACCOUNT_PLAN} is free`,
+};
 
 /**
  * Why the check skips an app on this account's plan, or null when it can run:
@@ -2912,21 +2961,9 @@ export const PAID_PLAN_SKIP = `skipped: the entry needs Workers Paid and ${CI_AC
  * its deploy on a free account says nothing about the app. Read loosely from
  * the catalog manifest embedded in the artifact, which the schema has checked.
  */
-export function paidPlanSkip(catalog: unknown, accountPlan: Plan): string | null {
+export function paidPlanSkip(catalog: unknown, accountPlan: Plan): CiSkip | null {
   const plan = (catalog as { plan?: unknown } | null)?.plan;
   return plan === "paid" && accountPlan === "free" ? PAID_PLAN_SKIP : null;
-}
-
-/**
- * A GitHub Actions notice for a skipped app, so the skip shows on the run's
- * page and never passes silently. `reason` is one of the fixed skip reasons,
- * which hold no value from the account.
- */
-export function skipNotice(
-  manifest: Pick<ArtifactManifest, "app" | "version">,
-  reason: string,
-): string {
-  return `::notice title=Install check skipped::${manifest.app}@${manifest.version}: ${reason}`;
 }
 
 // ---------------------------------------------------------------------------
@@ -2951,8 +2988,11 @@ export interface CiHyperdriveConfig {
 /** The environment variable (a repository secret in CI) naming the test database. */
 export const HYPERDRIVE_TEST_URL = "HYPERDRIVE_TEST_URL";
 
-/** The run summary's word for a Hyperdrive app the check has no database for. */
-export const HYPERDRIVE_SKIP = `skipped: Hyperdrive binding and no ${HYPERDRIVE_TEST_URL}`;
+/** The skip for a Hyperdrive app the check has no database for. */
+export const HYPERDRIVE_SKIP: CiSkip = {
+  kind: "hyperdrive",
+  reason: `skipped: Hyperdrive binding and no ${HYPERDRIVE_TEST_URL}`,
+};
 
 const PROTOCOL_NAMES: Record<HyperdriveProtocol, string> = {
   postgres: "PostgreSQL",
@@ -2966,15 +3006,19 @@ const PROTOCOL_SCHEMES: Record<HyperdriveProtocol, readonly string[]> = {
 
 const DEFAULT_PORTS: Record<HyperdriveProtocol, number> = { postgres: 5432, mysql: 3306 };
 
-/** The protocol the catalog manifest declares for a binding; PostgreSQL when it says none. */
+/**
+ * The protocol the catalog manifest declares for a binding, from
+ * `resources.hyperdrive`, which is keyed by the binding's name
+ * (`{ "POSTGRES": { "protocol": "postgres" } }`); PostgreSQL when it says none.
+ */
 export function declaredProtocol(catalog: unknown, binding: string): HyperdriveProtocol {
   const declared = (catalog as { resources?: { hyperdrive?: unknown } } | null)?.resources
     ?.hyperdrive;
-  if (!Array.isArray(declared)) return "postgres";
-  for (const d of declared as { binding?: unknown; protocol?: unknown }[]) {
-    if (d.binding === binding && d.protocol === "mysql") return "mysql";
+  if (typeof declared !== "object" || declared === null || !Object.hasOwn(declared, binding)) {
+    return "postgres";
   }
-  return "postgres";
+  const entry = (declared as Record<string, unknown>)[binding];
+  return (entry as { protocol?: unknown } | null)?.protocol === "mysql" ? "mysql" : "postgres";
 }
 
 /** The origin `POST /hyperdrive/configs` takes for a database on the public internet. */
@@ -3039,12 +3083,12 @@ export function testDatabaseOrigin(
 export function hyperdriveSkip(
   app: Pick<CiAppPlan, "hyperdriveConfigs">,
   testUrl: string | undefined,
-): string | null {
+): CiSkip | null {
   if (app.hyperdriveConfigs.length === 0) return null;
   if (testUrl === undefined || testUrl.trim() === "") return HYPERDRIVE_SKIP;
   for (const config of app.hyperdriveConfigs) {
     const origin = testDatabaseOrigin(testUrl, config.protocol);
-    if (!origin.ok) return `skipped: ${origin.reason}`;
+    if (!origin.ok) return { kind: "hyperdrive", reason: `skipped: ${origin.reason}` };
   }
   return null;
 }

@@ -4,7 +4,7 @@ import {
   analyticsEngineSkip,
   analyticsEngineState,
   needsAnalyticsEngine,
-  skippedSummaryLines,
+  skipReport,
 } from "./ci-install.ts";
 
 const withDataset = { config: { analytics_engine_datasets: [{ binding: "AE", dataset: "sink" }] } };
@@ -68,9 +68,18 @@ describe("Analytics Engine in the install check", () => {
     expect(await analyticsEngineSkip([withDataset], async () => "enabled")).toBeNull();
   });
 
-  it("reports the skip in the run summary", () => {
-    expect(
-      skippedSummaryLines({ app: "sink", version: "0.3.0" }, "ci-sink-pr1", ANALYTICS_ENGINE_SKIP),
-    ).toEqual(["SKIP sink@0.3.0 as ci-sink-pr1: skipped: Analytics Engine not enabled"]);
+  it("reports the skip in the run summary and the step outputs", () => {
+    const report = skipReport(
+      { app: "sink", version: "0.3.0" },
+      "ci-sink-pr1",
+      ANALYTICS_ENGINE_SKIP,
+    );
+    expect(report.summary).toEqual([
+      "SKIP sink@0.3.0 as ci-sink-pr1: skipped: Analytics Engine not enabled",
+    ]);
+    expect(report.outputs).toEqual([
+      "skipped=analytics-engine",
+      "skip-reason=skipped: Analytics Engine not enabled",
+    ]);
   });
 });
