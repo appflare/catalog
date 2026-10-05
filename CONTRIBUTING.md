@@ -560,6 +560,35 @@ secret. So:
 The secrets the wrangler config lists in `secrets.required` belong in `secrets`
 too; the pack log names any the manifest leaves out.
 
+### Links beside fields, and where Open goes
+
+A secret or var whose value comes from another service can carry a `link`: a
+short label and the https:// page where the admin gets the value. The install and
+settings forms show it beside the field and open it in a new tab. Help text stays
+plain text, so the link goes here, not in `help`.
+
+```jsonc
+{
+  "name": "OPENROUTER_API_KEY",
+  "label": "OpenRouter API key",
+  "help": "Turns on SAM, the in-app SEO agent.",
+  "link": { "label": "Get a key", "url": "https://openrouter.ai/settings/keys" }
+}
+```
+
+Use the most direct stable page (the one that creates the key, not the docs home),
+and one wording per kind of thing: "Get a key", "Create a bot", "Create an OAuth
+client", "Create a token", "Open the dashboard". The forms add the new-tab mark.
+
+`openPath` says where the app's own interface lives when it is not at the root,
+such as Sink's `/dashboard` or a shop's `/admin`: every Open button in the manager
+goes to the app's address plus this path. Health checks, `{{appUrl}}` and the
+address lists stay at the root. When the root is a public site and the path is
+where the admin manages it, use the admin path.
+
+Both need manager 0.3.0 to show; older managers ignore them, so an entry can use
+them without `requires`. Both may change in a revision.
+
 ### Apps of several Workers
 
 Some apps ship as more than one Worker from one repository: a web app and a content
@@ -858,18 +887,20 @@ change is one of these:
   needs no new release and no revision (once the entry has a published revision,
   an edit to any of them needs the next revision too, since a published revision
   never changes; see "Revisions").
-- **A revision: the form and copy only.** Raise `revision` by one (it is 1 when
-  omitted) in the same change. A revision may change `name`, `summary`, `homepage`,
-  `license`, `categories`, `maintainers`, `secrets`, `vars`, `postInstall` and
-  `bump`, as well as the fields above (`REVISABLE_CATALOG_FIELDS` in `@appflare/schema`):
-  labels and help text, a var that becomes a `select`, a secret the app already
-  reads but the entry forgot. Nothing is built. The release stays exactly as it
+- **A revision: the form, the copy and Cloudflare Access.** Raise `revision` by one
+  (it is 1 when omitted) in the same change. A revision may change `name`, `summary`,
+  `homepage`, `license`, `categories`, `maintainers`, `secrets`, `vars`, `postInstall`,
+  `openPath`, `bump` and `access`, as well as the fields above (`REVISABLE_CATALOG_FIELDS` in
+  `@appflare/schema`), and may add `"access"` to `requires` (nothing else there):
+  labels, help text and field links, where Open goes, a var that becomes a `select`, a secret the app already
+  reads but the entry forgot, Cloudflare Access protection for an app that has no
+  sign-in. Nothing is built. The release stays exactly as it
   is; the revised manifest is signed by the catalog's release key and published
   next to the index (see "Revisions" below). Managers switch to the new form
   without an update and without a job.
 
-Anything else (`source`, `install`, `plan`, `requires`, `tokenPermissions`,
-`resources`) changes what gets built, provisioned, or asked of the account. To ship
+Anything else (`source`, `install`, `plan`, any other change to `requires`,
+`tokenPermissions`, `resources`) changes what gets built, provisioned, or asked of the account. To ship
 it, re-pin `source`: a newer `source.sha` (for branch pins), or a new tag in
 `source.ref` and its `source.sha`. When the release's version comes from
 `source.version`, bump that too.
@@ -915,9 +946,11 @@ how the manifest parses.
 Which copy is authoritative: the `manifest.json` inside the release is the
 artifact's and never changes. It alone decides the Worker and every field a
 revision may not change. For the install and settings forms and the copy, managers
-use the revised manifest the row lists. A revision may change only form fields and
-copy, but those do reach the Worker: var defaults become its vars, and generated
-secrets its secrets. That is why the revised file is signed by the catalog's
+use the revised manifest the row lists, and they read `access` and `"access"` in
+`requires` from it too. A revision may change only form fields, copy and Access
+protection, but those do reach the app: var defaults become its vars, generated
+secrets its secrets, and `access` decides who reaches it and what stays public. That
+is why the revised file is signed by the catalog's
 release key, and why managers use it only after checking its sha256 against the
 index, its signature under the release's key id, and its fields against the signed
 `manifest.json` (same app, only revisable fields changed, vars that suit the signed
@@ -986,7 +1019,8 @@ A sandbox entry must:
   checks the manifest only and never reads the upstream wrangler config, so an
   app built only by its wrangler `build.command` does not qualify. Do not
   declare the same command in both places: the build would run twice;
-- not set `bump.autoMerge`, since CI never installs the entry (see below).
+- not set `bump.autoMerge` to `true`. CI never installs the entry (see below), so
+  none of its bumps merges itself and a maintainer merges each one.
 
 The account's sandbox Worker must be recent enough for what the entry uses. A static
 site without Worker code, an inline wrangler config (`wranglerConfigInline`),
@@ -1103,7 +1137,8 @@ A self-deploying entry must:
   schema lists every group Appflare can select), `"scope"` `"account"` or
   `"zone"`, `"access"` `"read"` or `"edit"`, and a `reason`, one plain sentence of
   what the installer does with it;
-- not set `bump.autoMerge`, since CI never installs the entry.
+- not set `bump.autoMerge` to `true`. CI never installs the entry, so none of its
+  bumps merges itself and a maintainer merges each one.
 
 It may set `install.buildCommand` (a build that needs no credentials, run
 before the installer) and `install.container`, which sizes the installer's run
@@ -1522,8 +1557,8 @@ Repository settings the maintainer has to make:
   token expires, the `docs` job fails with GitHub's answer in its log (a publish
   or a night's checks are already live by then); replace the secret and re-run
   that job.
-- Turn on **Allow auto-merge** under Settings > General, for entries that set
-  `bump.autoMerge`.
+- Turn on **Allow auto-merge** under Settings > General, so bump pull requests can
+  merge themselves (see "Who merges a bump").
 - Protect `main` with a branch ruleset that requires the status checks `verify
   passed` (from `verify.yml`) and `commit messages` (from `conventions.yml`), with
   **Repository admin** and **Deploy keys** in its bypass list (deploy keys, so the
@@ -1535,10 +1570,10 @@ Repository settings the maintainer has to make:
   and `install check` only when no artifact tier entry changed. `bump.yml`
   enables auto-merge only while `verify passed` is required on `main`.
 - Do not turn on **Require review from Code Owners** in that ruleset. It would
-  hold every auto-merge bump until an owner approves, which is the step
-  `bump.autoMerge` exists to skip. CODEOWNERS stays, so owners are still asked to
-  review and are notified of every pull request for their app, and a maintainer
-  still reviews and merges every bump of an entry without `bump.autoMerge`.
+  hold every auto-merge bump until an owner approves, which auto-merge exists to
+  skip. CODEOWNERS stays, so owners are still asked to review and are notified of
+  every pull request for their app, and a maintainer still merges every bump that
+  does not merge itself.
 - Requiring `verify passed` means a pull request from a fork cannot merge
   without a maintainer bypassing the rule: fork pull requests get no secrets, so
   `build packer` fails and `verify passed` with it, as the install check already
@@ -1605,38 +1640,45 @@ commit, so required checks can pass.
 
 ### Who merges a bump
 
-By default, a maintainer from CODEOWNERS reviews the upstream changes and merges
-once the checks pass. Merging publishes the new version. The ruleset on `main`
-requires the checks, not the review (see "Repository settings" above), so the
-merge itself is the maintainer's approval.
+The catalog works like a package index. It checks that each upstream release
+builds, matches its hashes and installs into the CI account; it does not review
+upstream's code, and each user decides whether to update an installed app. So a
+bump pull request merges itself once the required checks pass, for tag-pinned
+and branch-tracked entries alike, when the entry:
 
-An entry whose maintainers trust upstream's tags to be releasable as they are can
-let its bumps merge themselves:
+- is on the `artifact` tier, the default. CI does not install sandbox and
+  self-deploying entries, so a maintainer merges each of their bumps;
+- does not set `source.version`, which someone has to update by hand first;
+- does not opt out with `"bump": { "autoMerge": false }`.
 
-```jsonc
-"bump": { "autoMerge": true }
-```
-
-For such an entry, `bump.yml` enables GitHub auto-merge on the pull request right
-after opening it, before the checks start. GitHub squash-merges it once the
-required checks pass, with the pull request's title (`chore(<slug>): bump to
-<ref>`) as the commit subject. The checks are the same as for any other pull
-request, the full install check in the CI account included: auto-merge skips the
-review, not the checks. A failing check leaves the pull request open for a
-maintainer. Code owners are still asked to review and can step in until the
-checks finish:
+`bump.yml` enables GitHub auto-merge on such a pull request right after opening
+it, before the checks start. GitHub squash-merges it once the required checks
+pass, with the pull request's title (`chore(<slug>): bump to <ref>`) as the
+commit subject. The checks are the same as for any other pull request, the full
+install check in the CI account included: auto-merge skips the review, not the
+checks. A failing check leaves the pull request open for a maintainer. Code
+owners are still asked to review and can step in until the checks finish:
 
 - To stop one bump, disable auto-merge on the pull request (the "Disable
   auto-merge" button, or `gh pr merge --disable-auto <number>`), or close it.
-- To stop all future bumps of an entry from merging themselves, remove
-  `bump.autoMerge` from its `appflare.jsonc` (or set it to `false`). Pull
-  requests already open keep auto-merge until it is disabled on each.
+- To stop all future bumps of an entry from merging themselves, set
+  `"bump": { "autoMerge": false }` in its `appflare.jsonc`. Pull requests
+  already open keep auto-merge until it is disabled on each.
 
-The pull request body says which path applies. These cases fall back to a
+Opt out when a release that installs is not yet a release to publish as it is:
+for example, upstream is known for breaking releases that need a migration guide
+(`apps/mail2telegram`), or moves often across many dependencies (`apps/sink`).
+A maintainer then merges each bump, after reading the release notes and changing
+the entry if the release needs it. Merging publishes the new version. Some
+entries still say `"bump": { "autoMerge": true }`; that is the default spelled
+out and changes nothing.
+
+The pull request body says which path applies. These cases also fall back to a
 maintainer:
 
-- An entry that also sets `source.version` never merges itself: someone has to
-  set the new version first.
+- A `bump` the bot cannot read, such as a misspelt `autoMerge` or a value that is
+  not `true` or `false`. The bot neither stops nor guesses: it treats the entry
+  as opted out, and `pnpm validate` reports the problem.
 - `bump.yml` asks GitHub for `main`'s rules first and enables auto-merge only
   when `verify passed` is a required status check. Otherwise nothing would stop
   a bump from merging before its install check finished, so the workflow
@@ -1656,10 +1698,12 @@ one `bump.yml` started. A manual run may have been narrowed with `apps`, so it
 does not count, and neither does a failed run. A publish that keeps failing is
 retried once a night until it is fixed.
 
-Adding `bump` to an entry changes its `appflare.jsonc`, so for a version that is
-already released it is a metadata-only edit and publish fails (see above). Add it
-together with a move of `source`, for example as an extra commit on the entry's
-next bump pull request, or raise `revision` by one with it.
+Adding `"bump": { "autoMerge": false }` to an entry changes its `appflare.jsonc`,
+so for a version that is already released it is a metadata-only edit and publish
+fails (see above). Add it together with a move of `source`, for example as an
+extra commit on the entry's next bump pull request (disable auto-merge on that
+pull request too if this bump should wait as well), or raise `revision` by one
+with it.
 
 ## Install checks
 

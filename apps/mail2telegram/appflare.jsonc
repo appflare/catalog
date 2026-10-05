@@ -7,6 +7,8 @@
   "repo": "TBXark/mail2telegram",
   "license": "MIT",
   "categories": ["email", "bots"],
+  // Field links added after this release was published: a revision, no new build.
+  "revision": 2,
   "authors": [{ "name": "TBXark", "url": "https://tbxark.com", "github": "TBXark", "x": "tbxark" }],
   "maintainers": ["MendyLanda"],
   // Upstream tags releases without a "v" prefix (2.0.0); the packer reads both forms.
@@ -41,7 +43,8 @@
     {
       "name": "TELEGRAM_TOKEN",
       "label": "Telegram bot token",
-      "help": "Send /newbot to @BotFather in Telegram and paste the token it replies with. One Worker serves one bot."
+      "help": "Send /newbot to @BotFather in Telegram and paste the token it replies with. One Worker serves one bot.",
+      "link": { "label": "Create a bot", "url": "https://t.me/BotFather" }
     },
     {
       "name": "WEB_PASSWORD",
@@ -54,7 +57,8 @@
     {
       "name": "TELEGRAM_ID",
       "label": "Telegram chat ids",
-      "help": "Where mail is pushed, comma separated: your numeric user id from @userinfobot, or a group id starting with -100. Only these chats can open the Mini App."
+      "help": "Where mail is pushed, comma separated: your numeric user id from @userinfobot, or a group id starting with -100. Only these chats can open the Mini App.",
+      "link": { "label": "Find your chat ID", "url": "https://t.me/userinfobot" }
     },
     {
       "name": "DOMAIN",

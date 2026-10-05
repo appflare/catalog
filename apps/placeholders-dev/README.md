@@ -12,5 +12,4 @@ project's homepage. Licensed MIT.
   still load from the public host.
 - Upstream's production environment also writes request analytics to Analytics Engine; the
   installed Worker does not, and needs no storage at all.
-- **Pin.** Upstream has no release tags, so the pin follows the default branch and each
-  bump is reviewed by a maintainer.
+- **Pin.** Upstream has no release tags, so the pin follows the default branch.

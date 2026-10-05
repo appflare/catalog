@@ -8,6 +8,9 @@
   "repo": "openstory-so/openstory",
   "license": "MIT",
   "categories": ["ai", "media"],
+  // Edited help text (revision 2) and field links (revision 3) came after this
+  // release was published: revisions, no new build.
+  "revision": 3,
   "authors": [
     {
       "name": "OpenStory",
@@ -62,43 +65,56 @@
     {
       "name": "FAL_KEY",
       "label": "fal API key",
-      "help": "Optional. A server-wide fal.ai key for images, video, audio and language models. Without it, each team adds its own under Settings > API Keys.",
+      "help": "A server-wide fal.ai key for images, video, audio and language models. Without it, each team adds its own under Settings > API Keys.",
+      "link": { "label": "Get a key", "url": "https://fal.ai/dashboard/keys" },
       "optional": true
     },
     {
       "name": "OPENROUTER_KEY",
       "label": "OpenRouter API key",
-      "help": "Optional. A server-wide OpenRouter key for script analysis. Teams can add their own or connect OpenRouter in the app.",
+      "help": "A server-wide OpenRouter key for script analysis. Teams can add their own or connect OpenRouter in the app.",
+      "link": { "label": "Get a key", "url": "https://openrouter.ai/settings/keys" },
       "optional": true
     },
     {
       "name": "GEMINI_API_KEY",
       "label": "Gemini API key",
-      "help": "Optional. Serves Gemini chat and video models first-party; without it they go through OpenRouter or fal.",
+      "help": "Serves Gemini chat and video models first-party; without it they go through OpenRouter or fal.",
+      "link": { "label": "Get a key", "url": "https://aistudio.google.com/app/apikey" },
       "optional": true
     },
     {
       "name": "XAI_API_KEY",
       "label": "xAI API key",
-      "help": "Optional. Serves Grok chat, image and video models first-party; without it they go through OpenRouter or fal.",
+      "help": "Serves Grok chat, image and video models first-party; without it they go through OpenRouter or fal.",
+      "link": { "label": "Get a key", "url": "https://console.x.ai/" },
       "optional": true
     },
     {
       "name": "ELEVENLABS_API_KEY",
       "label": "ElevenLabs API key",
-      "help": "Optional. Text to speech, voice design and music. Server-wide only: designed voices live in this ElevenLabs account.",
+      "help": "Text to speech, voice design and music. Server-wide only: designed voices live in this ElevenLabs account.",
+      "link": { "label": "Get a key", "url": "https://elevenlabs.io/app/developers/api-keys" },
       "optional": true
     },
     {
       "name": "GOOGLE_CLIENT_ID",
       "label": "Google OAuth client ID",
-      "help": "Optional, with the secret below, for Google sign-in next to emailed codes.",
+      "help": "With the secret below, for Google sign-in next to emailed codes.",
+      "link": {
+        "label": "Create an OAuth client",
+        "url": "https://console.cloud.google.com/apis/credentials"
+      },
       "optional": true
     },
     {
       "name": "GOOGLE_CLIENT_SECRET",
       "label": "Google OAuth client secret",
-      "help": "Optional. The secret of the Google OAuth client above.",
+      "help": "The secret of the Google OAuth client above.",
+      "link": {
+        "label": "Create an OAuth client",
+        "url": "https://console.cloud.google.com/apis/credentials"
+      },
       "optional": true
     }
   ],
@@ -117,7 +133,7 @@
     {
       "name": "ADMIN_EMAILS",
       "label": "System admin emails",
-      "help": "Optional. Comma-separated addresses of the people who manage gift codes and moderation.",
+      "help": "Comma-separated addresses of the people who manage gift codes and moderation.",
       "default": "",
       "optional": true
     }

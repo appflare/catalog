@@ -9,8 +9,9 @@ and other e-readers. There is no database. Licensed MIT.
 
 - **R2 enabled**, for the library.
 - **Access control.** Bookshelf has no sign-in: anyone who can reach it can download
-  every book. Plan to put it behind Cloudflare Access, or turn its workers.dev address
-  off and reach it another way.
+  every book. The install form puts it behind Cloudflare Access by default, which lets
+  in only the people who use this Appflare and needs a Zero Trust organization on the
+  account.
 
 ## Notes
 
@@ -21,6 +22,10 @@ and other e-readers. There is no database. Licensed MIT.
   remove the EU jurisdiction from both, then run `npm run sync`.
 - **Bucket location.** Upstream keeps its bucket in the EU jurisdiction; this install
   creates it in the default location.
+- **E-readers.** KOReader, Kobo and other OPDS clients cannot sign in to Cloudflare
+  Access, so the OPDS catalog (`/opds`) answers them only while the app is unprotected.
+  Making `/opds` and the downloads public would publish the whole library, so the entry
+  keeps them protected.
 - **Read only** refuses changes to profiles and keeps reading positions in each
   browser, for a shelf strangers can reach.
 - **Updates.** Upstream publishes no tags, so the entry follows `main`.
