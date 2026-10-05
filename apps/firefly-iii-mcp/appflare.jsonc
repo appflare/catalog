@@ -7,6 +7,8 @@
   "repo": "etnperlong/firefly-iii-mcp",
   "license": "MIT",
   "categories": ["finance", "ai"],
+  // Help text edited after this release was published: a revision, no new build.
+  "revision": 2,
   "authors": [{ "name": "Mike Evans", "github": "etnperlong" }],
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v1.4.0", "sha": "cc48511591e14a633942b6cc22f407ada5faa5be" },
@@ -56,7 +58,7 @@
     {
       "name": "FIREFLY_III_TOOLS",
       "label": "Tool tags",
-      "help": "Optional. A comma-separated list of Firefly III API tags (accounts, transactions, budgets, ...) that replaces the preset.",
+      "help": "A comma-separated list of Firefly III API tags (accounts, transactions, budgets, ...) that replaces the preset.",
       "optional": true
     }
   ],

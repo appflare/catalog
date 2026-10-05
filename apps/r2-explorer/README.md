@@ -12,20 +12,28 @@ R2 must be enabled on the Cloudflare account. Enabling it asks for a payment
 method even though R2's free tier covers typical use, so the app is listed as
 free-plan compatible but will not install on an account without R2.
 
+The account also needs a Zero Trust organization for Cloudflare Access (see
+Security below); its free plan is enough.
+
 ## Security
 
 The template sets no authentication in code, and the configuration cannot be
-changed through secrets or variables. Until you protect it, anyone who knows
-the Worker's URL can list and download every file in the bucket. Protect it
-with Cloudflare Access, which needs Zero Trust turned on (the free plan is
-enough):
+changed through secrets or variables. Unprotected, anyone who knows the Worker's
+URL could list and download every file in the bucket, so Appflare installs it
+only behind Cloudflare Access, and its protection cannot be turned off: Access
+checks every request before the Worker runs, on the `workers.dev` URL, its
+previews and any domain, and lets in only the people who use this Appflare. That
+needs a Zero Trust organization on the account (its free plan is enough).
 
-1. In the Cloudflare dashboard, open Workers & Pages and select the Worker.
-2. Open the Access tab and choose Protect this Worker behind Access.
-3. Select All traffic, pick who may sign in, and apply.
-
-Access then checks every request before the Worker runs, on the `workers.dev`
-URL and any custom domain.
+Installed before Appflare could protect apps? Keep the Access application you made
+for the Worker until Appflare's protection is on: the app has no sign-in of its own,
+so deleting it first would open every file to anyone with the address. In the Zero
+Trust dashboard, rename it to `Appflare: <name> (<Worker>)`, with the app's name as
+Appflare lists it and its Worker name (for example `Appflare: R2 Explorer
+(r2-explorer)`), then turn on **Cloudflare Access** on the app's page in Appflare.
+Appflare takes that application over, keeping its audience tag and policies and
+adding its own, as long as it covers only this app's addresses. Any other Access
+application covering them must be deleted first.
 
 ## Read-only
 

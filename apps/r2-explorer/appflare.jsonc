@@ -8,8 +8,10 @@
   "repo": "cloudflare/templates",
   "license": "MIT",
   "categories": ["files"],
-  // The category changed after this release was published: a revision, no new build.
-  "revision": 2,
+  // The category changed after this release was published, and the Access
+  // protection below came later still: revisions, no new build (the template is
+  // unchanged in the repository's newer tags).
+  "revision": 3,
   "authors": [
     {
       "name": "Gabriel Massadas",
@@ -40,7 +42,13 @@
   // R2's free tier covers this app, but R2 has to be enabled on the account
   // first, which needs a payment method on file.
   "plan": "free",
-  "requires": ["r2"],
+  // "access": the app installs only behind Cloudflare Access (below).
+  "requires": ["r2", "access"],
+  // The template sets no authentication and cannot be given any through
+  // secrets or vars: unprotected, anyone with the URL lists and downloads
+  // every file in the bucket. So protection is required; nothing must stay
+  // public.
+  "access": { "mode": "required" },
   // The template configures authentication in code, not through secrets or vars.
   "secrets": [],
   "postInstall": [
@@ -50,7 +58,7 @@
     },
     {
       "type": "markdown",
-      "content": "**Anyone with the URL can list and download every file in the bucket until you protect it.** In the Cloudflare dashboard, open Workers & Pages, select this Worker, open the Access tab, choose Protect this Worker behind Access, select All traffic, and pick who may sign in. Access needs Zero Trust turned on for the account; its free plan is enough."
+      "content": "**R2 Explorer has no sign-in of its own**, so Appflare keeps it behind Cloudflare Access: only the people who use this Appflare can list and download the files in the bucket."
     },
     {
       "type": "markdown",
