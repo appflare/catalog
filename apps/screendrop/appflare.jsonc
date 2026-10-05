@@ -12,8 +12,9 @@
   // The repository has no LICENSE file; its README's License section says MIT.
   "license": "MIT",
   "categories": ["sharing", "media"],
-  // Field links added after this release was published: a revision, no new build.
-  "revision": 2,
+  // Field links (revision 2) and the formatting of URLs in the notes (revision 3)
+  // came after this release was published: revisions, no new build.
+  "revision": 3,
   "authors": [{ "name": "Fayaz Ahmed", "github": "fayazara", "x": "fayazara" }],
   "maintainers": ["MendyLanda"],
   // Upstream publishes no release tags; the pin tracks main, which the
@@ -106,7 +107,7 @@
   "postInstall": [
     {
       "type": "markdown",
-      "content": "In the Screendrop app, open Settings, Cloud, enter {{appUrl}} as the worker URL and choose Verify Connection. Captures you share from then on upload here and get links under {{appUrl}}."
+      "content": "In the Screendrop app, open Settings, Cloud, enter `{{appUrl}}` as the worker URL and choose Verify Connection. Captures you share from then on upload here and get links under {{appUrl}}."
     },
     {
       "type": "markdown",

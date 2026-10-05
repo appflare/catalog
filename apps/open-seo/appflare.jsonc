@@ -14,9 +14,10 @@
   "repo": "every-app/open-seo",
   "license": "MIT",
   "categories": ["marketing", "analytics"],
-  // Edited help text (revision 2) and field links (revision 3) came after this
-  // release was published: revisions, no new build.
-  "revision": 3,
+  // Edited help text (revision 2), field links (revision 3) and the formatting of
+  // URLs in the notes (revision 4) came after this release was published:
+  // revisions, no new build.
+  "revision": 4,
   "authors": [
     { "name": "Ben Senescu", "github": "bensenescu", "x": "bensenescu" },
     { "name": "Every App", "url": "https://everyapp.dev", "github": "every-app" }
@@ -187,11 +188,11 @@
     },
     {
       "type": "markdown",
-      "content": "{{appUrl}}/api/health lists OpenSEO's configuration checks (DataForSEO, Search Console, SAM) once you are signed in. For Search Console or Analytics, add {{appUrl}}/api/gsc/oauth/callback and {{appUrl}}/api/ga4/oauth/callback as redirect URIs of your Google OAuth client; they change if you give the app a custom domain."
+      "content": "{{appUrl}}/api/health lists OpenSEO's configuration checks (DataForSEO, Search Console, SAM) once you are signed in. For Search Console or Analytics, add `{{appUrl}}/api/gsc/oauth/callback` and `{{appUrl}}/api/ga4/oauth/callback` as redirect URIs of your Google OAuth client; they change if you give the app a custom domain."
     },
     {
       "type": "markdown",
-      "content": "The MCP server at {{appUrl}}/mcp sits behind Cloudflare Access too. MCP clients sign in with Access's Managed OAuth, which you turn on in the Zero Trust dashboard on the app's Access application (Additional settings, OAuth), as upstream's [operations guide](https://github.com/every-app/open-seo/blob/main/docs/SELF_HOSTING_CLOUDFLARE_OPERATIONS.md) describes."
+      "content": "The MCP server at `{{appUrl}}/mcp` sits behind Cloudflare Access too. MCP clients sign in with Access's Managed OAuth, which you turn on in the Zero Trust dashboard on the app's Access application (Additional settings, OAuth), as upstream's [operations guide](https://github.com/every-app/open-seo/blob/main/docs/SELF_HOSTING_CLOUDFLARE_OPERATIONS.md) describes."
     }
   ],
   "resources": {

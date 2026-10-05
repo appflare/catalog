@@ -8,9 +8,10 @@
   "repo": "MarSeventh/CloudFlare-ImgBed",
   "license": "MIT",
   "categories": ["files", "sharing"],
-  // Generated secrets (revision 2) and field links (revision 3) came after this
-  // release was published: revisions, no new build.
-  "revision": 3,
+  // Generated secrets (revision 2), field links (revision 3) and the formatting of
+  // URLs in the notes (revision 4) came after this release was published:
+  // revisions, no new build.
+  "revision": 4,
   "authors": [{ "name": "MarSeventh", "url": "https://home.sanyue.site", "github": "MarSeventh" }],
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v2.7.6", "sha": "bf9d8211ce6daa3af7b5b60685250bebcb2f681a" },
@@ -112,7 +113,7 @@
     },
     {
       "type": "markdown",
-      "content": "Add more storage channels (Telegram, Discord, S3, Hugging Face, WebDAV) under System Settings > Upload Settings. Files are served from {{appUrl}}/file/…; to serve R2 files from a public bucket domain instead, set its address on the R2 channel."
+      "content": "Add more storage channels (Telegram, Discord, S3, Hugging Face, WebDAV) under System Settings > Upload Settings. Files are served from `{{appUrl}}/file/…`; to serve R2 files from a public bucket domain instead, set its address on the R2 channel."
     }
   ]
 }

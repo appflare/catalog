@@ -7,8 +7,9 @@
   "repo": "newbietan/CloudSSH",
   "license": "Apache-2.0",
   "categories": ["remote-access", "developer-tools"],
-  // Field links added after this release was published: a revision, no new build.
-  "revision": 2,
+  // Field links (revision 2) and the formatting of URLs in the notes (revision 3)
+  // came after this release was published: revisions, no new build.
+  "revision": 3,
   "authors": [{ "name": "TanXin", "url": "https://tanxin.me", "github": "newbietan" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags; the pin tracks main.
@@ -128,7 +129,7 @@
     },
     {
       "type": "markdown",
-      "content": "To sign in with GitHub instead, create an OAuth app with {{appUrl}}/api/auth/callback as its callback URL, and set its client ID and secret, and your numeric user id under Allowed GitHub users, in the app's settings."
+      "content": "To sign in with GitHub instead, create an OAuth app with `{{appUrl}}/api/auth/callback` as its callback URL, and set its client ID and secret, and your numeric user id under Allowed GitHub users, in the app's settings."
     }
   ]
 }

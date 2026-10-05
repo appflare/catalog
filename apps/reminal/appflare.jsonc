@@ -11,6 +11,9 @@
   "repo": "harshalgajjar/Reminal",
   "license": "AGPL-3.0-or-later",
   "categories": ["remote-access", "developer-tools"],
+  // The formatting of URLs in the notes changed after this release was published:
+  // a revision, no new build.
+  "revision": 2,
   "authors": [{ "name": "Harshal Gajjar", "github": "harshalgajjar" }],
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v3.14.19", "sha": "49baa3576d146314b177a33b5cfee15a44b2f289" },
@@ -50,11 +53,11 @@
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Install the reminal program on each machine you want to reach (https://github.com/harshalgajjar/Reminal#set-it-up-in-one-line) and point it at this relay:\n\n```sh\nREMINAL_WEB={{appUrl}} reminal\n```\n\nIt prints a session ID, a PIN and a QR code; open the link on any device and enter the PIN."
+      "content": "Install the reminal program on each machine you want to reach ([upstream's one-line setup](https://github.com/harshalgajjar/Reminal#set-it-up-in-one-line)) and point it at this relay:\n\n```sh\nREMINAL_WEB={{appUrl}} reminal\n```\n\nIt prints a session ID, a PIN and a QR code; open the link on any device and enter the PIN."
     },
     {
       "type": "markdown",
-      "content": "The relay has no accounts of its own. Each session is reachable only with the session ID and PIN the machine prints, or from a device you enrolled as an owner with `reminal own`. Terminal and window traffic is end-to-end encrypted. `reminal expose` port forwards are the exception: they serve a local web port at {{appUrl}}/p/<id>/ behind the PIN, and pass through this Worker unencrypted."
+      "content": "The relay has no accounts of its own. Each session is reachable only with the session ID and PIN the machine prints, or from a device you enrolled as an owner with `reminal own`. Terminal and window traffic is end-to-end encrypted. `reminal expose` port forwards are the exception: they serve a local web port at `{{appUrl}}/p/<id>/` behind the PIN, and pass through this Worker unencrypted."
     }
   ]
 }

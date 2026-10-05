@@ -7,9 +7,10 @@
   "repo": "loadchange/wx2md-worker",
   "license": "MIT",
   "categories": ["utilities", "ai"],
-  // Edited help text (revision 2) and field links (revision 3) came after this
-  // release was published: revisions, no new build.
-  "revision": 3,
+  // Edited help text (revision 2), field links (revision 3) and the formatting of
+  // URLs in the notes (revision 4) came after this release was published:
+  // revisions, no new build.
+  "revision": 4,
   "authors": [{ "name": "Asa", "github": "loadchange" }],
   "maintainers": ["MendyLanda"],
   // Upstream publishes no tags; the pin is the head of main.
@@ -43,7 +44,7 @@
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Replace `https://mp.weixin.qq.com` in an article link with {{appUrl}}, for example {{appUrl}}/s/<article id>. Use `/html/s/<article id>` for a readable page, add `?download=true` to download the Markdown, or convert any page with {{appUrl}}/md?url=<address>."
+      "content": "Replace `https://mp.weixin.qq.com` in an article link with `{{appUrl}}`, for example `{{appUrl}}/s/<article id>`. Use `/html/s/<article id>` for a readable page, add `?download=true` to download the Markdown, or convert any page with `{{appUrl}}/md?url=<address>`."
     },
     {
       "type": "markdown",

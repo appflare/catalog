@@ -7,6 +7,9 @@
   "repo": "G4brym/workers-firecrawl",
   "license": "MIT",
   "categories": ["developer-tools", "ai"],
+  // The formatting of URLs in the notes changed after this release was published:
+  // a revision, no new build.
+  "revision": 2,
   "authors": [
     { "name": "Gabriel Massadas", "url": "https://massadas.com", "github": "G4brym", "x": "G4brym" }
   ],
@@ -38,11 +41,11 @@
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Point a Firecrawl SDK at {{appUrl}} with the API key, for example `new FirecrawlApp({ apiKey: \"<API key>\", apiUrl: \"{{appUrl}}\" })`. The endpoints are `POST /v1/search` (web search through DuckDuckGo, with each result scraped), `POST /v1/scrape` and `POST /v1/map`."
+      "content": "Point a Firecrawl SDK at `{{appUrl}}` with the API key, for example `new FirecrawlApp({ apiKey: \"<API key>\", apiUrl: \"{{appUrl}}\" })`. The endpoints are `POST /v1/search` (web search through DuckDuckGo, with each result scraped), `POST /v1/scrape` and `POST /v1/map`."
     },
     {
       "type": "markdown",
-      "content": "The OpenAPI docs at {{appUrl}} need the same `Authorization` header, so a plain browser visit answers 401. Browser Rendering on the free plan allows 10 minutes of browser time a day."
+      "content": "The OpenAPI docs at `{{appUrl}}` need the same `Authorization` header, so a plain browser visit answers 401. Browser Rendering on the free plan allows 10 minutes of browser time a day."
     }
   ]
 }

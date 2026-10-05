@@ -7,8 +7,9 @@
   "repo": "sveltia/sveltia-cms-auth",
   "license": "MIT",
   "categories": ["cms", "developer-tools"],
-  // Field links added after this release was published: a revision, no new build.
-  "revision": 2,
+  // Field links (revision 2) and the formatting of URLs in the notes (revision 3)
+  // came after this release was published: revisions, no new build.
+  "revision": 3,
   "authors": [
     { "name": "Sveltia", "github": "sveltia" },
     { "name": "Kohei Yoshino", "github": "kyoshino" }
@@ -93,7 +94,7 @@
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Register a GitHub OAuth app at https://github.com/settings/applications/new with the authorization callback URL {{appUrl}}/callback, then set its client ID and client secret in this app's settings. For GitLab, register an application with the redirect URI {{appUrl}}/callback, confidential, scope `api`."
+      "content": "Register a GitHub OAuth app at https://github.com/settings/applications/new with the authorization callback URL `{{appUrl}}/callback`, then set its client ID and client secret in this app's settings. For GitLab, register an application with the redirect URI `{{appUrl}}/callback`, confidential, scope `api`."
     },
     {
       "type": "markdown",
