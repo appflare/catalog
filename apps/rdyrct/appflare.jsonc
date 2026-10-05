@@ -20,7 +20,7 @@
   ],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags, so the entry follows the default branch by commit.
-  "source": { "ref": "main", "sha": "d0ece6ee7a8ff8ae6188f07fe749c881b9d415e2" },
+  "source": { "ref": "main", "sha": "837720385c3db1fd61d8adf04a8248a1f68852ba" },
   "install": {
     "packageManager": "bun",
     // The config's KV, D1 and zone ids are upstream's production resources;
