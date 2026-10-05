@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { type GhRequest, type GhRunner, runGh } from "./gh-api.ts";
+import { GhNotFoundError, type GhRequest, type GhRunner, runGh } from "./gh-api.ts";
 
 /**
  * Where an app's upstream is now, for the bump workflow. A repository with
@@ -108,15 +108,27 @@ export interface UpstreamSource {
   /**
    * How two commits relate (the compare API's `ahead_by` and `behind_by`):
    * `ahead` counts commits in `head` that `base` lacks, `behind` the reverse.
-   * `behind === 0` means `base` is reachable from `head`.
+   * `behind === 0` means `base` is reachable from `head`. Null when both
+   * commits exist but share no history (the compare API answers 404, "No
+   * common ancestor", for example after upstream rewrote its history).
    */
-  relation(repo: string, base: string, head: string): CommitRelation;
+  relation(repo: string, base: string, head: string): CommitRelation | null;
   /** Files changed between two commits (the compare API's `files[].filename`). */
   changedFiles(repo: string, base: string, head: string): ChangedFiles;
 }
 
 export function createGhUpstream(run: GhRunner = runGh): UpstreamSource {
   const text = (request: GhRequest) => run(request).toString("utf8").trim();
+  const exists = (repo: string, sha: string): boolean => {
+    try {
+      return text({ path: `repos/${repo}/commits/${sha}`, jq: ".sha" }) === sha;
+    } catch (err) {
+      if (err instanceof GhNotFoundError) {
+        return false;
+      }
+      throw err;
+    }
+  };
   return {
     resolve(repo) {
       const tags = text({
@@ -149,12 +161,21 @@ export function createGhUpstream(run: GhRunner = runGh): UpstreamSource {
       return out;
     },
     relation(repo, base, head) {
-      const [ahead, behind] = text({
-        path: `repos/${repo}/compare/${base}...${head}`,
-        jq: '"\\(.ahead_by) \\(.behind_by)"',
-      })
-        .split(" ")
-        .map(Number);
+      let out: string;
+      try {
+        out = text({
+          path: `repos/${repo}/compare/${base}...${head}`,
+          jq: '"\\(.ahead_by) \\(.behind_by)"',
+        });
+      } catch (err) {
+        // The compare API answers 404 both for a commit it cannot find and for
+        // two commits without a common ancestor; only the second is an answer.
+        if (err instanceof GhNotFoundError && exists(repo, base) && exists(repo, head)) {
+          return null;
+        }
+        throw err;
+      }
+      const [ahead, behind] = out.split(" ").map(Number);
       const count = (n: number | undefined): n is number =>
         n !== undefined && Number.isInteger(n) && n >= 0;
       if (!count(ahead) || !count(behind)) {

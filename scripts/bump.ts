@@ -6,6 +6,7 @@ import {
   applyBump,
   type Bump,
   gateBump,
+  outstandingBumps,
   planBumps,
   readPin,
   renderBumpBody,
@@ -24,11 +25,14 @@ const USAGE = `Usage:
 plan   Resolves each app's upstream with read-only gh api calls (newest stable
        semver tag, else the default branch head) and keeps only moves forward.
        Skips targets already proposed, and branch-tracked apps with a bump pull
-       request opened in the last week. Prints { bumps, failed } as JSON (each
-       bump with the open pull requests it supersedes, and autoMerge: true for
-       an artifact tier entry that sets neither bump.autoMerge: false nor
-       source.version) and writes the pull request body for each bump to
-       <dir>/<slug>.md.
+       request opened in the last week. Prints { bumps, failed, outstanding }
+       as JSON (each bump with the open pull requests it supersedes, and
+       autoMerge: true for an artifact tier entry that sets neither
+       bump.autoMerge: false nor source.version) and writes the pull request
+       body for each bump to <dir>/<slug>.md. "outstanding" lists existing
+       bumps that need a person: a bump branch without a pull request, and an
+       open bump pull request whose head still lacks a required check after a
+       few hours.
 apply  Sets source.ref and source.sha in apps/<slug>/appflare.jsonc, keeping
        its comments and layout.
 `;
@@ -77,6 +81,23 @@ runMain(() => {
       writeFileSync(path.join(values.out, `${bump.slug}.md`), renderBumpBody(pin, bump, changes));
       bumps.push({ ...bump, supersedes: gate.supersedes });
     }
+    const superseded = new Set(bumps.flatMap((b) => b.supersedes));
+    const outstanding: { slug: string; error: string }[] = [];
+    for (const app of apps) {
+      try {
+        for (const error of outstandingBumps(
+          history.existing(app.slug),
+          (sha) => history.reportedChecks(sha),
+          now,
+          superseded,
+        )) {
+          outstanding.push({ slug: app.slug, error });
+        }
+      } catch (err) {
+        const message = err instanceof Error ? err.message : String(err);
+        outstanding.push({ slug: app.slug, error: `checking its bump pull requests: ${message}` });
+      }
+    }
     const summary = [
       ...bumps.map(
         (b) =>
@@ -84,6 +105,7 @@ runMain(() => {
       ),
       ...plan.skipped.map((s) => `- ${s.slug}: skipped, ${s.reason}`),
       ...plan.failed.map((f) => `- ${f.slug}: **failed**, ${f.error}`),
+      ...outstanding.map((o) => `- ${o.slug}: **needs a maintainer**, ${o.error}`),
     ];
     for (const line of summary) {
       info(line.slice(2));
@@ -100,7 +122,10 @@ runMain(() => {
     for (const f of plan.failed) {
       warn(`${f.slug}: could not read upstream: ${f.error}`);
     }
-    process.stdout.write(`${JSON.stringify({ bumps, failed: plan.failed })}\n`);
+    for (const o of outstanding) {
+      warn(`${o.slug}: ${o.error}`);
+    }
+    process.stdout.write(`${JSON.stringify({ bumps, failed: plan.failed, outstanding })}\n`);
     return 0;
   }
 

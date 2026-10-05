@@ -7,11 +7,26 @@ name: bump
 # only move to greater versions; prerelease pins are left alone. A target that
 # already has a branch or pull request is skipped, so a closed bump is not
 # reopened; branch-tracked apps get at most one new bump a week, and a new bump
-# closes the app's older open ones. An app whose upstream cannot be read is
-# listed in the summary and fails the run after the others are done.
+# closes the app's older open ones.
 #
-# Pull requests opened with the workflow token do not trigger pull_request
-# workflows, so this starts verify and conventions on each new branch.
+# One app's failure (an upstream that cannot be read, or a pull request that
+# cannot be opened) skips that app only, with a warning; the run still
+# succeeds. The plan also reports existing bumps that are stuck: a bump branch
+# without a pull request (no run proposes its target again), and an open bump
+# pull request whose head still lacks a required check hours later. A full run
+# (no "apps" input) lists all of these in one open issue, "Bump workflow: apps
+# that need a maintainer", rewritten by each full run and closed by the first
+# full run that finds none.
+#
+# Pull requests opened with the workflow token get pull_request runs that wait
+# for a maintainer to approve them, and the runs this starts with
+# workflow_dispatch never count as a pull request's checks. So this starts
+# verify and conventions on each new branch, and those dispatched runs set
+# their results as commit statuses named "verify passed" and "commit messages"
+# on the branch head, which main's required status checks accept. Pushing the
+# branch with a deploy key instead would hand the push key, which bypasses
+# main's rules, to this job, and the pull request would still be opened (and
+# its first runs held) by the workflow token.
 #
 # Bumps merge themselves by default: the catalog checks that a release builds,
 # matches its hashes and installs, not upstream's code, and users choose when to
@@ -66,6 +81,8 @@ jobs:
       pull-requests: write
       # gh workflow run verify.yml and conventions.yml on each new branch.
       actions: write
+      # The issue that lists what a full run found needing a maintainer.
+      issues: write
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -148,9 +165,11 @@ jobs:
             done
             return 1
           }
-          count="$(jq '.bumps | length' "${RUNNER_TEMP}/bumps.json")"
-          for i in $(seq 0 $((count - 1))); do
-            field() { jq -r --argjson i "${i}" ".bumps[\$i].$1" "${RUNNER_TEMP}/bumps.json"; }
+          field() { jq -r --argjson i "${i}" ".bumps[\$i].$1" "${RUNNER_TEMP}/bumps.json"; }
+          # Opens bump number $i. Runs in a subshell with set -e of its own, so
+          # a failure ends this app's attempt only.
+          open_bump() {
+            local slug branch title ref sha url number merge old
             slug="$(field slug)"
             branch="$(field branch)"
             title="$(field title)"
@@ -159,9 +178,10 @@ jobs:
             # The plan already skipped targets with a branch; this guards a race.
             if git ls-remote --exit-code --heads origin "${branch}" > /dev/null; then
               echo "::notice::${branch} already exists; skipping ${slug}"
-              continue
+              return 0
             fi
-            git switch --quiet main
+            # --force: a failed attempt may have left an edited manifest behind.
+            git switch --quiet --force main
             git switch --quiet -c "${branch}"
             pnpm -s bump apply "${slug}" --ref "${ref}" --sha "${sha}"
             git add "apps/${slug}/appflare.jsonc"
@@ -186,25 +206,102 @@ jobs:
                 merge="auto-merge refused; a maintainer merges it"
               fi
             fi
+            # They report "verify passed" and "commit messages" on this commit.
             gh workflow run verify.yml --ref "${branch}"
             gh workflow run conventions.yml --ref "${branch}"
+            # The new pull request is open either way; a close that fails is
+            # its own problem, not a failed bump.
             for old in $(jq -r --argjson i "${i}" '.bumps[$i].supersedes[]' "${RUNNER_TEMP}/bumps.json"); do
-              gh pr close "${old}" --delete-branch --comment "Superseded by #${number}."
+              if ! gh pr close "${old}" --delete-branch --comment "Superseded by #${number}."; then
+                echo "::warning::${slug}: could not close #${old}, superseded by #${number}"
+                jq -nc --arg slug "${slug}" --arg error "#${old} is superseded by #${number}, but closing it failed; close it and delete its branch by hand" \
+                  '{slug: $slug, error: $error}' >> "${RUNNER_TEMP}/problems.jsonl"
+              fi
             done
             echo "- opened #${number} (${branch}); ${merge}" >> "${GITHUB_STEP_SUMMARY}"
+          }
+          : > "${RUNNER_TEMP}/problems.jsonl"
+          count="$(jq '.bumps | length' "${RUNNER_TEMP}/bumps.json")"
+          for i in $(seq 0 $((count - 1))); do
+            set +e
+            (set -e; open_bump)
+            status=$?
+            set -e
+            if [ "${status}" -ne 0 ]; then
+              slug="$(field slug)"
+              echo "::warning::${slug}: opening its bump pull request failed (exit ${status}); skipped, see the lines above"
+              jq -nc --arg slug "${slug}" --arg error "opening $(field branch) or its pull request failed (exit ${status}); see the run log" \
+                '{slug: $slug, error: $error}' >> "${RUNNER_TEMP}/problems.jsonl"
+            fi
           done
-      - name: Fail if any upstream could not be read
+      # Everything that needs a person: upstreams the plan could not read,
+      # existing bumps it found stuck ("outstanding": a bump branch without a
+      # pull request, or an open one whose checks never reported), and bumps
+      # above that failed part-way. A warning each, the run summary, and on a
+      # full run the tracking issue, which closes only when none is left.
+      # Never fails the run for them.
+      - name: Report what needs a maintainer
+        if: ${{ !cancelled() }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          ONLY_APPS: ${{ inputs.apps }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         run: |
-          failed="$(jq -r '.failed[] | "\(.slug): \(.error)"' "${RUNNER_TEMP}/bumps.json")"
-          if [ -n "${failed}" ]; then
-            echo "::error::could not check every upstream:"
-            echo "${failed}"
+          set -euo pipefail
+          plan="${RUNNER_TEMP}/bumps.json"
+          if [ ! -s "${plan}" ]; then
+            echo "::error::no bump plan; the step that makes it failed"
             exit 1
+          fi
+          opened="${RUNNER_TEMP}/problems.jsonl"
+          [ -f "${opened}" ] || : > "${opened}"
+          # Each error on one line.
+          problems="$(jq -n -c --slurpfile plan "${plan}" --slurpfile opened "${opened}" \
+            '($plan[0].failed + ($plan[0].outstanding // []) + $opened)
+             | map({slug, error: (.error | gsub("[\r\n]+"; " "))})')"
+          count="$(jq 'length' <<< "${problems}")"
+          jq -r '.[] | "::warning::\(.slug): \(.error)"' <<< "${problems}"
+          # Inline code that cannot break out of its backticks.
+          list="$(jq -r '.[] | "- `\(.slug)`: `\(.error | gsub("`"; "'"'"'"))`"' <<< "${problems}")"
+          if [ "${count}" -gt 0 ]; then
+            printf '### Needs a maintainer\n\n%s\n\n' "${list}" >> "${GITHUB_STEP_SUMMARY}"
+          fi
+          if [ -n "${ONLY_APPS:-}" ]; then
+            echo "a run narrowed to some apps leaves the tracking issue alone"
+            exit 0
+          fi
+          title="Bump workflow: apps that need a maintainer"
+          # gh names the workflow token's author app/github-actions; other bots
+          # (CodeRabbit) and people cannot take the issue over.
+          issue="$(gh issue list --state open --limit 500 --json number,title,author \
+            | jq -r --arg title "${title}" \
+                'first(.[] | select(.title == $title and .author.login == "app/github-actions") | .number) // empty')"
+          if [ "${count}" -eq 0 ]; then
+            if [ -n "${issue}" ]; then
+              gh issue close "${issue}" --comment "The full bump run ${RUN_URL} found nothing left that needs a maintainer."
+              echo "closed #${issue}: nothing is outstanding"
+            fi
+            exit 0
+          fi
+          body="${RUNNER_TEMP}/issue.md"
+          {
+            echo "The latest full run of the bump workflow (${RUN_URL}) found these bumps needing a maintainer; it handled the other apps as usual. Each full run rewrites this list, and the first one that finds nothing left closes this issue."
+            echo
+            echo "${list}"
+            echo
+            echo "An upstream that cannot be read needs a look at the app's repository (moved, deleted, or its history rewritten), and maybe a new pin set by hand. A bump branch without a pull request keeps every later run from proposing that target, and an open bump pull request without its required checks cannot merge; each line says what to do. For a bump that failed part-way, the run log names the step."
+          } > "${body}"
+          if [ -n "${issue}" ]; then
+            gh issue edit "${issue}" --body-file "${body}" > /dev/null
+            echo "updated #${issue}"
+          else
+            gh issue create --title "${title}" --body-file "${body}"
           fi
 
   # Auto-merged bumps land on main without starting publish (see the top of
-  # this file). Runs apart from the bump job so a failed upstream check does not
-  # hold it up.
+  # this file). Runs apart from the bump job so a failure there does not hold
+  # it up.
   #
   # It looks for the newest publish run on main that covers every app and has
   # succeeded or is still going: a push run, or a manual run this workflow

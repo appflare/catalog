@@ -11,6 +11,7 @@ import {
   decideBump,
   gateBump,
   gateOnAppDirectory,
+  outstandingBumps,
   planBumps,
   readAutoMerge,
   readPin,
@@ -122,6 +123,17 @@ describe("decideBump for other pins", () => {
     });
     expect(decideBump(branchPin, tag("v1.0.0"), () => ({ ahead: 2, behind: 4 })).action).toBe(
       "skip",
+    );
+    // A tag left on history upstream later rewrote (apps/clist): no common ancestor.
+    expect(decideBump(branchPin, tag("v1.0.0"), () => null)).toEqual({
+      action: "skip",
+      reason: `tag v1.0.0@89abcde shares no history with the pinned 0123456`,
+    });
+  });
+
+  it("refuses to choose for a branch pin whose new head shares no history with it", () => {
+    expect(() => decideBump(branchPin, head(), () => null)).toThrow(
+      "main@89abcde shares no history with the pinned 0123456 (upstream rewrote its history)",
     );
   });
 
@@ -292,6 +304,7 @@ describe("gateBump", () => {
   const pr = (number: number, head: string, state: "open" | "closed", createdAt: string) => ({
     number,
     head,
+    headSha: NEW,
     state,
     createdAt,
   });
@@ -325,6 +338,76 @@ describe("gateBump", () => {
       action: "open",
       supersedes: [8],
     });
+  });
+});
+
+describe("outstandingBumps", () => {
+  const now = new Date("2026-10-06T12:00:00Z");
+  const pr = (
+    number: number,
+    head: string,
+    state: "open" | "closed",
+    createdAt: string,
+    headSha = NEW,
+  ) => ({ number, head, headSha, state, createdAt });
+  const none = () => {
+    throw new Error("must not read checks");
+  };
+
+  it("reports a bump branch without any pull request, which no run proposes again", () => {
+    const open = pr(9, "bump/hello/2222222", "open", "2026-10-06T11:00:00Z");
+    const closed = pr(8, "bump/hello/3333333", "closed", "2026-09-01T00:00:00Z");
+    expect(
+      outstandingBumps(
+        {
+          branches: ["bump/hello/1111111", "bump/hello/2222222", "bump/hello/3333333"],
+          prs: [open, closed],
+        },
+        none,
+        now,
+      ),
+    ).toEqual([
+      "bump/hello/1111111 has no pull request, so no bump run proposes its target again; " +
+        "open the pull request by hand, or delete the branch",
+    ]);
+  });
+
+  it("reports an open pull request whose head lacks a required check after the grace period", () => {
+    const asked: string[] = [];
+    const stuck = pr(7, "bump/hello/89abcde", "open", "2026-10-06T05:59:00Z", NEW);
+    const lines = outstandingBumps(
+      { branches: [stuck.head], prs: [stuck] },
+      (sha) => {
+        asked.push(sha);
+        return ["CodeRabbit", "commit messages"];
+      },
+      now,
+    );
+    expect(asked).toEqual([NEW]);
+    expect(lines).toEqual([
+      '#7 (bump/hello/89abcde) has no "verify passed" on 89abcde after 6 hours, so it cannot ' +
+        "merge; start gh workflow run verify.yml --ref bump/hello/89abcde",
+    ]);
+    expect(outstandingBumps({ branches: [], prs: [stuck] }, () => [], now)[0]).toContain(
+      'no "verify passed" or "commit messages"',
+    );
+  });
+
+  it("leaves alone pull requests that reported, are young, closed, or superseded", () => {
+    const reported = pr(1, "bump/hello/1111111", "open", "2026-10-01T00:00:00Z");
+    const young = pr(2, "bump/hello/2222222", "open", "2026-10-06T06:01:00Z");
+    const closed = pr(3, "bump/hello/3333333", "closed", "2026-09-01T00:00:00Z");
+    const superseded = pr(4, "bump/hello/4444444", "open", "2026-09-01T00:00:00Z");
+    expect(
+      outstandingBumps(
+        { branches: [], prs: [reported] },
+        () => ["verify passed", "commit messages"],
+        now,
+      ),
+    ).toEqual([]);
+    expect(
+      outstandingBumps({ branches: [], prs: [young, closed, superseded] }, none, now, new Set([4])),
+    ).toEqual([]);
   });
 });
 
