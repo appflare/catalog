@@ -12,6 +12,10 @@
   "repo": "murerkinn/bookshelf",
   "license": "MIT",
   "categories": ["files", "productivity"],
+  // Upstream has not moved since the released pin, so the Access protection
+  // below (revision 2) and the formatting of URLs in the notes (revision 3) are
+  // revisions of that build.
+  "revision": 3,
   "authors": [
     {
       "name": "Murat Erkin Cicek",
@@ -38,6 +42,11 @@
   // R2 and rate limits fit the free plan for a personal library.
   "plan": "free",
   "requires": ["r2"],
+  // No sign-in at all (upstream docs/roadmap.md: "There is no
+  // authentication"), so protection starts switched on. Nothing is made
+  // public: the OPDS feed and the download links would hand out the whole
+  // library.
+  "access": { "mode": "recommended" },
   "vars": [
     {
       "name": "BOOKSHELF_READ_ONLY",
@@ -61,7 +70,7 @@
   "postInstall": [
     {
       "type": "markdown",
-      "content": "**There is no sign-in.** Anyone who can reach {{appUrl}} can download every book and pick any profile. Put the app behind Cloudflare Access, or turn off its workers.dev address and serve it only where you trust the network."
+      "content": "**Bookshelf has no sign-in of its own.** Behind Cloudflare Access only Appflare's users reach it. Without it, anyone who can reach {{appUrl}} can download every book and pick any profile. E-readers cannot sign in to Access, so the OPDS catalog at `{{appUrl}}/opds` works on them only while the app is unprotected."
     },
     {
       "type": "markdown",

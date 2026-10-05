@@ -7,6 +7,9 @@
   "repo": "TBXark/ChatGPT-Telegram-Workers",
   "license": "MIT",
   "categories": ["ai", "bots"],
+  // openPath and field links added after this release was published: a revision,
+  // no new build.
+  "revision": 2,
   "authors": [{ "name": "TBXark", "url": "https://tbxark.com", "github": "TBXark", "x": "tbxark" }],
   "maintainers": ["MendyLanda"],
   // Upstream tags releases without a "v" prefix (2.0.0); the packer reads both forms.
@@ -28,7 +31,8 @@
     {
       "name": "TELEGRAM_TOKEN",
       "label": "Telegram bot token",
-      "help": "Send /newbot to @BotFather in Telegram and paste the token it replies with. One Worker serves one bot."
+      "help": "Send /newbot to @BotFather in Telegram and paste the token it replies with. One Worker serves one bot.",
+      "link": { "label": "Create a bot", "url": "https://t.me/BotFather" }
     },
     {
       "name": "ADMIN_PASSWORD",
@@ -47,7 +51,8 @@
     {
       "name": "ADMIN_ID",
       "label": "Your Telegram user id",
-      "help": "The numeric id @userinfobot replies with. Only this user can open the admin panel and change the bot's settings."
+      "help": "The numeric id @userinfobot replies with. Only this user can open the admin panel and change the bot's settings.",
+      "link": { "label": "Find your user ID", "url": "https://t.me/userinfobot" }
     },
     {
       "name": "PUBLIC_BASE_URL",
@@ -56,6 +61,7 @@
       "optional": true
     }
   ],
+  "openPath": "/admin",
   "postInstall": [
     {
       "type": "markdown",

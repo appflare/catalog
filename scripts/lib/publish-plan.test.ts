@@ -218,7 +218,7 @@ describe("decide with a revision", () => {
     const releases = releasedWith("hello@1.2.3", hello);
     const decision = await plan({ ...hello, vars: [selectVar] }, releases);
     expect(decision.action === "error" && decision.message).toMatch(
-      /changed \(vars\).*re-pin `source`.* to publish the change, or bump revision to 2: only the form and copy changed/,
+      /changed \(vars\).*re-pin `source`.* to publish the change, or bump revision to 2: only what a revision may change changed/,
     );
   });
 
@@ -257,10 +257,32 @@ describe("decide with a revision", () => {
     "refuses a revision that changes what only a new build can change",
     async () => {
       const releases = releasedWith("hello@1.2.3", hello);
-      const decision = await plan({ ...revised(), requires: [] }, releases);
+      const decision = await plan({ ...revised(), plan: "paid" }, releases);
       expect(decision.action === "error" && decision.message).toMatch(
-        /raises revision to 2, but it changes requires, which only a new build can change\. Re-pin `source`/,
+        /raises revision to 2, but it changes plan, which only a new build can change\. Re-pin `source`/,
       );
+      const dropped = await plan({ ...revised(), requires: [] }, releases);
+      expect(dropped.action === "error" && dropped.message).toMatch(
+        /raises revision to 2, but it removes "r2" from requires, which only a new build can change/,
+      );
+      const added = await plan({ ...revised(), requires: ["r2", "zone"] }, releases);
+      expect(added.action === "error" && added.message).toMatch(
+        /it adds "zone" to requires; a revision may add only "access"/,
+      );
+    },
+  );
+
+  it.skipIf(!appflareAvailable)(
+    'plans a revision that adds Cloudflare Access protection and "access" to requires',
+    async () => {
+      const releases = releasedWith("hello@1.2.3", hello);
+      const protectedHello: CatalogManifest = {
+        ...revised(),
+        requires: ["r2", "access"],
+        access: { mode: "required", bypass: ["/s/*"] },
+      };
+      const decision = await plan(protectedHello, releases);
+      expect(decision).toMatchObject({ action: "revise", planned: { revision: 2 } });
     },
   );
 

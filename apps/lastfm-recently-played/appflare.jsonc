@@ -7,6 +7,8 @@
   "repo": "JeffreyCA/lastfm-recently-played-readme",
   "license": "MIT",
   "categories": ["media", "utilities"],
+  // Field links added after this release was published: a revision, no new build.
+  "revision": 2,
   "authors": [{ "name": "JeffreyCA", "github": "JeffreyCA" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags; the pin is the head of main.
@@ -24,7 +26,8 @@
     {
       "name": "LASTFM_API_KEY",
       "label": "Last.fm API key",
-      "help": "Create an API account at https://www.last.fm/api/account/create and copy its API key; the shared secret is not needed."
+      "help": "Create an API account at https://www.last.fm/api/account/create and copy its API key; the shared secret is not needed.",
+      "link": { "label": "Get a key", "url": "https://www.last.fm/api/account/create" }
     }
   ],
   // UPSTREAM_CACHE_SECONDS (60) and ART_CACHE_SECONDS (86400) keep upstream's

@@ -7,6 +7,9 @@
   "repo": "PublicAffairs/openai-gemini",
   "license": "MIT",
   "categories": ["ai"],
+  // The formatting of URLs in the notes changed after this release was published:
+  // a revision, no new build.
+  "revision": 2,
   "authors": [{ "name": "PublicAffairs", "github": "PublicAffairs" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no semver release tags (its tags name Gemini models); the pin tracks main.
@@ -24,7 +27,7 @@
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Point an OpenAI client at {{appUrl}}/v1 and use your Gemini API key from Google AI Studio as the API key."
+      "content": "Point an OpenAI client at `{{appUrl}}/v1` and use your Gemini API key from Google AI Studio as the API key."
     }
   ]
 }
