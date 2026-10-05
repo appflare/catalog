@@ -14,6 +14,8 @@
   // License section both say MIT.
   "license": "MIT",
   "categories": ["bots", "utilities"],
+  // Field links added after this release was published: a revision, no new build.
+  "revision": 2,
   "authors": [
     { "name": "AEtherside", "github": "AEtherside" },
     {
@@ -46,12 +48,14 @@
     {
       "name": "SKLAND_TOKENS",
       "label": "Skland credentials",
-      "help": "Sign in at https://user.hypergryph.com/login (or https://www.skland.com/), then open https://web-api.hypergryph.com/account/info/hg (or https://web-api.skland.com/account/info/hg) and copy the value of `content`. For several accounts, separate the values with commas."
+      "help": "Sign in at https://user.hypergryph.com/login (or https://www.skland.com/), then open https://web-api.hypergryph.com/account/info/hg (or https://web-api.skland.com/account/info/hg) and copy the value of `content`. For several accounts, separate the values with commas.",
+      "link": { "label": "Sign in to Skland", "url": "https://www.skland.com/" }
     },
     {
       "name": "SKLAND_NOTIFICATION_URLS",
       "label": "Notification URLs",
       "help": "Where each run's summary is sent, as Statocysts notification URLs (https://github.com/octoplorer/statocysts), comma separated. They usually hold a bot token or webhook key. Leave empty to only log.",
+      "link": { "label": "See the URL formats", "url": "https://github.com/octoplorer/statocysts" },
       "optional": true
     }
   ],

@@ -9,9 +9,9 @@
   "license": "MIT",
   "categories": ["business", "finance"],
   // Upstream has not moved since the released pin, so the public paths below
-  // (revision 2) and the generated admin password (revision 3) are revisions
-  // of that build.
-  "revision": 3,
+  // (revision 2), the generated admin password (revision 3) and the field links
+  // (revision 4) are revisions of that build.
+  "revision": 4,
   "authors": [{ "name": "Daniel Yang", "url": "https://daniel-yang.com", "github": "ddyy" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags; the pin tracks the default branch, main.
@@ -68,36 +68,51 @@
       "name": "STRIPE_SECRET_KEY",
       "label": "Stripe secret key",
       "help": "For card payments through Stripe Checkout (sk_live_... or sk_test_...). Can also be entered in Settings.",
+      "link": { "label": "Get a key", "url": "https://dashboard.stripe.com/apikeys" },
       "optional": true
     },
     {
       "name": "STRIPE_WEBHOOK_SECRET",
       "label": "Stripe webhook signing secret",
       "help": "The whsec_... secret of a Stripe webhook endpoint pointing at /webhooks/stripe on this app.",
+      "link": { "label": "Add a webhook", "url": "https://dashboard.stripe.com/webhooks" },
       "optional": true
     },
     {
       "name": "PAYPAL_CLIENT_ID",
       "label": "PayPal client ID",
       "help": "For PayPal payments, from a PayPal Business app. Can also be entered in Settings.",
+      "link": {
+        "label": "Create an app",
+        "url": "https://developer.paypal.com/dashboard/applications"
+      },
       "optional": true
     },
     {
       "name": "PAYPAL_CLIENT_SECRET",
       "label": "PayPal client secret",
       "help": "The secret of the PayPal app above.",
+      "link": {
+        "label": "Create an app",
+        "url": "https://developer.paypal.com/dashboard/applications"
+      },
       "optional": true
     },
     {
       "name": "PAYPAL_WEBHOOK_ID",
       "label": "PayPal webhook ID",
       "help": "The id of a PayPal webhook pointing at /webhooks/paypal on this app.",
+      "link": {
+        "label": "Add a webhook",
+        "url": "https://developer.paypal.com/dashboard/webhooks"
+      },
       "optional": true
     },
     {
       "name": "RESEND_API_KEY",
       "label": "Resend API key",
       "help": "To send invoices and reminders through Resend, with your domain verified there. Can also be entered in Settings.",
+      "link": { "label": "Get a key", "url": "https://resend.com/api-keys" },
       "optional": true
     }
   ],
