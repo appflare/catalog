@@ -7,8 +7,10 @@
   "repo": "loadchange/wx2md-worker",
   "license": "MIT",
   "categories": ["utilities", "ai"],
-  // Help text edited after this release was published: a revision, no new build.
-  "revision": 2,
+  // Edited help text (revision 2), field links (revision 3) and the formatting of
+  // URLs in the notes (revision 4) came after this release was published:
+  // revisions, no new build.
+  "revision": 4,
   "authors": [{ "name": "Asa", "github": "loadchange" }],
   "maintainers": ["MendyLanda"],
   // Upstream publishes no tags; the pin is the head of main.
@@ -31,6 +33,10 @@
       "name": "R2_PUBLIC_URL",
       "label": "Public image address",
       "help": "The public address of this install's R2 bucket (its r2.dev URL or a custom domain, without a trailing slash). When set, article images are copied to the bucket and linked from there, since WeChat blocks hotlinking. Leave empty to keep the original image links.",
+      "link": {
+        "label": "Open the dashboard",
+        "url": "https://dash.cloudflare.com/?to=/:account/r2/overview"
+      },
       "default": "",
       "optional": true
     }
@@ -38,7 +44,7 @@
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Replace `https://mp.weixin.qq.com` in an article link with {{appUrl}}, for example {{appUrl}}/s/<article id>. Use `/html/s/<article id>` for a readable page, add `?download=true` to download the Markdown, or convert any page with {{appUrl}}/md?url=<address>."
+      "content": "Replace `https://mp.weixin.qq.com` in an article link with `{{appUrl}}`, for example `{{appUrl}}/s/<article id>`. Use `/html/s/<article id>` for a readable page, add `?download=true` to download the Markdown, or convert any page with `{{appUrl}}/md?url=<address>`."
     },
     {
       "type": "markdown",

@@ -10,8 +10,9 @@
   "repo": "YuriCrystal/relay",
   "license": "MIT",
   "categories": ["utilities", "analytics"],
-  // Generated secrets added after this release was published: a revision, no new build.
-  "revision": 2,
+  // Generated secrets (revision 2) and field links (revision 3) came after this
+  // release was published: revisions, no new build.
+  "revision": 3,
   "authors": [{ "name": "Yuri", "github": "YuriCrystal" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags, so the entry follows the default branch by commit.
@@ -50,6 +51,10 @@
       "name": "SAFEBROWSING_KEY",
       "label": "Google Safe Browsing API key",
       "help": "Checks each new destination against Google Safe Browsing and refuses malicious ones.",
+      "link": {
+        "label": "Get a key",
+        "url": "https://developers.google.com/safe-browsing/v4/get-started"
+      },
       "optional": true
     }
   ],

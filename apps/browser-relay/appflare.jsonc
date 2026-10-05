@@ -13,6 +13,9 @@
   "repo": "reliefeai/browser-relay",
   "license": "MIT",
   "categories": ["ai", "remote-access"],
+  // The formatting of URLs in the notes changed after this release was published:
+  // a revision, no new build.
+  "revision": 2,
   "authors": [{ "name": "reliefe", "github": "reliefeai" }],
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v1.5.4", "sha": "973434bc6b339dd56d831b1ebd089a8465850844" },
@@ -33,7 +36,7 @@
   "postInstall": [
     {
       "type": "markdown",
-      "content": "In the Browser Relay extension, open Options, Remote Relay, enter {{appUrl}} in the Public relay field, and turn Remote Relay on. On the machines that send commands, set `BROWSER_RELAY_REMOTE_HOST={{appUrl}}` and pass the Device ID the extension shows with `--remote-device-id`."
+      "content": "In the Browser Relay extension, open Options, Remote Relay, enter `{{appUrl}}` in the Public relay field, and turn Remote Relay on. On the machines that send commands, set `BROWSER_RELAY_REMOTE_HOST={{appUrl}}` and pass the Device ID the extension shows with `--remote-device-id`."
     },
     {
       "type": "markdown",

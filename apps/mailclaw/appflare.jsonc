@@ -10,6 +10,8 @@
   // declares MIT.
   "license": "MIT",
   "categories": ["email", "ai"],
+  // Field links added after this release was published: a revision, no new build.
+  "revision": 2,
   "authors": [
     { "name": "Vincent Yang", "url": "https://missuo.me", "github": "missuo", "x": "m1ssuo" }
   ],
@@ -54,6 +56,7 @@
       "name": "RESEND_API_KEY",
       "label": "Resend API key",
       "help": "To send mail through Resend, with the sending domain verified there.",
+      "link": { "label": "Get a key", "url": "https://resend.com/api-keys" },
       "optional": true
     }
   ],

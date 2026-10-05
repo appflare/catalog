@@ -12,6 +12,9 @@
   "repo": "fishjar/kiss-worker",
   "license": "MIT",
   "categories": ["sync", "utilities"],
+  // The formatting of URLs in the notes changed after this release was published:
+  // a revision, no new build.
+  "revision": 2,
   "authors": [{ "name": "Gabe", "url": "https://fishjar.com", "github": "fishjar" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no tags; the pin follows the default branch.
@@ -40,11 +43,11 @@
   "postInstall": [
     {
       "type": "markdown",
-      "content": "In KISS Translator's Sync Setting, set Sync Type to KISS-Worker, Sync API to {{appUrl}}, and Sync Key to the sync password from this install."
+      "content": "In KISS Translator's Sync Setting, set Sync Type to KISS-Worker, Sync API to `{{appUrl}}`, and Sync Key to the sync password from this install."
     },
     {
       "type": "markdown",
-      "content": "Rule sets you share from the extension are served from this install at {{appUrl}}/rules; the extension shows the full share link."
+      "content": "Rule sets you share from the extension are served from this install at `{{appUrl}}/rules`; the extension shows the full share link."
     }
   ]
 }
