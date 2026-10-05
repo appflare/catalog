@@ -8,7 +8,7 @@
   "slug": "telegram-push",
   "name": "Telegram Push",
   "summary": "Push notifications to Telegram with one HTTP request: your own bot hands each chat a push key, and any script or webhook sends a message with a GET to /push.",
-  "homepage": "https://github.com/sduoduo233/telegram-push",
+  "tagline": "Send notifications to your Telegram chats with a web request",
   "repo": "sduoduo233/telegram-push",
   "license": "NONE",
   "categories": ["notifications", "bots"],
@@ -18,31 +18,25 @@
   // next, by commit. Its last commit is from July 2023.
   "source": { "ref": "next", "sha": "bb6f7172abb4115f1cd7d430058c88505be6114d" },
   "install": {
-    "tier": "artifact",
     "packageManager": "npm",
     // Upstream keeps its config only as a template, which its deploy script
     // copies and fills with a KV id; the packer copies it the same way, and
     // the placeholder id is dropped like any binding id.
     "wranglerConfig": "wrangler.toml.example",
-    "workerName": "telegram-push",
     // Answers before and after setup: the page asking for the bot token,
     // then the bot's status.
-    "healthPath": "/install"
+    "health": { "path": "/install" }
   },
   // One Worker and KV fit the free plan. No cron triggers.
   "plan": "free",
-  "requires": [],
-  "secrets": [],
-  "vars": [],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Create a bot with [@BotFather](https://t.me/BotFather), then open {{workerUrl}}/install right away and enter its token: the first visitor sets the bot, and the page locks after that."
+      "content": "Create a bot with [@BotFather](https://t.me/BotFather), then open {{appUrl}}/install right away and enter its token: the first visitor sets the bot, and the page locks after that."
     },
     {
       "type": "markdown",
-      "content": "Send your bot `/new` in Telegram. It answers with a push key and a ready-made link; `{{workerUrl}}/push?key=<push key>&msg=Hello` then sends Hello to that chat. `/new` again replaces the key."
+      "content": "Send your bot `/new` in Telegram. It answers with a push key and a ready-made link; `{{appUrl}}/push?key=<push key>&msg=Hello` then sends Hello to that chat. `/new` again replaces the key."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

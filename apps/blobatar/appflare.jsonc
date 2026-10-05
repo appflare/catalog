@@ -7,15 +7,18 @@
   "slug": "blobatar",
   "name": "blobatar API",
   "summary": "Your own avatar endpoint: GET /avatar/<name> returns a deterministic geometric blobatar SVG for any username, email or id, with Gravatar-compatible URLs.",
+  "tagline": "Generate an avatar for any name or email address",
   "homepage": "https://blobatar.dev",
   "repo": "Alain00/blobatar",
   "license": "MIT",
   "categories": ["developer-tools", "utilities"],
+  // The formatting of URLs in the notes changed after this release was published:
+  // a revision, no new build.
+  "revision": 2,
   "authors": [{ "name": "Alain", "url": "https://blobatar.dev", "github": "Alain00" }],
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v2.7.0", "sha": "ebb7ea4808b1263629fc8fa65e2398b9cbdb6f6b" },
   "install": {
-    "tier": "artifact",
     "packageManager": "bun",
     // The endpoint is apps/api of a bun workspace, and it imports the blobatar
     // library of the same workspace. The root bun.lock at this tag still
@@ -34,14 +37,10 @@
   // One stateless Worker; each avatar renders in microseconds, and responses
   // carry long cache headers.
   "plan": "free",
-  "requires": [],
-  "secrets": [],
-  "vars": [],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Point avatar URLs at {{workerUrl}}/avatar/<name>, for example `<img src=\"{{workerUrl}}/avatar/alice?size=64\">`. {{workerUrl}}/avatar/ lists every parameter, and {{workerUrl}}/openapi.json describes the endpoint. To serve a Gravatar URL, keep its path and query and change only the host."
+      "content": "Point avatar URLs at `{{appUrl}}/avatar/<name>`, for example `<img src=\"{{appUrl}}/avatar/alice?size=64\">`. {{appUrl}}/avatar/ lists every parameter, and {{appUrl}}/openapi.json describes the endpoint. To serve a Gravatar URL, keep its path and query and change only the host."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

@@ -13,7 +13,7 @@
   "slug": "inkstone",
   "name": "Inkstone",
   "summary": "A self-hosted Markdown notebook with live preview, backlinks, full-text and semantic search, offline editing, multi-device sync, public sharing, MCP access and scheduled backups.",
-  "homepage": "https://github.com/shuaiplus/inkstone",
+  "tagline": "A private notebook for writing, finding, and syncing notes",
   "repo": "shuaiplus/inkstone",
   // The LICENSE file holds the LGPL-3.0 text followed by the GPL-3.0 text it
   // builds on; README and package.json say LGPL-3.0-only.
@@ -23,12 +23,10 @@
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v0.8.0", "sha": "c146593f0c2153431433260d0377622906f17e42" },
   "install": {
-    "tier": "artifact",
     "packageManager": "npm",
     // The R2 variant. The Vite build writes the deployable config under
     // dist/inkstone and points wrangler at it.
     "wranglerConfig": "wrangler.toml",
-    "workerName": "inkstone",
     // Type-checks, then builds the client and the Worker.
     "buildCommand": "npm run build"
   },
@@ -38,27 +36,24 @@
   // Attachments go to R2; semantic search uses Workers AI and falls back to
   // full-text search where it is unavailable.
   "requires": ["r2", "workers-ai"],
-  "secrets": [],
   "vars": [
     {
       "name": "APP_NAME",
       "label": "Site name",
       "help": "Shown in the app, on shared notes, and as the issuer in authenticator apps.",
-      "default": "Inkstone",
-      "required": true
+      "default": "Inkstone"
     },
     {
       "name": "PUBLIC_URL",
       "label": "Public URL",
       "help": "The https address MCP clients and OAuth use, such as a custom domain. Leave it empty to use the address each request arrives at.",
-      "required": false
+      "optional": true
     }
   ],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Open {{workerUrl}} and register right away: the first account becomes the owner. Later sign-ups are closed unless the owner opens registration in the settings."
+      "content": "Open {{appUrl}} and register right away: the first account becomes the owner. Later sign-ups are closed unless the owner opens registration in the settings."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

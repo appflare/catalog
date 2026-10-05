@@ -1,7 +1,8 @@
-# Image sources
+# Media for Larafeed
 
-From angristan/larafeed at commit eedbc8b, licensed MIT (the repository's licence covers these files; its notice is at [LICENSE](https://github.com/angristan/larafeed/blob/eedbc8b9f6ec44229a8ed75efd0e6a1dc3945266/LICENSE)).
+Upstream: [`angristan/larafeed`](https://github.com/angristan/larafeed) at commit [`eedbc8b9f6ec44229a8ed75efd0e6a1dc3945266`](https://github.com/angristan/larafeed/tree/eedbc8b9f6ec44229a8ed75efd0e6a1dc3945266), licensed [MIT](https://github.com/angristan/larafeed/blob/eedbc8b9f6ec44229a8ed75efd0e6a1dc3945266/LICENSE).
 
+- `icon.png`: [`public/favicon.ico`](https://github.com/angristan/larafeed/blob/eedbc8b9f6ec44229a8ed75efd0e6a1dc3945266/public/favicon.ico), the project's newspaper mark. Converted from a PNG encoded as ICO and padded from 218x166 to a transparent 218x218 square.
 - `screenshots/01-reader-view.png`: [`.github/readme/reader.png`](https://github.com/angristan/larafeed/blob/eedbc8b9f6ec44229a8ed75efd0e6a1dc3945266/.github/readme/reader.png), the reader view shown in the README. Scaled from 2940x1594 to 1600x867, metadata removed.
 
-No icon or cover: the only logo, [`.github/readme/logo.png`](https://github.com/angristan/larafeed/blob/eedbc8b9f6ec44229a8ed75efd0e6a1dc3945266/.github/readme/logo.png), is a wide wordmark (3148x2036) that is neither square nor in the cover's 1200x630 shape, and cropping it would change the artwork.
+Left out: [`.github/readme/entry.png`](https://github.com/angristan/larafeed/blob/eedbc8b9f6ec44229a8ed75efd0e6a1dc3945266/.github/readme/entry.png), [`.github/readme/feed.png`](https://github.com/angristan/larafeed/blob/eedbc8b9f6ec44229a8ed75efd0e6a1dc3945266/.github/readme/feed.png), and [`.github/readme/feeds.png`](https://github.com/angristan/larafeed/blob/eedbc8b9f6ec44229a8ed75efd0e6a1dc3945266/.github/readme/feeds.png) show other sites' logos or favicons. [`.github/readme/railway.png`](https://github.com/angristan/larafeed/blob/eedbc8b9f6ec44229a8ed75efd0e6a1dc3945266/.github/readme/railway.png) shows a third-party hosting dashboard, not Larafeed. [`.github/readme/logo.png`](https://github.com/angristan/larafeed/blob/eedbc8b9f6ec44229a8ed75efd0e6a1dc3945266/.github/readme/logo.png) is a wide wordmark, not suitable as an icon or cover. No cover: upstream publishes no suitable social preview or banner.

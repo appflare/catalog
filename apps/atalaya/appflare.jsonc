@@ -3,10 +3,14 @@
   "slug": "atalaya",
   "name": "Atalaya",
   "summary": "Uptime monitoring and a status page on one Worker: HTTP, TCP and DNS checks every minute, optionally from chosen Cloudflare regions, webhook alerts, and 90 days of history in D1.",
+  "tagline": "Check if your sites are up and share a status page",
   "homepage": "https://atalaya-docs.dcarrillo.es",
   "repo": "dcarrillo/atalaya",
   "license": "Apache-2.0",
   "categories": ["monitoring", "developer-tools"],
+  // Generated secrets (revision 2), edited help text (revision 3) and field links
+  // (revision 4) came after this release was published: revisions, no new build.
+  "revision": 4,
   "authors": [
     {
       "name": "Daniel Carrillo",
@@ -19,7 +23,6 @@
   // Upstream has no release tags, so the entry follows the default branch by commit.
   "source": { "ref": "main", "sha": "5437d1c4357de76f045261aa04974c91c0895ca5" },
   "install": {
-    "tier": "artifact",
     // A pnpm workspace: the Worker at the root, the Astro status page in
     // status-page/.
     "packageManager": "pnpm",
@@ -30,7 +33,6 @@
     // format does not carry yet: responses are simply not cached by
     // Cloudflare's cache in front of the Worker.
     "wranglerConfig": "wrangler.example.toml",
-    "workerName": "atalaya",
     // Upstream's deploy script builds the status page first: the Worker
     // imports the Astro server build and serves its client build as assets.
     "buildCommand": "pnpm --filter atalaya-prod-status-page run build"
@@ -40,7 +42,6 @@
   // aggregation. Upstream sizes the app for the free plan; the account's
   // free allowance is 5 cron triggers in total.
   "plan": "free",
-  "requires": [],
   // The status page opens with HTTP basic auth using STATUS_USERNAME and
   // STATUS_PASSWORD, or without a sign-in when STATUS_PUBLIC is "true";
   // with neither it answers 403. The other three are the names upstream's
@@ -54,26 +55,32 @@
       "help": "The user name for the status page's sign-in (HTTP basic auth)."
     },
     {
+      // Upstream compares it in constant time with everything after the first
+      // colon of the basic auth credentials (src/lib/auth.ts:59-69), so any
+      // value works.
       "name": "STATUS_PASSWORD",
       "label": "Status page password",
-      "help": "The password for the status page's sign-in."
+      "help": "The password for the status page's sign-in.",
+      "generate": "password"
     },
     {
       "name": "AUTH_TOKEN",
       "label": "Alert webhook token",
-      "help": "Optional. Referenced as ${AUTH_TOKEN} in the monitors configuration, for example in an alert's Authorization header.",
+      "help": "Referenced as ${AUTH_TOKEN} in the monitors configuration, for example in an alert's Authorization header.",
       "optional": true
     },
     {
       "name": "TELEGRAM_BOT_TOKEN",
       "label": "Telegram bot token",
-      "help": "Optional. Referenced as ${TELEGRAM_BOT_TOKEN} in a webhook alert that posts to the Telegram Bot API.",
+      "help": "Referenced as ${TELEGRAM_BOT_TOKEN} in a webhook alert that posts to the Telegram Bot API.",
+      "link": { "label": "Create a bot", "url": "https://t.me/BotFather" },
       "optional": true
     },
     {
       "name": "TELEGRAM_CHAT_ID",
       "label": "Telegram chat ID",
-      "help": "Optional. Referenced as ${TELEGRAM_CHAT_ID} in the Telegram alert's body.",
+      "help": "Referenced as ${TELEGRAM_CHAT_ID} in the Telegram alert's body.",
+      "link": { "label": "Find your chat ID", "url": "https://t.me/userinfobot" },
       "optional": true
     }
   ],
@@ -82,8 +89,7 @@
       "name": "MONITORS_CONFIG",
       "label": "Monitors configuration",
       "help": "What to check, how often to retry, and where to send alerts, as YAML. One line of JSON is valid YAML too, as the default shows. Settings: title, default_retries, default_retry_delay_ms, default_timeout_ms, default_failure_threshold. Each monitor has a name, a type (http, tcp or dns) and a target, and may set a region (weur, enam, wnam, apac, eeur, oc, safr, me, sam) and alerts. See https://atalaya-docs.dcarrillo.es/configuration/ for every field.",
-      "default": "{\"settings\":{\"title\":\"Atalaya Uptime Monitor\"},\"monitors\":[{\"name\":\"example\",\"type\":\"http\",\"target\":\"https://example.com\",\"method\":\"GET\",\"expected_status\":200}]}",
-      "required": true
+      "default": "{\"settings\":{\"title\":\"Atalaya Uptime Monitor\"},\"monitors\":[{\"name\":\"example\",\"type\":\"http\",\"target\":\"https://example.com\",\"method\":\"GET\",\"expected_status\":200}]}"
     },
     {
       "name": "STATUS_PUBLIC",
@@ -94,28 +100,30 @@
         { "value": "false", "label": "Sign-in required" },
         { "value": "true", "label": "Public" }
       ],
-      "default": "false"
+      "default": "false",
+      "optional": true
     },
     {
       "name": "STATUS_BANNER_URL",
       "label": "Banner image URL",
-      "help": "Optional. An image shown instead of the title at the top of the status page."
+      "help": "An image shown instead of the title at the top of the status page.",
+      "optional": true
     },
     {
       "name": "STATUS_BANNER_LINK",
       "label": "Banner link",
-      "help": "Optional. Where a click on the banner image goes."
+      "help": "Where a click on the banner image goes.",
+      "optional": true
     }
   ],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Open {{workerUrl}} and sign in with the status page username and password. The first check runs within a minute; history builds up from there."
+      "content": "Open {{appUrl}} and sign in with the status page username and password. The first check runs within a minute; history builds up from there."
     },
     {
       "type": "markdown",
       "content": "Replace the example monitor under **Monitors configuration** in this app's settings with your own. Upstream's guide lists every field: https://atalaya-docs.dcarrillo.es/configuration/"
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

@@ -1,6 +1,8 @@
-# Image sources
+# Media for ShareHTML
 
-Both from jonesphillip/sharehtml at commit 27ddaaf, licensed Apache-2.0 (the repository's licence covers these files; its text is at https://github.com/jonesphillip/sharehtml/blob/27ddaaf191b535346453134fd693e2295a38b88f/LICENSE).
+Upstream: [`jonesphillip/sharehtml`](https://github.com/jonesphillip/sharehtml) at commit [`27ddaaf191b535346453134fd693e2295a38b88f`](https://github.com/jonesphillip/sharehtml/tree/27ddaaf191b535346453134fd693e2295a38b88f), licensed [Apache-2.0](https://github.com/jonesphillip/sharehtml/blob/27ddaaf191b535346453134fd693e2295a38b88f/LICENSE).
 
-- `icon.svg`: [`apps/worker/public/favicon.svg`](https://github.com/jonesphillip/sharehtml/blob/27ddaaf191b535346453134fd693e2295a38b88f/apps/worker/public/favicon.svg), the app's favicon. Unchanged.
-- `screenshots/01-document-with-comments.png`: [`assets/screenshot.png`](https://github.com/jonesphillip/sharehtml/blob/27ddaaf191b535346453134fd693e2295a38b88f/assets/screenshot.png), the README's screenshot of a shared report with comments and reactions. Changed: scaled from 2606x1864 to 2000x1431.
+- `icon.svg`: [`apps/worker/public/favicon.svg`](https://github.com/jonesphillip/sharehtml/blob/27ddaaf191b535346453134fd693e2295a38b88f/apps/worker/public/favicon.svg), the project favicon. Unchanged.
+- `screenshots/01-document-with-comments.png`: [`assets/screenshot.png`](https://github.com/jonesphillip/sharehtml/blob/27ddaaf191b535346453134fd693e2295a38b88f/assets/screenshot.png), referenced on README line 5; a shared report with comments and reactions. Scaled from 2606x1864 to 2000x1431.
+
+No cover: upstream publishes no social preview or banner suitable for 1200x630.

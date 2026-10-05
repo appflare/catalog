@@ -3,26 +3,27 @@
   "slug": "cattopic",
   "name": "CattoPic",
   "summary": "A self-hosted image host: upload, tag, and browse images, with WebP and AVIF copies, expiry, and a public random-image API, on R2, D1, KV, Queues, and Cloudflare Images.",
-  "homepage": "https://github.com/Yuri-NagaSaki/CattoPic",
+  "tagline": "Upload and organize images on your own image host",
   "repo": "Yuri-NagaSaki/CattoPic",
   // The LICENSE file is the GNU GPL version 3 with no "or any later version" grant.
   "license": "GPL-3.0-only",
-  "categories": ["files", "storage"],
+  "categories": ["files"],
+  // The category changed in revision 2, which this release was built with. Field
+  // links added after it was published: a revision, no new build.
+  "revision": 3,
   "authors": [{ "name": "Firefly", "url": "https://catcat.blog", "github": "Yuri-NagaSaki" }],
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v1.0.0", "sha": "7861a5477016717f05e53ea32fe63f5fd74739ca" },
   "install": {
-    "tier": "artifact",
     "packageManager": "pnpm",
     // Cloudflare's Vite plugin writes the bundled Worker and its deploy config
     // under dist/ and points wrangler at it; the packer follows that redirect.
     "wranglerConfig": "wrangler.jsonc",
-    "workerName": "cattopic",
     // Upstream's build script; the wrangler config has no build.command.
     "buildCommand": "pnpm run build",
     // Worker code that answers at once: 401 without an API key. (/ is the
     // static app, and /api/random answers 404 until there is an image.)
-    "healthPath": "/api/images"
+    "health": { "path": "/api/images" }
   },
   // D1, KV, R2, Queues (10,000 operations a day), one hourly cron trigger,
   // and the Images binding (5,000 unique transformations a month) all have
@@ -38,15 +39,19 @@
       "name": "R2_PUBLIC_URL",
       "label": "Public image URL",
       "help": "The public address of the app's R2 bucket (its r2.dev URL or a custom domain), without a trailing slash. Image links are built from it. The bucket exists only after installing, so leave this empty now and set it afterwards (see the steps after installing).",
+      "link": {
+        "label": "Open the dashboard",
+        "url": "https://dash.cloudflare.com/?to=/:account/r2/overview"
+      },
       // Replaces upstream's own bucket domain from the wrangler config.
       "default": "",
-      "required": false
+      "optional": true
     }
   ],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "**Create an API key.** CattoPic signs in with API keys stored in its D1 database. In the Cloudflare dashboard, open Storage & Databases, D1, the database named `{{workerName}}-db`, then Console, and run:\n\n```sql\nINSERT INTO api_keys (key, created_at) VALUES ('<a long random key>', datetime('now'));\n```\n\nThen open {{workerUrl}} and sign in with that key."
+      "content": "**Create an API key.** CattoPic signs in with API keys stored in its D1 database. In the Cloudflare dashboard, open Storage & Databases, D1, the database named `{{workerName}}-db`, then Console, and run:\n\n```sql\nINSERT INTO api_keys (key, created_at) VALUES ('<a long random key>', datetime('now'));\n```\n\nThen open {{appUrl}} and sign in with that key."
     },
     {
       "type": "markdown",
@@ -54,8 +59,7 @@
     },
     {
       "type": "markdown",
-      "content": "The random-image API is public: {{workerUrl}}/api/random answers with a redirect to one of your images."
+      "content": "The random-image API is public: {{appUrl}}/api/random answers with a redirect to one of your images."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

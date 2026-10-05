@@ -3,6 +3,7 @@ import { loadAppflareSchema } from "./lib/appflare-schema.ts";
 import { findApp, listApps, loadManifest } from "./lib/apps.ts";
 import { catalogRepo, info, runMain } from "./lib/cli.ts";
 import { FEATURED_FILE, readFeatured } from "./lib/featured.ts";
+import { licenseProblems } from "./lib/license-rules.ts";
 import { readAppMedia } from "./lib/media.ts";
 import { appsDir, catalogRoot, resolveAppflareDir } from "./lib/paths.ts";
 import { tierProblems } from "./lib/tier-rules.ts";
@@ -10,12 +11,16 @@ import { tierProblems } from "./lib/tier-rules.ts";
 const USAGE = `Usage: pnpm validate [<slug>...]
 
 Validates apps/<slug>/appflare.jsonc (every app when no slug is given) with the
-catalog manifest schema from @appflare/schema (APPFLARE_DIR), the catalog's
-layout rules, and its tier rules: a sandbox tier entry must set plan "paid" and
+strict catalog manifest schema from @appflare/schema (APPFLARE_DIR), the
+catalog's layout rules, and its tier rules. The strict schema refuses unknown
+and renamed fields, a license that is not an SPDX expression of current ids
+(NONE, or LicenseRef-<name> for the rest), categories off the fixed list or
+more than 3 of them, and token permission groups Appflare cannot select. A
+LicenseRef-<name> license must come with a licenseNote. Tier rules: a sandbox tier entry must set plan "paid" and
 declare install.buildCommand; a self-deploying entry must set plan "paid",
 describe its installer in install.selfDeploying, and list tokenPermissions;
 and entries CI does not install (sandbox, self-deploying) must not set
-bump.autoMerge.
+bump.autoMerge to true.
 
 It also checks each entry's images, all of them optional: at most one square
 icon (icon.svg or icon.png), a 1200x630 cover.png, and screenshots/*.png.
@@ -43,6 +48,7 @@ runMain(async () => {
       const manifest = loadManifest(app, schema.catalogManifest);
       const problems = [
         ...tierProblems(manifest),
+        ...licenseProblems(manifest),
         ...readAppMedia(app.dir, manifest.slug, manifest.name, repo).problems.map((p) => `- ${p}`),
       ];
       if (problems.length > 0) {

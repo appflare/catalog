@@ -3,11 +3,13 @@
   "slug": "open-artifacts",
   "name": "Open Artifacts",
   "summary": "Let coding agents publish HTML and Markdown pages to shareable links, with client-side password protection, version history, and updates in place when the project changes, on D1 and R2.",
-  "homepage": "https://github.com/coda0HQ/open-artifacts",
+  "tagline": "Share pages from your coding agent with links that stay up to date",
   "repo": "coda0HQ/open-artifacts",
   // The LICENSE file is MIT; package.json still carries npm's default "ISC".
   "license": "MIT",
   "categories": ["developer-tools", "sharing"],
+  // Help text edited after this release was published: a revision, no new build.
+  "revision": 2,
   "authors": [
     { "name": "Frad Lee", "url": "https://frad.me", "github": "FradSer", "x": "FradSer" },
     { "name": "code0", "url": "https://coda0.com", "github": "coda0HQ" }
@@ -16,10 +18,8 @@
   // Upstream has no release tags, so the entry follows the default branch by commit.
   "source": { "ref": "main", "sha": "4f8b54bec3af00ebb7e0750aa052ca7147c0f039" },
   "install": {
-    "tier": "artifact",
     "packageManager": "pnpm",
-    "wranglerConfig": "wrangler.jsonc",
-    "workerName": "open-artifacts"
+    "wranglerConfig": "wrangler.jsonc"
     // No build: the fonts, marked and mermaid bundles are committed under
     // src/generated/ and public/vendor/, and the Worker creates its D1 tables
     // itself (CREATE TABLE IF NOT EXISTS) on the first request.
@@ -37,16 +37,16 @@
       "name": "CREATE_TOKEN",
       "label": "Publish token",
       "help": "Agents need it to publish new pages: set it as OPEN_ARTIFACTS_TOKEN where the skill runs. Updates to an existing page use that page's own write token. Copy it now.",
-      "generate": true
+      "generate": "password"
     }
   ],
   "vars": [
     {
       "name": "PUBLIC_URL",
       "label": "Public URL",
-      "help": "Optional. The address links should use, for example a custom domain, without a trailing path. Leave it empty to use the address each request arrives at.",
+      "help": "The address links should use, for example a custom domain, without a trailing path. Leave it empty to use the address each request arrives at.",
       "default": "",
-      "required": false
+      "optional": true
     },
     {
       "name": "OPEN_ARTIFACTS_WEB_FONTS",
@@ -54,7 +54,8 @@
       "help": "Serves web fonts from allowlisted font CDNs through the Worker. It relaxes the page sandbox so the browser can cache fonts; turn it off to keep every page in an opaque origin.",
       "type": "select",
       "options": [{ "value": "1", "label": "On" }, { "value": "0", "label": "Off" }],
-      "default": "1"
+      "default": "1",
+      "optional": true
     },
     {
       "name": "OPEN_ARTIFACTS_HANDOFF",
@@ -62,18 +63,18 @@
       "help": "Adds the Record and Play dock to published pages, which records a walkthrough with the camera and microphone.",
       "type": "select",
       "options": [{ "value": "1", "label": "On" }, { "value": "0", "label": "Off" }],
-      "default": "1"
+      "default": "1",
+      "optional": true
     }
   ],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Install the skill for your coding agent and point it at this instance:\n\n```sh\nnpx skills add coda0HQ/open-artifacts -s using-open-artifacts\nexport OPEN_ARTIFACTS_URL={{workerUrl}}\nexport OPEN_ARTIFACTS_TOKEN=<the publish token>\n```\n\nThen ask the agent to publish something as an artifact."
+      "content": "Install the skill for your coding agent and point it at this instance:\n\n```sh\nnpx skills add coda0HQ/open-artifacts -s using-open-artifacts\nexport OPEN_ARTIFACTS_URL={{appUrl}}\nexport OPEN_ARTIFACTS_TOKEN=<the publish token>\n```\n\nThen ask the agent to publish something as an artifact."
     },
     {
       "type": "markdown",
       "content": "Published pages are unlisted, not private: anyone with a link can open it. Protect a page with a password when publishing; it is encrypted in the agent's environment and the Worker never sees the password."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

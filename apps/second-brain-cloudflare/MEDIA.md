@@ -1,5 +1,7 @@
-# Image sources
+# Media for Second Brain
 
-- `icon.svg`: [`public/sb-mark-square.svg`](https://github.com/rahilp/second-brain-cloudflare/blob/8be9305f37aa1b1eddb9d08f9894f04a22af7d8e/public/sb-mark-square.svg) in rahilp/second-brain-cloudflare at 8be9305 (MIT). Unchanged.
+Upstream: [`rahilp/second-brain-cloudflare`](https://github.com/rahilp/second-brain-cloudflare) at the entry's pinned v2.2.0 commit [`8be9305f37aa1b1eddb9d08f9894f04a22af7d8e`](https://github.com/rahilp/second-brain-cloudflare/tree/8be9305f37aa1b1eddb9d08f9894f04a22af7d8e), licensed [MIT](https://github.com/rahilp/second-brain-cloudflare/blob/8be9305f37aa1b1eddb9d08f9894f04a22af7d8e/LICENSE).
 
-No cover: the repository banner shows other companies' logos.
+- `icon.svg`: [`public/sb-mark-square.svg`](https://github.com/rahilp/second-brain-cloudflare/blob/8be9305f37aa1b1eddb9d08f9894f04a22af7d8e/public/sb-mark-square.svg), the project logo. Unchanged; its Git blob hash matches the file at the pin.
+
+Left out: The [site's social preview image](https://www.thesecondbrain.dev/images/social/index.jpg) appears to use a stock photograph of a person. It is absent from the MIT repository, so its license is unclear. [`assets/repo_banner.png`](https://github.com/rahilp/second-brain-cloudflare/blob/8be9305f37aa1b1eddb9d08f9894f04a22af7d8e/assets/repo_banner.png) shows other companies' logos. The site's [Projects overview](https://www.thesecondbrain.dev/images/dashboard-projects-list-light.webp), [project detail](https://www.thesecondbrain.dev/images/dashboard-project-detail-dark.webp), and [reminders sheet](https://www.thesecondbrain.dev/images/features-reminders-due.png) show features added after the v2.2.0 release this entry installs, so they would misrepresent the installed app. No matching screenshot was published in the inspected upstream sources.

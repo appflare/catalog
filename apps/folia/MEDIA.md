@@ -1,7 +1,7 @@
-# Image sources
+# Media for Folia
 
-From chthollyphile/folia-major at commit c249bde (v0.7.9), licensed AGPL-3.0 (the repository's licence covers this file; its text is at https://github.com/chthollyphile/folia-major/blob/c249bde0173c92d053838eb79b63ca06fb7fe2f3/LICENSE).
+Upstream: [`chthollyphile/folia-major`](https://github.com/chthollyphile/folia-major) at commit [`481805873a0b04ca6277dd21c0968ab1e1c4ab02`](https://github.com/chthollyphile/folia-major/tree/481805873a0b04ca6277dd21c0968ab1e1c4ab02), licensed [AGPL-3.0-only](https://github.com/chthollyphile/folia-major/blob/481805873a0b04ca6277dd21c0968ab1e1c4ab02/LICENSE).
 
-- `icon.svg`: [`public/icon.svg`](https://github.com/chthollyphile/folia-major/blob/c249bde0173c92d053838eb79b63ca06fb7fe2f3/public/icon.svg), the app's icon. Unchanged.
+- `icon.svg`: [`public/icon.svg`](https://github.com/chthollyphile/folia-major/blob/481805873a0b04ca6277dd21c0968ab1e1c4ab02/public/icon.svg), the app's icon. Unchanged.
 
-No screenshots: the ones in the repository's `img/` folder show album covers by other artists, which the licence does not cover. No cover: upstream's banner is a GitHub attachment, not a file of the repository.
+Left out: the `img/` previews `preview-fume`, `preview-lumi`, `preview-cad`, `preview-pat`, and `preview-diorama` show the player with lyrics of copyrighted songs, so they are excluded. No cover: the existing media record intentionally excludes the upstream banner, a GitHub attachment.

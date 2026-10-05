@@ -6,10 +6,12 @@
   "slug": "nabiz",
   "name": "nabiz",
   "summary": "A status page that probes your services every minute from Cloudflare's edge, with 90-day uptime bars, operator notices, and Telegram or webhook alerts.",
-  "homepage": "https://github.com/productdevbook/nabiz",
+  "tagline": "A status page that checks your services every minute",
   "repo": "productdevbook/nabiz",
   "license": "MIT",
   "categories": ["monitoring", "utilities"],
+  // Field links added after this release was published: a revision, no new build.
+  "revision": 2,
   "authors": [
     {
       "name": "Wind",
@@ -21,21 +23,18 @@
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v3.12.1", "sha": "eebc8acce25c5db5001398b483ba7a8016c3c5aa" },
   "install": {
-    "tier": "artifact",
     "packageManager": "bun",
     // The Astro build writes the deployable config under dist/server and
     // points wrangler at it; wrangler.toml is the source of its settings.
     "wranglerConfig": "wrangler.toml",
-    "workerName": "nabiz",
     "buildCommand": "bun run build",
     // Answers without a sign-in, from the Worker's own code.
-    "healthPath": "/health"
+    "health": { "path": "/health" }
   },
   // One Worker, one cron trigger and D1, inside the free tier. A probe round
   // spends one subrequest per monitor plus a few for the database, so the
   // free plan's 50 per invocation caps an install at about 43 monitors.
   "plan": "free",
-  "requires": [],
   "resources": {
     "d1": {
       // Upstream ships one schema file instead of migrations. Every statement
@@ -49,18 +48,20 @@
       "name": "ADMIN_TOKEN",
       "label": "Admin token",
       "help": "Lets you write and resolve notices on the page (press n, or open /#notice). Without it every write is refused.",
-      "generate": true
+      "generate": "password"
     },
     {
       "name": "TELEGRAM_BOT_TOKEN",
       "label": "Telegram bot token",
       "help": "With the chat id below, sends a Telegram message whenever a monitor goes down or recovers.",
+      "link": { "label": "Create a bot", "url": "https://t.me/BotFather" },
       "optional": true
     },
     {
       "name": "TELEGRAM_CHAT_ID",
       "label": "Telegram chat id",
       "help": "The chat the bot above writes to.",
+      "link": { "label": "Find your chat ID", "url": "https://t.me/userinfobot" },
       "optional": true
     },
     {
@@ -74,8 +75,7 @@
     {
       "name": "TITLE",
       "label": "Page title",
-      "default": "nabiz",
-      "required": true
+      "default": "nabiz"
     },
     {
       "name": "LANG",
@@ -90,18 +90,18 @@
         { "value": "fr", "label": "French" },
         { "value": "zh-CN", "label": "Chinese (Simplified)" }
       ],
-      "default": "en"
+      "default": "en",
+      "optional": true
     }
   ],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "The page at {{workerUrl}} starts empty: monitors are rows in the database. In the Cloudflare dashboard open Storage & Databases, D1, the database named `{{workerName}}-db`, then Console, and add them:\n\n```sql\nINSERT INTO monitors (slug, name, url, position) VALUES\n  ('api', 'API', 'https://api.example.com/health', 1);\n```\n\nEach one shows up at the next probe round, within a minute. Upstream's docs/monitors.md lists every column."
+      "content": "The page at {{appUrl}} starts empty: monitors are rows in the database. In the Cloudflare dashboard open Storage & Databases, D1, the database named `{{workerName}}-db`, then Console, and add them:\n\n```sql\nINSERT INTO monitors (slug, name, url, position) VALUES\n  ('api', 'API', 'https://api.example.com/health', 1);\n```\n\nEach one shows up at the next probe round, within a minute. Upstream's docs/monitors.md lists every column."
     },
     {
       "type": "markdown",
       "content": "Attach a custom domain to the Worker for real traffic: the page's edge cache does nothing on a workers.dev address."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

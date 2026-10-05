@@ -89,6 +89,9 @@ fails.
 `APPFLARE_DEPLOY_KEY` is not needed: without it the workflows check out
 `appflare/appflare` anonymously.
 
+`DOCS_REBUILD_TOKEN` is not needed either: it starts the rebuild of appflare.dev,
+which lists only the official catalog, and without it that step is skipped.
+
 The install checks deploy each app into the Cloudflare account above, check that
 it answers, and delete it again: in pull requests (`verify.yml`, whose `verify
 passed` check fails without them) and every night (`nightly.yml`). Use an
@@ -138,5 +141,5 @@ dialog shows the fingerprint of the pasted key back; an admin compares the two
 before saving.
 
 For how admins add, browse and remove catalogs, see
-[Custom catalogs](https://appflare-docs.appflare-dev.workers.dev/guides/custom-catalogs/)
+[Custom catalogs](https://appflare.dev/guides/custom-catalogs/)
 in the Appflare docs.

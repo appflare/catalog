@@ -6,7 +6,8 @@ name: nightly
 # summary and fails its job; the app stays in the catalog and keeps its
 # previous lastVerified. Only artifact tier apps have a release to install;
 # sandbox and self-deploying entries are skipped here and verified by hand
-# with verify-tier.yml.
+# with verify-tier.yml. After the Pages deploy, the docs site is rebuilt so
+# appflare.dev shows the new install check dates (see publish.yml).
 
 on:
   schedule:
@@ -80,6 +81,11 @@ jobs:
       contents: read
     strategy:
       fail-fast: false
+      # The CI account is on the free plan, which allows 10 D1 databases per
+      # account; wrangler creates each app's databases during its deploy and
+      # the cleanup step deletes them. Six installs at a time stay under the
+      # limit even when most of them bind a database or two.
+      max-parallel: 6
       matrix:
         include: ${{ fromJSON(needs.apps.outputs.apps) }}
     # Shares nothing with pull request runs (their names end in pr<n> or b<hash>).
@@ -116,12 +122,17 @@ jobs:
           node "${APPFLARE_DIR}/packages/pack/bin/appflare-pack.js" verify "${dir}" --require-signed \
             --check-upload "${trusted[@]}"
       - name: Deploy to the CI account and health-check
+        id: deploy
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           # Optional: a throwaway test database for apps that bind Hyperdrive;
           # without it such an app is skipped.
           HYPERDRIVE_TEST_URL: ${{ secrets.HYPERDRIVE_TEST_URL }}
+          # The CI account's Workers plan (see verify.yml): on free, an entry
+          # with plan "paid" is skipped with a notice and its step output
+          # skipped set, and nothing is recorded for it below.
+          CI_ACCOUNT_PLAN: ${{ vars.CI_ACCOUNT_PLAN || 'free' }}
         run: node scripts/ci-install.ts deploy "dist/${SLUG}" --suffix nightly
       - name: Delete the CI Worker and its resources
         id: cleanup
@@ -131,6 +142,7 @@ jobs:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: node scripts/ci-install.ts cleanup "dist/${SLUG}" --suffix nightly
       - name: Record the verification
+        if: steps.deploy.outputs.skipped == ''
         run: |
           set -euo pipefail
           mkdir -p "${RUNNER_TEMP}/verified"
@@ -141,9 +153,27 @@ jobs:
             '{slug: $slug, version: $version, digest: $digest, at: $at}' \
             > "${RUNNER_TEMP}/verified/${SLUG}.json"
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        if: steps.deploy.outputs.skipped == ''
         with:
           name: verified-${{ matrix.slug }}
           path: ${{ runner.temp }}/verified/${{ matrix.slug }}.json
+          if-no-files-found: error
+          retention-days: 7
+      # A skipped app is neither verified nor failed; the summary below says so.
+      - name: Note the skip
+        if: steps.deploy.outputs.skipped != ''
+        env:
+          SKIPPED: ${{ steps.deploy.outputs.skipped }}
+        run: |
+          set -euo pipefail
+          mkdir -p "${RUNNER_TEMP}/skipped"
+          jq -n --arg slug "${SLUG}" --arg reason "${SKIPPED}" '{slug: $slug, reason: $reason}' \
+            > "${RUNNER_TEMP}/skipped/${SLUG}.json"
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        if: steps.deploy.outputs.skipped != ''
+        with:
+          name: skipped-${{ matrix.slug }}
+          path: ${{ runner.temp }}/skipped/${{ matrix.slug }}.json
           if-no-files-found: error
           retention-days: 7
 
@@ -185,9 +215,13 @@ jobs:
           mkdir -p "${dir}"
           # One --name per app, so each file lands directly in dir; a failed app
           # uploaded nothing.
+          skipped="${RUNNER_TEMP}/skipped"
+          mkdir -p "${skipped}"
           for slug in $(jq -r '.[].slug' <<< "${APPS}"); do
             gh run download "${GITHUB_RUN_ID}" --repo "${GITHUB_REPOSITORY}" \
               --name "verified-${slug}" --dir "${dir}" 2> /dev/null || true
+            gh run download "${GITHUB_RUN_ID}" --repo "${GITHUB_REPOSITORY}" \
+              --name "skipped-${slug}" --dir "${skipped}" 2> /dev/null || true
           done
           shopt -s nullglob
           files=("${dir}"/*.json)
@@ -204,6 +238,8 @@ jobs:
               version="$(jq -r .version <<< "${row}")"
               if jq -e --arg s "${slug}" 'has($s)' "${RUNNER_TEMP}/verified.json" > /dev/null; then
                 echo "| ${slug} | ${version} | passed |"
+              elif [ -f "${skipped}/${slug}.json" ]; then
+                echo "| ${slug} | ${version} | skipped: needs Workers Paid, and the CI account is on the free plan |"
               else
                 echo "| ${slug} | ${version} | **FAILED** (kept in the catalog) |"
                 echo "::warning::${slug}@${version} failed the nightly install check"
@@ -255,3 +291,37 @@ jobs:
     steps:
       - id: deploy
         uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
+
+  docs:
+    name: rebuild docs
+    needs: pages
+    if: ${{ !cancelled() && needs.pages.result == 'success' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    # No checkout and no code from either repository: one API call that starts
+    # the docs site workflow in appflare/appflare, which builds main against
+    # whatever this catalog now serves. The workflow token gets no permissions;
+    # the call uses DOCS_REBUILD_TOKEN, and without it the job only says so.
+    permissions: {}
+    steps:
+      - name: Start the docs site workflow
+        working-directory: .
+        env:
+          DOCS_REBUILD_TOKEN: ${{ secrets.DOCS_REBUILD_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ -z "${DOCS_REBUILD_TOKEN}" ]; then
+            echo "::notice title=Docs rebuild skipped::docs rebuild skipped: DOCS_REBUILD_TOKEN is not set"
+            exit 0
+          fi
+          # The header goes in on stdin (printf is a shell builtin), so the
+          # token is never in a process's arguments or in the log.
+          printf 'Authorization: Bearer %s\n' "${DOCS_REBUILD_TOKEN}" |
+            curl --fail-with-body --silent --show-error --retry 3 --max-time 30 \
+              -X POST \
+              -H @- \
+              -H "Accept: application/vnd.github+json" \
+              -H "X-GitHub-Api-Version: 2022-11-28" \
+              --data '{"ref":"main"}' \
+              https://api.github.com/repos/appflare/appflare/actions/workflows/docs.yml/dispatches
+          echo "started the docs site workflow on appflare/appflare main"

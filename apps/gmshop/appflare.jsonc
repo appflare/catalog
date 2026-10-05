@@ -3,12 +3,14 @@
   "slug": "gmshop",
   "name": "GMShop Edge",
   "summary": "A single-tenant digital-goods shop: stock items such as licence keys delivered on payment, private downloads from R2, entitlements, coupons and refunds, guest or account checkout, and an admin console with roles, on D1, KV, R2 and Queues.",
-  "homepage": "https://github.com/GMWalletApp/gmshop-edge",
+  "tagline": "Sell digital goods with automatic delivery from your own shop",
   "repo": "GMWalletApp/gmshop-edge",
   // The LICENSE file is the GNU GPL version 3; package.json grants "or any
   // later version".
   "license": "GPL-3.0-or-later",
   "categories": ["ecommerce", "business"],
+  // openPath added after this release was published: a revision, no new build.
+  "revision": 2,
   "authors": [
     {
       "name": "GM Wallet",
@@ -20,17 +22,15 @@
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v1.0.2", "sha": "c5ed4855d4623417b61542966bcba15a6aeb8ce4" },
   "install": {
-    "tier": "artifact",
     "packageManager": "bun",
     "wranglerConfig": "wrangler.jsonc",
-    "workerName": "gmshop",
     // Upstream's `build` script. Without `--remote` (which its own deploy
     // adds to create resources and run migrations through wrangler first)
     // it only runs `vite build`: TanStack Start with the Cloudflare plugin
     // builds the shop and the Worker together.
     "buildCommand": "bun run build",
     // Liveness endpoint the Worker answers before any route or sign-in.
-    "healthPath": "/healthz"
+    "health": { "path": "/healthz" }
   },
   // D1, KV, R2, a queue with its dead-letter queue, and one cron trigger
   // every minute fit the free plan. The config binds Cloudflare Email
@@ -42,16 +42,15 @@
   // None: the Better Auth secret, the shop's address and every provider
   // credential are created or entered in the admin console and stored in D1.
   "secrets": [],
-  "vars": [],
+  "openPath": "/admin",
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Open {{workerUrl}}/install right away: whoever completes it first becomes the root administrator."
+      "content": "Open {{appUrl}}/install right away: whoever completes it first becomes the root administrator."
     },
     {
       "type": "markdown",
       "content": "Payment, email and sign-in providers are set up in the admin console. To send mail through Cloudflare Email Sending, onboard your sending domain under Email Service in the Cloudflare dashboard and pick the Cloudflare email provider in the console."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

@@ -17,7 +17,8 @@ import { createVersionResolver, loadPackerVersioning } from "./lib/versions.ts";
 
 const USAGE = `Usage: pnpm pack-app <slug> [--out <dir>] [--key-id <id>]
 
-Clones the app's repo at source.sha into a temp dir, builds the artifact with
+Clones the app's repo at source.sha into a temp dir (with its git submodules,
+at the commits the pin records), builds the artifact with
 appflare-pack (dependencies installed with --ignore-scripts), and checks it
 with appflare-pack verify --hashes-only --check-upload (each Worker must fit
 one upload by the manager: its module bytes, and the Range requests that read
@@ -52,7 +53,11 @@ function mustRun(cmd: string, args: string[], cwd?: string): void {
   }
 }
 
-/** Clones `repo` without blobs and checks out exactly `sha`. */
+/**
+ * Clones `repo` without blobs, checks out exactly `sha`, and then its git
+ * submodules at the commits `sha` records, since some apps keep their Worker
+ * or its assets in one. A repository without submodules is unaffected.
+ */
 function checkoutPinned(repo: string, sha: string, dir: string): void {
   const url = `https://github.com/${repo}.git`;
   info(`cloning ${url} (blob:none) at ${sha}`);
@@ -66,6 +71,11 @@ function checkoutPinned(repo: string, sha: string, dir: string): void {
   if (head.stdout.trim() !== sha) {
     throw new Error(`checkout is at ${head.stdout.trim()}, expected ${sha}`);
   }
+  mustRun(
+    "git",
+    ["submodule", "update", "--quiet", "--init", "--recursive", "--filter=blob:none"],
+    dir,
+  );
 }
 
 runMain(async () => {
@@ -136,14 +146,17 @@ runMain(async () => {
     );
   }
   const zipPath = path.join(outDir, `${slug}-${artifact.version}.zip`);
-  const count = (lists: Record<string, unknown[]> | undefined): number =>
-    Object.values(lists ?? {}).reduce((n, l) => n + l.length, 0);
-  const schemaFiles = count(artifact.d1Schema);
-  const postDeploy = count(artifact.d1PostDeploy);
+  const d1 = Object.values(artifact.d1);
+  const count = (of: (sql: (typeof d1)[number]) => number): number =>
+    d1.reduce((n, sql) => n + of(sql), 0);
+  const schemaFiles = count((sql) => sql.schema.length);
+  const postDeploy = count((sql) => sql.postDeploy.length);
+  const baselines = count((sql) => (sql.baseline === undefined ? 0 : 1));
   const migrations = [
-    String(count(artifact.d1Migrations)),
+    String(count((sql) => sql.migrations.length)),
     ...(schemaFiles > 0 ? [`${schemaFiles} schema file(s)`] : []),
     ...(postDeploy > 0 ? [`${postDeploy} post-deploy`] : []),
+    ...(baselines > 0 ? [`${baselines} baseline(s)`] : []),
   ].join(", ");
   const sizes = await loadPackerWorkerSize(appflareDir);
   // Each Worker is measured on its own: every Worker is its own upload.
@@ -152,7 +165,7 @@ runMain(async () => {
   process.stdout.write(
     [
       `${slug}@${artifact.version} (keyId=${artifact.keyId}, not signed)`,
-      `  source:     ${artifact.source.repo}@${artifact.source.sha} (${artifact.source.ref})`,
+      `  source:     ${artifact.catalog.repo}@${artifact.catalog.source.sha} (${artifact.catalog.source.ref})`,
       ...workerSummaryLines(artifact, sizeLine),
       `  migrations: ${migrations}`,
       `  zip:        ${zipPath} (${statSync(zipPath).size} bytes)`,

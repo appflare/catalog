@@ -1,5 +1,1 @@
-# Image sources
-
-- `icon.png`: the project logo, [`https://public-assets.turborepo-remote-cache.dev/images/logo.png`](https://public-assets.turborepo-remote-cache.dev/images/logo.png), which upstream's documentation site shows as its logo and hero image ([`docs/.vitepress/config.ts`](https://github.com/AdiRishi/turborepo-remote-cache-cloudflare/blob/b0aaab5c3063dd5f8d15e38e69398a0c040edcda/docs/.vitepress/config.ts) and [`docs/index.md`](https://github.com/AdiRishi/turborepo-remote-cache-cloudflare/blob/b0aaab5c3063dd5f8d15e38e69398a0c040edcda/docs/index.md) at b0aaab5). The same design ships in the repository, under its MIT licence, as [`docs/public/favicon.ico`](https://github.com/AdiRishi/turborepo-remote-cache-cloudflare/blob/b0aaab5c3063dd5f8d15e38e69398a0c040edcda/docs/public/favicon.ico) (48 px at most, too small for an icon), so the larger file from upstream's asset host is used. Changed: padded from 668x645 to a transparent square and scaled to 256x256.
-
-No cover or screenshots: upstream publishes none, and the server has no interface beyond a page linking to its documentation.
+- `icon.png` from the upstream [project logo](https://public-assets.turborepo-remote-cache.dev/images/logo.png): Padded from 668x645 to a transparent 668x668 square; Scaled to 256x256.

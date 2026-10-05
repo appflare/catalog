@@ -10,10 +10,13 @@
   "slug": "cloudflarebase",
   "name": "Cloudflarebase",
   "summary": "An open-source Firebase alternative on Cloudflare: auth, JSON collections and SQL tables with live queries, remote config and file storage, each project in Durable Objects of its own, run from one console. App hosting needs Workers for Platforms, which Appflare does not set up yet; the rest works.",
+  "tagline": "Add sign-in, live data, and file storage to your app",
   "homepage": "https://cloudflarebase.com",
   "repo": "cloudflarebase/cloudflarebase",
   "license": "Apache-2.0",
-  "categories": ["developer-tools", "storage"],
+  "categories": ["developer-tools", "files"],
+  // The category changed after this release was published: a revision, no new build.
+  "revision": 2,
   "authors": [
     {
       "name": "The Cloudflarebase Authors",
@@ -25,10 +28,8 @@
   // Pinned to main: the repository has no tags.
   "source": { "ref": "main", "sha": "adfd1b3007896b172f028c03dd0e442f0f8907b1" },
   "install": {
-    "tier": "artifact",
     "packageManager": "npm",
     "wranglerConfig": "wrangler.jsonc",
-    "workerName": "cloudflarebase",
     // The root install's postinstall runs `npm install` in each agent
     // directory; installs here run without scripts, so each agent directory,
     // which has a lockfile of its own, is listed instead.
@@ -80,7 +81,7 @@
       "name": "CONSOLE_SETUP_TOKEN",
       "label": "Console setup token",
       "help": "Paste it on the console's sign-in page to create the first operator account. It also lets you reclaim the console later. At least 24 characters.",
-      "generate": true,
+      "generate": "password",
       "workers": ["dashboard"]
     }
   ],
@@ -89,18 +90,18 @@
       "name": "EMAIL_FROM",
       "label": "Sender address",
       "help": "The address the auth agent sends verification and password-reset mail from, through Cloudflare Email Sending. Leave it empty to send no mail.",
-      "workers": ["auth"]
+      "workers": ["auth"],
+      "optional": true
     }
   ],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Open {{workerUrl}}/login and paste the console setup token to create the first operator account, then create a project. Apps call its API at `{{workerUrl}}/api/projects/<project id>`."
+      "content": "Open {{appUrl}}/login and paste the console setup token to create the first operator account, then create a project. Apps call its API at `{{appUrl}}/api/projects/<project id>`."
     },
     {
       "type": "markdown",
       "content": "App hosting needs Workers for Platforms, which Appflare does not set up yet; the rest works. The Hosting pages answer that hosting is not configured."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

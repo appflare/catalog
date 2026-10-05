@@ -3,54 +3,65 @@
   "slug": "ternssh",
   "name": "ternssh",
   "summary": "An SSH workspace in the browser: a draggable dashboard of terminals, SFTP file management, server status and process monitors, saved servers and keys, and an AI command helper.",
+  "tagline": "Manage SSH servers and files from your browser",
   "homepage": "https://ternssh.com",
   "repo": "haradakashiwa/ternssh",
-  "license": "GPL-3.0",
+  "license": "GPL-3.0-or-later",
   "categories": ["remote-access", "developer-tools"],
+  // The Access help and steps after installing changed after this release was
+  // published: a revision, no new build.
+  "revision": 2,
   "authors": [{ "name": "haradakashiwa", "url": "https://ternssh.com", "github": "haradakashiwa" }],
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v0.0.13", "sha": "b3d2b6c7c0ad00496d79e07c36532d549cd5e73a" },
   "install": {
-    "tier": "artifact",
     "packageManager": "npm",
     "wranglerConfig": "wrangler.jsonc",
-    "workerName": "ternssh",
     // Upstream's root postinstall installs web/ and server/, each from its own
     // lockfile; install scripts do not run here, so both are listed. The root
     // holds only wrangler, which the packer brings itself.
     "installDirs": [{ "path": "web" }, { "path": "server" }],
     // The React front end, built into server/public, which the Worker serves.
     "buildCommand": "npm run build:web",
-    "healthPath": "/api/health"
+    "health": { "path": "/api/health" }
   },
   // D1, one SQLite-backed Durable Object class per SSH session, and outbound
   // TCP sockets all work on the free plan.
   "plan": "free",
-  "requires": [],
-  "secrets": [],
+  // ACCESS_TEAM_DOMAIN and ACCESS_AUD take Appflare's Access values (below).
+  // Protection is offered, not required, so "access" asks for a Zero Trust
+  // organization only for a protected install.
+  "requires": ["access"],
+  // No `access` block: Appflare offers its Cloudflare Access protection,
+  // switched off, and nothing must stay public (the browser app and its
+  // WebSockets are one origin; /api/health answers without a sign-in).
   "vars": [
     {
+      // server/src/auth/identity.ts uses the Access sign-in only while both
+      // are set (it trims them and strips a leading https://), so they stay
+      // empty, and the app's own password works, while it is unprotected.
       "name": "ACCESS_TEAM_DOMAIN",
       "label": "Cloudflare Access team domain",
-      "help": "With the audience tag below, ternssh signs people in through Cloudflare Access instead of its own username and password, for example your-team.cloudflareaccess.com.",
-      "required": false
+      "help": "Filled in by Appflare from the app's Cloudflare Access protection: your Zero Trust team domain. While it and the audience tag are set, ternssh signs people in through Cloudflare Access instead of its own username and password. Empty while the app is unprotected.",
+      "optional": true,
+      "default": "{{accessTeamDomain}}"
     },
     {
       "name": "ACCESS_AUD",
       "label": "Cloudflare Access audience tag",
-      "help": "The Application Audience (AUD) tag of the Access application in front of this Worker.",
-      "required": false
+      "help": "Filled in by Appflare: the audience tag of the app's Cloudflare Access application. Empty while the app is unprotected.",
+      "optional": true,
+      "default": "{{accessAud}}"
     }
   ],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Open {{workerUrl}} right away and choose the username and password: until someone does, the first visitor sets them. After that every request needs them, and three failed attempts lock that IP address out for an hour."
+      "content": "Installed behind Cloudflare Access? Open {{appUrl}} and sign in through Access; ternssh asks for no password of its own."
     },
     {
       "type": "markdown",
-      "content": "To sign in through Cloudflare Access instead, put an Access application in front of the Worker and set its team domain and audience tag in the app's settings."
+      "content": "Without Cloudflare Access, open {{appUrl}} right away and choose the username and password: until someone does, the first visitor sets them. After that every request needs them, and three failed attempts lock that IP address out for an hour."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

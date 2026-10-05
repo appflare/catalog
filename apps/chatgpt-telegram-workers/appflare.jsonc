@@ -3,22 +3,23 @@
   "slug": "chatgpt-telegram-workers",
   "name": "ChatGPT Telegram Bot",
   "summary": "Your own AI chat bot on Telegram, backed by OpenAI, Anthropic, Workers AI, or any OpenAI-compatible API.",
-  "homepage": "https://github.com/TBXark/ChatGPT-Telegram-Workers",
+  "tagline": "Chat with your own AI bot on Telegram",
   "repo": "TBXark/ChatGPT-Telegram-Workers",
   "license": "MIT",
   "categories": ["ai", "bots"],
+  // openPath and field links added after this release was published: a revision,
+  // no new build.
+  "revision": 2,
   "authors": [{ "name": "TBXark", "url": "https://tbxark.com", "github": "TBXark", "x": "tbxark" }],
   "maintainers": ["MendyLanda"],
   // Upstream tags releases without a "v" prefix (2.0.0); the packer reads both forms.
   "source": { "ref": "2.0.0", "sha": "0d152e567a2b3db159d013957b6a48879262d5d2" },
   "install": {
-    "tier": "artifact",
     "packageManager": "pnpm",
     "wranglerConfig": "wrangler.jsonc",
-    "workerName": "chatgpt-telegram-workers",
     // The home page is served to anyone. It reads the bot's settings from the
     // DATABASE KV namespace (empty on a fresh install) and needs no credentials.
-    "healthPath": "/"
+    "health": { "path": "/" }
   },
   "plan": "free",
   // The wrangler config binds Workers AI as AI, but the bot only uses it when the
@@ -30,19 +31,20 @@
     {
       "name": "TELEGRAM_TOKEN",
       "label": "Telegram bot token",
-      "help": "Send /newbot to @BotFather in Telegram and paste the token it replies with. One Worker serves one bot."
+      "help": "Send /newbot to @BotFather in Telegram and paste the token it replies with. One Worker serves one bot.",
+      "link": { "label": "Create a bot", "url": "https://t.me/BotFather" }
     },
     {
       "name": "ADMIN_PASSWORD",
       "label": "Admin password",
       "help": "Signs you in to /admin from a browser, which you need once to register the webhook. Copy it now.",
-      "generate": true
+      "generate": "password"
     },
     {
       "name": "TELEGRAM_SECRET_TOKEN",
       "label": "Webhook secret",
       "help": "Sent to Telegram when the webhook is registered; the Worker rejects updates that do not carry it. Letters and digits only.",
-      "generate": true
+      "generate": "password"
     }
   ],
   "vars": [
@@ -50,24 +52,24 @@
       "name": "ADMIN_ID",
       "label": "Your Telegram user id",
       "help": "The numeric id @userinfobot replies with. Only this user can open the admin panel and change the bot's settings.",
-      "required": true
+      "link": { "label": "Find your user ID", "url": "https://t.me/userinfobot" }
     },
     {
       "name": "PUBLIC_BASE_URL",
       "label": "Public URL",
       "help": "Only for a custom domain, for example https://bot.example.com. Leave empty to use the workers.dev address.",
-      "required": false
+      "optional": true
     }
   ],
+  "openPath": "/admin",
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Open {{workerUrl}}/admin and sign in with the admin password. Then open {{workerUrl}}/init, which registers the Telegram webhook, the bot's command menu, and the Settings button that opens the admin panel inside Telegram."
+      "content": "Open {{appUrl}}/admin and sign in with the admin password. Then open {{appUrl}}/init, which registers the Telegram webhook, the bot's command menu, and the Settings button that opens the admin panel inside Telegram."
     },
     {
       "type": "markdown",
       "content": "In the admin panel, add an AI provider on the **Chat Providers** tab (base URL, API key, and API format; use the `workers` format for Workers AI, which needs no key) and choose the default model. Then send `/new` to the bot and start chatting. Only you can chat with it at first; add other Telegram user or group ids on the **Settings** tab."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

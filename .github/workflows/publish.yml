@@ -17,7 +17,7 @@ name: publish
 #   pack          no secrets; packs each app (runs its install and build code)
 #                 into an unsigned intermediate with the catalog's key id
 #   sign          APPFLARE_SIGNING_KEY only; runs no app code; signs only a manifest.json
-#                 whose app, version, source, keyId, and catalog equal the plan
+#                 whose app, version, keyId, and catalog (with the pin) equal the plan
 #   release       contents: write, CATALOG_PUSH_KEY; re-checks against the plan,
 #                 creates the releases, rebuilds and commits index.json (with the
 #                 revision signatures), and assembles the site, where build-site
@@ -28,6 +28,9 @@ name: publish
 #                 featured images, and the live stats.json to GitHub Pages (the
 #                 site is also kept as the "catalog-site" artifact, which the
 #                 stats workflow redeploys with new numbers)
+#   docs          DOCS_REBUILD_TOKEN only, no checkout, runs no code; starts the
+#                 docs site workflow in appflare/appflare so appflare.dev lists
+#                 what was just published (skipped with a notice when unset)
 #
 # The plan is computed from the manifests and existing releases, so any run
 # (including a manual one, or the one after a cancelled run) publishes whatever
@@ -128,8 +131,8 @@ jobs:
           revisions="$(jq -c '.revisions // {} | keys' "${RUNNER_TEMP}/publish-plan.json")"
           echo "revisions to sign: ${revisions}"
           echo "revisions=${revisions}" >> "${GITHUB_OUTPUT}"
-      # What sign and release hold every artifact to: app, version, source,
-      # keyId, and the canonical catalog block per slug.
+      # What sign and release hold every artifact to: app, version,
+      # keyId, and the canonical catalog block (with the pin) per slug.
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: publish-plan
@@ -398,11 +401,14 @@ jobs:
       # With ssh-key, origin is the SSH URL and core.sshCommand points at the
       # key until the job ends, which is what persist-credentials keeps. Every
       # later step can read the key, so this job runs no app code: only the
-      # catalog's own scripts, the packer bundle, and gh.
+      # catalog's own scripts, the packer bundle, and gh. The whole history
+      # (fetch-depth: 0): build-index dates each row's addedAt by the commit
+      # that added its appflare.jsonc, and refuses a shallow clone.
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           path: catalog
           ref: main
+          fetch-depth: 0
           ssh-key: ${{ secrets.CATALOG_PUSH_KEY }}
           persist-credentials: true
       - uses: ./catalog/.github/actions/use-packer
@@ -481,7 +487,8 @@ jobs:
               echo "::error::release ${tag} exists with a different manifest.json (released sha256 ${remote_sha}, this run ${local_sha}); fix or delete it by hand"
               exit 1
             fi
-            source="$(jq -r '.source.repo + "@" + .source.sha + " (" + .source.ref + ")"' "${dir}/manifest.json")"
+            # The pin is recorded in the catalog manifest packed into the artifact.
+            source="$(jq -r '.catalog.repo + "@" + .catalog.source.sha + " (" + .catalog.source.ref + ")"' "${dir}/manifest.json")"
             gh release create "${tag}" \
               "${dir}/${slug}-${version}.zip" "${dir}/manifest.json" "${dir}/manifest.sig" \
               --target "${GITHUB_SHA}" \
@@ -541,3 +548,37 @@ jobs:
     steps:
       - id: deploy
         uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
+
+  docs:
+    name: rebuild docs
+    needs: pages
+    if: ${{ !cancelled() && needs.pages.result == 'success' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    # No checkout and no code from either repository: one API call that starts
+    # the docs site workflow in appflare/appflare, which builds main against
+    # whatever this catalog now serves. The workflow token gets no permissions;
+    # the call uses DOCS_REBUILD_TOKEN, and without it the job only says so.
+    permissions: {}
+    steps:
+      - name: Start the docs site workflow
+        working-directory: .
+        env:
+          DOCS_REBUILD_TOKEN: ${{ secrets.DOCS_REBUILD_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ -z "${DOCS_REBUILD_TOKEN}" ]; then
+            echo "::notice title=Docs rebuild skipped::docs rebuild skipped: DOCS_REBUILD_TOKEN is not set"
+            exit 0
+          fi
+          # The header goes in on stdin (printf is a shell builtin), so the
+          # token is never in a process's arguments or in the log.
+          printf 'Authorization: Bearer %s\n' "${DOCS_REBUILD_TOKEN}" |
+            curl --fail-with-body --silent --show-error --retry 3 --max-time 30 \
+              -X POST \
+              -H @- \
+              -H "Accept: application/vnd.github+json" \
+              -H "X-GitHub-Api-Version: 2022-11-28" \
+              --data '{"ref":"main"}' \
+              https://api.github.com/repos/appflare/appflare/actions/workflows/docs.yml/dispatches
+          echo "started the docs site workflow on appflare/appflare main"

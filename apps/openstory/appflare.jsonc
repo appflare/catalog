@@ -3,10 +3,14 @@
   "slug": "openstory",
   "name": "OpenStory",
   "summary": "Turn a script into a storyboard and video: scene breakdown, consistent characters, locations and styles, AI-generated frames, motion, voices and music, with team libraries and an MCP server, on D1, R2, Workflows and Durable Objects. Brings your own AI provider keys.",
+  "tagline": "Turn scripts into videos with consistent characters and scenes",
   "homepage": "https://openstory.so",
   "repo": "openstory-so/openstory",
   "license": "MIT",
   "categories": ["ai", "media"],
+  // Edited help text (revision 2) and field links (revision 3) came after this
+  // release was published: revisions, no new build.
+  "revision": 3,
   "authors": [
     {
       "name": "OpenStory",
@@ -19,7 +23,6 @@
   // Upstream has no release tags, so the entry follows the default branch by commit.
   "source": { "ref": "main", "sha": "0311b1f63f2804fbb17bbbd999732198e424f098" },
   "install": {
-    "tier": "artifact",
     "packageManager": "bun",
     // The config's default environment is what upstream's Deploy to
     // Cloudflare button installs; its D1 id is a placeholder, dropped when
@@ -27,7 +30,6 @@
     // deployment, with a video-export container) and `test` are not used,
     // so server-side video export reports that it is unavailable.
     "wranglerConfig": "wrangler.jsonc",
-    "workerName": "openstory",
     // Upstream's deploy: drizzle-kit writes one folder per migration, and
     // its script flattens them into drizzle/migrations-wrangler, the D1
     // binding's migrations_dir. Then Vite with the Cloudflare plugin builds
@@ -52,54 +54,67 @@
       "name": "BETTER_AUTH_SECRET",
       "label": "Session secret",
       "help": "Signs sessions. Setting a new value signs everyone out.",
-      "generate": true
+      "generate": "password"
     },
     {
       "name": "API_KEY_ENCRYPTION_KEY",
       "label": "API key encryption key",
       "help": "Encrypts the AI provider keys teams add in the app. Setting a new value makes the stored keys unreadable, so teams must add them again.",
-      "generate": true
+      "generate": "password"
     },
     {
       "name": "FAL_KEY",
       "label": "fal API key",
-      "help": "Optional. A server-wide fal.ai key for images, video, audio and language models. Without it, each team adds its own under Settings > API Keys.",
+      "help": "A server-wide fal.ai key for images, video, audio and language models. Without it, each team adds its own under Settings > API Keys.",
+      "link": { "label": "Get a key", "url": "https://fal.ai/dashboard/keys" },
       "optional": true
     },
     {
       "name": "OPENROUTER_KEY",
       "label": "OpenRouter API key",
-      "help": "Optional. A server-wide OpenRouter key for script analysis. Teams can add their own or connect OpenRouter in the app.",
+      "help": "A server-wide OpenRouter key for script analysis. Teams can add their own or connect OpenRouter in the app.",
+      "link": { "label": "Get a key", "url": "https://openrouter.ai/settings/keys" },
       "optional": true
     },
     {
       "name": "GEMINI_API_KEY",
       "label": "Gemini API key",
-      "help": "Optional. Serves Gemini chat and video models first-party; without it they go through OpenRouter or fal.",
+      "help": "Serves Gemini chat and video models first-party; without it they go through OpenRouter or fal.",
+      "link": { "label": "Get a key", "url": "https://aistudio.google.com/app/apikey" },
       "optional": true
     },
     {
       "name": "XAI_API_KEY",
       "label": "xAI API key",
-      "help": "Optional. Serves Grok chat, image and video models first-party; without it they go through OpenRouter or fal.",
+      "help": "Serves Grok chat, image and video models first-party; without it they go through OpenRouter or fal.",
+      "link": { "label": "Get a key", "url": "https://console.x.ai/" },
       "optional": true
     },
     {
       "name": "ELEVENLABS_API_KEY",
       "label": "ElevenLabs API key",
-      "help": "Optional. Text to speech, voice design and music. Server-wide only: designed voices live in this ElevenLabs account.",
+      "help": "Text to speech, voice design and music. Server-wide only: designed voices live in this ElevenLabs account.",
+      "link": { "label": "Get a key", "url": "https://elevenlabs.io/app/developers/api-keys" },
       "optional": true
     },
     {
       "name": "GOOGLE_CLIENT_ID",
       "label": "Google OAuth client ID",
-      "help": "Optional, with the secret below, for Google sign-in next to emailed codes.",
+      "help": "With the secret below, for Google sign-in next to emailed codes.",
+      "link": {
+        "label": "Create an OAuth client",
+        "url": "https://console.cloud.google.com/apis/credentials"
+      },
       "optional": true
     },
     {
       "name": "GOOGLE_CLIENT_SECRET",
       "label": "Google OAuth client secret",
-      "help": "Optional. The secret of the Google OAuth client above.",
+      "help": "The secret of the Google OAuth client above.",
+      "link": {
+        "label": "Create an OAuth client",
+        "url": "https://console.cloud.google.com/apis/credentials"
+      },
       "optional": true
     }
   ],
@@ -108,31 +123,29 @@
       "name": "VITE_APP_URL",
       "label": "App URL",
       "help": "The address people open the app at, without a trailing slash. Sign-in accepts requests from it, and device sign-in links point to it.",
-      "default": "{{workerUrl}}",
-      "required": true
+      "default": "{{appUrl}}"
     },
     {
       "name": "EMAIL_FROM",
       "label": "Sender address",
-      "help": "The From of sign-in code emails, for example noreply@example.com, at a domain onboarded in Cloudflare Email Sending. Sign-in is by emailed codes, so without it nobody can create an account.",
-      "required": true
+      "help": "The From of sign-in code emails, for example noreply@example.com, at a domain onboarded in Cloudflare Email Sending. Sign-in is by emailed codes, so without it nobody can create an account."
     },
     {
       "name": "ADMIN_EMAILS",
       "label": "System admin emails",
-      "help": "Optional. Comma-separated addresses of the people who manage gift codes and moderation.",
-      "default": ""
+      "help": "Comma-separated addresses of the people who manage gift codes and moderation.",
+      "default": "",
+      "optional": true
     }
   ],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Onboard the sender address's domain under Email Service > Email Sending in the Cloudflare dashboard, then open {{workerUrl}} and sign in with the code sent to your email."
+      "content": "Onboard the sender address's domain under Email Service > Email Sending in the Cloudflare dashboard, then open {{appUrl}} and sign in with the code sent to your email."
     },
     {
       "type": "markdown",
       "content": "Generation runs on your AI provider accounts: add fal and OpenRouter keys under Settings > API Keys for your team, or set server-wide keys in this app's settings. Generations on server-wide keys draw on team credits, which system admins grant with gift codes."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

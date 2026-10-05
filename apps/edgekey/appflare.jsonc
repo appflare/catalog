@@ -6,63 +6,70 @@
   "slug": "edgekey",
   "name": "EdgeKey",
   "summary": "A shop for digital goods: sell card keys and codes, take payment through USDT, Epay, Alipay or Stripe, and deliver each order automatically by page and email.",
-  "homepage": "https://github.com/34892002/edgeKey",
+  "tagline": "Sell digital codes and deliver them automatically after payment",
   "repo": "34892002/edgeKey",
   "license": "MIT",
   "categories": ["business", "ecommerce"],
+  // openPath and field links added after this release was published: a revision,
+  // no new build.
+  "revision": 2,
   "authors": [{ "name": "ggyy", "github": "34892002" }],
   "maintainers": ["MendyLanda"],
   // No release tags upstream; the pin tracks main.
   "source": { "ref": "main", "sha": "fa69913b89a3dbd916be931fb4e06a0ae80958f4" },
   "install": {
-    "tier": "artifact",
     "packageManager": "bun",
     // Vike with Photon builds through the Cloudflare Vite plugin, which writes
     // the deployable config under dist/ and points wrangler at it.
     "wranglerConfig": "wrangler.jsonc",
-    "workerName": "edgekey",
     // Generates the Prisma client for D1, then builds the Vike app.
     "buildCommand": "bun run build"
   },
   // Workers, D1 and one cron trigger (closing expired orders every five
   // minutes) fit the free plan.
   "plan": "free",
-  "requires": [],
   "secrets": [
     {
       "name": "AUTH_SECRET",
       "label": "Session secret",
       "help": "Signs admin sign-in sessions. Setting a new value signs every admin out.",
-      "generate": true
+      "generate": "password"
     },
     {
       "name": "EDGEKEY_ADMIN_PASSWORD",
       "label": "Admin password",
       "help": "The password of the admin account `admin`.",
-      "generate": true,
+      "generate": "password",
       "seedOnly": true
     },
     {
       "name": "TURNSTILE_SITE_KEY",
       "label": "Turnstile site key",
       "help": "With the secret key below, puts a Cloudflare Turnstile check on the admin sign-in page. Set both or neither.",
+      "link": {
+        "label": "Create a widget",
+        "url": "https://dash.cloudflare.com/?to=/:account/turnstile"
+      },
       "optional": true
     },
     {
       "name": "TURNSTILE_SECRET_KEY",
       "label": "Turnstile secret key",
       "help": "The secret key of the same Turnstile widget.",
+      "link": {
+        "label": "Create a widget",
+        "url": "https://dash.cloudflare.com/?to=/:account/turnstile"
+      },
       "optional": true
     }
   ],
-  "vars": [],
+  "openPath": "/admin",
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Open {{workerUrl}}/admin and sign in as `admin` with the admin password from the install form (Appflare does not keep it). Then set the site name, payment channels and email delivery in the admin panel; upstream's docs/pay folder explains each payment provider."
+      "content": "Open {{appUrl}}/admin and sign in as `admin` with the admin password from the install form (Appflare does not keep it). Then set the site name, payment channels and email delivery in the admin panel; upstream's docs/pay folder explains each payment provider."
     }
   ],
-  "tokenPermissions": [],
   "resources": {
     "d1": {
       "DB": {

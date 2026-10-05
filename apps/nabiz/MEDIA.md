@@ -1,8 +1,8 @@
-# Image sources
+# Media for nabiz
 
-Both from productdevbook/nabiz at commit eebc8ac (v3.12.1), licensed MIT (the repository's licence covers these files; its notice is at https://github.com/productdevbook/nabiz/blob/eebc8acce25c5db5001398b483ba7a8016c3c5aa/LICENSE).
+Upstream: [`productdevbook/nabiz`](https://github.com/productdevbook/nabiz) at commit [`eebc8acce25c5db5001398b483ba7a8016c3c5aa`](https://github.com/productdevbook/nabiz/tree/eebc8acce25c5db5001398b483ba7a8016c3c5aa), licensed [MIT](https://github.com/productdevbook/nabiz/blob/eebc8acce25c5db5001398b483ba7a8016c3c5aa/LICENSE).
 
-- `screenshots/01-status-page-light.png`: [`docs/screenshot-light.png`](https://github.com/productdevbook/nabiz/blob/eebc8acce25c5db5001398b483ba7a8016c3c5aa/docs/screenshot-light.png), the README's screenshot. Unchanged.
-- `screenshots/02-status-page-dark.png`: [`docs/screenshot-dark.png`](https://github.com/productdevbook/nabiz/blob/eebc8acce25c5db5001398b483ba7a8016c3c5aa/docs/screenshot-dark.png), the same page in the dark theme. Unchanged.
+- `screenshots/01-status-page-light.png`: [`docs/screenshot-light.png`](https://github.com/productdevbook/nabiz/blob/eebc8acce25c5db5001398b483ba7a8016c3c5aa/docs/screenshot-light.png), referenced by the README. Unchanged.
+- `icon.svg`: [`docs/cover.svg`](https://github.com/productdevbook/nabiz/blob/eebc8acce25c5db5001398b483ba7a8016c3c5aa/docs/cover.svg), 2026-09-28. MIT; heart-pulse glyph from Lucide (ISC). Converted from the square brand tile in the banner by cropping the SVG to that tile.
 
-No icon: upstream publishes no logo or favicon. No cover: the README banner (`docs/cover.svg`) is 1200x300, a strip that does not fill a 1200x630 cover without drawing around it.
+Left out: `docs/screenshot-dark.png` repeats the same status page in a dark theme; the existing `screenshots/02-status-page-dark.png` was removed. No icon: upstream publishes no separate logo or favicon image. No cover: `docs/cover.svg` is a 1200×300 banner with text, too short for a 1200×630 cover without adding a large surrounding area.

@@ -8,33 +8,34 @@
   "slug": "one-ip",
   "name": "One IP",
   "summary": "IP and network diagnostics: look up an address's location, ASN, reputation and risk, check your exit IP, DNS, CDN, WebRTC and browser fingerprint, and run a speed test.",
+  "tagline": "Check your IP, network privacy, speed and online service status",
   "homepage": "https://ip.huzhihui.com",
   "repo": "zhihui-hu/one-ip",
   "license": "AGPL-3.0-only",
   "categories": ["networking", "utilities"],
+  // Edited help text (revision 2) and field links (revision 3) came after this
+  // release was published: revisions, no new build.
+  "revision": 3,
   "authors": [{ "name": "Hu Zhihui", "url": "https://huzhihui.com", "github": "zhihui-hu" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags, so the entry follows the default branch by commit.
   "source": { "ref": "main", "sha": "3d6531437cd1bf5e03711339c7d96b674d3e1e16" },
   "install": {
-    "tier": "artifact",
     "packageManager": "pnpm",
     // The Worker is plain JavaScript in public/worker/; the build is the
     // React app it serves from dist/. The config's local environment is only
     // for development and is not read.
     "wranglerConfig": "wrangler.toml",
-    "workerName": "one-ip",
     // Upstream's build script (tsc -b, then vite build), as its deploy
     // guide says.
     "buildCommand": "pnpm run build",
     // Answers from the Worker's own code without calling any outside lookup
     // service (/ is the static app).
-    "healthPath": "/api/map/config"
+    "health": { "path": "/api/map/config" }
   },
   // Workers and two rate limits (per-client API and action limits) fit the
   // free plan. No storage and no cron triggers.
   "plan": "free",
-  "requires": [],
   // All optional. The verification page demonstrates a CAPTCHA provider
   // only when its site key, secret and hostname are all set; the map uses
   // OpenStreetMap unless a Tianditu token is set.
@@ -42,25 +43,37 @@
     {
       "name": "TURNSTILE_SECRET",
       "label": "Turnstile secret key",
-      "help": "Optional. The secret key of a Cloudflare Turnstile widget, for the verification page. Needs the site key and hostnames below too.",
+      "help": "The secret key of a Cloudflare Turnstile widget, for the verification page. Needs the site key and hostnames below too.",
+      "link": {
+        "label": "Create a widget",
+        "url": "https://dash.cloudflare.com/?to=/:account/turnstile"
+      },
       "optional": true
     },
     {
       "name": "TURNSTILE_NONINTERACTIVE_SECRET",
       "label": "Non-interactive Turnstile secret key",
-      "help": "Optional. The secret key of a second Turnstile widget in Non-interactive mode. Needs its site key and hostnames below too.",
+      "help": "The secret key of a second Turnstile widget in Non-interactive mode. Needs its site key and hostnames below too.",
+      "link": {
+        "label": "Create a widget",
+        "url": "https://dash.cloudflare.com/?to=/:account/turnstile"
+      },
       "optional": true
     },
     {
       "name": "RECAPTCHA_SECRET",
       "label": "reCAPTCHA v3 secret key",
-      "help": "Optional. The secret key of a Google reCAPTCHA v3 site, for the verification page. Needs the site key and hostnames below too.",
+      "help": "The secret key of a Google reCAPTCHA v3 site, for the verification page. Needs the site key and hostnames below too.",
+      "link": {
+        "label": "Register a site",
+        "url": "https://www.google.com/recaptcha/admin/create"
+      },
       "optional": true
     },
     {
       "name": "TIANDITU_TOKEN",
       "label": "Tianditu map token",
-      "help": "Optional. A Tianditu browser token, for maps that load in mainland China. Without it the map uses OpenStreetMap. The token is handed to the browser.",
+      "help": "A Tianditu browser token, for maps that load in mainland China. Without it the map uses OpenStreetMap. The token is handed to the browser.",
       "optional": true
     }
   ],
@@ -68,51 +81,62 @@
     {
       "name": "TURNSTILE_SITE_KEY",
       "label": "Turnstile site key",
-      "help": "Optional. The site key of the Turnstile widget.",
+      "help": "The site key of the Turnstile widget.",
+      "link": {
+        "label": "Create a widget",
+        "url": "https://dash.cloudflare.com/?to=/:account/turnstile"
+      },
       "default": "",
-      "required": false
+      "optional": true
     },
     {
       "name": "TURNSTILE_HOSTNAMES",
       "label": "Turnstile hostnames",
-      "help": "Optional. The hostnames the Turnstile widget is shown on, comma-separated, for example this app's workers.dev host name.",
+      "help": "The hostnames the Turnstile widget is shown on, comma-separated, for example this app's workers.dev host name.",
       "default": "",
-      "required": false
+      "optional": true
     },
     {
       "name": "TURNSTILE_NONINTERACTIVE_SITE_KEY",
       "label": "Non-interactive Turnstile site key",
-      "help": "Optional. The site key of the Non-interactive Turnstile widget.",
+      "help": "The site key of the Non-interactive Turnstile widget.",
+      "link": {
+        "label": "Create a widget",
+        "url": "https://dash.cloudflare.com/?to=/:account/turnstile"
+      },
       "default": "",
-      "required": false
+      "optional": true
     },
     {
       "name": "TURNSTILE_NONINTERACTIVE_HOSTNAMES",
       "label": "Non-interactive Turnstile hostnames",
-      "help": "Optional. The hostnames the Non-interactive widget is shown on, comma-separated.",
+      "help": "The hostnames the Non-interactive widget is shown on, comma-separated.",
       "default": "",
-      "required": false
+      "optional": true
     },
     {
       "name": "RECAPTCHA_SITE_KEY",
       "label": "reCAPTCHA v3 site key",
-      "help": "Optional. The site key of the reCAPTCHA v3 site.",
+      "help": "The site key of the reCAPTCHA v3 site.",
+      "link": {
+        "label": "Register a site",
+        "url": "https://www.google.com/recaptcha/admin/create"
+      },
       "default": "",
-      "required": false
+      "optional": true
     },
     {
       "name": "RECAPTCHA_HOSTNAMES",
       "label": "reCAPTCHA hostnames",
-      "help": "Optional. The hostnames reCAPTCHA is shown on, comma-separated.",
+      "help": "The hostnames reCAPTCHA is shown on, comma-separated.",
       "default": "",
-      "required": false
+      "optional": true
     }
   ],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Open {{workerUrl}} to see your own connection. From a terminal, `curl -fsS '{{workerUrl}}/api/ip/health?format=text'` prints your exit address with its trust score; add `ip=1.1.1.1` to check another address."
+      "content": "Open {{appUrl}} to see your own connection. From a terminal, `curl -fsS '{{appUrl}}/api/ip/health?format=text'` prints your exit address with its trust score; add `ip=1.1.1.1` to check another address."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

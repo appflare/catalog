@@ -23,7 +23,11 @@ import type { IndexMedia, IndexMediaFile } from "./types.ts";
 
 export const COVER_WIDTH = 1200;
 export const COVER_HEIGHT = 630;
-export const MIN_ICON_PX = 128;
+/**
+ * The manager draws icons at 32 to 64 px, so a 64 px PNG is sharp enough;
+ * many projects only publish a small logo, and refusing it leaves a monogram.
+ */
+export const MIN_ICON_PX = 64;
 export const MAX_ICON_PX = 1024;
 export const MAX_SCREENSHOTS = 8;
 const MAX_ICON_BYTES = 256 * 1024;

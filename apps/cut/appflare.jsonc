@@ -3,7 +3,7 @@
   "slug": "cut",
   "name": "Cut",
   "summary": "Self-hosted link shortener on Workers + KV.",
-  "homepage": "https://github.com/MendyLanda/cut",
+  "tagline": "Short links on your own domain",
   "repo": "MendyLanda/cut",
   "license": "MIT",
   "categories": ["utilities"],
@@ -12,19 +12,16 @@
   // Cut has no release tags yet; the pin tracks main. The bump bot edits this.
   "source": { "ref": "v0.1.0", "sha": "6056400d47530aa87e4ae5764b37ffca9d00e87f" },
   "install": {
-    "tier": "artifact",
     "packageManager": "pnpm",
-    "wranglerConfig": "wrangler.jsonc",
-    "workerName": "cut"
+    "wranglerConfig": "wrangler.jsonc"
   },
   "plan": "free",
-  "requires": [],
   "secrets": [
     {
       "name": "ADMIN_PASSWORD",
       "label": "Admin password",
       "help": "Used to sign in to /admin.",
-      "generate": true
+      "generate": "password"
     }
   ],
   "vars": [
@@ -32,7 +29,7 @@
       "name": "HOME_PAGE",
       "label": "Home page",
       "help": "What / shows. Short links and /admin work the same either way.",
-      "required": false,
+      "optional": true,
       "type": "select",
       "options": [
         { "value": "default", "label": "Show the landing page" },
@@ -42,14 +39,14 @@
       "default": "default"
     }
   ],
+  "openPath": "/admin",
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Open {{workerUrl}}/admin and sign in with the admin password to create your first link."
+      "content": "Open {{appUrl}}/admin and sign in with the admin password to create your first link."
     }
   ],
-  "tokenPermissions": [],
-  // The HOME_PAGE select is a form change for the build v0.1.0 already
-  // released, so it is published as a revision rather than a new build.
-  "revision": 2
+  // The HOME_PAGE select came in revision 3, which this release was built with.
+  // openPath added after it was published: a revision, no new build.
+  "revision": 4
 }

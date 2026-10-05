@@ -1,7 +1,7 @@
-# Image sources
+# Media for child-video
 
-From bitoceango/civideo at commit 272d45d (v0.2.0), licensed MIT (the repository's licence covers this file; its notice is at https://github.com/bitoceango/civideo/blob/272d45d7e0d41a844795e1d76ffc138f1ad4a7ad/LICENSE).
+Upstream: [`bitoceango/civideo`](https://github.com/bitoceango/civideo) at commit [`5f8c9f8f17b82d9330f756f887632cc84dd0327c`](https://github.com/bitoceango/civideo/tree/5f8c9f8f17b82d9330f756f887632cc84dd0327c), licensed [MIT](https://github.com/bitoceango/civideo/blob/5f8c9f8f17b82d9330f756f887632cc84dd0327c/LICENSE).
 
-- `icon.png`: [`app/ChildVideo/Assets.xcassets/AppIcon.appiconset/icon-256.png`](https://github.com/bitoceango/civideo/blob/272d45d7e0d41a844795e1d76ffc138f1ad4a7ad/app/ChildVideo/Assets.xcassets/AppIcon.appiconset/icon-256.png), the player's app icon. Unchanged.
+- `icon.png`: [`app/ChildVideo/Assets.xcassets/AppIcon.appiconset/icon-256.png`](https://github.com/bitoceango/civideo/blob/5f8c9f8f17b82d9330f756f887632cc84dd0327c/app/ChildVideo/Assets.xcassets/AppIcon.appiconset/icon-256.png), the player's app icon. Unchanged.
 
-No cover or screenshots: the README's only image (`docs/assets/intro.png`, added after v0.2.0) is an overview poster, not a picture of the app, and the players are native apps that this entry does not install.
+Left out: [`docs/assets/intro.png`](https://github.com/bitoceango/civideo/blob/5f8c9f8f17b82d9330f756f887632cc84dd0327c/docs/assets/intro.png) is an overview poster, not a picture of the app. No screenshots: upstream publishes no pictures of the interface or output. No cover: upstream publishes no suitable social preview or banner.

@@ -3,6 +3,7 @@
   "slug": "nodrix",
   "name": "nodrix",
   "summary": "A self-hosted IoT platform: devices send telemetry over HTTPS or WebSocket, variables appear on their own, and you build realtime dashboards, controls and automations on top, with a read API and an MCP server, on Durable Objects, D1 and R2. Sends anonymous usage statistics to upstream daily, with no opt-out.",
+  "tagline": "Track devices with live dashboards and automations",
   "homepage": "https://nodrix.live",
   "repo": "decoded-cipher/nodrix",
   "license": "MIT",
@@ -18,10 +19,8 @@
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v1.0.1", "sha": "1b8af9175cd68fe097f548a6adbfd735237ce103" },
   "install": {
-    "tier": "artifact",
     "packageManager": "bun",
     "wranglerConfig": "wrangler.toml",
-    "workerName": "nodrix",
     // Upstream commits no lockfile (bun.lock is gitignored), so the packer
     // resolves the workspace's version ranges at pack time; the pack log
     // records the sha256 of the bun.lock it wrote
@@ -53,20 +52,18 @@
   // settings. NODRIX_UPSTREAM_REPO keeps the value in the wrangler config,
   // the repository the update check polls.
   "secrets": [],
-  "vars": [],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Open {{workerUrl}} right away: the first account created there becomes the owner, and sign-up closes after it. Invite other people from **Users**."
+      "content": "Open {{appUrl}} right away: the first account created there becomes the owner, and sign-up closes after it. Invite other people from **Users**."
     },
     {
       "type": "markdown",
-      "content": "Create a project, mint a project token, and send telemetry to `{{workerUrl}}/v1/telemetry` with the token as a Bearer header. Google and GitHub sign-in are set up under **Settings > Sign-in providers**."
+      "content": "Create a project, mint a project token, and send telemetry to `{{appUrl}}/v1/telemetry` with the token as a Bearer header. Google and GitHub sign-in are set up under **Settings > Sign-in providers**."
     },
     {
       "type": "markdown",
       "content": "nodrix sends anonymous usage statistics (an instance id, version, counts and feature flags) to upstream's collector once at setup and daily from its cron trigger. It has no setting to turn this off."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

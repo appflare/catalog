@@ -7,7 +7,7 @@
   "slug": "edgemetry",
   "name": "Edgemetry",
   "summary": "Privacy-friendly web analytics you run yourself: a 2 KB tracking script, no cookies, stackable filters, realtime views, custom events and several sites and users, on one Worker and D1.",
-  "homepage": "https://github.com/hayaran/Edgemetry",
+  "tagline": "See your website traffic without cookies",
   "repo": "hayaran/Edgemetry",
   "license": "MIT",
   "categories": ["analytics"],
@@ -15,18 +15,14 @@
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v0.3.0", "sha": "b8ceeadaa0e1211769376d3472e764a9bb8478e7" },
   "install": {
-    "tier": "artifact",
     "packageManager": "npm",
     // No build step: wrangler bundles the TypeScript Worker, with the
     // dashboard HTML imported as a text module.
-    "wranglerConfig": "wrangler.jsonc",
-    "workerName": "edgemetry"
+    "wranglerConfig": "wrangler.jsonc"
   },
   // One Worker and D1 fit the free plan. Its two cron triggers (the hourly
   // and the nightly rollup) count against the account's five.
   "plan": "free",
-  "requires": [],
-  "secrets": [],
   // PBKDF2_ITERATIONS keeps upstream's value and is not offered here: the
   // count is not stored with each hash, so changing it later locks every
   // account out.
@@ -36,30 +32,32 @@
       "label": "Filters",
       "help": "Keeps the per-day rollup that lets every panel narrow at once. Turn it off on a site with very varied traffic to write far fewer D1 rows.",
       "type": "select",
-      "options": [{ "value": "on", "label": "On" }, { "value": "off", "label": "Off" }]
+      "options": [{ "value": "on", "label": "On" }, { "value": "off", "label": "Off" }],
+      "optional": true
     },
     {
       "name": "HOURLY_RETENTION_DAYS",
       "label": "Hourly data kept (days)",
-      "help": "How long hour-by-hour figures are kept. Daily figures are kept forever."
+      "help": "How long hour-by-hour figures are kept. Daily figures are kept forever.",
+      "optional": true
     },
     {
       "name": "UPDATE_CHECK",
       "label": "Release check",
       "help": "Once a day the Worker reads upstream's releases feed on GitHub so the account menu can say when a newer release exists. It is the only request the app makes to anyone.",
       "type": "select",
-      "options": [{ "value": "on", "label": "On" }, { "value": "off", "label": "Off" }]
+      "options": [{ "value": "on", "label": "On" }, { "value": "off", "label": "Off" }],
+      "optional": true
     }
   ],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Open {{workerUrl}} right away and create your account: until the first account exists, anyone who finds the address can take it, and it becomes the owner. The same form asks for the first domain to track."
+      "content": "Open {{appUrl}} right away and create your account: until the first account exists, anyone who finds the address can take it, and it becomes the owner. The same form asks for the first domain to track."
     },
     {
       "type": "markdown",
       "content": "The dashboard then shows the snippet for your site's `<head>` under Settings. Ad blockers often block workers.dev addresses, so for real traffic add a custom domain to the app and set it as the script URL under Settings."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

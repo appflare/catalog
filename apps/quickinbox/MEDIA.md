@@ -1,7 +1,13 @@
-# Image sources
+# Media for Quickinbox
 
-From DivinPrince/quickinbox at commit ed79eeb (v1.1.0), licensed MIT (the repository's licence covers these files; its notice is at https://github.com/DivinPrince/quickinbox/blob/ed79eebaa1ec571b24f41a8537b275201ab53515/LICENSE.md).
+Upstream: [`DivinPrince/quickinbox`](https://github.com/DivinPrince/quickinbox) at the entry's pinned commit [`ed79eebaa1ec571b24f41a8537b275201ab53515`](https://github.com/DivinPrince/quickinbox/tree/ed79eebaa1ec571b24f41a8537b275201ab53515) (`v1.1.0`), licensed [MIT](https://github.com/DivinPrince/quickinbox/blob/ed79eebaa1ec571b24f41a8537b275201ab53515/LICENSE.md).
 
-- `icon.png`: [`static/icons/icon-512.png`](https://github.com/DivinPrince/quickinbox/blob/ed79eebaa1ec571b24f41a8537b275201ab53515/static/icons/icon-512.png), the app's own icon. Changed: scaled from 512x512 to 256x256.
+- `icon.png`: [`static/icons/icon-512.png`](https://github.com/DivinPrince/quickinbox/blob/ed79eebaa1ec571b24f41a8537b275201ab53515/static/icons/icon-512.png), the project icon. Unchanged in this entry; previously scaled from 512x512 to 256x256.
+- `screenshots/01-inbox-overview.png`: [project site inbox image](https://quickinbox.divinprince.com/shots/04-inbox.png), fetched 2026-09-27. Scaled from 3840x2160 to 2560x1440; shows the inbox and its conversation list.
+- `screenshots/02-message-thread.png`: [project site thread image](https://quickinbox.divinprince.com/shots/05-thread.png), fetched 2026-09-27. Scaled from 3840x2160 to 2560x1440; shows an open conversation and delivery status.
+- `screenshots/03-starred-messages.png`: [project site starred image](https://quickinbox.divinprince.com/shots/07-starred.png), fetched 2026-09-27. Scaled from 3840x2160 to 2560x1440; shows flagged conversations.
+- `screenshots/04-settings-light-theme.png`: [project site settings image](https://quickinbox.divinprince.com/shots/09-theme-light.png), fetched 2026-09-27. Scaled from 3840x2160 to 2560x1440; shows appearance and address settings.
+- `screenshots/05-admin-users.png`: [project site admin image](https://quickinbox.divinprince.com/shots/11-admin-users.png), fetched 2026-09-27. Scaled from 3840x2160 to 2560x1440; shows domain and user administration.
+- `screenshots/06-create-account.png`: [project site account setup image](https://quickinbox.divinprince.com/shots/03-create-account.png), fetched 2026-09-27. Scaled from 3840x2160 to 2560x1440; shows the account setup form.
 
-No cover or screenshots: the README has no images of the app, and the repository no social preview.
+Left out: No distinct cover exists; the removed cover was a resized copy of the inbox screenshot. [The composer image](https://quickinbox.divinprince.com/shots/06-compose-elon.png) contains a sales email naming X and Tesla; [the support user image](https://quickinbox.divinprince.com/shots/10-support-user.png) repeats the Admin page with a form filled in. [The first domain setup image](https://quickinbox.divinprince.com/shots/01-setup-logos.png) and [the second domain setup image](https://quickinbox.divinprince.com/shots/02-setup-domain.png) show the Resend logo; [the dark settings image](https://quickinbox.divinprince.com/shots/08-theme-dark.png) duplicates the light settings view.

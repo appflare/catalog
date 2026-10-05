@@ -9,44 +9,44 @@
   "slug": "folia",
   "name": "Folia",
   "summary": "A web music player built around full-screen animated lyrics, for your local library or a Navidrome server, with automatic lyric matching and AI colour themes from your own Gemini key.",
+  "tagline": "Play your music with full-screen animated lyrics",
   "homepage": "https://folia-site.cielaniska.top",
   "repo": "chthollyphile/folia-major",
   // The LICENSE file is the GNU AGPL version 3 with no "or any later
   // version" grant; package.json and the README say AGPL-3.0.
   "license": "AGPL-3.0-only",
   "categories": ["media"],
+  // Edited help text (revision 2) and field links (revision 3) came after this
+  // release was published: revisions, no new build.
+  "revision": 3,
   "authors": [{ "name": "chthollyphile", "github": "chthollyphile" }],
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v0.7.9", "sha": "c249bde0173c92d053838eb79b63ca06fb7fe2f3" },
   "install": {
-    "tier": "artifact",
     "packageManager": "npm",
     // The config at the root is the one upstream's Deploy button reads: the
     // Worker in worker/ plus the Vite build in dist/. The QQ Music sign-in
     // Durable Object is exported but has no binding there.
     "wranglerConfig": "wrangler.jsonc",
-    "workerName": "folia",
     // Upstream's build script: the Vercel API functions (unused here but
     // part of the script) and the Vite build.
     "buildCommand": "npm run build"
   },
   // Workers and static assets only: no storage, no cron triggers.
   "plan": "free",
-  "requires": [],
   "secrets": [
     {
       "name": "GEMINI_API_KEY",
       "label": "Gemini API key",
-      "help": "Optional. A Google Gemini API key for the AI colour themes and lyric word segmentation. Without it those features are off and everything else works.",
+      "help": "A Google Gemini API key for the AI colour themes and lyric word segmentation. Without it those features are off and everything else works.",
+      "link": { "label": "Get a key", "url": "https://aistudio.google.com/app/apikey" },
       "optional": true
     }
   ],
-  "vars": [],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Open {{workerUrl}} and add music: import a local folder (the browser keeps an index, never the files), or connect a Navidrome server in the settings. On a phone, add the page to the home screen to use it as an app."
+      "content": "Open {{appUrl}} and add music: import a local folder (the browser keeps an index, never the files), or connect a Navidrome server in the settings. On a phone, add the page to the home screen to use it as an app."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

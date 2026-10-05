@@ -3,6 +3,7 @@
   "slug": "semanticsearch",
   "name": "Semantic Search",
   "summary": "A semantic search API on Vectorize and Workers AI: add documents with metadata over HTTP, then search them by meaning, with writer and read-only API keys and Swagger docs.",
+  "tagline": "Find your documents by meaning",
   "homepage": "https://semanticsearch.ai",
   // Formerly SemanticSearch-ai/api.semanticsearch.ai, the address its Deploy
   // button still uses; GitHub redirects the old name.
@@ -12,6 +13,8 @@
   // https://semanticsearch.ai/ (see README.md beside this file).
   "license": "Apache-2.0",
   "categories": ["developer-tools", "ai"],
+  // Generated secrets added after this release was published: a revision, no new build.
+  "revision": 2,
   "authors": [
     {
       "name": "SemanticSearch.ai",
@@ -23,10 +26,8 @@
   // Upstream publishes no tags; the pin is the head of main.
   "source": { "ref": "main", "sha": "baa959e2fdf5d712bc756dd45dde884ff7e4cdef" },
   "install": {
-    "tier": "artifact",
     "packageManager": "pnpm",
-    "wranglerConfig": "wrangler.toml",
-    "workerName": "semanticsearch"
+    "wranglerConfig": "wrangler.toml"
   },
   // Workers AI (10,000 Neurons a day) and Vectorize (5 million stored
   // dimensions, about 19,500 documents at 256 each) both have free
@@ -38,12 +39,15 @@
       "name": "API_KEY_WRITER",
       "label": "Writer API key",
       "help": "Sent as `Authorization: Bearer <key>`. Adds, reads, deletes and searches documents. Several keys may be given, separated by commas. Copy it now.",
-      "generate": true
+      "generate": "password"
     },
     {
+      // Upstream splits the list on commas and newlines
+      // (src/middleware/auth.ts:12-21); one generated key is a one-item list.
       "name": "API_KEY_READER",
       "label": "Reader API key",
       "help": "Optional keys that may only read and search, safe to embed in a public client. Several keys may be given, separated by commas.",
+      "generate": "password",
       "optional": true
     }
   ],
@@ -54,14 +58,13 @@
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Add a document with `POST {{workerUrl}}/v1/documents` and a JSON body `{ \"text\": \"…\", \"id\": \"optional-id\", \"metadata\": { … } }`, then search with `POST {{workerUrl}}/v1/search` and `{ \"query\": \"…\", \"limit\": 10 }`. Every `/v1` route needs `Authorization: Bearer <key>`; adding and deleting need the writer key."
+      "content": "Add a document with `POST {{appUrl}}/v1/documents` and a JSON body `{ \"text\": \"…\", \"id\": \"optional-id\", \"metadata\": { … } }`, then search with `POST {{appUrl}}/v1/search` and `{ \"query\": \"…\", \"limit\": 10 }`. Every `/v1` route needs `Authorization: Bearer <key>`; adding and deleting need the writer key."
     },
     {
       "type": "markdown",
-      "content": "The Swagger UI at {{workerUrl}} lists every endpoint; it is public, the API behind it is not. Each document's text is stored with its vector, so keep documents under about 10 KB."
+      "content": "The Swagger UI at {{appUrl}} lists every endpoint; it is public, the API behind it is not. Each document's text is stored with its vector, so keep documents under about 10 KB."
     }
   ],
-  "tokenPermissions": [],
   // The Vectorize index is created before the Worker is uploaded, and its
   // shape cannot change later. Without EMBEDDING_MODEL and EMBEDDING_DIM the
   // Worker embeds with @cf/google/embeddinggemma-300m and keeps the first 256

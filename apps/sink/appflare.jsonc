@@ -8,10 +8,14 @@
   "slug": "sink",
   "name": "Sink",
   "summary": "Link shortener with visit analytics: custom slugs, expiring links, QR codes, AI slug suggestions and a realtime globe, all on Cloudflare.",
+  "tagline": "Create short links and track their visits",
   "homepage": "https://sink.cool",
   "repo": "miantiao-me/Sink",
-  "license": "AGPL-3.0",
+  "license": "AGPL-3.0-only",
   "categories": ["utilities", "analytics"],
+  // Generated secrets (revision 2) and openPath (revision 3) came after this
+  // release was published: revisions, no new build.
+  "revision": 3,
   "authors": [
     {
       "name": "miantiao",
@@ -23,10 +27,8 @@
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v0.3.1", "sha": "bafa4e1f7e3ec034929e11e5542c4c3e116d69da" },
   "install": {
-    "tier": "artifact",
     "packageManager": "pnpm",
     "wranglerConfig": "wrangler.jsonc",
-    "workerName": "sink",
     // Upstream deploys with `pnpm build` after a `pnpm install` that runs its
     // postinstall. Here neither install scripts nor pre/post hooks run, so
     // each step is listed: `build:map` (postinstall) writes the dashboard's
@@ -40,15 +42,21 @@
   "requires": ["r2", "workers-ai"],
   "secrets": [
     {
+      // Upstream's own fallback is a random value
+      // (nuxt.config.ts:22, `randomBytes(32).toString('base64url')`), and it
+      // refuses tokens shorter than 8 characters
+      // (server/middleware/2.auth.ts:31-36).
       "name": "NUXT_SITE_TOKEN",
       "label": "Site token",
-      "help": "The dashboard's sign-in password and the API key for Sink's API. At least 8 characters; keep it stable, since changing it signs out every browser and API client."
+      "help": "The dashboard's sign-in password and the API key for Sink's API. A value of your own needs at least 8 characters. Keep it stable: changing it signs out every browser and API client.",
+      "generate": "password"
     },
     {
       "name": "NUXT_CF_API_TOKEN",
       "label": "Analytics API token",
       "help": "A Cloudflare API token with Account Analytics Read on this account, used to read visits through the Analytics Engine SQL API. Without it links still work, but the charts, logs and realtime view stay empty.",
-      "optional": true
+      "optional": true,
+      "cloudflareToken": true
     }
   ],
   "vars": [
@@ -56,18 +64,19 @@
       "name": "NUXT_CF_ACCOUNT_ID",
       "label": "Cloudflare account ID",
       "help": "The account whose Analytics Engine data the dashboard reads: this one. Filled in on every install and update.",
-      "default": "{{accountId}}",
-      "required": true
+      "default": "{{accountId}}"
     },
     {
       "name": "NUXT_HOME_URL",
       "label": "Home page redirect",
-      "help": "Send visitors of / to this URL instead of Sink's home page."
+      "help": "Send visitors of / to this URL instead of Sink's home page.",
+      "optional": true
     },
     {
       "name": "NUXT_NOT_FOUND_REDIRECT",
       "label": "Unknown link redirect",
-      "help": "Send visitors of a short link that does not exist to this URL (always a 302) instead of a 404 page."
+      "help": "Send visitors of a short link that does not exist to this URL (always a 302) instead of a 404 page.",
+      "optional": true
     },
     {
       "name": "NUXT_REDIRECT_STATUS_CODE",
@@ -80,13 +89,15 @@
         { "value": "302", "label": "302 Found" },
         { "value": "307", "label": "307 Temporary Redirect" },
         { "value": "308", "label": "308 Permanent Redirect" }
-      ]
+      ],
+      "optional": true
     }
   ],
+  "openPath": "/dashboard",
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Open {{workerUrl}}/dashboard, sign in with the site token, and open **Links** once: it finishes Sink's storage setup, and creating links fails with \"storage not ready\" until then."
+      "content": "Open {{appUrl}}/dashboard, sign in with the site token, and open **Links** once: it finishes Sink's storage setup, and creating links fails with \"storage not ready\" until then."
     },
     {
       "type": "markdown",
@@ -95,9 +106,10 @@
   ],
   "tokenPermissions": [
     {
-      "name": "Account.Account Analytics:Read",
+      "group": "Account Analytics",
       "scope": "account",
-      "description": "Read visits through the Analytics Engine SQL API (NUXT_CF_API_TOKEN)."
+      "access": "read",
+      "reason": "Optional: reads visits through the Analytics Engine SQL API for the charts, logs and realtime view."
     }
   ],
   // Nuxt and its many dependencies move often; each bump gets a human review.

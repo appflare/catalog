@@ -31,9 +31,11 @@ describe("workerSummaryLines", () => {
     ]);
     expect(workerSummaryLines(m, sizeLine)).toEqual([
       "  Worker web (primary):",
+      "    config:   web/wrangler.jsonc",
       "    worker:   1 module(s) of duo-web",
       "    assets:   1",
       "  Worker jobs:",
+      "    config:   jobs/wrangler.jsonc",
       "    worker:   1 module(s) of duo-jobs",
       "    assets:   0",
     ]);

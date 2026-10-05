@@ -9,6 +9,7 @@ import type {
   CatalogStats,
   FeaturedItem,
   IndexJson,
+  R2LifecycleRule,
   SandboxInstanceType,
   SeedPbkdf2Hash,
   SeedStatement,
@@ -32,6 +33,14 @@ export interface Parser<T> {
 
 /** The `@appflare/schema` validators the catalog scripts need. */
 export interface AppflareSchema {
+  /**
+   * `strictCatalogManifestSchema`: the catalog manifest as the tools that
+   * write one check it. Beyond what a manager reads, it refuses unknown keys
+   * (a misspelled field would otherwise be dropped without a word), fields
+   * renamed since, a license that is not an SPDX expression of current ids,
+   * categories off the fixed list, and token permission groups Appflare
+   * cannot select.
+   */
   catalogManifest: Parser<CatalogManifest>;
   artifactManifest: Parser<ArtifactManifest>;
   indexJson: Parser<IndexJson>;
@@ -39,7 +48,7 @@ export interface AppflareSchema {
   featuredItem: Parser<FeaturedItem>;
   /** `stats.json`. */
   catalogStats: Parser<CatalogStats>;
-  /** What a sandbox tier entry's `install.sandbox` defaults to. */
+  /** What a sandbox tier entry's `install.container` defaults to. */
   sandboxDefaults: SandboxDefaults;
   /**
    * The Cloudflare services an app uses (`appServices`), from its catalog
@@ -112,10 +121,12 @@ export interface EntryWorkerHelpers {
   entryScriptName(installWorkerName: string, name: string, primary: boolean): string;
   /** The entry Worker `{{workerName:<name>}}` names, or null. */
   entryWorkerRefName(value: unknown): string | null;
-  /** `text` with `{{workerUrl:<name>}}` and `{{workerName:<name>}}` filled in. */
+  /** `text` with the per-Worker placeholders (`{{appUrl:<name>}}`, `{{workerName:<name>}}`, ...) filled in. */
   renderEntryWorkerPlaceholders(
     text: string,
-    workers: Readonly<Record<string, { workerName: string; workerUrl: string | null }>>,
+    workers: Readonly<
+      Record<string, { workerName: string; workerUrl: string | null; appUrl: string | null }>
+    >,
   ): string;
 }
 
@@ -199,6 +210,41 @@ export async function loadSeedHelpers(appflareDir: string): Promise<SeedHelpers>
 }
 
 /**
+ * The `@appflare/schema` function the install check sets an R2 bucket's
+ * lifecycle rules with, the one the manager's install uses, so a bucket gets
+ * in CI exactly the rules it gets at install.
+ */
+export interface R2LifecycleHelpers {
+  /**
+   * The rules to put on a bucket: the ones it has (Cloudflare's default rule
+   * that aborts unfinished multipart uploads among them), without any of a
+   * declared rule's id, then the declared ones in the API's shape.
+   */
+  mergeR2LifecycleRules(
+    existing: readonly unknown[],
+    declared: readonly R2LifecycleRule[],
+  ): unknown[];
+}
+
+/**
+ * The R2 lifecycle function from `@appflare/schema` in `appflareDir`, loaded
+ * only for an artifact whose buckets declare lifecycle rules. Throws, naming
+ * what is missing, with a build that predates it.
+ */
+export async function loadR2LifecycleHelpers(appflareDir: string): Promise<R2LifecycleHelpers> {
+  assertAppflareBuilt(appflareDir);
+  const mod: unknown = await import(pathToFileURL(appflarePaths(appflareDir).schemaDist).href);
+  if (typeof (mod as Record<string, unknown> | null)?.mergeR2LifecycleRules !== "function") {
+    throw new Error(
+      `@appflare/schema in ${appflareDir} does not export mergeR2LifecycleRules(); build a newer appflare checkout`,
+    );
+  }
+  // Checked above: a function; its signature is the one @appflare/schema
+  // declares, mirrored by R2LifecycleHelpers.
+  return mod as R2LifecycleHelpers;
+}
+
+/**
  * `combinedWorkerFacts` when the schema build has it. A build that predates
  * it cannot parse an artifact of several Workers at all, so every manifest
  * it hands over is of one Worker, whose own facts are all the app's; a
@@ -234,7 +280,7 @@ export async function loadAppflareSchema(appflareDir: string): Promise<AppflareS
   assertAppflareBuilt(appflareDir);
   const mod: unknown = await import(pathToFileURL(appflarePaths(appflareDir).schemaDist).href);
   return {
-    catalogManifest: pickParser<CatalogManifest>(mod, "catalogManifestSchema"),
+    catalogManifest: pickParser<CatalogManifest>(mod, "strictCatalogManifestSchema"),
     artifactManifest: pickParser<ArtifactManifest>(mod, "artifactManifestSchema"),
     indexJson: pickParser<IndexJson>(mod, "indexJsonSchema"),
     featuredItem: pickParser<FeaturedItem>(mod, "featuredItemSchema"),

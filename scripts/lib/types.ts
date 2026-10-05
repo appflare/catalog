@@ -18,10 +18,24 @@ export interface CatalogSelfDeploying {
   tool: "alchemy";
   deployCommand: string[];
   destroyCommand: string[];
-  stageArg?: string;
-  stateStore: "cloudflare";
   /** Worker names with `{{stage}}` for the install's stage; the first serves the app. */
-  workers: string[];
+  workerNames: string[];
+}
+
+/**
+ * `HealthMode`: how the install's health check reads the Worker's answer, the
+ * manager's rule. `no-server-errors` fails a persistent 5xx; `any-response`
+ * (apps whose every route sits behind Cloudflare Access or their own sign-in)
+ * counts any answer of the Worker itself as healthy, a 5xx of its own included.
+ */
+export type HealthMode = "no-server-errors" | "any-response";
+
+/** `CatalogTokenPermission`, in full: one permission of the app's own Cloudflare API token. */
+export interface CatalogTokenPermission {
+  group: string;
+  scope: "account" | "zone";
+  access: "read" | "edit";
+  reason: string;
 }
 
 /** `CatalogAuthor`, in full: a person or organization that wrote the app upstream. */
@@ -47,6 +61,53 @@ export interface CatalogEntryWorker {
   primary?: true;
   /** False for a Worker only the entry's other Workers reach: kept off workers.dev. */
   workersDev?: boolean;
+  /** This Worker's wrangler config, written at `wranglerConfig` when the repository ships none. */
+  wranglerConfigInline?: Record<string, unknown>;
+}
+
+/**
+ * `CatalogInstallDir`, in full: one directory whose dependencies the packer
+ * installs (`install.installDirs`).
+ */
+export interface CatalogInstallDir {
+  /** `.` or a path relative to the checkout's root, without `..`. */
+  path: string;
+  /** `"none"` when upstream ships no lockfile for the directory. */
+  lockfile?: "none";
+  /** The package manager of this directory, when it is not `install.packageManager`. */
+  packageManager?: string;
+  /** False installs the directory without its devDependencies (pnpm `--prod`, npm `--omit=dev`). */
+  devDependencies?: boolean;
+}
+
+/** `VectorizeMetadataIndex`, in full: a metadata property a Vectorize index's queries filter on. */
+export interface VectorizeMetadataIndex {
+  propertyName: string;
+  type: "string" | "number" | "boolean";
+}
+
+/**
+ * `R2LifecycleRule`, in full: one lifecycle rule of an R2 bucket, its ages in
+ * whole days. At least one of the three ages is set.
+ */
+export interface R2LifecycleRule {
+  id: string;
+  /** The key prefix the rule applies to; every object when omitted. */
+  prefix?: string;
+  deleteAfterDays?: number;
+  infrequentAccessAfterDays?: number;
+  abortMultipartUploadsAfterDays?: number;
+}
+
+/** Subset of `CatalogResources`: the settings wrangler's config cannot say. */
+export interface CatalogResources {
+  /** Each Vectorize binding's index shape, and the metadata indexes created with it. */
+  vectorize?: Record<
+    string,
+    { dimensions: number; metric: string; metadataIndexes?: VectorizeMetadataIndex[] }
+  >;
+  /** Each R2 binding's bucket settings: the lifecycle rules set when the bucket is created. */
+  r2?: Record<string, { lifecycle: R2LifecycleRule[] }>;
 }
 
 /** Subset of `CatalogManifest`. */
@@ -55,35 +116,58 @@ export interface CatalogManifest {
   slug: string;
   name: string;
   summary: string;
-  homepage: string;
+  /** One plain line for catalog tiles. */
+  tagline: string;
+  /** The app's home page; the repository's GitHub page when omitted. */
+  homepage?: string;
   repo: string;
+  /** An SPDX license expression of current ids (or `LicenseRef-`, `NONE`). */
   license: string;
+  /** One short line shown next to the license. */
+  licenseNote?: string;
   categories: string[];
   /** Who wrote the app upstream; the index lists the owner of `repo` when omitted. */
   authors?: CatalogAuthor[];
   maintainers: string[];
-  source: { ref: string; sha: string };
+  source: {
+    ref: string;
+    sha: string;
+    /** The app's version when the repository's tags do not describe it (monorepos). */
+    version?: string;
+  };
   install: {
     tier: InstallTier;
     packageManager: string;
     wranglerConfig: string;
-    workerName: string;
-    /** The app's version when the repository's tags do not describe it (monorepos). */
-    version?: string;
+    /** The Worker's name; the slug when omitted (see {@link catalogWorkerName}). */
+    workerName?: string;
+    /** The install's health check: the path probed and how its answer is read. */
+    health: { path: string; mode: HealthMode };
     /**
      * The command, or the commands in order, the packer runs after installing
      * dependencies, before bundling.
      */
     buildCommand?: string | string[];
     /** How a run in the sandbox Worker is sized (`sandbox` and `self-deploying` tiers). */
-    sandbox?: { expectedMinutes?: number; instanceType?: SandboxInstanceType };
+    container?: { expectedMinutes?: number; instanceType?: SandboxInstanceType };
     /** How the sandbox Worker runs the app's own installer (`self-deploying` tier only). */
     selfDeploying?: CatalogSelfDeploying;
     /** The Workers of an app that installs as several (artifact tier only). */
     workers?: CatalogEntryWorker[];
     /** Toolchains beyond Node.js the build needs; catalog CI installs them (artifact tier only). */
     toolchains?: "rust"[];
+    /** The directories whose dependencies the packer installs, in order; the root when omitted. */
+    installDirs?: CatalogInstallDir[];
+    /**
+     * Public build-time constants the packer sets for every build command and
+     * for wrangler's bundling, by name. Never secrets: the catalog publishes them.
+     */
+    buildEnv?: Record<string, string>;
+    /** The wrangler config of an app whose repository ships none, written at `wranglerConfig`. */
+    wranglerConfigInline?: Record<string, unknown>;
   };
+  /** Settings for resources the wrangler config binds but cannot fully describe. */
+  resources?: CatalogResources;
   plan: Plan;
   requires: string[];
   /**
@@ -93,11 +177,25 @@ export interface CatalogManifest {
   secrets: (Record<string, unknown> & { workers?: string[] })[];
   vars: (Record<string, unknown> & { workers?: string[] })[];
   /** Permissions of the Cloudflare API token the admin creates for the app itself. */
-  tokenPermissions: { name: string; description?: string; scope?: "account" | "zone" | "user" }[];
+  tokenPermissions: CatalogTokenPermission[];
   /** How the bump bot treats the entry. */
   bump?: { autoMerge: boolean };
-  /** Which edit of the entry's form and copy this is for its build; omitted means 1. */
-  revision?: number;
+  /** Which edit of the entry's form and copy this is for its build (1 when the file omits it). */
+  revision: number;
+  /**
+   * How the app goes with Cloudflare Access: `mode` `"required"` or
+   * `"recommended"` (offered, switched off, without one), and the paths that
+   * stay public while it is protected.
+   */
+  access?: { mode?: "required" | "recommended"; bypass?: string[] };
+}
+
+/**
+ * The Worker an entry installs as: `install.workerName`, else the slug, as
+ * `catalogWorkerName` in `@appflare/schema` has it.
+ */
+export function catalogWorkerName(manifest: Pick<CatalogManifest, "slug" | "install">): string {
+  return manifest.install.workerName ?? manifest.slug;
 }
 
 /** A file stored in the artifact zip, addressed by byte range. */
@@ -162,33 +260,33 @@ export interface ArtifactEntryWorker {
 }
 
 /**
- * Subset of `ArtifactManifest`. Format 1 is an app of one Worker. Format 2 is
- * an app of several: `worker` and `assets` are the primary Worker's, and
- * `workers` lists the others in the catalog entry's order. Format 3 is either
- * shape, and carries D1 schema files or post-deploy migrations
- * (`d1Schema`, `d1PostDeploy`), which managers that read only formats 1 and
- * 2 refuse. Format 4 is either shape too, and its catalog manifest keeps a
- * Worker off workers.dev (`install.workers[].workersDev: false`) or seeds a
- * D1 database (`resources.d1[binding].seed`), which managers that read only
- * formats 1 to 3 refuse. Whether an artifact has several Workers is whether
- * it has `workers`, whatever its format.
+ * Subset of `ArtifactManifest`. `worker` and `assets` are the app's Worker;
+ * for an app of several Workers they are the primary one's, and `workers`
+ * lists the others in the catalog entry's order. Whether an artifact has
+ * several Workers is whether it has `workers`.
  */
 export interface ArtifactManifest {
-  format: 1 | 2 | 3 | 4;
+  /**
+   * The only artifact format; a manager refuses a higher one it does not
+   * know, so it is raised only for a field an older manager must not skip.
+   */
+  format: 1;
   app: string;
   version: string;
   keyId: string;
-  source: { repo: string; sha: string; ref: string };
   worker: {
     name: string;
     /**
      * The wrangler config the Worker was built from, relative to the checkout:
      * the manifest's `install.wranglerConfig`, and the config wrangler deploys
-     * (another one when the build left a redirect beside it). Omitted by
-     * packers that predate it.
+     * (another one when the build left a redirect beside it).
      */
-    wranglerConfig?: { declared: string; effective: string };
-    mainModule: string;
+    wranglerConfig: { declared: string; effective: string };
+    /**
+     * The module the Worker starts from. Omitted, with `modules` empty, for a
+     * Worker that serves its static assets only.
+     */
+    mainModule?: string;
     compatibilityDate: string;
     compatibilityFlags: string[];
     modules: (ArtifactFile & { name: string; type: string })[];
@@ -210,36 +308,50 @@ export interface ArtifactManifest {
     cacheOptions?: { enabled: boolean; [key: string]: unknown };
   };
   assets: {
-    config: Record<string, unknown>;
+    /**
+     * wrangler's `assets` settings, sent as the upload's `assets.config`.
+     * `_redirects` and `_headers` hold the text of those files at the root of
+     * the assets directory, which wrangler reads there rather than uploading
+     * them as assets; omitted when there are none.
+     */
+    config: Record<string, unknown> & { _redirects?: string; _headers?: string };
     binding: string | null;
     files: (ArtifactFile & { route: string })[];
   };
-  /** Every D1 migration of the app, by binding; shared by the Workers that bind it. */
-  d1Migrations: Record<string, (ArtifactFile & { name: string })[]>;
-  /**
-   * SQL files run on every install and update after the migrations, never
-   * recorded in `d1_migrations`, by binding, in the catalog manifest's order
-   * (`resources.d1[binding].schema`); each is named by its path in the
-   * app's repository. Formats 3 and 4; omitted when there are none.
-   */
-  d1Schema?: Record<string, (ArtifactFile & { name: string })[]>;
-  /**
-   * Migrations run once the new version serves all traffic, recorded in
-   * `d1_migrations` like the others, by binding
-   * (`resources.d1[binding].postDeployMigrationsDir`). Formats 3 and 4.
-   */
-  d1PostDeploy?: Record<string, (ArtifactFile & { name: string })[]>;
-  /** Formats 2 to 4, for an app of several Workers: every Worker but the primary one. */
+  /** The D1 SQL of every binding, by binding name; shared by the Workers that bind it. */
+  d1: Record<string, ArtifactD1Binding>;
+  /** For an app of several Workers: every Worker but the primary one. */
   workers?: ArtifactEntryWorker[];
   /** The catalog manifest the artifact was packed from, as parsed by the schema. */
-  catalog: unknown;
+  catalog: CatalogManifest;
 }
 
-/** `IndexArtifacts`: release-asset URLs of one app version. */
+/** A D1 SQL file of an artifact: an {@link ArtifactFile} named by its migration name or path. */
+export type ArtifactD1File = ArtifactFile & { name: string };
+
+/**
+ * `ArtifactD1Binding`, in full: the D1 SQL of one binding. `migrations` run
+ * in order and are recorded in `d1_migrations`; `schema` files run on every
+ * install and update after them (`resources.d1[binding].schema`);
+ * `postDeploy` migrations run once the new version serves all traffic
+ * (`postDeployMigrationsDir`); `baseline` holds the whole current schema,
+ * run once on a new database before the migrations, which are then recorded
+ * without running (`resources.d1[binding].baseline`).
+ */
+export interface ArtifactD1Binding {
+  migrations: ArtifactD1File[];
+  schema: ArtifactD1File[];
+  postDeploy: ArtifactD1File[];
+  baseline?: ArtifactD1File;
+}
+
+/** `IndexArtifacts`: release-asset URLs of one app version, and the digest of its manifest. */
 export interface IndexArtifacts {
   zip: string;
   manifest: string;
   sig: string;
+  /** sha256 of the exact bytes of the release's `manifest.json`. */
+  digest: string;
 }
 
 /**
@@ -261,52 +373,62 @@ export interface IndexBuild {
 
 /**
  * `IndexApp`, in full: the catalog builds it. `artifact` tier rows carry
- * `artifacts` and `digest`; `sandbox` and `self-deploying` tier rows carry
- * `build` instead.
+ * `artifacts` (with the manifest's digest); `sandbox` and `self-deploying`
+ * tier rows carry `build` instead.
  */
 export interface IndexApp {
   slug: string;
   name: string;
   summary: string;
+  /** The catalog manifest's `tagline`. */
+  tagline: string;
+  /**
+   * When the entry first appeared in the catalog: the committer time of the
+   * commit that added its `appflare.jsonc` (see `added-at.ts`).
+   */
+  addedAt: string;
   version: string;
   artifacts?: IndexArtifacts;
-  digest?: string;
   tier: InstallTier;
   plan: Plan;
   requires: string[];
   lastVerified: string | null;
-  /**
-   * Who wrote the app (see `indexAuthors`). The schema keeps it optional for
-   * indexes published before it existed; this catalog always writes it.
-   */
+  /** Who wrote the app (see `indexAuthors`). */
   authors: CatalogAuthor[];
   maintainers: string[];
   build?: IndexBuild;
   /** The entry's images on the Pages site (see `media.ts`); omitted when it has none. */
   media?: IndexMedia;
-  /**
-   * The Cloudflare services the app uses (see `appServices`). The schema keeps
-   * it optional for indexes published before it existed; this catalog always
-   * writes it.
-   */
+  /** The Cloudflare services the app uses (see `appServices`). */
   services: string[];
   /** The app declares key-value backed Durable Objects; written only when true. */
   keyValueDurableObjects?: true;
-  /** The catalog manifest's `categories`; always written, like `services`. */
+  /** The catalog manifest's `categories`. */
   categories: string[];
-  /**
-   * The catalog manifest's revision (see `revision.ts`); omitted means 1. The
-   * schema keeps it optional for indexes published before it existed;
-   * `build-index` always writes it.
-   */
-  revision?: number;
+  /** The catalog manifest's `license`. */
+  license: string;
+  /** The catalog manifest's `licenseNote`; omitted when it has none. */
+  licenseNote?: string;
+  /** The catalog manifest's revision (see `revision.ts`). */
+  revision: number;
   /**
    * An `artifact` tier row whose revision is above its release's: the revised
    * catalog manifest on the Pages site, signed with the release's key, which
    * managers use in place of the release's copy for the forms and copy.
    */
   catalogManifest?: IndexCatalogManifest;
+  /**
+   * How the entry offers Cloudflare Access protection, from its current
+   * (revised) catalog manifest: `"required"`, `"recommended"` or `"offered"`;
+   * absent for a self-deploying entry, which cannot be protected. Managers
+   * read it to tell an app that needs Cloudflare Access only while protected
+   * from one that always does.
+   */
+  accessOffer?: AccessOffer;
 }
+
+/** How an entry offers Cloudflare Access protection: its `access.mode`, or `"offered"` without one. */
+export type AccessOffer = "required" | "recommended" | "offered";
 
 /** `IndexCatalogManifest`, in full: a signed revised catalog manifest on the Pages site. */
 export interface IndexCatalogManifest extends IndexMediaFile, RevisionSignature {}

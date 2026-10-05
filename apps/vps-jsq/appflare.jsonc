@@ -7,6 +7,7 @@
   "slug": "vps-jsq",
   "name": "VPS-JSQ",
   "summary": "A VPS remaining-value calculator: enter the renewal price, currency, billing cycle and dates to see the value left and a suggested resale price, with live exchange rates and a shareable image card. Chinese interface.",
+  "tagline": "See what the unused time on a prepaid server is worth",
   "homepage": "https://jsq.xiaoge.org",
   "repo": "verkyer/vps-jsq",
   "license": "Apache-2.0",
@@ -16,24 +17,18 @@
   // Upstream publishes no release tags; the pin tracks main.
   "source": { "ref": "main", "sha": "c9739a42571498aa8f384ccbe9a215571eae3974" },
   "install": {
-    "tier": "artifact",
     "packageManager": "npm",
     "wranglerConfig": "wrangler.toml",
-    "workerName": "vps-jsq",
     // The Vite build writes the page to dist/, which the config serves as
     // static assets; the config has no build.command.
     "buildCommand": "npm run build"
   },
   // Static assets and a Worker that only hands requests to them.
   "plan": "free",
-  "requires": [],
-  "secrets": [],
-  "vars": [],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Open {{workerUrl}} to use the calculator. Exchange rates come from open.er-api.com, fetched by each visitor's browser."
+      "content": "Open {{appUrl}} to use the calculator. Exchange rates come from open.er-api.com, fetched by each visitor's browser."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

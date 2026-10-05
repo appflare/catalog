@@ -7,20 +7,22 @@
   "slug": "quickinbox",
   "name": "Quickinbox",
   "summary": "Email for your own domain: a web mail client with threads, attachments, several users and domains, plus a REST API, CLI and MCP server.",
+  "tagline": "Email for your own domain, with a web inbox you control",
   "homepage": "https://quickmail.divinprince.com",
   "repo": "DivinPrince/quickinbox",
   "license": "MIT",
   "categories": ["email"],
+  // Generated secrets (revision 2) and field links (revision 3) came after this
+  // release was published: revisions, no new build.
+  "revision": 3,
   "authors": [
     { "name": "Irasubiza Divin Prince", "url": "https://divinprince.com", "github": "DivinPrince" }
   ],
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v1.1.0", "sha": "ed79eebaa1ec571b24f41a8537b275201ab53515" },
   "install": {
-    "tier": "artifact",
     "packageManager": "bun",
     "wranglerConfig": "wrangler.jsonc",
-    "workerName": "quickinbox",
     // `vite build` (SvelteKit's Cloudflare adapter), then upstream's script
     // that wraps the generated Worker with its email() handler.
     "buildCommand": "bun run build"
@@ -35,30 +37,35 @@
       "name": "RESEND_API_KEY",
       "label": "Resend API key",
       "help": "For the Resend provider: an API key with full access (sending, domains and receiving) from resend.com/api-keys. Not needed with Cloudflare Email Service.",
+      "link": { "label": "Get a key", "url": "https://resend.com/api-keys" },
       "optional": true
     },
     {
       "name": "RESEND_WEBHOOK_SECRET",
       "label": "Resend webhook signing secret",
       "help": "For the Resend provider: the whsec_ secret Resend shows once when you create the webhook for this app. Set it here after installing.",
+      "link": { "label": "Add a webhook", "url": "https://resend.com/webhooks" },
       "optional": true
     },
     {
       "name": "TYPESAFE_API_KEY",
       "label": "TypeSafe API key",
       "help": "Sorts incoming mail into Primary, Social, Promotions, Updates and Forums tabs, and spam. Without it everything stays in Primary.",
+      "link": { "label": "Get a key", "url": "https://console.typesafe.ai/" },
       "optional": true
     },
     {
       "name": "TELEGRAM_BOT_TOKEN",
       "label": "Telegram bot token",
       "help": "From @BotFather. With the chat id below, every incoming message is announced in that chat.",
+      "link": { "label": "Create a bot", "url": "https://t.me/BotFather" },
       "optional": true
     },
     {
       "name": "TELEGRAM_CHAT_ID",
       "label": "Telegram chat id",
       "help": "From @userinfobot; negative for groups.",
+      "link": { "label": "Find your chat ID", "url": "https://t.me/userinfobot" },
       "optional": true
     },
     {
@@ -68,16 +75,22 @@
       "optional": true
     },
     {
-      "name": "VAPID_PUBLIC_KEY",
-      "label": "Push public key (VAPID)",
-      "help": "Desktop notifications: generate a key pair once with `bunx web-push generate-vapid-keys`. Do not change it after people subscribe.",
-      "optional": true
-    },
-    {
+      // Upstream base64url-decodes both keys, checks that they are a P-256
+      // pair, and turns push on only when VAPID_SUBJECT is set as well
+      // (src/lib/server/push-notifications.ts:92-110,151-157). A derived
+      // secret cannot be optional, so both are required now. At runtime that
+      // changes nothing, since push stays off until the contact below is set;
+      // an install that left both unset shows "Not set" in Settings, and its
+      // next update asks for the key (prefilled), so it does not run on its own.
       "name": "VAPID_PRIVATE_KEY",
       "label": "Push private key (VAPID)",
-      "help": "The private key of the same pair.",
-      "optional": true
+      "help": "Signs desktop notifications, once the push contact below is set. Do not change it after people subscribe: they would have to turn notifications on again.",
+      "generate": "vapid-private-key"
+    },
+    {
+      "name": "VAPID_PUBLIC_KEY",
+      "label": "Push public key (VAPID)",
+      "derive": { "from": "VAPID_PRIVATE_KEY", "method": "vapid-public-key" }
     },
     {
       "name": "VAPID_SUBJECT",
@@ -96,35 +109,35 @@
         { "value": "resend", "label": "Resend" },
         { "value": "cloudflare", "label": "Cloudflare Email Service" }
       ],
-      "default": "resend"
+      "default": "resend",
+      "optional": true
     },
     {
       "name": "CLOUDFLARE_MAIL_DOMAINS",
       "label": "Cloudflare mail domains",
       "help": "With Cloudflare Email Service: your domains, separated by commas. Ignored with Resend.",
-      "default": "example.com",
-      "required": true
+      "default": "example.com"
     },
     {
       "name": "APP_URL",
       "label": "App URL",
       "help": "Linked from Telegram notifications.",
-      "default": "{{workerUrl}}"
+      "default": "{{appUrl}}",
+      "optional": true
     }
   ],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Open {{workerUrl}}/setup to pick your domain and create the admin account; its address is both the inbox and the sign-in."
+      "content": "Open {{appUrl}}/setup to pick your domain and create the admin account; its address is both the inbox and the sign-in."
     },
     {
       "type": "markdown",
-      "content": "**Resend:** verify the domain in Resend with receiving on, then add a webhook to `{{workerUrl}}/api/webhooks/resend` for the events `email.received`, `email.sent`, `email.delivered`, `email.bounced`, `email.complained`, `email.delivery_delayed` and `email.failed`, and paste its signing secret into this app's settings as the Resend webhook signing secret."
+      "content": "**Resend:** verify the domain in Resend with receiving on, then add a webhook to `{{appUrl}}/api/webhooks/resend` for the events `email.received`, `email.sent`, `email.delivered`, `email.bounced`, `email.complained`, `email.delivery_delayed` and `email.failed`, and paste its signing secret into this app's settings as the Resend webhook signing secret."
     },
     {
       "type": "markdown",
       "content": "**Cloudflare Email Service:** turn on Email Sending and Email Routing for the domain, point the zone's catch-all rule at this Worker ({{workerName}}), and list the domain under Cloudflare mail domains."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

@@ -3,10 +3,13 @@
   "slug": "feedlog",
   "name": "FeedLog",
   "summary": "Feedback boards, a public roadmap and an AI-assisted changelog for your product, with an embeddable widget. Runs on Workers with R2 for uploads and your own Postgres through Hyperdrive.",
+  "tagline": "Collect feedback, share your roadmap and announce updates",
   "homepage": "https://feedlog.ai",
   "repo": "linkcraftstudio/feedlog",
   "license": "MIT",
   "categories": ["business", "productivity"],
+  // Field links added after this release was published: a revision, no new build.
+  "revision": 2,
   "authors": [
     { "name": "LinkCraft Studio", "url": "https://feedlog.ai", "github": "linkcraftstudio" },
     { "name": "guoliim", "github": "guoliim" },
@@ -15,14 +18,12 @@
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v0.5.0", "sha": "44dd5b593e225e8afc1a35b94780f4031ce2d668" },
   "install": {
-    "tier": "artifact",
     "packageManager": "pnpm",
     // The root config has no `main`: the Nuxt build (Nitro's cloudflare-module
     // preset) writes the Worker and its deploy config under .output and points
     // wrangler at it through .wrangler/deploy/config.json, which the packer
     // follows as `wrangler deploy` does.
     "wranglerConfig": "wrangler.toml",
-    "workerName": "feedlog",
     // Upstream's Workers build: `nuxt build` with NITRO_PRESET=cloudflare-module,
     // then the Drizzle migrations are copied next to the server bundle, where
     // the Worker reads them as Text modules on its first request.
@@ -33,14 +34,13 @@
   "plan": "free",
   "requires": ["r2"],
   "resources": {
-    "hyperdrive": [
-      {
-        "binding": "POSTGRES",
+    "hyperdrive": {
+      "POSTGRES": {
         "protocol": "postgres",
         "label": "Postgres database",
         "help": "PostgreSQL 17 or later, reachable from the internet, with the vector extension enabled (CREATE EXTENSION IF NOT EXISTS vector;). FeedLog creates its tables on the first visit."
       }
-    ]
+    }
   },
   // Seeded from upstream's .dev.vars.example (the two the Deploy button asks
   // for) and .env.example (the optional sign-in, AI and mail settings).
@@ -49,7 +49,7 @@
       "name": "BETTER_AUTH_SECRET",
       "label": "Session secret",
       "help": "Encrypts sessions and cookies. Setting a new value signs everyone out.",
-      "generate": true
+      "generate": "password"
     },
     {
       "name": "SYSTEM_ADMIN_EMAILS",
@@ -59,25 +59,35 @@
     {
       "name": "GOOGLE_CLIENT_SECRET",
       "label": "Google OAuth client secret",
-      "help": "For Google sign-in, with the client ID below. The OAuth client's redirect URI is {{workerUrl}}/api/auth/callback/google.",
+      "help": "For Google sign-in, with the client ID below. The OAuth client's redirect URI is the app's address followed by /api/auth/callback/google.",
+      "link": {
+        "label": "Create an OAuth client",
+        "url": "https://console.cloud.google.com/apis/credentials"
+      },
       "optional": true
     },
     {
       "name": "GITHUB_CLIENT_SECRET",
       "label": "GitHub OAuth client secret",
-      "help": "For GitHub sign-in, with the client ID below. The OAuth app's callback URL is {{workerUrl}}/api/auth/callback/github.",
+      "help": "For GitHub sign-in, with the client ID below. The OAuth app's callback URL is the app's address followed by /api/auth/callback/github.",
+      "link": {
+        "label": "Create an OAuth app",
+        "url": "https://github.com/settings/applications/new"
+      },
       "optional": true
     },
     {
       "name": "OPENAI_API_KEY",
       "label": "OpenAI API key",
       "help": "Turns on similar-idea detection and AI-drafted changelog entries. Any OpenAI-compatible API works; see the base URL below.",
+      "link": { "label": "Get a key", "url": "https://platform.openai.com/api-keys" },
       "optional": true
     },
     {
       "name": "RESEND_API_KEY",
       "label": "Resend API key",
       "help": "Sends password-reset and verification mail through Resend, from the sender address below. Setting it also turns on email verification at sign-up. Without it, mail is only logged.",
+      "link": { "label": "Get a key", "url": "https://resend.com/api-keys" },
       "optional": true
     }
   ],
@@ -86,38 +96,52 @@
       "name": "BETTER_AUTH_URL",
       "label": "Public URL",
       "help": "Where people open FeedLog, without a trailing slash. OAuth callbacks and links in notifications use it.",
-      "default": "{{workerUrl}}"
+      "default": "{{appUrl}}",
+      "optional": true
     },
     {
       "name": "GOOGLE_CLIENT_ID",
       "label": "Google OAuth client ID",
-      "help": "For Google sign-in. With neither Google nor GitHub set up, email and password sign-in is on."
+      "help": "For Google sign-in. With neither Google nor GitHub set up, email and password sign-in is on.",
+      "link": {
+        "label": "Create an OAuth client",
+        "url": "https://console.cloud.google.com/apis/credentials"
+      },
+      "optional": true
     },
     {
       "name": "GITHUB_CLIENT_ID",
       "label": "GitHub OAuth client ID",
-      "help": "For GitHub sign-in."
+      "help": "For GitHub sign-in.",
+      "link": {
+        "label": "Create an OAuth app",
+        "url": "https://github.com/settings/applications/new"
+      },
+      "optional": true
     },
     {
       "name": "OPENAI_BASE_URL",
       "label": "OpenAI-compatible base URL",
-      "help": "Leave empty for https://api.openai.com/v1."
+      "help": "Leave empty for https://api.openai.com/v1.",
+      "optional": true
     },
     {
       "name": "OPENAI_TEXT_MODEL",
       "label": "Chat model",
-      "help": "The model that drafts changelog entries. Leave empty for upstream's default."
+      "help": "The model that drafts changelog entries. Leave empty for upstream's default.",
+      "optional": true
     },
     {
       "name": "EMAIL_FROM",
       "label": "Sender address",
-      "help": "The address FeedLog mails come from, on a domain verified with your email provider, for example noreply@example.com."
+      "help": "The address FeedLog mails come from, on a domain verified with your email provider, for example noreply@example.com.",
+      "optional": true
     }
   ],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Open {{workerUrl}}. On the first visit FeedLog creates its tables in your database and returns to the app; if that stops with an error, check that the vector extension is enabled."
+      "content": "Open {{appUrl}}. On the first visit FeedLog creates its tables in your database and returns to the app; if that stops with an error, check that the vector extension is enabled."
     },
     {
       "type": "markdown",
@@ -125,8 +149,7 @@
     },
     {
       "type": "markdown",
-      "content": "After an update that brings new database migrations, sign in as an admin and open {{workerUrl}}/setup to apply them."
+      "content": "After an update that brings new database migrations, sign in as an admin and open {{appUrl}}/setup to apply them."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

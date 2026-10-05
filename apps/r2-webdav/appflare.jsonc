@@ -3,23 +3,24 @@
   "slug": "r2-webdav",
   "name": "r2-webdav",
   "summary": "A WebDAV server for an R2 bucket: mount it as a network drive in Finder, Windows Explorer or any WebDAV client, with locking and one user name and password.",
-  "homepage": "https://github.com/abersheeran/r2-webdav",
+  "tagline": "Access your R2 files as a network drive",
   "repo": "abersheeran/r2-webdav",
   // The repository has no LICENSE file and declares no licence anywhere, so
   // the catalog shows it as unlicensed.
   "license": "NONE",
-  "categories": ["files", "storage"],
+  "categories": ["files"],
+  // The category (revision 2) and the formatting of URLs in the notes (revision 3)
+  // came after this release was published: revisions, no new build.
+  "revision": 3,
   "authors": [{ "name": "Aber", "github": "abersheeran" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags, so the entry follows the default branch by commit.
   "source": { "ref": "main", "sha": "d39f88f4a8308b1903d5f87fc99cefba0c4fc660" },
   "install": {
-    "tier": "artifact",
     "packageManager": "npm",
     // No build: wrangler bundles src/index.ts directly. The bucket name in
     // the config is upstream's; the install creates a bucket of its own.
-    "wranglerConfig": "wrangler.toml",
-    "workerName": "r2-webdav"
+    "wranglerConfig": "wrangler.toml"
     // No health path: every request without the credentials gets a 401 from
     // the Worker itself.
   },
@@ -39,15 +40,13 @@
       "name": "PASSWORD",
       "label": "Password",
       "help": "The WebDAV password. Every request needs it, over HTTP Basic authentication.",
-      "generate": true
+      "generate": "password"
     }
   ],
-  "vars": [],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Connect a WebDAV client to {{workerUrl}} with the user name and password. macOS Finder: Go, Connect to Server. Windows: Map network drive, or a client such as WinSCP or Cyberduck. Every file lands in the install's R2 bucket."
+      "content": "Connect a WebDAV client to `{{appUrl}}` with the user name and password. macOS Finder: Go, Connect to Server. Windows: Map network drive, or a client such as WinSCP or Cyberduck. Every file lands in the install's R2 bucket."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

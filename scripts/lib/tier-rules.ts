@@ -29,8 +29,9 @@ import type { CatalogManifest } from "./types.ts";
  * - must list `tokenPermissions`: the installer deploys with the app's own
  *   token, and the admin creates that token from this list.
  *
- * Neither tier may set `bump.autoMerge`: a bump would merge itself without
- * any install check, since CI installs neither.
+ * Neither tier may set `bump.autoMerge` to `true`. CI installs neither, so
+ * the bump bot never lets their bumps merge themselves, whatever the entry
+ * says, and a maintainer merges each one; `true` would claim otherwise.
  */
 export function tierProblems(manifest: CatalogManifest): string[] {
   const { tier } = manifest.install;

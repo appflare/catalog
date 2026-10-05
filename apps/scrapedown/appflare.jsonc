@@ -6,10 +6,13 @@
   "slug": "scrapedown",
   "name": "scrapedown",
   "summary": "Turn any web page into clean Markdown: one GET with a URL returns the article's text in reader mode, with its title, byline, excerpt and language.",
-  "homepage": "https://github.com/ozanvos/scrapedown",
+  "tagline": "Turn web pages into clean, readable text",
   "repo": "ozanvos/scrapedown",
   "license": "MIT",
   "categories": ["developer-tools", "utilities"],
+  // The note on Cloudflare Access changed after this release was published: a
+  // revision, no new build.
+  "revision": 2,
   "authors": [
     { "name": "Ozan Şener", "url": "https://getairefs.com", "github": "ozanvos", "x": "ozanvos" }
   ],
@@ -18,26 +21,23 @@
   // since January 2024.
   "source": { "ref": "main", "sha": "807d685b3efe4438deace2429bf01c9c0f76ca43" },
   "install": {
-    "tier": "artifact",
     "packageManager": "npm",
-    "wranglerConfig": "wrangler.toml",
-    "workerName": "scrapedown"
+    "wranglerConfig": "wrangler.toml"
   },
   // One stateless Worker: one outbound fetch per request.
   "plan": "free",
-  "requires": [],
   // Upstream has no access key: anyone who knows the address can use it.
+  // No `access` block: the endpoint is called by programs, which cannot sign
+  // in to Cloudflare Access, so protection stays offered and off.
   "secrets": [],
-  "vars": [],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Request {{workerUrl}}/?url=https://example.com for the page as Markdown in `page.textContent`, or add `&markdown=false` for cleaned HTML and plain text instead."
+      "content": "Request {{appUrl}}/?url=https://example.com for the page as Markdown in `page.textContent`, or add `&markdown=false` for cleaned HTML and plain text instead."
     },
     {
       "type": "markdown",
-      "content": "The endpoint has no key: anyone who learns this address can have your Worker fetch pages, within your Workers request allowance. Keep the address to yourself, or put the Worker behind Cloudflare Access."
+      "content": "The endpoint has no key: anyone who learns this address can have your Worker fetch pages, within your Workers request allowance. Keep the address to yourself. Cloudflare Access protection would admit only Appflare's users signed in through a browser, so scripts and other programs could no longer call it."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

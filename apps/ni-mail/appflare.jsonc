@@ -9,7 +9,7 @@
   "slug": "ni-mail",
   "name": "ni-mail",
   "summary": "A minimal mail receiver for your own domain with an HTTP API: fetch the latest message, list, read and thread mail per address, with attachments kept in R2, for scripts and automation.",
-  "homepage": "https://github.com/mskatoni/ni-mail",
+  "tagline": "Receive mail on your domain for scripts and automations",
   "repo": "mskatoni/ni-mail",
   "license": "Apache-2.0",
   "categories": ["email", "developer-tools"],
@@ -18,13 +18,11 @@
   // Upstream has no release tags, so the entry follows the default branch by commit.
   "source": { "ref": "main", "sha": "792b54a2b2bda1047af7e8f5c4ca8a77eff8a0bb" },
   "install": {
-    "tier": "artifact",
     "packageManager": "npm",
     // No build step: wrangler bundles src/index.ts.
     "wranglerConfig": "wrangler.jsonc",
-    "workerName": "ni-mail",
     // The one route that answers without the access key.
-    "healthPath": "/health",
+    "health": { "path": "/health" },
     // Upstream's setup sends the zone's catch-all to the Worker, so any
     // address of the domain can receive mail.
     "emailRouting": { "catchAll": true }
@@ -38,7 +36,7 @@
       "name": "AUTH_KEY",
       "label": "Access key",
       "help": "Every API request needs it in the X-Auth-Key header.",
-      "generate": true
+      "generate": "password"
     }
   ],
   "vars": [
@@ -48,24 +46,23 @@
       "help": "The domain mail arrives at, the zone you pick for Email Routing, for example example.com. Several are allowed, comma separated. Mail to any other domain is refused.",
       // The wrangler config leaves it empty, which accepts every domain; an
       // empty default with required makes the form ask for the real one.
-      "default": "",
-      "required": true
+      "default": ""
     },
     {
       "name": "DEFAULT_MAILBOX",
       "label": "Default mailbox",
-      "help": "The address /latest, /mails and /mail/<id> read when a request names none (with ?mailbox= or an X-Mailbox header), for example inbox@example.com. Leave empty to require one on every request."
+      "help": "The address /latest, /mails and /mail/<id> read when a request names none (with ?mailbox= or an X-Mailbox header), for example inbox@example.com. Leave empty to require one on every request.",
+      "optional": true
     }
   ],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Send a message to any address of your mail domain, then read it:\n\n```sh\ncurl '{{workerUrl}}/api/mailboxes/you@example.com/latest' -H 'X-Auth-Key: <access key>'\n```\n\n`/api/mailboxes/<address>/emails` lists a mailbox and `/api/mailboxes/<address>/emails/<id>` reads one message; the access key is in this app's settings."
+      "content": "Send a message to any address of your mail domain, then read it:\n\n```sh\ncurl '{{appUrl}}/api/mailboxes/you@example.com/latest' -H 'X-Auth-Key: <access key>'\n```\n\n`/api/mailboxes/<address>/emails` lists a mailbox and `/api/mailboxes/<address>/emails/<id>` reads one message; the access key is in this app's settings."
     },
     {
       "type": "markdown",
       "content": "Every address of the zone you picked now reaches the app. Use a domain kept for this, not one that receives mail you read elsewhere."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

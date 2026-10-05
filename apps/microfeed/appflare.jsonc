@@ -10,21 +10,22 @@
   "slug": "microfeed",
   "name": "microfeed",
   "summary": "A lightweight CMS for audio, video, photos, documents, blog posts and links, published as a website, RSS and JSON feed, with an admin dashboard and an API for agents.",
+  "tagline": "Publish podcasts, photos, videos and posts on your own site",
   "homepage": "https://www.microfeed.org",
   "repo": "microfeed/microfeed",
   "license": "AGPL-3.0-only",
   "categories": ["cms", "media"],
+  // openPath added after this release was published: a revision, no new build.
+  "revision": 2,
   "authors": [
     { "name": "Listen Notes", "url": "https://www.listennotes.com", "github": "microfeed" }
   ],
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v1.0.13", "sha": "45096852f90fd617b34b368b93f339ab383ea248" },
   "install": {
-    "tier": "artifact",
     // Yarn 4, pinned in package.json's packageManager.
     "packageManager": "yarn",
     "wranglerConfig": "wrangler.jsonc",
-    "workerName": "microfeed",
     // Upstream's `build` script is `yarn types && astro build`; the type
     // generation only feeds the type checker, so the build runs Astro
     // directly. The Cloudflare adapter builds the Worker and leaves a
@@ -55,19 +56,19 @@
       "name": "BETTER_AUTH_SECRET",
       "label": "Session secret",
       "help": "Signs dashboard sessions. Setting a new value signs everyone out.",
-      "generate": true
+      "generate": "password"
     },
     {
       "name": "UPLOAD_SIGNING_KEY",
       "label": "Upload signing key",
       "help": "Signs the short-lived links the dashboard uploads media through.",
-      "generate": true
+      "generate": "password"
     },
     {
       "name": "WEBHOOK_SECRET_KEY",
       "label": "Webhook signing key",
       "help": "Encrypts the signing secret of each webhook endpoint you add in the dashboard. Setting a new value makes those stored secrets unreadable.",
-      "generate": true
+      "generate": "password"
     }
   ],
   "vars": [
@@ -75,8 +76,7 @@
       "name": "MICROFEED_ADMIN_PATH",
       "label": "Admin path",
       "help": "Where the admin dashboard lives, without slashes: admin serves it at /admin/.",
-      "default": "admin",
-      "required": true
+      "default": "admin"
     },
     {
       "name": "DEPLOYMENT_ENVIRONMENT",
@@ -86,36 +86,42 @@
         { "value": "production", "label": "Production" },
         { "value": "preview", "label": "Preview" }
       ],
-      "default": "production"
+      "default": "production",
+      "optional": true
     },
     {
       "name": "MICROFEED_CLOUDFLARE_ACCOUNT_ID",
       "label": "Cloudflare account ID",
       "help": "The dashboard's setup checklist links into this account's Cloudflare dashboard with it. Filled in on every install and update.",
-      "default": "{{accountId}}"
+      "default": "{{accountId}}",
+      "optional": true
     },
     {
       "name": "MICROFEED_WORKER_NAME",
       "label": "Worker name",
       "help": "Used for the checklist's link to this Worker's domain settings.",
-      "default": "{{workerName}}"
+      "default": "{{workerName}}",
+      "optional": true
     },
     {
       "name": "MICROFEED_R2_BUCKET_NAME",
       "label": "Media bucket name",
       "help": "The R2 bucket Appflare created for media, named after the Worker. The checklist links to it to set up a public media domain.",
-      "default": "{{workerName}}-media-bucket"
+      "default": "{{workerName}}-media-bucket",
+      "optional": true
     }
   ],
+  // The default of MICROFEED_ADMIN_PATH. Open still goes here after an admin
+  // changes that var.
+  "openPath": "/admin/",
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Create the owner account from the email and password you entered, once:\n\n```sh\ncurl -X POST {{workerUrl}}/.well-known/microfeed/bootstrap-admin/\n```\n\nIt answers `{\"status\":\"created\"}`, and `already_initialized` from then on. Then sign in at {{workerUrl}}/admin/ (or the admin path you chose)."
+      "content": "Create the owner account from the email and password you entered, once:\n\n```sh\ncurl -X POST {{appUrl}}/.well-known/microfeed/bootstrap-admin/\n```\n\nIt answers `{\"status\":\"created\"}`, and `already_initialized` from then on. Then sign in at {{appUrl}}/admin/ (or the admin path you chose)."
     },
     {
       "type": "markdown",
       "content": "Media is served from the R2 bucket `{{workerName}}-media-bucket`: give it a public custom domain in the Cloudflare dashboard and enter that URL under **Settings > Media file storage**, as the dashboard's checklist shows."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

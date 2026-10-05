@@ -11,7 +11,7 @@
   "slug": "analytics-explorer",
   "name": "Cloudflare Analytics Explorer",
   "summary": "Build dashboards over your Workers Analytics Engine datasets: line, bar, area and pie charts, tables and stat cards from SQL queries, with filters and drag-and-drop layouts.",
-  "homepage": "https://github.com/rohanprasadofficial/visual-ae-cloudflare",
+  "tagline": "Build charts and dashboards from your Workers analytics data",
   "repo": "rohanprasadofficial/visual-ae-cloudflare",
   "license": "MIT",
   "categories": ["analytics", "developer-tools"],
@@ -27,27 +27,25 @@
   // Upstream publishes no release tags; the pin tracks main.
   "source": { "ref": "main", "sha": "b11ff41853b6c7c858beec6873072b1baaf20004" },
   "install": {
-    "tier": "artifact",
     "packageManager": "pnpm",
     // Cloudflare's Vite plugin writes the bundled Worker and its deploy config
     // under dist/ and points wrangler at it; the packer follows that redirect.
     "wranglerConfig": "wrangler.json",
-    "workerName": "analytics-explorer",
     // Upstream's build script (type check, then the Vite build); the wrangler
     // config has no build.command.
     "buildCommand": "pnpm run build",
     // Answers from the Worker's own code; / is the static app.
-    "healthPath": "/api/health"
+    "health": { "path": "/api/health" }
   },
   // Workers and static assets only; the Analytics Engine SQL API is free to query.
   "plan": "free",
-  "requires": [],
   "secrets": [
     {
       "name": "CF_API_TOKEN",
       "label": "Analytics API token (optional)",
       "help": "Leave empty to enter the token in the app's Settings instead, where it stays in your browser. If you set it here, the app reads this account's datasets with it for every visitor, and the app has no sign-in: anyone who can open its address can then run queries. Set it only after putting the Worker behind Cloudflare Access. Needs Account Analytics Read on this account.",
-      "optional": true
+      "optional": true,
+      "cloudflareToken": true
     }
   ],
   "vars": [
@@ -55,14 +53,13 @@
       "name": "CF_ACCOUNT_ID",
       "label": "Cloudflare account ID",
       "help": "The account whose Analytics Engine datasets the app reads with the token above: this one. Filled in on every install and update. Used only when the token is set.",
-      "default": "{{accountId}}",
-      "required": true
+      "default": "{{accountId}}"
     }
   ],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Open {{workerUrl}}, open **Settings**, and enter your account ID and an API token with **Account Analytics Read** permission (create it under My Profile, API Tokens). Both stay in your browser. Then add a data source for one of your Analytics Engine datasets and build a dashboard."
+      "content": "Open {{appUrl}}, open **Settings**, and enter your account ID and an API token with **Account Analytics Read** permission (create it under My Profile, API Tokens). Both stay in your browser. Then add a data source for one of your Analytics Engine datasets and build a dashboard."
     },
     {
       "type": "markdown",
@@ -71,9 +68,10 @@
   ],
   "tokenPermissions": [
     {
-      "name": "Account.Account Analytics:Read",
+      "group": "Account Analytics",
       "scope": "account",
-      "description": "Query Analytics Engine datasets through the SQL API (CF_API_TOKEN, optional; or entered in the app's Settings)."
+      "access": "read",
+      "reason": "Optional: runs your Analytics Engine queries through the SQL API; without it you enter a token in the app's Settings instead."
     }
   ]
 }

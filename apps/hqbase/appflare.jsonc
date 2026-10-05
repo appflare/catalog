@@ -10,6 +10,7 @@
   "slug": "hqbase",
   "name": "HQBase",
   "summary": "Your team's email workspace in your own account: shared mailboxes, drafts, labels, contacts and audit history, with a remote MCP server for agents.",
+  "tagline": "Shared email for your team in your own Cloudflare account",
   "homepage": "https://hqbase.io",
   "repo": "HQBase/hqbase",
   "license": "AGPL-3.0-only",
@@ -18,15 +19,13 @@
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v1.4.2", "sha": "a1161f1cebf67c147ec5ab934504f79a3bcfe807" },
   "install": {
-    "tier": "artifact",
     "packageManager": "pnpm",
     "wranglerConfig": "wrangler.jsonc",
-    "workerName": "hqbase",
     // Upstream's build: checks the Worker config, builds the React app into
     // dist/ (served as static assets), then the offline service worker.
     "buildCommand": "pnpm run build",
     // Answers without a sign-in.
-    "healthPath": "/api/health"
+    "health": { "path": "/api/health" }
   },
   // D1, R2, Queues, a SQLite-backed Durable Object, one daily cron trigger
   // and receiving through Email Routing all fit the free plan, but HQBase
@@ -41,7 +40,7 @@
       "name": "BETTER_AUTH_SECRET",
       "label": "Session secret",
       "help": "Signs sign-in sessions and the tokens HQBase issues. Setting a new value signs everyone out.",
-      "generate": true
+      "generate": "password"
     }
   ],
   "vars": [
@@ -51,21 +50,19 @@
       "name": "HQBASE_WORKER_NAME",
       "label": "Worker name",
       "help": "The name HQBase gives Cloudflare when it points your domains' mail at this Worker. Filled in on every install and update.",
-      "default": "{{workerName}}",
-      "required": true
+      "default": "{{workerName}}"
     }
   ],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Open {{workerUrl}}/setup right away: the first person to finish it becomes the owner. It asks you to authorize HQBase in Cloudflare so it can connect your email domains to this Worker."
+      "content": "Open {{appUrl}}/setup right away: the first person to finish it becomes the owner. It asks you to authorize HQBase in Cloudflare so it can connect your email domains to this Worker."
     },
     {
       "type": "markdown",
       "content": "Update HQBase through Appflare. Its own **Updates** settings follow HQBase's release channel through Workers Builds, which an Appflare install does not use, so they show the update as unavailable."
     }
   ],
-  "tokenPermissions": [],
   "resources": {
     "d1": {
       // Upstream's deploy applies migrations-after-deploy/ once the new

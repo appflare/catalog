@@ -3,6 +3,7 @@
   "slug": "synch",
   "name": "Synch",
   "summary": "Your own server for Synch, end-to-end encrypted real-time sync for Obsidian vaults: notes are encrypted on each device, and the Worker relays and stores only ciphertext in a Durable Object, D1 and R2.",
+  "tagline": "Keep your Obsidian notes in sync on your own server",
   "homepage": "https://synch.run",
   "repo": "hjinco/synch",
   "license": "MIT",
@@ -17,7 +18,6 @@
   // plugin version expects.
   "source": { "ref": "0.4.8", "sha": "2c07515fe4bfd0a8445d1c9fa3a1174669a495b3" },
   "install": {
-    "tier": "artifact",
     // A pnpm workspace (apps/*, packages/*); the root lockfile covers apps/api.
     "packageManager": "pnpm",
     // The self-hosted server, upstream's Deploy to Cloudflare template. Its
@@ -28,7 +28,7 @@
     // No build: public/ holds tracked files, and wrangler bundles the Worker
     // with the Durable Object's SQL migrations as text modules.
     // Answers without a sign-in, from the Worker itself.
-    "healthPath": "/health"
+    "health": { "path": "/health" }
   },
   // D1, R2 and a SQLite-backed Durable Object per vault all have free tiers;
   // upstream's guide deploys to a free account.
@@ -47,25 +47,23 @@
       "name": "BETTER_AUTH_SECRET",
       "label": "Session signing secret",
       "help": "Signs sign-in sessions. Setting a new value signs everyone out.",
-      "generate": true
+      "generate": "password"
     },
     {
       "name": "SYNC_TOKEN_SECRET",
       "label": "Sync token secret",
       "help": "Signs the short-lived tokens devices use to open a sync connection.",
-      "generate": true
+      "generate": "password"
     }
   ],
-  "vars": [],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "In Obsidian, install the Synch community plugin, open **Settings → Synch**, and paste `{{workerUrl}}` under **Self-hosted server** (without a trailing slash). Save, then sign up with one of the allowed email addresses and create or connect a vault."
+      "content": "In Obsidian, install the Synch community plugin, open **Settings → Synch**, and paste `{{appUrl}}` under **Self-hosted server** (without a trailing slash). Save, then sign up with one of the allowed email addresses and create or connect a vault."
     },
     {
       "type": "markdown",
       "content": "The vault password never leaves your devices: the server stores only encrypted data, so a forgotten vault password cannot be recovered."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

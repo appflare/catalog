@@ -3,27 +3,28 @@
   "slug": "flaremo",
   "name": "FlareMo",
   "summary": "A Memos-compatible notes app for quick capture: timeline, tags, attachments, semantic search, and an MCP server, on D1, R2, and Vectorize.",
-  "homepage": "https://github.com/realchendahuang/FlareMo",
+  "tagline": "Capture notes and find them when you need them",
   "repo": "realchendahuang/FlareMo",
   "license": "AGPL-3.0-only",
   "categories": ["productivity", "notes"],
+  // The formatting of URLs in the notes changed after this release was published:
+  // a revision, no new build.
+  "revision": 2,
   "authors": [{ "name": "realchendahuang", "github": "realchendahuang" }],
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v0.20.1", "sha": "f87c98ee528848fb8c200ca538cd82d1db03505c" },
   "install": {
-    "tier": "artifact",
     "packageManager": "pnpm",
     // The button-ready config. Upstream's wrangler.jsonc is a local, untracked
     // copy of wrangler.jsonc.example; the optional site and Telegram bot
     // Workers under apps/ are separate deployments and are not installed.
     "wranglerConfig": "wrangler.json",
-    "workerName": "flaremo",
     // The wrangler config serves apps/web/dist but has no build.command;
     // upstream's deploy script builds the web app with this (tsc, then Vite).
     "buildCommand": "pnpm --filter @flaremo/web build",
     // Runs Worker code (the assets config sends it to the Worker first) and
     // needs no credentials: the OpenAPI document is built in code, without D1.
-    "healthPath": "/openapi.json"
+    "health": { "path": "/openapi.json" }
   },
   // D1, R2, Queues (10,000 operations a day), Vectorize, and Workers AI all
   // have free tiers. The two indexes share Vectorize's free 5 million stored
@@ -40,13 +41,13 @@
       "name": "BETTER_AUTH_SECRET",
       "label": "Session signing secret",
       "help": "Signs sign-in sessions and API tokens. At least 32 characters; changing it later signs everyone out.",
-      "generate": true
+      "generate": "password"
     },
     {
       "name": "FLAREMO_BOOTSTRAP_SECRET",
       "label": "Setup secret",
       "help": "Creates the owner account once, on the /setup page. At least 32 characters. Copy it now.",
-      "generate": true
+      "generate": "password"
     }
   ],
   // The embedding provider, model, dimensions, and Vectorize usage limits keep
@@ -55,30 +56,29 @@
     {
       "name": "FLAREMO_PUBLIC_URL",
       "label": "Public URL",
-      "help": "The address you will open the app at, without a path: https://<Worker name>.<your workers.dev subdomain>.workers.dev, or your custom domain. Sign-in only works from this origin, and it cannot be changed after installing.",
+      "help": "The address you will open the app at, without a path. Sign-in only works from this origin, and it cannot be changed after installing.",
       // Newer managers fill in the Worker's workers.dev address here; older ones
       // show the placeholder as is, and it must be replaced by hand.
-      "default": "{{workerUrl}}",
-      "required": true
+      "default": "{{appUrl}}"
     },
     {
       "name": "FLAREMO_SINGLE_USER_NAME",
       "label": "Owner display name",
       "help": "Shown as the author of public memos and share pages until the owner sets a profile name.",
       "default": "FlareMo Owner",
-      "required": false
+      "optional": true
     },
     {
       "name": "FLAREMO_TRUSTED_ORIGINS",
       "label": "Other trusted origins",
       "help": "Only when browsers reach the app from more origins than the public URL, for example a second custom domain. Comma separated, without paths.",
-      "required": false
+      "optional": true
     }
   ],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Open {{workerUrl}}/setup and enter the setup secret to create the owner account. The setup page works once; afterwards sign in at {{workerUrl}}."
+      "content": "Open {{appUrl}}/setup and enter the setup secret to create the owner account. The setup page works once; afterwards sign in at {{appUrl}}."
     },
     {
       "type": "markdown",
@@ -86,10 +86,9 @@
     },
     {
       "type": "markdown",
-      "content": "Memos clients and scripts connect with a personal access token from Settings. MCP clients connect to {{workerUrl}}/mcp. The API is described at {{workerUrl}}/openapi.json."
+      "content": "Memos clients and scripts connect with a personal access token from Settings. MCP clients connect to `{{appUrl}}/mcp`. The API is described at {{appUrl}}/openapi.json."
     }
   ],
-  "tokenPermissions": [],
   // Both indexes are created before the Worker is uploaded, and their shape
   // cannot change later. They match upstream's provisioning script: the
   // embedding model @cf/qwen/qwen3-embedding-0.6b returns 1024 dimensions, and

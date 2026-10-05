@@ -7,12 +7,16 @@
   "slug": "bashupload",
   "name": "bashupload",
   "summary": "Upload a file from the terminal with curl or from a browser and get a link that works for one download or until it expires, with an optional password, on R2.",
+  "tagline": "Share files from your browser or terminal with expiring links",
   "homepage": "https://bashupload.app",
   "repo": "DullJZ/bashupload-r2",
   // The repository has no LICENSE file and declares no licence anywhere, so
   // the catalog shows it as unlicensed.
   "license": "NONE",
   "categories": ["files", "sharing"],
+  // Generated secrets (revision 2) and edited help text (revision 3) came after
+  // this release was published: revisions, no new build.
+  "revision": 3,
   "authors": [{ "name": "DullJZ", "url": "https://www.jz-home.top", "github": "DullJZ" }],
   "maintainers": ["MendyLanda"],
   // Upstream's tags (bashupload-0.1.0, chart-v0.1.0) name its Docker image
@@ -20,14 +24,12 @@
   // so the entry follows the default branch by commit.
   "source": { "ref": "main", "sha": "104901548e0b436fed269e445c4d23a0cfb043a6" },
   "install": {
-    "tier": "artifact",
     "packageManager": "npm",
     // No build: wrangler bundles src/index.js and serves public/ as static
     // assets through the Worker. Upstream's custom domain (bashupload.app)
     // is not part of the artifact, so the app answers at its workers.dev
     // address.
-    "wranglerConfig": "wrangler.toml",
-    "workerName": "bashupload"
+    "wranglerConfig": "wrangler.toml"
   },
   // R2, one rate limit and one cron trigger (every five minutes; the free
   // plan allows five per account) fit the free plan.
@@ -37,9 +39,13 @@
   // secret here, that var is left out of the artifact.
   "secrets": [
     {
+      // Basic auth credentials are split on every colon (src/index.js:189-195)
+      // and the password is compared with !== (:204); a generated one has no
+      // colon.
       "name": "PASSWORD",
       "label": "Password",
-      "help": "Optional. When set, every upload and download must send it in the Authorization header (curl -H 'Authorization: <password>'), and the web page asks for it. Without it anyone who finds the address can upload files to your bucket.",
+      "help": "When set, every upload and download must send it in the Authorization header (curl -H 'Authorization: <password>'), and the web page asks for it. Without it anyone who finds the address can upload files to your bucket.",
+      "generate": "password",
       "optional": true
     }
   ],
@@ -48,22 +54,19 @@
       "name": "MAX_UPLOAD_SIZE",
       "label": "Largest upload (bytes)",
       "help": "Upstream's default is 5 GB, but Cloudflare refuses request bodies over 100 MB on workers.dev and on Free and Pro zones, so the default here is 100 MB.",
-      "default": "100000000",
-      "required": true
+      "default": "100000000"
     },
     {
       "name": "MAX_AGE",
       "label": "Lifetime of a one-time file (seconds)",
       "help": "A file nobody downloads is deleted after this long.",
-      "default": "3600",
-      "required": true
+      "default": "3600"
     },
     {
       "name": "MAX_AGE_FOR_MULTIDOWNLOAD",
       "label": "Longest lifetime an uploader may ask for (seconds)",
       "help": "An upload that sends X-Expiration-Seconds can be downloaded many times until it expires, up to this limit.",
-      "default": "86400",
-      "required": true
+      "default": "86400"
     },
     {
       "name": "ALLOW_LIFETIME_OVER_MAX_AGE",
@@ -71,7 +74,8 @@
       "help": "Let uploaders ask for a lifetime above the limit above.",
       "type": "select",
       "options": [{ "value": "false", "label": "No" }, { "value": "true", "label": "Yes" }],
-      "default": "false"
+      "default": "false",
+      "optional": true
     },
     {
       "name": "NO_CLEANUP",
@@ -82,25 +86,24 @@
         { "value": "false", "label": "No, delete them" },
         { "value": "true", "label": "Yes, keep them" }
       ],
-      "default": "false"
+      "default": "false",
+      "optional": true
     },
     {
       "name": "SHORT_URL_SERVICE",
       "label": "Short link service",
       "help": "A MyUrls endpoint used only for uploads to /short, which send the file's link to it. The default is the public instance upstream uses.",
-      "default": "https://suosuo.de/short",
-      "required": true
+      "default": "https://suosuo.de/short"
     }
   ],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Upload from a terminal with `curl {{workerUrl}} -T file.txt`, or open {{workerUrl}} and drop a file. The link works for one download; send `-H 'X-Expiration-Seconds: 3600'` to allow downloads for an hour instead."
+      "content": "Upload from a terminal with `curl {{appUrl}} -T file.txt`, or open {{appUrl}} and drop a file. The link works for one download; send `-H 'X-Expiration-Seconds: 3600'` to allow downloads for an hour instead."
     },
     {
       "type": "markdown",
       "content": "Without a password, anyone who finds the address can store files in your R2 bucket, up to 10 uploads a minute per IP address. Set the password in this app's settings to keep it to yourself."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

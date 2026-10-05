@@ -7,18 +7,20 @@
   "slug": "screendrop",
   "name": "Screendrop Cloud",
   "summary": "The upload and sharing backend for the Screendrop macOS app: screenshots and screen recordings stored in R2, with share pages, transcripts, comments and likes.",
-  "homepage": "https://github.com/fayazara/screendrop-worker",
+  "tagline": "Share screenshots and screen recordings with your own links",
   "repo": "fayazara/screendrop-worker",
   // The repository has no LICENSE file; its README's License section says MIT.
   "license": "MIT",
   "categories": ["sharing", "media"],
+  // Field links (revision 2) and the formatting of URLs in the notes (revision 3)
+  // came after this release was published: revisions, no new build.
+  "revision": 3,
   "authors": [{ "name": "Fayaz Ahmed", "github": "fayazara", "x": "fayazara" }],
   "maintainers": ["MendyLanda"],
   // Upstream publishes no release tags; the pin tracks main, which the
   // Screendrop app compares against through /api/version.
   "source": { "ref": "main", "sha": "32a8898dac62da1b190dd9edcb63d22a2049a257" },
   "install": {
-    "tier": "artifact",
     "packageManager": "pnpm",
     // TanStack Start through the Cloudflare Vite plugin, which writes the
     // Worker and the config wrangler deploys from under dist/ and points
@@ -27,7 +29,6 @@
     // wrangler.jsonc. The Worker's own /api/setup creates the same tables
     // with IF NOT EXISTS, so it agrees with a database migrated this way.
     "wranglerConfig": "wrangler.jsonc",
-    "workerName": "screendrop",
     // Upstream's build script (vite build); the config has no build.command.
     "buildCommand": "pnpm run build"
   },
@@ -46,18 +47,26 @@
       "name": "AUTH_SECRET",
       "label": "Session key",
       "help": "Signs the cookies of viewers who sign in to comment, so they do not depend on the upload token. Setting a new value signs every viewer out.",
-      "generate": true
+      "generate": "password"
     },
     {
       "name": "GITHUB_CLIENT_SECRET",
       "label": "GitHub OAuth client secret",
-      "help": "For \"Sign in with GitHub\" on share pages, with the client ID below. The OAuth app's callback URL is {{workerUrl}}/api/auth/callback/github.",
+      "help": "For \"Sign in with GitHub\" on share pages, with the client ID below. The OAuth app's callback URL is the app's address followed by /api/auth/callback/github.",
+      "link": {
+        "label": "Create an OAuth app",
+        "url": "https://github.com/settings/applications/new"
+      },
       "optional": true
     },
     {
       "name": "GOOGLE_CLIENT_SECRET",
       "label": "Google OAuth client secret",
-      "help": "For \"Sign in with Google\" on share pages, with the client ID below. The OAuth client's redirect URI is {{workerUrl}}/api/auth/callback/google.",
+      "help": "For \"Sign in with Google\" on share pages, with the client ID below. The OAuth client's redirect URI is the app's address followed by /api/auth/callback/google.",
+      "link": {
+        "label": "Create an OAuth client",
+        "url": "https://console.cloud.google.com/apis/credentials"
+      },
       "optional": true
     }
   ],
@@ -65,33 +74,44 @@
     {
       "name": "AUTHOR_NAME",
       "label": "Your name",
-      "help": "Shown on share pages as the person who shared the capture. Leave empty for Anonymous."
+      "help": "Shown on share pages as the person who shared the capture. Leave empty for Anonymous.",
+      "optional": true
     },
     {
       "name": "AUTHOR_AVATAR",
       "label": "Avatar URL",
-      "help": "An image shown next to your name, for example https://github.com/your-username.png. Leave empty for a generated avatar."
+      "help": "An image shown next to your name, for example https://github.com/your-username.png. Leave empty for a generated avatar.",
+      "optional": true
     },
     {
       "name": "GITHUB_CLIENT_ID",
       "label": "GitHub OAuth client ID",
-      "help": "Comments and likes need a signed-in viewer. Set up GitHub, Google, or both; without either, share pages show no comments or likes."
+      "help": "Comments and likes need a signed-in viewer. Set up GitHub, Google, or both; without either, share pages show no comments or likes.",
+      "link": {
+        "label": "Create an OAuth app",
+        "url": "https://github.com/settings/applications/new"
+      },
+      "optional": true
     },
     {
       "name": "GOOGLE_CLIENT_ID",
       "label": "Google OAuth client ID",
-      "help": "A Web application OAuth client. Publish its consent screen, or only its test users can sign in."
+      "help": "A Web application OAuth client. Publish its consent screen, or only its test users can sign in.",
+      "link": {
+        "label": "Create an OAuth client",
+        "url": "https://console.cloud.google.com/apis/credentials"
+      },
+      "optional": true
     }
   ],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "In the Screendrop app, open Settings, Cloud, enter {{workerUrl}} as the worker URL and choose Verify Connection. Captures you share from then on upload here and get links under {{workerUrl}}."
+      "content": "In the Screendrop app, open Settings, Cloud, enter `{{appUrl}}` as the worker URL and choose Verify Connection. Captures you share from then on upload here and get links under {{appUrl}}."
     },
     {
       "type": "markdown",
       "content": "Share pages are public to anyone with the link. Uploading and deleting need the upload token."
     }
-  ],
-  "tokenPermissions": []
+  ]
 }

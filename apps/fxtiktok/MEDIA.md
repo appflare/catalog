@@ -1,0 +1,7 @@
+# Media for fxTikTok
+
+Upstream: [`okdargy/fxTikTok`](https://github.com/okdargy/fxTikTok) at commit [`66fbae3ff37421db854517d3de1ce48eb7f733b0`](https://github.com/okdargy/fxTikTok/tree/66fbae3ff37421db854517d3de1ce48eb7f733b0), licensed [MIT](https://github.com/okdargy/fxTikTok/blob/66fbae3ff37421db854517d3de1ce48eb7f733b0/LICENSE).
+
+No icon: upstream publishes no project logo. No cover: upstream publishes no suitable social preview or banner. The homepage redirects to the GitHub repository and publishes no separate site images.
+
+Left out: [`.github/readme/compare.png`](https://github.com/okdargy/fxTikTok/blob/66fbae3ff37421db854517d3de1ce48eb7f733b0/.github/readme/compare.png) and [`.github/readme/slideshow.png`](https://github.com/okdargy/fxTikTok/blob/66fbae3ff37421db854517d3de1ce48eb7f733b0/.github/readme/slideshow.png) show Discord embeds containing TikTok branding and other people's videos. [`.github/readme/direct.png`](https://github.com/okdargy/fxTikTok/blob/66fbae3ff37421db854517d3de1ce48eb7f733b0/.github/readme/direct.png) shows another person's photo in Discord. [`.github/readme/settings.png`](https://github.com/okdargy/fxTikTok/blob/66fbae3ff37421db854517d3de1ce48eb7f733b0/.github/readme/settings.png) shows Cloudflare's dashboard, not fxTikTok's interface. [`.github/readme/introduction.gif`](https://github.com/okdargy/fxTikTok/blob/66fbae3ff37421db854517d3de1ce48eb7f733b0/.github/readme/introduction.gif) is animated and its first frame does not show the tool's output.

@@ -22,8 +22,9 @@ It never calls a Cloudflare write API: it cannot stop a Worker or change a setti
 - **Cron.** One trigger, every 6 hours, of the five the Workers free plan allows per
   account.
 - **Status page.** `GET /` shows the last 7 days and the current surges. It has no
-  sign-in; put the Worker behind Cloudflare Access to keep it private.
+  sign-in, so the install form puts the app behind Cloudflare Access by default, which
+  lets in only the people who use this Appflare and needs a Zero Trust organization on
+  the account. The cron runs either way.
 - **Numbers.** These are analytics counts, not the invoice, and sit a little above what
   is billed.
-- **Pin.** Upstream has no release tags, so the pin follows the default branch and each
-  bump is reviewed by a maintainer.
+- **Pin.** Upstream has no release tags, so the pin follows the default branch.

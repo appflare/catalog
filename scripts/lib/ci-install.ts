@@ -5,12 +5,19 @@ import bcrypt from "bcryptjs";
 import type { EntryWorkerHelpers, SeedHelpers } from "./appflare-schema.ts";
 import type {
   ArtifactBinding,
+  ArtifactD1Binding,
   ArtifactFile,
   ArtifactManifest,
   ArtifactQueueConsumer,
   CatalogD1Seed,
+  HealthMode,
+  Plan,
   QueueRef,
+  R2LifecycleRule,
+  VectorizeMetadataIndex,
 } from "./types.ts";
+
+export type { HealthMode } from "./types.ts";
 
 /**
  * Installs a packed artifact into the CI Cloudflare account with wrangler, to
@@ -27,17 +34,38 @@ import type {
  * same names, `<worker>-<binding, lowercased, "_" -> "-">`, so the CI Worker's
  * resources can be found and deleted by name afterwards without any records.
  *
+ * What wrangler's config cannot say about a resource is set as the manager
+ * sets it: a Vectorize index's metadata indexes
+ * (`resources.vectorize[binding].metadataIndexes`) are created right after
+ * the index, one `metadata_index/create` call each, and an R2 bucket's
+ * lifecycle rules (`resources.r2[binding].lifecycle`) are merged into the
+ * rules it has with the manager's own `mergeR2LifecycleRules` and put back.
+ * wrangler creates the buckets during the deploy, so their rules are set
+ * right after it, before any D1 SQL runs or any request reaches the app.
+ *
  * D1 SQL runs as the manager runs it, once every Worker is deployed: each
  * database's migrations with `wrangler d1 migrations apply` (named and ordered
  * as the artifact records them), then its schema files in order with
  * `wrangler d1 execute --file`, unrecorded; then, for every database, its
  * post-deploy migrations with `wrangler d1 migrations apply` against a second
  * config whose `migrations_dir` is their folder, so they are recorded in
- * `d1_migrations` beside the others. A database's seed
+ * `d1_migrations` beside the others. A database with a baseline
+ * (`resources.d1[binding].baseline`) instead runs it with `wrangler d1
+ * execute --file`, then records every migration and post-deploy migration
+ * of the version in `d1_migrations` without running them, as the manager
+ * does on a new database. A database's seed
  * (`resources.d1[binding].seed`) runs last, or right after its migrations
  * when it says `beforeSchema`, through the D1 API rather than wrangler,
  * which cannot bind params (see {@link runSeed}). Seed-only secrets and vars
  * get values for the seeds and are never set on a Worker.
+ *
+ * A Worker of static assets only (no modules and no `mainModule`) is deployed as `wrangler deploy` deploys a config with `assets`
+ * and no `main`: the config names no entry module, no module rules and no
+ * bundling settings, and nothing is unpacked under `worker/`.
+ *
+ * `_redirects` and `_headers`, which the packer records as text in the assets
+ * config, are written back as files at the root of the assets directory,
+ * where wrangler reads them, and left out of the config's `assets` block.
  *
  * An app of several Workers (an artifact manifest with `workers`) is deployed as
  * the manager deploys it: every Worker, each after the Workers it binds to,
@@ -60,6 +88,10 @@ export const D1_DIR = "d1";
 export const D1_SCHEMA_DIR = "d1-schema";
 /** Where each D1 binding's post-deploy migrations are unpacked. */
 export const D1_POST_DEPLOY_DIR = "d1-post-deploy";
+/** Where each D1 baseline is unpacked, under `<binding>/<name>`. */
+export const D1_BASELINE_DIR = "d1-baseline";
+/** Where the SQL that records a baseline database's migrations is written, as `<binding>.sql`. */
+export const D1_BASELINE_RECORD_DIR = "d1-baseline-record";
 /** The config the post-deploy migrations are applied with (see {@link postDeployConfig}). */
 export const POST_DEPLOY_CONFIG = "wrangler.post-deploy.json";
 /** The config every Worker is deployed with. */
@@ -104,7 +136,19 @@ export interface CiVectorizeIndex {
   name: string;
   dimensions: number;
   metric: VectorizeMetric;
+  /** The metadata indexes created right after it, in order; omitted when none are declared. */
+  metadataIndexes?: VectorizeMetadataIndex[];
 }
+
+/** An R2 bucket the deploy creates, and the lifecycle rules set on it right after. */
+export interface CiR2Lifecycle {
+  bucket: string;
+  binding: string;
+  rules: R2LifecycleRule[];
+}
+
+/** The files at the root of the assets directory that configure it rather than being served. */
+export const ASSET_RULE_FILES = ["_redirects", "_headers"] as const;
 
 /** Vectorize's limits: index names up to 64 bytes, vectors up to 1536 dimensions. */
 const VECTORIZE_MAX_NAME = 64;
@@ -147,6 +191,13 @@ export interface CiD1Database {
   postDeploy: string[];
   /** The rows it gets once, at install (`resources.d1[binding].seed`); omitted when none. */
   seed?: CatalogD1Seed;
+  /**
+   * Its baseline (`resources.d1[binding].baseline`): the file, relative to
+   * the work dir, and the names of every migration and post-deploy migration
+   * the version ships, recorded in `d1_migrations` after it without running.
+   * Omitted when it has none.
+   */
+  baseline?: { file: string; recorded: string[] };
 }
 
 export interface CiInstallPlan {
@@ -198,6 +249,8 @@ export interface CiInstallPlan {
   d1: CiD1Database[];
   /** Vectorize indexes to create before the deploy (wrangler cannot provision them). */
   vectorizeIndexes: CiVectorizeIndex[];
+  /** R2 buckets whose lifecycle rules are set once the deploy has created them. */
+  r2Lifecycles: CiR2Lifecycle[];
   /**
    * Hyperdrive configurations to create before the deploy, from
    * `HYPERDRIVE_TEST_URL` (see {@link hyperdriveSkip}); their ids go into
@@ -210,10 +263,10 @@ export interface CiInstallPlan {
   queueConsumers: CiQueueConsumer[];
   /** What the check deploys but cannot exercise, for the run's summary. */
   notes: string[];
-  /** The path the health check probes: the catalog's `install.healthPath`, else `/`. */
-  healthPath: string;
-  /** How the health check reads the answer: the catalog's `install.healthMode`, else `default`. */
-  healthMode: HealthMode;
+  /** The path the health check probes: the catalog's `install.health.path`. */
+  probePath: string;
+  /** How the health check reads the answer: the catalog's `install.health.mode`. */
+  probeMode: HealthMode;
 }
 
 type WranglerRule =
@@ -275,6 +328,7 @@ interface CatalogForms {
 interface CatalogFormVar {
   name: string;
   default?: string;
+  /** The app cannot run without a value: the var does not set `optional: true`. */
   required: boolean;
   firstOption?: string;
 }
@@ -344,7 +398,7 @@ export function catalogForms(catalog: unknown): CatalogForms {
             v as {
               name?: unknown;
               default?: unknown;
-              required?: unknown;
+              optional?: unknown;
               type?: unknown;
               options?: unknown;
             },
@@ -355,7 +409,7 @@ export function catalogForms(catalog: unknown): CatalogForms {
           ): v is {
             name: string;
             default?: unknown;
-            required?: unknown;
+            optional?: unknown;
             type?: unknown;
             options?: unknown;
           } => typeof v.name === "string" && !derivedVarNames.has(v.name),
@@ -363,7 +417,8 @@ export function catalogForms(catalog: unknown): CatalogForms {
         .map((v) => ({
           name: v.name,
           ...(typeof v.default === "string" ? { default: v.default } : {}),
-          required: v.required === true,
+          // A var needs a value unless it says it is optional.
+          required: v.optional !== true,
           ...firstOption(v),
           seedOnly: seedOnly(v),
         }))
@@ -408,58 +463,108 @@ function vectorizeIndex(binding: ArtifactBinding, resource: string): CiVectorize
       `the Vectorize index name "${resource}" is longer than ${VECTORIZE_MAX_NAME} characters; use a shorter suffix`,
     );
   }
-  return { name: resource, dimensions, metric: metric as VectorizeMetric };
+  const metadataIndexes = metadataIndexesOf(binding);
+  return {
+    name: resource,
+    dimensions,
+    metric: metric as VectorizeMetric,
+    ...(metadataIndexes === undefined ? {} : { metadataIndexes }),
+  };
+}
+
+const METADATA_TYPES: readonly string[] = ["string", "number", "boolean"];
+
+/**
+ * The metadata indexes a `vectorize` binding records, or
+ * undefined when it has none. The artifact schema has checked them; this
+ * only refuses a shape the check could not use.
+ */
+function metadataIndexesOf(binding: ArtifactBinding): VectorizeMetadataIndex[] | undefined {
+  const value = binding.metadataIndexes;
+  if (value === undefined) return undefined;
+  const ok =
+    Array.isArray(value) &&
+    value.every(
+      (m: unknown) =>
+        typeof (m as { propertyName?: unknown } | null)?.propertyName === "string" &&
+        METADATA_TYPES.includes(String((m as { type?: unknown }).type)),
+    );
+  if (!ok) {
+    throw new Error(`vectorize binding ${binding.name} records unusable metadata indexes`);
+  }
+  // Checked above: each has a string propertyName and a known type.
+  return (value as VectorizeMetadataIndex[]).map((m) => ({
+    propertyName: m.propertyName,
+    type: m.type,
+  }));
+}
+
+/**
+ * The lifecycle rules an `r2_bucket` binding records, or
+ * undefined when it has none. The artifact schema has checked them.
+ */
+function lifecycleOf(binding: ArtifactBinding): R2LifecycleRule[] | undefined {
+  const value = binding.lifecycle;
+  if (value === undefined) return undefined;
+  const ok =
+    Array.isArray(value) &&
+    value.length > 0 &&
+    value.every((r: unknown) => typeof (r as { id?: unknown } | null)?.id === "string");
+  if (!ok) {
+    throw new Error(`r2_bucket binding ${binding.name} records unusable lifecycle rules`);
+  }
+  // Checked above: a list of rules with ids; the schema checked the rest.
+  return value as R2LifecycleRule[];
 }
 
 /** Same rule as the catalog schema: a URL path starting with `/`, without query or fragment. */
 const HEALTH_PATH = /^\/[^\s?#]*$/;
 
 /**
- * The path to probe, from `install.healthPath` in the catalog manifest embedded
- * in the artifact; `/` when it is absent, as the manager does. Throws for a
- * value the schema would reject, rather than probing somewhere else.
+ * The path to probe, from `install.health.path` in the catalog manifest
+ * embedded in the artifact; `/` when it is absent, as the manager does.
+ * Throws for a value the schema would reject, rather than probing somewhere
+ * else.
  */
 export function catalogHealthPath(catalog: unknown): string {
-  const install = (catalog as { install?: { healthPath?: unknown } } | null)?.install;
-  const healthPath = install?.healthPath;
-  if (healthPath === undefined) {
+  const path = catalogHealth(catalog)?.path;
+  if (path === undefined) {
     return "/";
   }
-  if (typeof healthPath !== "string" || !HEALTH_PATH.test(healthPath)) {
-    throw new Error(`install.healthPath ${JSON.stringify(healthPath)} is not a URL path`);
+  if (typeof path !== "string" || !HEALTH_PATH.test(path)) {
+    throw new Error(`install.health.path ${JSON.stringify(path)} is not a URL path`);
   }
-  return healthPath;
+  return path;
 }
 
 /**
- * How the health check reads the Worker's answer, the manager's rule:
- * `default` fails a persistent 5xx; `status-only` (apps whose every route sits
- * behind Cloudflare Access or their own sign-in) counts any answer of the
- * Worker itself as healthy, a 5xx of its own included.
- */
-export type HealthMode = "default" | "status-only";
-
-/**
- * The mode from `install.healthMode` in the catalog manifest embedded in the
- * artifact; `default` when it is absent. Read loosely, since the schema this
- * repository validates against may not know the field yet. Throws for a value
- * the manager would not accept, rather than checking by another rule.
+ * The mode from `install.health.mode` in the catalog manifest embedded in the
+ * artifact; `no-server-errors` when it is absent, as the schema defaults it.
+ * Throws for a value the manager would not accept, rather than checking by
+ * another rule.
  */
 export function catalogHealthMode(catalog: unknown): HealthMode {
-  const install = (catalog as { install?: { healthMode?: unknown } } | null)?.install;
-  const mode = install?.healthMode;
+  const mode = catalogHealth(catalog)?.mode;
   if (mode === undefined) {
-    return "default";
+    return "no-server-errors";
   }
-  if (mode !== "default" && mode !== "status-only") {
-    throw new Error(`install.healthMode ${JSON.stringify(mode)} is not "default" or "status-only"`);
+  if (mode !== "no-server-errors" && mode !== "any-response") {
+    throw new Error(
+      `install.health.mode ${JSON.stringify(mode)} is not "no-server-errors" or "any-response"`,
+    );
   }
   return mode;
 }
 
+/** `install.health` of a catalog manifest, read loosely; undefined when it has none. */
+function catalogHealth(catalog: unknown): { path?: unknown; mode?: unknown } | undefined {
+  const health = (catalog as { install?: { health?: unknown } } | null)?.install?.health;
+  return health !== null && typeof health === "object" ? health : undefined;
+}
+
 /** The URL the health check probes for Worker `name` in the account's workers.dev subdomain. */
-export function healthUrl(name: string, subdomain: string, healthPath: string): string {
-  return `https://${name}.${subdomain}.workers.dev${healthPath}`;
+export function healthUrl(name: string, subdomain: string, probePath: string): string {
+  return `https://${name}.${subdomain}.workers.dev${probePath}`;
 }
 
 /** The largest rate limit namespace id the check assigns: 2^31-1, as the manager does. */
@@ -556,7 +661,7 @@ export interface EntryPlanContext {
   queueBindings: ReadonlySet<string>;
   /** `entryWorkerRefName` from `@appflare/schema`: the entry Worker `{{workerName:<name>}}` names. */
   refName: (value: unknown) => string | null;
-  /** Fills in `{{workerUrl:<name>}}` and `{{workerName:<name>}}` (`renderEntryWorkerPlaceholders`). */
+  /** Fills in the per-Worker placeholders, such as `{{workerUrl:<name>}}` (`renderEntryWorkerPlaceholders`). */
   render: (text: string) => string;
 }
 
@@ -669,16 +774,29 @@ export const REQUIRED_VAR_PLACEHOLDER = "ci";
 export const SEED_VAR_PLACEHOLDER = "ci-admin";
 
 /**
- * What the manager fills in for `{{workerUrl}}`, `{{workerName}}` and
- * `{{accountId}}` in var values: the wrangler config's own vars (strings, and
- * strings inside JSON values) and the catalog's var defaults.
+ * What the manager fills in for the address placeholders (`{{appUrl}}`,
+ * `{{appHostname}}`, `{{workerUrl}}`, `{{workerHostname}}`), `{{workerName}}`
+ * and `{{accountId}}` in var values: the wrangler config's own vars
+ * (strings, and strings inside JSON values) and the catalog's var defaults.
  */
 export interface PlaceholderValues {
   /** `https://<worker>.<subdomain>.workers.dev`; null keeps `{{workerUrl}}` as written. */
   workerUrl: string | null;
+  /**
+   * The address the app is served at. The install check gives no app a custom
+   * domain, so it is `workerUrl`; null keeps `{{appUrl}}` as written.
+   */
+  appUrl: string | null;
   workerName: string;
   /** The account's id; absent or null keeps `{{accountId}}` as written. */
   accountId?: string | null;
+  /**
+   * What `{{accessTeamDomain}}`, `{{accessTeamName}}`, `{{accessAud}}` and
+   * `{{accessCertsUrl}}` become. Null fills all four in empty, as the manager
+   * does for an app it does not protect with Cloudflare Access; absent keeps
+   * them as written.
+   */
+  access?: { teamDomain: string; teamName: string; aud: string; certsUrl: string } | null;
 }
 
 /** A JSON value: what a `json` var holds. */
@@ -693,14 +811,44 @@ export type JsonValue =
 // The manager's rules, from @appflare/schema: whitespace inside the braces is
 // allowed, and anything else in double braces is left as written. A test
 // checks these copies against the schema package's own functions.
-const PLACEHOLDER_PATTERN = /\{\{\s*(workerUrl|workerName|accountId)\s*\}\}/g;
+const PLACEHOLDER_PATTERN =
+  /\{\{\s*(appUrl|appHostname|workerUrl|workerHostname|workerName|accountId|accessTeamDomain|accessTeamName|accessAud|accessCertsUrl)\s*\}\}/g;
 
-/** `text` with `{{workerUrl}}`, `{{workerName}}` and `{{accountId}}` filled in, as the manager does. */
+/** The hostname of an https:// URL. */
+function hostnameOf(url: string): string {
+  return url.replace(/^[a-z]+:\/\//i, "").replace(/[/?#].*$/, "");
+}
+
+/**
+ * `text` with the address placeholders, `{{workerName}}`, `{{accountId}}` and
+ * the Cloudflare Access ones filled in, as the manager does.
+ * `{{wildcardHostname}}` is kept as written: the install check gives no app a
+ * wildcard domain.
+ */
 export function renderPlaceholders(text: string, values: PlaceholderValues): string {
   return text.replace(PLACEHOLDER_PATTERN, (match, key: string) => {
-    if (key === "workerName") return values.workerName;
-    if (key === "accountId") return values.accountId ?? match;
-    return values.workerUrl ?? match;
+    switch (key) {
+      case "workerName":
+        return values.workerName;
+      case "accountId":
+        return values.accountId ?? match;
+      case "accessTeamDomain":
+        return values.access === undefined ? match : (values.access?.teamDomain ?? "");
+      case "accessTeamName":
+        return values.access === undefined ? match : (values.access?.teamName ?? "");
+      case "accessAud":
+        return values.access === undefined ? match : (values.access?.aud ?? "");
+      case "accessCertsUrl":
+        return values.access === undefined ? match : (values.access?.certsUrl ?? "");
+      case "appUrl":
+        return values.appUrl ?? match;
+      case "appHostname":
+        return values.appUrl === null ? match : hostnameOf(values.appUrl);
+      case "workerHostname":
+        return values.workerUrl === null ? match : hostnameOf(values.workerUrl);
+      default:
+        return values.workerUrl ?? match;
+    }
   });
 }
 
@@ -785,10 +933,16 @@ export function planCiInstall(
   const { entry } = options;
   const namespaceId = options.namespaceId ?? randomNamespaceId;
   const appName = entry?.installName ?? name;
+  const appUrl = options.subdomain === undefined ? null : healthUrl(appName, options.subdomain, "");
   const placeholders: PlaceholderValues = {
     workerName: appName,
-    workerUrl: options.subdomain === undefined ? null : healthUrl(appName, options.subdomain, ""),
+    workerUrl: appUrl,
+    appUrl,
     accountId: options.accountId ?? null,
+    // The CI account has no Zero Trust organization, and the check deploys
+    // the app unprotected, so the Access placeholders are empty, as the
+    // manager fills them in for an app it does not protect.
+    access: null,
   };
   const resources: CiResource[] = [];
   const kv: Record<string, string>[] = [];
@@ -799,6 +953,7 @@ export function planCiInstall(
   const analytics: Record<string, string>[] = [];
   const vectorize: Record<string, string>[] = [];
   const vectorizeIndexes: CiVectorizeIndex[] = [];
+  const r2Lifecycles: CiR2Lifecycle[] = [];
   const hyperdrive: Record<string, string>[] = [];
   const hyperdriveConfigs: CiHyperdriveConfig[] = [];
   const producers: Record<string, unknown>[] = [];
@@ -833,6 +988,7 @@ export function planCiInstall(
           ),
         });
         resources.push({ type: "d1", name: resource, binding: binding.name });
+        const baseline = files.baseline;
         const database: CiD1Database = {
           database: resource,
           binding: binding.name,
@@ -840,21 +996,35 @@ export function planCiInstall(
           schema: files.schema.map((f) => `${D1_SCHEMA_DIR}/${binding.name}/${f.name}`),
           postDeploy: files.postDeploy.map((f) => f.name),
           ...(seed === null ? {} : { seed }),
+          ...(baseline === undefined
+            ? {}
+            : {
+                baseline: {
+                  file: `${D1_BASELINE_DIR}/${binding.name}/${baseline.name}`,
+                  recorded: [...files.migrations, ...files.postDeploy].map((f) => f.name),
+                },
+              }),
         };
         if (
           database.migrations ||
           database.schema.length > 0 ||
           database.postDeploy.length > 0 ||
-          seed !== null
+          seed !== null ||
+          baseline !== undefined
         ) {
           d1Databases.push(database);
         }
         break;
       }
-      case "r2_bucket":
+      case "r2_bucket": {
         r2.push({ binding: binding.name, bucket_name: resource });
         resources.push({ type: "r2", name: resource, binding: binding.name });
+        const rules = lifecycleOf(binding);
+        if (rules !== undefined) {
+          r2Lifecycles.push({ bucket: resource, binding: binding.name, rules });
+        }
         break;
+      }
       case "durable_object_namespace": {
         // A class in another Worker of the entry: that Worker's CI name.
         const ref = entry?.refName(binding.script_name) ?? null;
@@ -1012,16 +1182,34 @@ export function planCiInstall(
   }
 
   const hasAssets = manifest.assets.files.length > 0 || manifest.assets.binding !== null;
+  // Files wrangler reads from the assets directory, not keys of its config.
+  const { _redirects, _headers, ...assetsConfig } = manifest.assets.config;
+  // A Worker of static assets only: wrangler uploads it without a module.
+  const assetsOnly = worker.mainModule === undefined;
+  if (assetsOnly) {
+    if (worker.modules.length > 0) {
+      throw new Error(`the Worker ${worker.name} has modules but no main module`);
+    }
+    notes.push("static assets only: deployed without Worker code");
+  }
   const config: Record<string, unknown> = {
     name,
-    main: `${WORKER_DIR}/${worker.mainModule}`,
+    ...(assetsOnly
+      ? {}
+      : {
+          main: `${WORKER_DIR}/${worker.mainModule}`,
+        }),
     compatibility_date: worker.compatibilityDate,
     compatibility_flags: [...worker.compatibilityFlags],
     // The modules are wrangler's own build output; upload them unchanged.
-    no_bundle: true,
-    find_additional_modules: true,
-    base_dir: WORKER_DIR,
-    rules: [...rules].map(([type, globs]) => ({ type, globs })),
+    ...(assetsOnly
+      ? {}
+      : {
+          no_bundle: true,
+          find_additional_modules: true,
+          base_dir: WORKER_DIR,
+          rules: [...rules].map(([type, globs]) => ({ type, globs })),
+        }),
     // Off for a Worker the entry keeps off workers.dev, as the manager keeps it.
     workers_dev: workersDev,
     preview_urls: false,
@@ -1029,7 +1217,7 @@ export function planCiInstall(
     ...(hasAssets
       ? {
           assets: {
-            ...manifest.assets.config,
+            ...assetsConfig,
             directory: ASSETS_DIR,
             ...(manifest.assets.binding ? { binding: manifest.assets.binding } : {}),
           },
@@ -1081,12 +1269,13 @@ export function planCiInstall(
     derivedVars: forms.derivedVars,
     d1: d1Databases,
     vectorizeIndexes,
+    r2Lifecycles,
     hyperdriveConfigs,
     queues,
     queueConsumers,
     notes,
-    healthPath: catalogHealthPath(manifest.catalog),
-    healthMode: catalogHealthMode(manifest.catalog),
+    probePath: catalogHealthPath(manifest.catalog),
+    probeMode: catalogHealthMode(manifest.catalog),
   };
 }
 
@@ -1199,6 +1388,8 @@ export interface CiAppPlan {
   /** Everything the deploys may create besides the Workers, each once. */
   resources: CiResource[];
   vectorizeIndexes: CiVectorizeIndex[];
+  /** R2 buckets with lifecycle rules, each once. */
+  r2Lifecycles: CiR2Lifecycle[];
   /** Hyperdrive configurations the Workers bind, each once. */
   hyperdriveConfigs: CiHyperdriveConfig[];
   queues: string[];
@@ -1213,8 +1404,8 @@ export interface CiAppPlan {
    * named (the first in deploy order that binds it).
    */
   d1: CiAppD1Database[];
-  healthPath: string;
-  healthMode: HealthMode;
+  probePath: string;
+  probeMode: HealthMode;
 }
 
 /** A Worker name is a DNS label on workers.dev: at most 63 characters. */
@@ -1260,12 +1451,13 @@ export function planCiApp(
       workers: [{ entryName: null, primary: true, plan, manifest }],
       resources: plan.resources,
       vectorizeIndexes: plan.vectorizeIndexes,
+      r2Lifecycles: plan.r2Lifecycles,
       hyperdriveConfigs: plan.hyperdriveConfigs,
       queues: plan.queues,
       kvNamespaces: [],
       d1: plan.d1.map((database) => ({ ...database, worker: name })),
-      healthPath: plan.healthPath,
-      healthMode: plan.healthMode,
+      probePath: plan.probePath,
+      probeMode: plan.probeMode,
     };
   }
   if (helpers === undefined) {
@@ -1293,16 +1485,14 @@ export function planCiApp(
   // `{{workerUrl:<name>}}` of one, so null never reaches a var.
   const onWorkersDev = new Map(ordered.map((w) => [w.name, w.primary || w.workersDev !== false]));
   const placeholders = Object.fromEntries(
-    Object.entries(scriptNames).map(([entryName, scriptName]) => [
-      entryName,
-      {
-        workerName: scriptName,
-        workerUrl:
-          options.subdomain === undefined || onWorkersDev.get(entryName) === false
-            ? null
-            : healthUrl(scriptName, options.subdomain, ""),
-      },
-    ]),
+    Object.entries(scriptNames).map(([entryName, scriptName]) => {
+      const url =
+        options.subdomain === undefined || onWorkersDev.get(entryName) === false
+          ? null
+          : healthUrl(scriptName, options.subdomain, "");
+      // No custom domains in the install check: each Worker is served at its workers.dev URL.
+      return [entryName, { workerName: scriptName, workerUrl: url, appUrl: url }];
+    }),
   );
   const bindings = ordered.flatMap((w) => w.worker.bindings);
   const entry: EntryPlanContext = {
@@ -1366,6 +1556,10 @@ export function planCiApp(
       plans.flatMap((p) => p.vectorizeIndexes),
       (v) => v.name,
     ),
+    r2Lifecycles: uniqueBy(
+      plans.flatMap((p) => p.r2Lifecycles),
+      (b) => b.bucket,
+    ),
     hyperdriveConfigs: uniqueBy(
       plans.flatMap((p) => p.hyperdriveConfigs),
       (h) => h.name,
@@ -1373,8 +1567,8 @@ export function planCiApp(
     queues: [...new Set(plans.flatMap((p) => p.queues))],
     kvNamespaces: resources.filter((r) => r.type === "kv"),
     d1,
-    healthPath: primary?.healthPath ?? "/",
-    healthMode: primary?.healthMode ?? "default",
+    probePath: primary?.probePath ?? "/",
+    probeMode: primary?.probeMode ?? "no-server-errors",
   };
 }
 
@@ -1561,13 +1755,13 @@ export type CiHealthProbe<W> =
  */
 export function healthProbes<
   W extends { primary: boolean; plan: Pick<CiInstallPlan, "name" | "workersDev"> },
->(app: { workers: readonly W[]; healthPath: string }, subdomain: string): CiHealthProbe<W>[] {
+>(app: { workers: readonly W[]; probePath: string }, subdomain: string): CiHealthProbe<W>[] {
   const primary = app.workers.filter((w) => w.primary);
   const others = app.workers.filter((w) => !w.primary);
   return [
     ...primary.map((worker) => ({
       worker,
-      url: healthUrl(worker.plan.name, subdomain, app.healthPath),
+      url: healthUrl(worker.plan.name, subdomain, app.probePath),
       timeoutMs: PRIMARY_PROBE_TIMEOUT_MS,
     })),
     ...others.map((worker) =>
@@ -1637,12 +1831,15 @@ export function safeJoin(root: string, relative: string): string {
 }
 
 /**
- * Writes the Worker modules to `<outDir>/worker/`, the assets to
- * `<outDir>/assets/`, and each D1 binding's migrations, schema files and
- * post-deploy migrations to `<outDir>/d1/<binding>/`,
- * `<outDir>/d1-schema/<binding>/` and `<outDir>/d1-post-deploy/<binding>/`,
+ * Writes the Worker modules to `<outDir>/worker/` (a Worker of static assets
+ * only has none, and gets no such folder), the assets to `<outDir>/assets/`,
+ * and each D1 binding's migrations, schema files, post-deploy migrations and
+ * baseline to `<outDir>/d1/<binding>/`, `<outDir>/d1-schema/<binding>/`,
+ * `<outDir>/d1-post-deploy/<binding>/` and `<outDir>/d1-baseline/<binding>/`,
  * each under its name, reading each as its byte range of the STORE zip and
- * checking size and sha256 before anything is written.
+ * checking size and sha256 before anything is written. `_redirects` and
+ * `_headers`, recorded as text in the assets config, are written at the root
+ * of `<outDir>/assets/`, where wrangler reads them.
  */
 export function unpackArtifact(manifest: ArtifactManifest, zipPath: string, outDir: string): void {
   const zipSize = statSync(zipPath).size;
@@ -1675,13 +1872,20 @@ export function unpackArtifact(manifest: ArtifactManifest, zipPath: string, outD
         data: read(a),
       });
     }
-    const d1Lists = [
-      [D1_DIR, manifest.d1Migrations],
-      [D1_SCHEMA_DIR, manifest.d1Schema ?? {}],
-      [D1_POST_DEPLOY_DIR, manifest.d1PostDeploy ?? {}],
-    ] as const;
-    for (const [dir, byBinding] of d1Lists) {
-      for (const [binding, files] of Object.entries(byBinding)) {
+    for (const name of ASSET_RULE_FILES) {
+      const text = manifest.assets.config[name];
+      if (typeof text === "string") {
+        writes.push({ target: path.join(outDir, ASSETS_DIR, name), data: Buffer.from(text) });
+      }
+    }
+    for (const [binding, sql] of Object.entries(manifest.d1)) {
+      const lists = [
+        [D1_DIR, sql.migrations],
+        [D1_SCHEMA_DIR, sql.schema],
+        [D1_POST_DEPLOY_DIR, sql.postDeploy],
+        [D1_BASELINE_DIR, sql.baseline === undefined ? [] : [sql.baseline]],
+      ] as const;
+      for (const [dir, files] of lists) {
         for (const f of files) {
           writes.push({
             target: safeJoin(path.join(outDir, dir), `${binding}/${f.name}`),
@@ -1693,7 +1897,9 @@ export function unpackArtifact(manifest: ArtifactManifest, zipPath: string, outD
   } finally {
     closeSync(fd);
   }
-  mkdirSync(path.join(outDir, WORKER_DIR), { recursive: true });
+  if (manifest.worker.modules.length > 0) {
+    mkdirSync(path.join(outDir, WORKER_DIR), { recursive: true });
+  }
   mkdirSync(path.join(outDir, ASSETS_DIR), { recursive: true });
   for (const { target, data } of writes) {
     mkdirSync(path.dirname(target), { recursive: true });
@@ -1717,20 +1923,10 @@ export function randomBase64Key32(): string {
 // ---------------------------------------------------------------------------
 // D1
 
-type D1File = ArtifactManifest["d1Migrations"][string][number];
-
-/** One D1 binding's migrations, schema files and post-deploy migrations, as the artifact records them. */
-function d1FilesOf(
-  manifest: ArtifactManifest,
-  binding: string,
-): { migrations: D1File[]; schema: D1File[]; postDeploy: D1File[] } {
-  const of = (lists: Record<string, D1File[]> | undefined): D1File[] =>
-    lists !== undefined && Object.hasOwn(lists, binding) ? (lists[binding] ?? []) : [];
-  return {
-    migrations: of(manifest.d1Migrations),
-    schema: of(manifest.d1Schema),
-    postDeploy: of(manifest.d1PostDeploy),
-  };
+/** One D1 binding's migrations, schema files, post-deploy migrations and baseline, as the artifact records them. */
+function d1FilesOf(manifest: ArtifactManifest, binding: string): ArtifactD1Binding {
+  const sql = Object.hasOwn(manifest.d1, binding) ? manifest.d1[binding] : undefined;
+  return sql ?? { migrations: [], schema: [], postDeploy: [] };
 }
 
 /**
@@ -1776,9 +1972,7 @@ export function postDeployConfig(
   config: Record<string, unknown>,
   databases: readonly CiD1Database[],
 ): Record<string, unknown> | null {
-  const post = new Map(
-    databases.filter((d) => d.postDeploy.length > 0).map((d) => [d.binding, d.postDeploy]),
-  );
+  const post = new Map(databases.filter(appliesPostDeploy).map((d) => [d.binding, d.postDeploy]));
   if (post.size === 0) return null;
   const entries = Array.isArray(config.d1_databases)
     ? (config.d1_databases as Record<string, unknown>[])
@@ -1794,11 +1988,43 @@ export function postDeployConfig(
   };
 }
 
-/** One wrangler command of the D1 steps: its arguments, the config, and the Worker whose work dir it runs in. */
+/**
+ * Whether a database's post-deploy migrations run with `wrangler d1
+ * migrations apply`: it has some, and no baseline, after which they are
+ * recorded without running.
+ */
+function appliesPostDeploy(d: CiD1Database): boolean {
+  return d.postDeploy.length > 0 && d.baseline === undefined;
+}
+
+/**
+ * The SQL that records `names` in `d1_migrations` as applied, without
+ * running them: the table as `wrangler d1 migrations apply` creates it
+ * (verbatim from wrangler 4, as the manager has it), then one row per name.
+ * Names already recorded stay.
+ */
+export function recordMigrationsSql(names: readonly string[]): string {
+  const rows = names.map((name) => `('${name.replace(/'/g, "''")}')`).join(",\n");
+  return `CREATE TABLE IF NOT EXISTS "d1_migrations"(
+\t\tid         INTEGER PRIMARY KEY AUTOINCREMENT,
+\t\tname       TEXT UNIQUE,
+\t\tapplied_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+INSERT OR IGNORE INTO "d1_migrations" (name)
+values ${rows};
+`;
+}
+
+/**
+ * One wrangler command of the D1 steps: its arguments, the config, the
+ * Worker whose work dir it runs in, and a file to write there first (the
+ * SQL that records a baseline database's migrations), relative to it.
+ */
 export interface CiWranglerStep {
   worker: string;
   config: string;
   args: string[];
+  write?: { file: string; text: string };
 }
 
 /** One database's seed, run through the D1 API (see {@link runSeed}). */
@@ -1818,9 +2044,11 @@ export function isSeedStep(step: CiD1Step): step is CiSeedStep {
 
 /**
  * The steps that run the app's D1 SQL once every Worker is deployed, in the
- * manager's order: for each database its migrations, then its seed when it
- * says `beforeSchema`, then its schema files one by one (unrecorded; the
- * packer accepts only files that are safe to run again); then every
+ * manager's order: for each database its migrations (or, with a baseline,
+ * the baseline and then the rows that record every migration and
+ * post-deploy migration as applied, none of which then runs), then its seed
+ * when it says `beforeSchema`, then its schema files one by one (unrecorded;
+ * the packer accepts only files that are safe to run again); then every
  * database's post-deploy migrations; then every other seed.
  */
 export function d1Steps(databases: readonly CiAppD1Database[]): CiD1Step[] {
@@ -1832,7 +2060,22 @@ export function d1Steps(databases: readonly CiAppD1Database[]): CiD1Step[] {
     seed,
   });
   for (const d of databases) {
-    if (d.migrations) {
+    if (d.baseline !== undefined) {
+      steps.push({
+        worker: d.worker,
+        config: DEPLOY_CONFIG,
+        args: ["d1", "execute", d.database, "--remote", "--yes", "--file", d.baseline.file],
+      });
+      if (d.baseline.recorded.length > 0) {
+        const file = `${D1_BASELINE_RECORD_DIR}/${d.binding}.sql`;
+        steps.push({
+          worker: d.worker,
+          config: DEPLOY_CONFIG,
+          args: ["d1", "execute", d.database, "--remote", "--yes", "--file", file],
+          write: { file, text: recordMigrationsSql(d.baseline.recorded) },
+        });
+      }
+    } else if (d.migrations) {
       steps.push({
         worker: d.worker,
         config: DEPLOY_CONFIG,
@@ -1848,7 +2091,7 @@ export function d1Steps(databases: readonly CiAppD1Database[]): CiD1Step[] {
       });
     }
   }
-  for (const d of databases.filter((x) => x.postDeploy.length > 0)) {
+  for (const d of databases.filter(appliesPostDeploy)) {
     steps.push({
       worker: d.worker,
       config: POST_DEPLOY_CONFIG,
@@ -1961,9 +2204,11 @@ function queryChanges(res: CfResponse): number | null {
  * each statement as its own `POST /d1/database/{uuid}/query` with
  * `{ sql, params }`, so no value is ever part of the SQL. wrangler's
  * `d1 execute` cannot bind params, hence the API. The database is fresh, so
- * each statement must add exactly its one row (`meta.changes === 1`); a
+ * each statement must add at least one row (`meta.changes >= 1`); a
  * statement that adds none (a schema file already inserted the row) fails
- * the check. Errors name the statement and D1's message, never a value.
+ * the check. D1 counts the rows a trigger writes too, so a statement on a
+ * table with an `AFTER INSERT` trigger may report more, which the manager
+ * accepts as well. Errors name the statement and D1's message, never a value.
  * Returns the number of statements run.
  */
 export async function runSeed(
@@ -2000,10 +2245,10 @@ export async function runSeed(
       throw new Error(`${subject} failed: ${describe(res)}`);
     }
     const changes = queryChanges(res);
-    if (changes !== 1) {
+    if (changes === null || changes < 1) {
       throw new Error(
         `${subject} added ${changes ?? "an unknown number of"} rows; on a fresh database each ` +
-          "statement adds its one row, so something else already wrote it",
+          "statement adds its row, so something else already wrote it",
       );
     }
   }
@@ -2016,13 +2261,13 @@ export async function runSeed(
 export type Probe = { status: number; body: string } | { error: string };
 
 /**
- * Whether a probe settles the check or should be retried. Under `status-only`
+ * Whether a probe settles the check or should be retried. Under `any-response`
  * any answer of the Worker itself settles it, a 5xx included; Cloudflare's own
  * error pages (`error code: <n>`) are not the Worker's answer.
  */
 export function classifyProbe(
   probe: Probe,
-  mode: HealthMode = "default",
+  mode: HealthMode = "no-server-errors",
 ): "ok" | "retry" | "soft-404" {
   if ("error" in probe) {
     return "retry";
@@ -2032,7 +2277,7 @@ export function classifyProbe(
     // Any other 404 may still be the workers.dev route propagating.
     return probe.body.includes("error code: 1042") ? "retry" : "soft-404";
   }
-  if (mode === "status-only" && !/^error code: \d+/.test(probe.body.trimStart())) {
+  if (mode === "any-response" && !/^error code: \d+/.test(probe.body.trimStart())) {
     return "ok";
   }
   if (probe.status >= 500) {
@@ -2050,7 +2295,7 @@ export interface HealthResult {
  * Polls `url` until it answers something other than a 5xx or a 404, for up to
  * `timeoutMs`. A plain 404 that persists to the deadline passes (an app without
  * a health path may serve 404 at `/`); a 1042, a 5xx, or no answer fails.
- * Under `status-only` a 5xx of the Worker's own passes too.
+ * Under `any-response` a 5xx of the Worker's own passes too.
  */
 export async function waitForHealth(
   probe: () => Promise<Probe>,
@@ -2299,9 +2544,13 @@ function created(res: CfResponse): boolean {
 
 /**
  * Creates each Vectorize index in the plan with
- * `POST /vectorize/v2/indexes` and `{ name, config: { dimensions, metric } }`.
- * Run after the cleanup of an earlier run, so every name is free; an index
- * that already exists is an error rather than something to reuse.
+ * `POST /vectorize/v2/indexes` and `{ name, config: { dimensions, metric } }`,
+ * then its metadata indexes, as the manager does right after it creates the
+ * index: `POST /vectorize/v2/indexes/{name}/metadata_index/create` with
+ * `{ propertyName, indexType }` for each, which is what `wrangler vectorize
+ * create-metadata-index` sends. Run after the cleanup of an earlier run, so
+ * every name is free; an index that already exists is an error rather than
+ * something to reuse.
  */
 export async function createVectorizeIndexes(
   request: CfRequest,
@@ -2316,6 +2565,57 @@ export async function createVectorizeIndexes(
     // `success` is what says the create went through.
     if (!created(res)) {
       throw new Error(`creating Vectorize index ${index.name} failed: ${describe(res)}`);
+    }
+    for (const metadata of index.metadataIndexes ?? []) {
+      const made = await request(
+        "POST",
+        `/vectorize/v2/indexes/${encodeURIComponent(index.name)}/metadata_index/create`,
+        { propertyName: metadata.propertyName, indexType: metadata.type },
+      );
+      if (!created(made)) {
+        throw new Error(
+          `creating the metadata index on "${metadata.propertyName}" of Vectorize index ${index.name} failed: ${describe(made)}`,
+        );
+      }
+    }
+  }
+}
+
+/** Whether the app declares R2 lifecycle rules, and so needs `mergeR2LifecycleRules`. */
+export function needsR2LifecycleHelpers(app: Pick<CiAppPlan, "r2Lifecycles">): boolean {
+  return app.r2Lifecycles.length > 0;
+}
+
+/**
+ * Sets each planned bucket's lifecycle rules as the manager does once it has
+ * created the bucket: reads the rules the bucket has
+ * (`GET /r2/buckets/{name}/lifecycle`; a new bucket has Cloudflare's default
+ * rule for unfinished multipart uploads), merges the declared ones in with
+ * `merge` (`mergeR2LifecycleRules` from `@appflare/schema`), and puts the
+ * result back (`PUT /r2/buckets/{name}/lifecycle` with `{ rules }`, which
+ * replaces every rule). Run once the deploy has created the buckets.
+ */
+export async function setR2LifecycleRules(
+  request: CfRequest,
+  plan: Pick<CiAppPlan, "r2Lifecycles">,
+  merge: (existing: readonly unknown[], declared: readonly R2LifecycleRule[]) => unknown[],
+): Promise<void> {
+  for (const { bucket, rules } of plan.r2Lifecycles) {
+    const lifecyclePath = `/r2/buckets/${encodeURIComponent(bucket)}/lifecycle`;
+    const current = await request("GET", lifecyclePath);
+    if (current.status !== 200 || current.body?.success !== true) {
+      throw new Error(
+        `reading the lifecycle rules of R2 bucket ${bucket} failed: ${describe(current)}`,
+      );
+    }
+    const existing = (current.body.result as { rules?: unknown } | null)?.rules;
+    const put = await request("PUT", lifecyclePath, {
+      rules: merge(Array.isArray(existing) ? existing : [], rules),
+    });
+    if (!created(put)) {
+      throw new Error(
+        `setting the lifecycle rules of R2 bucket ${bucket} failed: ${describe(put)}`,
+      );
     }
   }
 }
@@ -2581,6 +2881,52 @@ export function skippedSummaryLines(
   reason: string,
 ): string[] {
   return [`SKIP ${manifest.app}@${manifest.version} as ${name}: ${reason}`];
+}
+
+// ---------------------------------------------------------------------------
+// Workers plan
+
+/**
+ * The environment variable (a repository variable in CI) naming the CI
+ * account's Workers plan, `free` or `paid`; unset or empty means `free`.
+ * Cloudflare offers no cheap read of an account's plan to a token scoped to
+ * Workers, so the workflow says which plan the account is on.
+ */
+export const CI_ACCOUNT_PLAN = "CI_ACCOUNT_PLAN";
+
+/** The CI account's plan from {@link CI_ACCOUNT_PLAN}; throws for any other value. */
+export function ciAccountPlan(value: string | undefined): Plan {
+  const plan = value?.trim() ?? "";
+  if (plan === "") return "free";
+  if (plan === "free" || plan === "paid") return plan;
+  throw new Error(`${CI_ACCOUNT_PLAN} ${JSON.stringify(plan)} is not "free" or "paid"`);
+}
+
+/** The run summary's word for an entry that needs Workers Paid on a free CI account. */
+export const PAID_PLAN_SKIP = `skipped: the entry needs Workers Paid and ${CI_ACCOUNT_PLAN} is free`;
+
+/**
+ * Why the check skips an app on this account's plan, or null when it can run:
+ * an entry whose catalog manifest says `plan: "paid"` may use what the free
+ * plan refuses at upload (a `limits.cpu_ms`, Containers, a Worker Loader), so
+ * its deploy on a free account says nothing about the app. Read loosely from
+ * the catalog manifest embedded in the artifact, which the schema has checked.
+ */
+export function paidPlanSkip(catalog: unknown, accountPlan: Plan): string | null {
+  const plan = (catalog as { plan?: unknown } | null)?.plan;
+  return plan === "paid" && accountPlan === "free" ? PAID_PLAN_SKIP : null;
+}
+
+/**
+ * A GitHub Actions notice for a skipped app, so the skip shows on the run's
+ * page and never passes silently. `reason` is one of the fixed skip reasons,
+ * which hold no value from the account.
+ */
+export function skipNotice(
+  manifest: Pick<ArtifactManifest, "app" | "version">,
+  reason: string,
+): string {
+  return `::notice title=Install check skipped::${manifest.app}@${manifest.version}: ${reason}`;
 }
 
 // ---------------------------------------------------------------------------
