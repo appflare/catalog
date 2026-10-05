@@ -9,6 +9,10 @@
   "repo": "CaoMeiYouRen/rsshub-never-die",
   "license": "MIT",
   "categories": ["utilities", "networking"],
+  // Generated secrets (revision 2), edited help text (revision 3) and the
+  // formatting of URLs in the notes (revision 4) came after this release was
+  // published: revisions, no new build.
+  "revision": 4,
   "authors": [{ "name": "CaoMeiYouRen", "url": "https://blog.cmyr.ltd", "github": "CaoMeiYouRen" }],
   "maintainers": ["MendyLanda"],
   // The newest release tag. The commits after it on master bump
@@ -30,9 +34,12 @@
   // secret here, that var is left out of the artifact.
   "secrets": [
     {
+      // Read from ?authKey= and compared in constant time, and the HMAC key of
+      // ?authCode= (src/routes/index.ts:19-30); a generated value is URL-safe.
       "name": "AUTH_KEY",
       "label": "Access key",
-      "help": "Optional, and not RSSHub's own ACCESS_KEY. When set, every request needs ?authKey=<this key>, or ?authCode= with the hex HMAC-SHA256 of the path keyed with it. Without it anyone who finds the address can use your Worker's requests.",
+      "help": "Not RSSHub's own ACCESS_KEY. When set, every request needs ?authKey=<this key>, or ?authCode= with the hex HMAC-SHA256 of the path keyed with it. Without it anyone who finds the address can use your Worker's requests.",
+      "generate": "password",
       "optional": true
     }
   ],
@@ -74,7 +81,7 @@
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Use {{appUrl}} wherever a feed reader or RSSHub Radar asks for an RSSHub address: {{appUrl}}/github/issue/DIYgod/RSSHub, say, is answered by one of the instances in the pool."
+      "content": "Use `{{appUrl}}` wherever a feed reader or RSSHub Radar asks for an RSSHub address: {{appUrl}}/github/issue/DIYgod/RSSHub, say, is answered by one of the instances in the pool."
     }
   ]
 }

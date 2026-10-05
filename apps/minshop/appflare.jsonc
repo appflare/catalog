@@ -8,6 +8,8 @@
   "repo": "ddyy/minshop",
   "license": "MIT",
   "categories": ["business", "finance"],
+  // openPath added after this release was published: a revision, no new build.
+  "revision": 2,
   "authors": [{ "name": "Daniel Yang", "url": "https://daniel-yang.com", "github": "ddyy" }],
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v0.2.0", "sha": "e906890bef17bb514e7e7eabbd09c5501991857c" },
@@ -40,6 +42,7 @@
       "generate": "password"
     }
   ],
+  "openPath": "/admin",
   "postInstall": [
     {
       "type": "markdown",

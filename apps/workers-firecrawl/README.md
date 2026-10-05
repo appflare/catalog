@@ -16,6 +16,5 @@ cleaned or raw HTML, links, or screenshots. Licensed MIT.
 - **API key.** Upstream leaves the API open when `AUTHORIZATION_KEY` is unset. Appflare
   generates one, since each open request would spend the account's browser time. The key
   guards every route, the OpenAPI docs page at `/` included.
-- **Pin.** Upstream has no release tags, so the pin follows the default branch and each
-  bump is reviewed by a maintainer.
+- **Pin.** Upstream has no release tags, so the pin follows the default branch.
 - No images: the repository publishes none.

@@ -15,6 +15,10 @@
   "repo": "zonghaoyuan/infiplot",
   "license": "AGPL-3.0-only",
   "categories": ["ai", "games"],
+  // Upstream has not moved since the released pin, so the Access protection
+  // below (revision 2), the edited help text (revision 3) and the field links
+  // (revision 4) are revisions of that build.
+  "revision": 4,
   "authors": [{ "name": "Zonghao Yuan", "url": "https://yzh.im", "github": "zonghaoyuan" }],
   "maintainers": ["MendyLanda"],
   // InfiPlot publishes no release tags; the pin tracks main.
@@ -29,26 +33,35 @@
   // Upstream: "Cloudflare deployment requires the Workers Paid Plan because
   // the scene pipeline needs longer CPU time" than the free plan allows.
   "plan": "paid",
+  // No sign-in in this build, and every scene is paid for with the admin's
+  // keys, so protection starts switched on, as upstream recommends for a
+  // private instance. Stories are saved in the browser; nothing must stay
+  // public.
+  "access": { "mode": "recommended" },
   "secrets": [
     {
       "name": "TEXT_API_KEY",
       "label": "Text model API key",
-      "help": "API key for the text model's endpoint below."
+      "help": "API key for the text model's endpoint below.",
+      "link": { "label": "Get a DeepSeek key", "url": "https://platform.deepseek.com/api_keys" }
     },
     {
       "name": "IMAGE_API_KEY",
       "label": "Image model API key",
-      "help": "API key for the image model's endpoint below, for example a Runware key."
+      "help": "API key for the image model's endpoint below, for example a Runware key.",
+      "link": { "label": "Get a Runware key", "url": "https://my.runware.ai/keys" }
     },
     {
       "name": "VISION_API_KEY",
       "label": "Vision model API key",
-      "help": "API key for the vision model's endpoint below."
+      "help": "API key for the vision model's endpoint below.",
+      "link": { "label": "Get a MiMo key", "url": "https://platform.xiaomimimo.com/" }
     },
     {
       "name": "TTS_API_KEY",
       "label": "Speech API key",
       "help": "API key for text to speech. Leave empty, with the speech endpoint or model, to play without voices.",
+      "link": { "label": "Get a MiMo key", "url": "https://platform.xiaomimimo.com/" },
       "optional": true
     }
   ],
@@ -128,14 +141,14 @@
     {
       "name": "IMAGE_HEDGE_MS",
       "label": "Image hedge (ms)",
-      "help": "Optional: when a scene image is still not done after this long, a second identical request races it (the provider may bill both). Upstream suggests 15000 for Runware.",
+      "help": "When a scene image is still not done after this long, a second identical request races it (the provider may bill both). Upstream suggests 15000 for Runware.",
       "optional": true
     }
   ],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Open {{appUrl}} and start a story. **There is no sign-in**: anyone who can reach the address plays on your API keys. Put the app behind Cloudflare Access, as upstream recommends for private instances, before you share the link."
+      "content": "Open {{appUrl}} and start a story. **The game has no sign-in of its own**: behind Cloudflare Access only Appflare's users play; without it, anyone who can reach the address plays on your API keys."
     }
   ]
 }

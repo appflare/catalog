@@ -7,6 +7,9 @@
   "repo": "jonesphillip/sharehtml",
   "license": "Apache-2.0",
   "categories": ["files", "sharing"],
+  // Upstream has not moved since the released pin, so the Access protection
+  // below is a revision of that build.
+  "revision": 2,
   "authors": [{ "name": "Phillip Jones", "github": "jonesphillip", "x": "akaphill" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags, so the entry follows the default branch by commit.
@@ -28,8 +31,15 @@
   // R2 and two SQLite-backed Durable Objects, all with free tiers. Cloudflare
   // Access is free for up to 50 users.
   "plan": "free",
-  // Uploaded documents are stored in an R2 bucket.
-  "requires": ["r2"],
+  // Uploaded documents are stored in an R2 bucket. ACCESS_TEAM and ACCESS_AUD
+  // are filled in from Appflare's Access protection; "access" asks for a Zero
+  // Trust organization only when the app is installed protected, since
+  // protection is recommended, not required.
+  "requires": ["r2", "access"],
+  // Sign-in is Cloudflare Access (AUTH_MODE "access", the default below) or
+  // none at all, so protection starts switched on. Readers of a document sign
+  // in too: apps/worker/src/index.ts checks every route but /health.
+  "access": { "mode": "recommended" },
   "secrets": [
     {
       "name": "VIEWER_CAPABILITY_SECRET",
@@ -42,7 +52,7 @@
     {
       "name": "AUTH_MODE",
       "label": "Sign-in",
-      "help": "With Cloudflare Access, the Worker checks the Access token on every request and refuses everything until the two Access values below are set. Without sign-in, anyone with the address can publish, read, and comment.",
+      "help": "With Cloudflare Access, keep the app's Cloudflare Access protection on: the Worker checks the Access token on every request, and refuses everything while the app is unprotected. Without sign-in, anyone with the address can publish, read, and comment.",
       "type": "select",
       "options": [
         { "value": "access", "label": "Cloudflare Access" },
@@ -51,24 +61,27 @@
       "default": "access"
     },
     {
+      // The team name alone: apps/worker/src/utils/auth.ts builds
+      // https://<ACCESS_TEAM>.cloudflareaccess.com from it, for the keys and
+      // the token's issuer.
       "name": "ACCESS_TEAM",
       "label": "Access team name",
-      "help": "Your Zero Trust team name: the <team> in <team>.cloudflareaccess.com. Set it here after turning on Access for the Worker (see the steps after installing).",
+      "help": "Filled in by Appflare from the app's Cloudflare Access protection: your Zero Trust team name, the <team> in <team>.cloudflareaccess.com. Empty while the app is unprotected.",
       "optional": true,
-      "default": ""
+      "default": "{{accessTeamName}}"
     },
     {
       "name": "ACCESS_AUD",
       "label": "Access application audience (AUD)",
-      "help": "The AUD tag of the Access application that protects the Worker. Set it here after turning on Access for the Worker.",
+      "help": "Filled in by Appflare from the app's Cloudflare Access protection: the audience tag of its Access application. Empty while the app is unprotected.",
       "optional": true,
-      "default": ""
+      "default": "{{accessAud}}"
     }
   ],
   "postInstall": [
     {
       "type": "markdown",
-      "content": "**With Cloudflare Access sign-in, every page answers 401 until Access protects the Worker.** In the Cloudflare dashboard, open Workers & Pages, select this Worker, open Settings, Domains & Routes, and turn on Cloudflare Access for its workers.dev address. Then enter the team name and the application audience (AUD) tag it shows under **Access team name** and **Access application audience** in this app's settings."
+      "content": "**With Cloudflare Access sign-in, every page answers 401 while the app is not protected.** Keep **Cloudflare Access** on for the app in Appflare; it fills in the team name and audience tag. Every Appflare user can sign in and publish."
     },
     {
       "type": "markdown",

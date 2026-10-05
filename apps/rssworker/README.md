@@ -13,6 +13,5 @@ Licensed MIT.
   number.
 - **Build.** Upstream patches node-forge in a postinstall script. The catalog installs
   without running scripts, so the build applies the same patch with `patch-package`.
-- **Pin.** Upstream has no release tags, so the pin follows the default branch and each
-  bump is reviewed by a maintainer.
+- **Pin.** Upstream has no release tags, so the pin follows the default branch.
 - No images: the repository publishes none.
