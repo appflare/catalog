@@ -346,6 +346,27 @@ describe("planCiInstall", () => {
     });
   });
 
+  it("fills in the Cloudflare Access placeholders empty: the check never protects the app", () => {
+    const edit = (m: Record<string, unknown>) => {
+      worker(m).bindings = [
+        { type: "plain_text", name: "TEAM_DOMAIN", text: "https://{{accessTeamDomain}}" },
+        { type: "plain_text", name: "TEAM", text: "{{ accessTeamName }}" },
+        { type: "json", name: "ACCESS", json: { certs: "{{ accessCertsUrl }}" } },
+      ];
+      const catalog = m.catalog as Record<string, unknown>;
+      catalog.requires = ["access"];
+      catalog.vars = [{ name: "POLICY_AUD", label: "Audience", default: "{{accessAud}}" }];
+    };
+    expect(
+      planCiInstall(manifest(edit), "ci-hello-pr1", { subdomain: "acme" }).config.vars,
+    ).toEqual({
+      TEAM_DOMAIN: "https://",
+      TEAM: "",
+      ACCESS: { certs: "" },
+      POLICY_AUD: "",
+    });
+  });
+
   it("fills in {{appUrl}} and the hostnames with the workers.dev address", () => {
     const edit = (m: Record<string, unknown>) => {
       worker(m).bindings = [{ type: "plain_text", name: "HOST", text: "{{appHostname}}" }];
@@ -1386,8 +1407,22 @@ describe.skipIf(!appflareAvailable)("placeholders match @appflare/schema", () =>
     texts.push("{{accountId}}/{{ accountId }}", "{{accountid}}");
     texts.push("{{appUrl}}/x {{ appHostname }} {{workerHostname}}", "{{wildcardHostname}}");
     jsons.push({ a: ["{{accountId}}"] }, { b: ["{{appUrl}}", "{{appHostname}}"] });
+    texts.push(
+      "https://{{accessTeamDomain}} {{ accessAud }} {{accessCertsUrl}}",
+      "https://{{accessTeamName}}.cloudflareaccess.com",
+      "{{accessaud}}",
+    );
+    jsons.push({ c: ["{{accessAud}}", "{{ accessCertsUrl }}", "{{ accessTeamName }}"] });
     const url = "https://w.acme.workers.dev";
+    const access = {
+      teamDomain: "acme.cloudflareaccess.com",
+      teamName: "acme",
+      aud: "0".repeat(64),
+      certsUrl: "https://acme.cloudflareaccess.com/cdn-cgi/access/certs",
+    };
     for (const values of [
+      { workerUrl: url, appUrl: url, workerName: "w", access },
+      { workerUrl: url, appUrl: url, workerName: "w", access: null },
       { workerUrl: url, appUrl: url, workerName: "w" },
       { workerUrl: null, appUrl: null, workerName: "w" },
       { workerUrl: url, appUrl: "https://links.example.com", workerName: "w" },

@@ -1,13 +1,14 @@
 import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
+import { pathToFileURL } from "node:url";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import {
   artifactManifestFixture,
   duoArtifactManifestFixture,
 } from "../fixtures/artifact-manifest.ts";
 import { sandboxFixture, selfDeployingFixture } from "../fixtures/sandbox-manifest.ts";
-import { appflareAvailable, testSchema } from "../fixtures/schema.ts";
+import { appflareAvailable, appflareDir, testSchema } from "../fixtures/schema.ts";
 import {
   type AppflareSchema,
   type AppServicesOf,
@@ -21,12 +22,14 @@ import {
   buildIndexApps,
   finalizeIndex,
   type IndexBuildOptions,
+  indexAccessOffer,
   lastVerifiedFor,
   rowFacts,
   serializeIndex,
   sha256Hex,
   verifiedDigest,
 } from "./index-builder.ts";
+import { appflarePaths } from "./paths.ts";
 import { publishedManifestBytes } from "./sandbox-entry.ts";
 import type { ArtifactManifest, CatalogManifest, IndexApp } from "./types.ts";
 import type { VersionResolver } from "./versions.ts";
@@ -162,8 +165,38 @@ describe("buildIndexApps", () => {
       categories: ["utilities"],
       license: "MIT",
       revision: 1,
+      // Without an `access` block, protection is offered, switched off.
+      accessOffer: "offered",
     });
     expect(warnings.join("\n")).toMatch(/UNSIGNED/);
+  });
+
+  it("lists requires verbatim, Cloudflare Access included, so older managers leave the entry out", () => {
+    writeLocal(artifactManifestFixture({ app: "hello", version: "1.2.3", sha: PIN }));
+    const protectedHello: CatalogManifest = {
+      ...hello,
+      requires: ["r2", "access"],
+      access: { mode: "required", bypass: ["/s/*"] },
+    };
+    const [row] = buildIndexApps([protectedHello], options());
+    expect(row?.requires).toEqual(["r2", "access"]);
+    expect(row?.services).toEqual(["binding:kv_namespace", "requires:r2", "requires:access"]);
+    expect(row?.accessOffer).toBe("required");
+  });
+
+  it("writes accessOffer from the entry's access mode, for artifact and sandbox entries", () => {
+    writeLocal(artifactManifestFixture({ app: "hello", version: "1.2.3", sha: PIN }));
+    const recommended: CatalogManifest = {
+      ...hello,
+      requires: ["r2", "access"],
+      access: { mode: "recommended" },
+    };
+    const built = { ...sandboxFixture(hello, schema), access: { bypass: ["/api/webhook"] } };
+    const rows = buildIndexApps([built, recommended], options());
+    expect(rows.map((r) => [r.slug, r.accessOffer])).toEqual([
+      ["built", "offered"],
+      ["hello", "recommended"],
+    ]);
   });
 
   it("works out services from the release's artifact manifest", () => {
@@ -445,6 +478,7 @@ describe("sandbox tier entries", () => {
         categories: ["utilities"],
         license: "MIT",
         revision: 1,
+        accessOffer: "offered",
       },
     ]);
     expect(rows[0]).not.toHaveProperty("artifacts");
@@ -473,6 +507,7 @@ describe("sandbox tier entries", () => {
       categories: ["utilities"],
       license: "MIT",
       revision: 1,
+      accessOffer: "offered",
     });
   });
 
@@ -560,6 +595,8 @@ describe("self-deploying tier entries", () => {
       },
     ]);
     expect(rows[0]).not.toHaveProperty("artifacts");
+    // A self-deploying app cannot be protected with Cloudflare Access.
+    expect(rows[0]).not.toHaveProperty("accessOffer");
     expect(warnings).toEqual([]);
   });
 
@@ -728,6 +765,38 @@ describe("revisions of artifact tier entries", () => {
   });
 
   it.skipIf(!appflareAvailable)(
+    "list a revision that asks for Cloudflare Access, with the revised entry's accessOffer",
+    () => {
+      const release = releasedWith(hello);
+      const revised: CatalogManifest = {
+        ...hello,
+        requires: [...hello.requires, "access"],
+        access: { mode: "required", bypass: ["/s/*"] },
+        revision: 2,
+      };
+      const [row] = buildIndexApps(
+        [revised],
+        options({
+          distDir: null,
+          releases: releasesOf(release),
+          revisionSignatures: signed(revised),
+        }),
+      );
+      expect(warnings).toEqual([]);
+      expect(row).toMatchObject({
+        version: "1.2.3",
+        revision: 2,
+        requires: ["r2", "access"],
+        accessOffer: "required",
+      });
+      expect(row?.catalogManifest?.sha256).toBe(sha256Hex(publishedManifestBytes(revised)));
+      expect(finalizeIndex([row as IndexApp], null, new Date(), schema.indexJson).apps).toEqual([
+        row,
+      ]);
+    },
+  );
+
+  it.skipIf(!appflareAvailable)(
     "omit an entry whose revision changes what only a new build can, or fail when strict",
     () => {
       const release = releasedWith(hello);
@@ -738,14 +807,14 @@ describe("revisions of artifact tier entries", () => {
       );
       expect(rows).toEqual([]);
       expect(warnings.join("\n")).toMatch(
-        /hello: omitted: .*revision 2 of hello@1\.2\.3, but it changes requires, which only a new build can change/,
+        /hello: omitted: .*revision 2 of hello@1\.2\.3, but it removes "r2" from requires, which only a new build can change/,
       );
       expect(() =>
         buildIndexApps(
           [moved],
           options({ distDir: null, releases: releasesOf(release), strictReleases: true }),
         ),
-      ).toThrow(/it changes requires/);
+      ).toThrow(/it removes "r2" from requires/);
     },
   );
 
@@ -842,5 +911,25 @@ describe("license, tagline and addedAt", () => {
       license: "BUSL-1.1",
       tagline: "Short links on your own domain",
     });
+  });
+});
+
+describe.skipIf(!appflareAvailable)("indexAccessOffer and @appflare/schema", () => {
+  it("follow the same rule as indexAccessOffer()", async () => {
+    const mod = (await import(pathToFileURL(appflarePaths(appflareDir).schemaDist).href)) as {
+      indexAccessOffer?: typeof indexAccessOffer;
+    };
+    expect(typeof mod.indexAccessOffer).toBe("function");
+    for (const tier of ["artifact", "sandbox", "self-deploying"] as const) {
+      for (const access of [
+        undefined,
+        { bypass: ["/s/*"] },
+        { mode: "recommended" as const },
+        { mode: "required" as const, bypass: ["/api/webhook"] },
+      ]) {
+        const manifest = { install: { tier }, ...(access === undefined ? {} : { access }) };
+        expect(indexAccessOffer(manifest)).toEqual(mod.indexAccessOffer?.(manifest));
+      }
+    }
   });
 });

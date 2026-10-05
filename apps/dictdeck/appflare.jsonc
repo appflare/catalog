@@ -14,6 +14,9 @@
   // The repository has no licence file.
   "license": "NONE",
   "categories": ["education", "ai"],
+  // The formatting of URLs in the notes changed after this release was published:
+  // a revision, no new build.
+  "revision": 2,
   "authors": [{ "name": "Asutorufa", "github": "Asutorufa", "x": "Asutorufa" }],
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v0.20.0", "sha": "2a9759e0504c99d7d2da4b622c1ec29507fac096" },
@@ -68,7 +71,7 @@
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Open {{appUrl}} and sign in with the user name and password. Settings holds the LLM providers, the Telegram bot token and MCP tokens; the MCP endpoint is {{appUrl}}/mcp."
+      "content": "Open {{appUrl}} and sign in with the user name and password. Settings holds the LLM providers, the Telegram bot token and MCP tokens; the MCP endpoint is `{{appUrl}}/mcp`."
     }
   ]
 }

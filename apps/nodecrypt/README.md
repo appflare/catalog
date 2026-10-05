@@ -10,4 +10,4 @@ The install creates one Durable Object class that relays each room. There is not
 to configure.
 
 NodeCrypt is licensed under ISC. Upstream has no release tags, so the pin follows
-main and each bump is reviewed by a maintainer.
+main.

@@ -7,6 +7,9 @@
   "repo": "plivo-labs/glance",
   "license": "MIT",
   "categories": ["developer-tools"],
+  // Generated secrets (revision 2) and field links (revision 3) came after this
+  // release was published: revisions, no new build.
+  "revision": 3,
   "authors": [{ "name": "Plivo", "url": "https://www.plivo.com", "github": "plivo-labs" }],
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v0.14.0", "sha": "caaed8f60a5365a652a9d519f77bfcb489016585" },
@@ -44,15 +47,22 @@
       "generate": "password"
     },
     {
+      // Upstream makes it with `openssl rand -hex 32` (DEPLOY.md:60) and
+      // compares it as fixed-length MACs
+      // (packages/api/src/lib/bootstrap.ts:13-25), so any value works.
       "name": "BOOTSTRAP_TOKEN",
       "label": "First sign-in token",
       "help": "Paste it on the sign-in page to claim the first admin account (the admin email below). It stops working once an admin exists.",
+      "generate": "password",
       "workers": ["app"]
     },
     {
+      // An HMAC key upstream makes with `openssl rand -hex 32`
+      // (DEPLOY.md:65-68).
       "name": "DATA_TOKEN_SECRET",
       "label": "Data token secret",
-      "help": "Turns on the shared data backend for published sites (glance.db). Any long random value.",
+      "help": "Turns on the shared data backend for published sites (glance.db).",
+      "generate": "password",
       "optional": true,
       "workers": ["app"]
     },
@@ -60,6 +70,10 @@
       "name": "GOOGLE_CLIENT_ID",
       "label": "Google OAuth client ID",
       "help": "For Google Workspace sign-in, with the client secret below. Leave both unset to sign in with the first sign-in token alone; the Google button then stays hidden.",
+      "link": {
+        "label": "Create an OAuth client",
+        "url": "https://console.cloud.google.com/apis/credentials"
+      },
       "optional": true,
       "workers": ["app"]
     },
@@ -67,6 +81,10 @@
       "name": "GOOGLE_CLIENT_SECRET",
       "label": "Google OAuth client secret",
       "help": "The secret of the Google OAuth client above.",
+      "link": {
+        "label": "Create an OAuth client",
+        "url": "https://console.cloud.google.com/apis/credentials"
+      },
       "optional": true,
       "workers": ["app"]
     }
