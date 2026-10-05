@@ -10,7 +10,7 @@
   "categories": ["productivity", "developer-tools", "ai"],
   "authors": [{ "name": "Thomas Dickson", "url": "https://tom-dickson.com", "github": "TAJD" }],
   "maintainers": ["MendyLanda"],
-  "source": { "ref": "v0.7.1", "sha": "4d245d159c97b57e46daabf6631055b6395ee2c4" },
+  "source": { "ref": "v0.7.6", "sha": "f25010ebd7fc68249f3038ab16041d9ca61283da" },
   "install": {
     "packageManager": "pnpm",
     // The API Worker, which also serves the web app as static assets.
@@ -37,11 +37,41 @@
       "vars": { "ENVIRONMENT": null }
     }
   },
-  // D1, two KV namespaces, R2 and one daily cron fit the free plan. The
-  // optional real-time hub (a Durable Object) is left out, as upstream's
-  // config does.
+  // D1, two KV namespaces, R2, the SQLite-backed rate limiter Durable Object
+  // and one daily cron fit the free plan. The optional real-time hub's
+  // binding is left out, as upstream's config does.
   "plan": "free",
-  "requires": ["r2"],
+  "requires": ["r2", "access"],
+  // People sign in only through Cloudflare Access (apps/api/src/middleware/
+  // auth.ts tryCfAccessAuth), so the app installs only behind Appflare's
+  // Access application. These paths stay public for MCP clients, which carry
+  // no Access session: OAuth discovery and the token endpoint, as upstream's
+  // MCP guide lists them (apps/docs/.../agents/mcp-connection.md, "two paths
+  // must bypass"), and the MCP endpoint itself, which checks its own OAuth or
+  // pk_ bearer tokens (auth.ts authMiddleware) and refuses Access service
+  // tokens, the only other way past Appflare's policy. Upstream keeps /mcp
+  // behind Access and gives MCP clients an Access service token; Appflare's
+  // policy admits only Appflare's users and its own health-check token, so
+  // /mcp is public here and relies on the app's own check. /oauth/authorize,
+  // the consent screen, stays behind Access. Two more features answer people
+  // without an Access session, each by its own token (apps/api/src/index.ts,
+  // mounted before the auth middleware): issue share links (the /share/<token>
+  // page, which loads its data and logo from /api/share/<token> and its
+  // scripts, styles and font from /_astro/ and /fonts/), and feedback that
+  // other sites POST to /api/feedback/submit with a feedback source's token.
+  "access": {
+    "mode": "required",
+    "bypass": [
+      "/.well-known/*",
+      "/oauth/token",
+      "/mcp/*",
+      "/share/*",
+      "/api/share/*",
+      "/_astro/*",
+      "/fonts/*",
+      "/api/feedback/submit"
+    ]
+  },
   "secrets": [
     {
       "name": "JWT_SECRET",
@@ -52,16 +82,17 @@
   ],
   "vars": [
     {
+      // Without https://: auth.ts prefixes it for the issuer and the certs URL.
       "name": "CF_ACCESS_TEAM_DOMAIN",
       "label": "Cloudflare Access team domain",
-      "help": "Set after enabling Cloudflare Access for this app: your Zero Trust team domain without https://, for example myteam.cloudflareaccess.com. The app checks each sign-in's Access token against it.",
-      "optional": true
+      "help": "Filled in by Appflare from the app's Cloudflare Access protection: your Zero Trust team domain. The app checks each sign-in's Access token against it.",
+      "default": "{{accessTeamDomain}}"
     },
     {
       "name": "CF_ACCESS_AUDIENCE",
       "label": "Cloudflare Access audience (AUD) tag",
-      "help": "Set after enabling Cloudflare Access for this app: the Application Audience (AUD) tag of the Access application that protects it.",
-      "optional": true
+      "help": "Filled in by Appflare: the audience tag of the app's Cloudflare Access application.",
+      "default": "{{accessAud}}"
     },
     {
       "name": "ADMIN_EMAILS",
@@ -74,7 +105,7 @@
     {
       "name": "AUTO_JOIN_ROLE",
       "label": "Role for other people",
-      "help": "What everyone else Cloudflare Access lets in gets in the default workspace.",
+      "help": "What every other Appflare user gets in the default workspace when they first sign in.",
       "type": "select",
       "options": [
         { "value": "none", "label": "Nothing: invite only" },
@@ -103,15 +134,11 @@
   "postInstall": [
     {
       "type": "markdown",
-      "content": "**Sign-in goes through Cloudflare Access.** In the Cloudflare dashboard, open Workers & Pages, select this Worker, open Settings, Domains & Routes, and turn on Cloudflare Access for its workers.dev address. Then enter the team domain and the audience (AUD) tag it shows in this app's settings; until both are set, nobody can sign in."
+      "content": "Open {{appUrl}} and sign in through Cloudflare Access with one of the admin emails: the first admin creates the default workspace. The database is already migrated. Every Appflare user can sign in; what they get depends on **Role for other people**."
     },
     {
       "type": "markdown",
-      "content": "Then open {{appUrl}} and sign in with one of the admin emails: the first admin creates the default workspace. The database is already migrated."
-    },
-    {
-      "type": "markdown",
-      "content": "To connect Claude or another MCP client, `/.well-known` and `/oauth/token` must answer without Access: add a Cloudflare Access application with a Bypass policy for each of those two paths, and keep `/oauth/authorize` protected. Upstream's [deploy guide](https://tajd.github.io/projektor/guides/deploying/) explains it."
+      "content": "To connect Claude or another MCP client, add `{{appUrl}}/mcp/<workspace id>` as a connector and approve it in the browser. Discovery, the token endpoint and the MCP endpoint answer without Access; the consent screen stays behind it. Upstream's [MCP guide](https://tajd.github.io/projektor/agents/mcp-connection/) has the details."
     }
   ]
 }

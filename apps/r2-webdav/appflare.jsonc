@@ -9,8 +9,9 @@
   // the catalog shows it as unlicensed.
   "license": "NONE",
   "categories": ["files"],
-  // The category changed after this release was published: a revision, no new build.
-  "revision": 2,
+  // The category (revision 2) and the formatting of URLs in the notes (revision 3)
+  // came after this release was published: revisions, no new build.
+  "revision": 3,
   "authors": [{ "name": "Aber", "github": "abersheeran" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags, so the entry follows the default branch by commit.
@@ -45,7 +46,7 @@
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Connect a WebDAV client to {{appUrl}} with the user name and password. macOS Finder: Go, Connect to Server. Windows: Map network drive, or a client such as WinSCP or Cyberduck. Every file lands in the install's R2 bucket."
+      "content": "Connect a WebDAV client to `{{appUrl}}` with the user name and password. macOS Finder: Go, Connect to Server. Windows: Map network drive, or a client such as WinSCP or Cyberduck. Every file lands in the install's R2 bucket."
     }
   ]
 }

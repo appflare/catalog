@@ -12,4 +12,4 @@ open SSH connections: set an admin password hash, made on the app's own setup pa
 or a GitHub OAuth app in the settings.
 
 CloudSSH is licensed under Apache-2.0. Upstream has no release tags, so the pin
-follows main and each bump is reviewed by a maintainer.
+follows main.

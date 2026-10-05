@@ -13,6 +13,8 @@
   // https://semanticsearch.ai/ (see README.md beside this file).
   "license": "Apache-2.0",
   "categories": ["developer-tools", "ai"],
+  // Generated secrets added after this release was published: a revision, no new build.
+  "revision": 2,
   "authors": [
     {
       "name": "SemanticSearch.ai",
@@ -40,9 +42,12 @@
       "generate": "password"
     },
     {
+      // Upstream splits the list on commas and newlines
+      // (src/middleware/auth.ts:12-21); one generated key is a one-item list.
       "name": "API_KEY_READER",
       "label": "Reader API key",
       "help": "Optional keys that may only read and search, safe to embed in a public client. Several keys may be given, separated by commas.",
+      "generate": "password",
       "optional": true
     }
   ],

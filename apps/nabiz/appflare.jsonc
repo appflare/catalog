@@ -10,6 +10,8 @@
   "repo": "productdevbook/nabiz",
   "license": "MIT",
   "categories": ["monitoring", "utilities"],
+  // Field links added after this release was published: a revision, no new build.
+  "revision": 2,
   "authors": [
     {
       "name": "Wind",
@@ -52,12 +54,14 @@
       "name": "TELEGRAM_BOT_TOKEN",
       "label": "Telegram bot token",
       "help": "With the chat id below, sends a Telegram message whenever a monitor goes down or recovers.",
+      "link": { "label": "Create a bot", "url": "https://t.me/BotFather" },
       "optional": true
     },
     {
       "name": "TELEGRAM_CHAT_ID",
       "label": "Telegram chat id",
       "help": "The chat the bot above writes to.",
+      "link": { "label": "Find your chat ID", "url": "https://t.me/userinfobot" },
       "optional": true
     },
     {

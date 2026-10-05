@@ -8,8 +8,9 @@
   // The LICENSE file is the GNU GPL version 3 with no "or any later version" grant.
   "license": "GPL-3.0-only",
   "categories": ["files"],
-  // The category changed after this release was published: a revision, no new build.
-  "revision": 2,
+  // The category changed in revision 2, which this release was built with. Field
+  // links added after it was published: a revision, no new build.
+  "revision": 3,
   "authors": [{ "name": "Firefly", "url": "https://catcat.blog", "github": "Yuri-NagaSaki" }],
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v1.0.0", "sha": "7861a5477016717f05e53ea32fe63f5fd74739ca" },
@@ -38,6 +39,10 @@
       "name": "R2_PUBLIC_URL",
       "label": "Public image URL",
       "help": "The public address of the app's R2 bucket (its r2.dev URL or a custom domain), without a trailing slash. Image links are built from it. The bucket exists only after installing, so leave this empty now and set it afterwards (see the steps after installing).",
+      "link": {
+        "label": "Open the dashboard",
+        "url": "https://dash.cloudflare.com/?to=/:account/r2/overview"
+      },
       // Replaces upstream's own bucket domain from the wrangler config.
       "default": "",
       "optional": true

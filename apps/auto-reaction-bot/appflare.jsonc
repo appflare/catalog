@@ -11,6 +11,9 @@
   "repo": "Malith-Rukshan/Auto-Reaction-Bot",
   "license": "MIT",
   "categories": ["bots", "chat"],
+  // Field links (revision 2) and the formatting of URLs in the notes (revision 3)
+  // came after this release was published: revisions, no new build.
+  "revision": 3,
   "authors": [
     {
       "name": "Malith Rukshan",
@@ -34,14 +37,16 @@
     {
       "name": "BOT_TOKEN",
       "label": "Bot token",
-      "help": "The token @BotFather gave you for the bot."
+      "help": "The token @BotFather gave you for the bot.",
+      "link": { "label": "Create a bot", "url": "https://t.me/BotFather" }
     }
   ],
   "vars": [
     {
       "name": "BOT_USERNAME",
       "label": "Bot username",
-      "help": "The bot's username without the @. Used for its /start reply and its Add to Group and Add to Channel buttons."
+      "help": "The bot's username without the @. Used for its /start reply and its Add to Group and Add to Channel buttons.",
+      "link": { "label": "Create a bot", "url": "https://t.me/BotFather" }
     },
     {
       "name": "EMOJI_LIST",
@@ -80,7 +85,7 @@
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Connect the bot to this Worker by opening https://api.telegram.org/bot<your bot token>/setWebhook?url={{appUrl}}/ in a browser, with your bot token in place of the brackets. Then add the bot to a group or channel (as an admin in channels) or message it directly; {{appUrl}}/health reports whether the token and username are set."
+      "content": "Connect the bot to this Worker by opening `https://api.telegram.org/bot<your bot token>/setWebhook?url={{appUrl}}/` in a browser, with your bot token in place of the brackets. Then add the bot to a group or channel (as an admin in channels) or message it directly; {{appUrl}}/health reports whether the token and username are set."
     },
     {
       "type": "markdown",

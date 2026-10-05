@@ -20,9 +20,9 @@ Licensed MIT.
 ## Notes
 
 - **Language.** The web app and the setup guide are in Chinese.
-- **First run.** The first-run page asks for the setup token you entered at install and
-  creates the super administrator (the address in `SUPER_ADMIN_EMAIL`). Remove the
-  token from the app's settings afterwards.
+- **First run.** The first-run page asks for the setup token from the install form and
+  creates the super administrator (the address in `SUPER_ADMIN_EMAIL`). After that the
+  page refuses to run again, so the token no longer opens anything.
 - **Other domains.** Each further receiving domain needs Email Routing with a catch-all
   to this Worker, set up in the Cloudflare dashboard, and the domain added in the app.
 - **Free plan.** The app watches D1's free daily quota: once it is spent, the API answers
