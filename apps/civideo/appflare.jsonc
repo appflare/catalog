@@ -12,8 +12,9 @@
   "repo": "bitoceango/civideo",
   "license": "MIT",
   "categories": ["media", "family"],
-  // Field links added after this release was published: a revision, no new build.
-  "revision": 2,
+  // Field links (revision 2) and the formatting of URLs in the notes (revision 3)
+  // came after this release was published: revisions, no new build.
+  "revision": 3,
   "authors": [{ "name": "bitoceango", "github": "bitoceango" }],
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v0.2.0", "sha": "272d45d7e0d41a844795e1d76ffc138f1ad4a7ad" },
@@ -92,7 +93,7 @@
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Install upstream's player on each child's device from its GitHub releases (iPhone and iPad through SideStore), then enter {{appUrl}} and the activation key on its first screen."
+      "content": "Install upstream's player on each child's device from its GitHub releases (iPhone and iPad through SideStore), then enter `{{appUrl}}` and the activation key on its first screen."
     },
     {
       "type": "markdown",

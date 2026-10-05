@@ -13,8 +13,9 @@
   "license": "MIT",
   "categories": ["files", "productivity"],
   // Upstream has not moved since the released pin, so the Access protection
-  // below is a revision of that build.
-  "revision": 2,
+  // below (revision 2) and the formatting of URLs in the notes (revision 3) are
+  // revisions of that build.
+  "revision": 3,
   "authors": [
     {
       "name": "Murat Erkin Cicek",
@@ -69,7 +70,7 @@
   "postInstall": [
     {
       "type": "markdown",
-      "content": "**Bookshelf has no sign-in of its own.** Behind Cloudflare Access only Appflare's users reach it. Without it, anyone who can reach {{appUrl}} can download every book and pick any profile. E-readers cannot sign in to Access, so the OPDS catalog at {{appUrl}}/opds works on them only while the app is unprotected."
+      "content": "**Bookshelf has no sign-in of its own.** Behind Cloudflare Access only Appflare's users reach it. Without it, anyone who can reach {{appUrl}} can download every book and pick any profile. E-readers cannot sign in to Access, so the OPDS catalog at `{{appUrl}}/opds` works on them only while the app is unprotected."
     },
     {
       "type": "markdown",

@@ -8,8 +8,9 @@
   "repo": "lumpinif/deepcrawl",
   "license": "MIT",
   "categories": ["developer-tools", "ai"],
-  // Field links added after this release was published: a revision, no new build.
-  "revision": 2,
+  // Field links (revision 2) and the formatting of URLs in the notes (revision 3)
+  // came after this release was published: revisions, no new build.
+  "revision": 3,
   "authors": [{ "name": "Felix Lu", "github": "lumpinif", "x": "felixlu1018" }],
   "maintainers": ["MendyLanda"],
   // Upstream's release tags (deepcrawl@X.Y.Z) version the project's
@@ -128,7 +129,7 @@
     },
     {
       "type": "markdown",
-      "content": "Then read a page as Markdown:\n\n```sh\ncurl '{{appUrl}}/read?url=https://example.com' -H 'Authorization: Bearer <token>'\n```\n\n`POST /read` returns the full result with metadata, and `/links` the page's link tree. The API reference is at {{appUrl}}/docs and the OpenAPI document at {{appUrl}}/openapi, both behind the same token. Point the `deepcrawl` SDK at {{appUrl}} with the token as its API key."
+      "content": "Then read a page as Markdown:\n\n```sh\ncurl '{{appUrl}}/read?url=https://example.com' -H 'Authorization: Bearer <token>'\n```\n\n`POST /read` returns the full result with metadata, and `/links` the page's link tree. The API reference is at `{{appUrl}}/docs` and the OpenAPI document at `{{appUrl}}/openapi`, both behind the same token. Point the `deepcrawl` SDK at `{{appUrl}}` with the token as its API key."
     }
   ]
 }

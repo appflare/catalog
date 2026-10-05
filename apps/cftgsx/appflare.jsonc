@@ -10,8 +10,9 @@
   "repo": "SCSHIRKER/cftgsx",
   "license": "MIT",
   "categories": ["chat", "bots"],
-  // Field links added after this release was published: a revision, no new build.
-  "revision": 2,
+  // Field links (revision 2) and the formatting of URLs in the notes (revision 3)
+  // came after this release was published: revisions, no new build.
+  "revision": 3,
   "authors": [{ "name": "SCSHIRKER", "github": "SCSHIRKER" }],
   "maintainers": ["MendyLanda"],
   // The default branch, not the only tag (v1.2.0, July 2025): the commits
@@ -91,7 +92,7 @@
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Open {{appUrl}}/setWebhook once: it points your bot at {{appUrl}}/webhook with the webhook secret. Then send /start to the bot from the admin chat to see its commands."
+      "content": "Open {{appUrl}}/setWebhook once: it points your bot at `{{appUrl}}/webhook` with the webhook secret. Then send /start to the bot from the admin chat to see its commands."
     },
     {
       "type": "markdown",

@@ -10,8 +10,9 @@
   "repo": "rxliuli/llm-api-proxy",
   "license": "GPL-3.0-only",
   "categories": ["ai", "developer-tools"],
-  // Field links added after this release was published: a revision, no new build.
-  "revision": 2,
+  // Field links (revision 2) and the formatting of URLs in the notes (revision 3)
+  // came after this release was published: revisions, no new build.
+  "revision": 3,
   "authors": [{ "name": "rxliuli", "url": "https://rxliuli.com", "github": "rxliuli" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags; the pin is the head of main.
@@ -235,11 +236,11 @@
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Point an OpenAI client at {{appUrl}}/v1 with the proxy API key from this app's settings as its API key. {{appUrl}}/v1/models lists the models of every provider you configured; ask for any of them by name."
+      "content": "Point an OpenAI client at `{{appUrl}}/v1` with the proxy API key from this app's settings as its API key. `{{appUrl}}/v1/models` lists the models of every provider you configured; ask for any of them by name."
     },
     {
       "type": "markdown",
-      "content": "Clients that only speak the Ollama API use {{appUrl}}/ollama/<proxy API key>/v1. That address carries the key in its path, so it shows up in request logs."
+      "content": "Clients that only speak the Ollama API use `{{appUrl}}/ollama/<proxy API key>/v1`. That address carries the key in its path, so it shows up in request logs."
     }
   ]
 }

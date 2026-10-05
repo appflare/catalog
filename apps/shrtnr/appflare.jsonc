@@ -8,10 +8,10 @@
   "repo": "oddbit/shrtnr",
   "license": "Apache-2.0",
   "categories": ["utilities", "analytics"],
-  // The changed first step after installing (revision 2) and openPath and field
-  // links (revision 3) came after this release was published: revisions, no new
-  // build.
-  "revision": 3,
+  // The changed first step after installing (revision 2), openPath and field
+  // links (revision 3) and the formatting of URLs in the notes (revision 4) came
+  // after this release was published: revisions, no new build.
+  "revision": 4,
   "authors": [
     { "name": "Oddbit", "url": "https://oddbit.id", "github": "oddbit", "x": "evenbit" },
     {
@@ -91,7 +91,7 @@
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Short links redirect right away, but the admin pages open only behind Cloudflare Access. In the Zero Trust dashboard, under Access, Applications, add a self-hosted application for {{appHostname}} with the path `_/admin/*`, and copy its Application Audience (AUD) tag. Protect only that path: Appflare's Cloudflare Access protection, and the one-click Access in the Worker's settings, cover every path, short links included."
+      "content": "Short links redirect right away, but the admin pages open only behind Cloudflare Access. In the Zero Trust dashboard, under Access, Applications, add a self-hosted application for `{{appHostname}}` with the path `_/admin/*`, and copy its Application Audience (AUD) tag. Protect only that path: Appflare's Cloudflare Access protection, and the one-click Access in the Worker's settings, cover every path, short links included."
     },
     {
       "type": "markdown",

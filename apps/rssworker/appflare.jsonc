@@ -7,8 +7,9 @@
   "repo": "yllhwa/RSSWorker",
   "license": "MIT",
   "categories": ["utilities"],
-  // Field links added after this release was published: a revision, no new build.
-  "revision": 2,
+  // Field links (revision 2) and the formatting of URLs in the notes (revision 3)
+  // came after this release was published: revisions, no new build.
+  "revision": 3,
   "authors": [{ "name": "hwa", "url": "https://blog.yllhwa.com", "github": "yllhwa" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags; the pin is the head of main.
@@ -36,7 +37,7 @@
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Feeds are under {{appUrl}}/rss/, for example {{appUrl}}/rss/bilibili/user/video/<uid>, {{appUrl}}/rss/telegram/channel/<username>, {{appUrl}}/rss/weibo/user/<uid> and {{appUrl}}/rss/xiaohongshu/user/<user id>. The page at {{appUrl}} lists every route."
+      "content": "Feeds are under `{{appUrl}}/rss/`, for example `{{appUrl}}/rss/bilibili/user/video/<uid>`, `{{appUrl}}/rss/telegram/channel/<username>`, `{{appUrl}}/rss/weibo/user/<uid>` and `{{appUrl}}/rss/xiaohongshu/user/<user id>`. The page at {{appUrl}} lists every route."
     }
   ]
 }
