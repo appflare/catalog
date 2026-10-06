@@ -14,6 +14,8 @@
   "repo": "0xdps/emailflare",
   "license": "MIT",
   "categories": ["email", "business"],
+  // Help text edited after this release was published: a revision, no new build.
+  "revision": 2,
   "authors": [{ "name": "0xdps", "github": "0xdps" }],
   "maintainers": ["MendyLanda"],
   // Pinned to main: the latest tag, v2.0.2, predates the Workers deployment
@@ -60,7 +62,7 @@
     {
       "name": "CF_API_TOKEN",
       "label": "Cloudflare API token for EmailFlare",
-      "help": "A token you create for the app, separate from Appflare's, with the permissions listed below. The app sends mail through Email Sending with it, sets up sending domains, and points a domain's Email Routing at the inbox.",
+      "help": "A token you create for the app, separate from Appflare's, with the permissions listed below. The app sends mail through Email Sending with it, sets up sending domains, and points a domain's Email Routing at the inbox. Also give it Account Settings: Read so the dashboards' token card can show the account; without it the card says \"Unknown account\" and \"Account lookup failed\", while sending, domains and inbox routing still work.",
       "cloudflareToken": true
     }
   ],

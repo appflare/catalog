@@ -8,9 +8,10 @@
   "repo": "baronunread/rdyrct",
   "license": "MIT",
   "categories": ["utilities", "analytics"],
-  // Edited help text (revision 2) and field links (revision 3) came after this
-  // release was published: revisions, no new build.
-  "revision": 3,
+  // Edited help text (revision 2), field links (revision 3) and the short link
+  // host's default (revision 4) came after this release was published:
+  // revisions, no new build.
+  "revision": 4,
   "authors": [
     {
       "name": "Andrea Bruno",
@@ -121,10 +122,12 @@
       "default": "{{appUrl}}"
     },
     {
+      // A bare hostname: upstream compares it with each request's Host header
+      // (src/worker/index.ts) and puts https:// before it in shared short links.
       "name": "APP_HOST",
       "label": "Short link host",
-      "help": "The host part of the App URL, for example rdyrct.<your subdomain>.workers.dev or go.example.com. Short links are shown under it.",
-      "default": ""
+      "help": "The host part of the App URL, without https://, such as go.example.com. Short links are shown under it, and organizations point their own domains at it.",
+      "default": "{{appHostname}}"
     },
     {
       "name": "MAIL_FROM",
