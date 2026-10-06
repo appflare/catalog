@@ -17,7 +17,7 @@
   "revision": 2,
   "authors": [{ "name": "Javis", "url": "https://javis-ai.com", "github": "Javis603" }],
   "maintainers": ["MendyLanda"],
-  "source": { "ref": "v0.66.0", "sha": "e7bac3aff6a1bc7cf74fd149a26d2730cfe32de8" },
+  "source": { "ref": "v0.67.0", "sha": "338a965f6c9a5a06b017eba4ebd7d5997973519e" },
   "install": {
     "packageManager": "npm",
     // The hub is its own npm project in worker/, with its own lockfile,
