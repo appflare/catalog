@@ -24,7 +24,13 @@ const pinSchema = z.object({
     sha: z.string().regex(/^[0-9a-f]{40}$/),
     version: z.string().min(1).optional(),
   }),
-  install: z.object({ wranglerConfig: z.string().min(1) }),
+  install: z.object({
+    wranglerConfig: z.string().min(1),
+    /** Every Worker of a multi-Worker entry; the primary is `install.wranglerConfig`'s too. */
+    workers: z.array(z.object({ wranglerConfig: z.string().min(1) })).optional(),
+    /** The directories the packer installs dependencies in; the root when absent. */
+    installDirs: z.array(z.object({ path: z.string().min(1) })).optional(),
+  }),
 });
 export type AppPin = z.infer<typeof pinSchema> & {
   /** `install.tier` as CI reads it, `artifact` when absent; see `declaredTier`. */
@@ -217,41 +223,74 @@ export function decideBump(
   return { action: "bump", bump: bumpFor(pin, target) };
 }
 
+/** A repository directory as written in a manifest, normalized; null for the root. */
+function repoDirectory(dir: string): string | null {
+  const normalized = path.posix.normalize(dir.replaceAll("\\", "/")).replace(/^\/+|\/+$/g, "");
+  return normalized === "." || normalized === "" ? null : normalized;
+}
+
 /**
  * The repository directory an app lives in, from its `install.wranglerConfig`
  * (`r2-explorer-template/wrangler.json` gives `r2-explorer-template`); null when
  * the config is at the repository root.
  */
 export function appDirectory(wranglerConfig: string): string | null {
-  const dir = path.posix.dirname(path.posix.normalize(wranglerConfig.replaceAll("\\", "/")));
-  return dir === "." || dir === "/" ? null : dir.replace(/^\/+|\/+$/g, "");
+  return repoDirectory(path.posix.dirname(wranglerConfig.replaceAll("\\", "/")));
 }
 
 /**
- * Keeps a bump for an app in a subdirectory of its repository (a monorepo of
- * many apps) only when the upstream changes touch that directory, since a new
- * repository tag says nothing about this app then. A file list GitHub may have
- * cut short cannot prove the directory is untouched, so the bump stays.
+ * The repository directories whose changes can change an app's build: the
+ * directory of `install.wranglerConfig` and of each
+ * `install.workers[].wranglerConfig`, and each directory `install.installDirs`
+ * declares. Sorted, without duplicates or directories inside another listed
+ * one; null when any of them is the repository root, since every upstream
+ * change may then touch the app. The default install at the root, when
+ * `installDirs` is absent, does not count: the root lockfile changes with every
+ * dependency bump and says little about one app.
  */
-export function gateOnAppDirectory(
+export function appDirectories(pin: AppPin): string[] | null {
+  const candidates = [
+    appDirectory(pin.install.wranglerConfig),
+    ...(pin.install.workers ?? []).map((w) => appDirectory(w.wranglerConfig)),
+    ...(pin.install.installDirs ?? []).map((d) => repoDirectory(d.path)),
+  ];
+  const dirs = new Set<string>();
+  for (const dir of candidates) {
+    if (dir === null) {
+      return null;
+    }
+    dirs.add(dir);
+  }
+  const sorted = [...dirs].sort();
+  return sorted.filter((dir) => !sorted.some((other) => dir.startsWith(`${other}/`)));
+}
+
+/**
+ * Keeps a bump for an app in subdirectories of its repository (a monorepo of
+ * many apps, or of one app's several Workers) only when the upstream changes
+ * touch one of its {@link appDirectories}, since a new repository tag says
+ * nothing about this app otherwise. A file list GitHub may have cut short
+ * cannot prove the directories are untouched, so the bump stays.
+ */
+export function gateOnAppDirectories(
   pin: AppPin,
   bump: Bump,
   changedFiles: (base: string, head: string) => ChangedFiles,
 ): BumpDecision {
-  const dir = appDirectory(pin.install.wranglerConfig);
-  if (dir === null) {
+  const dirs = appDirectories(pin);
+  if (dirs === null) {
     return { action: "bump", bump };
   }
   const changed = changedFiles(bump.from.sha, bump.to.sha);
-  const prefix = `${dir}/`;
-  if (!changed.complete || changed.paths.some((p) => p.startsWith(prefix))) {
+  const prefixes = dirs.map((dir) => `${dir}/`);
+  if (!changed.complete || changed.paths.some((p) => prefixes.some((pre) => p.startsWith(pre)))) {
     return { action: "bump", bump };
   }
   return {
     action: "skip",
     reason:
-      `${bump.to.ref}@${shortSha(bump.to.sha)} changes nothing under ${prefix} since ` +
-      `${bump.from.ref}@${shortSha(bump.from.sha)}; not bumping`,
+      `${bump.to.ref}@${shortSha(bump.to.sha)} changes nothing under ${prefixes.join(" or ")} ` +
+      `since ${bump.from.ref}@${shortSha(bump.from.sha)}; not bumping`,
   };
 }
 
@@ -272,7 +311,7 @@ export function planBumps(apps: readonly AppEntry[], upstream: UpstreamSource): 
         upstream.relation(pin.repo, base, head),
       );
       if (decision.action === "bump") {
-        decision = gateOnAppDirectory(pin, decision.bump, (base, head) =>
+        decision = gateOnAppDirectories(pin, decision.bump, (base, head) =>
           upstream.changedFiles(pin.repo, base, head),
         );
       }

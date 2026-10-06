@@ -5,12 +5,13 @@ import { describe, expect, it } from "vitest";
 import { type AppEntry, findApp } from "./apps.ts";
 import {
   type AppPin,
+  appDirectories,
   appDirectory,
   applyBump,
   type Bump,
   decideBump,
   gateBump,
-  gateOnAppDirectory,
+  gateOnAppDirectories,
   outstandingBumps,
   planBumps,
   readAutoMerge,
@@ -156,7 +157,69 @@ describe("appDirectory", () => {
   });
 });
 
-describe("gateOnAppDirectory", () => {
+describe("appDirectories", () => {
+  const withWorkers = (primary: string, ...others: string[]): AppPin => ({
+    ...tagPin,
+    install: {
+      wranglerConfig: primary,
+      workers: [primary, ...others].map((wranglerConfig) => ({ wranglerConfig })),
+    },
+  });
+
+  it("is the primary config's directory for a single-Worker entry", () => {
+    expect(appDirectories(tagPin)).toBeNull();
+    expect(
+      appDirectories({ ...tagPin, install: { wranglerConfig: "apps/web/wrangler.jsonc" } }),
+    ).toEqual(["apps/web"]);
+  });
+
+  it("lists every Worker's directory once, sorted", () => {
+    expect(
+      appDirectories(
+        withWorkers(
+          "services/email-worker/wrangler.jsonc",
+          "services/inbox-worker/wrangler.jsonc",
+          "services/email-worker/wrangler.cron.jsonc",
+        ),
+      ),
+    ).toEqual(["services/email-worker", "services/inbox-worker"]);
+  });
+
+  it("drops a directory inside another Worker's", () => {
+    expect(
+      appDirectories(withWorkers("apps/web/wrangler.jsonc", "apps/web/worker/wrangler.jsonc")),
+    ).toEqual(["apps/web"]);
+  });
+
+  it("adds the directories installDirs declares", () => {
+    const pin: AppPin = {
+      ...tagPin,
+      install: {
+        wranglerConfig: "web/wrangler.jsonc",
+        installDirs: [{ path: "web" }, { path: "./server/" }, { path: "web/ui" }],
+      },
+    };
+    expect(appDirectories(pin)).toEqual(["server", "web"]);
+  });
+
+  it("is null when installDirs declares the repository root", () => {
+    const pin: AppPin = {
+      ...tagPin,
+      install: {
+        wranglerConfig: "dashboard/wrangler.jsonc",
+        installDirs: [{ path: "." }, { path: "dashboard" }],
+      },
+    };
+    expect(appDirectories(pin)).toBeNull();
+  });
+
+  it("is null when any Worker's config is at the repository root", () => {
+    expect(appDirectories(withWorkers("agents/db/wrangler.jsonc", "wrangler.jsonc"))).toBeNull();
+    expect(appDirectories(withWorkers("wrangler.jsonc", "agents/db/wrangler.jsonc"))).toBeNull();
+  });
+});
+
+describe("gateOnAppDirectories", () => {
   const monoPin: AppPin = {
     ...tagPin,
     install: { wranglerConfig: "r2-explorer-template/wrangler.json" },
@@ -168,14 +231,14 @@ describe("gateOnAppDirectory", () => {
 
   it("never lists files for an app at the repository root", () => {
     expect(
-      gateOnAppDirectory(tagPin, bump, () => {
+      gateOnAppDirectories(tagPin, bump, () => {
         throw new Error("must not list files");
       }),
     ).toEqual({ action: "bump", bump });
   });
 
   it("skips a target that changes nothing under the app's directory", () => {
-    const decision = gateOnAppDirectory(
+    const decision = gateOnAppDirectories(
       monoPin,
       bump,
       files(["other-template/src/index.ts", "r2-explorer-template.md", "package.json"]),
@@ -190,10 +253,10 @@ describe("gateOnAppDirectory", () => {
 
   it("keeps a target that changes the app's directory, including a rename out of it", () => {
     expect(
-      gateOnAppDirectory(monoPin, bump, files(["r2-explorer-template/package.json"])).action,
+      gateOnAppDirectories(monoPin, bump, files(["r2-explorer-template/package.json"])).action,
     ).toBe("bump");
     expect(
-      gateOnAppDirectory(
+      gateOnAppDirectories(
         monoPin,
         bump,
         files(["elsewhere/wrangler.json", "r2-explorer-template/wrangler.json"]),
@@ -201,13 +264,72 @@ describe("gateOnAppDirectory", () => {
     ).toBe("bump");
   });
 
+  it("keeps a target that changes only a Worker other than the primary", () => {
+    const multiPin: AppPin = {
+      ...tagPin,
+      install: {
+        wranglerConfig: "apps/web/wrangler.jsonc",
+        workers: [
+          { wranglerConfig: "apps/web/wrangler.jsonc" },
+          { wranglerConfig: "apps/worker/wrangler.jsonc" },
+        ],
+      },
+    };
+    expect(gateOnAppDirectories(multiPin, bump, files(["apps/worker/src/check.ts"])).action).toBe(
+      "bump",
+    );
+    expect(gateOnAppDirectories(multiPin, bump, files(["apps/docs/index.md"]))).toEqual({
+      action: "skip",
+      reason:
+        "v1.3.0@89abcde changes nothing under apps/web/ or apps/worker/ since v1.2.3@0123456; " +
+        "not bumping",
+    });
+  });
+
+  it("keeps a target that changes only a directory installDirs declares", () => {
+    const installPin: AppPin = {
+      ...monoPin,
+      install: {
+        ...monoPin.install,
+        installDirs: [{ path: "r2-explorer-template" }, { path: "packages/shared" }],
+      },
+    };
+    expect(gateOnAppDirectories(installPin, bump, files(["packages/shared/src/x.ts"])).action).toBe(
+      "bump",
+    );
+    expect(gateOnAppDirectories(installPin, bump, files(["pnpm-lock.yaml"]))).toEqual({
+      action: "skip",
+      reason:
+        "v1.3.0@89abcde changes nothing under packages/shared/ or r2-explorer-template/ " +
+        "since v1.2.3@0123456; not bumping",
+    });
+  });
+
+  it("never lists files when one of the Workers is at the repository root", () => {
+    const rootWorker: AppPin = {
+      ...monoPin,
+      install: {
+        ...monoPin.install,
+        workers: [
+          { wranglerConfig: "r2-explorer-template/wrangler.json" },
+          { wranglerConfig: "wrangler.jsonc" },
+        ],
+      },
+    };
+    expect(
+      gateOnAppDirectories(rootWorker, bump, () => {
+        throw new Error("must not list files");
+      }),
+    ).toEqual({ action: "bump", bump });
+  });
+
   it("keeps the bump when GitHub's file list may be cut short", () => {
-    expect(gateOnAppDirectory(monoPin, bump, files(["other/x.ts"], false)).action).toBe("bump");
+    expect(gateOnAppDirectories(monoPin, bump, files(["other/x.ts"], false)).action).toBe("bump");
   });
 
   it("passes the pinned and target commits to the file listing", () => {
     const asked: string[] = [];
-    gateOnAppDirectory(monoPin, bump, (base, head) => {
+    gateOnAppDirectories(monoPin, bump, (base, head) => {
       asked.push(`${base}...${head}`);
       return { paths: [], complete: true };
     });
@@ -291,6 +413,50 @@ describe("planBumps", () => {
         ),
       );
       expect(touched.bumps.map((b) => b.branch)).toEqual(["bump/hello/89abcde"]);
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
+  });
+
+  it("bumps a multi-Worker app when only a Worker other than the primary changed", () => {
+    const root = mkdtempSync(path.join(tmpdir(), "appflare-bump-workers-"));
+    try {
+      const dir = path.join(root, "hello");
+      mkdirSync(dir);
+      const text = readFileSync(hello.manifestPath, "utf8").replace(
+        '"wranglerConfig": "wrangler.jsonc"',
+        '"wranglerConfig": "apps/web/wrangler.jsonc",\n' +
+          '    "workers": [\n' +
+          '      { "name": "web", "wranglerConfig": "apps/web/wrangler.jsonc", "primary": true },\n' +
+          '      { "name": "checker", "wranglerConfig": "apps/worker/wrangler.jsonc" }\n' +
+          "    ]",
+      );
+      writeFileSync(path.join(dir, "appflare.jsonc"), text);
+      const app = findApp(root, "hello");
+      const touched = planBumps(
+        [app],
+        upstream(
+          () => tag("v1.3.0"),
+          () => ({ paths: ["apps/worker/src/index.ts"], complete: true }),
+        ),
+      );
+      expect(touched.failed).toEqual([]);
+      expect(touched.bumps.map((b) => b.branch)).toEqual(["bump/hello/89abcde"]);
+      const untouched = planBumps(
+        [app],
+        upstream(
+          () => tag("v1.3.0"),
+          () => ({ paths: ["apps/docs/index.md"], complete: true }),
+        ),
+      );
+      expect(untouched.skipped).toEqual([
+        {
+          slug: "hello",
+          reason:
+            "v1.3.0@89abcde changes nothing under apps/web/ or apps/worker/ since " +
+            "v1.2.3@0123456; not bumping",
+        },
+      ]);
     } finally {
       rmSync(root, { recursive: true, force: true });
     }
