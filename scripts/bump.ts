@@ -23,9 +23,11 @@ const USAGE = `Usage:
   pnpm -s bump apply <slug> --ref <ref> --sha <sha>
 
 plan   Resolves each app's upstream with read-only gh api calls (newest stable
-       semver tag; for a branch pin without a newer tag that contains it, the
-       pinned branch's head, or the default branch's when upstream no longer
-       has the pinned branch) and keeps only moves forward.
+       semver tag; for a pin on a tag with a prefix such as app-v0.42.1, the
+       newest stable tag with that prefix that contains the pinned commit; for
+       a branch pin without a newer tag that contains it, the pinned branch's
+       head, or the default branch's when upstream no longer has the pinned
+       branch) and keeps only moves forward.
        Skips targets already proposed, and branch-tracked apps with a bump pull
        request opened in the last week. Prints { bumps, failed, outstanding }
        as JSON (each bump with the open pull requests it supersedes, and

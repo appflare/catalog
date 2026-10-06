@@ -98,19 +98,19 @@ describe("decideBump for other pins", () => {
     });
   });
 
-  it("leaves a pin on a tag that is not a semver release alone", () => {
-    const monorepoTag: AppPin = { ...tagPin, source: { ref: "app-v0.42.1", sha: PIN } };
+  it("leaves a pin on a tag without a version alone", () => {
+    const pin: AppPin = { ...tagPin, source: { ref: "release-1.2", sha: PIN } };
     const upstream: UpstreamState = {
       tags: [
-        { name: "app-v0.43.0", sha: NEW },
-        { name: "app-v0.42.1", sha: PIN },
+        { name: "release-1.3", sha: NEW },
+        { name: "release-1.2", sha: PIN },
       ],
       branch: () => null,
       defaultBranch: noBranch,
     };
-    expect(decideBump(monorepoTag, upstream, never)).toEqual({
+    expect(decideBump(pin, upstream, never)).toEqual({
       action: "skip",
-      reason: "pinned to tag app-v0.42.1, which is not a semver release; left alone",
+      reason: "pinned to tag release-1.2, which is not a semver release; left alone",
     });
   });
 
@@ -323,6 +323,132 @@ describe("decideBump for other pins", () => {
   it("keeps the title within the commit header limit", () => {
     const long = tag(`v1.3.0+${"x".repeat(80)}`);
     expect(bumped(decideBump(tagPin, long, never)).title).toBe("chore(hello): bump to 89abcde");
+  });
+});
+
+describe("decideBump for a tag with a prefix", () => {
+  const OTHER = "fedcba9876543210fedcba9876543210fedcba98";
+  const pinOn = (ref: string, version?: string): AppPin => ({
+    ...tagPin,
+    source: { ref, sha: PIN, ...(version ? { version } : {}) },
+  });
+  const tags = (...list: [string, string][]): UpstreamState => ({
+    tags: list.map(([name, sha]) => ({ name, sha })),
+    branch: () => null,
+    defaultBranch: noBranch,
+  });
+  const contains = (base: string, h: string) => {
+    expect(base).toBe(PIN);
+    return h === OTHER ? { ahead: 1, behind: 3 } : { ahead: 4, behind: 0 };
+  };
+
+  it("moves to the newest stable tag of its own series that contains the pin", () => {
+    const upstream = tags(
+      ["deepcrawl@0.5.5", PIN],
+      ["deepcrawl@0.5.6", OTHER],
+      ["deepcrawl@0.6.0", NEW],
+      ["deepcrawl@0.7.0-beta.1", OTHER],
+      ["0.7.0-beta.1", OTHER],
+      ["web-v1.0.0", OTHER],
+      ["v2.0.0", OTHER],
+    );
+    const b = bumped(decideBump(pinOn("deepcrawl@0.5.5", "0.5.5"), upstream, contains));
+    expect(b).toEqual({
+      slug: "hello",
+      repo: "example/hello",
+      from: { ref: "deepcrawl@0.5.5", sha: PIN, version: "0.5.5" },
+      to: { ref: "deepcrawl@0.6.0", sha: NEW, kind: "tag" },
+      branch: "bump/hello/89abcde",
+      title: "chore(hello): bump to deepcrawl@0.6.0",
+      autoMerge: false,
+    });
+    expect(b.refChange).toBeUndefined();
+  });
+
+  it("follows each series of one repository on its own", () => {
+    const APP = "1111111111111111111111111111111111111111";
+    const WEB = "2222222222222222222222222222222222222222";
+    const upstream = tags(
+      ["web-v0.1.1", PIN],
+      ["app-v0.42.1", PIN],
+      ["web-v0.2.0", WEB],
+      ["app-v0.43.0", APP],
+      ["app-v1.0.0-rc.1", OTHER],
+      ["web-v0.10.0-rc.1", OTHER],
+    );
+    const related = () => ({ ahead: 1, behind: 0 });
+    expect(bumped(decideBump(pinOn("app-v0.42.1"), upstream, related)).to).toEqual({
+      ref: "app-v0.43.0",
+      sha: APP,
+      kind: "tag",
+    });
+    expect(bumped(decideBump(pinOn("web-v0.1.1"), upstream, related)).to).toEqual({
+      ref: "web-v0.2.0",
+      sha: WEB,
+      kind: "tag",
+    });
+  });
+
+  it("orders a series by version, not by listing or string order", () => {
+    const upstream = tags(["app-v0.9.0", OTHER], ["app-v0.10.0", NEW], ["app-v0.8.0", PIN]);
+    expect(
+      bumped(decideBump(pinOn("app-v0.8.0"), upstream, () => ({ ahead: 1, behind: 0 }))).to.ref,
+    ).toBe("app-v0.10.0");
+  });
+
+  it("merges itself under the rules for any tag bump", () => {
+    const upstream = tags(["app-v0.42.1", PIN], ["app-v0.43.0", NEW]);
+    const related = () => ({ ahead: 1, behind: 0 });
+    expect(bumped(decideBump(pinOn("app-v0.42.1"), upstream, related)).autoMerge).toBe(true);
+    expect(bumped(decideBump(pinOn("app-v0.42.1", "0.42.1"), upstream, related)).autoMerge).toBe(
+      false,
+    );
+  });
+
+  it("is left alone when its series has no newer stable tag", () => {
+    const upstream = tags(
+      ["app-v0.42.1", PIN],
+      ["app-v0.42.0", OTHER],
+      ["app-v0.43.0-rc.1", OTHER],
+      ["web-v9.0.0", OTHER],
+      ["v1.0.0", OTHER],
+    );
+    expect(decideBump(pinOn("app-v0.42.1"), upstream, never)).toEqual({
+      action: "skip",
+      reason:
+        "pinned to tag app-v0.42.1; upstream has no stable app-v<version> tag newer than it; left alone",
+    });
+  });
+
+  it("is left alone when the newer tag does not contain the pinned commit", () => {
+    const upstream = tags(["app-v0.42.1", PIN], ["app-v0.43.0", OTHER]);
+    expect(decideBump(pinOn("app-v0.42.1"), upstream, contains)).toEqual({
+      action: "skip",
+      reason: "tag app-v0.43.0@fedcba9 does not contain the pinned 0123456; left alone",
+    });
+    expect(decideBump(pinOn("app-v0.42.1"), upstream, () => null)).toEqual({
+      action: "skip",
+      reason: "tag app-v0.43.0@fedcba9 shares no history with the pinned 0123456; left alone",
+    });
+  });
+
+  it("leaves a prerelease pin with a prefix alone", () => {
+    const upstream = tags(["app-v1.0.0-rc.1", PIN], ["app-v1.0.0", NEW]);
+    expect(decideBump(pinOn("app-v1.0.0-rc.1"), upstream, never)).toEqual({
+      action: "skip",
+      reason: "pinned to prerelease app-v1.0.0-rc.1; left alone",
+    });
+  });
+
+  it("names the new tag's version in the source.version checklist", () => {
+    const pin = pinOn("deepcrawl@0.5.5", "0.5.5");
+    const upstream = tags(["deepcrawl@0.5.5", PIN], ["deepcrawl@0.6.0", NEW]);
+    const body = renderBumpBody(pin, bumped(decideBump(pin, upstream, contains)), null);
+    expect(body).toContain(
+      "- [ ] Set `source.version` in `apps/hello/appflare.jsonc` to `0.6.0`, the version in " +
+        "the new tag `deepcrawl@0.6.0` (it is `0.5.5` now).",
+    );
+    expect(body).toContain("**A maintainer merges this pull request.**");
   });
 });
 
