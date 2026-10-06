@@ -9,8 +9,11 @@ import {
   type CommitRelation,
   compareSemver,
   isPrereleaseTag,
+  newestStableTag,
   parseStableTag,
+  type UpstreamBranch,
   type UpstreamSource,
+  type UpstreamTag,
   type UpstreamTarget,
 } from "./upstream.ts";
 
@@ -109,6 +112,11 @@ export interface Bump {
   /** Why this bump, when it is not simply a newer commit. */
   note?: string;
   /**
+   * Why `source.ref` moves to another branch. Set only then; such a bump
+   * never merges itself, since a person has to confirm the line to follow.
+   */
+  refChange?: string;
+  /**
    * The workflow enables GitHub auto-merge (squash, with `title` as the
    * subject) on the pull request, so it merges once the required checks pass.
    * False leaves the merge to a maintainer.
@@ -123,7 +131,7 @@ export function shortSha(sha: string): string {
   return sha.slice(0, 7);
 }
 
-function bumpFor(pin: AppPin, target: UpstreamTarget): Bump {
+function bumpFor(pin: AppPin, target: UpstreamTarget, refChange?: string): Bump {
   // A branch name alone does not say where the pin moved; add the commit.
   const label = target.kind === "tag" ? target.ref : `${target.ref}@${shortSha(target.sha)}`;
   // Commit headers are at most 72 characters; fall back to the short SHA.
@@ -137,7 +145,8 @@ function bumpFor(pin: AppPin, target: UpstreamTarget): Bump {
     to: target,
     branch: `bump/${pin.slug}/${shortSha(target.sha)}`,
     title,
-    autoMerge: autoMerges(pin),
+    ...(refChange ? { refChange } : {}),
+    autoMerge: autoMerges(pin) && !refChange,
   };
 }
 
@@ -147,80 +156,147 @@ export type BumpDecision = { action: "bump"; bump: Bump } | { action: "skip"; re
 export const TAG_PIN_NOTE = "a tag pin gives the app a semver version instead of a date-based one";
 
 /**
- * Whether `target` is newer than the pin, so a bump never goes backwards:
+ * What `decideBump` reads: upstream's tags and branches, and the app's last
+ * bump in the catalog. Each function is called only when the decision needs it.
+ */
+export interface UpstreamState {
+  tags: readonly UpstreamTag[];
+  /** The branch of this name, null when upstream has none; see `UpstreamSource.branch`. */
+  branch: (name: string) => UpstreamBranch | null;
+  defaultBranch: () => UpstreamBranch;
+  /**
+   * The tag the app's last bump moved it to; null when that bump moved it to a
+   * branch head, or the app has no bump. Absent reads as null.
+   */
+  lastBumpTag?: () => string | null;
+}
+
+/**
+ * Whether a ref reads as a release tag rather than a branch: it holds a
+ * version number after its start or a separator (`app-v0.42.1`,
+ * `deepcrawl@0.5.5`, `1.2`).
+ */
+export function looksLikeTag(ref: string): boolean {
+  return /(?:^|[^0-9A-Za-z])v?\d+\.\d+/.test(ref);
+}
+
+/**
+ * Where the pin moves, if anywhere; a bump never goes backwards:
  *
- * - a stable tag pin moves only to a tag with a greater version, never to a
- *   branch head;
- * - a prerelease tag pin is left alone (someone chose it on purpose);
- * - a branch pin moves to a stable tag whose commit is the pinned commit or
- *   contains it (`behind_by === 0` in the compare API); a tag on an older or
- *   unrelated commit is refused (`relation` is null for commits that share no
- *   history);
- * - a branch pin moves to a newer branch head when the head is ahead of the
- *   pinned commit (`ahead_by > 0`; this also covers histories that diverged).
- *   A head that shares no history with the pin throws: upstream rewrote its
- *   history, and someone has to choose the new pin.
+ * - a stable tag pin moves only to the newest stable tag, when its version is
+ *   greater, never to a branch head;
+ * - a prerelease tag pin, or a pin on a tag that is not a semver release, is
+ *   left alone (someone chose it on purpose). A ref that is a branch upstream
+ *   is a branch, even when a tag shares its name;
+ * - a pin on a ref upstream has neither as a branch nor as a tag is left alone
+ *   when the ref looks like a tag ({@link looksLikeTag}) or the app's last bump
+ *   moved it to that tag: upstream deleted the tag, and a branch head is no
+ *   substitute for a release;
+ * - a branch pin moves to the newest stable tag when its commit is the pinned
+ *   commit or contains it (`behind_by === 0` in the compare API); a tag on an
+ *   older or unrelated commit is not a target (`relation` is null for commits
+ *   that share no history);
+ * - otherwise a branch pin follows its branch, or, when upstream has no branch
+ *   of that name now (it was renamed or deleted), the default branch under its
+ *   current name, when the head is ahead of the pinned commit (`ahead_by > 0`;
+ *   this also covers histories that diverged). A head that shares no history
+ *   with the pin throws: upstream rewrote its history, and someone has to
+ *   choose the new pin.
+ *
+ * A bump that changes `source.ref` other than to a tag never merges itself.
  */
 export function decideBump(
   pin: AppPin,
-  target: UpstreamTarget,
+  upstream: UpstreamState,
   relation: (base: string, head: string) => CommitRelation | null,
 ): BumpDecision {
   const { ref, sha } = pin.source;
-  if (target.sha === sha && target.ref === ref) {
-    return { action: "skip", reason: "up to date" };
-  }
+  const newest = newestStableTag(upstream.tags);
   if (isPrereleaseTag(ref)) {
     return { action: "skip", reason: `pinned to prerelease ${ref}; left alone` };
   }
   const pinned = parseStableTag(ref);
   if (pinned) {
-    const next = target.kind === "tag" ? parseStableTag(target.ref) : null;
-    if (!next) {
+    if (!newest) {
       return {
         action: "skip",
         reason: `pinned to tag ${ref}, but upstream has no stable tag now; not moving to a branch`,
       };
     }
-    if (compareSemver(next, pinned) <= 0) {
-      return { action: "skip", reason: `newest tag ${target.ref} is not newer than ${ref}` };
+    if (newest.name === ref && newest.sha === sha) {
+      return { action: "skip", reason: "up to date" };
     }
-    return { action: "bump", bump: bumpFor(pin, target) };
+    const next = parseStableTag(newest.name);
+    if (!next || compareSemver(next, pinned) <= 0) {
+      return { action: "skip", reason: `newest tag ${newest.name} is not newer than ${ref}` };
+    }
+    return { action: "bump", bump: bumpFor(pin, tagTarget(newest)) };
   }
-  if (target.kind === "tag") {
-    const tag = `tag ${target.ref}@${shortSha(target.sha)}`;
-    const related = target.sha === sha ? { ahead: 0, behind: 0 } : relation(sha, target.sha);
-    if (related === null) {
+  const pinnedBranch = upstream.branch(ref);
+  if (!pinnedBranch) {
+    if (upstream.tags.some((t) => t.name === ref)) {
       return {
         action: "skip",
-        reason: `${tag} shares no history with the pinned ${shortSha(sha)}`,
+        reason: `pinned to tag ${ref}, which is not a semver release; left alone`,
       };
     }
-    if (related.behind > 0) {
+    const why = looksLikeTag(ref)
+      ? "it looks like a tag"
+      : upstream.lastBumpTag?.() === ref
+        ? "the last bump moved the app to that tag"
+        : null;
+    if (why) {
       return {
         action: "skip",
-        reason: `${tag} does not contain the pinned ${shortSha(sha)}`,
+        reason:
+          `pinned to ${ref}, which upstream has neither as a branch nor as a tag now, and ` +
+          `${why}; not moving to a branch, choose the new pin by hand`,
       };
     }
-    return { action: "bump", bump: { ...bumpFor(pin, target), note: TAG_PIN_NOTE } };
   }
-  if (target.sha === sha) {
-    return { action: "skip", reason: "upstream still points at the pinned commit" };
+  let refused: string | undefined;
+  if (newest) {
+    const tag = `tag ${newest.name}@${shortSha(newest.sha)}`;
+    const related = newest.sha === sha ? { ahead: 0, behind: 0 } : relation(sha, newest.sha);
+    if (related !== null && related.behind === 0) {
+      return { action: "bump", bump: { ...bumpFor(pin, tagTarget(newest)), note: TAG_PIN_NOTE } };
+    }
+    refused =
+      related === null
+        ? `${tag} shares no history with the pinned ${shortSha(sha)}`
+        : `${tag} does not contain the pinned ${shortSha(sha)}`;
   }
-  const related = relation(sha, target.sha);
+  const branch = pinnedBranch ?? upstream.defaultBranch();
+  const target: UpstreamTarget = { ref: branch.name, sha: branch.sha, kind: "branch" };
+  const refChange =
+    branch.name === ref
+      ? undefined
+      : `upstream has no branch ${ref} now (it was renamed or deleted), so the pin ` +
+        `follows ${branch.name}, the default branch`;
+  const skip = (reason: string): BumpDecision => ({
+    action: "skip",
+    reason: [reason, refused].filter(Boolean).join("; "),
+  });
+  if (branch.sha === sha) {
+    return skip(refChange ? `${refChange}, which still points at the pinned commit` : "up to date");
+  }
+  const related = relation(sha, branch.sha);
   if (related === null) {
     throw new Error(
-      `${target.ref}@${shortSha(target.sha)} shares no history with the pinned ` +
+      `${branch.name}@${shortSha(branch.sha)} shares no history with the pinned ` +
         `${shortSha(sha)} (upstream rewrote its history); choose the new pin by hand`,
     );
   }
   if (related.ahead <= 0) {
-    return {
-      action: "skip",
-      reason: `${target.ref}@${shortSha(target.sha)} is not ahead of the pinned ${shortSha(sha)}`,
-    };
+    return skip(
+      `${branch.name}@${shortSha(branch.sha)} is not ahead of the pinned ${shortSha(sha)}`,
+    );
   }
-  return { action: "bump", bump: bumpFor(pin, target) };
+  return { action: "bump", bump: bumpFor(pin, target, refChange) };
+}
+
+function tagTarget(tag: UpstreamTag): UpstreamTarget {
+  return { ref: tag.name, sha: tag.sha, kind: "tag" };
 }
 
 /** A repository directory as written in a manifest, normalized; null for the root. */
@@ -301,13 +377,27 @@ export interface BumpPlan {
   failed: { slug: string; error: string }[];
 }
 
-/** Decides every app, isolating failures so one broken upstream does not stop the rest. */
-export function planBumps(apps: readonly AppEntry[], upstream: UpstreamSource): BumpPlan {
+/**
+ * Decides every app, isolating failures so one broken upstream does not stop
+ * the rest. `lastBumpTag` reads the tag each app's last bump moved it to (see
+ * `UpstreamState.lastBumpTag`).
+ */
+export function planBumps(
+  apps: readonly AppEntry[],
+  upstream: UpstreamSource,
+  lastBumpTag: (slug: string) => string | null = () => null,
+): BumpPlan {
   const plan: BumpPlan = { bumps: [], skipped: [], failed: [] };
   for (const app of apps) {
     try {
       const pin = readPin(app);
-      let decision = decideBump(pin, upstream.resolve(pin.repo), (base, head) =>
+      const state: UpstreamState = {
+        tags: upstream.tags(pin.repo),
+        branch: (name) => upstream.branch(pin.repo, name),
+        defaultBranch: () => upstream.defaultBranch(pin.repo),
+        lastBumpTag: () => lastBumpTag(pin.slug),
+      };
+      let decision = decideBump(pin, state, (base, head) =>
         upstream.relation(pin.repo, base, head),
       );
       if (decision.action === "bump") {
@@ -399,6 +489,14 @@ export function renderBumpBody(
     `| to | ${codeSpan(bump.to.ref)} | ${codeSpan(bump.to.sha)} |`,
     "",
     ...(bump.note ? [`Why: ${bump.note}.`, ""] : []),
+    ...(bump.refChange
+      ? [
+          `The ref changes from ${codeSpan(bump.from.ref)} to ${codeSpan(bump.to.ref)}: ` +
+            `${bump.refChange}. A bump that changes \`source.ref\` to another branch never ` +
+            "merges itself.",
+          "",
+        ]
+      : []),
     `Upstream changes: ${compareUrl}`,
     "",
   ];
@@ -429,7 +527,7 @@ export function renderBumpBody(
         "publish refuses a moved pin under a `source.version` that is already released.",
     );
   }
-  lines.push("", checksText(pin.tier), "", mergePathText(pin));
+  lines.push("", checksText(pin.tier), "", mergePathText(pin, bump));
   return `${lines.join("\n")}\n`;
 }
 
@@ -449,9 +547,9 @@ function checksText(tier: string): string {
  * publishes. The catalog checks that a release builds and installs; it does
  * not review upstream's code, so no case promises that review.
  */
-function mergePathText(pin: AppPin): string {
+function mergePathText(pin: AppPin, bump: Bump): string {
   const manifest = `\`apps/${pin.slug}/appflare.jsonc\``;
-  if (autoMerges(pin)) {
+  if (bump.autoMerge) {
     return (
       "**This pull request merges itself.** It squash-merges once the required checks pass, " +
       "the install check included, and the next nightly bump run publishes the new version. " +
@@ -480,6 +578,12 @@ function mergePathText(pin: AppPin): string {
     return (
       `${head} ${manifest} sets \`bump.autoMerge\` to \`false\`, so its bumps wait for a ` +
       `maintainer instead of merging themselves once the checks pass. ${tail}`
+    );
+  }
+  if (bump.refChange) {
+    return (
+      `${head} It moves \`source.ref\` to another branch, so it does not merge itself: ` +
+      `check that ${codeSpan(bump.to.ref)} is the line this app should follow. ${tail}`
     );
   }
   return (

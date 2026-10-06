@@ -1584,30 +1584,43 @@ Repository settings the maintainer has to make:
 ## Keeping pins current
 
 `bump.yml` runs every night, and on demand with an optional `apps` input. For each
-app it asks GitHub, read-only, where the upstream repository is now:
-
-- If the repository has stable semver tags (`1.2.3` or `v1.2.3`), the target is the
-  newest one by version number, not by date. Prerelease tags such as
-  `v2.0.0-rc.1` are ignored.
-- Otherwise the target is the head commit of the default branch, with `ref` set to
-  the branch name.
+app it asks GitHub, read-only, where the upstream repository is now: its newest
+stable semver tag (`1.2.3` or `v1.2.3`), by version number, not by date, with
+prerelease tags such as `v2.0.0-rc.1` ignored; and, for a pin on a branch, the head
+commit of that branch. A pin is on a tag when `source.ref` is a semver tag; on a
+branch when the repository has a branch of that name, even if a tag shares the
+name; and on a tag when the repository has only a tag of that name.
 
 A bump only ever moves forward:
 
 - A pin on a stable tag moves only to a tag with a greater version. It never
   moves to an older tag, and never to a branch head if the tags disappear.
-- A pin on a prerelease tag is left alone and noted in the run summary; someone
-  chose it on purpose.
+- A pin on a prerelease tag, or on a tag that is not a semver release
+  (`app-v0.42.1` in a monorepo), is left alone and noted in the run summary;
+  someone chose it on purpose.
 - A pin on a branch moves to the repository's newest stable tag when the tag
   is on the pinned commit or on a later one that contains it, meaning GitHub's
   compare API reports `behind_by == 0` from the pin to the tag. A tag pin gives
-  the app a semver version instead of a date-based one. A tag on an older or
-  unrelated commit is refused, including a tag that shares no history with the
-  pin because upstream rewrote its history (`apps/clist`).
-- Without stable tags, a pin on a branch moves to the new head when the head is
-  ahead of the pinned commit (`ahead_by > 0`). A head that shares no history
-  with the pin is not bumped: the app is reported (below) for a maintainer to
-  choose the new pin.
+  the app a semver version instead of a date-based one.
+- Otherwise a pin on a branch follows that branch, default or not: it moves to
+  the branch's head when the head is ahead of the pinned commit
+  (`ahead_by > 0`). This includes repositories whose tags are on older commits
+  or on history upstream rewrote (`apps/clist`): such a tag is never a target.
+  A head that shares no history with the pin is not bumped: the app is reported
+  (below) for a maintainer to choose the new pin.
+- A `source.ref` the repository has neither as a branch nor as a tag now is
+  either a deleted tag or a renamed branch. It is taken for a tag, and left
+  alone for a maintainer, when it holds a version number (`app-v0.42.1`,
+  `deepcrawl@0.5.5`) or the app's last bump moved it to that tag: a branch head
+  is no substitute for a release. Otherwise it is taken for a renamed branch,
+  and the pin follows the default branch, with `source.ref` set to that
+  branch's current name, under the rules above.
+
+A bump that moves `source.ref` to another branch (the renamed branch case)
+never merges itself, whatever the entry's `bump` setting: a deleted branch looks
+the same as a renamed one, so a maintainer confirms that the default branch is
+the line to follow. Its pull request body says which ref it changes from and
+to, and why.
 
 An app whose `install.wranglerConfig` is in a subdirectory of its repository
 (`r2-explorer-template/wrangler.json`) moves only when GitHub's compare API lists
@@ -1678,7 +1691,10 @@ and branch-tracked entries alike, when the entry:
 - is on the `artifact` tier, the default. CI does not install sandbox and
   self-deploying entries, so a maintainer merges each of their bumps;
 - does not set `source.version`, which someone has to update by hand first;
-- does not opt out with `"bump": { "autoMerge": false }`.
+- does not opt out with `"bump": { "autoMerge": false }`;
+
+and the bump does not move `source.ref` to another branch (see "Keeping pins
+current").
 
 `bump.yml` enables GitHub auto-merge on such a pull request right after opening
 it, before the checks start. GitHub squash-merges it once the required checks
@@ -1753,7 +1769,10 @@ self-deploying entries have no install check in CI (see "Sandbox tier" and
 3. Write a `wrangler.json` from `manifest.json`. It gets the manifest's modules,
    compatibility settings, assets, vars, bindings without ids, and the Worker's
    `exports`, `cache` block and Worker Loaders when it records them, but not its
-   cron triggers (see below). The Worker is named:
+   cron triggers (see below). Each Workflow the Worker defines gets the settings
+   its wrangler config gives it (`limits`, `concurrency`, `schedules`,
+   `default_retention`), which wrangler sends when it creates the Workflow, as
+   the manager does. The Worker is named:
    - `ci-<slug>-pr<number>` for a pull request;
    - `ci-<slug>-b<hash of the branch>` for a dispatched run on a bump branch;
    - `ci-<slug>-nightly` at night.
@@ -1861,9 +1880,11 @@ How this differs from installing with the manager:
   add to. Cron triggers also count against a limit for the whole account (5 on
   the Workers Free plan) that several checks running at once would share, so
   setting them could fail a check for a reason unrelated to the app. The
-  manager sets an app's cron triggers on a real install. If a deploy fails
-  after wrangler uploaded the Worker (for example on a trigger update), the
-  cleanup step still deletes it.
+  manager sets an app's cron triggers on a real install. A Workflow's
+  `schedules` are set, as the manager sets them: they have a limit of their own
+  (100 per account), and only an entry with `plan: "paid"` may have one, which
+  a free CI account skips. If a deploy fails after wrangler uploaded the Worker
+  (for example on a trigger update), the cleanup step still deletes it.
 
 Fork pull requests get no secrets, so the install job is skipped for them. Pull
 requests from branches of this repository run their own copy of

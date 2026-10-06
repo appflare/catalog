@@ -23,12 +23,15 @@ const USAGE = `Usage:
   pnpm -s bump apply <slug> --ref <ref> --sha <sha>
 
 plan   Resolves each app's upstream with read-only gh api calls (newest stable
-       semver tag, else the default branch head) and keeps only moves forward.
+       semver tag; for a branch pin without a newer tag that contains it, the
+       pinned branch's head, or the default branch's when upstream no longer
+       has the pinned branch) and keeps only moves forward.
        Skips targets already proposed, and branch-tracked apps with a bump pull
        request opened in the last week. Prints { bumps, failed, outstanding }
        as JSON (each bump with the open pull requests it supersedes, and
        autoMerge: true for an artifact tier entry that sets neither
-       bump.autoMerge: false nor source.version) and writes the pull request
+       bump.autoMerge: false nor source.version, unless the bump moves
+       source.ref to another branch) and writes the pull request
        body for each bump to <dir>/<slug>.md. "outstanding" lists existing
        bumps that need a person: a bump branch without a pull request, and an
        open bump pull request whose head still lacks a required check after a
@@ -61,7 +64,7 @@ runMain(() => {
     const upstream = createGhUpstream();
     const history = createGhBumpHistory(catalogRepo());
     const apps = selectApps(listApps(appsDir), values.only);
-    const plan = planBumps(apps, upstream);
+    const plan = planBumps(apps, upstream, (slug) => history.lastBumpTag(slug));
     const now = new Date();
     mkdirSync(values.out, { recursive: true });
     const bumps: (Bump & { supersedes: number[] })[] = [];
@@ -101,7 +104,7 @@ runMain(() => {
     const summary = [
       ...bumps.map(
         (b) =>
-          `- ${b.slug}: bump ${b.from.ref}@${shortSha(b.from.sha)} to ${b.to.ref}@${shortSha(b.to.sha)}${b.note ? ` (${b.note})` : ""}`,
+          `- ${b.slug}: bump ${b.from.ref}@${shortSha(b.from.sha)} to ${b.to.ref}@${shortSha(b.to.sha)}${b.note ? ` (${b.note})` : ""}${b.refChange ? ` (${b.refChange}; not merging itself)` : ""}`,
       ),
       ...plan.skipped.map((s) => `- ${s.slug}: skipped, ${s.reason}`),
       ...plan.failed.map((f) => `- ${f.slug}: **failed**, ${f.error}`),

@@ -18,9 +18,10 @@ import {
   readPin,
   renderBumpBody,
   TAG_PIN_NOTE,
+  type UpstreamState,
 } from "./bump.ts";
 import { parseJsonc } from "./jsonc.ts";
-import type { ChangedFiles, UpstreamSource, UpstreamTarget } from "./upstream.ts";
+import type { ChangedFiles, UpstreamSource } from "./upstream.ts";
 
 const fixtureApps = path.join(import.meta.dirname, "..", "fixtures", "apps");
 const hello = findApp(fixtureApps, "hello");
@@ -30,11 +31,24 @@ const NEW = "89abcdef0123456789abcdef0123456789abcdef";
 const tagPin = readPin(hello); // source.ref v1.2.3
 const branchPin: AppPin = { ...tagPin, source: { ref: "main", sha: PIN } };
 const rcPin: AppPin = { ...tagPin, source: { ref: "v2.0.0-rc.1", sha: PIN } };
-const tag = (ref: string, sha = NEW): UpstreamTarget => ({ ref, sha, kind: "tag" });
-const head = (sha = NEW): UpstreamTarget => ({ ref: "main", sha, kind: "branch" });
 const never = () => {
   throw new Error("must not compare");
 };
+const noBranch = () => {
+  throw new Error("must not read the default branch");
+};
+/** Upstream with one tag and a branch main at the pinned commit; its default branch must not be read. */
+const tag = (name: string, sha = NEW): UpstreamState => ({
+  tags: [{ name, sha }],
+  branch: (b) => (b === "main" ? { name: b, sha: PIN } : null),
+  defaultBranch: noBranch,
+});
+/** Upstream without tags, its default branch `name` at `sha`. */
+const head = (sha = NEW, name = "main"): UpstreamState => ({
+  tags: [],
+  branch: (b) => (b === name ? { name, sha } : null),
+  defaultBranch: () => ({ name, sha }),
+});
 
 function bumped(decision: ReturnType<typeof decideBump>): Bump {
   if (decision.action !== "bump") {
@@ -84,6 +98,29 @@ describe("decideBump for other pins", () => {
     });
   });
 
+  it("leaves a pin on a tag that is not a semver release alone", () => {
+    const monorepoTag: AppPin = { ...tagPin, source: { ref: "app-v0.42.1", sha: PIN } };
+    const upstream: UpstreamState = {
+      tags: [
+        { name: "app-v0.43.0", sha: NEW },
+        { name: "app-v0.42.1", sha: PIN },
+      ],
+      branch: () => null,
+      defaultBranch: noBranch,
+    };
+    expect(decideBump(monorepoTag, upstream, never)).toEqual({
+      action: "skip",
+      reason: "pinned to tag app-v0.42.1, which is not a semver release; left alone",
+    });
+  });
+
+  it("keeps a semver pin on tags after upstream deleted its tag", () => {
+    expect(decideBump(tagPin, head(), never)).toEqual({
+      action: "skip",
+      reason: "pinned to tag v1.2.3, but upstream has no stable tag now; not moving to a branch",
+    });
+  });
+
   it("moves a branch pin only when the new head is ahead of it", () => {
     const asked: string[] = [];
     const ahead = (n: number) => (base: string, h: string) => {
@@ -117,18 +154,159 @@ describe("decideBump for other pins", () => {
     expect(b.to).toEqual({ ref: "v1.0.0", sha: NEW, kind: "tag" });
   });
 
-  it("refuses a tag on an older or unrelated commit", () => {
-    expect(decideBump(branchPin, tag("v1.0.0"), () => ({ ahead: 0, behind: 3 }))).toEqual({
-      action: "skip",
-      reason: `tag v1.0.0@89abcde does not contain the pinned 0123456`,
+  it("does not move a branch pin to a tag on an older or unrelated commit", () => {
+    const olderTag = (sha: string): UpstreamState => ({
+      ...tag("v1.0.0"),
+      branch: (name) => ({ name, sha }),
     });
-    expect(decideBump(branchPin, tag("v1.0.0"), () => ({ ahead: 2, behind: 4 })).action).toBe(
+    expect(decideBump(branchPin, olderTag(PIN), () => ({ ahead: 0, behind: 3 }))).toEqual({
+      action: "skip",
+      reason: "up to date; tag v1.0.0@89abcde does not contain the pinned 0123456",
+    });
+    expect(decideBump(branchPin, olderTag(PIN), () => ({ ahead: 2, behind: 4 })).action).toBe(
       "skip",
     );
     // A tag left on history upstream later rewrote (apps/clist): no common ancestor.
-    expect(decideBump(branchPin, tag("v1.0.0"), () => null)).toEqual({
+    expect(decideBump(branchPin, olderTag(PIN), () => null)).toEqual({
       action: "skip",
-      reason: `tag v1.0.0@89abcde shares no history with the pinned 0123456`,
+      reason: "up to date; tag v1.0.0@89abcde shares no history with the pinned 0123456",
+    });
+  });
+
+  describe("when upstream's newest tag predates the branch pin", () => {
+    const RENAMED =
+      "upstream has no branch main now (it was renamed or deleted), so the pin follows trunk, " +
+      "the default branch";
+    const TAG = "fedcba9876543210fedcba9876543210fedcba98";
+    const HEAD = "4444444444444444444444444444444444444444";
+    // Tags from before the pinned commit, and a default branch renamed from main to trunk.
+    const upstream = (sha: string): UpstreamState => ({
+      tags: [
+        { name: "v2.0.2", sha: TAG },
+        { name: "v2.0.1", sha: TAG },
+      ],
+      branch: (name) => (name === "trunk" ? { name, sha } : null),
+      defaultBranch: () => ({ name: "trunk", sha }),
+    });
+    const relation = (base: string, head: string) => {
+      expect(base).toBe(PIN);
+      return head === TAG ? { ahead: 0, behind: 12 } : { ahead: 3, behind: 0 };
+    };
+
+    it("follows the default branch head, under the branch's new name, without merging itself", () => {
+      const b = bumped(decideBump(branchPin, upstream(HEAD), relation));
+      expect(b).toMatchObject({
+        from: { ref: "main", sha: PIN },
+        to: { ref: "trunk", sha: HEAD, kind: "branch" },
+        title: "chore(hello): bump to trunk@4444444",
+        refChange: RENAMED,
+        autoMerge: false,
+      });
+      expect(b.note).toBeUndefined();
+      const body = renderBumpBody(branchPin, b, null);
+      expect(body).toContain(
+        `The ref changes from \`main\` to \`trunk\`: ${RENAMED}. A bump that changes ` +
+          "`source.ref` to another branch never merges itself.",
+      );
+      expect(body).toContain(
+        "**A maintainer merges this pull request.** It moves `source.ref` to another branch",
+      );
+      expect(body).not.toContain("merges itself.**");
+    });
+
+    it("stays while the renamed branch still points at the pinned commit", () => {
+      expect(decideBump(branchPin, upstream(PIN), relation)).toEqual({
+        action: "skip",
+        reason:
+          `${RENAMED}, which still points at the pinned commit; ` +
+          "tag v2.0.2@fedcba9 does not contain the pinned 0123456",
+      });
+    });
+
+    it("still prefers a later tag that contains the pinned commit", () => {
+      const tagged: UpstreamState = {
+        ...upstream(HEAD),
+        tags: [{ name: "v2.1.0", sha: HEAD }],
+        defaultBranch: noBranch,
+      };
+      expect(bumped(decideBump(branchPin, tagged, relation))).toMatchObject({
+        to: { ref: "v2.1.0", sha: HEAD, kind: "tag" },
+        note: TAG_PIN_NOTE,
+      });
+    });
+  });
+
+  it("follows a branch that is not the default one, and merges itself", () => {
+    const nextPin: AppPin = { ...tagPin, source: { ref: "next", sha: PIN } };
+    const upstream: UpstreamState = {
+      tags: [],
+      branch: (name) => (name === "next" ? { name, sha: NEW } : null),
+      defaultBranch: noBranch,
+    };
+    const b = bumped(decideBump(nextPin, upstream, () => ({ ahead: 2, behind: 0 })));
+    expect(b).toMatchObject({ to: { ref: "next", sha: NEW, kind: "branch" }, autoMerge: true });
+    expect(b.refChange).toBeUndefined();
+    expect(renderBumpBody(nextPin, b, null)).not.toContain("The ref changes");
+  });
+
+  it("treats a ref upstream has as both a branch and a tag as the branch", () => {
+    const pin: AppPin = { ...tagPin, source: { ref: "stable", sha: PIN } };
+    const upstream = (branch: boolean): UpstreamState => ({
+      tags: [{ name: "stable", sha: PIN }],
+      branch: (name) => (branch ? { name, sha: NEW } : null),
+      defaultBranch: noBranch,
+    });
+    expect(bumped(decideBump(pin, upstream(true), () => ({ ahead: 1, behind: 0 }))).to).toEqual({
+      ref: "stable",
+      sha: NEW,
+      kind: "branch",
+    });
+    expect(decideBump(pin, upstream(false), never)).toEqual({
+      action: "skip",
+      reason: "pinned to tag stable, which is not a semver release; left alone",
+    });
+  });
+
+  describe("when upstream has the pinned ref neither as a branch nor as a tag", () => {
+    const gone = (lastBumpTag: string | null = null): UpstreamState => ({
+      tags: [{ name: "app-v0.43.0", sha: NEW }],
+      branch: () => null,
+      defaultBranch: () => ({ name: "main", sha: NEW }),
+      lastBumpTag: () => lastBumpTag,
+    });
+
+    it("never moves a pin that looks like a tag to a branch", () => {
+      for (const ref of ["app-v0.42.1", "deepcrawl@0.5.5", "web-v0.1.1", "release-1.2"]) {
+        const pin: AppPin = { ...tagPin, source: { ref, sha: PIN } };
+        expect(decideBump(pin, gone(), never)).toEqual({
+          action: "skip",
+          reason:
+            `pinned to ${ref}, which upstream has neither as a branch nor as a tag now, and ` +
+            "it looks like a tag; not moving to a branch, choose the new pin by hand",
+        });
+      }
+    });
+
+    it("never moves a pin its last bump put on that tag to a branch", () => {
+      const pin: AppPin = { ...tagPin, source: { ref: "stable", sha: PIN } };
+      expect(decideBump(pin, gone("stable"), never)).toEqual({
+        action: "skip",
+        reason:
+          "pinned to stable, which upstream has neither as a branch nor as a tag now, and " +
+          "the last bump moved the app to that tag; not moving to a branch, choose the new pin by hand",
+      });
+    });
+
+    it("moves any other pin to the default branch, leaving the merge to a maintainer", () => {
+      const pin: AppPin = { ...tagPin, source: { ref: "stable", sha: PIN } };
+      const b = bumped(decideBump(pin, gone("v1.0.0"), () => ({ ahead: 1, behind: 0 })));
+      expect(b).toMatchObject({
+        to: { ref: "main", sha: NEW, kind: "branch" },
+        refChange:
+          "upstream has no branch stable now (it was renamed or deleted), so the pin follows " +
+          "main, the default branch",
+        autoMerge: false,
+      });
     });
   });
 
@@ -339,12 +517,14 @@ describe("gateOnAppDirectories", () => {
 
 describe("planBumps", () => {
   const upstream = (
-    resolve: UpstreamSource["resolve"],
+    resolve: () => UpstreamState,
     changedFiles: UpstreamSource["changedFiles"] = () => {
       throw new Error("must not list files");
     },
   ): UpstreamSource => ({
-    resolve,
+    tags: () => [...resolve().tags],
+    branch: (_repo, name) => resolve().branch(name),
+    defaultBranch: noBranch,
     compare: () => ({ total: 0, subjects: [] }),
     relation: () => ({ ahead: 1, behind: 0 }),
     changedFiles,
@@ -377,6 +557,95 @@ describe("planBumps", () => {
     );
     expect(plan.failed).toEqual([{ slug: "hello-again", error: "HTTP 404: repository gone" }]);
     expect(plan.bumps).toHaveLength(2);
+  });
+
+  it("reads the default branch for a branch pin whose tags predate it", () => {
+    const root = mkdtempSync(path.join(tmpdir(), "appflare-bump-branch-"));
+    try {
+      const dir = path.join(root, "hello");
+      mkdirSync(dir);
+      const text = readFileSync(hello.manifestPath, "utf8").replace('"v1.2.3"', '"main"');
+      writeFileSync(path.join(dir, "appflare.jsonc"), text);
+      const read: string[] = [];
+      const plan = planBumps([findApp(root, "hello")], {
+        tags: () => [{ name: "v1.0.0", sha: NEW }],
+        branch: () => null,
+        defaultBranch: (repo) => {
+          read.push(repo);
+          return { name: "trunk", sha: "4444444444444444444444444444444444444444" };
+        },
+        compare: never,
+        relation: (_repo, _base, head) =>
+          head === NEW ? { ahead: 0, behind: 2 } : { ahead: 1, behind: 0 },
+        changedFiles: never,
+      });
+      expect(plan.failed).toEqual([]);
+      expect(read).toEqual(["example/hello"]);
+      expect(plan.bumps.map((b) => [b.to.ref, b.title, b.autoMerge])).toEqual([
+        ["trunk", "chore(hello): bump to trunk@4444444", false],
+      ]);
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
+  });
+
+  it("fails the app, never falls back, when the pinned branch cannot be read", () => {
+    const root = mkdtempSync(path.join(tmpdir(), "appflare-bump-branch-error-"));
+    try {
+      const dir = path.join(root, "hello");
+      mkdirSync(dir);
+      const text = readFileSync(hello.manifestPath, "utf8").replace('"v1.2.3"', '"main"');
+      writeFileSync(path.join(dir, "appflare.jsonc"), text);
+      const plan = planBumps([findApp(root, "hello")], {
+        tags: () => [],
+        branch: () => {
+          throw new Error("gh api GET repos/example/hello/branches/main: HTTP 502");
+        },
+        defaultBranch: noBranch,
+        compare: never,
+        relation: never,
+        changedFiles: never,
+      });
+      expect(plan.bumps).toEqual([]);
+      expect(plan.failed).toEqual([
+        { slug: "hello", error: "gh api GET repos/example/hello/branches/main: HTTP 502" },
+      ]);
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
+  });
+
+  it("asks for the app's last bump only for a ref upstream no longer has", () => {
+    const root = mkdtempSync(path.join(tmpdir(), "appflare-bump-last-"));
+    try {
+      const dir = path.join(root, "hello");
+      mkdirSync(dir);
+      const text = readFileSync(hello.manifestPath, "utf8").replace('"v1.2.3"', '"stable"');
+      writeFileSync(path.join(dir, "appflare.jsonc"), text);
+      const asked: string[] = [];
+      const plan = planBumps(
+        [findApp(root, "hello")],
+        {
+          tags: () => [],
+          branch: () => null,
+          defaultBranch: noBranch,
+          compare: never,
+          relation: never,
+          changedFiles: never,
+        },
+        (slug) => {
+          asked.push(slug);
+          return "stable";
+        },
+      );
+      expect(asked).toEqual(["hello"]);
+      expect(plan.skipped.map((s) => s.reason)).toEqual([
+        "pinned to stable, which upstream has neither as a branch nor as a tag now, and " +
+          "the last bump moved the app to that tag; not moving to a branch, choose the new pin by hand",
+      ]);
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
   });
 
   it("skips an app in a subdirectory when the target leaves that directory alone", () => {
@@ -617,7 +886,11 @@ describe("auto-merge", () => {
   const optOutPin = readPin(optOutApp);
   const plan1 = (app: AppEntry): Bump => {
     const plan = planBumps([app], {
-      resolve: () => tag("v1.3.0"),
+      tags: () => [{ name: "v1.3.0", sha: NEW }],
+      branch: () => {
+        throw new Error("must not read a branch");
+      },
+      defaultBranch: noBranch,
       compare: () => ({ total: 0, subjects: [] }),
       relation: never,
       changedFiles: never,

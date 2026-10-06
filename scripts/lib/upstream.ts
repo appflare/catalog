@@ -2,11 +2,10 @@ import { z } from "zod";
 import { GhNotFoundError, type GhRequest, type GhRunner, runGh } from "./gh-api.ts";
 
 /**
- * Where an app's upstream is now, for the bump workflow. A repository with
- * stable semver tags is tracked by its newest tag (ordered by semver, not by
- * date, so a patch to an old line never outranks a newer release);
- * prerelease tags are ignored. A repository without them is tracked by its
- * default branch's head commit, with `ref` set to the branch name.
+ * Where an app's upstream is now, for the bump workflow: its tags, of which
+ * the newest stable semver tag counts (ordered by semver, not by date, so a
+ * patch to an old line never outranks a newer release; prerelease tags are
+ * ignored), and its default branch's head commit.
  */
 
 export interface CommitRelation {
@@ -66,15 +65,9 @@ export function newestStableTag(tags: readonly UpstreamTag[]): UpstreamTag | nul
   return best?.tag ?? null;
 }
 
-/** Picks the target from the repository's tags, or its default branch head without them. */
-export function pickUpstreamTarget(
-  tags: readonly UpstreamTag[],
-  branch: { name: string; sha: string },
-): UpstreamTarget {
-  const tag = newestStableTag(tags);
-  return tag
-    ? { ref: tag.name, sha: tag.sha, kind: "tag" }
-    : { ref: branch.name, sha: branch.sha, kind: "branch" };
+export interface UpstreamBranch {
+  name: string;
+  sha: string;
 }
 
 /**
@@ -99,10 +92,20 @@ const changedFilesSchema = z.object({
 
 const tagSchema = z.object({ name: z.string(), sha: z.string().regex(/^[0-9a-f]{40}$/) });
 const shaSchema = z.string().regex(/^[0-9a-f]{40}$/);
+const branchSchema = z.object({ name: z.string(), sha: shaSchema });
 
 /** Reads the upstream state with read-only `gh api` calls. */
 export interface UpstreamSource {
-  resolve(repo: string): UpstreamTarget;
+  /** Every tag of the repository, with the commit it points at. */
+  tags(repo: string): UpstreamTag[];
+  /** The repository's default branch, under its current name, and its head commit. */
+  defaultBranch(repo: string): UpstreamBranch;
+  /**
+   * The branch `name` and its head commit; null when the repository has no
+   * branch of that name (HTTP 404: deleted or renamed). Any other failure
+   * throws.
+   */
+  branch(repo: string, name: string): UpstreamBranch | null;
   /** Commit subjects between two SHAs (oldest first) and the total count. */
   compare(repo: string, from: string, to: string): { total: number; subjects: string[] };
   /**
@@ -130,8 +133,8 @@ export function createGhUpstream(run: GhRunner = runGh): UpstreamSource {
     }
   };
   return {
-    resolve(repo) {
-      const tags = text({
+    tags(repo) {
+      return text({
         path: `repos/${repo}/tags?per_page=100`,
         paginate: true,
         jq: ".[] | {name, sha: .commit.sha} | @json",
@@ -139,17 +142,34 @@ export function createGhUpstream(run: GhRunner = runGh): UpstreamSource {
         .split("\n")
         .filter((l) => l.trim())
         .map((l) => tagSchema.parse(JSON.parse(l)));
-      if (newestStableTag(tags)) {
-        return pickUpstreamTarget(tags, { name: "", sha: "" });
-      }
-      const branch = text({ path: `repos/${repo}`, jq: ".default_branch" });
-      if (!branch) {
+    },
+    defaultBranch(repo) {
+      const name = text({ path: `repos/${repo}`, jq: ".default_branch" });
+      if (!name) {
         throw new Error(`${repo} has no default branch`);
       }
       const sha = shaSchema.parse(
-        text({ path: `repos/${repo}/commits/${encodeURIComponent(branch)}`, jq: ".sha" }),
+        text({ path: `repos/${repo}/commits/${encodeURIComponent(name)}`, jq: ".sha" }),
       );
-      return { ref: branch, sha, kind: "branch" };
+      return { name, sha };
+    },
+    branch(repo, name) {
+      let out: string;
+      try {
+        out = text({
+          path: `repos/${repo}/branches/${encodeURIComponent(name)}`,
+          jq: "{name, sha: .commit.sha} | @json",
+        });
+      } catch (err) {
+        if (err instanceof GhNotFoundError) {
+          return null;
+        }
+        throw err;
+      }
+      const branch = branchSchema.parse(JSON.parse(out));
+      // GitHub may redirect a renamed branch's old name to its new one; the
+      // pinned name is then gone all the same.
+      return branch.name === name ? branch : null;
     },
     compare(repo, from, to) {
       const out = JSON.parse(

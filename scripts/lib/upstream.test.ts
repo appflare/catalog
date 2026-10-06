@@ -7,7 +7,6 @@ import {
   isPrereleaseTag,
   newestStableTag,
   parseStableTag,
-  pickUpstreamTarget,
 } from "./upstream.ts";
 
 const sha = (c: string) => c.repeat(40);
@@ -45,26 +44,6 @@ describe("newestStableTag", () => {
   });
 });
 
-describe("pickUpstreamTarget", () => {
-  const branch = { name: "main", sha: sha("f") };
-
-  it("prefers the newest stable tag", () => {
-    expect(pickUpstreamTarget([{ name: "v0.2.0", sha: sha("2") }], branch)).toEqual({
-      ref: "v0.2.0",
-      sha: sha("2"),
-      kind: "tag",
-    });
-  });
-
-  it("falls back to the default branch head without stable tags", () => {
-    expect(pickUpstreamTarget([{ name: "v1.0.0-rc.1", sha: sha("1") }], branch)).toEqual({
-      ref: "main",
-      sha: sha("f"),
-      kind: "branch",
-    });
-  });
-});
-
 describe("createGhUpstream", () => {
   function gh(routes: Record<string, string>): GhRunner & { calls: string[] } {
     const calls: string[] = [];
@@ -81,37 +60,58 @@ describe("createGhUpstream", () => {
     return fn;
   }
 
-  it("resolves a tagged repository to its newest stable tag without reading branches", () => {
+  it("lists every tag with its commit, across pages", () => {
     const run = gh({
       "repos/o/r/tags?per_page=100": [
         JSON.stringify({ name: "v1.2.0", sha: sha("1") }),
-        JSON.stringify({ name: "v1.10.0", sha: sha("2") }),
+        JSON.stringify({ name: "app-v1.10.0", sha: sha("2") }),
         JSON.stringify({ name: "v2.0.0-rc.1", sha: sha("3") }),
       ].join("\n"),
     });
-    expect(createGhUpstream(run).resolve("o/r")).toEqual({
-      ref: "v1.10.0",
-      sha: sha("2"),
-      kind: "tag",
-    });
+    expect(createGhUpstream(run).tags("o/r")).toEqual([
+      { name: "v1.2.0", sha: sha("1") },
+      { name: "app-v1.10.0", sha: sha("2") },
+      { name: "v2.0.0-rc.1", sha: sha("3") },
+    ]);
     expect(run.calls).toEqual(["repos/o/r/tags?per_page=100"]);
   });
 
-  it("resolves an untagged repository to its default branch head", () => {
+  it("lists no tags for an untagged repository", () => {
+    expect(createGhUpstream(gh({ "repos/o/r/tags?per_page=100": "" })).tags("o/r")).toEqual([]);
+  });
+
+  it("reads the default branch under its current name, with its head commit", () => {
     const run = gh({
-      "repos/o/r/tags?per_page=100": "",
       "repos/o/r": "trunk",
       "repos/o/r/commits/trunk": sha("9"),
     });
-    expect(createGhUpstream(run).resolve("o/r")).toEqual({
-      ref: "trunk",
-      sha: sha("9"),
-      kind: "branch",
+    expect(createGhUpstream(run).defaultBranch("o/r")).toEqual({ name: "trunk", sha: sha("9") });
+  });
+
+  it("reads a branch's head, and null for a branch upstream does not have", () => {
+    const run = gh({
+      "repos/o/r/branches/release%2F2.x": JSON.stringify({ name: "release/2.x", sha: sha("7") }),
     });
+    const upstream = createGhUpstream(run);
+    expect(upstream.branch("o/r", "release/2.x")).toEqual({ name: "release/2.x", sha: sha("7") });
+    expect(upstream.branch("o/r", "main")).toBe(null);
+  });
+
+  it("reads a branch GitHub redirects to another name as gone", () => {
+    const run = gh({ "repos/o/r/branches/main": JSON.stringify({ name: "trunk", sha: sha("7") }) });
+    expect(createGhUpstream(run).branch("o/r", "main")).toBe(null);
+  });
+
+  it("throws any failure reading a branch other than 404", () => {
+    const run = (() => {
+      throw new Error("gh api GET repos/o/r/branches/main: HTTP 502");
+    }) as GhRunner;
+    expect(() => createGhUpstream(run).branch("o/r", "main")).toThrow("HTTP 502");
   });
 
   it("propagates API failures", () => {
-    expect(() => createGhUpstream(gh({})).resolve("o/missing")).toThrow(/HTTP 404/);
+    expect(() => createGhUpstream(gh({})).tags("o/missing")).toThrow(/HTTP 404/);
+    expect(() => createGhUpstream(gh({})).defaultBranch("o/missing")).toThrow(/HTTP 404/);
   });
 });
 

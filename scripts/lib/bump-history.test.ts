@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { createGhBumpHistory } from "./bump-history.ts";
+import { createGhBumpHistory, lastBumpTag } from "./bump-history.ts";
 import type { GhRequest, GhRunner } from "./gh-api.ts";
 
 const A = "a".repeat(40);
@@ -88,5 +88,39 @@ describe("createGhBumpHistory", () => {
     ]);
     expect(requests.every((r) => r.paginate)).toBe(true);
     expect(() => history.reportedChecks("main")).toThrow();
+  });
+});
+
+describe("lastBumpTag", () => {
+  it("reads the tag of the app's newest bump commit", () => {
+    expect(
+      lastBumpTag("cut", [
+        "docs(cut): describe the settings",
+        "chore(cutter): bump to v9.0.0",
+        "chore(cut): bump to cut@0.5.5 (#21)",
+        "chore(cut): bump to main@1234567",
+      ]),
+    ).toBe("cut@0.5.5");
+    expect(lastBumpTag("cut", ["chore(cut): bump to app-v0.42.1"])).toBe("app-v0.42.1");
+  });
+
+  it("is null when the newest bump moved to a branch head or names only the commit", () => {
+    expect(
+      lastBumpTag("cut", ["chore(cut): bump to main@1234567 (#3)", "chore(cut): bump to v1.0.0"]),
+    ).toBe(null);
+    expect(lastBumpTag("cut", ["chore(cut): bump to 89abcde"])).toBe(null);
+    expect(lastBumpTag("cut", ["feat(cut): add the entry"])).toBe(null);
+  });
+
+  it("reads the app manifest's commits on the default branch", () => {
+    const requests: GhRequest[] = [];
+    const run: GhRunner = (request) => {
+      requests.push(request);
+      return Buffer.from("chore(cut): bump to stable (#4)\nfeat(cut): add the entry\n");
+    };
+    expect(createGhBumpHistory("appflare/catalog", run).lastBumpTag("cut")).toBe("stable");
+    expect(requests.map((r) => r.path)).toEqual([
+      "repos/appflare/catalog/commits?path=apps%2Fcut%2Fappflare.jsonc&per_page=30",
+    ]);
   });
 });

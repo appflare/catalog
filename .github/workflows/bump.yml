@@ -1,13 +1,15 @@
 name: bump
 
-# Nightly: for each app, find where its upstream is now (the newest stable
-# semver tag, or the default branch head for repositories without one) and,
-# when that is ahead of the pin in appflare.jsonc, open one pull request per
-# app on bump/<slug>/<short sha> that moves source.ref and source.sha. Tag pins
-# only move to greater versions; prerelease pins are left alone. A target that
-# already has a branch or pull request is skipped, so a closed bump is not
-# reopened; branch-tracked apps get at most one new bump a week, and a new bump
-# closes the app's older open ones.
+# Nightly: for each app, find where its upstream is now and, when that is ahead
+# of the pin in appflare.jsonc, open one pull request per app on
+# bump/<slug>/<short sha> that moves source.ref and source.sha. Tag pins only
+# move to greater semver tags; prerelease and other non-semver tag pins are left
+# alone. A branch pin moves to a newer stable tag that contains it, otherwise to
+# its branch's head; when upstream no longer has that branch, to the default
+# branch's head under its current name, unless the ref looks like a deleted tag,
+# which is left alone. A target that already has a branch or pull request is
+# skipped, so a closed bump is not reopened; branch-tracked apps get at most one
+# new bump a week, and a new bump closes the app's older open ones.
 #
 # One app's failure (an upstream that cannot be read, or a pull request that
 # cannot be opened) skips that app only, with a warning; the run still
@@ -32,9 +34,10 @@ name: bump
 # matches its hashes and installs, not upstream's code, and users choose when to
 # update. A bump of an artifact tier app gets GitHub auto-merge (squash) enabled
 # on its pull request, so it merges once the required checks pass, unless its
-# appflare.jsonc sets bump.autoMerge to false or sets source.version. Those
-# bumps, and every bump of a sandbox or self-deploying app (CI does not install
-# either), wait for a maintainer.
+# appflare.jsonc sets bump.autoMerge to false or sets source.version, or the
+# bump moves source.ref to another branch. Those bumps, and every bump of a
+# sandbox or self-deploying app (CI does not install either), wait for a
+# maintainer.
 #
 # Auto-merge is enabled with the GraphQL mutation rather than `gh pr merge
 # --auto`, because gh merges at once when the pull request is already
