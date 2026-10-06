@@ -9,7 +9,9 @@ import {
   type CommitRelation,
   compareSemver,
   isPrereleaseTag,
+  newestInSeries,
   newestStableTag,
+  parseSeriesTag,
   parseStableTag,
   type UpstreamBranch,
   type UpstreamSource,
@@ -185,6 +187,9 @@ export function looksLikeTag(ref: string): boolean {
  *
  * - a stable tag pin moves only to the newest stable tag, when its version is
  *   greater, never to a branch head;
+ * - a pin on a tag with a prefix (`app-v0.42.1`) moves to the newest stable
+ *   tag of the same prefix, when it is newer and contains the pinned commit
+ *   (see `decideSeriesBump`);
  * - a prerelease tag pin, or a pin on a tag that is not a semver release, is
  *   left alone (someone chose it on purpose). A ref that is a branch upstream
  *   is a branch, even when a tag shares its name;
@@ -235,10 +240,7 @@ export function decideBump(
   const pinnedBranch = upstream.branch(ref);
   if (!pinnedBranch) {
     if (upstream.tags.some((t) => t.name === ref)) {
-      return {
-        action: "skip",
-        reason: `pinned to tag ${ref}, which is not a semver release; left alone`,
-      };
+      return decideSeriesBump(pin, upstream.tags, relation);
     }
     const why = looksLikeTag(ref)
       ? "it looks like a tag"
@@ -293,6 +295,52 @@ export function decideBump(
     );
   }
   return { action: "bump", bump: bumpFor(pin, target, refChange) };
+}
+
+/**
+ * For a pin on a tag with a prefix before its version (`app-v0.42.1`,
+ * `deepcrawl@0.5.5`, as monorepos tag each of their apps): the newest stable
+ * tag with the same prefix, when its version is greater and its commit is the
+ * pinned commit or contains it, the check a branch pin's move to a tag makes.
+ * A tag of another series (`web-v1.0.0`) is never a target, and neither is a
+ * prerelease. The move keeps `source.ref` on a tag, so it merges itself under
+ * the same rules as any tag bump.
+ */
+function decideSeriesBump(
+  pin: AppPin,
+  tags: readonly UpstreamTag[],
+  relation: (base: string, head: string) => CommitRelation | null,
+): BumpDecision {
+  const { ref, sha } = pin.source;
+  const series = parseSeriesTag(ref);
+  if (!series) {
+    return {
+      action: "skip",
+      reason: `pinned to tag ${ref}, which is not a semver release; left alone`,
+    };
+  }
+  if (!series.stable) {
+    return { action: "skip", reason: `pinned to prerelease ${ref}; left alone` };
+  }
+  const next = newestInSeries(tags, series.prefix, series.stable);
+  if (!next) {
+    return {
+      action: "skip",
+      reason: `pinned to tag ${ref}; upstream has no stable ${series.prefix}<version> tag newer than it; left alone`,
+    };
+  }
+  const related = next.sha === sha ? { ahead: 0, behind: 0 } : relation(sha, next.sha);
+  if (related !== null && related.behind === 0) {
+    return { action: "bump", bump: bumpFor(pin, tagTarget(next)) };
+  }
+  const tag = `tag ${next.name}@${shortSha(next.sha)}`;
+  return {
+    action: "skip",
+    reason:
+      related === null
+        ? `${tag} shares no history with the pinned ${shortSha(sha)}; left alone`
+        : `${tag} does not contain the pinned ${shortSha(sha)}; left alone`,
+  };
 }
 
 function tagTarget(tag: UpstreamTag): UpstreamTarget {
@@ -517,14 +565,23 @@ export function renderBumpBody(
     }
   }
   if (pin.source.version !== undefined) {
+    const manifest = `\`apps/${pin.slug}/appflare.jsonc\``;
+    const now = `(it is ${codeSpan(pin.source.version)} now)`;
+    const refused =
+      "publish refuses a moved pin under a `source.version` that is already released.";
+    const tagged = bump.to.kind === "tag" ? parseSeriesTag(bump.to.ref) : null;
     lines.push(
       "",
       "Before merging:",
       "",
-      `- [ ] Set \`source.version\` in \`apps/${pin.slug}/appflare.jsonc\` to ${pin.name}'s ` +
-        `version at the new commit (it is ${codeSpan(pin.source.version)} now). The repository's ` +
-        "tag does not describe this app, so this pull request cannot tell the new version, and " +
-        "publish refuses a moved pin under a `source.version` that is already released.",
+      tagged && tagged.prefix !== "" && tagged.prefix !== "v"
+        ? `- [ ] Set \`source.version\` in ${manifest} to ${codeSpan(tagged.version)}, the ` +
+            `version in the new tag ${codeSpan(bump.to.ref)} ${now}. The packer reads a ` +
+            "version only from a tag that is a bare version such as `v1.2.3`, and " +
+            refused
+        : `- [ ] Set \`source.version\` in ${manifest} to ${pin.name}'s version at the new ` +
+            `commit ${now}. The repository's tag does not describe this app, so this pull ` +
+            `request cannot tell the new version, and ${refused}`,
     );
   }
   lines.push("", checksText(pin.tier), "", mergePathText(pin, bump));

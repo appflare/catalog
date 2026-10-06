@@ -5,7 +5,9 @@ import {
   compareSemver,
   createGhUpstream,
   isPrereleaseTag,
+  newestInSeries,
   newestStableTag,
+  parseSeriesTag,
   parseStableTag,
 } from "./upstream.ts";
 
@@ -41,6 +43,62 @@ describe("newestStableTag", () => {
 
   it("returns null when only prereleases exist", () => {
     expect(newestStableTag([{ name: "v3.0.0-alpha", sha: sha("a") }])).toBe(null);
+  });
+});
+
+describe("parseSeriesTag", () => {
+  it("splits a tag into the prefix before its version and the version", () => {
+    expect(parseSeriesTag("app-v0.42.1")).toEqual({
+      prefix: "app-v",
+      version: "0.42.1",
+      stable: { major: 0, minor: 42, patch: 1 },
+    });
+    expect(parseSeriesTag("deepcrawl@0.5.5")).toMatchObject({ prefix: "deepcrawl@" });
+    expect(parseSeriesTag("v1.2.3")).toMatchObject({ prefix: "v", version: "1.2.3" });
+    expect(parseSeriesTag("1.2.3")).toMatchObject({ prefix: "", version: "1.2.3" });
+    expect(parseSeriesTag("app-v10.0.0")).toMatchObject({ prefix: "app-v", version: "10.0.0" });
+    expect(parseSeriesTag("web-v2.0.0+build.1")).toMatchObject({
+      prefix: "web-v",
+      version: "2.0.0+build.1",
+      stable: { major: 2, minor: 0, patch: 0 },
+    });
+  });
+
+  it("marks a prerelease as not stable", () => {
+    expect(parseSeriesTag("deepcrawl@0.7.0-beta.1")).toEqual({
+      prefix: "deepcrawl@",
+      version: "0.7.0-beta.1",
+      stable: null,
+    });
+  });
+
+  it("is null for a tag that does not end in a semver version", () => {
+    for (const tag of ["release-1.2", "latest", "app-v01.0.0", "v1.2.3-", "app-v1.2.3.x"]) {
+      expect(parseSeriesTag(tag)).toBe(null);
+    }
+  });
+});
+
+describe("newestInSeries", () => {
+  const tags = [
+    { name: "app-v0.9.0", sha: sha("a") },
+    { name: "app-v0.10.0", sha: sha("b") },
+    { name: "app-v1.0.0-rc.1", sha: sha("c") },
+    { name: "web-v5.0.0", sha: sha("d") },
+    { name: "v9.0.0", sha: sha("e") },
+    { name: "my-app-v3.0.0", sha: sha("f") },
+  ];
+
+  it("is the newest stable tag with exactly that prefix, newer than the version", () => {
+    expect(newestInSeries(tags, "app-v", { major: 0, minor: 8, patch: 0 })).toEqual({
+      name: "app-v0.10.0",
+      sha: sha("b"),
+    });
+  });
+
+  it("is null when the series has nothing newer", () => {
+    expect(newestInSeries(tags, "app-v", { major: 0, minor: 10, patch: 0 })).toBe(null);
+    expect(newestInSeries(tags, "cli-v", { major: 0, minor: 0, patch: 1 })).toBe(null);
   });
 });
 

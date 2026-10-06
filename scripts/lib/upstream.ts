@@ -5,7 +5,8 @@ import { GhNotFoundError, type GhRequest, type GhRunner, runGh } from "./gh-api.
  * Where an app's upstream is now, for the bump workflow: its tags, of which
  * the newest stable semver tag counts (ordered by semver, not by date, so a
  * patch to an old line never outranks a newer release; prerelease tags are
- * ignored), and its default branch's head commit.
+ * ignored), or for a pin on a tag with a prefix (`app-v0.42.1`), the newest
+ * stable tag with the same prefix; and its branches' head commits.
  */
 
 export interface CommitRelation {
@@ -59,6 +60,66 @@ export function newestStableTag(tags: readonly UpstreamTag[]): UpstreamTag | nul
   for (const tag of tags) {
     const parts = parseStableTag(tag.name);
     if (parts && (!best || compareSemver(parts, best.parts) > 0)) {
+      best = { tag, parts };
+    }
+  }
+  return best?.tag ?? null;
+}
+
+/**
+ * A tag split into its version and everything before it, the prefix that names
+ * the series: `app-v0.42.1` is `app-v` and `0.42.1`, `deepcrawl@0.5.5` is
+ * `deepcrawl@` and `0.5.5`, `v1.2.3` is `v` and `1.2.3`.
+ */
+export interface SeriesTag {
+  prefix: string;
+  /** The semver after the prefix, prerelease and build metadata included. */
+  version: string;
+  /** The release's numbers; null for a prerelease (`app-v1.0.0-rc.1`). */
+  stable: SemverParts | null;
+}
+
+// The shortest prefix wins, so `app-v10.0.0` is `app-v` and `10.0.0`; a
+// prefix never ends in a digit, so `app-v01.0.0` is not a release.
+const SERIES_TAG =
+  /^((?:.*?[^0-9])?)((0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?)$/;
+
+/** Splits a tag that ends in a semver version; null for any other tag. */
+export function parseSeriesTag(tag: string): SeriesTag | null {
+  const match = SERIES_TAG.exec(tag);
+  if (!match) {
+    return null;
+  }
+  const [, prefix = "", version = "", major, minor, patch, prerelease] = match;
+  return {
+    prefix,
+    version,
+    stable:
+      prerelease === undefined
+        ? { major: Number(major), minor: Number(minor), patch: Number(patch) }
+        : null,
+  };
+}
+
+/**
+ * The newest stable tag of the series `prefix` with a version greater than
+ * `than`; null when there is none. Only an exact prefix counts (`web-v` is not
+ * `app-v`), and ties prefer the first listed, as in {@link newestStableTag}.
+ */
+export function newestInSeries(
+  tags: readonly UpstreamTag[],
+  prefix: string,
+  than: SemverParts,
+): UpstreamTag | null {
+  let best: { tag: UpstreamTag; parts: SemverParts } | null = null;
+  for (const tag of tags) {
+    const series = parseSeriesTag(tag.name);
+    const parts = series?.prefix === prefix ? series.stable : null;
+    if (
+      parts &&
+      compareSemver(parts, than) > 0 &&
+      (!best || compareSemver(parts, best.parts) > 0)
+    ) {
       best = { tag, parts };
     }
   }

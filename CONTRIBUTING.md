@@ -1595,9 +1595,21 @@ A bump only ever moves forward:
 
 - A pin on a stable tag moves only to a tag with a greater version. It never
   moves to an older tag, and never to a branch head if the tags disappear.
-- A pin on a prerelease tag, or on a tag that is not a semver release
-  (`app-v0.42.1` in a monorepo), is left alone and noted in the run summary;
-  someone chose it on purpose.
+- A pin on a tag with a prefix before its version, as monorepos tag each of
+  their apps (`app-v0.42.1`, `web-v0.1.1`, `deepcrawl@0.5.5`), follows its own
+  series: the prefix is everything before the version (`app-v`, `web-v`,
+  `deepcrawl@`). It moves to the newest tag with exactly that prefix whose
+  version is a stable release greater than the pinned one, prereleases such as
+  `deepcrawl@0.7.0-beta.1` ignored, and only when that tag is on the pinned
+  commit or on a later one that contains it (`behind_by == 0`, as below). A tag
+  with another prefix (`web-v1.0.0` for an `app-v` pin, or a plain `v1.0.0`) is
+  never a target. When the series has no newer stable tag, or its newest tag
+  does not contain the pinned commit, the pin is left alone and the run summary
+  says why. `source.ref` stays on a tag of the same series, so the bump merges
+  itself under the same rules as any tag bump (see "Who merges a bump").
+- A pin on a prerelease tag (`v2.0.0-rc.1`, `app-v1.0.0-rc.1`), or on a tag
+  without a semver version at its end (`release-1.2`), is left alone and noted
+  in the run summary; someone chose it on purpose.
 - A pin on a branch moves to the repository's newest stable tag when the tag
   is on the pinned commit or on a later one that contains it, meaning GitHub's
   compare API reports `behind_by == 0` from the pin to the tag. A tag pin gives
@@ -1642,7 +1654,10 @@ place, keeping the manifest's comments and layout. It commits
 `bump/<slug>/<short sha>` and opens a pull request. The pull request body links
 the upstream compare view and lists the commits in between. For an app that sets
 `source.version`, the body also has a checklist item to update it: the
-workflow cannot know the app's new version.
+workflow does not change it. When the new pin is a tag with a prefix, the item
+names the version in the tag (`0.6.0` for `deepcrawl@0.6.0`), since the packer
+reads a version only from a tag that is a bare version such as `v1.2.3`;
+otherwise the workflow cannot know the app's new version.
 
 Cadence and cleanup:
 
@@ -1694,7 +1709,10 @@ and branch-tracked entries alike, when the entry:
 - does not opt out with `"bump": { "autoMerge": false }`;
 
 and the bump does not move `source.ref` to another branch (see "Keeping pins
-current").
+current"). A move to the next tag of a prefixed series (`app-v0.42.1` to
+`app-v0.43.0`) is a tag bump like any other. An entry pinned to such a tag
+usually sets `source.version`, since the packer cannot read a version from the
+tag, so a maintainer merges its bumps after updating it.
 
 `bump.yml` enables GitHub auto-merge on such a pull request right after opening
 it, before the checks start. GitHub squash-merges it once the required checks
