@@ -9,12 +9,14 @@ import type {
   ArtifactFile,
   ArtifactManifest,
   ArtifactQueueConsumer,
+  ArtifactWorker,
   CatalogD1Seed,
   HealthMode,
   Plan,
   QueueRef,
   R2LifecycleRule,
   VectorizeMetadataIndex,
+  WorkflowSettings,
 } from "./types.ts";
 
 export type { HealthMode } from "./types.ts";
@@ -735,6 +737,33 @@ function queueName(resource: string): string {
   return resource;
 }
 
+/**
+ * The settings the artifact records for the Workflow of `binding`
+ * (`worker.workflowSettings`), as keys of its `workflows[]` entry; empty when
+ * it records none. wrangler sends each one the config sets in the
+ * `PUT /workflows/{name}` that creates the Workflow after the upload, the
+ * call the manager makes with the same settings, so the check's Workflow
+ * gets the app's step limit, concurrency, schedules and retention. The
+ * schema records settings only for a binding of the Worker that defines the
+ * Workflow, the one place wrangler accepts them. A schedule needs Workers
+ * Paid, which the schema has the entry declare, so a free CI account skips
+ * such an entry (see {@link paidPlanSkip}).
+ */
+export function workflowSettingsOf(
+  worker: Pick<ArtifactWorker, "workflowSettings">,
+  binding: string,
+): WorkflowSettings {
+  const recorded = worker.workflowSettings ?? {};
+  if (!Object.hasOwn(recorded, binding)) return {};
+  const { limits, concurrency, schedules, default_retention } = recorded[binding] ?? {};
+  return {
+    ...(limits === undefined ? {} : { limits }),
+    ...(concurrency === undefined ? {} : { concurrency }),
+    ...(schedules === undefined ? {} : { schedules: [...schedules] }),
+    ...(default_retention === undefined ? {} : { default_retention }),
+  };
+}
+
 /** Wrangler's consumer settings in the API's names and units (seconds become ms), as the manager sends them. */
 export function consumerSettings(consumer: ArtifactQueueConsumer): QueueConsumerSettings {
   const settings: QueueConsumerSettings = {};
@@ -949,7 +978,7 @@ export function planCiInstall(
   const d1: Record<string, string>[] = [];
   const r2: Record<string, string>[] = [];
   const durableObjects: Record<string, string>[] = [];
-  const workflows: Record<string, string>[] = [];
+  const workflows: Record<string, unknown>[] = [];
   const analytics: Record<string, string>[] = [];
   const vectorize: Record<string, string>[] = [];
   const vectorizeIndexes: CiVectorizeIndex[] = [];
@@ -1044,6 +1073,7 @@ export function planCiInstall(
           name: resource,
           class_name: str(binding, "class_name"),
           ...optionalStr(binding, "script_name"),
+          ...workflowSettingsOf(worker, binding.name),
         });
         resources.push({ type: "workflow", name: resource, binding: binding.name });
         break;
