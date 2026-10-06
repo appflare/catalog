@@ -1611,11 +1611,17 @@ A bump only ever moves forward:
 
 An app whose `install.wranglerConfig` is in a subdirectory of its repository
 (`r2-explorer-template/wrangler.json`) moves only when GitHub's compare API lists
-a changed file under that directory between the pin and the target. Otherwise
-the run summary notes the skip and the pin stays; the next run compares from the
-same pin again, so a later change to the directory is still found. When the
-compare lists 300 files, the most GitHub returns, the list may be cut short and
-the bump goes ahead.
+a changed file, between the pin and the target, under one of its directories:
+the directory of each Worker's config (`install.wranglerConfig` and every
+`install.workers[].wranglerConfig`) and each directory `install.installDirs`
+lists, since the build installs from those. An app is never held back this way
+when one of these is the repository root (an `installDirs` entry of `.`
+included). Only those directories count: a change elsewhere, such as the root
+lockfile while `installDirs` is absent, does not move the pin by itself.
+Otherwise the run summary notes the skip and the pin stays; the next run compares
+from the same pin again, so a later change to the directories is still found.
+When the compare lists 300 files, the most GitHub returns, the list may be cut
+short and the bump goes ahead.
 
 For each app that moves, the workflow edits `source.ref` and `source.sha` in
 place, keeping the manifest's comments and layout. It commits
