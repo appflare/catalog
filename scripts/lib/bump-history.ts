@@ -12,6 +12,30 @@ export interface BumpHistory {
    * request's checks and of the ruleset's required checks.
    */
   reportedChecks(sha: string): string[];
+  /**
+   * The tag the app's last bump commit on the default branch moved it to,
+   * read from its subject (see {@link lastBumpTag}).
+   */
+  lastBumpTag(slug: string): string | null;
+}
+
+/**
+ * The tag in the newest bump commit subject of `slug` among `subjects`
+ * (newest first): `chore(<slug>): bump to <tag>`, with the pull request number
+ * a squash merge adds. Null when that bump moved the app to a branch head
+ * (`<branch>@<short sha>`), when its subject names only the commit (a tag too
+ * long for the header), or when there is no bump.
+ */
+export function lastBumpTag(slug: string, subjects: readonly string[]): string | null {
+  const escaped = slug.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const bump = new RegExp(`^chore\\(${escaped}\\): bump to (\\S+)(?: \\(#\\d+\\))?$`);
+  for (const subject of subjects) {
+    const label = bump.exec(subject)?.[1];
+    if (label !== undefined) {
+      return /@[0-9a-f]{7}$/.test(label) || /^[0-9a-f]{7}$/.test(label) ? null : label;
+    }
+  }
+  return null;
 }
 
 const sha = z.string().regex(/^[0-9a-f]{40}$/);
@@ -51,6 +75,15 @@ export function createGhBumpHistory(repo: string, run: GhRunner = runGh): BumpHi
         branches: branches.filter((b) => b.startsWith(prefix)),
         prs: prs.filter((p) => p.head.startsWith(prefix)),
       };
+    },
+    lastBumpTag(slug) {
+      return lastBumpTag(
+        slug,
+        lines({
+          path: `repos/${repo}/commits?path=${encodeURIComponent(`apps/${slug}/appflare.jsonc`)}&per_page=30`,
+          jq: '.[].commit.message | split("\\n")[0]',
+        }),
+      );
     },
     reportedChecks(commit) {
       sha.parse(commit);

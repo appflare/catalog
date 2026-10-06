@@ -206,6 +206,21 @@ export interface ArtifactFile {
   offset: number;
 }
 
+/**
+ * `WorkflowSettings`, in full: a `workflows[]` entry's settings beside its
+ * binding, in wrangler's names, which are the API's. `schedules` is always a
+ * list; each retention is milliseconds or a duration such as `"3 days"`.
+ */
+export interface WorkflowSettings {
+  limits?: { steps?: number };
+  concurrency?: { limit?: number };
+  schedules?: string[];
+  default_retention?: {
+    success_retention?: number | string;
+    error_retention?: number | string;
+  };
+}
+
 /** A Worker binding as the packer records it: wrangler's shape without account ids. */
 export type ArtifactBinding = { type: string; name: string } & Record<string, unknown>;
 
@@ -306,6 +321,12 @@ export interface ArtifactManifest {
     exports?: Record<string, { type: string; [key: string]: unknown }>;
     /** The wrangler config's `cache` block. Omitted when unset. */
     cacheOptions?: { enabled: boolean; [key: string]: unknown };
+    /**
+     * The settings the wrangler config gives each Workflow this Worker
+     * defines, by the name of its `workflow` binding. Omitted when there are
+     * none, and in an artifact packed before they were recorded.
+     */
+    workflowSettings?: Record<string, WorkflowSettings>;
   };
   assets: {
     /**
