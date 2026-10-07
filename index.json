@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-07T11:00:21.709Z",
+  "generatedAt": "2026-10-07T12:06:26.026Z",
   "apps": [
     {
       "slug": "2fa",
@@ -1241,12 +1241,12 @@
       "summary": "Cloudflare's AI productivity environment: an agent chat that gets work done for you, and builds small private apps (gadgets) on request, each in its own sandbox, shareable with your team.\n\nThis install has the workspace, the agents, gadgets and blueprints, the Context library, scheduled agent runs, and the connectors for GitHub, Google, Slack, Notion, Linear, Cloudflare and other services; most of them start working once you give them an OAuth client of your own. Everyone signs in through Cloudflare Access.",
       "tagline": "An AI workspace where agents do your work and build small apps for you",
       "addedAt": "2026-10-07T10:01:59+03:00",
-      "version": "0.0.0-20261005.b304e8c",
+      "version": "0.0.0-20261006.9c2b76a",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/cloudflare-os@0.0.0-20261005.b304e8c/cloudflare-os-0.0.0-20261005.b304e8c.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/cloudflare-os@0.0.0-20261005.b304e8c/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/cloudflare-os@0.0.0-20261005.b304e8c/manifest.sig",
-        "digest": "4b81127f8be207f927ef0fd91a6096cf8f2626fde7206123facca96eb13cb22e"
+        "zip": "https://github.com/appflare/catalog/releases/download/cloudflare-os@0.0.0-20261006.9c2b76a/cloudflare-os-0.0.0-20261006.9c2b76a.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/cloudflare-os@0.0.0-20261006.9c2b76a/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/cloudflare-os@0.0.0-20261006.9c2b76a/manifest.sig",
+        "digest": "f90dfa627ece5a5fa09e615f77345570017a2122d67dbaf8b494377ad01bb595"
       },
       "tier": "artifact",
       "plan": "paid",
@@ -2910,19 +2910,19 @@
       "summary": "Self-hosted comments for static sites and blogs: an embeddable widget with threads, reactions and votes, OAuth or anonymous posting behind Turnstile, a moderation queue, and reply emails.",
       "tagline": "Comments and reactions for your website, hosted in your account",
       "addedAt": "2026-09-27T05:55:55+03:00",
-      "version": "2.34.0",
+      "version": "2.35.0",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/garrul@2.34.0/garrul-2.34.0.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/garrul@2.34.0/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/garrul@2.34.0/manifest.sig",
-        "digest": "76f264330fe1ebfe6ff688767a0e2f4c87bd129c63253b052ca6dd1095daee85"
+        "zip": "https://github.com/appflare/catalog/releases/download/garrul@2.35.0/garrul-2.35.0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/garrul@2.35.0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/garrul@2.35.0/manifest.sig",
+        "digest": "4880d0ce61163f99c8d85e7414fc22050f35b27998b82816e59fc16040d18dc5"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "analytics-engine"
       ],
-      "lastVerified": "2026-10-07T10:43:39.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "KingPin",
@@ -4123,12 +4123,12 @@
       "summary": "A self-hosted email service for your own domains: mailboxes, forwarding rules, and a web inbox, on Email Routing, D1, R2, Queues, and Durable Objects. Shared inboxes require a paid Team license.",
       "tagline": "Receive, send and organize email on your own domain",
       "addedAt": "2026-09-24T07:29:19+03:00",
-      "version": "0.0.0-20261006.48da9fa",
+      "version": "0.0.0-20261007.6978c01",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261006.48da9fa/mailflare-0.0.0-20261006.48da9fa.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261006.48da9fa/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261006.48da9fa/manifest.sig",
-        "digest": "5bf0eaf31ed4283ec63da3c72e90df13a1b103f9ec7089f47453eac9d66d2217"
+        "zip": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261007.6978c01/mailflare-0.0.0-20261007.6978c01.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261007.6978c01/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261007.6978c01/manifest.sig",
+        "digest": "731a35656f75bb691d6b8ca50c48351e2c597cfe6fc72d6e3d6231cc0c89b5b5"
       },
       "tier": "artifact",
       "plan": "paid",
@@ -4187,12 +4187,6 @@
       ],
       "license": "AGPL-3.0-or-later",
       "revision": 3,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/mailflare/manifest.json",
-        "sha256": "3e47432cdfb61c1d9e9c4b20c91d3d9f5f210b5cc05924a5cc358bb216d82e0b",
-        "keyId": "catalog-2026-09",
-        "signature": "bRQN/km0ZWECzu0yRw/p9WdBRRRXyLo9GniedCXfpwm0gs/Ken9fmrdcXqlJIO0LD9p7xjwIlFLyaHzYJIJ4AA=="
-      },
       "accessOffer": "offered"
     },
     {
@@ -5106,12 +5100,12 @@
       "summary": "Self-hosted SEO research: keywords, rankings, backlinks and site audits, on your own Cloudflare account and behind Cloudflare Access.",
       "tagline": "Find search terms, track rankings, and check your site's health",
       "addedAt": "2026-09-24T08:09:39+03:00",
-      "version": "0.1.10",
+      "version": "0.1.11",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/open-seo@0.1.10/open-seo-0.1.10.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/open-seo@0.1.10/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/open-seo@0.1.10/manifest.sig",
-        "digest": "62bcae45fdf56e1ef8ab7127f963cd497903366d54014d289a01ca31def6249f"
+        "zip": "https://github.com/appflare/catalog/releases/download/open-seo@0.1.11/open-seo-0.1.11.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/open-seo@0.1.11/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/open-seo@0.1.11/manifest.sig",
+        "digest": "6a05b43a7a7e2b2603172c3f81af8b54d1ebe0e6180210144a8603b63286f21a"
       },
       "tier": "artifact",
       "plan": "free",
@@ -5119,7 +5113,7 @@
         "r2",
         "access"
       ],
-      "lastVerified": "2026-10-07T10:49:06.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Ben Senescu",
@@ -5168,12 +5162,6 @@
       ],
       "license": "MIT",
       "revision": 5,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/open-seo/manifest.json",
-        "sha256": "d3c43380bf5b7b86cd26c18c2f9860d77bb06414b6f362b1f69705339998eddc",
-        "keyId": "catalog-2026-09",
-        "signature": "9HqP7wHsWzR3SPbMjRbVePEeDbGYVIomvvrF4cGF3HYsOYW8qKYdsDF2/kS0bXpSB+TNwtb8p2JyVSJAY9xODg=="
-      },
       "accessOffer": "required"
     },
     {
@@ -5225,19 +5213,19 @@
       "summary": "Link shortener and link management for your own domains: geo and device redirects, QR codes, tags, teams with roles, API keys, and click analytics on Analytics Engine.",
       "tagline": "Create short links on your own domains and track their clicks",
       "addedAt": "2026-09-27T06:13:42+03:00",
-      "version": "0.10.0",
+      "version": "0.11.0",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/openshortlink@0.10.0/openshortlink-0.10.0.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/openshortlink@0.10.0/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/openshortlink@0.10.0/manifest.sig",
-        "digest": "ee8bc20e77ab01b481944a69e74659e34aa05a660f8346b240554f742adae314"
+        "zip": "https://github.com/appflare/catalog/releases/download/openshortlink@0.11.0/openshortlink-0.11.0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/openshortlink@0.11.0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/openshortlink@0.11.0/manifest.sig",
+        "digest": "a34d83e032083f494886855eee892f9fc4a6304ccc0f096cd4a7b30bf6b40c72"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "analytics-engine"
       ],
-      "lastVerified": "2026-10-07T10:49:09.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "OpenShort.link contributors",
@@ -5267,12 +5255,6 @@
       ],
       "license": "AGPL-3.0-only",
       "revision": 2,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/openshortlink/manifest.json",
-        "sha256": "ecc20b95cb137f6722775513ba753af1ffad9bdf96a19098d31a276a1a1c9cff",
-        "keyId": "catalog-2026-09",
-        "signature": "HSJD9bHuajNboNJ/fal1q4Ef9AbdIdl+0nlz4a7kevTtA//4vCwD86Vx1xobYxjTqJtFbBMiD16i8sSfBPzvBQ=="
-      },
       "accessOffer": "offered"
     },
     {
@@ -5282,12 +5264,12 @@
       "summary": "Turn scripts into storyboards and videos with scene breakdowns, consistent characters, locations and styles, AI-generated frames, motion, voices and music, shared team libraries and an MCP server. Bring your own AI provider keys.",
       "tagline": "Turn scripts into videos with consistent characters and scenes",
       "addedAt": "2026-09-27T12:03:21+03:00",
-      "version": "0.0.0-20261006.9854a24",
+      "version": "0.0.0-20261007.b10ccf7",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261006.9854a24/openstory-0.0.0-20261006.9854a24.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261006.9854a24/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261006.9854a24/manifest.sig",
-        "digest": "4785f8747388ea3718f86ffb54a295219f21d18716025ffc920a9977c3568a6a"
+        "zip": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261007.b10ccf7/openstory-0.0.0-20261007.b10ccf7.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261007.b10ccf7/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261007.b10ccf7/manifest.sig",
+        "digest": "33549cd3d93c7ef349458ebaa8e5c920dd20cac0714452bf6df61c06702d22ac"
       },
       "tier": "artifact",
       "plan": "paid",
@@ -5333,12 +5315,6 @@
       ],
       "license": "MIT",
       "revision": 4,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/openstory/manifest.json",
-        "sha256": "f8b8ebbbdb14bac4ca866536cbf4ecb5d6fd107789aa368a6fe90d39e92c29a5",
-        "keyId": "catalog-2026-09",
-        "signature": "3yLX/j/YmRAlau9gt9TxG5yzD4PPGRde6zWwsuDIMBTOUJpL7Nhcu186JBfxabzAjBmhAiBCRaDIyiCRDsgIBg=="
-      },
       "accessOffer": "offered"
     },
     {
@@ -5513,17 +5489,17 @@
       "summary": "A private notebook behind one password: notes encrypted in the browser before they reach D1, search that runs in the browser, separate vaults per password, and one-time share links that burn after reading.",
       "tagline": "Keep encrypted notes behind a password",
       "addedAt": "2026-09-27T12:14:18+03:00",
-      "version": "0.0.0-20260716.4ba4163",
+      "version": "0.0.0-20261007.bacedf3",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/private-notes@0.0.0-20260716.4ba4163/private-notes-0.0.0-20260716.4ba4163.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/private-notes@0.0.0-20260716.4ba4163/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/private-notes@0.0.0-20260716.4ba4163/manifest.sig",
-        "digest": "097e2264e797c0083558b8b2c896ad0f2d5b95f79f1e8645ff15cf748622935d"
+        "zip": "https://github.com/appflare/catalog/releases/download/private-notes@0.0.0-20261007.bacedf3/private-notes-0.0.0-20261007.bacedf3.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/private-notes@0.0.0-20261007.bacedf3/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/private-notes@0.0.0-20261007.bacedf3/manifest.sig",
+        "digest": "fec5f2c22e5ed2006c2bed4620c94c9c43baa941938bb196a3f2431877ec7aa6"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-10-07T10:49:49.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "tao-t356",
@@ -5549,12 +5525,6 @@
       ],
       "license": "NONE",
       "revision": 2,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/private-notes/manifest.json",
-        "sha256": "d6f407138512760b3c67b0d69e65fedf0f15b46e372cbf191412a5d28631bfbb",
-        "keyId": "catalog-2026-09",
-        "signature": "1xy4CjfS/6CFByW59VKv9dTYkqn931UH3ZSnIE3vcZ7WqpPwkR5FdztP90xLkjAcraSW0dHQhiINeqyBxTx0DA=="
-      },
       "accessOffer": "offered"
     },
     {
@@ -5904,19 +5874,19 @@
       "summary": "A URL shortener for teams: organizations with roles, branded short links and QR codes, click analytics that never store an IP, an MCP server, and a KV redirect path in front of D1.",
       "tagline": "Branded short links, QR codes, and private click analytics for teams",
       "addedAt": "2026-09-27T04:47:37+03:00",
-      "version": "0.0.0-20261005.b58a786",
+      "version": "0.0.0-20261006.f7c4be2",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/rdyrct@0.0.0-20261005.b58a786/rdyrct-0.0.0-20261005.b58a786.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/rdyrct@0.0.0-20261005.b58a786/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/rdyrct@0.0.0-20261005.b58a786/manifest.sig",
-        "digest": "59bdaade12560420da6f7d56393ea6952740f1e411c81490ba2bdffef74cfa41"
+        "zip": "https://github.com/appflare/catalog/releases/download/rdyrct@0.0.0-20261006.f7c4be2/rdyrct-0.0.0-20261006.f7c4be2.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/rdyrct@0.0.0-20261006.f7c4be2/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/rdyrct@0.0.0-20261006.f7c4be2/manifest.sig",
+        "digest": "902c447cf7489172abe59af28594b6b30c6632f8bc0fdd90a68bcea9cf37c808"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-10-07T10:52:04.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Andrea Bruno",
