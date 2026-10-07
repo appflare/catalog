@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-07T06:54:23.701Z",
+  "generatedAt": "2026-10-07T07:08:53.484Z",
   "apps": [
     {
       "slug": "2fa",
@@ -1194,6 +1194,69 @@
         "signature": "KuXpyA1aWmxACpHYSFr98Q9TM/+Us9TTfdvT8mvixVlweWkI2j/HCUdNjM0isOf1Swb1CS1hQXlWKb4KgadsAQ=="
       },
       "accessOffer": "offered"
+    },
+    {
+      "slug": "cloudflare-os",
+      "name": "Cloudflare OS",
+      "summary": "Cloudflare's AI productivity environment: an agent chat that gets work done for you, and builds small private apps (gadgets) on request, each in its own sandbox, shareable with your team.\n\nThis install has the workspace, the agents, gadgets and blueprints, the Context library, scheduled agent runs, and the connectors for GitHub, Google, Slack, Notion, Linear, Cloudflare and other services; most of them start working once you give them an OAuth client of your own. Everyone signs in through Cloudflare Access.",
+      "tagline": "An AI workspace where agents do your work and build small apps for you",
+      "addedAt": "2026-10-07T10:01:59+03:00",
+      "version": "0.0.0-20261005.b304e8c",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/cloudflare-os@0.0.0-20261005.b304e8c/cloudflare-os-0.0.0-20261005.b304e8c.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/cloudflare-os@0.0.0-20261005.b304e8c/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/cloudflare-os@0.0.0-20261005.b304e8c/manifest.sig",
+        "digest": "4b81127f8be207f927ef0fd91a6096cf8f2626fde7206123facca96eb13cb22e"
+      },
+      "tier": "artifact",
+      "plan": "paid",
+      "requires": [
+        "r2",
+        "browser-rendering",
+        "workers-ai",
+        "access",
+        "secret-keys",
+        "config-patch-values"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Cloudflare",
+          "url": "https://www.cloudflare.com",
+          "github": "cloudflare"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/cloudflare-os/icon.svg",
+          "sha256": "606275f1619691b590187af154fb1e6c32cca0b4a89b8a902bc9c4530db26956"
+        },
+        "screenshots": [
+          {
+            "url": "https://appflare.github.io/catalog/apps/cloudflare-os/screenshots/01-planning-workspace-with-a-slide-deck.png",
+            "sha256": "494a59ef7ec8f80c28532d42e141a6fb3355baf8a9b8810a485973f868735e5d",
+            "alt": "Cloudflare OS: Planning workspace with a slide deck"
+          }
+        ]
+      },
+      "services": [
+        "kv",
+        "r2",
+        "workers-ai",
+        "browser-rendering",
+        "access"
+      ],
+      "categories": [
+        "ai",
+        "productivity",
+        "developer-tools"
+      ],
+      "license": "Apache-2.0",
+      "revision": 1,
+      "accessOffer": "required"
     },
     {
       "slug": "cloudflare-prometheus-exporter",
