@@ -1,8 +1,9 @@
 {
-  "generatedAt": "2026-10-07T07:24:57.337Z",
+  "generatedAt": "2026-10-07T08:33:24.863Z",
   "apps": [
     {
       "slug": "2fa",
+      "repo": "wuzf/2fa",
       "name": "2FA",
       "summary": "A two-factor code manager for TOTP and HOTP keys: scan or import from Google Authenticator, Aegis, 2FAS, and Bitwarden, encrypted in KV, with backups to WebDAV, S3, OneDrive, or Google Drive.",
       "tagline": "Store your two-factor codes with automatic backups",
@@ -49,6 +50,7 @@
     },
     {
       "slug": "888wiki",
+      "repo": "tbdavid2019/888wiki",
       "name": "888wiki",
       "summary": "A Markdown-first notepad and wiki: write in Markdown, Block, Canvas or Whiteboard, publish password-protected or timed shares, and present notes as slides or books.",
       "tagline": "Write notes and share them with passwords or time limits",
@@ -114,11 +116,18 @@
         "productivity"
       ],
       "license": "AGPL-3.0-only",
-      "revision": 2,
+      "revision": 3,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/888wiki/manifest.json",
+        "sha256": "b0258fa802c57c06598681b27363f57e92fb983dcc25b6777d6f9be11f9804dd",
+        "keyId": "catalog-2026-09",
+        "signature": "rBNYGHZriiijR8VzU4J9i39j/HEM4euCsQBYVNz92jiZ+pTS9+zLRy6rMsPj50YZ6xeISBiRRynJ8s1gT0HHBA=="
+      },
       "accessOffer": "offered"
     },
     {
       "slug": "agentic-inbox",
+      "repo": "cloudflare/agentic-inbox",
       "name": "Agentic Inbox",
       "summary": "A self-hosted email client with an AI agent that reads, searches, and drafts replies, on Email Routing, Durable Objects, R2, and Workers AI.",
       "tagline": "Your own email inbox with an AI assistant that drafts replies",
@@ -187,6 +196,7 @@
     },
     {
       "slug": "alle",
+      "repo": "bestruirui/Alle",
       "name": "Alle",
       "summary": "One inbox for all your mail: forward your Gmail, Outlook and other accounts to your domain and read them together, with attachments, plus throwaway addresses on the same domain.",
       "tagline": "Read mail from all your accounts in one inbox",
@@ -232,6 +242,7 @@
     },
     {
       "slug": "analytics-explorer",
+      "repo": "rohanprasadofficial/cloudflare-analytics-explorer",
       "name": "Cloudflare Analytics Explorer",
       "summary": "Build dashboards over your Workers Analytics Engine datasets: line, bar, area and pie charts, tables and stat cards from SQL queries, with filters and drag-and-drop layouts.",
       "tagline": "Build charts and dashboards from your Workers analytics data",
@@ -277,11 +288,18 @@
         "developer-tools"
       ],
       "license": "MIT",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/analytics-explorer/manifest.json",
+        "sha256": "a703b4b9d2245bdf82150b81dbbde2854f124f3260720b222f083c566db0f4e8",
+        "keyId": "catalog-2026-09",
+        "signature": "c77YIecC1vUzuihRL/dfn2550IY4y6077LxwHe39DqY9NDJoHYXoJckHWXbxg6qRhMmprRU7WjbIvKOvZ4uTBw=="
+      },
       "accessOffer": "offered"
     },
     {
       "slug": "atalaya",
+      "repo": "dcarrillo/atalaya",
       "name": "Atalaya",
       "summary": "Uptime monitoring and a status page on one Worker: HTTP, TCP and DNS checks every minute, optionally from chosen Cloudflare regions, webhook alerts, and 90 days of history in D1.",
       "tagline": "Check if your sites are up and share a status page",
@@ -330,6 +348,7 @@
     },
     {
       "slug": "auth-inbox",
+      "repo": "TooonyChen/AuthInbox",
       "name": "Auth Inbox",
       "summary": "An inbox for sign-up and verification mail: Email Routing delivers it, an AI model of your choice pulls out codes and links and sorts each mail, and a dashboard, per-user grants and a remote MCP server let people and agents read them.",
       "tagline": "Get sign-up codes and links in one private inbox",
@@ -393,6 +412,7 @@
     },
     {
       "slug": "auto-reaction-bot",
+      "repo": "Malith-Rukshan/Auto-Reaction-Bot",
       "name": "Auto Reaction Bot",
       "summary": "Your own Telegram bot that adds an emoji reaction to posts in the channels and groups you add it to, and to private messages, from an emoji list you choose.",
       "tagline": "Emoji reactions for your Telegram chats and channels",
@@ -438,17 +458,18 @@
         "chat"
       ],
       "license": "MIT",
-      "revision": 3,
+      "revision": 4,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/auto-reaction-bot/manifest.json",
-        "sha256": "b8c5b05816e032afb99e7d2640be7862ac38916573318765037bfc2ccd7d35ac",
+        "sha256": "14790242ebfb6758135d9e03cebe7c2e725f47353a87e802f741c2d679eb64bb",
         "keyId": "catalog-2026-09",
-        "signature": "zekbEYKxY84hbnzDDaYGrJhQQZ/beEBrXMz+MxpqFwjSDER3/dvbNWlSJRcun3Q3omC6u/N9A9JU29HoBpyODw=="
+        "signature": "0XzZVOSlG7amydGMwe2WpksBmRxPXQA5y/N4XtfRS2z42NE+h7TP3hmSXb2wPxMEheH3SySyeWG29fBuXkf6Dg=="
       },
       "accessOffer": "offered"
     },
     {
       "slug": "bark-worker",
+      "repo": "cwxiaos/bark-worker",
       "name": "Bark Worker",
       "summary": "Your own push server for Bark, the iOS notification app: send notifications to your iPhone from scripts and services with a simple HTTP call, with devices stored in D1.",
       "tagline": "Send notifications to your iPhone from your own server",
@@ -491,7 +512,8 @@
     },
     {
       "slug": "bashupload",
-      "name": "bashupload",
+      "repo": "DullJZ/bashupload-r2",
+      "name": "BashUpload",
       "summary": "Upload a file from the terminal with curl or from a browser and get a link that works for one download or until it expires, with an optional password, on R2.",
       "tagline": "Share files from your browser or terminal with expiring links",
       "addedAt": "2026-09-27T11:44:15+03:00",
@@ -527,18 +549,19 @@
         "sharing"
       ],
       "license": "NONE",
-      "revision": 3,
+      "revision": 4,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/bashupload/manifest.json",
-        "sha256": "b50776459711713307f2227759647fc71570e07a33b5ad579af538675f5ace57",
+        "sha256": "2b87787233779d27876a3ddac5abd0ede1788f7c4417b2b58480674c707d387d",
         "keyId": "catalog-2026-09",
-        "signature": "wDZPB05spNPIsPAK5O7Vt0Va6PlGjDWvXo2EPqebVxaGZHMvFqa6Mr2L3QKLZDqyT5w6WyVXZ/nmQUsR/5nMAg=="
+        "signature": "kvtZ0kc9a0zXyjJ0Gj87NuNICAYAeE6zPVGs59yG9UhRegFnwQeeVu0TNPJHQj89gpaea6R1YKyOiKVQdwUWCQ=="
       },
       "accessOffer": "offered"
     },
     {
       "slug": "binthere",
-      "name": "BinThere",
+      "repo": "nxfu/binthere",
+      "name": "binthere",
       "summary": "A zero-knowledge pastebin for one-time notes: encrypted in the browser with AES-256-GCM, burned on first read by a Durable Object, and gone after 24 hours.",
       "tagline": "Share private notes that disappear after one read",
       "addedAt": "2026-09-27T04:19:23+03:00",
@@ -583,11 +606,18 @@
         "privacy"
       ],
       "license": "MIT",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/binthere/manifest.json",
+        "sha256": "d7a94d00d2111c73a7f86a66a014889332ca5f3cda9562d151b01f52ff907d2d",
+        "keyId": "catalog-2026-09",
+        "signature": "1txeioeotFizqhT3C8TgBgnM0686L4q61hrcSXvy0OV8NYei6CCghbqVqf0TRNDRezcrcYYFkamZl2AXgxP4AA=="
+      },
       "accessOffer": "offered"
     },
     {
       "slug": "blobatar",
+      "repo": "Alain00/blobatar",
       "name": "blobatar API",
       "summary": "Your own avatar endpoint: GET /avatar/<name> returns a deterministic geometric blobatar SVG for any username, email or id, with Gravatar-compatible URLs.",
       "tagline": "Generate an avatar for any name or email address",
@@ -652,6 +682,7 @@
     },
     {
       "slug": "bookshelf",
+      "repo": "murerkinn/bookshelf",
       "name": "Bookshelf",
       "summary": "A library for the ebooks you own: read EPUBs and PDFs in the browser or on a Kobo over OPDS, served from your own R2 bucket.",
       "tagline": "Read your ebooks in a library you host yourself",
@@ -710,17 +741,18 @@
         "productivity"
       ],
       "license": "MIT",
-      "revision": 3,
+      "revision": 4,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/bookshelf/manifest.json",
-        "sha256": "15dc292e2c6cad744956978c951abc935ab0c2767f2c7df03c64b60fb0bdcfe4",
+        "sha256": "6ed5c9d75e837f4c7a42b1c919c290fcc735fb6b38cc30487362a680ac0d0604",
         "keyId": "catalog-2026-09",
-        "signature": "R6YWhYYV/6q6uxKVt6TpfpQhKLeFlJmJkxOQJULgiBjDOMzCh6rRwZtBHvZPXGRQYNiqaVqgBsDassyhPYueBA=="
+        "signature": "GhKopn1/8Wmam+xIvcKPju+TCeTk1OAwWbCvBx7RcZchDkDivOUX8zAqxHHo5xJl1sUJnAYUooIsvHjRwkOeCQ=="
       },
       "accessOffer": "recommended"
     },
     {
       "slug": "browser-relay",
+      "repo": "reliefeai/browser-relay",
       "name": "Browser Relay Hub",
       "summary": "Your own relay for Browser Relay: let AI agents on other machines drive the Chrome you are signed in to, through a hub in your account instead of the hosted one.",
       "tagline": "Connect AI assistants on other devices to your signed-in Chrome",
@@ -771,6 +803,7 @@
     },
     {
       "slug": "cap-worker",
+      "repo": "xyTom/cap-worker",
       "name": "Cap Worker",
       "summary": "A self-hosted backend for Cap, the privacy-friendly proof-of-work CAPTCHA: your sites get challenges and verify tokens against your own Worker, with no tracking.",
       "tagline": "Protect your site from bots without tracking visitors",
@@ -814,6 +847,7 @@
     },
     {
       "slug": "cattopic",
+      "repo": "Yuri-NagaSaki/CattoPic",
       "name": "CattoPic",
       "summary": "A self-hosted image host: upload, tag, and browse images, with WebP and AVIF copies, expiry, and a public random-image API, on R2, D1, KV, Queues, and Cloudflare Images.",
       "tagline": "Upload and organize images on your own image host",
@@ -871,6 +905,7 @@
     },
     {
       "slug": "cf-nav",
+      "repo": "djkyc/cf-nav",
       "name": "cf-nav",
       "summary": "A card-style start page: your links in categories with a search box, public and private links, drag-and-drop ordering, and JSON export and import, stored in KV.",
       "tagline": "Organize your favorite links on a searchable start page",
@@ -888,7 +923,7 @@
       "lastVerified": "2026-10-06T10:50:11.000Z",
       "authors": [
         {
-          "name": "djkyc",
+          "name": "Diana Sari",
           "github": "djkyc"
         }
       ],
@@ -910,17 +945,18 @@
         "utilities"
       ],
       "license": "NONE",
-      "revision": 3,
+      "revision": 4,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/cf-nav/manifest.json",
-        "sha256": "a6b4bfb9b62fb5f74d6c0f245cf45336cf5c3d6f0b38588968561d9171a3438b",
+        "sha256": "1ebac95df23938e0a951ebf07a52326ec69c84100a559b03ec1609b88f530089",
         "keyId": "catalog-2026-09",
-        "signature": "BAzqM5/6OqeSHDEJfPq5di7gMvT93H6F9qn2rO/dbtZLcz/pU1mbmO1eDLz61L91CgXeuurtkTzkAZtpbnCZDQ=="
+        "signature": "RWwSf0tRFfcUoNizzIfNHMlzbEfCDn3QYtDxO6xl//rR9+D7lei0T7MXGIs8fi/A6e7U41QYYU4fblNEgXP8Bg=="
       },
       "accessOffer": "offered"
     },
     {
       "slug": "cf-server-monitor",
+      "repo": "huilang-me/CF-Server-Monitor",
       "name": "CF Server Monitor",
       "summary": "Monitor your servers from a Worker: live CPU, memory, disk, traffic and latency from a small agent on each machine, with history, a map, offline and threshold alerts, and expiry reminders.",
       "tagline": "Track your servers live and get alerts when they need attention",
@@ -939,7 +975,6 @@
       "authors": [
         {
           "name": "huilang-me",
-          "url": "https://demo.huilang.me",
           "github": "huilang-me"
         }
       ],
@@ -985,17 +1020,18 @@
         "developer-tools"
       ],
       "license": "MIT",
-      "revision": 2,
+      "revision": 3,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/cf-server-monitor/manifest.json",
-        "sha256": "1b2a6d9c355b7645329357b9979ee0c16e690079286601805f80e2fcf4b919b0",
+        "sha256": "3438a3bb28c1597a9fdadc787cf1d4846a0e2067a58bf9238ccdd7e6f7f0ad63",
         "keyId": "catalog-2026-09",
-        "signature": "leIbpV8AM6Gn3HxR0oM2F/3KCalCcP3tl1ggBj3neNj3wwL405Zd1NYO9S5haEWsJhwlVB/SeX9iAZSwu6ZzCg=="
+        "signature": "rzOVjwASvME9LbG0TpmaEz8EGrlj/4YcYG6JHYhn5yqGjtZ0bdk8kMxm0b/MR4ivcoKwWHVaA5YRgOZeMKIOAg=="
       },
       "accessOffer": "offered"
     },
     {
       "slug": "cftgsx",
+      "repo": "SCSHIRKER/cftgsx",
       "name": "cftgsx",
       "summary": "A two-way Telegram contact bot: messages to the bot reach your admin chat, your replies go back to the sender, with broadcasts, bans and one forum topic per user.",
       "tagline": "Answer messages to your Telegram bot from one chat",
@@ -1039,6 +1075,7 @@
     },
     {
       "slug": "chatgpt-telegram-workers",
+      "repo": "TBXark/ChatGPT-Telegram-Workers",
       "name": "ChatGPT Telegram Bot",
       "summary": "Your own AI chat bot on Telegram, backed by OpenAI, Anthropic, Workers AI, or any OpenAI-compatible API.",
       "tagline": "Chat with your own AI bot on Telegram",
@@ -1083,18 +1120,19 @@
         "bots"
       ],
       "license": "MIT",
-      "revision": 2,
+      "revision": 3,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/chatgpt-telegram-workers/manifest.json",
-        "sha256": "f24af8f6058dadbb950c08ef2e27aefb01dbb867548f8362e142c057d4702e2a",
+        "sha256": "3936a1cde07b099887e2af0dd576fa86c801858534f0c5dff43dba48da8177f5",
         "keyId": "catalog-2026-09",
-        "signature": "KcPEub0oEGMUktEgs57SCBOKBYI+1cvT9FuXIBH9wZSSOTbhjR0lmvMu5huGMDqGzDupf71t2ymM9CRHtWtxDQ=="
+        "signature": "ckoKBW1dMXVt7CPhwdjn4gNdq0kzhcj4zgDSp9A/Qw/gMQd8vhEjJxAG3aCj2YB4J+Ab4f3G8T8l4ccCtjobBA=="
       },
       "accessOffer": "offered"
     },
     {
       "slug": "civideo",
-      "name": "child-video",
+      "repo": "bitoceango/civideo",
+      "name": "child-podcast",
       "summary": "A private, ad-free video and audiobook library for children: you upload to your own R2 bucket, and upstream's native apps play only what you put there, with daily limits and allowed hours.",
       "tagline": "Your own ad-free video and audiobook library for children",
       "addedAt": "2026-09-27T05:56:12+03:00",
@@ -1136,17 +1174,18 @@
         "family"
       ],
       "license": "MIT",
-      "revision": 3,
+      "revision": 4,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/civideo/manifest.json",
-        "sha256": "b6ba50a9b0343fee7b7d56e545da3bb51ce2e6df225fe7b7431acf0d7cd1c1f8",
+        "sha256": "0f98c35ca49b5e6a35fe40a3fb4558273fb039b44928503012bc81ec746e08ff",
         "keyId": "catalog-2026-09",
-        "signature": "4AEElgeeldvwJyCMadFvzCVzjdwYtXoSyQSX5QZXsUY+Cz1yhothrSgJ4/Zrszn2dAj7MS8kWXP6RFKrZGxpAA=="
+        "signature": "9I1jxqrlVrWXM+4ZNZvhwWraL6nG1CVCYSYYXWhdDRWuK6q05g+59/P8D0WVKGXadVhBnBTfw1ASlNUd/BfdBQ=="
       },
       "accessOffer": "offered"
     },
     {
       "slug": "clist",
+      "repo": "ooyyh/Cloudflare-Clist",
       "name": "CList",
       "summary": "A file browser and WebDAV server over your S3, WebDAV, OneDrive and Google Drive storage, with previews, share links and audit logs.",
       "tagline": "Browse and share files from all your storage in one place",
@@ -1186,17 +1225,18 @@
         "files"
       ],
       "license": "MIT",
-      "revision": 3,
+      "revision": 4,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/clist/manifest.json",
-        "sha256": "3b7e81b5514e99278d296f13912f3d486cc05b77340ac0bc349b556732e1dfb4",
+        "sha256": "0bcd75bdae02d76d2d804f3f94bd7e76864355e460adea4796f0bf9d61e1e627",
         "keyId": "catalog-2026-09",
-        "signature": "KuXpyA1aWmxACpHYSFr98Q9TM/+Us9TTfdvT8mvixVlweWkI2j/HCUdNjM0isOf1Swb1CS1hQXlWKb4KgadsAQ=="
+        "signature": "8t3viqLRU/MIICUFUXVMrADN2xke49E5+w0yytTu2bqwSsKjv7LRXiDC/8e+Zb8cm/IGaCLiJifVysrPHLpYCQ=="
       },
       "accessOffer": "offered"
     },
     {
       "slug": "cloudflare-os",
+      "repo": "cloudflare/cloudflare-os",
       "name": "Cloudflare OS",
       "summary": "Cloudflare's AI productivity environment: an agent chat that gets work done for you, and builds small private apps (gadgets) on request, each in its own sandbox, shareable with your team.\n\nThis install has the workspace, the agents, gadgets and blueprints, the Context library, scheduled agent runs, and the connectors for GitHub, Google, Slack, Notion, Linear, Cloudflare and other services; most of them start working once you give them an OAuth client of your own. Everyone signs in through Cloudflare Access.",
       "tagline": "An AI workspace where agents do your work and build small apps for you",
@@ -1265,6 +1305,7 @@
     },
     {
       "slug": "cloudflare-prometheus-exporter",
+      "repo": "cloudflare/cloudflare-prometheus-exporter",
       "name": "Cloudflare Prometheus Exporter",
       "summary": "Export Cloudflare analytics as Prometheus metrics: requests, bandwidth, threats, Workers, load balancers, certificates, Magic Transit and more, for every account and zone your API token can read, refreshed each minute by Durable Objects.",
       "tagline": "Send Cloudflare traffic and security metrics to Prometheus",
@@ -1321,6 +1362,7 @@
     },
     {
       "slug": "cloudflarebase",
+      "repo": "cloudflarebase/cloudflarebase",
       "name": "Cloudflarebase",
       "summary": "An open-source Firebase alternative on Cloudflare: auth, JSON collections and SQL tables with live queries, remote config and file storage, each project in Durable Objects of its own, run from one console. App hosting needs Workers for Platforms, which Appflare does not set up yet; the rest works.",
       "tagline": "Add sign-in, live data, and file storage to your app",
@@ -1380,6 +1422,7 @@
     },
     {
       "slug": "cloudmark",
+      "repo": "wesleyel/cloudmark",
       "name": "Cloudmark",
       "summary": "Bookmarks without an account: create a collection with a write token, save pages with a bookmarklet or the Chrome extension, and open them from any device. On D1.",
       "tagline": "Save bookmarks and open them from any device",
@@ -1435,6 +1478,7 @@
     },
     {
       "slug": "cloudssh",
+      "repo": "newbietan/CloudSSH",
       "name": "CloudSSH",
       "summary": "A web SSH terminal on Workers: connect to your servers from the browser with multiple sessions, SFTP file management, jump hosts, saved servers, and a bring-your-own-key AI assistant.",
       "tagline": "Connect to your servers through a browser",
@@ -1475,11 +1519,18 @@
         "developer-tools"
       ],
       "license": "Apache-2.0",
-      "revision": 3,
+      "revision": 4,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/cloudssh/manifest.json",
+        "sha256": "9acf2edd4d8d97df9a69f09b62c0eaf153fca9e326ee0134901e39e91fac7676",
+        "keyId": "catalog-2026-09",
+        "signature": "Pz2Fbw/1Cj7n8Sum5rSGKCeIRY+X2vapIKO0fhT5+o6l7h+KNTkwBtg/vvqVWuX2UQUPho97xjh+37FCG8q/Dg=="
+      },
       "accessOffer": "offered"
     },
     {
       "slug": "collection-down",
+      "repo": "heartalborada-del/Collection-Down",
       "name": "Collection Down",
       "summary": "Browse Bilibili digital collections and decoration suits and download their videos, images and emoji packs, from a Nuxt app on your own Worker.",
       "tagline": "Download videos, images and emoji packs from Bilibili collections",
@@ -1516,6 +1567,7 @@
     },
     {
       "slug": "counterscale",
+      "repo": "benvinegar/counterscale",
       "name": "Counterscale",
       "summary": "Privacy-friendly web analytics you host yourself: a tracking script, a dashboard, and long-term rollups in R2, on Workers Analytics Engine.",
       "tagline": "Track website visits with a dashboard you host yourself",
@@ -1581,6 +1633,7 @@
     },
     {
       "slug": "cut",
+      "repo": "MendyLanda/cut",
       "name": "Cut",
       "summary": "Self-hosted link shortener on Workers + KV.",
       "tagline": "Short links on your own domain",
@@ -1630,8 +1683,9 @@
     },
     {
       "slug": "deepcrawl",
+      "repo": "lumpinif/deepcrawl",
       "name": "Deepcrawl",
-      "summary": "An open-source Firecrawl alternative: an API that turns any web page into clean Markdown, metadata and a tree of its links for AI agents, cached in KV with request logs in D1.",
+      "summary": "An open-source Firecrawl alternative: an API that turns public web pages into clean Markdown, metadata and a tree of their links for AI agents, cached in KV with request logs in D1.",
       "tagline": "Turn web pages into clean text and organized links",
       "addedAt": "2026-09-27T06:13:42+03:00",
       "version": "0.5.5",
@@ -1671,17 +1725,18 @@
         "ai"
       ],
       "license": "MIT",
-      "revision": 3,
+      "revision": 4,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/deepcrawl/manifest.json",
-        "sha256": "b4e075ba0451c4dc6d079c2dc382aa8af2c84a1be3f933a28f1e3aedba432f8c",
+        "sha256": "3e2627f7c436b4c5f05b97e20af4e5cf31f85c353a1bc9ba56b9106b1fc8e4d4",
         "keyId": "catalog-2026-09",
-        "signature": "D+hCdT7CQsDZW66oaZdnz/RPJUF7GEQRy8mV8IQTXDeaCySSUb4QKiTjDOfrEr3mFQ2VgQeE1SNvlx9DCdBdDQ=="
+        "signature": "L+KsOW8jdC2Zy/pUFRhJjWwIvvktwRovgZt583xt4BwId1PQLhKVNawInaxeZ6oGsTIVwBs4+MBfuWPOu2EYAA=="
       },
       "accessOffer": "offered"
     },
     {
       "slug": "dictdeck",
+      "repo": "Asutorufa/hujiang_dictionary",
       "name": "DictDeck",
       "summary": "A self-hosted Japanese dictionary, translator and flashcard deck: several dictionary sources, AI explanations on Workers AI or your own LLM provider, saved words and review cards, a Telegram bot and an MCP server.",
       "tagline": "Look up Japanese words, translate them, and review flashcards",
@@ -1737,6 +1792,7 @@
     },
     {
       "slug": "dispoflare",
+      "repo": "LeoColomb/dispoflare",
       "name": "Dispoflare",
       "summary": "Disposable email addresses on your own domains: create a random or chosen address that forwards to your inbox until the date you pick, on Email Routing.",
       "tagline": "Disposable email addresses on your own domains",
@@ -1789,6 +1845,7 @@
     },
     {
       "slug": "durable-git",
+      "repo": "littledivy/durable-git",
       "name": "dgit",
       "summary": "A git host on Durable Objects: push and clone over HTTPS with a stock git client and browse with a cgit-style web interface, one Durable Object per repository.",
       "tagline": "Host and browse your own code repositories",
@@ -1824,11 +1881,18 @@
         "developer-tools"
       ],
       "license": "MIT",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/durable-git/manifest.json",
+        "sha256": "9a0a9132fa5ae42b1ebb9ae0ea749872bfc180125860b50c6436250553ce113a",
+        "keyId": "catalog-2026-09",
+        "signature": "eLpK6sT2ok/sRFSBOJEr/LTtUzCDm/HAlPuLwpPFy5110JAy81GqLMenZaHSKWZaUHYjklbnY18PfxVO0NTzDw=="
+      },
       "accessOffer": "offered"
     },
     {
       "slug": "edgechat",
+      "repo": "aozorae/Edgechat",
       "name": "EdgeChat",
       "summary": "Team chat on Cloudflare: public and private groups, direct messages, realtime delivery, voice messages, messages and files encrypted at rest, a Telegram bridge and an admin dashboard.",
       "tagline": "Private team chat with groups, direct messages and file sharing",
@@ -1889,6 +1953,7 @@
     },
     {
       "slug": "edgeever",
+      "repo": "tianma-if/edgeever",
       "name": "EdgeEver",
       "summary": "An Evernote-style notes and knowledge base with a three-pane layout, full-text search, public note sharing, AI features and a built-in MCP server, on D1 and R2.",
       "tagline": "Notes you can organize, search, and share from your own account",
@@ -1937,6 +2002,7 @@
     },
     {
       "slug": "edgekey",
+      "repo": "34892002/edgeKey",
       "name": "EdgeKey",
       "summary": "A shop for digital goods: sell card keys and codes, take payment through USDT, Epay, Alipay or Stripe, and deliver each order automatically by page and email.",
       "tagline": "Sell digital codes and deliver them automatically after payment",
@@ -1983,17 +2049,18 @@
         "ecommerce"
       ],
       "license": "MIT",
-      "revision": 2,
+      "revision": 3,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/edgekey/manifest.json",
-        "sha256": "dcf7020469ae32dbdb178acc0ef3b37c15fad0c03ac7325a25f05b0762d8e1ed",
+        "sha256": "b0fc32e2ed2d2dfbfbc8185d92954db12997945179a023cf0875e9a942b74347",
         "keyId": "catalog-2026-09",
-        "signature": "i4L129jT597U1CnyJ8BHjS//HKmY8okNlo99SChNnAQYhEbIp7t+NiHx4ASmzkeSdtOev2Ch3HdspOYtEDcYDA=="
+        "signature": "ZzrSDgGM/k/qaoHGrOY5DZlRIXX94cdmvmVddU5NGWz2JruJgiw8BpGYeIefGRyRspsF2FKkjywCfZOWaroeDQ=="
       },
       "accessOffer": "offered"
     },
     {
       "slug": "edgemetry",
+      "repo": "hayaran/Edgemetry",
       "name": "Edgemetry",
       "summary": "Privacy-friendly web analytics you run yourself: a 2 KB tracking script, no cookies, stackable filters, realtime views, custom events and several sites and users, on one Worker and D1.",
       "tagline": "See your website traffic without cookies",
@@ -2012,7 +2079,7 @@
       "authors": [
         {
           "name": "Nitin Hayaran",
-          "github": "hayaran",
+          "github": "nitinhayaran",
           "x": "nitinhayaran"
         }
       ],
@@ -2043,6 +2110,7 @@
     },
     {
       "slug": "elm-chat",
+      "repo": "shawnbure/elm-chat",
       "name": "elm.chat",
       "summary": "Account-free, end-to-end encrypted chat rooms that disappear: single-use invites, messages that vanish on a timer, and no transcript kept on the server. One Worker and a Durable Object per room.",
       "tagline": "Private chat rooms that disappear, with no account needed",
@@ -2098,6 +2166,7 @@
     },
     {
       "slug": "email-explorer",
+      "repo": "G4brym/email-explorer",
       "name": "Email Explorer",
       "summary": "A self-hosted email client: receive mail through Email Routing, read and write it in a web app with folders, search, contacts and several users, with each mailbox in its own Durable Object and attachments in R2.",
       "tagline": "Read and send email from your own domain",
@@ -2157,6 +2226,7 @@
     },
     {
       "slug": "emailflare",
+      "repo": "0xdps/emailflare",
       "name": "EmailFlare",
       "summary": "Transactional email on Cloudflare Email Sending: a sending API with templates, API keys, logs, suppressions and one-click unsubscribe, plus a team inbox and lightweight CRM on Email Routing.",
       "tagline": "Send emails and manage replies in a shared inbox",
@@ -2178,8 +2248,9 @@
       "lastVerified": null,
       "authors": [
         {
-          "name": "0xdps",
-          "github": "0xdps"
+          "name": "Devendra Pratap Singh",
+          "github": "0xdps",
+          "x": "0xdps"
         }
       ],
       "maintainers": [
@@ -2207,17 +2278,18 @@
         "business"
       ],
       "license": "MIT",
-      "revision": 2,
+      "revision": 3,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/emailflare/manifest.json",
-        "sha256": "d9ef966c95089a885bb5162c1c2f923f8621167d9b6adcaada6121ad5e36884f",
+        "sha256": "7054346ff296e6e161fea1b508e2466b4e87013c959ce883e31a54864e353b98",
         "keyId": "catalog-2026-09",
-        "signature": "S/FCzNZBWyrX69VGgqL/mvS+YO8+WhuzzavAd7+q7V35WJpp6fSItm2UdrAgZd71oHkDezrZONl+ROSx4BuJAA=="
+        "signature": "gQk0rYwQBJD1k/ypCWzB+GurkOXnAc82wgufk4zdCOet9fi2eHiDrDH4n4JBvB4aollH2D5LSYp3IT7PH77GCg=="
       },
       "accessOffer": "offered"
     },
     {
       "slug": "emdash",
+      "repo": "emdash-cms/emdash",
       "name": "EmDash",
       "summary": "A full-stack TypeScript CMS built on Astro, the spiritual successor to WordPress: this is its blog template, with posts, pages, categories and tags, search, RSS and an admin editor, on D1 and R2.",
       "tagline": "Create a blog with built-in search and an editor",
@@ -2274,11 +2346,18 @@
         "cms"
       ],
       "license": "MIT",
-      "revision": 3,
+      "revision": 4,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/emdash/manifest.json",
+        "sha256": "b72d4c82788451b00fc14a543de32821a52afc27373716b2b56e6de46854efda",
+        "keyId": "catalog-2026-09",
+        "signature": "qtZWjKC3BwIuaR5tNPkHV0k307MXqPTOBYUtfwu/rfnQI7svDPjA/k8UndI4ri0gBttbrW8MyOe8sx9CYpiyCQ=="
+      },
       "accessOffer": "offered"
     },
     {
       "slug": "exception-notify",
+      "repo": "GuangYiDing/exception-notify",
       "name": "Exception-Notify workspace",
       "summary": "The AI analysis page for Exception-Notify alerts from Spring Boot: open an exception from DingTalk, Feishu or WeChat Work and work through it with your own AI provider.",
       "tagline": "Read error alerts and work through fixes with AI",
@@ -2320,11 +2399,18 @@
         "monitoring"
       ],
       "license": "Apache-2.0",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/exception-notify/manifest.json",
+        "sha256": "039c432d22ddd878480bd7c0c969c8468b8d28124c96edcfab42c9bf6dea5ca8",
+        "keyId": "catalog-2026-09",
+        "signature": "IeVAmGacUOapDYiTgCJwWu2rV9mAPbu/9+9FV5tpHW3DpxF/nPYDqGluCjdIFN+AyiRUdIxmwhqtUSV/DvDuDw=="
+      },
       "accessOffer": "offered"
     },
     {
       "slug": "feedlog",
+      "repo": "linkcraftstudio/feedlog",
       "name": "FeedLog",
       "summary": "Feedback boards, a public roadmap and an AI-assisted changelog for your product, with an embeddable widget. Runs on Workers with R2 for uploads and your own Postgres through Hyperdrive.",
       "tagline": "Collect feedback, share your roadmap and announce updates",
@@ -2417,6 +2503,7 @@
     },
     {
       "slug": "firefly-iii-mcp",
+      "repo": "etnperlong/firefly-iii-mcp",
       "name": "Firefly III MCP",
       "summary": "A remote MCP server for Firefly III: lets AI assistants read and record accounts, transactions, bills, budgets and more in your own Firefly III, each connection with its own personal access token.",
       "tagline": "Manage your personal finances with an AI assistant",
@@ -2460,6 +2547,7 @@
     },
     {
       "slug": "flaremo",
+      "repo": "realchendahuang/FlareMo",
       "name": "FlareMo",
       "summary": "A Memos-compatible notes app for quick capture: timeline, tags, attachments, semantic search, and an MCP server, on D1, R2, and Vectorize.",
       "tagline": "Capture notes and find them when you need them",
@@ -2522,13 +2610,20 @@
         "notes"
       ],
       "license": "AGPL-3.0-only",
-      "revision": 2,
+      "revision": 3,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/flaremo/manifest.json",
+        "sha256": "661d4073a7af6887f0daf1fddb29ae83f67687551e821e5e9fa84ccecce3e0bb",
+        "keyId": "catalog-2026-09",
+        "signature": "0EKAh1nWuuIcJ0/lsWO/z7TnGV7ZvHE1xhRuSLptmIlgPS8K2QrPJXsnepCPzxD/TWtPEGq9kLZvzfWoAnMWBg=="
+      },
       "accessOffer": "offered"
     },
     {
       "slug": "fodi",
+      "repo": "vcheckzen/FODI",
       "name": "FODI",
-      "summary": "A fast index of your OneDrive: browse, preview and download files from a web page, with password-protected folders, signed download links, uploads and WebDAV, on Workers KV.",
+      "summary": "Browse, preview and download files from a personal OneDrive account, with password-protected folders, signed download links, uploads and WebDAV.",
       "tagline": "Browse and preview your OneDrive files in a web page",
       "addedAt": "2026-09-27T11:44:57+03:00",
       "version": "0.0.0-20260403.20a227a",
@@ -2568,17 +2663,18 @@
         "sharing"
       ],
       "license": "GPL-3.0-only",
-      "revision": 2,
+      "revision": 3,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/fodi/manifest.json",
-        "sha256": "f8b5035dc59fee929c7aabd610a5d50ee7331f3712fca0949afe4ea9b3c9be75",
+        "sha256": "9b10bdb8db0a0597882648fb2b05c0e323c28cacad43ee22e1509ec92f108094",
         "keyId": "catalog-2026-09",
-        "signature": "NPLO7riTdNhmOVGf4HdaKJlmwPGQg36BhfBaDgI5+gJmEcRqODypP44sYWogJZsEuj3Kxr4FtSeWDmKoZQJ6AQ=="
+        "signature": "FLYMp/y21ALQemKjpdcfBMaH03o5YyNt8Z1w2kAA34VSfA+S3WLDc2kJSz0ENoZPU2pQqYvKWQmYUJrqx3YSCQ=="
       },
       "accessOffer": "offered"
     },
     {
       "slug": "folia",
+      "repo": "chthollyphile/folia-major",
       "name": "Folia",
       "summary": "A web music player built around full-screen animated lyrics, for your local library or a Navidrome server, with automatic lyric matching and AI colour themes from your own Gemini key.",
       "tagline": "Play your music with full-screen animated lyrics",
@@ -2620,6 +2716,7 @@
     },
     {
       "slug": "formzero",
+      "repo": "BohdanPetryshyn/formzero",
       "name": "FormZero",
       "summary": "A form backend for static sites: send HTML forms or JSON to your own endpoint and browse, chart and export the submissions from a dashboard.",
       "tagline": "Collect form submissions and see them in your own dashboard",
@@ -2670,8 +2767,9 @@
     },
     {
       "slug": "freemail",
+      "repo": "idinging/freemail",
       "name": "Freemail",
-      "summary": "Temporary and domain mailboxes on your own domain: create addresses in the browser, read what Email Routing delivers, share mailboxes with users, and send through Resend or SendFlare, on D1 and R2.",
+      "summary": "Temporary and domain mailboxes on your own domain: create addresses in the browser, read what Email Routing delivers, share mailboxes with users, and send through Resend, SendFlare or Cyberpersons, on D1 and R2.",
       "tagline": "Create mailboxes and read mail on your own domain",
       "addedAt": "2026-09-27T11:44:15+03:00",
       "version": "5.3.1",
@@ -2758,17 +2856,18 @@
         "privacy"
       ],
       "license": "Apache-2.0",
-      "revision": 3,
+      "revision": 4,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/freemail/manifest.json",
-        "sha256": "6ef4c96f5a28df6baad62258e5a24640a6ec9616e4e3a7c58a51ed14fca4ff12",
+        "sha256": "23ca2a0221b2456f8d403c2055bf7e7dc3959008ed9baa75ca37dda348d57989",
         "keyId": "catalog-2026-09",
-        "signature": "a7f+X9WSlqsQObIK/w5BW3nES/OoB2N5hWGpHtbRW+wmWNhOFiXPPGGKTg0UgzR2U5iPFMojTuIqK1Wo2nZXCg=="
+        "signature": "tLJXZEkeFzWhU1OrFrVeThihFg875LLcDHBvbrHwTaDy83GHodKPp5VMuFtiGTBr3XhPWrs9u727d99bXKJwBg=="
       },
       "accessOffer": "offered"
     },
     {
       "slug": "fxtiktok",
+      "repo": "okdargy/fxTikTok",
       "name": "fxTikTok",
       "summary": "Fixes TikTok embeds on Discord and other chat apps: swap tiktok.com for your own address in a link and it previews the video or slideshow inline, with the author, caption and counts.",
       "tagline": "Make TikTok links preview videos and slideshows in chat",
@@ -2806,6 +2905,7 @@
     },
     {
       "slug": "garrul",
+      "repo": "KingPin/Garrul",
       "name": "Garrul",
       "summary": "Self-hosted comments for static sites and blogs: an embeddable widget with threads, reactions and votes, OAuth or anonymous posting behind Turnstile, a moderation queue, and reply emails.",
       "tagline": "Comments and reactions for your website, hosted in your account",
@@ -2900,6 +3000,7 @@
     },
     {
       "slug": "git-on-cloudflare",
+      "repo": "zllovesuki/git-on-cloudflare",
       "name": "git-on-cloudflare",
       "summary": "A git server on Workers: push and clone over HTTPS, browse code in a web interface, with repositories in Durable Objects and R2.",
       "tagline": "Host your code and browse changes in your own Cloudflare account",
@@ -2938,11 +3039,18 @@
         "developer-tools"
       ],
       "license": "MIT",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/git-on-cloudflare/manifest.json",
+        "sha256": "160ee92ba9fcdaf2be052841559b3cf7644a2ec54771a9760139a02fca49c829",
+        "keyId": "catalog-2026-09",
+        "signature": "ywyRDeBXpa+kmptDk1x5jh4sjGOvfvU2H094veKvoq7QMV49nQMA41RWFJhMu3ENT1EJXFa3fgRYB2/+Uh8SDQ=="
+      },
       "accessOffer": "offered"
     },
     {
       "slug": "glance",
+      "repo": "plivo-labs/glance",
       "name": "Glance",
       "summary": "Share what your coding agents build: publish HTML, Markdown and files as private sites your team opens, comments on, and annotates. An open-source alternative to Claude Artifacts.",
       "tagline": "Share your coding agent's work as pages your team can review",
@@ -3001,6 +3109,7 @@
     },
     {
       "slug": "gmshop",
+      "repo": "GMWalletApp/gmshop-edge",
       "name": "GMShop Edge",
       "summary": "A single-tenant digital-goods shop: stock items such as licence keys delivered on payment, private downloads from R2, entitlements, coupons and refunds, guest or account checkout, and an admin console with roles, on D1, KV, R2 and Queues.",
       "tagline": "Sell digital goods with automatic delivery from your own shop",
@@ -3049,11 +3158,18 @@
         "business"
       ],
       "license": "GPL-3.0-or-later",
-      "revision": 2,
+      "revision": 3,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/gmshop/manifest.json",
+        "sha256": "2505fbeead4ee801ffce093b6f9ab95242014d894a7359c20bc933052fbd369c",
+        "keyId": "catalog-2026-09",
+        "signature": "dFiam/j1bg0v5Ma4iYL9ZoK4gHZY4XuxWjXzENB8W9/THK4vUAkPPQzgArVH5CUo4a3i+bwXc9Of9w/wb0K1Aw=="
+      },
       "accessOffer": "offered"
     },
     {
       "slug": "hashpay",
+      "repo": "TGDash/HashPay",
       "name": "HashPay",
       "summary": "A crypto payment gateway run from your own Telegram bot: take USDT, USDC and native coins on eight chains or through Binance, OKX and OKPay, with a signed order API, merchant callbacks and an admin console.",
       "tagline": "Accept crypto payments through your Telegram bot",
@@ -3110,6 +3226,7 @@
     },
     {
       "slug": "hqbase",
+      "repo": "HQBase/hqbase",
       "name": "HQBase",
       "summary": "Your team's email workspace in your own account: shared mailboxes, drafts, labels, contacts and audit history, with a remote MCP server for agents.",
       "tagline": "Shared email for your team in your own Cloudflare account",
@@ -3167,6 +3284,7 @@
     },
     {
       "slug": "imgbed",
+      "repo": "MarSeventh/CloudFlare-ImgBed",
       "name": "CloudFlare ImgBed",
       "summary": "Self-hosted image and file hosting with an admin panel: uploads to R2, Telegram, Discord, S3, Hugging Face or WebDAV, file management, access control, a public gallery, a REST API and WebDAV, on D1.",
       "tagline": "Store and share images and files on your own site",
@@ -3238,6 +3356,7 @@
     },
     {
       "slug": "infiplot",
+      "repo": "zonghaoyuan/infiplot",
       "name": "InfiPlot",
       "summary": "An interactive story game generated in real time: AI writes the plot, paints every scene and voices the characters as you play, with the text, image and speech providers you choose.",
       "tagline": "Play stories that AI writes and illustrates as you go",
@@ -3318,6 +3437,7 @@
     },
     {
       "slug": "inkstone",
+      "repo": "shuaiplus/inkstone",
       "name": "Inkstone",
       "summary": "A self-hosted Markdown notebook with live preview, backlinks, full-text and semantic search, offline editing, multi-device sync, public sharing, MCP access and scheduled backups.",
       "tagline": "A private notebook for writing, finding, and syncing notes",
@@ -3366,11 +3486,18 @@
         "productivity"
       ],
       "license": "LGPL-3.0-only",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/inkstone/manifest.json",
+        "sha256": "e92b151bd3d2c0eb1f2617b8aeaa8de2e8306d059731e55d20e4d7fc5df64f8a",
+        "keyId": "catalog-2026-09",
+        "signature": "doUy8hBukSX7EZ6YDWrzb2F163JQ7EaIQ9BpBLY0lP1xTq9rw0wa2cVznAQnhn6rU55FiJFsP5SrQEbHh/ftAA=="
+      },
       "accessOffer": "offered"
     },
     {
       "slug": "insightflare",
+      "repo": "RavelloH/InsightFlare",
       "name": "InsightFlare",
       "summary": "Privacy-friendly web analytics that runs entirely on Cloudflare: a tracking script, a realtime dashboard with maps and funnels, and an API for AI agents, on D1, a Durable Object and Analytics Engine.",
       "tagline": "See your website traffic and visitor trends in one dashboard",
@@ -3448,13 +3575,20 @@
         "analytics"
       ],
       "license": "MIT",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/insightflare/manifest.json",
+        "sha256": "5c68e43b6f35b7a499439cb8b6fdd2646b82dc47a06c08d2f476aa8c4dfdc4cf",
+        "keyId": "catalog-2026-09",
+        "signature": "wKsM0px2koay5xPiPJCVFkGGvSIcmpbbDd15YT54R9yd7Ng0kj4TKJjzmzvjt7sIadIElTUznNC3uNq2VknMDQ=="
+      },
       "accessOffer": "offered"
     },
     {
       "slug": "isupmap",
-      "name": "isupmap",
-      "summary": "A live up/down heatmap for 40+ popular internet services, polled every five minutes, with history and community outage reports.",
+      "repo": "Jaironlanda/isupmap",
+      "name": "isUpMap",
+      "summary": "A live up/down heatmap for 80+ popular internet services, polled every five minutes, with history and community outage reports.",
       "tagline": "See which popular online services are up or down",
       "addedAt": "2026-09-27T06:14:13+03:00",
       "version": "0.0.0-20260927.0b78646",
@@ -3498,13 +3632,20 @@
         "monitoring"
       ],
       "license": "MIT",
-      "revision": 2,
+      "revision": 3,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/isupmap/manifest.json",
+        "sha256": "2edcc11d4c2e4b5c3dae293802a18e053f57a59b25110901adca9e80eaff06f3",
+        "keyId": "catalog-2026-09",
+        "signature": "9xLhYh9RzL8LDDNzLt4qiox5iQdZtXCO8RyBPs6azv7K5TuchmlPIyDy9LgXSXZgUu9tmgujQYYrH4EOJuXuCw=="
+      },
       "accessOffer": "offered"
     },
     {
       "slug": "jant",
+      "repo": "jant-me/jant",
       "name": "Jant",
-      "summary": "A personal microblog as smooth as Threads and Tumblr: notes, links and quotes in threads and collections, media on R2, full-text search, RSS, an API and an MCP endpoint for agents, on D1.",
+      "summary": "A personal microblog for notes, links and quotes, organized into threads and collections, with media attachments, full-text search, RSS, an API and an MCP endpoint for agents.",
       "tagline": "Your own blog for notes, links, quotes, and threads",
       "addedAt": "2026-09-27T12:14:18+03:00",
       "version": "0.0.0-20260929.d3ee87b",
@@ -3557,11 +3698,18 @@
         "community"
       ],
       "license": "AGPL-3.0-or-later",
-      "revision": 4,
+      "revision": 5,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/jant/manifest.json",
+        "sha256": "830798121f49bd28bb06209ffe021a4b3c9a24511703467ab72590de2a713b47",
+        "keyId": "catalog-2026-09",
+        "signature": "rsGhrZZVbCVgCTEdoYhAPA5ab3oxuUwJNlnCRQ8Pi6fRPt29362Z4aUQFgZ+x5iGsf/neyUB9kUFD9NSr09IBw=="
+      },
       "accessOffer": "offered"
     },
     {
       "slug": "jina-mcp",
+      "repo": "jina-ai/MCP",
       "name": "Jina AI MCP Server",
       "summary": "Jina AI's remote MCP server on your own Worker: read pages and PDFs as Markdown, take screenshots, search the web, arXiv and SSRN, and rerank or deduplicate text with Jina's Reader, Search, Embeddings and Reranker APIs.",
       "tagline": "Let your AI assistant read pages, search the web, and compare text",
@@ -3594,17 +3742,18 @@
         "developer-tools"
       ],
       "license": "Apache-2.0",
-      "revision": 3,
+      "revision": 4,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/jina-mcp/manifest.json",
-        "sha256": "60b89f20afc14ba6bfc46ed59435a220bfe11aef49246959cddb46be06ef82a7",
+        "sha256": "df9d6d46722055d631b9046b5fdb5b2f8b451a097b3c43b57ecf0cb0f2cf2a0f",
         "keyId": "catalog-2026-09",
-        "signature": "8ejpb1FZgV4bfYpNtaqGKWmAI9jjZWinIWSUFT6Rn+B1/l311ZKUlaI6uoGNO15L/BxPaZ+0gacFKgzn5vzqDA=="
+        "signature": "bgsAlcTe0YYiP34vXJu8yIlkniYRqEZtQHQ6tqACpsbEhDbrWgqX6as2X4LKF6+nc4wZkR5Gp73gvhal1JmPDQ=="
       },
       "accessOffer": "offered"
     },
     {
       "slug": "kiss-worker",
+      "repo": "fishjar/kiss-worker",
       "name": "KISS Worker",
       "summary": "Your own sync server for KISS Translator: keeps the extension's settings, rules and vocabulary in step across browsers and serves shared rule sets.",
       "tagline": "Sync your translation settings and vocabulary across browsers",
@@ -3650,8 +3799,9 @@
     },
     {
       "slug": "kukuroo",
+      "repo": "saiday/kukuroo",
       "name": "Kukuroo",
-      "summary": "Your own Web Push service in one Worker: send notifications to your iPhone, iPad or Mac with a single authenticated POST, no vendor and no native app.",
+      "summary": "Your own Web Push service for iPhone, iPad and Mac using Safari's Declarative Web Push: send notifications with one authenticated HTTP request, without installing a native app.",
       "tagline": "Send notifications to your iPhone, iPad or Mac without a native app",
       "addedAt": "2026-09-27T05:20:16+03:00",
       "version": "0.1.3",
@@ -3692,11 +3842,18 @@
         "notifications"
       ],
       "license": "MIT",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/kukuroo/manifest.json",
+        "sha256": "8f9e59e37d9a8e5d4b0d5e69bc605c98634a43063b65af6ee13a8b42632fac03",
+        "keyId": "catalog-2026-09",
+        "signature": "3KL7IV36LK6jU7JT1DV5lbIcIYdpQC3wu+nlfoZ9QuzAVGFAIiUbLUY4HaLMwmi4KP3cL5eUpo2MUYWkqI5JCQ=="
+      },
       "accessOffer": "offered"
     },
     {
       "slug": "larafeed",
+      "repo": "angristan/larafeed",
       "name": "Larafeed",
       "summary": "A private feed reader with passkey-only sign-in: RSS and Atom subscriptions refreshed on a schedule through Queues, OPML import and export, full-article extraction, favicons, and reader-client APIs, on D1, KV and Queues.",
       "tagline": "Keep up with your favorite websites in one private feed",
@@ -3752,6 +3909,7 @@
     },
     {
       "slug": "lastfm-recently-played",
+      "repo": "JeffreyCA/lastfm-recently-played-readme",
       "name": "Last.fm Recently Played",
       "summary": "An SVG card of your recent Last.fm scrobbles for a GitHub profile README, with themes, artwork, stats and loved tracks, plus a configurator page to build the card's URL.",
       "tagline": "Show your recent music on your GitHub profile",
@@ -3782,17 +3940,18 @@
         "utilities"
       ],
       "license": "MIT",
-      "revision": 2,
+      "revision": 3,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/lastfm-recently-played/manifest.json",
-        "sha256": "a0c35740125117d82ac7dee17f8782fbb3220024c0f5a2db173f66f7b22c3b65",
+        "sha256": "393bf2d2bc8a4a9b6f4d0ea60136a8835e821395fb0dee8dc5a56dc8f309d197",
         "keyId": "catalog-2026-09",
-        "signature": "zHC6xL6c2/4PttzZEAaCYonC7W20EbTbZoi1W1zZkRnaO/7i514TlgU306w7QxBAIc+tEBYxYbKpcUbt4ZdqDw=="
+        "signature": "KUfoWgLwdQV5MQJ9BkeEk4ZXZk0Y/tz7du+rFfPMhBhi0+U97W56A3tFtVbo1X6HXS0iYhcdi2UxHvO7vQxbBA=="
       },
       "accessOffer": "offered"
     },
     {
       "slug": "llm-api-proxy",
+      "repo": "rxliuli/llm-api-proxy",
       "name": "LLM API Proxy",
       "summary": "One OpenAI-compatible (and Ollama-compatible) API in front of OpenAI, Anthropic, Gemini, DeepSeek, Groq, Grok, OpenRouter, Azure OpenAI and more, using your own provider keys behind a key of its own.",
       "tagline": "Connect your AI tools to models from different providers",
@@ -3835,6 +3994,7 @@
     },
     {
       "slug": "mail2telegram",
+      "repo": "TBXark/mail2telegram",
       "name": "mail2telegram",
       "summary": "Receive your domain's email in Telegram: a push for every message and a Mini App inbox with attachments, filters, and AI summaries.",
       "tagline": "Get your email in Telegram, with a full inbox",
@@ -3887,17 +4047,18 @@
         "bots"
       ],
       "license": "MIT",
-      "revision": 2,
+      "revision": 3,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/mail2telegram/manifest.json",
-        "sha256": "8a30a27278054ff51c908a1120c957690ca621e2736982da49ac93cbb8bb9871",
+        "sha256": "04a068603eb15341b87e01276807281f919d168b07fee4757164202925b0e0c3",
         "keyId": "catalog-2026-09",
-        "signature": "GM2vpAg8e6IiOekru4LMy0j4QlOvNG1ucEu1wAwp9qyXn7tcLmOow4YKgSnxCh8Qk/Z6jEVuMKESsmjHDCG0Dw=="
+        "signature": "4HMf8/p/wIaQDPylSupJXf+5fp+DH2Jglb5MCWC5eOrb0oGkKsaDeRbFPXbL/VzBVex6+bPrFjjevF/0PJV/Cg=="
       },
       "accessOffer": "offered"
     },
     {
       "slug": "mailclaw",
+      "repo": "missuo/mailclaw",
       "name": "MailClaw",
       "summary": "A catch-all inbox for your domain with a token-protected API for AI agents: every address receives into D1 and R2, with search, filters, export, sending through Resend or Cloudflare, and a web dashboard.",
       "tagline": "One searchable inbox for every address on your domain",
@@ -3957,9 +4118,10 @@
     },
     {
       "slug": "mailflare",
+      "repo": "hieunc229/mailflare",
       "name": "Mailflare",
-      "summary": "A self-hosted email service for your own domains: mailboxes, forwarding rules, and a web inbox, on Email Routing, D1, R2, Queues, and Durable Objects.",
-      "tagline": "Email and shared inboxes for your own domain",
+      "summary": "A self-hosted email service for your own domains: mailboxes, forwarding rules, and a web inbox, on Email Routing, D1, R2, Queues, and Durable Objects. Shared inboxes require a paid Team license.",
+      "tagline": "Receive, send and organize email on your own domain",
       "addedAt": "2026-09-24T07:29:19+03:00",
       "version": "0.0.0-20261006.48da9fa",
       "artifacts": {
@@ -4023,12 +4185,19 @@
       "categories": [
         "email"
       ],
-      "license": "AGPL-3.0-only",
-      "revision": 2,
+      "license": "AGPL-3.0-or-later",
+      "revision": 3,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/mailflare/manifest.json",
+        "sha256": "3e47432cdfb61c1d9e9c4b20c91d3d9f5f210b5cc05924a5cc358bb216d82e0b",
+        "keyId": "catalog-2026-09",
+        "signature": "bRQN/km0ZWECzu0yRw/p9WdBRRRXyLo9GniedCXfpwm0gs/Ken9fmrdcXqlJIO0LD9p7xjwIlFLyaHzYJIJ4AA=="
+      },
       "accessOffer": "offered"
     },
     {
       "slug": "md-page",
+      "repo": "maypaz/md.page",
       "name": "md.page",
       "summary": "Turn Markdown into a shareable web page with one request: an API, an MCP server for coding agents, and pages that expire after 24 hours, on Workers KV.",
       "tagline": "Turn your Markdown into a web page you can share",
@@ -4054,7 +4223,6 @@
         },
         {
           "name": "Matan Lachmish",
-          "url": "https://www.thebigfatninja.xyz",
           "github": "mlachmish"
         }
       ],
@@ -4093,17 +4261,18 @@
         "developer-tools"
       ],
       "license": "MIT",
-      "revision": 2,
+      "revision": 3,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/md-page/manifest.json",
-        "sha256": "0805173ddbceb778f18a17b87e67cb290826394f1d0c58f03710815b6e6e5fac",
+        "sha256": "fd91df4b694a42e3cefe0d41b44730f7fb293cad5bb2de76bf21c840a73baf49",
         "keyId": "catalog-2026-09",
-        "signature": "vpr/mNdMVFIuLGk8d4vIWirMSWe8mMAWkPN4hI1lYJ9W+F3FaJTwqynYOOCc7hTnVcWHFwE/GVTaol78W+vlAA=="
+        "signature": "L0mHzmarpkV+wDAAoDBhbabZTsPTzwGuzTa+Lrh33mMDfSl40Iuj6N/VezjDaIeJ1hBgI7icv1zPeZrAPn68DQ=="
       },
       "accessOffer": "offered"
     },
     {
       "slug": "memory-note",
+      "repo": "azu/memory-note",
       "name": "Memory Note",
       "summary": "A small notes and to-do API behind one token: push, list, edit, move and delete notes over REST from Siri Shortcuts, Alfred, a home screen widget or any script, stored in Workers KV or a Notion database.",
       "tagline": "Notes and to-dos you can reach from shortcuts, widgets and scripts",
@@ -4150,6 +4319,7 @@
     },
     {
       "slug": "microfeed",
+      "repo": "microfeed/microfeed",
       "name": "microfeed",
       "summary": "A lightweight CMS for audio, video, photos, documents, blog posts and links, published as a website, RSS and JSON feed, with an admin dashboard and an API for agents.",
       "tagline": "Publish podcasts, photos, videos and posts on your own site",
@@ -4171,7 +4341,7 @@
         {
           "name": "Listen Notes",
           "url": "https://www.listennotes.com",
-          "github": "microfeed"
+          "github": "ListenNotes"
         }
       ],
       "maintainers": [
@@ -4206,17 +4376,18 @@
         "media"
       ],
       "license": "AGPL-3.0-only",
-      "revision": 2,
+      "revision": 3,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/microfeed/manifest.json",
-        "sha256": "fc0a7469cddbfdd92c0c4acd211ead4fc08d01d0df9d7653c66cbf7aa8c1313a",
+        "sha256": "0baf1fc6aff2af395bf4b2772656fda90d9b0233d3c84783e4e063928d221778",
         "keyId": "catalog-2026-09",
-        "signature": "2nYtCjQBSAyFKpbftj4+gzREVaJS8NRQ2G9cAwtrcH7JawLM5QjjJTcpE8O11Guf+D+zcNZbKrdPYJqQqXyNDg=="
+        "signature": "vmsMFNbC4vSCJ023CJqW2/A1N6F0SUzLqCNJNWrqabNdAxaoOCD9yGOJV/IhiJ5w9ulcXt4tLiUhFX+rFggGDw=="
       },
       "accessOffer": "offered"
     },
     {
       "slug": "minshop",
+      "repo": "ddyy/minshop",
       "name": "minshop",
       "summary": "A small, server-rendered online store with a full admin: Stripe checkout for people, Lightning invoices and a JSON API that agents can pay through, on D1 and R2.",
       "tagline": "Run your own online store with card and Lightning payments",
@@ -4283,21 +4454,21 @@
         "r2"
       ],
       "categories": [
-        "business",
-        "finance"
+        "ecommerce"
       ],
       "license": "MIT",
-      "revision": 2,
+      "revision": 3,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/minshop/manifest.json",
-        "sha256": "bf72000a9f4dd54126912caf2f7c35aa86c17147c967ecba78c53995e84ebef8",
+        "sha256": "cce4ed6dded1b5be433a5959363fcb354d0e9ca0a1b699818b34fa0ba17d1d9f",
         "keyId": "catalog-2026-09",
-        "signature": "D10hSQY9MGNgOrSrTaqGuJmWm2Cf/UKsCYiTIwn+0J2P32+kEY5xU2YbH1y1soVwARQmoA6nJr7pMxwNhhRkDw=="
+        "signature": "Up4BqbLuxSyMRefnJ32I1Oe32cDKiCA3j53xhFvIZOaXHv8DvnkTYoKlDPqErSqH8DBQndBJRJlR9EAgbXv1CA=="
       },
       "accessOffer": "offered"
     },
     {
       "slug": "minvoice",
+      "repo": "ddyy/minvoice",
       "name": "Minvoice",
       "summary": "Invoicing for one business: invoices with PDF attachments, pay links through Stripe and PayPal, payment reminders, reports and CSV export, on D1.",
       "tagline": "Create invoices with pay links and payment reminders",
@@ -4379,9 +4550,10 @@
     },
     {
       "slug": "mpp-proxy",
+      "repo": "cloudflare/mpp-proxy",
       "name": "MPP Payment-Gated Proxy",
-      "summary": "Charge AI agents and other clients per request for paths of your own site: a reverse proxy that answers 402 with a Machine Payments Protocol challenge, verifies the payment on Tempo, and then passes the request to your origin.",
-      "tagline": "Charge for requests to selected parts of your website",
+      "summary": "Put paid access in front of selected website paths. The reverse proxy verifies Machine Payments Protocol payments on Tempo, forwards requests to your origin, and grants one hour of access through a cookie.",
+      "tagline": "Require payments to access selected parts of your website",
       "addedAt": "2026-09-27T12:13:25+03:00",
       "version": "0.0.0-20260722.0e4dd80",
       "artifacts": {
@@ -4418,17 +4590,18 @@
         "developer-tools"
       ],
       "license": "Apache-2.0",
-      "revision": 2,
+      "revision": 3,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/mpp-proxy/manifest.json",
-        "sha256": "983386c6aac9fc1f29358814d9181501277948027443e9abef5a382d4998acaa",
+        "sha256": "a2f73741792d9f052440fd332fac157f170c24e62c6c5b4ba5a66aff11b829f1",
         "keyId": "catalog-2026-09",
-        "signature": "saDqsTRINblFBEWqLyWoWks+AUguUHjpqtlP3Ce3PrhT/RMoXMeMgR0ng7E6RG+tCrn8TePA0sUqZ9iLcwxjCw=="
+        "signature": "Eat7VUtqcuQ+FynojT4T20Vf3T9baloY+bUedV1G6x1LsxHrosgIFL+UOeEqmmWW3U6JFU3O5/sUqC2E9qXfDQ=="
       },
       "accessOffer": "offered"
     },
     {
       "slug": "nabiz",
+      "repo": "productdevbook/nabiz",
       "name": "nabiz",
       "summary": "A status page that probes your services every minute from Cloudflare's edge, with 90-day uptime bars, operator notices, and Telegram or webhook alerts.",
       "tagline": "A status page that checks your services every minute",
@@ -4489,6 +4662,7 @@
     },
     {
       "slug": "neriplayer-listen-together",
+      "repo": "cwuom/NeriPlayer",
       "name": "NeriPlayer Listen Together",
       "summary": "Your own listen-together server for the NeriPlayer Android app: create a room, share the invite, and everyone's playback, queue and track changes stay in sync.",
       "tagline": "Keep music playback in sync while listening with friends",
@@ -4528,11 +4702,18 @@
         "sync"
       ],
       "license": "NONE",
-      "revision": 2,
+      "revision": 3,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/neriplayer-listen-together/manifest.json",
+        "sha256": "7e6a4ce2364ec0d90ba476532fe3d25b86e03a93d411c7fdb41195f66f76ec3a",
+        "keyId": "catalog-2026-09",
+        "signature": "mg/ylEWqG+UwNm6OFgDFGgIXCovlDTTXrTa2mnqoTggUkg0rBPGfb5yIk5Hn1Xcch7QKpbOhPFAqrN2eqcDCBA=="
+      },
       "accessOffer": "offered"
     },
     {
       "slug": "ni-mail",
+      "repo": "mskatoni/ni-mail",
       "name": "ni-mail",
       "summary": "A minimal mail receiver for your own domain with an HTTP API: fetch the latest message, list, read and thread mail per address, with attachments kept in R2, for scripts and automation.",
       "tagline": "Receive mail on your domain for scripts and automations",
@@ -4577,6 +4758,7 @@
     },
     {
       "slug": "nodecrypt",
+      "repo": "shuaiplus/nodecrypt",
       "name": "NodeCrypt",
       "summary": "End-to-end encrypted chat rooms in the browser: no accounts and no stored history, with private messages, images, and files, relayed by a Durable Object that never sees plaintext.",
       "tagline": "Private chat rooms without accounts or message history",
@@ -4617,11 +4799,18 @@
         "privacy"
       ],
       "license": "ISC",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/nodecrypt/manifest.json",
+        "sha256": "b8e60736d05a34b1f95fd07489dcd1a7be4a46e7d253c3640942eb742c206a72",
+        "keyId": "catalog-2026-09",
+        "signature": "7F6bWk/EwmBtd8fhu08Hq3yDZmp0IUHDLUJkVa2oWj8+3/bnvOq4cWaa+IzLmuP2JALBgvjtBk+S0WkyVy+bBg=="
+      },
       "accessOffer": "offered"
     },
     {
       "slug": "nodewarden",
+      "repo": "shuaiplus/nodewarden",
       "name": "NodeWarden",
       "summary": "A Bitwarden-compatible password manager server: the official Bitwarden apps and browser extensions sync to it, with a web vault, attachments, Send, and passkey sign-in, on D1 and R2.",
       "tagline": "A password vault that syncs with your Bitwarden apps",
@@ -4672,6 +4861,7 @@
     },
     {
       "slug": "nodrix",
+      "repo": "decoded-cipher/nodrix",
       "name": "nodrix",
       "summary": "A self-hosted IoT platform: devices send telemetry over HTTPS or WebSocket, variables appear on their own, and you build realtime dashboards, controls and automations on top, with a read API and an MCP server, on Durable Objects, D1 and R2. Sends anonymous usage statistics to upstream daily, with no opt-out.",
       "tagline": "Track devices with live dashboards and automations",
@@ -4729,6 +4919,7 @@
     },
     {
       "slug": "omnimail",
+      "repo": "mibgb65-cloud/OmniMail",
       "name": "OmniMail",
       "summary": "Self-hosted multi-domain webmail on one Worker: mailboxes and users on your own domains through Email Routing, sending through Resend or SendFlare, and external Gmail, Microsoft and other accounts in one place. The interface is in Chinese.",
       "tagline": "Mail for your domains and other inboxes in one place",
@@ -4788,6 +4979,7 @@
     },
     {
       "slug": "one-ip",
+      "repo": "zhihui-hu/one-ip",
       "name": "One IP",
       "summary": "IP and network diagnostics: look up an address's location, ASN, reputation and risk, check your exit IP, DNS, CDN, WebRTC and browser fingerprint, and run a speed test.",
       "tagline": "Check your IP, network privacy, speed and online service status",
@@ -4848,6 +5040,7 @@
     },
     {
       "slug": "open-artifacts",
+      "repo": "coda0HQ/open-artifacts",
       "name": "Open Artifacts",
       "summary": "Let coding agents publish HTML and Markdown pages to shareable links, with client-side password protection, version history, and updates in place when the project changes, on D1 and R2.",
       "tagline": "Share pages from your coding agent with links that stay up to date",
@@ -4897,17 +5090,18 @@
         "sharing"
       ],
       "license": "MIT",
-      "revision": 2,
+      "revision": 3,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/open-artifacts/manifest.json",
-        "sha256": "8cbb42e5a3f51d2ed447383704e9c08f7170a7277d78858888e928177e4fe302",
+        "sha256": "b24c8e941bd6b8c6ffc48ad615442001a97111aea3f7cd5400a3a5d46d23bc1e",
         "keyId": "catalog-2026-09",
-        "signature": "+a4CbAGqPCwXiFD7ak5AAgWzPhkpwqHk5WatQy79ZVlI9hol/4L+L9bQEmhu2QPR1ZvyEnuLHOhGDFQyAyRKDA=="
+        "signature": "ajkSi9I/v/kZtcmezoKs1hIO+8MAYwxHXbMCSKqcTbt2Qv1qIx60bESQd4oFlPVuxN11rsr/dCByplldQavACA=="
       },
       "accessOffer": "offered"
     },
     {
       "slug": "open-seo",
+      "repo": "every-app/open-seo",
       "name": "OpenSEO",
       "summary": "Self-hosted SEO research: keywords, rankings, backlinks and site audits, on your own Cloudflare account and behind Cloudflare Access.",
       "tagline": "Find search terms, track rankings, and check your site's health",
@@ -4973,19 +5167,20 @@
         "analytics"
       ],
       "license": "MIT",
-      "revision": 4,
+      "revision": 5,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/open-seo/manifest.json",
-        "sha256": "86ede81187d43e48fcfa804b09ba8427e0c3b5d72386a9cb6f16b9f5af7f8f21",
+        "sha256": "d3c43380bf5b7b86cd26c18c2f9860d77bb06414b6f362b1f69705339998eddc",
         "keyId": "catalog-2026-09",
-        "signature": "57kQxeQ7cGT2hTsgBJzXBp/EhuDf5RQAJPXxbgxCX7fmEBv6qkXL3RjfCSoeHXB7hwFkLuzh8ZG9UDpHOwdMCg=="
+        "signature": "9HqP7wHsWzR3SPbMjRbVePEeDbGYVIomvvrF4cGF3HYsOYW8qKYdsDF2/kS0bXpSB+TNwtb8p2JyVSJAY9xODg=="
       },
       "accessOffer": "required"
     },
     {
       "slug": "openai-gemini",
+      "repo": "PublicAffairs/openai-gemini",
       "name": "OpenAI Gemini",
-      "summary": "OpenAI-compatible API adapter for Gemini, on Workers.",
+      "summary": "Use Gemini with OpenAI clients through your own API endpoint, with chat, embeddings, streaming replies, tool calls, and image or audio input.",
       "tagline": "Use Gemini in apps built for OpenAI",
       "addedAt": "2026-09-23T15:16:53+03:00",
       "version": "0.0.0-20251222.61a83bd",
@@ -5010,20 +5205,22 @@
       ],
       "services": [],
       "categories": [
-        "ai"
+        "ai",
+        "developer-tools"
       ],
       "license": "MIT",
-      "revision": 2,
+      "revision": 3,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/openai-gemini/manifest.json",
-        "sha256": "a33eba599ca7fcc70c46373363222cb2f0af1fc040fb42bb686c389475991719",
+        "sha256": "78172e51a2b08e77572e0dc32c406fa7f0694d51631516ad36577bdc8b5fa852",
         "keyId": "catalog-2026-09",
-        "signature": "6O1wM5q3w39iDPbdA2ALCd7OLRNlmDcNqqNagDd/hX6Ypph1KrVbwWqSGcjuBOKiAbxURb5mtbgzdfKt5If2AA=="
+        "signature": "Ztrh6SpxsH6CzrCurK4/anYny1Df5J8LegHQ847kWDEUI1vzKjVpw58rxJMPJEfri4J5ANxOq0gLT7UEZlKRDQ=="
       },
       "accessOffer": "offered"
     },
     {
       "slug": "openshortlink",
+      "repo": "idhamsy/openshortlink",
       "name": "OpenShort.link",
       "summary": "Link shortener and link management for your own domains: geo and device redirects, QR codes, tags, teams with roles, API keys, and click analytics on Analytics Engine.",
       "tagline": "Create short links on your own domains and track their clicks",
@@ -5080,8 +5277,9 @@
     },
     {
       "slug": "openstory",
+      "repo": "openstory-so/openstory",
       "name": "OpenStory",
-      "summary": "Turn a script into a storyboard and video: scene breakdown, consistent characters, locations and styles, AI-generated frames, motion, voices and music, with team libraries and an MCP server, on D1, R2, Workflows and Durable Objects. Brings your own AI provider keys.",
+      "summary": "Turn scripts into storyboards and videos with scene breakdowns, consistent characters, locations and styles, AI-generated frames, motion, voices and music, shared team libraries and an MCP server. Bring your own AI provider keys.",
       "tagline": "Turn scripts into videos with consistent characters and scenes",
       "addedAt": "2026-09-27T12:03:21+03:00",
       "version": "0.0.0-20261006.9854a24",
@@ -5134,11 +5332,18 @@
         "media"
       ],
       "license": "MIT",
-      "revision": 3,
+      "revision": 4,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/openstory/manifest.json",
+        "sha256": "f8b8ebbbdb14bac4ca866536cbf4ecb5d6fd107789aa368a6fe90d39e92c29a5",
+        "keyId": "catalog-2026-09",
+        "signature": "3yLX/j/YmRAlau9gt9TxG5yzD4PPGRde6zWwsuDIMBTOUJpL7Nhcu186JBfxabzAjBmhAiBCRaDIyiCRDsgIBg=="
+      },
       "accessOffer": "offered"
     },
     {
       "slug": "pastebin-worker",
+      "repo": "SharzyL/pastebin-worker",
       "name": "Pastebin Worker",
       "summary": "A pastebin and file sharer with short links, syntax highlighting, rendered Markdown, client-side encryption, a URL shortener, and a curl-friendly API, on KV and R2.",
       "tagline": "Share text and files with short links on your own site",
@@ -5176,11 +5381,18 @@
         "sharing"
       ],
       "license": "MIT",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/pastebin-worker/manifest.json",
+        "sha256": "0f72ae156cb1f8e54c84cff3f2176996ad5e11bc08eb26850fbb0e5d1f22a2ad",
+        "keyId": "catalog-2026-09",
+        "signature": "AVO4ePQFaoL9gWEVLxsZ5nFr0xzkjkqZrEpqps5N344rAbFEg7MVUYKWTH5Aw7fsWI1fyv9DcbVdBjN2EW/ZAw=="
+      },
       "accessOffer": "offered"
     },
     {
       "slug": "placeholders-dev",
+      "repo": "Cherry/placeholders.dev",
       "name": "placeholders.dev",
       "summary": "Placeholder images generated on the fly: SVGs of any size, text, font and colours, described entirely by the URL, with light and dark variants.",
       "tagline": "Make placeholder images in any size and color",
@@ -5234,7 +5446,8 @@
     },
     {
       "slug": "playwright-mcp",
-      "name": "Playwright MCP",
+      "repo": "microsoft/playwright-mcp",
+      "name": "Cloudflare Playwright MCP",
       "summary": "A remote MCP server that lets AI assistants browse for you: navigate, click, type, read page snapshots and take screenshots in a headless browser from Cloudflare Browser Rendering.",
       "tagline": "Let your AI assistant browse websites and take screenshots",
       "addedAt": "2026-09-27T11:42:03+03:00",
@@ -5257,6 +5470,10 @@
           "url": "https://www.cloudflare.com",
           "github": "cloudflare",
           "x": "Cloudflare"
+        },
+        {
+          "name": "Microsoft Corporation",
+          "github": "microsoft"
         }
       ],
       "maintainers": [
@@ -5267,7 +5484,7 @@
           {
             "url": "https://appflare.github.io/catalog/apps/playwright-mcp/screenshots/01-workers-ai-playground.png",
             "sha256": "0babb2b842dcb3b300f23734b7a882a4f2533585d3489d2df56e796a1d9c1f7f",
-            "alt": "Playwright MCP: Workers ai playground"
+            "alt": "Cloudflare Playwright MCP: Workers ai playground"
           }
         ]
       },
@@ -5280,17 +5497,18 @@
         "developer-tools"
       ],
       "license": "Apache-2.0",
-      "revision": 2,
+      "revision": 3,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/playwright-mcp/manifest.json",
-        "sha256": "44ccb6edef49d2c0febfe4ae9778199eaadf1ea0b3405f8af8f514e90b8fc71e",
+        "sha256": "f506bbec631bdfbb46bd6201c433bee29226be18a039d6ef0bb8ffd2800eddeb",
         "keyId": "catalog-2026-09",
-        "signature": "KuFbufJQc920TKMsPL1N0/9/AkR+SbYNSl/jGTWd/S7tHohI3zRz/niDx+eNROz0wOfmMOjQmVPx6QJLh/COAg=="
+        "signature": "SbF09DjPXeKqncN7VomzMdonPO4xYeKj96MZ+XZZ4RzTIdvjgxq0Q02Jb3bqVf3eLkdA6ppSQAvjam65Vxd0BQ=="
       },
       "accessOffer": "offered"
     },
     {
       "slug": "private-notes",
+      "repo": "tao-t356/private-notes",
       "name": "Private Notes",
       "summary": "A private notebook behind one password: notes encrypted in the browser before they reach D1, search that runs in the browser, separate vaults per password, and one-time share links that burn after reading.",
       "tagline": "Keep encrypted notes behind a password",
@@ -5341,6 +5559,7 @@
     },
     {
       "slug": "projektor",
+      "repo": "TAJD/projektor",
       "name": "Projektor",
       "summary": "An issue tracker and wiki for teams and their AI coding agents: issues, boards, sprints and pages in the browser, and the same actions over MCP.",
       "tagline": "Track team issues and keep a wiki alongside AI coding agents",
@@ -5405,6 +5624,7 @@
     },
     {
       "slug": "punctual",
+      "repo": "CCCrafts/punctual",
       "name": "Punctual",
       "summary": "Scheduling links for you and your team, a Calendly alternative: booking pages, Google and Microsoft 365 calendar sync, round-robin and collective events, reminders, and webhooks.",
       "tagline": "Let people book time with you or your team",
@@ -5423,6 +5643,9 @@
       ],
       "lastVerified": "2026-10-06T11:02:37.000Z",
       "authors": [
+        {
+          "name": "Sergey Bulaev"
+        },
         {
           "name": "Creative Content Crafts",
           "url": "https://cccrafts.ai",
@@ -5463,17 +5686,18 @@
         "scheduling"
       ],
       "license": "MIT",
-      "revision": 2,
+      "revision": 3,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/punctual/manifest.json",
-        "sha256": "02aab1fbed6d5e3b3e97a7991dd56890781e08cdda04e182bfc55ba0477e15ee",
+        "sha256": "884f41c684598db24903d9ab2674af3066bd4d08f9daba927ce8a4c021df3cd1",
         "keyId": "catalog-2026-09",
-        "signature": "Bc07khRM2+ZOhua7wzekUuqCy+Znq2bdu66FPB3rkzTF88hL66MI2Bn6lZfveWzOlX2Pdopaciqh7nkiZ7M5DQ=="
+        "signature": "G1iqwD4v0VMc91miKxWVEe/0jHrHtIvsEFHjSlL59Xftby58n9Jyg+4V3JLvAefmIgxQaFdH+4us/UvP9WcxDQ=="
       },
       "accessOffer": "offered"
     },
     {
       "slug": "quickinbox",
+      "repo": "DivinPrince/quickinbox",
       "name": "Quickinbox",
       "summary": "Email for your own domain: a web mail client with threads, attachments, several users and domains, plus a REST API, CLI and MCP server.",
       "tagline": "Email for your own domain, with a web inbox you control",
@@ -5559,8 +5783,9 @@
     },
     {
       "slug": "r2-explorer",
+      "repo": "G4brym/R2-Explorer",
       "name": "R2 Explorer",
-      "summary": "A Google Drive-like file browser for an R2 bucket, on Workers + R2.",
+      "summary": "Browse folders, preview files and download objects from an R2 bucket through a read-only web interface.",
       "tagline": "Browse and preview files in your Cloudflare storage",
       "addedAt": "2026-09-23T15:41:37+03:00",
       "version": "1.1.10",
@@ -5618,17 +5843,18 @@
         "files"
       ],
       "license": "MIT",
-      "revision": 3,
+      "revision": 4,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/r2-explorer/manifest.json",
-        "sha256": "b08abc0d5e1d35337eda762bf8dc8a9dade102723ea907035f8675cbe8816857",
+        "sha256": "eaaa21d63e24223bee80ea55e19591434492d6b91a17b3e798b1081ae0a6ee04",
         "keyId": "catalog-2026-09",
-        "signature": "KAPjGSvRN/FSv/1BNPlKlO+MmD6jAuMK/D87j78mx3IVnvMI3mpcs0dZM9OXuLjso+DRUk3aWyYQQmLYtRK+Bw=="
+        "signature": "AK5CsHvbULtW0Sv6z/lpena3FEX9a3ux8J2jtV5VRsWIxToVWut5C+MildKP+YkKI3LcByDSmXLPLQwN8rYRAw=="
       },
       "accessOffer": "required"
     },
     {
       "slug": "r2-webdav",
+      "repo": "abersheeran/r2-webdav",
       "name": "r2-webdav",
       "summary": "A WebDAV server for an R2 bucket: mount it as a network drive in Finder, Windows Explorer or any WebDAV client, with locking and one user name and password.",
       "tagline": "Access your R2 files as a network drive",
@@ -5661,12 +5887,19 @@
       "categories": [
         "files"
       ],
-      "license": "NONE",
-      "revision": 3,
+      "license": "Apache-2.0",
+      "revision": 4,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/r2-webdav/manifest.json",
+        "sha256": "c3e15a3018c07a1c9b611917dbc7be9c84b15b399eca98f474b23c974df0dfad",
+        "keyId": "catalog-2026-09",
+        "signature": "tvg0CQLZVUTGT2F/AsN1wa4faz40pfTdtnruoDzfi6j+qqUzLSJHjlnI2iaB2a0rKmulu22/5IzfncLrsGaaCw=="
+      },
       "accessOffer": "offered"
     },
     {
       "slug": "rdyrct",
+      "repo": "baronunread/rdyrct",
       "name": "rdyrct",
       "summary": "A URL shortener for teams: organizations with roles, branded short links and QR codes, click analytics that never store an IP, an MCP server, and a KV redirect path in front of D1.",
       "tagline": "Branded short links, QR codes, and private click analytics for teams",
@@ -5726,6 +5959,7 @@
     },
     {
       "slug": "relay",
+      "repo": "YuriCrystal/relay",
       "name": "Relay",
       "summary": "A link shortener with cookieless click and conversion analytics: A/B splits, device and country routing, per-channel suffixes, retargeting pixels, QR codes and CSV export, on D1.",
       "tagline": "Short links you control, with cookieless click and conversion stats",
@@ -5743,7 +5977,7 @@
       "lastVerified": "2026-10-06T11:02:41.000Z",
       "authors": [
         {
-          "name": "Yuri",
+          "name": "YuriCrystal",
           "github": "YuriCrystal"
         }
       ],
@@ -5758,17 +5992,18 @@
         "analytics"
       ],
       "license": "MIT",
-      "revision": 3,
+      "revision": 4,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/relay/manifest.json",
-        "sha256": "9991e3d1b6aa29b503dfbef796a2ad30910a7c99bf7fe8403f5abd0286354994",
+        "sha256": "b5c328f7ebf13225a16e539537e47e19c759e97f8bee2011db1e8f3bc0db135b",
         "keyId": "catalog-2026-09",
-        "signature": "+eY6Jv2ai9mjTMUm5oSr4xc4wYxcE6AryQ/0c2Lze552eWUNF5PRzZL6NpGECuJXCJCPxB6ZHTBjiVDcJmVbAQ=="
+        "signature": "M5VG80UXl5GHXq4pcv6nXAfFu3H4Ceax1hmnlw/leZ9r6D2ksFmbbWS1CodNLB/xcreFDkEwfPDcSuJUzffXDA=="
       },
       "accessOffer": "offered"
     },
     {
       "slug": "reminal",
+      "repo": "harshalgajjar/Reminal",
       "name": "Reminal",
       "summary": "Your own relay for reminal: reach the terminals, app windows and desktops of your machines from any browser, end-to-end encrypted, with nothing listening on the machines.",
       "tagline": "Reach your computers' windows and terminals from any browser",
@@ -5823,8 +6058,9 @@
     },
     {
       "slug": "renewhelper",
+      "repo": "ieax/renewhelper",
       "name": "RenewHelper",
-      "summary": "Keep track of subscriptions, domain renewals, server expiry dates and birthdays: solar and lunar cycles, reminders through Telegram, email, webhooks and a dozen other channels, a calendar with an iCal feed, and a spending dashboard, on Workers KV.",
+      "summary": "Track subscriptions, domain renewals, server expiry dates and birthdays with Gregorian and lunar calendars, reminders through Telegram, email and other channels, an iCal calendar feed, and a spending dashboard.",
       "tagline": "Track renewals and important dates with timely reminders",
       "addedAt": "2026-09-27T11:44:57+03:00",
       "version": "3.8.4",
@@ -5890,13 +6126,20 @@
         "notifications"
       ],
       "license": "MIT",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/renewhelper/manifest.json",
+        "sha256": "1406fffd342104be3a588dee25ef1dc56dc07caf15ef423aa2c682f71a2319e7",
+        "keyId": "catalog-2026-09",
+        "signature": "eYHKYu6pyK77r6KJxQAcvGpA8t3w3w+v0GV59dAaJ8lYMAq0Q7B5ioeL67oFuCtB+ApVpbEVZ50E24BvJxtLDw=="
+      },
       "accessOffer": "offered"
     },
     {
       "slug": "renewlet",
+      "repo": "zhiyingzzhou/renewlet",
       "name": "Renewlet",
-      "summary": "Track recurring subscriptions and renewals: timezone-aware reminders over ten notification channels, calendar feeds, budgets, cost sharing and spending statistics, on D1, R2 and a queue.",
+      "summary": "Track recurring subscriptions and renewals with timezone-aware reminders through ten notification channels, calendar feeds, budgets, cost sharing and spending statistics.",
       "tagline": "Track subscriptions and get reminders before they renew",
       "addedAt": "2026-09-27T12:02:55+03:00",
       "version": "0.3.28",
@@ -5956,11 +6199,18 @@
         "productivity"
       ],
       "license": "MIT",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/renewlet/manifest.json",
+        "sha256": "12a54b7fc95923eaa0919de453d7bd22181c3d9b23df633dc2a6b20911674f25",
+        "keyId": "catalog-2026-09",
+        "signature": "Jus6iTC6BSuyYkbXJusoFWqlbwv0OU0Px/N3KE/86Bu5KdULoiG3/TwupsLdabQuztNouJYjj0ojmoSek5qRAA=="
+      },
       "accessOffer": "offered"
     },
     {
       "slug": "resolvehq",
+      "repo": "mirza-rizvi/ResolveHQ",
       "name": "ResolveHQ",
       "summary": "A self-hosted helpdesk: a shared inbox fed by Email Routing, threaded tickets, SLAs and snoozes, a help center and knowledge base, customer ratings, reports, a scoped API and outbound webhooks, on D1, R2 and Queues.",
       "tagline": "Manage customer emails and support tickets in your own account",
@@ -6016,6 +6266,7 @@
     },
     {
       "slug": "rsshub-never-die",
+      "repo": "CaoMeiYouRen/rsshub-never-die",
       "name": "RSSHub Never Die",
       "summary": "A stable RSSHub address for your feed reader: requests go to a pool of public RSSHub instances, by load balancing, failover to the next instance, or the fastest of several.",
       "tagline": "One address for your feed reader that switches servers when one fails",
@@ -6058,6 +6309,7 @@
     },
     {
       "slug": "rssworker",
+      "repo": "yllhwa/RSSWorker",
       "name": "RSSWorker",
       "summary": "A small RSS feed generator: RSS and Atom feeds for Bilibili dynamics and videos, Telegram channels, Weibo users and Xiaohongshu users, one URL per feed.",
       "tagline": "RSS feeds for Bilibili, Telegram, Weibo and Xiaohongshu updates",
@@ -6099,6 +6351,7 @@
     },
     {
       "slug": "scrapedown",
+      "repo": "ozanvos/scrapedown",
       "name": "scrapedown",
       "summary": "Turn any web page into clean Markdown: one GET with a URL returns the article's text in reader mode, with its title, byline, excerpt and language.",
       "tagline": "Turn web pages into clean, readable text",
@@ -6116,7 +6369,7 @@
       "lastVerified": "2026-10-06T11:03:40.000Z",
       "authors": [
         {
-          "name": "Ozan Şener",
+          "name": "Ozan van Oosten-Şener",
           "url": "https://getairefs.com",
           "github": "ozanvos",
           "x": "ozanvos"
@@ -6131,17 +6384,18 @@
         "utilities"
       ],
       "license": "MIT",
-      "revision": 2,
+      "revision": 3,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/scrapedown/manifest.json",
-        "sha256": "4d91adbb0e66620e42a0f0775289f6d0c4cca725d4a30e56dcf826221bb0e6e3",
+        "sha256": "3bbed62ce423cf0e6e817ec71b13b65f1ae57eb07721c8ddb1b7fdff0d3c1576",
         "keyId": "catalog-2026-09",
-        "signature": "Pdb0gymZoNfSah5Fe+LCqK1ZG0ohFcPMv2FdZZoI3jrX0BgGF4Rg70UbZ3wtK+DbTdJxRZOMOLtRriJN/ECyBQ=="
+        "signature": "KJRo3AY7K0wiExxwMUogP7Fhg0rO2SSBO9/UxG2WKE2bdSH9hjyahAVYflBxNmNoSO2SvHMVrvoeGxeIrFatBw=="
       },
       "accessOffer": "offered"
     },
     {
       "slug": "screencapture-live",
+      "repo": "itschip/screencapture",
       "name": "screencapture Live",
       "summary": "The live-streaming relay for screencapture on FiveM: stream a player's game view to admins' browsers through Cloudflare Realtime, with one-time viewer grants and a visible indicator for the player.",
       "tagline": "Let admins watch a player's game live in their browser",
@@ -6185,6 +6439,7 @@
     },
     {
       "slug": "screendrop",
+      "repo": "fayazara/Screendrop",
       "name": "Screendrop Cloud",
       "summary": "The upload and sharing backend for the Screendrop macOS app: screenshots and screen recordings stored in R2, with share pages, transcripts, comments and likes.",
       "tagline": "Share screenshots and screen recordings with your own links",
@@ -6228,17 +6483,18 @@
         "media"
       ],
       "license": "MIT",
-      "revision": 3,
+      "revision": 4,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/screendrop/manifest.json",
-        "sha256": "7fb4040a72f23a796680e3ff01050f685ab7136b5cd3404e0bf7b379f0a0b4ad",
+        "sha256": "db146a1ae2c3ef69498d880a4c46b60d26eb3bb4cb7f9b9ba5109ba8a71cff64",
         "keyId": "catalog-2026-09",
-        "signature": "qv6o9kbK0qeQwQBJ8LzORxAS+s6I2DGPh/HOG2gdZCPo5vpxIfKiHyr5ZrxKLxxoK+4KB4YuR+kSec52k87UBA=="
+        "signature": "wXp9vnJmVoNgccnMydBZ86TeHsLANS0oVfzHONkxrP/M4di5JXPOK+z/kMzdvK8DJj1OeoXcqAhXnRhl7dpDAg=="
       },
       "accessOffer": "offered"
     },
     {
       "slug": "second-brain-cloudflare",
+      "repo": "rahilp/second-brain-cloudflare",
       "name": "Second Brain",
       "summary": "A personal memory for your AI assistants: an MCP server that stores notes in D1 and recalls them by meaning with Vectorize and Workers AI.",
       "tagline": "Save notes once and recall them across your AI tools",
@@ -6283,14 +6539,21 @@
       ],
       "categories": [
         "ai",
-        "productivity"
+        "notes"
       ],
       "license": "MIT",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/second-brain-cloudflare/manifest.json",
+        "sha256": "5e0103c6f73d820b0ed5452764d2f7d56a0ad6ccb83ad720b71bcb95f38c3401",
+        "keyId": "catalog-2026-09",
+        "signature": "l+YJ688YMqNC/SP2wv0TQ2+AW8YuBD/Eh2ftuN/IZCL+V7WF6O9zFPU4XcTibh3GiQI62kIYwavs3o0NfsHUDQ=="
+      },
       "accessOffer": "offered"
     },
     {
       "slug": "seeder",
+      "repo": "danielsyauqi/Seeder",
       "name": "Seeder",
       "summary": "A project manager for small teams: kanban tasks, client requests, a public client board, a daily planner and a built-in MCP server.",
       "tagline": "Manage team projects, tasks, and client requests in one place",
@@ -6386,6 +6649,7 @@
     },
     {
       "slug": "semanticsearch",
+      "repo": "SemanticSearch-ai/semanticsearch",
       "name": "Semantic Search",
       "summary": "A semantic search API on Vectorize and Workers AI: add documents with metadata over HTTP, then search them by meaning, with writer and read-only API keys and Swagger docs.",
       "tagline": "Find your documents by meaning",
@@ -6429,17 +6693,19 @@
         "ai"
       ],
       "license": "Apache-2.0",
-      "revision": 2,
+      "licenseNote": "The README requires products built on this app to include a link to https://semanticsearch.ai/.",
+      "revision": 3,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/semanticsearch/manifest.json",
-        "sha256": "4e9589014bca19d537649e5d5d5d3beecdd2039b4c7fa786fc7d6871955563cf",
+        "sha256": "d8452696e3691df5367f53d485ef224df93c920784247d4a14c504243212cc0d",
         "keyId": "catalog-2026-09",
-        "signature": "IBAUHtM/RPBStHUycPMMz7I7R/k2f3M/IgRzsI42mdmSlkYK3hioHuUkMSMqaOMOYo/8uSrzoWvn3h3pqithBA=="
+        "signature": "mkOJcytH6O2diy0NQnEpOeDAWRlTdUTJPlHL+momn/7+Q5B8aKztBs0exAqjNzKlefyKR/HPFmJwyxRmeWdwAA=="
       },
       "accessOffer": "offered"
     },
     {
       "slug": "sharehtml",
+      "repo": "jonesphillip/sharehtml",
       "name": "ShareHTML",
       "summary": "Publish HTML, Markdown, and code files from the command line and get a shareable link with live comments, reactions, and presence. Sign-in through Cloudflare Access.",
       "tagline": "Publish web pages and documents by link and gather comments",
@@ -6502,6 +6768,7 @@
     },
     {
       "slug": "shotsync",
+      "repo": "Defiabell/shotsync",
       "name": "ShotSync",
       "summary": "A private image and text pool shared across your devices: drop a screenshot or snippet on one, grab it on another, from an installable web app backed by R2.",
       "tagline": "Share pictures and text between your devices, privately",
@@ -6553,17 +6820,18 @@
         "sharing"
       ],
       "license": "MIT",
-      "revision": 2,
+      "revision": 3,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/shotsync/manifest.json",
-        "sha256": "726a9c25312867cc111f87c558c75aa716fa9917142f26cdf2bc019f734ec930",
+        "sha256": "68e92bfdcafc80bf69b170613fc545deb91833adb6ac7173028e8dd2bbcee17e",
         "keyId": "catalog-2026-09",
-        "signature": "Gk9sWSJjFkN+qM36upBZJaAjEwtx0/t8cY1eq8XtQnPXfo6ZfKU39andBKjo1iiTn0K+ldKgP3EKjDc1hf1SCA=="
+        "signature": "x1FtM2kUQ1NGAc1TgPuusjuw4/qeYfChWAX/EzxATa4MalRkqc1UppKXsvmsa+/6quVTzqWkYSKGXrA647fyCg=="
       },
       "accessOffer": "offered"
     },
     {
       "slug": "shrtnr",
+      "repo": "oddbit/shrtnr",
       "name": "shrtnr",
       "summary": "A URL shortener you drive from code and AI assistants: a REST API with typed SDKs, an MCP server, per-user links behind Cloudflare Access, bundles and click analytics, on D1 and KV.",
       "tagline": "Create short links and track clicks in one place",
@@ -6588,7 +6856,6 @@
         },
         {
           "name": "Dennis Alund",
-          "url": "https://dennis.alund.me",
           "github": "DennisAlund",
           "x": "DennisAlund"
         }
@@ -6635,17 +6902,18 @@
         "analytics"
       ],
       "license": "Apache-2.0",
-      "revision": 4,
+      "revision": 5,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/shrtnr/manifest.json",
-        "sha256": "323d0d15d1abbe73a9a964f40d8317d1946c508cc5fe9bb5fefe243044eeb1c8",
+        "sha256": "7a74271b54ec2f28a2d5a820f116810b11691bb1c1722280afec2a8e4342e787",
         "keyId": "catalog-2026-09",
-        "signature": "PbSHU8G0sQcacIyioh9OPEVMn4qLiZSVKj8AzNItVGdpTinLVyFDOc+TmasiB4md+uLUybcBvhmNawVIIhGeAA=="
+        "signature": "ohRDzdMCExA0NfnW2mO245CGpbctyBlChbK/PCKshoPKUFhMrYOgwxWLYs8xnFLmB1WCdSEj4uXug5dVPf53DA=="
       },
       "accessOffer": "offered"
     },
     {
       "slug": "sink",
+      "repo": "miantiao-me/Sink",
       "name": "Sink",
       "summary": "Link shortener with visit analytics: custom slugs, expiring links, QR codes, AI slug suggestions and a realtime globe, all on Cloudflare.",
       "tagline": "Create short links and track their visits",
@@ -6715,6 +6983,7 @@
     },
     {
       "slug": "skland-attendance",
+      "repo": "AEtherside/skland-daily-attendance",
       "name": "Skland Daily Attendance",
       "summary": "Claims the daily Skland sign-in rewards for your Arknights and Arknights: Endfield accounts on a schedule, with optional notifications of each run.",
       "tagline": "Automatically claim daily rewards for Arknights and Endfield",
@@ -6751,22 +7020,23 @@
       ],
       "categories": [
         "bots",
-        "utilities"
+        "games"
       ],
       "license": "MIT",
-      "revision": 2,
+      "revision": 3,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/skland-attendance/manifest.json",
-        "sha256": "ab7727ffe977c8b3482fd476582ab39163dfa988096c8f73e0e68062b58b3f95",
+        "sha256": "f04fb9c3e4cc8c670ac825394dce937847c0f8598078aa0cfbb56a7f98bc459d",
         "keyId": "catalog-2026-09",
-        "signature": "/f22lJqRBhJuOqnhSYKP1nO+8vMeJ+MITeMH4UpCn4nmasgoyjReD1iCcDpxgDmbfYi6ji6siN8HekBDlTl4BQ=="
+        "signature": "3BYHdjWg3Ryxx3tzsYw/5mYy3qMLhTmq8YkSJRuzW0J9SrIAsnqzzKPL5upa6LOBV1fyJgeoVBguiBR+xeiPAQ=="
       },
       "accessOffer": "offered"
     },
     {
       "slug": "statusbeam",
+      "repo": "pleaseai/statusbeam",
       "name": "StatusBeam",
-      "summary": "A status page served from Cloudflare's edge cache, with a checker that probes your sites, Statuspage and incident.io pages, and Sentry monitors every five minutes.",
+      "summary": "A public status page with uptime history and response-time charts. It checks your websites every five minutes and mirrors service status from Statuspage, incident.io, Sentry Uptime and AI gateways.",
       "tagline": "Monitor your services and share a public status page",
       "addedAt": "2026-09-27T06:14:13+03:00",
       "version": "0.1.1",
@@ -6813,17 +7083,18 @@
         "utilities"
       ],
       "license": "MIT",
-      "revision": 2,
+      "revision": 3,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/statusbeam/manifest.json",
-        "sha256": "0c62f7363e23004dc4138e88f8728adf4b924ada922404fff8cdbae08d709d66",
+        "sha256": "63b401854051b09d1547e79e48a5a92490d19bfa3d81120da67433d35c1f869d",
         "keyId": "catalog-2026-09",
-        "signature": "jJQfFi2xMBUkYZQTAR12NowroWHfrGkr5IVALDBUQX9PwnBiB4ji6DhfxTgSwCLpW2wkIyzO1JspkptO4idlCQ=="
+        "signature": "23FhPFVYKHm/yw8QA36HF9DbuFojllpX9Ey6j+lJqdEUpD6n8Qz7tR0gg3SfQF2NmAWn1LEKJyg1N0AsATkmCA=="
       },
       "accessOffer": "offered"
     },
     {
       "slug": "sveltia-cms-auth",
+      "repo": "sveltia/sveltia-cms-auth",
       "name": "Sveltia CMS Authenticator",
       "summary": "The OAuth helper that lets people sign in to Sveltia CMS (or Decap CMS) with GitHub or GitLab, for sites whose editors should not have to create access tokens.",
       "tagline": "Let site editors sign in with GitHub without making access tokens",
@@ -6863,6 +7134,7 @@
     },
     {
       "slug": "synch",
+      "repo": "hjinco/synch",
       "name": "Synch",
       "summary": "Your own server for Synch, end-to-end encrypted real-time sync for Obsidian vaults: notes are encrypted on each device, and the Worker relays and stores only ciphertext in a Durable Object, D1 and R2.",
       "tagline": "Keep your Obsidian notes in sync on your own server",
@@ -6922,6 +7194,7 @@
     },
     {
       "slug": "telegram-push",
+      "repo": "sduoduo233/telegram-push",
       "name": "Telegram Push",
       "summary": "Push notifications to Telegram with one HTTP request: your own bot hands each chat a push key, and any script or webhook sends a message with a GET to /push.",
       "tagline": "Send notifications to your Telegram chats with a web request",
@@ -6959,6 +7232,7 @@
     },
     {
       "slug": "tempik",
+      "repo": "hirotomasato/tempik",
       "name": "Tempik",
       "summary": "A disposable email service on your own domain: pick or generate an address in the browser and read the mail sent to it, received by Email Routing and kept in D1.",
       "tagline": "Disposable email addresses on your own domain",
@@ -7008,6 +7282,7 @@
     },
     {
       "slug": "ternssh",
+      "repo": "haradakashiwa/ternssh",
       "name": "ternssh",
       "summary": "An SSH workspace in the browser: a draggable dashboard of terminals, SFTP file management, server status and process monitors, saved servers and keys, and an AI command helper.",
       "tagline": "Manage SSH servers and files from your browser",
@@ -7027,7 +7302,7 @@
       "lastVerified": "2026-10-06T11:06:19.000Z",
       "authors": [
         {
-          "name": "haradakashiwa",
+          "name": "Kashiwa",
           "url": "https://ternssh.com",
           "github": "haradakashiwa"
         }
@@ -7058,17 +7333,18 @@
         "developer-tools"
       ],
       "license": "GPL-3.0-or-later",
-      "revision": 2,
+      "revision": 3,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/ternssh/manifest.json",
-        "sha256": "1c74d016b2301c43f821905272fcb16d518ab340a4970812ca3304a59d36d201",
+        "sha256": "41257d6f8757c9ef8afde4b07694a1a4354132abd6ecc5fa4e30cc1f8667d21a",
         "keyId": "catalog-2026-09",
-        "signature": "sU15C18nFhX4R5c3gHRNV5tJH26hUCdWXGG+CqV1fmUiKSiMfJYxNquncPKFqIIWP3NGHYcgdxrOLcsuDHT9BA=="
+        "signature": "OQ0RwxCT9xPyocRyCwV4odmHcq0t+D7PEA7WlyPWhGRBTphY4iVgvh5jGKg/h2M6+W4fmJEZZhAcGjrR0/66BA=="
       },
       "accessOffer": "offered"
     },
     {
       "slug": "token-monitor",
+      "repo": "Javis603/token-monitor",
       "name": "Token Monitor Hub",
       "summary": "Your own sync hub for Token Monitor: combine the token use, costs and plan limits of Claude Code, Codex, Cursor and 40 more AI coding tools across all your machines, live in every widget.",
       "tagline": "Sync your AI coding usage across all your devices",
@@ -7114,6 +7390,7 @@
     },
     {
       "slug": "turborepo-remote-cache",
+      "repo": "AdiRishi/turborepo-remote-cache-cloudflare",
       "name": "Turborepo Remote Cache",
       "summary": "A Turborepo remote cache server on Workers and R2: point turbo at it and share build outputs between your machines and CI, without Vercel.",
       "tagline": "Speed up builds by sharing cached results across your machines",
@@ -7162,6 +7439,7 @@
     },
     {
       "slug": "unifi-ddns",
+      "repo": "willswire/unifi-ddns",
       "name": "UniFi DDNS",
       "summary": "Dynamic DNS for UniFi gateways: keeps Cloudflare A/AAAA records on your current IP.",
       "tagline": "Keep your domain pointed at your current IP address",
@@ -7205,6 +7483,7 @@
     },
     {
       "slug": "usage-guard-collector",
+      "repo": "HowardZlh/usage-guard-collector",
       "name": "Usage Guard Collector",
       "summary": "Usage surge alerts for your Cloudflare account: reads daily Workers, D1, Durable Objects, KV, R2 and Queues counts into D1 and pings Discord or Slack when a meter jumps.",
       "tagline": "Get alerts when your Cloudflare usage suddenly jumps",
@@ -7223,7 +7502,7 @@
       "authors": [
         {
           "name": "Howard",
-          "url": "https://www.guushu.com",
+          "url": "https://guushu.com",
           "github": "HowardZlh"
         }
       ],
@@ -7239,17 +7518,18 @@
         "utilities"
       ],
       "license": "MIT",
-      "revision": 2,
+      "revision": 3,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/usage-guard-collector/manifest.json",
-        "sha256": "e14d431be559fc083550f554e013bbf3c25fc7671c1e9f4fd84ad07c456d5471",
+        "sha256": "b064379cbc63b95d8f344451d5c677d07115bcafbd8707f6a66be2873441b55e",
         "keyId": "catalog-2026-09",
-        "signature": "ZNtVYg7oGkjFMoDhE7tft5RBXoA+pnlhMn3npJ+8Cbir4BJ46HSy15FrUqdyfhlgTMAHiHdjwEJ52aE0PllNBQ=="
+        "signature": "3foqPFIs59CkxJtgzGpAK+nBCx1/Eu8KhNIEXk5Vueh+iSoJ6Qzkrtsat6MB0Rj5DzhfTKVFdm1opGVLFIdSCQ=="
       },
       "accessOffer": "recommended"
     },
     {
       "slug": "veet",
+      "repo": "megaconfidence/veet",
       "name": "Veet",
       "summary": "Video calls in the browser: share a meeting link and talk face to face, with chat, device settings and peer-to-peer media for small groups.",
       "tagline": "Share a link and talk face to face in your browser",
@@ -7290,19 +7570,20 @@
         "chat"
       ],
       "license": "NONE",
-      "revision": 2,
+      "revision": 3,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/veet/manifest.json",
-        "sha256": "ed465adaedb484a0b6fbe9275e5e775883e4701f264558700e479a3525cab42a",
+        "sha256": "915639604d33678b421c65815ccd2d1844757ad8fc50a318dca95e71167b0fbf",
         "keyId": "catalog-2026-09",
-        "signature": "FXMVczvPpHADGIlhZ34sgnYQKEYlgO4Z1tcIlb0Ci/zJtrUycVASliCuE336X9OqdJA2waUYp9mvr8ud8hl7CQ=="
+        "signature": "gpBvlvCaXoaFZzKxDoysfAPxZ9Q2U8MXf6swxYOKYllpCEr92OAKk42QeTYRMaVGwIuu3E0R3OxU15O1uAXEBA=="
       },
       "accessOffer": "offered"
     },
     {
       "slug": "vps-jsq",
+      "repo": "verkyer/vps-jsq",
       "name": "VPS-JSQ",
-      "summary": "A VPS remaining-value calculator: enter the renewal price, currency, billing cycle and dates to see the value left and a suggested resale price, with live exchange rates and a shareable image card. Chinese interface.",
+      "summary": "Calculate the unused value of a prepaid VPS from its renewal price, billing cycle and dates, then set a resale premium. Includes currency conversion, live exchange rates and shareable image cards. Chinese interface.",
       "tagline": "See what the unused time on a prepaid server is worth",
       "addedAt": "2026-09-27T12:08:49+03:00",
       "version": "0.0.0-20260829.c9739a4",
@@ -7346,11 +7627,18 @@
         "utilities"
       ],
       "license": "Apache-2.0",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/vps-jsq/manifest.json",
+        "sha256": "f091e0c394b9d4872e69a651fabb7cb0449e2403f33f0c86e5f1f1bf84ae18a6",
+        "keyId": "catalog-2026-09",
+        "signature": "Mf4kHhD8O+Xzea3ZJJp+fQswwXbwHcTlPquy61dztZusW7SNNJK79KD6aMR9/JyZqaomOz8gtC+gwRZSamTCDg=="
+      },
       "accessOffer": "offered"
     },
     {
       "slug": "webrtc-turn",
+      "repo": "heruoxin/webrtc_turn",
       "name": "AndroMeld TURN Relay",
       "summary": "Your own TURN relay for AndroMeld: when your phone, Mac and browser cannot connect directly, they relay their encrypted traffic through Cloudflare Realtime TURN in your account.",
       "tagline": "Keep AndroMeld connected when a direct connection fails",
@@ -7393,6 +7681,7 @@
     },
     {
       "slug": "workers-firecrawl",
+      "repo": "G4brym/workers-firecrawl",
       "name": "Workers Firecrawl",
       "summary": "A Firecrawl-compatible search, scrape and map API on Browser Rendering: point the Firecrawl SDKs at your own Worker and get pages as Markdown, HTML, links or screenshots.",
       "tagline": "Search the web and turn pages into readable text",
@@ -7440,6 +7729,7 @@
     },
     {
       "slug": "wx2md",
+      "repo": "loadchange/wx2md-worker",
       "name": "wx2md",
       "summary": "Turns WeChat Official Account articles, and any other web page, into clean Markdown or a readable HTML view: swap the article link's host for your Worker's, on Workers AI Markdown conversion.",
       "tagline": "Turn WeChat articles and web pages into Markdown",
@@ -7476,18 +7766,19 @@
         "ai"
       ],
       "license": "MIT",
-      "revision": 4,
+      "revision": 5,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/wx2md/manifest.json",
-        "sha256": "a2342e15a3be5709c4d954683a3a6df17159196b08fa56afdfe78f961bf32c50",
+        "sha256": "a5a83618134ed2d7966c8b27907ba444dae7e0fe30de5e804b22675b7d5eeed9",
         "keyId": "catalog-2026-09",
-        "signature": "o6g2tIbBY5+WQeQTaI9G6e7F3D/2cK/IbtkxnNPiTJ4guyUYQ49OrSp8XBVT33tAxEGXa4tJLmuG8WzVet8JDw=="
+        "signature": "C8ELZ2V28p/2qSBX4mSVNAQxXHE9lbcPhvcOXVc0klwWA7srKT3OnawV4aeF3XQ0DgiGjCKe7heZirAIb51WAw=="
       },
       "accessOffer": "offered"
     },
     {
       "slug": "xiadd-pastebin",
-      "name": "xiadd Pastebin",
+      "repo": "xiadd/pastebin-worker",
+      "name": "PasteShare",
       "summary": "A pastebin with syntax highlighting, Markdown, password-protected pastes, expiry times and file uploads up to 25 MB, on D1 and R2, with a JSON API.",
       "tagline": "Share text and files with links that can expire or use a password",
       "addedAt": "2026-09-27T11:50:07+03:00",
@@ -7529,11 +7820,18 @@
         "developer-tools"
       ],
       "license": "MIT",
-      "revision": 1,
+      "revision": 2,
+      "catalogManifest": {
+        "url": "https://appflare.github.io/catalog/apps/xiadd-pastebin/manifest.json",
+        "sha256": "de9312c34fb00b4d1acdf6c35fd5f6cc2a2d8f5b083faf118ae8abd626b4570e",
+        "keyId": "catalog-2026-09",
+        "signature": "T9rMu5NHLL2X648w6ruOBqsGy4c6ULuFQhoCQDq4FOImP4H9bSLECQDXBx/wkfBZemceIndIE2L5ppkF/0qBDw=="
+      },
       "accessOffer": "offered"
     },
     {
       "slug": "yaos",
+      "repo": "kavinsood/yaos",
       "name": "YAOS",
       "summary": "Real-time sync for Obsidian vaults: edits merge live across devices as CRDTs, with attachments and snapshots in R2, through a Worker you own.",
       "tagline": "Keep your Obsidian notes in sync across devices",
@@ -7556,7 +7854,7 @@
           "name": "Kavin",
           "url": "https://kavinsood.com",
           "github": "kavinsood",
-          "x": "kavinsoodd"
+          "x": "itskavins"
         }
       ],
       "maintainers": [
