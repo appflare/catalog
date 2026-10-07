@@ -11,9 +11,11 @@ The official app catalog for [Appflare](https://github.com/appflare/appflare).
 Find apps for analytics, email, files, AI, productivity and more, then install and
 update them from your Appflare dashboard.
 
-[Browse all apps](https://appflare.dev/apps/) · [Install Appflare](https://appflare.dev/start/install/) · [Submit an app](https://appflare.dev/catalog/submit/) · [Contributing](CONTRIBUTING.md)
+[![Install Appflare](docs/assets/install-appflare.svg)](https://link.appflare.dev/deploy?utm_source=github&utm_medium=readme&utm_campaign=appflare&utm_content=catalog-readme-install-1)
 
-[![The Appflare catalog with app categories and popular apps](docs/assets/catalog-preview.png)](https://appflare.dev/apps/)
+[Browse all apps](https://appflare.dev/apps/?utm_source=github&utm_medium=readme&utm_campaign=appflare&utm_content=catalog-readme-apps-1) · [Install Appflare](https://link.appflare.dev/deploy?utm_source=github&utm_medium=readme&utm_campaign=appflare&utm_content=catalog-readme-install-2) · [Submit an app](https://appflare.dev/catalog/submit/?utm_source=github&utm_medium=readme&utm_campaign=appflare&utm_content=catalog-readme-catalog-submit-1) · [Contributing](CONTRIBUTING.md)
+
+[![The Appflare catalog with app categories and popular apps](docs/assets/catalog-preview.png)](https://appflare.dev/apps/?utm_source=github&utm_medium=readme&utm_campaign=appflare&utm_content=catalog-readme-apps-2)
 
 ## Find your next app
 
@@ -21,18 +23,18 @@ A few apps you can install through Appflare:
 
 | App | What it does |
 | --- | --- |
-| <img src="apps/open-seo/icon.png" width="32" height="32" alt=""> [OpenSEO](https://appflare.dev/apps/open-seo/) | Find search terms, track rankings and check your site's health. |
-| <img src="apps/sink/icon.png" width="32" height="32" alt=""> [Sink](https://appflare.dev/apps/sink/) | Create short links and track their visits. |
-| <img src="apps/counterscale/icon.png" width="32" height="32" alt=""> [Counterscale](https://appflare.dev/apps/counterscale/) | Track website visits with a dashboard you host yourself. |
-| <img src="apps/agentic-inbox/icon.svg" width="32" height="32" alt=""> [Agentic Inbox](https://appflare.dev/apps/agentic-inbox/) | Your own email inbox with an AI assistant that drafts replies. |
-| <img src="apps/nodewarden/icon.png" width="32" height="32" alt=""> [NodeWarden](https://appflare.dev/apps/nodewarden/) | A password vault that syncs with your Bitwarden apps. |
+| <img src="apps/open-seo/icon.png" width="32" height="32" alt=""> [OpenSEO](https://appflare.dev/apps/open-seo/?utm_source=github&utm_medium=readme&utm_campaign=appflare&utm_content=catalog-readme-apps-open-seo-1) | Find search terms, track rankings and check your site's health. |
+| <img src="apps/sink/icon.png" width="32" height="32" alt=""> [Sink](https://appflare.dev/apps/sink/?utm_source=github&utm_medium=readme&utm_campaign=appflare&utm_content=catalog-readme-apps-sink-1) | Create short links and track their visits. |
+| <img src="apps/counterscale/icon.png" width="32" height="32" alt=""> [Counterscale](https://appflare.dev/apps/counterscale/?utm_source=github&utm_medium=readme&utm_campaign=appflare&utm_content=catalog-readme-apps-counterscale-1) | Track website visits with a dashboard you host yourself. |
+| <img src="apps/agentic-inbox/icon.svg" width="32" height="32" alt=""> [Agentic Inbox](https://appflare.dev/apps/agentic-inbox/?utm_source=github&utm_medium=readme&utm_campaign=appflare&utm_content=catalog-readme-apps-agentic-inbox-1) | Your own email inbox with an AI assistant that drafts replies. |
+| <img src="apps/nodewarden/icon.png" width="32" height="32" alt=""> [NodeWarden](https://appflare.dev/apps/nodewarden/?utm_source=github&utm_medium=readme&utm_campaign=appflare&utm_content=catalog-readme-apps-nodewarden-1) | A password vault that syncs with your Bitwarden apps. |
 
-[Explore the full catalog](https://appflare.dev/apps/) for app details,
+[Explore the full catalog](https://appflare.dev/apps/?utm_source=github&utm_medium=readme&utm_campaign=appflare&utm_content=catalog-readme-apps-3) for app details,
 screenshots, licenses and requirements.
 
 ## Install an app
 
-1. [Install Appflare](https://appflare.dev/start/install/) in your Cloudflare account.
+1. [Install Appflare](https://link.appflare.dev/deploy?utm_source=github&utm_medium=readme&utm_campaign=appflare&utm_content=catalog-readme-install-3) in your Cloudflare account.
 2. Open **Catalog** in Appflare and choose an app.
 3. Review its requirements, fill in any settings it needs and select **Install**.
 
@@ -49,7 +51,7 @@ with their own pricing.
 You can submit an app, update an existing entry or improve its description and
 images. Adding an app does not require changing the upstream project's repository.
 
-1. Follow the [submission guide](https://appflare.dev/catalog/submit/) to create
+1. Follow the [submission guide](https://appflare.dev/catalog/submit/?utm_source=github&utm_medium=readme&utm_campaign=appflare&utm_content=catalog-readme-catalog-submit-2) to create
    `apps/<slug>/appflare.jsonc`, or edit an existing entry.
 2. Set up the [local tooling and checks](CONTRIBUTING.md#local-tooling).
 3. Open a pull request with your changes.
@@ -69,7 +71,7 @@ problem, [open an issue](https://github.com/appflare/catalog/issues).
 
 Each entry pins one upstream commit. GitHub workflows build the releases, update
 `index.json` and run install checks on pull requests and every night. See
-[how the catalog works](https://appflare.dev/catalog/how-it-works/) for the details.
+[how the catalog works](https://appflare.dev/catalog/how-it-works/?utm_source=github&utm_medium=readme&utm_campaign=appflare&utm_content=catalog-readme-catalog-how-it-works-1) for the details.
 
 ## Run your own catalog
 
