@@ -23,7 +23,7 @@
     { "name": "OpenShort.link contributors", "url": "https://openshort.link", "github": "idhamsy" }
   ],
   "maintainers": ["MendyLanda"],
-  "source": { "ref": "v0.10.0", "sha": "bd337fcf45f237087373e9a837bb884d02e7eb4f" },
+  "source": { "ref": "v0.11.0", "sha": "7e05244381ab8c02f4569b7c05729c5429ce0e7f" },
   "install": {
     // Upstream documents npm, but its unpinned ranges no longer resolve with
     // npm's strict peer checks (today's wrangler wants @cloudflare/workers-types
