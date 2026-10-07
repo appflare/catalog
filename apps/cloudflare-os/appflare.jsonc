@@ -1,0 +1,662 @@
+{
+  // Upstream's repository holds 18 Workers (the router, the workshop backend
+  // and 16 gatekeepers) and deploys them with its own service: its release
+  // build bundles every package, and the deploy service adds the bindings
+  // and settings that are not in the checked-in wrangler configs
+  // (scripts/release/manifest-lib.ts:1-17, 469-515). This entry installs all
+  // 17 that the deploy service offers: the router, the workshop, the two
+  // gatekeepers it preinstalls (Context and Scheduler) and the 13 gatekeepers
+  // for outside services. gatekeeper-email is left out, as upstream leaves it
+  // out of every install (NOT_INSTALLABLE, manifest-lib.ts:271-273): it
+  // receives mail through Email Routing on a zone, which an install served
+  // from workers.dev does not have.
+  //
+  // The config patches below add what upstream's deploy service adds at
+  // upload time. No upstream pull request yet: upstream deploys through that
+  // service by design, so its checked-in configs are not meant to carry these
+  // values.
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "cloudflare-os",
+  "name": "Cloudflare OS",
+  "summary": "Cloudflare's AI productivity environment: an agent chat that gets work done for you, and builds small private apps (gadgets) on request, each in its own sandbox, shareable with your team.\n\nThis install has the workspace, the agents, gadgets and blueprints, the Context library, scheduled agent runs, and the connectors for GitHub, Google, Slack, Notion, Linear, Cloudflare and other services; most of them start working once you give them an OAuth client of your own. Everyone signs in through Cloudflare Access.",
+  "tagline": "An AI workspace where agents do your work and build small apps for you",
+  "repo": "cloudflare/cloudflare-os",
+  "license": "Apache-2.0",
+  "categories": ["ai", "productivity", "developer-tools"],
+  "authors": [
+    { "name": "Cloudflare", "url": "https://www.cloudflare.com", "github": "cloudflare" }
+  ],
+  "maintainers": ["MendyLanda"],
+  // Upstream has no tags or releases, so the entry follows the default branch by commit.
+  "source": { "ref": "main", "sha": "b304e8c25497b7de3e976daebce3cfc015bbd605" },
+  "install": {
+    "packageManager": "pnpm",
+    "wranglerConfig": "packages/router/wrangler.jsonc",
+    // Cloudflare Access mode is a build-time switch of the frontend
+    // (packages/workshop-frontend/src/useAuth.ts:6); upstream's release builds
+    // with it on (scripts/release/build-release.ts:219-231), as the starter does.
+    "buildEnv": { "VITE_CF_ACCESS_MODE": "true" },
+    // The generated files the Workers import (the Context and Scheduler
+    // apps, the bundled blueprints), then the frontend the router serves.
+    // Each gatekeeper's buildCommand below generates its configurator pages,
+    // as its package's deploy script does. Each Worker's own build.command
+    // (capnweb-validate, and build:worker for the workshop) then runs in its
+    // package directory, as wrangler runs it there. The same steps as the
+    // packages' deploy scripts and the starter's buildCommands, without
+    // their type checks.
+    "buildCommand": [
+      "pnpm exec vp run -F @gadgets/gatekeeper-context --no-cache build:app",
+      "pnpm exec vp run -F @gadgets/gatekeeper-scheduler --no-cache build:app",
+      "pnpm exec vp run -F @gadgets/workshop-backend build:bundled-blueprints",
+      "pnpm exec vp run -F @gadgets/workshop-frontend --no-cache build"
+    ],
+    "workers": [
+      {
+        // The only public Worker: it serves the frontend and forwards /api to
+        // the workshop and /gatekeeper/<name> to the gatekeeper whose
+        // GATEKEEPER_<NAME> binding matches (packages/router/src/index.ts:24-49).
+        "name": "router",
+        "wranglerConfig": "packages/router/wrangler.jsonc",
+        "primary": true,
+        // Upstream checks in only the backend binding; its deploy service adds
+        // one GATEKEEPER_* binding per installed gatekeeper, without an
+        // entrypoint or props (manifest-lib.ts:492-495). The binding name is
+        // the gatekeeper's install slug upper-cased (releaseShortName,
+        // manifest-lib.ts:374: mcp-portal folds to MCPPORTAL).
+        "configPatch": {
+          "services": [
+            { "binding": "WORKSHOP_BACKEND", "service": "workshop-backend" },
+            { "binding": "GATEKEEPER_CONTEXT", "service": "gatekeeper-context" },
+            { "binding": "GATEKEEPER_SCHEDULER", "service": "gatekeeper-scheduler" },
+            { "binding": "GATEKEEPER_CLOUDFLARE", "service": "gatekeeper-cloudflare" },
+            { "binding": "GATEKEEPER_CONFLUENCE", "service": "gatekeeper-confluence" },
+            { "binding": "GATEKEEPER_GITHUB", "service": "gatekeeper-github" },
+            { "binding": "GATEKEEPER_GOOGLE", "service": "gatekeeper-google" },
+            { "binding": "GATEKEEPER_HOMEASSISTANT", "service": "gatekeeper-homeassistant" },
+            { "binding": "GATEKEEPER_LINEAR", "service": "gatekeeper-linear" },
+            { "binding": "GATEKEEPER_MCP", "service": "gatekeeper-mcp" },
+            { "binding": "GATEKEEPER_MCPPORTAL", "service": "gatekeeper-mcp-portal" },
+            { "binding": "GATEKEEPER_NOTION", "service": "gatekeeper-notion" },
+            { "binding": "GATEKEEPER_SLACK", "service": "gatekeeper-slack" },
+            { "binding": "GATEKEEPER_SPOTIFY", "service": "gatekeeper-spotify" },
+            { "binding": "GATEKEEPER_SUPABASE", "service": "gatekeeper-supabase" },
+            { "binding": "GATEKEEPER_ZOOMINFO", "service": "gatekeeper-zoominfo" }
+          ]
+        }
+      },
+      {
+        "name": "workshop",
+        "wranglerConfig": "packages/workshop-backend/wrangler.jsonc",
+        "workersDev": false,
+        "configPatch": {
+          // The Workers AI binding upstream's deploy service gives every
+          // backend (manifest-lib.ts:473-481): the agents' web fetch tool
+          // converts documents to Markdown through it, and it carries AI
+          // Gateway traffic without an API token.
+          "ai": { "binding": "WORKERS_AI" },
+          // The vendor bindings the deploy service adds to the backend, one
+          // per installed gatekeeper, through GatekeeperVendor
+          // (manifest-lib.ts:482-491). The workshop finds its gatekeepers by
+          // these names (packages/workshop-backend/src/auth/auth-vendors.ts:3-31).
+          "services": [
+            {
+              // No props on purpose, so Context keeps its library under its
+              // default sharing domain, "default"
+              // (packages/gatekeeper-context/src/domain.ts:5,
+              // library-gatekeeper.ts:394). Upstream's deploy service sets the
+              // instance's public origin instead (manifest-lib.ts:486-490).
+              // The sharing domain only separates data between deployments
+              // that share one Context Worker, and every Appflare install has
+              // its own. {{appUrl}} would also change whenever a custom domain
+              // is added or removed, splitting collections between the people
+              // who joined before and after. Keep this fixed: changing it in a
+              // new version hides existing installs' Context data.
+              "binding": "GATEKEEPER_CONTEXT",
+              "service": "gatekeeper-context",
+              "entrypoint": "GatekeeperVendor"
+            },
+            {
+              "binding": "GATEKEEPER_SCHEDULER",
+              "service": "gatekeeper-scheduler",
+              "entrypoint": "GatekeeperVendor"
+            },
+            {
+              "binding": "GATEKEEPER_CLOUDFLARE",
+              "service": "gatekeeper-cloudflare",
+              "entrypoint": "GatekeeperVendor"
+            },
+            {
+              "binding": "GATEKEEPER_CONFLUENCE",
+              "service": "gatekeeper-confluence",
+              "entrypoint": "GatekeeperVendor"
+            },
+            {
+              "binding": "GATEKEEPER_GITHUB",
+              "service": "gatekeeper-github",
+              "entrypoint": "GatekeeperVendor"
+            },
+            {
+              "binding": "GATEKEEPER_GOOGLE",
+              "service": "gatekeeper-google",
+              "entrypoint": "GatekeeperVendor"
+            },
+            {
+              "binding": "GATEKEEPER_HOMEASSISTANT",
+              "service": "gatekeeper-homeassistant",
+              "entrypoint": "GatekeeperVendor"
+            },
+            {
+              "binding": "GATEKEEPER_LINEAR",
+              "service": "gatekeeper-linear",
+              "entrypoint": "GatekeeperVendor"
+            },
+            {
+              "binding": "GATEKEEPER_MCP",
+              "service": "gatekeeper-mcp",
+              "entrypoint": "GatekeeperVendor"
+            },
+            {
+              "binding": "GATEKEEPER_MCPPORTAL",
+              "service": "gatekeeper-mcp-portal",
+              "entrypoint": "GatekeeperVendor"
+            },
+            {
+              "binding": "GATEKEEPER_NOTION",
+              "service": "gatekeeper-notion",
+              "entrypoint": "GatekeeperVendor"
+            },
+            {
+              "binding": "GATEKEEPER_SLACK",
+              "service": "gatekeeper-slack",
+              "entrypoint": "GatekeeperVendor"
+            },
+            {
+              "binding": "GATEKEEPER_SPOTIFY",
+              "service": "gatekeeper-spotify",
+              "entrypoint": "GatekeeperVendor"
+            },
+            {
+              "binding": "GATEKEEPER_SUPABASE",
+              "service": "gatekeeper-supabase",
+              "entrypoint": "GatekeeperVendor"
+            },
+            {
+              "binding": "GATEKEEPER_ZOOMINFO",
+              "service": "gatekeeper-zoominfo",
+              "entrypoint": "GatekeeperVendor"
+            }
+          ]
+        }
+      },
+      // Shared context collections agents consult.
+      {
+        "name": "context",
+        "wranglerConfig": "packages/gatekeeper-context/wrangler.jsonc",
+        "workersDev": false
+      },
+      // Scheduled and recurring agent runs.
+      {
+        "name": "scheduler",
+        "wranglerConfig": "packages/gatekeeper-scheduler/wrangler.jsonc",
+        "workersDev": false
+      },
+      // The gatekeepers for outside services. Each answers under the router
+      // at /gatekeeper/<slug> and reads that address from BASE_URL, which
+      // upstream's deploy service sets to <public origin>/gatekeeper/<slug>
+      // (manifest-lib.ts:497); OAuth providers send people back to
+      // BASE_URL/oauth. They stay off workers.dev: the router reaches them
+      // over service bindings, the workshop through GatekeeperVendor. Each
+      // imports configurator pages its buildCommand generates
+      // (src/generated, from the shared build:configurator step).
+      {
+        "name": "cloudflare",
+        "wranglerConfig": "packages/gatekeeper-cloudflare/wrangler.jsonc",
+        "workersDev": false,
+        "buildCommand": "pnpm exec vp run -F @gadgets/cloudflare-gatekeeper --no-cache build:configurator",
+        "configPatch": { "vars": { "BASE_URL": "{{appUrl}}/gatekeeper/cloudflare" } }
+      },
+      {
+        "name": "confluence",
+        "wranglerConfig": "packages/gatekeeper-confluence/wrangler.jsonc",
+        "workersDev": false,
+        "buildCommand": "pnpm exec vp run -F @gadgets/confluence-gatekeeper --no-cache build:configurator",
+        "configPatch": { "vars": { "BASE_URL": "{{appUrl}}/gatekeeper/confluence" } }
+      },
+      {
+        "name": "github",
+        "wranglerConfig": "packages/gatekeeper-github/wrangler.jsonc",
+        "workersDev": false,
+        "buildCommand": "pnpm exec vp run -F @gadgets/github-gatekeeper --no-cache build:configurator",
+        "configPatch": { "vars": { "BASE_URL": "{{appUrl}}/gatekeeper/github" } }
+      },
+      {
+        "name": "google",
+        "wranglerConfig": "packages/gatekeeper-google/wrangler.jsonc",
+        "workersDev": false,
+        "buildCommand": "pnpm exec vp run -F @gadgets/google-gatekeeper --no-cache build:configurator",
+        "configPatch": { "vars": { "BASE_URL": "{{appUrl}}/gatekeeper/google" } }
+      },
+      {
+        // People connect their own Home Assistant address and token in the app.
+        "name": "homeassistant",
+        "wranglerConfig": "packages/gatekeeper-homeassistant/wrangler.jsonc",
+        "workersDev": false,
+        "buildCommand": "pnpm exec vp run -F @gadgets/homeassistant-gatekeeper --no-cache build:configurator",
+        "configPatch": { "vars": { "BASE_URL": "{{appUrl}}/gatekeeper/homeassistant" } }
+      },
+      {
+        "name": "linear",
+        "wranglerConfig": "packages/gatekeeper-linear/wrangler.jsonc",
+        "workersDev": false,
+        "buildCommand": "pnpm exec vp run -F @gadgets/linear-gatekeeper --no-cache build:configurator",
+        "configPatch": { "vars": { "BASE_URL": "{{appUrl}}/gatekeeper/linear" } }
+      },
+      {
+        // MCP servers people add themselves; their OAuth uses dynamic client
+        // registration, so it needs no client of its own.
+        "name": "mcp",
+        "wranglerConfig": "packages/gatekeeper-mcp/wrangler.jsonc",
+        "workersDev": false,
+        "buildCommand": "pnpm exec vp run -F @gadgets/mcp-gatekeeper --no-cache build:configurator",
+        "configPatch": { "vars": { "BASE_URL": "{{appUrl}}/gatekeeper/mcp" } }
+      },
+      {
+        // One MCP server portal for everyone, set by the admin below.
+        "name": "mcpportal",
+        "wranglerConfig": "packages/gatekeeper-mcp-portal/wrangler.jsonc",
+        "workersDev": false,
+        "buildCommand": "pnpm exec vp run -F @gadgets/mcp-portal-gatekeeper --no-cache build:configurator",
+        "configPatch": { "vars": { "BASE_URL": "{{appUrl}}/gatekeeper/mcpportal" } }
+      },
+      {
+        "name": "notion",
+        "wranglerConfig": "packages/gatekeeper-notion/wrangler.jsonc",
+        "workersDev": false,
+        "buildCommand": "pnpm exec vp run -F @gadgets/notion-gatekeeper --no-cache build:configurator",
+        "configPatch": { "vars": { "BASE_URL": "{{appUrl}}/gatekeeper/notion" } }
+      },
+      {
+        "name": "slack",
+        "wranglerConfig": "packages/gatekeeper-slack/wrangler.jsonc",
+        "workersDev": false,
+        "buildCommand": "pnpm exec vp run -F @gadgets/slack-gatekeeper --no-cache build:configurator",
+        "configPatch": { "vars": { "BASE_URL": "{{appUrl}}/gatekeeper/slack" } }
+      },
+      {
+        "name": "spotify",
+        "wranglerConfig": "packages/gatekeeper-spotify/wrangler.jsonc",
+        "workersDev": false,
+        "buildCommand": "pnpm exec vp run -F @gadgets/spotify-gatekeeper --no-cache build:configurator",
+        "configPatch": { "vars": { "BASE_URL": "{{appUrl}}/gatekeeper/spotify" } }
+      },
+      {
+        "name": "supabase",
+        "wranglerConfig": "packages/gatekeeper-supabase/wrangler.jsonc",
+        "workersDev": false,
+        "buildCommand": "pnpm exec vp run -F @gadgets/supabase-gatekeeper --no-cache build:configurator",
+        "configPatch": { "vars": { "BASE_URL": "{{appUrl}}/gatekeeper/supabase" } }
+      },
+      {
+        "name": "zoominfo",
+        "wranglerConfig": "packages/gatekeeper-zoominfo/wrangler.jsonc",
+        "workersDev": false,
+        "buildCommand": "pnpm exec vp run -F @gadgets/zoominfo-gatekeeper --no-cache build:configurator",
+        "configPatch": { "vars": { "BASE_URL": "{{appUrl}}/gatekeeper/zoominfo" } }
+      }
+    ]
+  },
+  // Gadgets run in Dynamic Workers (the workshop's LOADER Worker Loader
+  // binding), which only Workers Paid has.
+  "plan": "paid",
+  // BLUEPRINT_CONTENT is an R2 bucket, gadget PDF exports use Browser
+  // Rendering, and the workshop has a Workers AI binding. The last two are
+  // what the manager must support: keyed secrets (each gatekeeper's own
+  // CLIENT_ID and CLIENT_SECRET), and the config patches that set BASE_URL
+  // and add the AI binding.
+  "requires": [
+    "r2",
+    "browser-rendering",
+    "workers-ai",
+    "access",
+    "secret-keys",
+    "config-patch-values"
+  ],
+  // The frontend is built in Access mode, so it has no sign-in page: the
+  // workshop takes the user from the Access JWT the router passes on
+  // (packages/workshop-backend/src/server.ts:891-905) and refuses /api
+  // without one. Every Appflare user can sign in.
+  "access": { "mode": "required" },
+  "vars": [
+    {
+      // packages/workshop-backend/src/server.ts:122-138: parsed as a JSON
+      // array and matched exactly (includes) against the Access email, so
+      // the case must match too.
+      "name": "ADMINS",
+      "label": "Administrators",
+      "help": "A JSON list of the emails that may open the admin page, each in double quotes, for example [\"you@example.com\", \"ops@example.com\"]. Write each email exactly as Cloudflare Access reports it, same upper and lower case: the app compares them letter for letter. Text that is not a JSON list makes the admin page fail.",
+      "workers": ["workshop"]
+    },
+    {
+      "name": "PUBLIC_BASE_URL",
+      "label": "Public address",
+      "help": "Filled in by Appflare: the app's address, which it builds links from.",
+      "default": "{{appUrl}}",
+      "workers": ["workshop"]
+    },
+    {
+      // packages/workshop-backend/src/access.ts:13-26: the issuer is the
+      // team's https origin, and the keys are read from its /cdn-cgi/access/certs.
+      "name": "CF_ACCESS_ISS",
+      "label": "Cloudflare Access team address",
+      "help": "Filled in by Appflare from the app's Cloudflare Access protection.",
+      "default": "https://{{accessTeamDomain}}",
+      "workers": ["workshop"]
+    },
+    {
+      "name": "CF_ACCESS_AUD",
+      "label": "Cloudflare Access audience (AUD) tag",
+      "help": "Filled in by Appflare: the audience tag of the app's Cloudflare Access application.",
+      "default": "{{accessAud}}",
+      "workers": ["workshop"]
+    },
+    {
+      // AI Gateway mode (packages/workshop-backend/src/ai-gateway.ts:72-130,
+      // docs/ai-gateway-billing.md "Configuration"). With the WORKERS_AI
+      // binding the gateway in this account needs no token, except for the
+      // google provider, which only goes over HTTPS
+      // (workshop-shared/src/api.ts:1903). The check runs whenever a model
+      // is looked up (ai-gateway.ts:116-130, 162-165), so a google provider
+      // without the token breaks every model, not only Google's.
+      "name": "CF_AI_GATEWAY",
+      "label": "AI Gateway name",
+      "help": "Optional. The name of an AI Gateway in this account, such as default, to offer everyone its models without keys of their own. Leave it empty and each user adds models with their own provider keys.",
+      "link": {
+        "label": "Open the dashboard",
+        "url": "https://dash.cloudflare.com/?to=/:account/ai/ai-gateway"
+      },
+      "optional": true,
+      "workers": ["workshop"]
+    },
+    {
+      "name": "CF_AI_GATEWAY_PROVIDERS",
+      "label": "AI Gateway providers",
+      "help": "The providers the gateway serves, comma separated, from anthropic, openai, google and cloudflare (Workers AI). Used only with an AI Gateway name. If you list google, also set the AI Gateway token: without it no model works, Google's or any other.",
+      "default": "cloudflare",
+      "workers": ["workshop"]
+    },
+    {
+      "name": "CF_AI_GATEWAY_ACCOUNT_ID",
+      "label": "AI Gateway account ID",
+      "help": "Filled in by Appflare: the account the gateway is in, this one.",
+      "default": "{{accountId}}",
+      "workers": ["workshop"]
+    },
+    {
+      // packages/gatekeeper-mcp-portal/README.md "Configuration" and
+      // src/config.ts:67-100. Upstream's deploy service takes no inputs for
+      // this gatekeeper; without a URL it hides itself.
+      "name": "MCP_PORTAL_URL",
+      "label": "MCP server portal address",
+      "help": "Optional. The MCP endpoint of a Cloudflare MCP server portal, offered to everyone as one connector. Leave it empty and the connector stays hidden.",
+      "link": {
+        "label": "About MCP server portals",
+        "url": "https://developers.cloudflare.com/cloudflare-one/access-controls/ai-controls/mcp-portals/"
+      },
+      "optional": true,
+      "workers": ["mcpportal"]
+    },
+    {
+      "name": "MCP_PORTAL_NAME",
+      "label": "MCP server portal name",
+      "help": "Optional. The name people see for the portal. Leave it empty to show MCP Server Portal and the portal's host name.",
+      "optional": true,
+      "workers": ["mcpportal"]
+    },
+    {
+      "name": "MCP_PORTAL_AUTH",
+      "label": "MCP server portal sign-in",
+      "help": "How the app signs in to the portal. Used only with a portal address.",
+      "type": "select",
+      "options": [
+        { "value": "oauth", "label": "Each person signs in (OAuth)" },
+        { "value": "token", "label": "A shared token" },
+        { "value": "none", "label": "No sign-in" }
+      ],
+      "default": "oauth",
+      "workers": ["mcpportal"]
+    }
+  ],
+  // Each gatekeeper for an outside service reads its OAuth client as
+  // CLIENT_ID and CLIENT_SECRET, a client of its own
+  // (manifest-lib.ts:261-269, 305-318, and the deploy-inputs.json of
+  // gatekeeper-github, -google, -notion and -slack). All are optional: a
+  // gatekeeper without its client shows a not-configured page when someone
+  // connects it.
+  "secrets": [
+    {
+      "name": "CF_AI_GATEWAY_API_TOKEN",
+      "label": "AI Gateway token",
+      "help": "Optional. Needed when the AI Gateway providers include google, which the gateway serves only over HTTPS. A Cloudflare API token with the AI Gateway Run and Read permissions on this account.",
+      "link": {
+        "label": "Create a token",
+        "url": "https://dash.cloudflare.com/profile/api-tokens"
+      },
+      "optional": true,
+      "workers": ["workshop"]
+    },
+    {
+      "name": "MCP_PORTAL_TOKEN",
+      "label": "MCP server portal token",
+      "help": "Only with the shared token sign-in: the bearer token the app sends to the portal.",
+      "optional": true,
+      "workers": ["mcpportal"]
+    },
+    {
+      "name": "CLIENT_ID",
+      "key": "GITHUB_CLIENT_ID",
+      "label": "GitHub client ID",
+      "help": "Optional. Lets people connect GitHub. Create a GitHub OAuth App (not a GitHub App) with the callback URL set to this app's address followed by /gatekeeper/github/oauth, and enter its client ID and client secret.",
+      "link": { "label": "GitHub OAuth Apps", "url": "https://github.com/settings/developers" },
+      "optional": true,
+      "workers": ["github"]
+    },
+    {
+      "name": "CLIENT_SECRET",
+      "key": "GITHUB_CLIENT_SECRET",
+      "label": "GitHub client secret",
+      "help": "Optional, with the GitHub client ID: the OAuth App's client secret.",
+      "optional": true,
+      "workers": ["github"]
+    },
+    {
+      "name": "CLIENT_ID",
+      "key": "GOOGLE_CLIENT_ID",
+      "label": "Google client ID",
+      "help": "Optional. Lets people connect Gmail, Drive, Docs, Sheets, Calendar, Chat and BigQuery. In Google Cloud, enable those APIs, set up the OAuth consent screen, and create an OAuth client of type Web application with the redirect URI set to this app's address followed by /gatekeeper/google/oauth. Enter its client ID and client secret.",
+      "link": {
+        "label": "Google Cloud credentials",
+        "url": "https://console.cloud.google.com/apis/credentials"
+      },
+      "optional": true,
+      "workers": ["google"]
+    },
+    {
+      "name": "CLIENT_SECRET",
+      "key": "GOOGLE_CLIENT_SECRET",
+      "label": "Google client secret",
+      "help": "Optional, with the Google client ID: the OAuth client's secret.",
+      "optional": true,
+      "workers": ["google"]
+    },
+    {
+      "name": "CLIENT_ID",
+      "key": "SLACK_CLIENT_ID",
+      "label": "Slack client ID",
+      "help": "Optional. Lets people connect Slack. Create a Slack app with the redirect URL set to this app's address followed by /gatekeeper/slack/oauth, turn on token rotation, and enter its client ID and client secret.",
+      "link": { "label": "Slack apps", "url": "https://api.slack.com/apps" },
+      "optional": true,
+      "workers": ["slack"]
+    },
+    {
+      "name": "CLIENT_SECRET",
+      "key": "SLACK_CLIENT_SECRET",
+      "label": "Slack client secret",
+      "help": "Optional, with the Slack client ID: the Slack app's client secret.",
+      "optional": true,
+      "workers": ["slack"]
+    },
+    {
+      "name": "CLIENT_ID",
+      "key": "NOTION_CLIENT_ID",
+      "label": "Notion client ID",
+      "help": "Optional. Lets people connect Notion. Create a public Notion integration with the redirect URI set to this app's address followed by /gatekeeper/notion/oauth, and enter its OAuth client ID and client secret.",
+      "link": { "label": "Notion integrations", "url": "https://www.notion.so/my-integrations" },
+      "optional": true,
+      "workers": ["notion"]
+    },
+    {
+      "name": "CLIENT_SECRET",
+      "key": "NOTION_CLIENT_SECRET",
+      "label": "Notion client secret",
+      "help": "Optional, with the Notion client ID: the integration's OAuth client secret.",
+      "optional": true,
+      "workers": ["notion"]
+    },
+    {
+      "name": "CLIENT_ID",
+      "key": "LINEAR_CLIENT_ID",
+      "label": "Linear client ID",
+      "help": "Optional. Lets people connect Linear. Create a Linear OAuth application with the callback URL set to this app's address followed by /gatekeeper/linear/oauth, and enter its client ID and client secret.",
+      "link": {
+        "label": "New Linear application",
+        "url": "https://linear.app/settings/api/applications/new"
+      },
+      "optional": true,
+      "workers": ["linear"]
+    },
+    {
+      "name": "CLIENT_SECRET",
+      "key": "LINEAR_CLIENT_SECRET",
+      "label": "Linear client secret",
+      "help": "Optional, with the Linear client ID: the application's client secret.",
+      "optional": true,
+      "workers": ["linear"]
+    },
+    {
+      "name": "CLIENT_ID",
+      "key": "CLOUDFLARE_CLIENT_ID",
+      "label": "Cloudflare client ID",
+      "help": "Optional. Lets people connect Cloudflare accounts. Create a Cloudflare OAuth client with the redirect URL set to this app's address followed by /gatekeeper/cloudflare/oauth, and enter its client ID and client secret.",
+      "link": {
+        "label": "Create a Cloudflare OAuth client",
+        "url": "https://developers.cloudflare.com/fundamentals/oauth/create-an-oauth-client/"
+      },
+      "optional": true,
+      "workers": ["cloudflare"]
+    },
+    {
+      "name": "CLIENT_SECRET",
+      "key": "CLOUDFLARE_CLIENT_SECRET",
+      "label": "Cloudflare client secret",
+      "help": "Optional, with the Cloudflare client ID: the OAuth client's secret.",
+      "optional": true,
+      "workers": ["cloudflare"]
+    },
+    {
+      "name": "CLIENT_ID",
+      "key": "CONFLUENCE_CLIENT_ID",
+      "label": "Confluence client ID",
+      "help": "Optional. Lets people connect Confluence. Create an Atlassian OAuth 2.0 app with the Confluence API's granular and classic scopes and the callback URL set to this app's address followed by /gatekeeper/confluence/oauth, and enter its client ID and secret.",
+      "link": {
+        "label": "Atlassian developer console",
+        "url": "https://developer.atlassian.com/console/myapps/"
+      },
+      "optional": true,
+      "workers": ["confluence"]
+    },
+    {
+      "name": "CLIENT_SECRET",
+      "key": "CONFLUENCE_CLIENT_SECRET",
+      "label": "Confluence client secret",
+      "help": "Optional, with the Confluence client ID: the Atlassian app's secret.",
+      "optional": true,
+      "workers": ["confluence"]
+    },
+    {
+      "name": "CLIENT_ID",
+      "key": "SPOTIFY_CLIENT_ID",
+      "label": "Spotify client ID",
+      "help": "Optional. Lets people connect Spotify. Create a Spotify app with the redirect URI set to this app's address followed by /gatekeeper/spotify/oauth, and enter its client ID and client secret.",
+      "link": { "label": "Spotify dashboard", "url": "https://developer.spotify.com/dashboard" },
+      "optional": true,
+      "workers": ["spotify"]
+    },
+    {
+      "name": "CLIENT_SECRET",
+      "key": "SPOTIFY_CLIENT_SECRET",
+      "label": "Spotify client secret",
+      "help": "Optional, with the Spotify client ID: the app's client secret.",
+      "optional": true,
+      "workers": ["spotify"]
+    },
+    {
+      "name": "CLIENT_ID",
+      "key": "SUPABASE_CLIENT_ID",
+      "label": "Supabase client ID",
+      "help": "Optional. Lets people connect Supabase projects. Add an OAuth application to your Supabase organization with the redirect URI set to this app's address followed by /gatekeeper/supabase/oauth, and enter its client ID and client secret.",
+      "link": {
+        "label": "Supabase OAuth apps",
+        "url": "https://supabase.com/dashboard/org/_/apps"
+      },
+      "optional": true,
+      "workers": ["supabase"]
+    },
+    {
+      "name": "CLIENT_SECRET",
+      "key": "SUPABASE_CLIENT_SECRET",
+      "label": "Supabase client secret",
+      "help": "Optional, with the Supabase client ID: the OAuth application's client secret.",
+      "optional": true,
+      "workers": ["supabase"]
+    },
+    {
+      "name": "CLIENT_ID",
+      "key": "ZOOMINFO_CLIENT_ID",
+      "label": "ZoomInfo client ID",
+      "help": "Optional. Lets people connect ZoomInfo. Create a ZoomInfo OAuth application with the redirect URI set to this app's address followed by /gatekeeper/zoominfo/oauth, and enter its client ID and client secret.",
+      "link": { "label": "ZoomInfo developer portal", "url": "https://api.zoominfo.com/" },
+      "optional": true,
+      "workers": ["zoominfo"]
+    },
+    {
+      "name": "CLIENT_SECRET",
+      "key": "ZOOMINFO_CLIENT_SECRET",
+      "label": "ZoomInfo client secret",
+      "help": "Optional, with the ZoomInfo client ID: the OAuth application's client secret.",
+      "optional": true,
+      "workers": ["zoominfo"]
+    }
+  ],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "Open {{appUrl}} and sign in through Cloudflare Access. An email listed under Administrators can open {{appUrl}}/admin to set the site's name, logo and the models everyone gets."
+    },
+    {
+      "type": "markdown",
+      "content": "Agents need a model before the first chat: each user adds one with their own provider key in the app's settings, or set the AI Gateway fields in this app's settings to give everyone the gateway's models."
+    },
+    {
+      "type": "markdown",
+      "content": "To let people connect an outside service, create an OAuth app with that service and enter its client ID and secret in this app's settings. Each service sends people back to its own address: {{appUrl}}/gatekeeper/github/oauth for GitHub, and the same with google, slack, notion, linear, cloudflare, confluence, spotify, supabase or zoominfo in place of github. Home Assistant and MCP servers need no client: people connect them in the app. Adding or removing a custom domain moves these addresses to the new domain, so register the new callback address with every OAuth client then."
+    },
+    {
+      "type": "markdown",
+      "content": "Every Appflare user can sign in."
+    }
+  ],
+  // Upstream moves several times a day and its deploy contract
+  // (scripts/release/manifest-lib.ts) changes with it, so a maintainer
+  // reads each bump before it publishes.
+  "bump": { "autoMerge": false }
+}
