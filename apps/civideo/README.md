@@ -1,6 +1,6 @@
-# child-video
+# child-podcast
 
-[child-video](https://github.com/bitoceango/civideo) (repository `civideo`) by bitoceango
+[child-podcast](https://github.com/bitoceango/civideo) (repository `civideo`) by bitoceango
 is a private video and audiobook library for children. Parents upload to their own R2
 bucket; children watch in upstream's native players, which show only that content, with
 no recommendations, ads or outside links. Licensed MIT. The docs are mainly in Chinese,

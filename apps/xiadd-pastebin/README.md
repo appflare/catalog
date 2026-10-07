@@ -1,4 +1,4 @@
-# xiadd Pastebin
+# PasteShare
 
 [Pastebin Worker](https://github.com/xiadd/pastebin-worker) by xiadd: post text with
 syntax highlighting or Markdown, or upload a file up to 25 MB, and get a short link.
@@ -6,8 +6,8 @@ Pastes can have a password and an expiry time, from a minute to a month. Texts a
 in D1, files in R2. A JSON API under `/api` does the same from scripts. Upstream runs it
 at [as.al](https://as.al). Licensed MIT.
 
-It is a different project from the catalog's Pastebin Worker (SharzyL/pastebin-worker),
-hence the author's name in this entry's name.
+Upstream calls the project Pastebin Worker in its README and uses PasteShare in the
+interface. It is separate from the catalog's Pastebin Worker (SharzyL/pastebin-worker).
 
 ## Notes
 

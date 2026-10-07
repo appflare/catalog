@@ -6,7 +6,7 @@
   // upstream's own native apps for iOS, macOS, Windows and Android.
   "$schema": "https://appflare.github.io/catalog/schema/v1.json",
   "slug": "civideo",
-  "name": "child-video",
+  "name": "child-podcast",
   "summary": "A private, ad-free video and audiobook library for children: you upload to your own R2 bucket, and upstream's native apps play only what you put there, with daily limits and allowed hours.",
   "tagline": "Your own ad-free video and audiobook library for children",
   "repo": "bitoceango/civideo",
@@ -14,7 +14,7 @@
   "categories": ["media", "family"],
   // Field links (revision 2) and the formatting of URLs in the notes (revision 3)
   // came after this release was published: revisions, no new build.
-  "revision": 3,
+  "revision": 4,
   "authors": [{ "name": "bitoceango", "github": "bitoceango" }],
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v0.2.0", "sha": "272d45d7e0d41a844795e1d76ffc138f1ad4a7ad" },

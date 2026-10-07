@@ -9,9 +9,11 @@
   "name": "git-on-cloudflare",
   "summary": "A git server on Workers: push and clone over HTTPS, browse code in a web interface, with repositories in Durable Objects and R2.",
   "tagline": "Host your code and browse changes in your own Cloudflare account",
+  "homepage": "https://git.limic.dev",
   "repo": "zllovesuki/git-on-cloudflare",
   "license": "MIT",
   "categories": ["developer-tools"],
+  "revision": 2,
   "authors": [{ "name": "Rachel Chen", "url": "https://limic.dev", "github": "zllovesuki" }],
   "maintainers": ["MendyLanda"],
   // No release tags upstream; the pin tracks main.

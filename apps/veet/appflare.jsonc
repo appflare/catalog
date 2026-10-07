@@ -9,12 +9,13 @@
   "summary": "Video calls in the browser: share a meeting link and talk face to face, with chat, device settings and peer-to-peer media for small groups.",
   "tagline": "Share a link and talk face to face in your browser",
   "repo": "megaconfidence/veet",
+  "homepage": "https://veet.conflare.workers.dev",
   // The repository has no LICENSE file and states no licence in its README or
   // package.json.
   "license": "NONE",
   "categories": ["chat"],
   // Field links added after this release was published: a revision, no new build.
-  "revision": 2,
+  "revision": 3,
   "authors": [
     {
       "name": "Confidence Okoghenun",

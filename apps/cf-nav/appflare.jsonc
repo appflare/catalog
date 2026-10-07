@@ -7,14 +7,15 @@
   "summary": "A card-style start page: your links in categories with a search box, public and private links, drag-and-drop ordering, and JSON export and import, stored in KV.",
   "tagline": "Organize your favorite links on a searchable start page",
   "repo": "djkyc/cf-nav",
+  "homepage": "https://cf-nav2.djcf.workers.dev/",
   // The repository has no LICENSE file and declares no licence anywhere, so
   // the catalog shows it as unlicensed.
   "license": "NONE",
   "categories": ["productivity", "utilities"],
   // Edited help text (revision 2) and field links (revision 3) came after this
   // release was published: revisions, no new build.
-  "revision": 3,
-  "authors": [{ "name": "djkyc", "github": "djkyc" }],
+  "revision": 4,
+  "authors": [{ "name": "Diana Sari", "github": "djkyc" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags; the pin is the head of main.
   "source": { "ref": "main", "sha": "6e83733af9ba3d49a5b8b0a5299bcd32817e0746" },

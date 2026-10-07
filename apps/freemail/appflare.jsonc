@@ -7,14 +7,15 @@
   "$schema": "https://appflare.github.io/catalog/schema/v1.json",
   "slug": "freemail",
   "name": "Freemail",
-  "summary": "Temporary and domain mailboxes on your own domain: create addresses in the browser, read what Email Routing delivers, share mailboxes with users, and send through Resend or SendFlare, on D1 and R2.",
+  "summary": "Temporary and domain mailboxes on your own domain: create addresses in the browser, read what Email Routing delivers, share mailboxes with users, and send through Resend, SendFlare or Cyberpersons, on D1 and R2.",
   "tagline": "Create mailboxes and read mail on your own domain",
+  "homepage": "https://freemail.cq.de5.net",
   "repo": "idinging/freemail",
   "license": "Apache-2.0",
   "categories": ["email", "privacy"],
   // Edited help text (revision 2) and field links (revision 3) came after this
   // release was published: revisions, no new build.
-  "revision": 3,
+  "revision": 4,
   "authors": [{ "name": "iding", "url": "https://blog.iding.qzz.io", "github": "idinging" }],
   "maintainers": ["MendyLanda"],
   // The newest release tag, not the default branch: every commit after it on

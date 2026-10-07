@@ -63,6 +63,20 @@ describe("statsTargets", () => {
       { slug: "r2", repo: null },
     ]);
   });
+
+  it("counts the main project's stars when the build uses a template", () => {
+    mkdirSync(path.join(root, "emdash"));
+    writeFileSync(
+      path.join(root, "emdash", "appflare.jsonc"),
+      JSON.stringify({
+        slug: "emdash",
+        repo: "emdash-cms/templates",
+        upstreamRepo: "emdash-cms/emdash",
+        homepage: "https://github.com/emdash-cms/templates/tree/main/blog-cloudflare",
+      }),
+    );
+    expect(statsTargets(listApps(root))).toEqual([{ slug: "emdash", repo: "emdash-cms/emdash" }]);
+  });
 });
 
 describe("GitHub stars", () => {
@@ -154,7 +168,7 @@ describe("buildStats", () => {
     generatedAt: EARLIER,
     apps: {
       cut: {
-        stars: { count: 10, fetchedAt: EARLIER },
+        stars: { count: 10, fetchedAt: EARLIER, repo: "MendyLanda/cut" },
         installs: { last30d: 11, active: 20, fetchedAt: EARLIER },
       },
     },
@@ -173,7 +187,7 @@ describe("buildStats", () => {
       previous,
     });
     expect(stats.apps.cut).toEqual({
-      stars: { count: 17, fetchedAt: NOW.toISOString() },
+      stars: { count: 17, fetchedAt: NOW.toISOString(), repo: "MendyLanda/cut" },
       installs: { last30d: null, active: 25, fetchedAt: NOW.toISOString() },
     });
     expect(stats.apps.r2).toEqual({
@@ -212,6 +226,33 @@ describe("buildStats", () => {
     expect(parsePreviousStats("{}")).toBeNull();
     expect(parsePreviousStats("not json")).toBeNull();
     expect(parsePreviousStats(null)).toBeNull();
+  });
+
+  it("drops the previous repository's stars when the upstream changes or is unknown", () => {
+    for (const repo of ["emdash-cms/templates", undefined]) {
+      const stats = buildStats({
+        now: NOW,
+        targets: [{ slug: "emdash", repo: "emdash-cms/emdash" }],
+        stars: { ok: false, error: "HTTP 502" },
+        installs: { ok: false, error: "no key" },
+        previous: {
+          ...previous,
+          apps: { emdash: { stars: { count: 40, fetchedAt: EARLIER, repo }, installs: null } },
+        },
+      });
+      expect(stats.apps.emdash?.stars).toBeNull();
+    }
+  });
+
+  it("keeps only a matching repository's stars on a partial GitHub response", () => {
+    const stats = buildStats({
+      now: NOW,
+      targets: [{ slug: "cut", repo: "mendylanda/CUT" }],
+      stars: { ok: true, value: new Map() },
+      installs: { ok: false, error: "no key" },
+      previous,
+    });
+    expect(stats.apps.cut?.stars).toEqual(previous.apps.cut?.stars);
   });
 
   it.skipIf(!appflareAvailable)("writes files @appflare/schema accepts, and agrees with it", () => {

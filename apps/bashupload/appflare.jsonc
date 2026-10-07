@@ -5,7 +5,7 @@
   // the R2 bucket every five minutes.
   "$schema": "https://appflare.github.io/catalog/schema/v1.json",
   "slug": "bashupload",
-  "name": "bashupload",
+  "name": "BashUpload",
   "summary": "Upload a file from the terminal with curl or from a browser and get a link that works for one download or until it expires, with an optional password, on R2.",
   "tagline": "Share files from your browser or terminal with expiring links",
   "homepage": "https://bashupload.app",
@@ -16,7 +16,7 @@
   "categories": ["files", "sharing"],
   // Generated secrets (revision 2) and edited help text (revision 3) came after
   // this release was published: revisions, no new build.
-  "revision": 3,
+  "revision": 4,
   "authors": [{ "name": "DullJZ", "url": "https://www.jz-home.top", "github": "DullJZ" }],
   "maintainers": ["MendyLanda"],
   // Upstream's tags (bashupload-0.1.0, chart-v0.1.0) name its Docker image

@@ -328,6 +328,7 @@ export function toIndexApp(
   const requires = options.indexRequires(manifest);
   return {
     slug: manifest.slug,
+    repo: manifest.upstreamRepo ?? manifest.repo,
     name: manifest.name,
     summary: manifest.summary,
     tagline: manifest.tagline,
@@ -441,6 +442,7 @@ export function toSandboxIndexApp(
   const requires = options.indexRequires(manifest);
   return {
     slug: manifest.slug,
+    repo: manifest.upstreamRepo ?? manifest.repo,
     name: manifest.name,
     summary: manifest.summary,
     tagline: manifest.tagline,

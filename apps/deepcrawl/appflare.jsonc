@@ -2,7 +2,7 @@
   "$schema": "https://appflare.github.io/catalog/schema/v1.json",
   "slug": "deepcrawl",
   "name": "Deepcrawl",
-  "summary": "An open-source Firecrawl alternative: an API that turns any web page into clean Markdown, metadata and a tree of its links for AI agents, cached in KV with request logs in D1.",
+  "summary": "An open-source Firecrawl alternative: an API that turns public web pages into clean Markdown, metadata and a tree of their links for AI agents, cached in KV with request logs in D1.",
   "tagline": "Turn web pages into clean text and organized links",
   "homepage": "https://deepcrawl.dev",
   "repo": "lumpinif/deepcrawl",
@@ -10,7 +10,7 @@
   "categories": ["developer-tools", "ai"],
   // Field links (revision 2) and the formatting of URLs in the notes (revision 3)
   // came after this release was published: revisions, no new build.
-  "revision": 3,
+  "revision": 4,
   "authors": [{ "name": "Felix Lu", "github": "lumpinif", "x": "felixlu1018" }],
   "maintainers": ["MendyLanda"],
   // Upstream's release tags (deepcrawl@X.Y.Z) version the project's

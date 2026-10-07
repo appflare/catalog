@@ -4,11 +4,12 @@
   "name": "mail2telegram",
   "summary": "Receive your domain's email in Telegram: a push for every message and a Mini App inbox with attachments, filters, and AI summaries.",
   "tagline": "Get your email in Telegram, with a full inbox",
+  "homepage": "https://mail2telegram.tbxark.workers.dev",
   "repo": "TBXark/mail2telegram",
   "license": "MIT",
   "categories": ["email", "bots"],
   // Field links added after this release was published: a revision, no new build.
-  "revision": 2,
+  "revision": 3,
   "authors": [{ "name": "TBXark", "url": "https://tbxark.com", "github": "TBXark", "x": "tbxark" }],
   "maintainers": ["MendyLanda"],
   // Upstream tags releases without a "v" prefix (2.0.0); the packer reads both forms.

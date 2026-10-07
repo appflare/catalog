@@ -12,8 +12,8 @@
   "categories": ["utilities", "analytics"],
   // Generated secrets (revision 2) and field links (revision 3) came after this
   // release was published: revisions, no new build.
-  "revision": 3,
-  "authors": [{ "name": "Yuri", "github": "YuriCrystal" }],
+  "revision": 4,
+  "authors": [{ "name": "YuriCrystal", "github": "YuriCrystal" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags, so the entry follows the default branch by commit.
   "source": { "ref": "main", "sha": "7fb2f441e19e7ba446bfbd0cd0e3ca0f53edfb45" },

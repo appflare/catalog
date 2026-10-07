@@ -5,13 +5,13 @@
   "$schema": "https://appflare.github.io/catalog/schema/v1.json",
   "slug": "mpp-proxy",
   "name": "MPP Payment-Gated Proxy",
-  "summary": "Charge AI agents and other clients per request for paths of your own site: a reverse proxy that answers 402 with a Machine Payments Protocol challenge, verifies the payment on Tempo, and then passes the request to your origin.",
-  "tagline": "Charge for requests to selected parts of your website",
+  "summary": "Put paid access in front of selected website paths. The reverse proxy verifies Machine Payments Protocol payments on Tempo, forwards requests to your origin, and grants one hour of access through a cookie.",
+  "tagline": "Require payments to access selected parts of your website",
   "repo": "cloudflare/mpp-proxy",
   "license": "Apache-2.0",
   "categories": ["finance", "developer-tools"],
   // Help text edited after this release was published: a revision, no new build.
-  "revision": 2,
+  "revision": 3,
   "authors": [
     {
       "name": "Cloudflare",

@@ -8,9 +8,11 @@
   "name": "dgit",
   "summary": "A git host on Durable Objects: push and clone over HTTPS with a stock git client and browse with a cgit-style web interface, one Durable Object per repository.",
   "tagline": "Host and browse your own code repositories",
+  "homepage": "https://git.littledivy.com",
   "repo": "littledivy/durable-git",
   "license": "MIT",
   "categories": ["developer-tools"],
+  "revision": 2,
   "authors": [
     { "name": "Divy Srivastava", "url": "https://littledivy.com", "github": "littledivy" }
   ],

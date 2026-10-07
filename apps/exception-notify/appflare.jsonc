@@ -11,11 +11,13 @@
   "name": "Exception-Notify workspace",
   "summary": "The AI analysis page for Exception-Notify alerts from Spring Boot: open an exception from DingTalk, Feishu or WeChat Work and work through it with your own AI provider.",
   "tagline": "Read error alerts and work through fixes with AI",
+  "homepage": "https://fixit.nolimit35.com",
   "repo": "GuangYiDing/exception-notify",
   // The repository has no LICENSE file; its README and pom.xml both declare
   // Apache License 2.0.
   "license": "Apache-2.0",
   "categories": ["developer-tools", "monitoring"],
+  "revision": 2,
   "authors": [{ "name": "XiaoDingSiRen", "url": "https://nolimit35.cn", "github": "GuangYiDing" }],
   "maintainers": ["MendyLanda"],
   // The repository's tags (v1.3.3-RELEASE and earlier) version the Java

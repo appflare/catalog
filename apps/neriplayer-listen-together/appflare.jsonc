@@ -10,6 +10,9 @@
   "summary": "Your own listen-together server for the NeriPlayer Android app: create a room, share the invite, and everyone's playback, queue and track changes stay in sync.",
   "tagline": "Keep music playback in sync while listening with friends",
   "repo": "TheSmallHanCat/NeriPlayer-LTW",
+  // The pinned README identifies NeriPlayer as the main project:
+  // https://github.com/TheSmallHanCat/NeriPlayer-LTW/blob/d83f9e2f6b12d0f020fd23145ace10c71e3de777/README.md
+  "upstreamRepo": "cwuom/NeriPlayer",
   // The repository has no LICENSE file and states no licence in its README or
   // package.json. The NeriPlayer app, which includes it as a submodule, is
   // GPL-3.0, but that licence does not extend to this separate repository.
@@ -17,7 +20,7 @@
   "categories": ["media", "sync"],
   // The formatting of URLs in the notes changed after this release was published:
   // a revision, no new build.
-  "revision": 2,
+  "revision": 3,
   "authors": [{ "name": "TheSmallHanCat", "github": "TheSmallHanCat" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no tags; the pin follows the default branch.

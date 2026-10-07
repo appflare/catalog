@@ -10,16 +10,19 @@
   "$schema": "https://appflare.github.io/catalog/schema/v1.json",
   "slug": "jant",
   "name": "Jant",
-  "summary": "A personal microblog as smooth as Threads and Tumblr: notes, links and quotes in threads and collections, media on R2, full-text search, RSS, an API and an MCP endpoint for agents, on D1.",
+  "summary": "A personal microblog for notes, links and quotes, organized into threads and collections, with media attachments, full-text search, RSS, an API and an MCP endpoint for agents.",
   "tagline": "Your own blog for notes, links, quotes, and threads",
   "homepage": "https://jant.me",
   "repo": "jant-me/jant-starter",
+  // The pinned starter README identifies the main project:
+  // https://github.com/jant-me/jant-starter/blob/d3ee87bb263527c6535b4a24f418cabf318cb8f3/README.md
+  "upstreamRepo": "jant-me/jant",
   "license": "AGPL-3.0-or-later",
   "categories": ["cms", "community"],
   // The category changed in revision 2, which this release was built with. Edited
   // help text (revision 3) and field links (revision 4) came after it was
   // published: revisions, no new build.
-  "revision": 4,
+  "revision": 5,
   "authors": [{ "name": "Jant", "url": "https://jant.me", "github": "jant-me" }],
   "maintainers": ["MendyLanda"],
   // The starter has no tags; upstream commits to main with each Jant release

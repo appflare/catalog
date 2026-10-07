@@ -2,14 +2,15 @@
   "$schema": "https://appflare.github.io/catalog/schema/v1.json",
   "slug": "fodi",
   "name": "FODI",
-  "summary": "A fast index of your OneDrive: browse, preview and download files from a web page, with password-protected folders, signed download links, uploads and WebDAV, on Workers KV.",
+  "summary": "Browse, preview and download files from a personal OneDrive account, with password-protected folders, signed download links, uploads and WebDAV.",
   "tagline": "Browse and preview your OneDrive files in a web page",
+  "homepage": "https://logi.im/fodi.html",
   "repo": "vcheckzen/FODI",
   // The LICENSE file is the GNU GPL version 3 with no "or any later version" grant.
   "license": "GPL-3.0-only",
   "categories": ["files", "sharing"],
   // Generated secrets added after this release was published: a revision, no new build.
-  "revision": 2,
+  "revision": 3,
   "authors": [{ "name": "LOGI", "url": "https://logi.im", "github": "vcheckzen" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags, so the entry follows the default branch by commit.

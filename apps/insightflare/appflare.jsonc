@@ -9,9 +9,11 @@
   "name": "InsightFlare",
   "summary": "Privacy-friendly web analytics that runs entirely on Cloudflare: a tracking script, a realtime dashboard with maps and funnels, and an API for AI agents, on D1, a Durable Object and Analytics Engine.",
   "tagline": "See your website traffic and visitor trends in one dashboard",
+  "homepage": "https://demo.insightflare.net",
   "repo": "RavelloH/InsightFlare",
   "license": "MIT",
   "categories": ["analytics"],
+  "revision": 2,
   "authors": [
     { "name": "RavelloH", "url": "https://ravelloh.com", "github": "RavelloH", "x": "ravellohh" }
   ],

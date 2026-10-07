@@ -5,11 +5,12 @@
   "summary": "A private image and text pool shared across your devices: drop a screenshot or snippet on one, grab it on another, from an installable web app backed by R2.",
   "tagline": "Share pictures and text between your devices, privately",
   "repo": "Defiabell/shotsync",
+  "homepage": "https://shotsync-demo.defiabell.workers.dev",
   "license": "MIT",
   "categories": ["files", "sharing"],
   // The formatting of URLs in the notes changed after this release was published:
   // a revision, no new build.
-  "revision": 2,
+  "revision": 3,
   "authors": [{ "name": "Jinkun Sun", "github": "Defiabell" }],
   "maintainers": ["MendyLanda"],
   // The newest release tag. The commits after it add upstream's hosted,

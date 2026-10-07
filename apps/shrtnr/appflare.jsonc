@@ -11,12 +11,11 @@
   // The changed first step after installing (revision 2), openPath and field
   // links (revision 3) and the formatting of URLs in the notes (revision 4) came
   // after this release was published: revisions, no new build.
-  "revision": 4,
+  "revision": 5,
   "authors": [
     { "name": "Oddbit", "url": "https://oddbit.id", "github": "oddbit", "x": "evenbit" },
     {
       "name": "Dennis Alund",
-      "url": "https://dennis.alund.me",
       "github": "DennisAlund",
       "x": "DennisAlund"
     }

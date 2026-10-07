@@ -81,7 +81,16 @@ export const statsSchema = z.object({
   apps: z.record(
     z.string().min(1),
     z.object({
-      stars: z.object({ count: z.number().int().nonnegative(), fetchedAt: iso }).nullable(),
+      stars: z
+        .object({
+          count: z.number().int().nonnegative(),
+          fetchedAt: iso,
+          repo: z
+            .string()
+            .regex(/^[A-Za-z0-9-]+\/[A-Za-z0-9._-]+$/)
+            .optional(),
+        })
+        .nullable(),
       installs: z.object({ last30d: countSchema, active: countSchema, fetchedAt: iso }).nullable(),
     }),
   ),
@@ -98,21 +107,27 @@ export interface StatsTarget {
 const targetManifestSchema = z.object({
   slug: z.string().min(1),
   repo: z.string().regex(/^[A-Za-z0-9-]+\/[A-Za-z0-9._-]+$/),
+  upstreamRepo: z
+    .string()
+    .regex(/^[A-Za-z0-9-]+\/[A-Za-z0-9._-]+$/)
+    .optional(),
   /** Omitted means the repository's GitHub page. */
   homepage: z.string().optional(),
 });
 
 /**
  * The entries to count, from their manifests (read with a local schema; the
- * workflow has no appflare checkout). An entry whose homepage is a folder of
- * its repository (`.../tree/...`) lives in a shared repository, such as a
+ * workflow has no appflare checkout). Uses `upstreamRepo` when a template or
+ * packaging fork supplies the build. An entry whose homepage is a folder of
+ * the counted repository (`.../tree/...`) lives in a shared repository, such as a
  * collection of templates, whose stars say nothing about the entry.
  */
 export function statsTargets(apps: readonly AppEntry[]): StatsTarget[] {
   return apps.map((app) => {
     const m = targetManifestSchema.parse(readManifestFile(app.manifestPath));
-    const shared = m.homepage?.startsWith(`https://github.com/${m.repo}/tree/`) === true;
-    return { slug: m.slug, repo: shared ? null : m.repo };
+    const repo = m.upstreamRepo ?? m.repo;
+    const shared = m.homepage?.startsWith(`https://github.com/${repo}/tree/`) === true;
+    return { slug: m.slug, repo: shared ? null : repo };
   });
 }
 
@@ -245,7 +260,7 @@ export function published(count: number | undefined): number | null {
 /**
  * Assembles `stats.json` from this run's sources and the previous file:
  * every target gets an entry; a failed source's numbers come from `previous`
- * unchanged, a working one's are replaced (and an app it did not report
+ * unchanged when their repository still matches, a working one's are replaced (and an app it did not report
  * counts as zero installs, published as null).
  */
 export function buildStats(input: {
@@ -262,7 +277,12 @@ export function buildStats(input: {
     let stars: CatalogAppStats["stars"] = null;
     if (repo !== null) {
       const count = input.stars.ok ? input.stars.value.get(slug) : undefined;
-      stars = count === undefined ? (before?.stars ?? null) : { count, fetchedAt: at };
+      stars =
+        count === undefined
+          ? before?.stars?.repo?.toLowerCase() === repo.toLowerCase()
+            ? before.stars
+            : null
+          : { count, fetchedAt: at, repo };
     }
     const installs: CatalogAppStats["installs"] = input.installs.ok
       ? {

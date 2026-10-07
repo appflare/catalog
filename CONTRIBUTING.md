@@ -117,6 +117,14 @@ not say what matters; managers mark an app with a note as source-available.
    icon, its cover, screenshots, and `MEDIA.md` saying where each one comes from.
 8. Run the checks below, then open a pull request.
 
+`repo` is the repository the packer checks out at `source.sha`. When the app
+builds from a template or packaging fork, set `upstreamRepo` to the main
+project's `owner/repo`. Appflare uses it for the public GitHub link, the
+default homepage and author, and GitHub stars. Keep `repo` and the pin tied
+to the code that is actually built. Leave `upstreamRepo` out when it would
+equal `repo`, and do not point a standalone app at another project's repository
+just because it uses that project's library.
+
 Leave out what states a default: `homepage` when it is the repository's GitHub
 page, `install.tier` when it is `"artifact"`, `install.workerName` when it is the
 slug, `revision` when it is 1, and `requires`, `secrets`, `vars`, `postInstall`
@@ -990,7 +998,7 @@ change is one of these:
   never changes; see "Revisions").
 - **A revision: the form, the copy and Cloudflare Access.** Raise `revision` by one
   (it is 1 when omitted) in the same change. A revision may change `name`, `summary`,
-  `homepage`, `license`, `categories`, `maintainers`, `secrets`, `vars`, `postInstall`,
+  `homepage`, `upstreamRepo`, `license`, `categories`, `maintainers`, `secrets`, `vars`, `postInstall`,
   `openPath`, `bump` and `access`, as well as the fields above (`REVISABLE_CATALOG_FIELDS` in
   `@appflare/schema`), and may add to `requires` only `"access"`, `"secret-keys"`
   (with keys on the secrets the revision adds; a released secret's key never
@@ -1383,6 +1391,12 @@ are published as null. An entry whose homepage is a folder of a shared repositor
 (such as a collection of templates) gets no stars, because the repository's stars
 are not the app's. Managers sort their catalog page by these numbers and show the
 stars; nothing else depends on them.
+
+When an entry sets `upstreamRepo`, stars come from that repository rather than
+the build repository. Each refreshed star count records the repository it
+counts. A failed refresh keeps an older count only when its recorded repository
+matches the current target. Counts from another repository, or older files with
+no repository recorded, are cleared until GitHub supplies a verified count.
 
 The `stats` workflow rebuilds the file about every hour (and on demand) without a
 commit. It runs in the `stats` environment, whose `POSTHOG_PERSONAL_API_KEY` secret

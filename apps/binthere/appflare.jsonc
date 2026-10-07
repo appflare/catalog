@@ -1,13 +1,14 @@
 {
   "$schema": "https://appflare.github.io/catalog/schema/v1.json",
   "slug": "binthere",
-  "name": "BinThere",
+  "name": "binthere",
   "summary": "A zero-knowledge pastebin for one-time notes: encrypted in the browser with AES-256-GCM, burned on first read by a Durable Object, and gone after 24 hours.",
   "tagline": "Share private notes that disappear after one read",
   "homepage": "https://binthere.gaury.dev",
   "repo": "nxfu/binthere",
   "license": "MIT",
   "categories": ["sharing", "privacy"],
+  "revision": 2,
   "authors": [{ "name": "Gaurav", "url": "https://gaury.dev", "github": "nxfu" }],
   "maintainers": ["MendyLanda"],
   // The default branch, not the newest tag (v1.1.0): the commit after that

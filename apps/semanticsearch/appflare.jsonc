@@ -12,9 +12,11 @@
   // 2.0 and adds that a product built on it must link to
   // https://semanticsearch.ai/ (see README.md beside this file).
   "license": "Apache-2.0",
+  "licenseNote": "The README requires products built on this app to include a link to https://semanticsearch.ai/.",
   "categories": ["developer-tools", "ai"],
-  // Generated secrets added after this release was published: a revision, no new build.
-  "revision": 2,
+  // Generated secrets (revision 2) and the licence note (revision 3) came
+  // after this release was published: revisions, no new build.
+  "revision": 3,
   "authors": [
     {
       "name": "SemanticSearch.ai",

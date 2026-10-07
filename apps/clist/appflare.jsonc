@@ -11,12 +11,13 @@
   "name": "CList",
   "summary": "A file browser and WebDAV server over your S3, WebDAV, OneDrive and Google Drive storage, with previews, share links and audit logs.",
   "tagline": "Browse and share files from all your storage in one place",
+  "homepage": "https://mirrors.ohyraw.dpdns.org",
   "repo": "ooyyh/Cloudflare-Clist",
   "license": "MIT",
   "categories": ["files"],
   // The category (revision 2) and the formatting of URLs in the notes (revision 3)
   // came after this release was published: revisions, no new build.
-  "revision": 3,
+  "revision": 4,
   "authors": [{ "name": "ooyyh", "url": "https://blog.ooyyh.top", "github": "ooyyh" }],
   "maintainers": ["MendyLanda"],
   // Pinned to master: the latest tag, v1.2.0, predates the repository's
