@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-06T11:10:10.871Z",
+  "generatedAt": "2026-10-07T06:54:23.701Z",
   "apps": [
     {
       "slug": "2fa",
@@ -53,19 +53,19 @@
       "summary": "A Markdown-first notepad and wiki: write in Markdown, Block, Canvas or Whiteboard, publish password-protected or timed shares, and present notes as slides or books.",
       "tagline": "Write notes and share them with passwords or time limits",
       "addedAt": "2026-09-27T06:02:01+03:00",
-      "version": "0.0.0-20261005.03bfbda",
+      "version": "0.0.0-20261006.bb091b5",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20261005.03bfbda/888wiki-0.0.0-20261005.03bfbda.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20261005.03bfbda/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20261005.03bfbda/manifest.sig",
-        "digest": "071ff13becf1049723bf8158b05567f23db28fb40ab3ea66452cc773b4268e7b"
+        "zip": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20261006.bb091b5/888wiki-0.0.0-20261006.bb091b5.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20261006.bb091b5/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20261006.bb091b5/manifest.sig",
+        "digest": "fc2eb6ec78249dbd9a6508a296034bd798a21e0b08d7dc5a602365dbb4e9a3f0"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-10-06T10:48:43.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "DAVID888",
@@ -1257,19 +1257,20 @@
       "summary": "An open-source Firebase alternative on Cloudflare: auth, JSON collections and SQL tables with live queries, remote config and file storage, each project in Durable Objects of its own, run from one console. App hosting needs Workers for Platforms, which Appflare does not set up yet; the rest works.",
       "tagline": "Add sign-in, live data, and file storage to your app",
       "addedAt": "2026-09-27T10:14:04+03:00",
-      "version": "0.0.0-20260827.adfd1b3",
+      "version": "0.0.0-20260827.adfd1b3.1",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/cloudflarebase@0.0.0-20260827.adfd1b3/cloudflarebase-0.0.0-20260827.adfd1b3.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/cloudflarebase@0.0.0-20260827.adfd1b3/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/cloudflarebase@0.0.0-20260827.adfd1b3/manifest.sig",
-        "digest": "6de4293f655802ffee9f47ee53402c8c7303854a30b3fad6c0832705f92e94de"
+        "zip": "https://github.com/appflare/catalog/releases/download/cloudflarebase@0.0.0-20260827.adfd1b3.1/cloudflarebase-0.0.0-20260827.adfd1b3.1.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/cloudflarebase@0.0.0-20260827.adfd1b3.1/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/cloudflarebase@0.0.0-20260827.adfd1b3.1/manifest.sig",
+        "digest": "3e90fbe2fc304d289171574449919f65d02f71d7be407e8d26dc0429ef6a8b69"
       },
       "tier": "artifact",
-      "plan": "paid",
+      "plan": "free",
       "requires": [
         "r2",
         "workers-ai",
-        "analytics-engine"
+        "analytics-engine",
+        "manager:spread-jobs"
       ],
       "lastVerified": null,
       "authors": [
@@ -1306,7 +1307,7 @@
         "files"
       ],
       "license": "Apache-2.0",
-      "revision": 2,
+      "revision": 1,
       "accessOffer": "offered"
     },
     {
@@ -2260,12 +2261,12 @@
       "summary": "Feedback boards, a public roadmap and an AI-assisted changelog for your product, with an embeddable widget. Runs on Workers with R2 for uploads and your own Postgres through Hyperdrive.",
       "tagline": "Collect feedback, share your roadmap and announce updates",
       "addedAt": "2026-09-27T04:47:55+03:00",
-      "version": "0.5.0",
+      "version": "0.5.1-0",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/feedlog@0.5.0/feedlog-0.5.0.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/feedlog@0.5.0/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/feedlog@0.5.0/manifest.sig",
-        "digest": "cca3d99a581eca92c4ffc1a430bc5d77960119dad0de01abbc02201d01a4ed9f"
+        "zip": "https://github.com/appflare/catalog/releases/download/feedlog@0.5.1-0/feedlog-0.5.1-0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/feedlog@0.5.1-0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/feedlog@0.5.1-0/manifest.sig",
+        "digest": "5345ef431228fa43a144aa5f3edfc56a04d57176269548914d86000373c4ec8f"
       },
       "tier": "artifact",
       "plan": "free",
@@ -2343,13 +2344,7 @@
         "productivity"
       ],
       "license": "MIT",
-      "revision": 2,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/feedlog/manifest.json",
-        "sha256": "60703bedbd7b35caa97dac1de19263be122f63ef31e0112665b841512ad94c31",
-        "keyId": "catalog-2026-09",
-        "signature": "LCZymKIC/IyekpjvYF3RA9Ge3sYGYxpSNMqriY1LVt5xfyD147suPqF4S6dt2o9mgCezVSSecEWxlEAOgQsdAg=="
-      },
+      "revision": 1,
       "accessOffer": "offered"
     },
     {
@@ -3898,12 +3893,12 @@
       "summary": "A self-hosted email service for your own domains: mailboxes, forwarding rules, and a web inbox, on Email Routing, D1, R2, Queues, and Durable Objects.",
       "tagline": "Email and shared inboxes for your own domain",
       "addedAt": "2026-09-24T07:29:19+03:00",
-      "version": "0.0.0-20261005.13999f8",
+      "version": "0.0.0-20261006.48da9fa",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261005.13999f8/mailflare-0.0.0-20261005.13999f8.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261005.13999f8/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261005.13999f8/manifest.sig",
-        "digest": "34ac295081a890c175a159b9d7dbc8447e1e1076414d502f39bf8a0a4eb61853"
+        "zip": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261006.48da9fa/mailflare-0.0.0-20261006.48da9fa.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261006.48da9fa/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261006.48da9fa/manifest.sig",
+        "digest": "5bf0eaf31ed4283ec63da3c72e90df13a1b103f9ec7089f47453eac9d66d2217"
       },
       "tier": "artifact",
       "plan": "paid",
@@ -5021,12 +5016,12 @@
       "summary": "Turn a script into a storyboard and video: scene breakdown, consistent characters, locations and styles, AI-generated frames, motion, voices and music, with team libraries and an MCP server, on D1, R2, Workflows and Durable Objects. Brings your own AI provider keys.",
       "tagline": "Turn scripts into videos with consistent characters and scenes",
       "addedAt": "2026-09-27T12:03:21+03:00",
-      "version": "0.0.0-20261005.60a994b",
+      "version": "0.0.0-20261006.9854a24",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261005.60a994b/openstory-0.0.0-20261005.60a994b.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261005.60a994b/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261005.60a994b/manifest.sig",
-        "digest": "c7a97d1fa6ca2549bed28be37e14dff678e874c699abb39614a714960a3931bd"
+        "zip": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261006.9854a24/openstory-0.0.0-20261006.9854a24.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261006.9854a24/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261006.9854a24/manifest.sig",
+        "digest": "4785f8747388ea3718f86ffb54a295219f21d18716025ffc920a9977c3568a6a"
       },
       "tier": "artifact",
       "plan": "paid",
@@ -5080,19 +5075,19 @@
       "summary": "A pastebin and file sharer with short links, syntax highlighting, rendered Markdown, client-side encryption, a URL shortener, and a curl-friendly API, on KV and R2.",
       "tagline": "Share text and files with short links on your own site",
       "addedAt": "2026-09-26T23:19:31+03:00",
-      "version": "0.0.0-20260717.0835cac",
+      "version": "0.0.0-20260717.0835cac.1",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/pastebin-worker@0.0.0-20260717.0835cac/pastebin-worker-0.0.0-20260717.0835cac.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/pastebin-worker@0.0.0-20260717.0835cac/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/pastebin-worker@0.0.0-20260717.0835cac/manifest.sig",
-        "digest": "6612674f0d78be5496840a1bd8c0bc4b1f92dd2e4937ccb2aed650242e420fe3"
+        "zip": "https://github.com/appflare/catalog/releases/download/pastebin-worker@0.0.0-20260717.0835cac.1/pastebin-worker-0.0.0-20260717.0835cac.1.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/pastebin-worker@0.0.0-20260717.0835cac.1/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/pastebin-worker@0.0.0-20260717.0835cac.1/manifest.sig",
+        "digest": "c1b32e11058775869717f106f3307b6c28e509cde7433181110abef040f1e018"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-10-06T11:00:49.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Sharzy",
@@ -5608,19 +5603,19 @@
       "summary": "A URL shortener for teams: organizations with roles, branded short links and QR codes, click analytics that never store an IP, an MCP server, and a KV redirect path in front of D1.",
       "tagline": "Branded short links, QR codes, and private click analytics for teams",
       "addedAt": "2026-09-27T04:47:37+03:00",
-      "version": "0.0.0-20261005.f3fa51e",
+      "version": "0.0.0-20261005.b58a786",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/rdyrct@0.0.0-20261005.f3fa51e/rdyrct-0.0.0-20261005.f3fa51e.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/rdyrct@0.0.0-20261005.f3fa51e/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/rdyrct@0.0.0-20261005.f3fa51e/manifest.sig",
-        "digest": "14a7d5c4a11935b2e2f8d5fb35a12749e532009908e65599e712be5ba4e4e94b"
+        "zip": "https://github.com/appflare/catalog/releases/download/rdyrct@0.0.0-20261005.b58a786/rdyrct-0.0.0-20261005.b58a786.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/rdyrct@0.0.0-20261005.b58a786/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/rdyrct@0.0.0-20261005.b58a786/manifest.sig",
+        "digest": "59bdaade12560420da6f7d56393ea6952740f1e411c81490ba2bdffef74cfa41"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-10-06T11:03:31.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Andrea Bruno",
@@ -6804,19 +6799,19 @@
       "summary": "Your own server for Synch, end-to-end encrypted real-time sync for Obsidian vaults: notes are encrypted on each device, and the Worker relays and stores only ciphertext in a Durable Object, D1 and R2.",
       "tagline": "Keep your Obsidian notes in sync on your own server",
       "addedAt": "2026-09-27T04:47:37+03:00",
-      "version": "0.5.4",
+      "version": "0.5.5",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/synch@0.5.4/synch-0.5.4.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/synch@0.5.4/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/synch@0.5.4/manifest.sig",
-        "digest": "314d08ec47bf4115a99a3b0e5991732f7415d2c6aabaf79c701a64c806627e5c"
+        "zip": "https://github.com/appflare/catalog/releases/download/synch@0.5.5/synch-0.5.5.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/synch@0.5.5/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/synch@0.5.5/manifest.sig",
+        "digest": "8b82db02fc3ab1de164fddafe3aa29578f97fc29118334d11999f36a2f9b2042"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-10-06T11:05:42.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Synch",
@@ -6900,12 +6895,12 @@
       "summary": "A disposable email service on your own domain: pick or generate an address in the browser and read the mail sent to it, received by Email Routing and kept in D1.",
       "tagline": "Disposable email addresses on your own domain",
       "addedAt": "2026-09-27T05:55:55+03:00",
-      "version": "0.0.0-20260627.36d05ed",
+      "version": "0.0.0-20260627.36d05ed.1",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/tempik@0.0.0-20260627.36d05ed/tempik-0.0.0-20260627.36d05ed.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/tempik@0.0.0-20260627.36d05ed/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/tempik@0.0.0-20260627.36d05ed/manifest.sig",
-        "digest": "1988c3dc3d72b6c28f3f1962770191145d6438eb5940008d0d2093f51248d348"
+        "zip": "https://github.com/appflare/catalog/releases/download/tempik@0.0.0-20260627.36d05ed.1/tempik-0.0.0-20260627.36d05ed.1.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/tempik@0.0.0-20260627.36d05ed.1/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/tempik@0.0.0-20260627.36d05ed.1/manifest.sig",
+        "digest": "981614e851a6a1b2169acdf318184d9568a6c732170545767216d11f77a64fe5"
       },
       "tier": "artifact",
       "plan": "free",
@@ -6913,7 +6908,7 @@
         "zone",
         "email-routing"
       ],
-      "lastVerified": "2026-10-06T11:05:41.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Hiroto Masato",
@@ -7010,17 +7005,17 @@
       "summary": "Your own sync hub for Token Monitor: combine the token use, costs and plan limits of Claude Code, Codex, Cursor and 40 more AI coding tools across all your machines, live in every widget.",
       "tagline": "Sync your AI coding usage across all your devices",
       "addedAt": "2026-09-27T11:42:03+03:00",
-      "version": "0.66.0",
+      "version": "0.67.0",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/token-monitor@0.66.0/token-monitor-0.66.0.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/token-monitor@0.66.0/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/token-monitor@0.66.0/manifest.sig",
-        "digest": "337faa14d90a96d2a471bebf445a173fb47b6e422d649455fa5a7cdc331d1e81"
+        "zip": "https://github.com/appflare/catalog/releases/download/token-monitor@0.67.0/token-monitor-0.67.0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/token-monitor@0.67.0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/token-monitor@0.67.0/manifest.sig",
+        "digest": "2b7d8e8621857f6aca9df91b4cc7501788f5ad6f50245d6459efc8d47d9701a0"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-10-06T11:06:40.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Javis",
