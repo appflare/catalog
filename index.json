@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-07T07:08:53.484Z",
+  "generatedAt": "2026-10-07T07:24:57.337Z",
   "apps": [
     {
       "slug": "2fa",
@@ -1236,7 +1236,12 @@
         },
         "screenshots": [
           {
-            "url": "https://appflare.github.io/catalog/apps/cloudflare-os/screenshots/01-planning-workspace-with-a-slide-deck.png",
+            "url": "https://appflare.github.io/catalog/apps/cloudflare-os/screenshots/01-home-screen.png",
+            "sha256": "5059082485347f0ca19a595d5b205076326fd82d709d1b13fa54802c2a802657",
+            "alt": "Cloudflare OS: Home screen"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/cloudflare-os/screenshots/02-planning-workspace-with-a-slide-deck.png",
             "sha256": "494a59ef7ec8f80c28532d42e141a6fb3355baf8a9b8810a485973f868735e5d",
             "alt": "Cloudflare OS: Planning workspace with a slide deck"
           }
