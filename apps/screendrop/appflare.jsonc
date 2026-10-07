@@ -9,12 +9,14 @@
   "summary": "The upload and sharing backend for the Screendrop macOS app: screenshots and screen recordings stored in R2, with share pages, transcripts, comments and likes.",
   "tagline": "Share screenshots and screen recordings with your own links",
   "repo": "fayazara/screendrop-worker",
+  // The Worker's README identifies Screendrop as the main macOS app.
+  "upstreamRepo": "fayazara/Screendrop",
   // The repository has no LICENSE file; its README's License section says MIT.
   "license": "MIT",
   "categories": ["sharing", "media"],
   // Field links (revision 2) and the formatting of URLs in the notes (revision 3)
   // came after this release was published: revisions, no new build.
-  "revision": 3,
+  "revision": 4,
   "authors": [{ "name": "Fayaz Ahmed", "github": "fayazara", "x": "fayazara" }],
   "maintainers": ["MendyLanda"],
   // Upstream publishes no release tags; the pin tracks main, which the

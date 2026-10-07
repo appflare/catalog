@@ -5,11 +5,12 @@
   "summary": "A Memos-compatible notes app for quick capture: timeline, tags, attachments, semantic search, and an MCP server, on D1, R2, and Vectorize.",
   "tagline": "Capture notes and find them when you need them",
   "repo": "realchendahuang/FlareMo",
+  "homepage": "https://flaremo.app",
   "license": "AGPL-3.0-only",
   "categories": ["productivity", "notes"],
   // The formatting of URLs in the notes changed after this release was published:
   // a revision, no new build.
-  "revision": 2,
+  "revision": 3,
   "authors": [{ "name": "realchendahuang", "github": "realchendahuang" }],
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v0.22.0", "sha": "f507923497128e3dc2bb349355a7cafd95e657f9" },

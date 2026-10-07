@@ -5,22 +5,26 @@
   // is a SQLite-backed Durable Object that holds its browser.
   "$schema": "https://appflare.github.io/catalog/schema/v1.json",
   "slug": "playwright-mcp",
-  "name": "Playwright MCP",
+  "name": "Cloudflare Playwright MCP",
   "summary": "A remote MCP server that lets AI assistants browse for you: navigate, click, type, read page snapshots and take screenshots in a headless browser from Cloudflare Browser Rendering.",
   "tagline": "Let your AI assistant browse websites and take screenshots",
   "repo": "cloudflare/playwright-mcp",
+  // The fork's pinned package.json identifies Microsoft's upstream project:
+  // https://github.com/cloudflare/playwright-mcp/blob/ee81e278966626f9ad72d94bdb16f949d06744e5/package.json
+  "upstreamRepo": "microsoft/playwright-mcp",
   "license": "Apache-2.0",
   "categories": ["ai", "developer-tools"],
   // The formatting of URLs in the notes changed after this release was published:
   // a revision, no new build.
-  "revision": 2,
+  "revision": 3,
   "authors": [
     {
       "name": "Cloudflare",
       "url": "https://www.cloudflare.com",
       "github": "cloudflare",
       "x": "Cloudflare"
-    }
+    },
+    { "name": "Microsoft Corporation", "github": "microsoft" }
   ],
   "maintainers": ["MendyLanda"],
   // The head of main, not the v0.0.5 tag: at the tag the deployable example

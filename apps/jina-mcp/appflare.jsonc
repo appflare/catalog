@@ -4,12 +4,13 @@
   "name": "Jina AI MCP Server",
   "summary": "Jina AI's remote MCP server on your own Worker: read pages and PDFs as Markdown, take screenshots, search the web, arXiv and SSRN, and rerank or deduplicate text with Jina's Reader, Search, Embeddings and Reranker APIs.",
   "tagline": "Let your AI assistant read pages, search the web, and compare text",
+  "homepage": "https://mcp.jina.ai",
   "repo": "jina-ai/MCP",
   "license": "Apache-2.0",
   "categories": ["ai", "developer-tools"],
   // Field links (revision 2) and the formatting of URLs in the notes (revision 3)
   // came after this release was published: revisions, no new build.
-  "revision": 3,
+  "revision": 4,
   "authors": [{ "name": "Jina AI", "url": "https://jina.ai", "github": "jina-ai", "x": "JinaAI_" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags; the pin is the head of main.

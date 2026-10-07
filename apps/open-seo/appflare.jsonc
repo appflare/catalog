@@ -12,12 +12,13 @@
   "summary": "Self-hosted SEO research: keywords, rankings, backlinks and site audits, on your own Cloudflare account and behind Cloudflare Access.",
   "tagline": "Find search terms, track rankings, and check your site's health",
   "repo": "every-app/open-seo",
+  "homepage": "https://openseo.so",
   "license": "MIT",
   "categories": ["marketing", "analytics"],
   // Edited help text (revision 2), field links (revision 3) and the formatting of
   // URLs in the notes (revision 4) came after this release was published:
   // revisions, no new build.
-  "revision": 4,
+  "revision": 5,
   "authors": [
     { "name": "Ben Senescu", "github": "bensenescu", "x": "bensenescu" },
     { "name": "Every App", "url": "https://everyapp.dev", "github": "every-app" }

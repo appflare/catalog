@@ -10,10 +10,10 @@
   "categories": ["sharing", "developer-tools"],
   // The formatting of URLs in the notes changed after this release was published:
   // a revision, no new build.
-  "revision": 2,
+  "revision": 3,
   "authors": [
     { "name": "Or May-Paz", "github": "maypaz" },
-    { "name": "Matan Lachmish", "url": "https://www.thebigfatninja.xyz", "github": "mlachmish" }
+    { "name": "Matan Lachmish", "github": "mlachmish" }
   ],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags, so the entry follows the default branch by commit.

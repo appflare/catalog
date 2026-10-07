@@ -4,12 +4,14 @@
   // live in D1, uploaded files in R2.
   "$schema": "https://appflare.github.io/catalog/schema/v1.json",
   "slug": "xiadd-pastebin",
-  "name": "xiadd Pastebin",
+  "name": "PasteShare",
   "summary": "A pastebin with syntax highlighting, Markdown, password-protected pastes, expiry times and file uploads up to 25 MB, on D1 and R2, with a JSON API.",
   "tagline": "Share text and files with links that can expire or use a password",
+  "homepage": "https://as.al",
   "repo": "xiadd/pastebin-worker",
   "license": "MIT",
   "categories": ["sharing", "developer-tools"],
+  "revision": 2,
   "authors": [{ "name": "xiadd", "github": "xiadd" }],
   "maintainers": ["MendyLanda"],
   // Upstream publishes no release tags; the pin tracks main.

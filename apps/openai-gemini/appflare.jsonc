@@ -2,14 +2,15 @@
   "$schema": "https://appflare.github.io/catalog/schema/v1.json",
   "slug": "openai-gemini",
   "name": "OpenAI Gemini",
-  "summary": "OpenAI-compatible API adapter for Gemini, on Workers.",
+  "summary": "Use Gemini with OpenAI clients through your own API endpoint, with chat, embeddings, streaming replies, tool calls, and image or audio input.",
   "tagline": "Use Gemini in apps built for OpenAI",
+  "homepage": "https://my-openai-gemini-demo.vercel.app/",
   "repo": "PublicAffairs/openai-gemini",
   "license": "MIT",
-  "categories": ["ai"],
+  "categories": ["ai", "developer-tools"],
   // The formatting of URLs in the notes changed after this release was published:
   // a revision, no new build.
-  "revision": 2,
+  "revision": 3,
   "authors": [{ "name": "PublicAffairs", "github": "PublicAffairs" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no semver release tags (its tags name Gemini models); the pin tracks main.

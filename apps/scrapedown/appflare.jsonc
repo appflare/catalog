@@ -12,9 +12,14 @@
   "categories": ["developer-tools", "utilities"],
   // The note on Cloudflare Access changed after this release was published: a
   // revision, no new build.
-  "revision": 2,
+  "revision": 3,
   "authors": [
-    { "name": "Ozan Şener", "url": "https://getairefs.com", "github": "ozanvos", "x": "ozanvos" }
+    {
+      "name": "Ozan van Oosten-Şener",
+      "url": "https://getairefs.com",
+      "github": "ozanvos",
+      "x": "ozanvos"
+    }
   ],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags; the pin is the head of main, unchanged

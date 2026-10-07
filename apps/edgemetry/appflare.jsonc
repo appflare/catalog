@@ -11,7 +11,7 @@
   "repo": "hayaran/Edgemetry",
   "license": "MIT",
   "categories": ["analytics"],
-  "authors": [{ "name": "Nitin Hayaran", "github": "hayaran", "x": "nitinhayaran" }],
+  "authors": [{ "name": "Nitin Hayaran", "github": "nitinhayaran", "x": "nitinhayaran" }],
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v0.3.0", "sha": "b8ceeadaa0e1211769376d3472e764a9bb8478e7" },
   "install": {

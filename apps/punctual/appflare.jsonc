@@ -10,8 +10,9 @@
   "categories": ["business", "scheduling"],
   // openPath and field links added after this release was published: a revision,
   // no new build.
-  "revision": 2,
+  "revision": 3,
   "authors": [
+    { "name": "Sergey Bulaev" },
     {
       "name": "Creative Content Crafts",
       "url": "https://cccrafts.ai",

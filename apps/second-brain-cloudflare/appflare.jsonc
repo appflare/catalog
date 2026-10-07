@@ -4,9 +4,11 @@
   "name": "Second Brain",
   "summary": "A personal memory for your AI assistants: an MCP server that stores notes in D1 and recalls them by meaning with Vectorize and Workers AI.",
   "tagline": "Save notes once and recall them across your AI tools",
+  "homepage": "https://www.thesecondbrain.dev",
   "repo": "rahilp/second-brain-cloudflare",
   "license": "MIT",
-  "categories": ["ai", "productivity"],
+  "categories": ["ai", "notes"],
+  "revision": 2,
   "authors": [
     {
       "name": "Rahil Pirani",

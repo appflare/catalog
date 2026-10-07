@@ -1,8 +1,8 @@
 {
   // EmDash's Cloudflare blog template, the project its README's Deploy button
   // deploys. EmDash itself (emdash-cms/emdash) is MIT; the templates repository
-  // has no LICENSE file of its own, and EmDash's maintainers intend the
-  // templates to be used under the same MIT licence.
+  // has no LICENSE file of its own. Its pinned README says the templates are
+  // auto-synced from EmDash, whose emdash@1.0.1 release declares MIT.
   //
   // The template directory ships without a lockfile, so its dependencies are
   // resolved at pack time (installDirs, lockfile "none") within the ranges its
@@ -14,11 +14,14 @@
   "tagline": "Create a blog with built-in search and an editor",
   "homepage": "https://emdashcms.com",
   "repo": "emdash-cms/templates",
+  // The pinned template README identifies this as the main project:
+  // https://github.com/emdash-cms/templates/blob/1930243108073ebb41ff48533678af7635b01c37/README.md
+  "upstreamRepo": "emdash-cms/emdash",
   "license": "MIT",
   "categories": ["cms"],
   // The category changed in revision 2, which this release was built with.
   // openPath added after it was published: a revision, no new build.
-  "revision": 3,
+  "revision": 4,
   "authors": [{ "name": "EmDash", "url": "https://emdashcms.com", "github": "emdash-cms" }],
   "maintainers": ["MendyLanda"],
   // The templates repository has no tags; the pin tracks main.

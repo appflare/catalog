@@ -10,8 +10,8 @@
   "categories": ["remote-access", "developer-tools"],
   // The Access help and steps after installing changed after this release was
   // published: a revision, no new build.
-  "revision": 2,
-  "authors": [{ "name": "haradakashiwa", "url": "https://ternssh.com", "github": "haradakashiwa" }],
+  "revision": 3,
+  "authors": [{ "name": "Kashiwa", "url": "https://ternssh.com", "github": "haradakashiwa" }],
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v0.0.13", "sha": "b3d2b6c7c0ad00496d79e07c36532d549cd5e73a" },
   "install": {

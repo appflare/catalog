@@ -8,15 +8,15 @@
   // artifact.
   "$schema": "https://appflare.github.io/catalog/schema/v1.json",
   "slug": "isupmap",
-  "name": "isupmap",
-  "summary": "A live up/down heatmap for 40+ popular internet services, polled every five minutes, with history and community outage reports.",
+  "name": "isUpMap",
+  "summary": "A live up/down heatmap for 80+ popular internet services, polled every five minutes, with history and community outage reports.",
   "tagline": "See which popular online services are up or down",
   "homepage": "https://isupmap.com",
   "repo": "Jaironlanda/isupmap",
   "license": "MIT",
   "categories": ["monitoring"],
   // Field links added after this release was published: a revision, no new build.
-  "revision": 2,
+  "revision": 3,
   "authors": [
     { "name": "Jairon Landa", "url": "https://jaironlanda.com", "github": "Jaironlanda" }
   ],

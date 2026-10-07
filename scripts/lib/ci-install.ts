@@ -2162,6 +2162,22 @@ export interface CiWranglerStep {
   write?: { file: string; text: string };
 }
 
+/**
+ * Runs one D1 CLI step. A request can let an app apply its own migrations
+ * after wrangler lists its pending files. A tracked migration and its ledger
+ * row commit together, so retrying once rereads that ledger and skips the
+ * app's work. Persistent SQL failures still fail. Untracked SQL is not retried.
+ */
+export function runD1WranglerStep(step: CiWranglerStep, run: () => void): void {
+  try {
+    run();
+  } catch (error) {
+    const [command, operation, action] = step.args;
+    if (command !== "d1" || operation !== "migrations" || action !== "apply") throw error;
+    run();
+  }
+}
+
 /** One database's seed, run through the D1 API (see {@link runSeed}). */
 export interface CiSeedStep {
   worker: string;

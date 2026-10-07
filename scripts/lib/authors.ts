@@ -11,11 +11,13 @@ import type { CatalogAuthor, CatalogManifest } from "./types.ts";
  * never from a release, so an edit to `authors` alone needs no new release
  * (see `INDEX_ONLY_FIELDS` in `publish-plan.ts`).
  */
-export function indexAuthors(manifest: Pick<CatalogManifest, "authors" | "repo">): CatalogAuthor[] {
+export function indexAuthors(
+  manifest: Pick<CatalogManifest, "authors" | "repo" | "upstreamRepo">,
+): CatalogAuthor[] {
   if (manifest.authors !== undefined) {
     return manifest.authors.map((author) => ({ ...author }));
   }
-  const owner = manifest.repo.split("/")[0] ?? "";
+  const owner = (manifest.upstreamRepo ?? manifest.repo).split("/")[0] ?? "";
   if (owner === "") {
     return [];
   }

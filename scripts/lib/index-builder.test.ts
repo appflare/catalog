@@ -149,6 +149,7 @@ describe("buildIndexApps", () => {
     expect(rest).toHaveLength(0);
     expect(row).toEqual({
       slug: "hello",
+      repo: hello.repo,
       name: "Hello",
       summary: "Fixture app for the catalog scripts' tests.",
       tagline: "A fixture for the catalog's tests",
@@ -451,12 +452,25 @@ describe("sandbox tier entries", () => {
     },
   };
 
+  it("publishes the public repository while keeping the template build source", () => {
+    const built = {
+      ...sandboxFixture(hello, schema),
+      upstreamRepo: "project/main-app",
+    };
+    const [row] = buildIndexApps([built], options({ releases: throwingReleases }));
+    expect(row?.repo).toBe("project/main-app");
+    expect(built.repo).toBe(hello.repo);
+    expect(row?.build?.pin).toBe(built.source.sha);
+    expect(row?.authors).toEqual([{ name: "project", github: "project" }]);
+  });
+
   it("are listed with a build block instead of artifacts, without a release", () => {
     const built = sandboxFixture(hello, schema);
     const rows = buildIndexApps([built], options({ releases: throwingReleases }));
     expect(rows).toEqual([
       {
         slug: "built",
+        repo: hello.repo,
         name: "Hello",
         summary: "Fixture app for the catalog scripts' tests.",
         tagline: "A fixture for the catalog's tests",
@@ -493,6 +507,7 @@ describe("sandbox tier entries", () => {
     expect(rows.map((r) => r.slug)).toEqual(["built", "hello"]);
     expect(rows[1]).toEqual({
       slug: "hello",
+      repo: hello.repo,
       name: "Hello",
       summary: "Fixture app for the catalog scripts' tests.",
       tagline: "A fixture for the catalog's tests",
@@ -572,6 +587,7 @@ describe("self-deploying tier entries", () => {
     expect(rows).toEqual([
       {
         slug: "seo",
+        repo: hello.repo,
         name: "Hello",
         summary: "Fixture app for the catalog scripts' tests.",
         tagline: "A fixture for the catalog's tests",

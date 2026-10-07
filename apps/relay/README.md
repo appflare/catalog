@@ -1,6 +1,6 @@
 # Relay
 
-[Relay](https://github.com/YuriCrystal/relay) by Yuri is a link shortener with click
+[Relay](https://github.com/YuriCrystal/relay) by YuriCrystal is a link shortener with click
 analytics that keeps no cookies and no IPs: weighted A/B splits, routing by device and
 country, per-channel suffixes (`/spring/ig`), conversion postbacks, Facebook Pixel, GA4
 and GTM retargeting on an interstitial, password-protected and expiring links, QR codes

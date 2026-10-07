@@ -2,16 +2,19 @@
   "$schema": "https://appflare.github.io/catalog/schema/v1.json",
   "slug": "r2-explorer",
   "name": "R2 Explorer",
-  "summary": "A Google Drive-like file browser for an R2 bucket, on Workers + R2.",
+  "summary": "Browse folders, preview files and download objects from an R2 bucket through a read-only web interface.",
   "tagline": "Browse and preview files in your Cloudflare storage",
-  "homepage": "https://github.com/cloudflare/templates/tree/main/r2-explorer-template",
+  "homepage": "https://r2explorer.com",
   "repo": "cloudflare/templates",
+  // The template pins r2-explorer 1.1.10. Its upstream README links back to this
+  // Deploy-button template: https://github.com/G4brym/R2-Explorer/tree/v1.1.10.
+  "upstreamRepo": "G4brym/R2-Explorer",
   "license": "MIT",
   "categories": ["files"],
   // The category changed after this release was published, and the Access
   // protection below came later still: revisions, no new build (the template is
   // unchanged in the repository's newer tags).
-  "revision": 3,
+  "revision": 4,
   "authors": [
     {
       "name": "Gabriel Massadas",

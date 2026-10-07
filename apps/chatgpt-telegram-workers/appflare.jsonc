@@ -4,12 +4,13 @@
   "name": "ChatGPT Telegram Bot",
   "summary": "Your own AI chat bot on Telegram, backed by OpenAI, Anthropic, Workers AI, or any OpenAI-compatible API.",
   "tagline": "Chat with your own AI bot on Telegram",
+  "homepage": "https://chatgpt-telegram-workers.tbxark.workers.dev",
   "repo": "TBXark/ChatGPT-Telegram-Workers",
   "license": "MIT",
   "categories": ["ai", "bots"],
   // openPath and field links added after this release was published: a revision,
   // no new build.
-  "revision": 2,
+  "revision": 3,
   "authors": [{ "name": "TBXark", "url": "https://tbxark.com", "github": "TBXark", "x": "tbxark" }],
   "maintainers": ["MendyLanda"],
   // Upstream tags releases without a "v" prefix (2.0.0); the packer reads both forms.

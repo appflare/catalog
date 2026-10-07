@@ -15,10 +15,12 @@
   "summary": "A self-hosted Markdown notebook with live preview, backlinks, full-text and semantic search, offline editing, multi-device sync, public sharing, MCP access and scheduled backups.",
   "tagline": "A private notebook for writing, finding, and syncing notes",
   "repo": "shuaiplus/inkstone",
+  "homepage": "https://inkstone-demo.pages.dev/",
   // The LICENSE file holds the LGPL-3.0 text followed by the GPL-3.0 text it
   // builds on; README and package.json say LGPL-3.0-only.
   "license": "LGPL-3.0-only",
   "categories": ["notes", "productivity"],
+  "revision": 2,
   "authors": [{ "name": "Shuai", "url": "https://shuai.plus", "github": "shuaiplus" }],
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v0.8.0", "sha": "c146593f0c2153431433260d0377622906f17e42" },

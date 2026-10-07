@@ -9,7 +9,7 @@
   "license": "0BSD",
   "categories": ["notes", "sync"],
   "authors": [
-    { "name": "Kavin", "url": "https://kavinsood.com", "github": "kavinsood", "x": "kavinsoodd" }
+    { "name": "Kavin", "url": "https://kavinsood.com", "github": "kavinsood", "x": "itskavins" }
   ],
   "maintainers": ["MendyLanda"],
   // Upstream tags releases without a "v" prefix (2.1.1); the packer reads both forms.

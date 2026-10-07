@@ -13,9 +13,9 @@
   // The repository has no LICENSE file; package.json and the README's
   // License section both say MIT.
   "license": "MIT",
-  "categories": ["bots", "utilities"],
+  "categories": ["bots", "games"],
   // Field links added after this release was published: a revision, no new build.
-  "revision": 2,
+  "revision": 3,
   "authors": [
     { "name": "AEtherside", "github": "AEtherside" },
     {

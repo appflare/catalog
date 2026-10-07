@@ -5,13 +5,12 @@
   "summary": "A WebDAV server for an R2 bucket: mount it as a network drive in Finder, Windows Explorer or any WebDAV client, with locking and one user name and password.",
   "tagline": "Access your R2 files as a network drive",
   "repo": "abersheeran/r2-webdav",
-  // The repository has no LICENSE file and declares no licence anywhere, so
-  // the catalog shows it as unlicensed.
-  "license": "NONE",
+  // The pinned repository's LICENSE declares Apache License 2.0.
+  "license": "Apache-2.0",
   "categories": ["files"],
-  // The category (revision 2) and the formatting of URLs in the notes (revision 3)
+  // The category (revision 2), URLs in the notes (revision 3), and licence (revision 4)
   // came after this release was published: revisions, no new build.
-  "revision": 3,
+  "revision": 4,
   "authors": [{ "name": "Aber", "github": "abersheeran" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags, so the entry follows the default branch by commit.

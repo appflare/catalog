@@ -2,7 +2,7 @@
   "$schema": "https://appflare.github.io/catalog/schema/v1.json",
   "slug": "openstory",
   "name": "OpenStory",
-  "summary": "Turn a script into a storyboard and video: scene breakdown, consistent characters, locations and styles, AI-generated frames, motion, voices and music, with team libraries and an MCP server, on D1, R2, Workflows and Durable Objects. Brings your own AI provider keys.",
+  "summary": "Turn scripts into storyboards and videos with scene breakdowns, consistent characters, locations and styles, AI-generated frames, motion, voices and music, shared team libraries and an MCP server. Bring your own AI provider keys.",
   "tagline": "Turn scripts into videos with consistent characters and scenes",
   "homepage": "https://openstory.so",
   "repo": "openstory-so/openstory",
@@ -10,7 +10,7 @@
   "categories": ["ai", "media"],
   // Edited help text (revision 2) and field links (revision 3) came after this
   // release was published: revisions, no new build.
-  "revision": 3,
+  "revision": 4,
   "authors": [
     {
       "name": "OpenStory",

@@ -10,10 +10,11 @@ const listed: CatalogAuthor[] = [
   { name: "Cloudflare", url: "https://www.cloudflare.com", github: "cloudflare" },
 ];
 
-const cases: Pick<CatalogManifest, "authors" | "repo">[] = [
+const cases: Pick<CatalogManifest, "authors" | "repo" | "upstreamRepo">[] = [
   { repo: "cloudflare/templates", authors: listed },
   { repo: "willswire/unifi-ddns" },
   { repo: "not_a.login/repo" },
+  { repo: "packager/template", upstreamRepo: "emdash-cms/emdash" },
 ];
 
 describe("indexAuthors", () => {
@@ -30,12 +31,20 @@ describe("indexAuthors", () => {
   it("leaves out the GitHub link for an owner that is not a GitHub login", () => {
     expect(indexAuthors({ repo: "not_a.login/repo" })).toEqual([{ name: "not_a.login" }]);
   });
+
+  it("credits the upstream owner when a template is used for the build", () => {
+    expect(indexAuthors({ repo: "packager/template", upstreamRepo: "emdash-cms/emdash" })).toEqual([
+      { name: "emdash-cms", github: "emdash-cms" },
+    ]);
+  });
 });
 
 describe.skipIf(!appflareAvailable)("indexAuthors and @appflare/schema", () => {
   it("follow the same rule as catalogAuthors()", async () => {
     const mod = (await import(pathToFileURL(appflarePaths(appflareDir).schemaDist).href)) as {
-      catalogAuthors?: (manifest: Pick<CatalogManifest, "authors" | "repo">) => CatalogAuthor[];
+      catalogAuthors?: (
+        manifest: Pick<CatalogManifest, "authors" | "repo" | "upstreamRepo">,
+      ) => CatalogAuthor[];
     };
     expect(typeof mod.catalogAuthors).toBe("function");
     for (const manifest of cases) {

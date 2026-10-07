@@ -121,6 +121,8 @@ export interface CatalogManifest {
   /** The app's home page; the repository's GitHub page when omitted. */
   homepage?: string;
   repo: string;
+  /** The app's public repository when its build comes from a template or fork. */
+  upstreamRepo?: string;
   /** An SPDX license expression of current ids (or `LicenseRef-`, `NONE`). */
   license: string;
   /** One short line shown next to the license. */
@@ -399,6 +401,8 @@ export interface IndexBuild {
  */
 export interface IndexApp {
   slug: string;
+  /** Public repository, used to match star counts to this index's app identity. */
+  repo?: string;
   name: string;
   summary: string;
   /** The catalog manifest's `tagline`. */
@@ -505,7 +509,7 @@ export interface IndexJson {
 
 /** `CatalogAppStats`, in full: one app's numbers in `stats.json`. */
 export interface CatalogAppStats {
-  stars: { count: number; fetchedAt: string } | null;
+  stars: { count: number; fetchedAt: string; repo?: string } | null;
   installs: { last30d: number | null; active: number | null; fetchedAt: string } | null;
 }
 
