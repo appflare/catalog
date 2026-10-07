@@ -55,6 +55,7 @@ import {
   paidPlanSkip,
   planCiApp,
   postDeployConfig,
+  runD1WranglerStep,
   runSeed,
   seedFunctions,
   seedValues,
@@ -415,7 +416,7 @@ async function deployAndCheck(
         mkdirSync(path.dirname(target), { recursive: true });
         writeFileSync(target, step.write.text);
       }
-      wrangler(bin, dir, step.args, undefined, step.config);
+      runD1WranglerStep(step, () => wrangler(bin, dir, step.args, undefined, step.config));
     } else if (seeds === null) {
       throw new Error(`${step.database} has a seed, and no seed functions were loaded`);
     } else {
