@@ -8,15 +8,22 @@
   "repo": "linkcraftstudio/feedlog",
   "license": "MIT",
   "categories": ["business", "productivity"],
-  // Field links added after this release was published: a revision, no new build.
-  "revision": 2,
   "authors": [
     { "name": "LinkCraft Studio", "url": "https://feedlog.ai", "github": "linkcraftstudio" },
     { "name": "guoliim", "github": "guoliim" },
     { "name": "Jeff", "github": "canghai118", "x": "lastz321" }
   ],
   "maintainers": ["MendyLanda"],
-  "source": { "ref": "v0.5.0", "sha": "44dd5b593e225e8afc1a35b94780f4031ce2d668" },
+  "source": {
+    "ref": "v0.5.0",
+    "sha": "44dd5b593e225e8afc1a35b94780f4031ce2d668",
+    // A rebuild of v0.5.0: the release of 0.5.0 typed the migrations journal
+    // as data where the Worker reads it as text, and this build types it as
+    // wrangler does. A version above 0.5.0 and below upstream's next release
+    // (semver's next prerelease), so managers offer it as an update. Remove
+    // this line when source moves.
+    "version": "0.5.1-0"
+  },
   "install": {
     "packageManager": "pnpm",
     // The root config has no `main`: the Nuxt build (Nitro's cloudflare-module

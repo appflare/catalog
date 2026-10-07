@@ -15,8 +15,6 @@
   "repo": "cloudflarebase/cloudflarebase",
   "license": "Apache-2.0",
   "categories": ["developer-tools", "files"],
-  // The category changed after this release was published: a revision, no new build.
-  "revision": 2,
   "authors": [
     {
       "name": "The Cloudflarebase Authors",
@@ -26,7 +24,14 @@
   ],
   "maintainers": ["MendyLanda"],
   // Pinned to main: the repository has no tags.
-  "source": { "ref": "main", "sha": "adfd1b3007896b172f028c03dd0e442f0f8907b1" },
+  "source": {
+    "ref": "main",
+    "sha": "adfd1b3007896b172f028c03dd0e442f0f8907b1",
+    // The commit's own version plus a build number: the plan changed to
+    // "free" after 0.0.0-20260827.adfd1b3 was released, which only a new
+    // build can carry. Remove this line when source moves.
+    "version": "0.0.0-20260827.adfd1b3.1"
+  },
   "install": {
     "packageManager": "npm",
     "wranglerConfig": "wrangler.jsonc",
@@ -68,10 +73,10 @@
       { "name": "hosting", "wranglerConfig": "agents/hosting/wrangler.jsonc", "workersDev": false }
     ]
   },
-  // Five Workers install only on Workers Paid. D1, R2, Durable Objects,
-  // Workers AI (the project copilot) and Analytics Engine (database events)
-  // all have free tiers.
-  "plan": "paid",
+  // D1, R2, Durable Objects, Workers AI (the project copilot) and Analytics
+  // Engine (database events) all have free tiers, and managers from 0.4.0
+  // install five Workers on Workers Free.
+  "plan": "free",
   // The db agent writes database events to an Analytics Engine dataset, and
   // Cloudflare refuses the upload on an account that has not turned
   // Analytics Engine on.

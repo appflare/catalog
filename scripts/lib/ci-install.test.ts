@@ -310,8 +310,8 @@ describe("planCiInstall", () => {
     ).toEqual({
       PUBLIC_URL: url,
       OTHER: "ci-hello-pr1/{{notMine}}",
-      // Keys are not rendered, only the strings inside the value.
-      ORIGINS: { "{{workerName}}": [`${url}/a`, 1], nested: { url } },
+      // Keys are filled in too, as managers from 0.4.0 fill them in.
+      ORIGINS: { "ci-hello-pr1": [`${url}/a`, 1], nested: { url } },
       TRUSTED: [url],
       CALLBACK: `${url}/cb?w=ci-hello-pr1`,
     });
@@ -656,6 +656,31 @@ describe("planCiInstall", () => {
     expect(plan.notes).toEqual([]);
   });
 
+  it("sends a service binding's props with their placeholders filled in", () => {
+    const edit = (m: Record<string, unknown>) => {
+      worker(m).bindings = [
+        {
+          type: "service",
+          name: "AUTH",
+          service: "self",
+          entrypoint: "Auth",
+          props: { origin: "{{appUrl}}", "{{workerName}}": [1, { admin: true }] },
+        },
+      ];
+    };
+    const url = "https://ci-hello-pr1.acme.workers.dev";
+    expect(
+      planCiInstall(manifest(edit), "ci-hello-pr1", { subdomain: "acme" }).config.services,
+    ).toEqual([
+      {
+        binding: "AUTH",
+        service: "ci-hello-pr1",
+        entrypoint: "Auth",
+        props: { origin: url, "ci-hello-pr1": [1, { admin: true }] },
+      },
+    ]);
+  });
+
   it("refuses every other service binding", () => {
     const plan = (binding: Record<string, unknown>) => () =>
       planCiInstall(
@@ -672,7 +697,12 @@ describe("planCiInstall", () => {
     expect(plan({ service: "self", environment: "production" })).toThrow(
       /service binding PEER also sets environment/,
     );
-    expect(plan({ service: "self", props: { admin: true } })).toThrow(/also sets props/);
+    expect(plan({ service: "self", props: [true] })).toThrow(
+      /records props that are not a JSON object/,
+    );
+    expect(plan({ service: "self", props: null })).toThrow(
+      /records props that are not a JSON object/,
+    );
     expect(plan({ service: "self", entrypoint: "" })).toThrow(
       /records an entrypoint that is not a name/,
     );

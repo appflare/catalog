@@ -13,7 +13,14 @@
   "authors": [{ "name": "Hiroto Masato", "github": "hirotomasato" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags, so the entry follows the default branch by commit.
-  "source": { "ref": "main", "sha": "36d05edc7010039664716559acd3d623d5738188" },
+  "source": {
+    "ref": "main",
+    "sha": "36d05edc7010039664716559acd3d623d5738188",
+    // The commit's own version plus a build number: the config patch below
+    // came after 0.0.0-20260627.36d05ed was released, which only a new build
+    // can carry. Remove this line when source moves.
+    "version": "0.0.0-20260627.36d05ed.1"
+  },
   "install": {
     "packageManager": "npm",
     "wranglerConfig": "wrangler.toml",
@@ -21,7 +28,11 @@
     "health": { "path": "/api/config" },
     // Upstream's setup sends every address of the domain to the Worker
     // through the zone's catch-all rule.
-    "emailRouting": { "catchAll": true }
+    "emailRouting": { "catchAll": true },
+    // The config's `[email]` section is not a wrangler key: wrangler ignores
+    // it, and the packer refuses keys it does not know. Mail reaches the
+    // Worker through emailRouting above.
+    "configPatch": { "email": null }
   },
   // D1, static assets and receiving mail fit the free plan.
   "plan": "free",

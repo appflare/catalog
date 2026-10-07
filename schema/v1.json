@@ -314,6 +314,13 @@
         "emailRouting": {
           "type": "object",
           "properties": {
+            "worker": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 24,
+              "pattern": "^[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$",
+              "description": "For an app of several Workers (`install.workers`): the `name` of the Worker that receives the mail, which must export an `email` handler. Omitted means the primary Worker. Email Routing delivers to a Worker by name, not over HTTP, so a Worker with `workersDev: false` can receive mail. An entry that sets it lists `\"email-worker\"` in `requires`."
+            },
             "catchAll": {
               "default": false,
               "description": "Send every address of the zone that no other rule matches to the app (the zone's catch-all rule). The install refuses when the catch-all already sends mail somewhere else.",
@@ -332,7 +339,7 @@
             }
           },
           "additionalProperties": false,
-          "description": "Email the app receives through Email Routing. The install form asks for one of the account's zones; the install turns Email Routing on there if it is off, then points the listed addresses (and, with `catchAll`, every other address) at the app's Worker, which must export an `email` handler. Uninstalling removes what the install added. Not for the self-deploying tier, whose own installer deploys the app.",
+          "description": "Email the app receives through Email Routing. The install form asks for one of the account's zones; the install turns Email Routing on there if it is off, then points the listed addresses (and, with `catchAll`, every other address) at the app's Worker (the primary one, or the Worker `worker` names), which must export an `email` handler. Uninstalling removes what the install added. `{{emailDomain}}` and `{{emailZoneId}}` give the app the zone's name and id. Not for the self-deploying tier, whose own installer deploys the app.",
           "anyOf": [
             {
               "required": [
@@ -397,7 +404,7 @@
         },
         "configPatch": {
           "minProperties": 1,
-          "description": "Changes to the app's wrangler config, applied before wrangler reads it, as a JSON merge patch (RFC 7386): an object merges key by key, null removes a key, and anything else, arrays included, replaces the value. Allowed keys: main, assets, build, services, kv_namespaces, r2_buckets, d1_databases, vars, migrations, ratelimits; a section Appflare cannot install (such as `vpc_services`) may be set to null, which drops it, when the app works without it. Prefer a pull request upstream and link it in a comment beside the patch; the patch is for the time until it is merged.",
+          "description": "Changes to the app's wrangler config, applied before wrangler reads it, as a JSON merge patch (RFC 7386): an object merges key by key, null removes a key, and anything else, arrays included, replaces the value. Allowed keys: main, assets, build, services, kv_namespaces, r2_buckets, d1_databases, vars, migrations, ratelimits, ai; a section Appflare cannot install (such as `vpc_services`), or a key the packer's wrangler does not know, may be set to null, which drops it, when the app works without it. Prefer a pull request upstream and link it in a comment beside the patch; the patch is for the time until it is merged.",
           "type": "object",
           "properties": {
             "main": {
@@ -505,6 +512,16 @@
                         "type": "string",
                         "minLength": 1,
                         "description": "The name of the Worker the binding points at."
+                      },
+                      "props": {
+                        "type": "object",
+                        "propertyNames": {
+                          "type": "string"
+                        },
+                        "additionalProperties": {
+                          "$ref": "#/$defs/__schema0"
+                        },
+                        "description": "Values the Worker the binding points at reads as `ctx.props` on every call through it, as wrangler sends them: a JSON object whose strings may hold the placeholders a var's default takes (`{{appUrl}}` and the others), filled in at every deploy. Only on a binding to a Worker of this entry; needs \"service-props\" in `requires`."
                       }
                     },
                     "required": [
@@ -590,14 +607,17 @@
                     "type": "string"
                   },
                   "additionalProperties": {
-                    "type": "null"
+                    "type": [
+                      "string",
+                      "null"
+                    ]
                   }
                 },
                 {
                   "type": "null"
                 }
               ],
-              "description": "Only removals: each var to remove as null, or null to remove them all."
+              "description": "Vars to set or remove: text sets the var (added, or replacing the config's value), null removes it, and null for `vars` itself removes them all. Text may hold the placeholders a var's default takes (`{{appUrl}}`, `{{appUrl:<name>}}` and the others), filled in at every deploy. For a value only one Worker of the entry gets, such as the address it is reached at; a value the admin chooses is a catalog var. The admin does not see these in the app's settings."
             },
             "ratelimits": {
               "type": "array",
@@ -655,6 +675,21 @@
               },
               "description": "The whole list: every rate limit of the config, unchanged, plus new ones, for a limit an upstream deploy script adds."
             },
+            "ai": {
+              "type": "object",
+              "properties": {
+                "binding": {
+                  "type": "string",
+                  "minLength": 1,
+                  "description": "The binding's name, as the Worker reads it from `env`."
+                }
+              },
+              "required": [
+                "binding"
+              ],
+              "additionalProperties": false,
+              "description": "Adds a Workers AI binding, for one an upstream deploy script adds: only `binding`, and only to a config without an `ai` binding of its own (or with this one)."
+            },
             "migrations": {
               "type": "array",
               "items": {
@@ -686,6 +721,10 @@
             "dispatch_namespaces": {
               "type": "null",
               "description": "Only null: drops `dispatch_namespaces`, which Appflare cannot install, from the config."
+            },
+            "mtls_certificates": {
+              "type": "null",
+              "description": "Only null: drops `mtls_certificates`, which Appflare cannot install, from the config."
             },
             "tail_consumers": {
               "type": "null",
@@ -780,7 +819,10 @@
               "description": "Only null: drops `data_blobs`, which Appflare cannot install, from the config."
             }
           },
-          "additionalProperties": false
+          "additionalProperties": {
+            "type": "null",
+            "description": "Only null: drops a key the packer's wrangler does not know, which the packer refuses, from the config."
+          }
         },
         "wranglerConfigInline": {
           "description": "The wrangler config of an app whose repository ships none, which the packer writes as `.appflare.wrangler.jsonc` where `wranglerConfig` names (for example `.appflare.wrangler.jsonc`, or `server/.appflare.wrangler.jsonc`) and reads like any other config. Not beside `configPatch` or `workers`. Prefer a pull request upstream that adds a config, and link it in a comment beside this one.",
@@ -1560,6 +1602,16 @@
                               "type": "string",
                               "minLength": 1,
                               "description": "The name of the Worker the binding points at."
+                            },
+                            "props": {
+                              "type": "object",
+                              "propertyNames": {
+                                "type": "string"
+                              },
+                              "additionalProperties": {
+                                "$ref": "#/$defs/__schema0"
+                              },
+                              "description": "Values the Worker the binding points at reads as `ctx.props` on every call through it, as wrangler sends them: a JSON object whose strings may hold the placeholders a var's default takes (`{{appUrl}}` and the others), filled in at every deploy. Only on a binding to a Worker of this entry; needs \"service-props\" in `requires`."
                             }
                           },
                           "required": [
@@ -1645,14 +1697,17 @@
                           "type": "string"
                         },
                         "additionalProperties": {
-                          "type": "null"
+                          "type": [
+                            "string",
+                            "null"
+                          ]
                         }
                       },
                       {
                         "type": "null"
                       }
                     ],
-                    "description": "Only removals: each var to remove as null, or null to remove them all."
+                    "description": "Vars to set or remove: text sets the var (added, or replacing the config's value), null removes it, and null for `vars` itself removes them all. Text may hold the placeholders a var's default takes (`{{appUrl}}`, `{{appUrl:<name>}}` and the others), filled in at every deploy. For a value only one Worker of the entry gets, such as the address it is reached at; a value the admin chooses is a catalog var. The admin does not see these in the app's settings."
                   },
                   "ratelimits": {
                     "type": "array",
@@ -1710,6 +1765,21 @@
                     },
                     "description": "The whole list: every rate limit of the config, unchanged, plus new ones, for a limit an upstream deploy script adds."
                   },
+                  "ai": {
+                    "type": "object",
+                    "properties": {
+                      "binding": {
+                        "type": "string",
+                        "minLength": 1,
+                        "description": "The binding's name, as the Worker reads it from `env`."
+                      }
+                    },
+                    "required": [
+                      "binding"
+                    ],
+                    "additionalProperties": false,
+                    "description": "Adds a Workers AI binding, for one an upstream deploy script adds: only `binding`, and only to a config without an `ai` binding of its own (or with this one)."
+                  },
                   "migrations": {
                     "type": "array",
                     "items": {
@@ -1741,6 +1811,10 @@
                   "dispatch_namespaces": {
                     "type": "null",
                     "description": "Only null: drops `dispatch_namespaces`, which Appflare cannot install, from the config."
+                  },
+                  "mtls_certificates": {
+                    "type": "null",
+                    "description": "Only null: drops `mtls_certificates`, which Appflare cannot install, from the config."
                   },
                   "tail_consumers": {
                     "type": "null",
@@ -1835,7 +1909,10 @@
                     "description": "Only null: drops `data_blobs`, which Appflare cannot install, from the config."
                   }
                 },
-                "additionalProperties": false
+                "additionalProperties": {
+                  "type": "null",
+                  "description": "Only null: drops a key the packer's wrangler does not know, which the packer refuses, from the config."
+                }
               },
               "wranglerConfigInline": {
                 "description": "This Worker's wrangler config, for a repository that ships none; the same rules as `install.wranglerConfigInline`, and `wranglerConfig` names where it is written.",
@@ -2420,7 +2497,7 @@
             "additionalProperties": false,
             "description": "One Worker of an entry that installs as several Workers."
           },
-          "description": "For an app that installs as several Workers deployed together (for example an API and a web front end), 2 to 24 of them: each Worker's name, wrangler config and optional build command. Exactly one is `primary`: it answers the app's address and health check, and its `wranglerConfig` is `install.wranglerConfig`. Service bindings between these Workers, Durable Object bindings to a class in another of them, and Workflow bindings to a Workflow another of them defines are pointed at the installed Workers; bindings of the same name share one resource. Artifact tier only. On Workers Free the manager installs at most three Workers per app, so an entry of more must set `\"plan\": \"paid\"`."
+          "description": "For an app that installs as several Workers deployed together (for example an API and a web front end), 2 to 24 of them: each Worker's name, wrangler config and optional build command. Exactly one is `primary`: it answers the app's address and health check, and its `wranglerConfig` is `install.wranglerConfig`. Service bindings between these Workers, Durable Object bindings to a class in another of them, and Workflow bindings to a Workflow another of them defines are pointed at the installed Workers; bindings of the same name share one resource. Artifact tier only. On Workers Free a job for more than three Workers can take longer: the manager waits 5 minutes whenever the job needs a fresh allowance of the 50 requests Cloudflare gives it at a time."
         }
       },
       "required": [
@@ -2656,6 +2733,33 @@
               }
             }
           ]
+        },
+        {
+          "anyOf": [
+            {
+              "not": {
+                "required": [
+                  "emailRouting"
+                ]
+              }
+            },
+            {
+              "properties": {
+                "emailRouting": {
+                  "not": {
+                    "required": [
+                      "worker"
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "required": [
+                "workers"
+              ]
+            }
+          ]
         }
       ]
     },
@@ -2665,11 +2769,11 @@
         "free",
         "paid"
       ],
-      "description": "The Cloudflare Workers plan the app needs: `\"free\"` when it runs on Workers Free, `\"paid\"` when it needs Workers Paid. An entry with Pipelines, or with more than 3 Workers, must say `\"paid\"`."
+      "description": "The Cloudflare Workers plan the app needs: `\"free\"` when it runs on Workers Free, `\"paid\"` when it needs Workers Paid. An entry with Pipelines must say `\"paid\"`."
     },
     "requires": {
       "default": [],
-      "description": "Account capabilities the app needs beyond the free Workers baseline. `\"access\"`: the app goes with Cloudflare Access. The account needs a Zero Trust organization only while the app is protected (always, with `access.mode: \"required\"`), and the value keeps the entry away from managers too old to protect apps. Required with `access.mode: \"required\"` and whenever a var's default uses an Access placeholder.",
+      "description": "Account capabilities the app needs beyond the free Workers baseline. `\"access\"`: the app goes with Cloudflare Access. The account needs a Zero Trust organization only while the app is protected (always, with `access.mode: \"required\"`), and the value keeps the entry away from managers too old to protect apps. Required with `access.mode: \"required\"` and whenever a var's default uses an Access placeholder. Some values name a feature of Appflare instead, which keeps the entry away from managers too old for it: `\"secret-keys\"` (a secret with a `key`), `\"service-props\"` (`props` on a service binding), `\"config-patch-values\"` (a config patch that sets var text or adds Workers AI), `\"email-worker\"` (`install.emailRouting.worker`), `\"email-placeholders\"` (`{{emailDomain}}` or `{{emailZoneId}}` anywhere, or any placeholder in an object key of a JSON var or of service binding `props`) and `\"hyperdrive-caching\"` (`caching` on a Hyperdrive binding).",
       "type": "array",
       "items": {
         "type": "string",
@@ -2681,7 +2785,13 @@
           "browser-rendering",
           "containers",
           "analytics-engine",
-          "access"
+          "access",
+          "secret-keys",
+          "service-props",
+          "config-patch-values",
+          "email-worker",
+          "email-placeholders",
+          "hyperdrive-caching"
         ]
       }
     },
@@ -2695,6 +2805,13 @@
             "type": "string",
             "minLength": 1,
             "description": "The name the Worker reads the secret by, exactly as the app's code spells it, for example `ADMIN_PASSWORD`."
+          },
+          "key": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64,
+            "pattern": "^[A-Za-z_][A-Za-z0-9_]*$",
+            "description": "What Appflare calls the secret, when it is not its `name`: unique among the entry's secrets, for an entry of several Workers where two secrets give different Workers a value under one name, for example `GITHUB_CLIENT_ID` for the `CLIENT_ID` of the `github` Worker. The forms, the install's record and `derive.from`, seed params and a Pipelines sink's `tokenSecret` use the key; the Worker still reads the secret by `name`. Defaults to `name`. An entry with a key other than its secret's name lists \"secret-keys\" in `requires`, so managers that do not know keys leave it out. Not for self-deploying entries. Changing a released secret's key makes installs ask for its value again."
           },
           "label": {
             "type": "string",
@@ -2749,7 +2866,7 @@
               "from": {
                 "type": "string",
                 "minLength": 1,
-                "description": "The name of the secret whose value this one is computed from. It must be another secret of this manifest, not itself derived, not optional."
+                "description": "The secret whose value this one is computed from, by its `key` (its `name` when it has no key). It must be another secret of this manifest, not itself derived, not optional."
               },
               "method": {
                 "type": "string",
@@ -3034,7 +3151,7 @@
               "from": {
                 "type": "string",
                 "minLength": 1,
-                "description": "The name of the secret whose value this var is computed from. It must be a secret of this manifest, not itself derived, not optional."
+                "description": "The secret whose value this var is computed from, by its `key` (its `name` when it has no key). It must be a secret of this manifest, not itself derived, not optional."
               },
               "method": {
                 "type": "string",
@@ -3162,7 +3279,7 @@
           "content": {
             "type": "string",
             "minLength": 1,
-            "description": "Markdown the manager shows once the app is installed, such as how to sign in the first time. These placeholders are filled in: `{{appUrl}}`, `{{appHostname}}`, `{{workerUrl}}`, `{{workerHostname}}`, `{{workerName}}`, `{{accountId}}`, `{{wildcardHostname}}`. For the address people open, use `{{appUrl}}`, which follows a custom domain. An entry of several Workers names one of them with `{{appUrl:<name>}}` and the like."
+            "description": "Markdown the manager shows once the app is installed, such as how to sign in the first time. These placeholders are filled in: `{{appUrl}}`, `{{appHostname}}`, `{{workerUrl}}`, `{{workerHostname}}`, `{{workerName}}`, `{{accountId}}`, `{{emailDomain}}`, `{{emailZoneId}}`, `{{wildcardHostname}}`. For the address people open, use `{{appUrl}}`, which follows a custom domain. An entry of several Workers names one of them with `{{appUrl:<name>}}` and the like."
           }
         },
         "required": [
@@ -3210,6 +3327,7 @@
               "D1",
               "Queues",
               "Vectorize",
+              "Images",
               "Hyperdrive",
               "Pipelines",
               "Secrets Store",
@@ -3218,7 +3336,7 @@
               "Access: Apps and Policies",
               "Access: Organizations, Identity Providers, and Groups"
             ],
-            "description": "The permission group, as the Cloudflare dashboard's token form names it, for example `\"DNS\"` or `\"Workers Scripts\"`. Zone groups: DNS, Zone, Zone Settings, Analytics, Page Rules, Cache Purge, SSL and Certificates, Firewall Services, Load Balancers, Logs, Workers Routes, Email Routing Rules. Account groups: Account Settings, Account Analytics, Billing, Logs, Magic Transit, Workers Scripts, Workers KV Storage, Workers R2 Storage, Workers R2 Data Catalog, Workers R2 SQL, Workers Tail, Workers Containers, D1, Queues, Vectorize, Hyperdrive, Pipelines, Secrets Store, Email Sending, Email Routing Addresses, Access: Apps and Policies, Access: Organizations, Identity Providers, and Groups."
+            "description": "The permission group, as the Cloudflare dashboard's token form names it, for example `\"DNS\"` or `\"Workers Scripts\"`. Zone groups: DNS, Zone, Zone Settings, Analytics, Page Rules, Cache Purge, SSL and Certificates, Firewall Services, Load Balancers, Logs, Workers Routes, Email Routing Rules. Account groups: Account Settings, Account Analytics, Billing, Logs, Magic Transit, Workers Scripts, Workers KV Storage, Workers R2 Storage, Workers R2 Data Catalog, Workers R2 SQL, Workers Tail, Workers Containers, D1, Queues, Vectorize, Images, Hyperdrive, Pipelines, Secrets Store, Email Sending, Email Routing Addresses, Access: Apps and Policies, Access: Organizations, Identity Providers, and Groups."
           },
           "scope": {
             "type": "string",
@@ -3274,6 +3392,7 @@
                   "D1",
                   "Queues",
                   "Vectorize",
+                  "Images",
                   "Hyperdrive",
                   "Pipelines",
                   "Secrets Store",
@@ -3483,6 +3602,10 @@
                 "type": "string",
                 "minLength": 1,
                 "description": "A sentence under the connection string field, for example which schema it needs."
+              },
+              "caching": {
+                "type": "boolean",
+                "description": "Whether Hyperdrive caches the results of read queries for this database. Omitted keeps Cloudflare's default (on) when the configuration is created, and updates leave the setting as it is. `false` turns caching off, for an app that must read its own writes at once; `true` turns it on. Either value is applied at install and again on every update and settings change, and needs `\"hyperdrive-caching\"` in `requires`."
               }
             },
             "required": [
@@ -3592,7 +3715,7 @@
                   "tokenSecret": {
                     "type": "string",
                     "minLength": 1,
-                    "description": "The catalog secret that holds a Cloudflare API token with R2 Data Catalog and R2 Storage write access (the dashboard's R2 token with Admin Read & Write). Cloudflare keeps it as the sink's credential, and as the catalog's for table maintenance; Appflare's own token never leaves the manager. The secret must be asked for (no `generate`, `optional`, `derive` or `seedOnly`)."
+                    "description": "The catalog secret, by its key (its name when it has none), that holds a Cloudflare API token with R2 Data Catalog and R2 Storage write access (the dashboard's R2 token with Admin Read & Write). Cloudflare keeps it as the sink's credential, and as the catalog's for table maintenance; Appflare's own token never leaves the manager. The secret must be asked for (no `generate`, `optional`, `derive` or `seedOnly`)."
                   },
                   "rollIntervalSeconds": {
                     "type": "integer",
@@ -3709,7 +3832,7 @@
                               "type": "string",
                               "minLength": 1,
                               "maxLength": 128,
-                              "description": "The secret whose value is hashed: a secret of this manifest, neither optional nor derived."
+                              "description": "The secret whose value is hashed, by its key (its name when it has none): a secret of this manifest, neither optional nor derived."
                             },
                             "method": {
                               "type": "string",
@@ -3761,7 +3884,7 @@
                               "type": "string",
                               "minLength": 1,
                               "maxLength": 128,
-                              "description": "The secret whose value is hashed: a secret of this manifest, neither optional nor derived. Values longer than 72 bytes are refused at install."
+                              "description": "The secret whose value is hashed, by its key (its name when it has none): a secret of this manifest, neither optional nor derived. Values longer than 72 bytes are refused at install."
                             },
                             "method": {
                               "type": "string",
@@ -3825,7 +3948,7 @@
                                     "type": "string",
                                     "minLength": 1,
                                     "maxLength": 128,
-                                    "description": "A secret of this manifest, not optional."
+                                    "description": "A secret of this manifest, not optional, by its key (its name when it has none)."
                                   }
                                 },
                                 "required": [

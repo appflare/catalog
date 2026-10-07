@@ -30,6 +30,7 @@ import {
   verifiedDigest,
 } from "./index-builder.ts";
 import { appflarePaths } from "./paths.ts";
+import { patchLastVerified } from "./record-verified.ts";
 import { publishedManifestBytes } from "./sandbox-entry.ts";
 import type { ArtifactManifest, CatalogManifest, IndexApp } from "./types.ts";
 import type { VersionResolver } from "./versions.ts";
@@ -119,6 +120,7 @@ function options(overrides: Partial<IndexBuildOptions> = {}): IndexBuildOptions 
     sandboxDefaults: schema.sandboxDefaults,
     builtAt: BUILT_AT,
     services: echoServices,
+    indexRequires: schema.indexRequires,
     revisionProblem: schema.revisionProblem,
     ...overrides,
   };
@@ -835,11 +837,79 @@ describe("revisions of artifact tier entries", () => {
   });
 });
 
+describe("manager features in requires", () => {
+  /** `hello` as an entry of `count` Workers on `plan`. */
+  const spread = (count: number, plan: CatalogManifest["plan"] = "free"): CatalogManifest => ({
+    ...hello,
+    plan,
+    install: {
+      ...hello.install,
+      workers: Array.from({ length: count }, (_, i) => ({
+        name: i === 0 ? "app" : `w${i}`,
+        wranglerConfig: i === 0 ? hello.install.wranglerConfig : `w${i}/wrangler.jsonc`,
+        ...(i === 0 ? { primary: true } : {}),
+      })),
+    },
+  });
+
+  it.skipIf(!appflareAvailable)(
+    "marks a free entry of more than three Workers with manager:spread-jobs",
+    () => {
+      writeLocal(artifactManifestFixture({ app: "hello", version: "1.2.3", sha: PIN }));
+      const [four] = buildIndexApps([spread(4)], options());
+      expect(four?.requires).toEqual(["r2", "manager:spread-jobs"]);
+      // The services see the row's requires, and a manager feature is no service.
+      expect(four?.services).toEqual([
+        "binding:kv_namespace",
+        "requires:r2",
+        "requires:manager:spread-jobs",
+      ]);
+      const [three] = buildIndexApps([spread(3)], options());
+      expect(three?.requires).toEqual(["r2"]);
+      const [paid] = buildIndexApps([spread(5, "paid")], options());
+      expect(paid?.requires).toEqual(["r2"]);
+      const [real] = buildIndexApps([spread(4)], options({ services: schema.appServices }));
+      expect(real?.services).toEqual(["kv", "r2"]);
+    },
+  );
+
+  it.skipIf(!appflareAvailable)(
+    "keeps the marker through the index schema, a write and a read again",
+    () => {
+      writeLocal(artifactManifestFixture({ app: "hello", version: "1.2.3", sha: PIN }));
+      const rows = buildIndexApps([spread(5)], options());
+      const index = finalizeIndex(rows, null, new Date(), schema.indexJson);
+      expect(index.apps[0]?.requires).toEqual(["r2", "manager:spread-jobs"]);
+      // What build-index writes and record-verified reads, patches and writes again.
+      const read = parseOrThrow(
+        schema.indexJson,
+        JSON.parse(serializeIndex(index)),
+        "written index.json",
+      );
+      const patched = patchLastVerified(
+        read,
+        {
+          hello: {
+            version: "1.2.3",
+            digest: index.apps[0]?.artifacts?.digest ?? "",
+            at: "2026-10-07T03:00:00.000Z",
+          },
+        },
+        new Date("2026-10-07T03:00:00.000Z"),
+      );
+      expect(patched.updated).toEqual(["hello"]);
+      const again = parseOrThrow(schema.indexJson, patched.index, "patched index.json");
+      expect(again.apps[0]?.requires).toEqual(["r2", "manager:spread-jobs"]);
+      expect(serializeIndex(again)).toContain('"manager:spread-jobs"');
+    },
+  );
+});
+
 describe("rowFacts for an app of several Workers", () => {
   const duo = () => duoArtifactManifestFixture({ sha: PIN }) as unknown as ArtifactManifest;
 
   it("reads every Worker's bindings through workerFacts", () => {
-    const facts = rowFacts(hello, duo(), echoServices, (m) => ({
+    const facts = rowFacts(hello, duo(), hello.requires, echoServices, (m) => ({
       ...m.worker,
       bindings: [m.worker, ...(m.workers ?? []).map((w) => w.worker)].flatMap((w) => w.bindings),
     }));
@@ -848,7 +918,7 @@ describe("rowFacts for an app of several Workers", () => {
   });
 
   it("refuses to read only the primary Worker without combinedWorkerFacts", () => {
-    expect(() => rowFacts(hello, duo(), echoServices)).toThrow(
+    expect(() => rowFacts(hello, duo(), hello.requires, echoServices)).toThrow(
       /duo@0\.2\.0 has several Workers.*build a newer appflare checkout/,
     );
   });
@@ -857,7 +927,13 @@ describe("rowFacts for an app of several Workers", () => {
     if (!appflareAvailable || schema.appWorkerFacts === oneWorkerFacts) ctx.skip();
     const parsed = parseOrThrow(schema.artifactManifest, duo(), "duo");
     const primaryOnly = schema.appServices(parsed.catalog as CatalogManifest, parsed.worker).ids;
-    const facts = rowFacts(hello, parsed, schema.appServices, schema.appWorkerFacts);
+    const facts = rowFacts(
+      hello,
+      parsed,
+      hello.requires,
+      schema.appServices,
+      schema.appWorkerFacts,
+    );
     // The jobs Worker's cron trigger and queue consumer, beyond the primary's own.
     expect(primaryOnly).not.toContain("cron");
     expect(facts.services).toEqual(expect.arrayContaining(["cron", "queues", "d1", "kv"]));

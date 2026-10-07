@@ -3,6 +3,7 @@ import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import {
   type AppServicesOf,
+  type IndexRequiresOf,
   oneWorkerFacts,
   type Parser,
   parseOrThrow,
@@ -106,6 +107,11 @@ export interface IndexBuildOptions {
   builtAt: string;
   /** `appServices` from `@appflare/schema`, which works out each row's `services`. */
   services: AppServicesOf;
+  /**
+   * `indexRequires` from `@appflare/schema`: each row's `requires`, the
+   * entry's own followed by the manager features it needs.
+   */
+  indexRequires: IndexRequiresOf;
   /**
    * `combinedWorkerFacts` from `@appflare/schema` (the schema's
    * `appWorkerFacts`): what `services` reads of an artifact, every Worker of
@@ -301,6 +307,7 @@ export function toIndexApp(
     IndexBuildOptions,
     | "repo"
     | "services"
+    | "indexRequires"
     | "workerFacts"
     | "mediaFor"
     | "addedAt"
@@ -318,6 +325,7 @@ export function toIndexApp(
     options.revisionProblem,
     revisionSignatureLookup(options.revisionSignatures ?? {}, options.previousApps ?? []),
   );
+  const requires = options.indexRequires(manifest);
   return {
     slug: manifest.slug,
     name: manifest.name,
@@ -328,12 +336,12 @@ export function toIndexApp(
     artifacts: artifactUrls(options.repo, manifest.slug, artifact.version, artifact.digest),
     tier: manifest.install.tier,
     plan: manifest.plan,
-    requires: [...manifest.requires],
+    requires,
     lastVerified,
     authors: indexAuthors(manifest),
     maintainers: [...manifest.maintainers],
     ...mediaBlock(manifest, options),
-    ...rowFacts(manifest, artifact.manifest, options.services, options.workerFacts),
+    ...rowFacts(manifest, artifact.manifest, requires, options.services, options.workerFacts),
     ...revision,
     ...accessOfferBlock(manifest),
   };
@@ -368,8 +376,8 @@ function accessOfferBlock(manifest: CatalogManifest): { accessOffer?: AccessOffe
  * published artifact manifest: its Workers (bindings, queue consumers, crons,
  * Durable Object migrations of every Worker of the app together, from
  * `workerFacts`) and the catalog manifest packed into it
- * (`requires`, `install.emailRouting`, token permissions), with the current
- * manifest's `requires` added as the row lists them. A `sandbox` or
+ * (`requires`, `install.emailRouting`, token permissions), with the row's
+ * `requires` (`indexRequires` of the current manifest) added. A `sandbox` or
  * `self-deploying` entry has no Worker until it runs, so its services are
  * what its catalog manifest declares. The manager falls back to the same
  * `appServices` call on the same inputs, so both agree.
@@ -377,6 +385,7 @@ function accessOfferBlock(manifest: CatalogManifest): { accessOffer?: AccessOffe
 export function rowFacts(
   manifest: CatalogManifest,
   artifact: ArtifactManifest | null,
+  requires: readonly string[],
   services: AppServicesOf,
   workerFacts: WorkerFactsOf = oneWorkerFacts,
 ): Pick<
@@ -385,7 +394,7 @@ export function rowFacts(
 > {
   const catalog = artifact === null ? manifest : artifact.catalog;
   const found = services(
-    { ...catalog, requires: [...new Set([...manifest.requires, ...catalog.requires])] },
+    { ...catalog, requires: [...new Set([...requires, ...catalog.requires])] },
     artifact === null ? null : workerFacts(artifact),
   );
   return {
@@ -429,6 +438,7 @@ export function toSandboxIndexApp(
     return null;
   }
   const build = sandboxBuild(manifest, options.repo, options.sandboxDefaults);
+  const requires = options.indexRequires(manifest);
   return {
     slug: manifest.slug,
     name: manifest.name,
@@ -438,7 +448,7 @@ export function toSandboxIndexApp(
     version,
     tier: manifest.install.tier,
     plan: manifest.plan,
-    requires: [...manifest.requires],
+    requires,
     lastVerified: lastVerifiedFor(
       manifest.slug,
       { version, digest: build.manifestDigest },
@@ -448,7 +458,7 @@ export function toSandboxIndexApp(
     maintainers: [...manifest.maintainers],
     build,
     ...mediaBlock(manifest, options),
-    ...rowFacts(manifest, null, options.services),
+    ...rowFacts(manifest, null, requires, options.services),
     // No release to revise: every edit publishes the current manifest in `build`.
     revision: revisionOf(manifest),
     ...accessOfferBlock(manifest),

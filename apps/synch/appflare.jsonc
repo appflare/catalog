@@ -16,7 +16,7 @@
   // One release line for the whole repository: each tag ships the Obsidian
   // plugin, and the server in apps/api at the same commit is the one that
   // plugin version expects.
-  "source": { "ref": "0.5.4", "sha": "8d505b359896f589a4d8236bc796bd6208565881" },
+  "source": { "ref": "0.5.5", "sha": "a190f1f2ca1dbec7e1b3aa77f1e9f18297851968" },
   "install": {
     // A pnpm workspace (apps/*, packages/*); the root lockfile covers apps/api.
     "packageManager": "pnpm",
@@ -25,17 +25,9 @@
     // is upstream's hosted service (billing, queues, email) and is not used.
     "wranglerConfig": "apps/api/wrangler.jsonc",
     "workerName": "synch-api",
-    // Vite builds the sign-in and vault pages into apps/api/public/, the
-    // assets directory; wrangler bundles the Worker with the Durable Object's
-    // SQL migrations as text modules.
-    "buildCommand": "pnpm --dir apps/api run build:public",
-    // The config's own build runs the same script, but wrangler runs a custom
-    // build in the directory it was started in, which is apps/api for
-    // upstream and the repository root for the packer, where no such script
-    // exists. The build command above runs it in apps/api instead. Upstream's
-    // config is right for how upstream deploys, so there is nothing to change
-    // there.
-    "configPatch": { "build": null },
+    // The config's own build (Vite) writes the sign-in and vault pages into
+    // apps/api/public/, the assets directory; wrangler bundles the Worker with
+    // the Durable Object's SQL migrations as text modules.
     // Answers without a sign-in, from the Worker itself.
     "health": { "path": "/health" }
   },

@@ -646,7 +646,7 @@ function sendEmailBinding(binding: ArtifactBinding): {
  */
 export const SELF_SERVICE = "self";
 
-const SELF_SERVICE_FIELDS: readonly string[] = ["type", "name", "service", "entrypoint"];
+const SELF_SERVICE_FIELDS: readonly string[] = ["type", "name", "service", "entrypoint", "props"];
 
 /**
  * What planning one Worker of an app of several needs besides its own view of
@@ -681,9 +681,12 @@ function entryTarget(entry: EntryPlanContext, ref: string, binding: ArtifactBind
 /**
  * A service binding as wrangler's config writes it, aimed at Worker `name`:
  * the only service binding an artifact may hold is one to the app's own
- * Worker, `{ type: "service", name, service: "self", entrypoint? }` and
- * nothing more, as the manager holds it. Every other service binding throws,
- * since it would let the app call another Worker in the account.
+ * Worker, `{ type: "service", name, service: "self", entrypoint?, props? }`
+ * and nothing more, as the manager holds it (or, in an app of several
+ * Workers, the same aimed at another Worker of the entry). Every other
+ * service binding throws, since it would let the app call another Worker in
+ * the account. `props` must be a JSON object; `fill` fills its placeholders
+ * in, as the manager fills them in before it uploads them as wrangler does.
  *
  * wrangler deploys a Worker that binds to itself on its first deploy (it
  * accepts a binding to the Worker the deploy creates), so the CI Worker needs
@@ -692,39 +695,49 @@ function entryTarget(entry: EntryPlanContext, ref: string, binding: ArtifactBind
 function selfServiceBinding(
   binding: ArtifactBinding,
   name: string,
+  fill: (value: JsonValue) => JsonValue,
   entry?: EntryPlanContext,
-): Record<string, string> {
+): Record<string, unknown> {
   const extra = Object.keys(binding).filter((key) => !SELF_SERVICE_FIELDS.includes(key));
-  const { service, entrypoint } = binding;
+  const { service, entrypoint, props } = binding;
   const entrypointOk =
     entrypoint === undefined || (typeof entrypoint === "string" && entrypoint.length > 0);
+  const propsOk = props === undefined || isJsonObject(props);
+  const rest = {
+    ...(typeof entrypoint === "string" ? { entrypoint } : {}),
+    ...(props === undefined || !propsOk ? {} : { props: fill(props as JsonValue) }),
+  };
   // Another Worker of the app's own entry, recorded as `{{workerName:<name>}}`.
   const ref = entry?.refName(service) ?? null;
-  if (ref !== null && entry !== undefined && entrypointOk && extra.length === 0) {
-    return {
-      binding: binding.name,
-      service: entryTarget(entry, ref, binding),
-      ...(typeof entrypoint === "string" ? { entrypoint } : {}),
-    };
+  if (ref !== null && entry !== undefined && entrypointOk && propsOk && extra.length === 0) {
+    return { binding: binding.name, service: entryTarget(entry, ref, binding), ...rest };
   }
-  if (service !== SELF_SERVICE || !entrypointOk || extra.length > 0) {
+  if (service !== SELF_SERVICE || !entrypointOk || !propsOk || extra.length > 0) {
     const target = typeof service === "string" ? `the Worker "${service}"` : "no Worker";
     const why =
       service !== SELF_SERVICE
         ? `points at ${target}`
         : !entrypointOk
           ? "records an entrypoint that is not a name"
-          : `also sets ${extra.join(", ")}`;
+          : !propsOk
+            ? "records props that are not a JSON object"
+            : `also sets ${extra.join(", ")}`;
     throw new Error(
       `service binding ${binding.name} ${why}; an app may bind only to its own Worker ` +
-        `(recorded as service "${SELF_SERVICE}", with nothing but an optional entrypoint)`,
+        `(recorded as service "${SELF_SERVICE}", with nothing but an optional entrypoint and props)`,
     );
   }
-  return {
-    binding: binding.name,
-    service: name,
-    ...(typeof entrypoint === "string" ? { entrypoint } : {}),
-  };
+  return { binding: binding.name, service: name, ...rest };
+}
+
+/** Whether `value` is a JSON object (not an array or null), as service binding `props` must be. */
+function isJsonObject(value: unknown): boolean {
+  if (value === null || typeof value !== "object" || Array.isArray(value)) return false;
+  try {
+    return JSON.stringify(value) !== undefined;
+  } catch {
+    return false;
+  }
 }
 
 /** A queue name for `resource`; throws when it is longer than Cloudflare allows. */
@@ -881,12 +894,38 @@ export function renderPlaceholders(text: string, values: PlaceholderValues): str
   });
 }
 
-/** `value` with placeholders filled in inside every string it holds (keys excepted). */
+/**
+ * `value` with placeholders filled in inside every string it holds, object
+ * keys included, as managers from 0.4.0 fill them in.
+ */
 export function renderJsonPlaceholders(value: JsonValue, values: PlaceholderValues): JsonValue {
-  return mapJsonStrings(value, (text) => renderPlaceholders(text, values));
+  return mapJsonText(value, (text) => renderPlaceholders(text, values));
 }
 
-/** `value` with `fn` applied to every string it holds (keys excepted). */
+/** `value` with `fn` applied to every string it holds and to every object key. */
+export function mapJsonText(value: JsonValue, fn: (text: string) => string): JsonValue {
+  if (typeof value === "string") return fn(value);
+  if (Array.isArray(value)) return value.map((item) => mapJsonText(item, fn));
+  if (value !== null && typeof value === "object") {
+    const out: { [key: string]: JsonValue } = {};
+    for (const [key, item] of Object.entries(value)) {
+      // Plain assignment of `__proto__` would set the prototype instead.
+      Object.defineProperty(out, fn(key), {
+        value: mapJsonText(item, fn),
+        enumerable: true,
+        writable: true,
+        configurable: true,
+      });
+    }
+    return out;
+  }
+  return value;
+}
+
+/**
+ * `value` with `fn` applied to every string it holds (keys excepted), as the
+ * manager fills in the per-Worker placeholders.
+ */
 export function mapJsonStrings(value: JsonValue, fn: (text: string) => string): JsonValue {
   if (typeof value === "string") return fn(value);
   if (Array.isArray(value)) return value.map((item) => mapJsonStrings(item, fn));
@@ -973,6 +1012,13 @@ export function planCiInstall(
     // manager fills them in for an app it does not protect.
     access: null,
   };
+  // A JSON value (a var's, or a service binding's props) filled in as the
+  // manager fills it in: the placeholders, keys included, then the
+  // per-Worker ones in its strings.
+  const fillJson = (value: JsonValue): JsonValue => {
+    const rendered = renderJsonPlaceholders(value, placeholders);
+    return entry === undefined ? rendered : mapJsonStrings(rendered, entry.render);
+  };
   const resources: CiResource[] = [];
   const kv: Record<string, string>[] = [];
   const d1: Record<string, string>[] = [];
@@ -989,7 +1035,7 @@ export function planCiInstall(
   const queues: string[] = [];
   const ratelimits: Record<string, unknown>[] = [];
   const sendEmail: Record<string, unknown>[] = [];
-  const services: Record<string, string>[] = [];
+  const services: Record<string, unknown>[] = [];
   const workerLoaders: Record<string, string>[] = [];
   const notes: string[] = [];
   const singles: Record<string, { binding: string }> = {};
@@ -1114,7 +1160,7 @@ export function planCiInstall(
       case "service":
         // Aimed at the CI Worker itself, as the manager aims it at the install's
         // Worker, or at the CI Worker of the entry Worker it names.
-        services.push(selfServiceBinding(binding, name, entry));
+        services.push(selfServiceBinding(binding, name, fillJson, entry));
         break;
       case "worker_loader":
         // `{ binding }` is all wrangler's `worker_loaders` takes. Workers Paid only.
@@ -1188,8 +1234,7 @@ export function planCiInstall(
     }
   }
   for (const [varName, value] of Object.entries(vars)) {
-    const rendered = renderJsonPlaceholders(value, placeholders);
-    vars[varName] = entry === undefined ? rendered : mapJsonStrings(rendered, entry.render);
+    vars[varName] = fillJson(value);
   }
   // Seed-only vars stay out of the config: only the seed statements read them.
   const seedVars: Record<string, string> = {};
