@@ -65,6 +65,7 @@ import {
   withHyperdriveIds,
   withKvIds,
   withVars,
+  workerSecretValues,
   workersSubdomain,
 } from "./lib/ci-install.ts";
 import { info, runMain } from "./lib/cli.ts";
@@ -135,7 +136,9 @@ deploy   Unpacks the artifact (checking every file's sha256), removes anything
          the API first, so every Worker binds the same one); bindings and
          {{workerUrl:<name>}}/{{workerName:<name>}} naming another Worker
          point at its CI Worker; each secret and var goes to the Workers the
-         catalog manifest names, a shared secret with one value; each D1
+         catalog manifest names, a shared secret with one value, and
+         secrets of one name with different keys each with a value of
+         their own under that name; each D1
          database's SQL runs once. After the primary's health check, every other
          Worker must answer at / within 30 s, except one the entry keeps off
          workers.dev (workersDev: false), which is deployed with workers_dev
@@ -421,12 +424,9 @@ async function deployAndCheck(
     }
   }
   for (const [i, w] of app.workers.entries()) {
-    for (const secret of [...w.plan.secrets, ...w.plan.derivedSecrets.map((s) => s.name)]) {
-      const value = values.get(secret);
-      if (value === undefined) {
-        throw new Error(`the check has no value for the secret ${secret}`);
-      }
-      wrangler(bin, dirs[i] as string, ["secret", "put", secret, "--name", w.plan.name], value);
+    // Each under the name the Worker reads, with the value of its key.
+    for (const { name, value } of workerSecretValues(w.plan, values)) {
+      wrangler(bin, dirs[i] as string, ["secret", "put", name, "--name", w.plan.name], value);
     }
   }
   const results: CiWorkerResult[] = [];
