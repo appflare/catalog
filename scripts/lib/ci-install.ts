@@ -209,11 +209,20 @@ export interface CiInstallPlan {
   /** Everything the deploy may create besides the Worker, deleted afterwards. */
   resources: CiResource[];
   /**
-   * The secrets the Worker gets, from the catalog manifest; each gets a random
-   * value, a new VAPID private key when it is listed in `vapidPrivateKeys`, or
-   * a 32-byte key when it is listed in `base64Keys`.
+   * The secrets the Worker gets, from the catalog manifest, by key (a
+   * secret's `key`, else its name); each gets a random value, a new VAPID
+   * private key when it is listed in `vapidPrivateKeys`, or a 32-byte key
+   * when it is listed in `base64Keys`. The value is set on the Worker under
+   * the secret's name ({@link secretNames}).
    */
   secrets: string[];
+  /**
+   * The name each secret is set under on the Worker, by key, for the
+   * secrets (derived ones included) whose `key` is not their name. Two
+   * Workers of an app may each read `CLIENT_ID` from secrets of different
+   * keys, and so get values of their own, as the manager sets them.
+   */
+  secretNames: Record<string, string>;
   /**
    * Secrets that only a D1 seed reads (`seedOnly`): each gets a value as
    * `secrets` do, and is never set on the Worker, as the manager never sets it.
@@ -303,16 +312,28 @@ function optionalStr(binding: ArtifactBinding, field: string): Record<string, st
   return typeof value === "string" && value.length > 0 ? { [field]: value } : {};
 }
 
-/** A secret or var the catalog manifest derives from a secret: `method` applied to `from`'s value. */
+/**
+ * A secret or var the catalog manifest derives from a secret: `method`
+ * applied to the value of the secret whose key is `from`.
+ */
 export interface CiDerivedSecret {
   name: string;
+  /** A derived secret's `key`, when it is not its name. */
+  key?: string;
   from: string;
   method: string;
 }
 
+/** The key a derived secret's value goes by: its `key`, else its name. */
+export function derivedKey(derived: CiDerivedSecret): string {
+  return derived.key ?? derived.name;
+}
+
 interface CatalogForms {
-  /** The secrets the Worker gets: every one but the derived and seed-only ones. */
+  /** The secrets the Worker gets, by key: every one but the derived and seed-only ones. */
   secrets: string[];
+  /** The name a secret is set under, by key, where the two differ. */
+  secretNames: Record<string, string>;
   /** Secrets, seed-only ones included, with `generate: "vapid-private-key"`. */
   vapidPrivateKeys: string[];
   /** Secrets, seed-only ones included, with `generate: "base64-key-32"`. */
@@ -351,6 +372,16 @@ function deriveOf(secret: unknown): { from: string; method: string } | null {
     : null;
 }
 
+/**
+ * The key a catalog secret goes by: its `key`, else its name. Managers from
+ * 0.4.0 store, generate, derive and seed by it, and set the value on the
+ * Worker under the name.
+ */
+function secretKeyOf(secret: unknown, name: string): string {
+  const key = (secret as { key?: unknown }).key;
+  return typeof key === "string" && key.length > 0 ? key : name;
+}
+
 /** The first value of a `type: "select"` var's options, if it has any. */
 function firstOption(v: { type?: unknown; options?: unknown }): Record<string, string> {
   if (v.type !== "select" || !Array.isArray(v.options)) return {};
@@ -369,6 +400,7 @@ function firstOption(v: { type?: unknown; options?: unknown }): Record<string, s
 export function catalogForms(catalog: unknown): CatalogForms {
   const c = (catalog ?? {}) as { secrets?: unknown; vars?: unknown };
   const secrets: string[] = [];
+  const secretNames: Record<string, string> = {};
   const vapidPrivateKeys: string[] = [];
   const base64Keys: string[] = [];
   const seedOnlySecrets: string[] = [];
@@ -376,15 +408,17 @@ export function catalogForms(catalog: unknown): CatalogForms {
   for (const s of Array.isArray(c.secrets) ? c.secrets : []) {
     const name = (s as { name?: unknown }).name;
     if (typeof name !== "string") continue;
+    const key = secretKeyOf(s, name);
+    if (key !== name) secretNames[key] = name;
     const derive = deriveOf(s);
     if (derive !== null) {
-      derivedSecrets.push({ name, ...derive });
+      derivedSecrets.push({ name, ...(key === name ? {} : { key }), ...derive });
       continue;
     }
-    (seedOnly(s) ? seedOnlySecrets : secrets).push(name);
+    (seedOnly(s) ? seedOnlySecrets : secrets).push(key);
     const generate = (s as { generate?: unknown }).generate;
-    if (generate === "vapid-private-key") vapidPrivateKeys.push(name);
-    if (generate === "base64-key-32") base64Keys.push(name);
+    if (generate === "vapid-private-key") vapidPrivateKeys.push(key);
+    if (generate === "base64-key-32") base64Keys.push(key);
   }
   const derivedVars: CiDerivedSecret[] = [];
   for (const v of Array.isArray(c.vars) ? c.vars : []) {
@@ -428,6 +462,7 @@ export function catalogForms(catalog: unknown): CatalogForms {
   const formVar = ({ seedOnly: _seedOnly, ...v }: CatalogFormVar & { seedOnly: boolean }) => v;
   return {
     secrets,
+    secretNames,
     vapidPrivateKeys,
     base64Keys,
     seedOnlySecrets,
@@ -1335,6 +1370,7 @@ export function planCiInstall(
     config,
     resources,
     secrets: forms.secrets,
+    secretNames: forms.secretNames,
     seedOnlySecrets: forms.seedOnlySecrets,
     vapidPrivateKeys: forms.vapidPrivateKeys,
     base64Keys: forms.base64Keys,
@@ -1717,7 +1753,7 @@ export function needsPackerSecrets(app: Pick<CiAppPlan, "workers">): boolean {
   );
 }
 
-/** `derive.method` applied to the value of `derive.from`, refused when either is missing. */
+/** `derive.method` applied to the value of the secret keyed `derive.from`, refused when either is missing. */
 function derivedValue(
   derived: CiDerivedSecret,
   values: ReadonlyMap<string, string>,
@@ -1735,7 +1771,9 @@ function derivedValue(
 
 /**
  * The value of every secret any Worker of the app gets, and of every
- * seed-only secret, by name: a random one (32 characters) for each, a new
+ * seed-only secret, by key (a secret's `key`, else its name; see
+ * {@link CiInstallPlan.secrets}), so secrets of one name and different keys
+ * each get their own: a random one (32 characters) for each, a new
  * VAPID private key for a `generate: "vapid-private-key"` secret, 32 random
  * bytes as padded base64 for a `generate: "base64-key-32"` one, and for a
  * derived secret the value `derive` computes from its source's. A secret
@@ -1766,8 +1804,9 @@ export function appSecretValues(
   }
   for (const w of app.workers) {
     for (const secret of w.plan.derivedSecrets) {
-      if (!values.has(secret.name)) {
-        values.set(secret.name, derivedValue(secret, values, fns.deriveSecretValue));
+      const key = derivedKey(secret);
+      if (!values.has(key)) {
+        values.set(key, derivedValue(secret, values, fns.deriveSecretValue));
       }
     }
   }
@@ -1786,6 +1825,27 @@ export function derivedVarValues(
   return Object.fromEntries(
     plan.derivedVars.map((v) => [v.name, derivedValue(v, secrets, derive)] as const),
   );
+}
+
+/**
+ * The secrets to set on one Worker: each secret it gets (derived ones
+ * included) under the name the Worker reads, with the value of its key.
+ * Throws, naming no value, when one has none.
+ */
+export function workerSecretValues(
+  plan: Pick<CiInstallPlan, "secrets" | "derivedSecrets" | "secretNames">,
+  values: ReadonlyMap<string, string>,
+): Array<{ name: string; value: string }> {
+  return [...plan.secrets, ...plan.derivedSecrets.map(derivedKey)].map((key) => {
+    const value = values.get(key);
+    if (value === undefined) {
+      throw new Error(`the check has no value for the secret ${key}`);
+    }
+    return {
+      name: Object.hasOwn(plan.secretNames, key) ? (plan.secretNames[key] as string) : key,
+      value,
+    };
+  });
 }
 
 /** `config` with `vars` added to its own vars; unchanged when there are none. */

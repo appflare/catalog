@@ -1070,6 +1070,7 @@ describe("cleanupCiInstall", () => {
     name: "ci-hello-pr1",
     config: {},
     secrets: [],
+    secretNames: {},
     seedOnlySecrets: [],
     vapidPrivateKeys: [],
     base64Keys: [],
