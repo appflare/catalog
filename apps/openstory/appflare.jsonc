@@ -21,7 +21,7 @@
   ],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags, so the entry follows the default branch by commit.
-  "source": { "ref": "main", "sha": "9854a244b617316858112e010cf77fdc046f9227" },
+  "source": { "ref": "main", "sha": "b10ccf7eee1d267be99624a707789cc81bf8b105" },
   "install": {
     "packageManager": "bun",
     // The config's default environment is what upstream's Deploy to
