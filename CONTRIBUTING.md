@@ -171,7 +171,8 @@ it. A directory that has a lockfile is always installed from it.
 Each `path` is `.` or a path relative to the root, without `..`. A directory's
 package manager is `install.packageManager` unless it holds another manager's
 lockfile, or unless the entry sets `packageManager` for it. Every install runs with
-`--ignore-scripts`; build commands still run at the root.
+`--ignore-scripts`; `install.buildCommand` still runs at the root, and the wrangler
+config's own `build.command` in the config's directory (see "Build commands").
 
 #### Installs without dev dependencies
 
@@ -190,6 +191,12 @@ such install, so the pack fails there. Check that the build still works without
 the dev dependencies: a bundler or a type generator listed there is gone too.
 
 ### Build commands
+
+The wrangler config's own `build.command` runs in the config's directory, as it does
+when you run `wrangler deploy` beside the config, so a command such as `npm run
+build` in a config below the root finds the `package.json` next to it. An entry
+needs nothing for it, and needs no `"build": null` patch with an
+`install.buildCommand` that runs the same script in that directory.
 
 Set `install.buildCommand` when the app needs a build step before `wrangler deploy`
 and its wrangler config has no `build.command`: one command, or a list of up to
@@ -212,6 +219,11 @@ A tool given an option it does not take there often prints its usage and exits 0
 and the packer would otherwise bundle whatever the checkout already held. The
 commands are judged together, so a command that only checks (a type check, say)
 may sit beside the ones that write files.
+
+Each module reaches the Worker as the type `wrangler deploy` would upload it as,
+following the config's `rules` and wrangler's default ones: a `Text` rule for
+`**/*.md` or `**/*.svg` makes an imported file a string, not bytes. The packer reads
+the types from the upload wrangler's dry run writes, not from file extensions.
 
 ### Build-time constants
 
@@ -335,24 +347,60 @@ Only these keys may be patched, each only in the way given:
 | `main` | set the entrypoint, relative to the config, without `..` |
 | `assets` | set or remove `directory` (relative, without `..`), `binding`, `html_handling`, `not_found_handling`, `run_worker_first`; or remove `assets` |
 | `build` | only `null`, when `install.buildCommand` builds instead |
-| `services` | leave bindings out, or add one to a Worker of the same entry |
+| `services` | leave bindings out, or add one to a Worker of the same entry, optionally with `props` (see below) |
 | `kv_namespaces`, `r2_buckets`, `d1_databases` | add bindings, or leave out an `id`, `bucket_name` or `database_id` that is `""` or a placeholder an upstream deploy script fills (`$NAME`, `${NAME}`, `{{NAME}}`, `<NAME>`), so the install provisions it; never remove or change a binding |
-| `vars` | only remove vars, with `null` |
+| `vars` | set a var to text (see below), or remove it with `null` |
 | `migrations` | only rename `new_classes` to `new_sqlite_classes` in the config's own migrations |
 | `ratelimits` | only add a rate limit an upstream deploy script adds, keeping the config's own |
-| a section Appflare cannot install | only `null`, to drop it when the app works without it (`"vpc_services": null`) |
+| `ai` | only `{ "binding": "<NAME>" }`, to add the Workers AI binding an upstream deploy script adds to a config that has none |
+| a section Appflare cannot install | only `null`, to drop it when the app works without it (`"vpc_services": null`, `"mtls_certificates": null`) |
+| a top-level key the packer's wrangler does not know | only `null`, when the config sets it and the app works without it (`"email": null`) |
 
 Everything else (`name`, `account_id`, `routes`, `env`, `durable_objects`,
 compatibility settings, any other key) fails validation with the reason.
 
 The packer never drops a section of the wrangler config silently. A section it
 cannot install (Workers VPC services, Secrets Store secrets, Tail Workers, dispatch
-namespaces, Containers, AI Search, Media, Stream, inbound email `addresses`,
-Workers Sites, and the rest wrangler knows) fails the pack with a message naming
-it, instead of installing an app that would run without it. When the app works
-without that section, drop it with the `null` patch the message names. An app of
-several Workers sets `configPatch` on the Worker in `install.workers` whose config it
-changes, never on `install`; a `self-deploying` entry cannot set it.
+namespaces, mTLS certificates, Containers, AI Search, Media, Stream, inbound email
+`addresses`, Workers Sites, and the rest wrangler knows) fails the pack with a
+message naming it, instead of installing an app that would run without it. An mTLS
+certificate is uploaded to one account with its private key, so an artifact cannot
+bring one. A key at the top of the config that the packer's wrangler does not know
+(a binding added in a newer wrangler, or a key wrangler never had) fails the pack the
+same way, since wrangler would drop it with no more than a warning. When the app
+works without that section or key, drop it with the `null` patch the message names.
+Managers before 0.4.0 refuse an artifact whose patch drops `mtls_certificates` or an
+unknown key. An app of several Workers sets `configPatch` on the Worker in
+`install.workers` whose config it changes, never on `install`; a `self-deploying`
+entry cannot set it.
+
+A var a patch sets is part of that Worker's config, signed with the release: the
+admin does not see it in the app's settings. Use it for a value one Worker of an app
+of several Workers needs for itself, such as the address it is reached at. Its text
+may hold the placeholders a var's `default` takes, filled in at every install,
+update and settings change, and again when the app's address changes:
+
+```jsonc
+{
+  "name": "github",
+  "wranglerConfig": "packages/gatekeeper-github/wrangler.jsonc",
+  "configPatch": { "vars": { "BASE_URL": "{{appUrl}}/gatekeeper/github" } }
+}
+```
+
+A patched var may not have the name of a secret its Worker gets, nor of a catalog var
+that goes to that Worker. A value the admin chooses belongs in `vars` instead. An
+entry whose patch sets var text or adds an `ai` binding lists
+`"config-patch-values"` in `requires`. The admin sees these vars read-only in the
+app's settings with **Show technical names** on.
+
+A service binding in a patch may carry `props`, the JSON object the Worker it points
+at reads as `ctx.props` on every call through it, as `wrangler deploy` sends it. Its
+strings take the same placeholders:
+`{ "binding": "CONTEXT", "service": "context", "entrypoint": "Vendor", "props": { "sharingDomain": "{{appUrl}}" } }`.
+Props a wrangler config sets on a binding to its own Worker, or to another Worker of
+the entry, are kept the same way. An entry with props lists `"service-props"` in
+`requires`.
 
 The patch is part of the catalog manifest, so the artifact's signature covers it.
 After the build commands, the packer writes the patched config beside the original
@@ -589,15 +637,42 @@ where the admin manages it, use the admin path.
 Both need manager 0.3.0 to show; older managers ignore them, so an entry can use
 them without `requires`. Both may change in a revision.
 
+### Features a manager must have
+
+Most `requires` values name an account feature the app needs beyond Workers, such
+as `r2` or `workers-ai`. Some name something the manager must know how to do
+instead. An entry that uses the feature without listing the value fails `pnpm
+validate`, or the pack when only its wrangler config shows the use:
+
+| Value | Where the entry uses it |
+|---|---|
+| `secret-keys` | a secret with a `key` other than its name (see "Apps of several Workers") |
+| `service-props` | `props` on a service binding, in the wrangler config or a config patch |
+| `config-patch-values` | a config patch that sets a var to text or adds an `ai` binding |
+| `email-worker` | `install.emailRouting.worker` |
+| `email-placeholders` | `{{emailDomain}}` or `{{emailZoneId}}` anywhere in the entry or its wrangler config, or any placeholder in an object key of a JSON var or of service binding `props` |
+| `hyperdrive-caching` | `caching` on a `resources.hyperdrive` binding |
+
+A manager that predates the feature does not know the value and leaves the entry
+out of its catalog instead of installing the app wrong; a newer one asks the admin
+nothing about it. All six need manager 0.4.0.
+
 ### Apps of several Workers
 
 Some apps ship as more than one Worker from one repository: a web app and a content
 origin, or an API and a queue consumer. An artifact tier entry lists them all in
-`install.workers` (2 to 5), and the manager installs, updates, and removes them
-together. On Workers Free the manager installs and updates at most 3 Workers per
-app: each Worker adds requests to the one job, which the free plan caps at 50.
-Entries of 4 or 5 Workers install only on Workers Paid, so give them
-`"plan": "paid"`.
+`install.workers` (2 to 24), and the manager installs, updates, and removes them
+together.
+
+The Worker count does not decide the plan: set `"plan"` for what the app needs, as
+for an app of one Worker. Each Worker adds requests to the one job that installs or
+updates the app. Workers Free lets a job make 50 at a time, so there a job for more
+Workers pauses for 5 minutes whenever it needs a fresh allowance and then carries
+on; the install takes longer, nothing else changes. Managers before 0.4.0 install
+at most three Workers per app on Workers Free, so `index.json` lists
+`manager:spread-jobs` in the `requires` of a `"free"` entry of four or more Workers
+(`indexRequires` in `@appflare/schema`): those managers leave it out of their
+catalog and ask to be updated. Never write that value in `appflare.jsonc`.
 
 ```jsonc
 "install": {
@@ -643,6 +718,32 @@ Entries of 4 or 5 Workers install only on Workers Paid, so give them
   Workers has one value. `{{appUrl}}`, `{{workerUrl}}` and `{{workerName}}` are the
   primary Worker's; in vars, `{{appUrl:<name>}}` and `{{workerName:<name>}}` name any
   Worker of the entry.
+- **One secret name, a value per Worker.** When several Workers read a secret of
+  the same name that must differ between them (each its own OAuth client, say),
+  declare one secret per Worker with that `name`, a `key` of its own, and
+  `workers`, and list `"secret-keys"` in `requires`:
+
+  ```jsonc
+  "requires": ["secret-keys"],
+  "secrets": [
+    { "name": "CLIENT_ID", "key": "GITHUB_CLIENT_ID", "label": "GitHub client ID", "workers": ["github"] },
+    { "name": "CLIENT_ID", "key": "GOOGLE_CLIENT_ID", "label": "Google client ID", "workers": ["google"] }
+  ]
+  ```
+
+  The key is what Appflare knows the secret by: one field each in the install form
+  and the app's settings, one record each, and the name `derive.from`, seed params
+  and a sink's `tokenSecret` use. Each Worker still reads `CLIENT_ID`. Keys are
+  letters, digits and underscores, unique among the entry's secrets; a secret
+  without one is known by its name. Secrets of one name must each list `workers`,
+  and no Worker may get two of them.
+- **A var a Worker needs for itself.** Set it in that Worker's `configPatch` (see
+  "Patching the wrangler config"), with placeholders such as `{{appUrl}}`.
+- **The Worker that receives email.** An app that receives email
+  (`install.emailRouting`) has its primary Worker receive it unless
+  `install.emailRouting.worker` names another of its Workers, by its `name` within
+  the entry. List `"email-worker"` in `requires` with it: an older manager would send
+  the mail to the primary Worker.
 - **Workers only the app calls.** Set `"workersDev": false` on a Worker that only
   the entry's other Workers reach, through a service binding or a Durable Object
   binding, and that must not answer from the internet: for example one that trusts
@@ -891,7 +992,9 @@ change is one of these:
   (it is 1 when omitted) in the same change. A revision may change `name`, `summary`,
   `homepage`, `license`, `categories`, `maintainers`, `secrets`, `vars`, `postInstall`,
   `openPath`, `bump` and `access`, as well as the fields above (`REVISABLE_CATALOG_FIELDS` in
-  `@appflare/schema`), and may add `"access"` to `requires` (nothing else there):
+  `@appflare/schema`), and may add to `requires` only `"access"`, `"secret-keys"`
+  (with keys on the secrets the revision adds; a released secret's key never
+  changes) and `"email-placeholders"` (with a setting or note that uses them):
   labels, help text and field links, where Open goes, a var that becomes a `select`, a secret the app already
   reads but the entry forgot, Cloudflare Access protection for an app that has no
   sign-in. Nothing is built. The release stays exactly as it
@@ -904,6 +1007,17 @@ Anything else (`source`, `install`, `plan`, any other change to `requires`,
 it, re-pin `source`: a newer `source.sha` (for branch pins), or a new tag in
 `source.ref` and its `source.sha`. When the release's version comes from
 `source.version`, bump that too.
+
+To build the same pin again, when a newer packer fixes what a release got wrong
+(the module types of a published build, say), or when a field only a new build can
+change must change before upstream moves, give the entry a `source.version` above the
+released one with a comment saying why, and remove it when `source` next moves. For
+a pin without a semver tag, add a build number to the version the commit packs to
+(`0.0.0-20260717.0835cac` becomes `0.0.0-20260717.0835cac.1`); for a tag, use the
+next patch's first prerelease (`0.5.0` becomes `0.5.1-0`). Both sort above the
+released version and below any later upstream release, so managers offer the build
+as an update and later bumps still move forward. A bump of an entry that sets
+`source.version` does not merge itself (see "Who merges a bump").
 
 `publish-plan` tells you which case you are in: with only form and copy changes it
 fails with "or bump revision to N", and it refuses a revision that changes anything
@@ -1370,6 +1484,11 @@ rebuilds rows, so a failed check can never drop an app. Every rebuild by
 `build-index` carries the value over while the version and digest stay the
 same, which a revision does not change. A new version starts at `null` until its
 first nightly run.
+
+A row's `requires` is the entry's own followed by the manager features it needs
+(`indexRequires` in `@appflare/schema`), such as `manager:spread-jobs` for a `"free"`
+entry of more than three Workers (see "Apps of several Workers"). The index schema
+keeps them, so `record-verified` and later rebuilds write them back unchanged.
 
 Every row also carries the entry's `tagline`, `categories` and `license`, and its
 `licenseNote` when it has one, from the current `appflare.jsonc`, and `addedAt`:

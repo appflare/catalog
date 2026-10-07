@@ -64,6 +64,13 @@ export interface AppflareSchema {
    */
   appWorkerFacts: WorkerFactsOf;
   /**
+   * An index row's `requires` (`indexRequires`): the entry's own, then the
+   * manager features it needs, such as `manager:spread-jobs` for a `"free"`
+   * entry of more than three Workers, so managers that cannot install it
+   * leave it out of their catalog.
+   */
+  indexRequires: IndexRequiresOf;
+  /**
    * Why a catalog manifest cannot stand in for the one inside a release as a
    * revision (`revisedArtifactProblem`), or null when it can: its revision is
    * above the release's, and it changes only the fields a revision may change.
@@ -102,6 +109,13 @@ export type RevisionProblemOf = (
 
 /** `appServices` from `@appflare/schema`: the arguments are schema-parsed manifests. */
 export type AppServicesOf = (catalog: CatalogManifest, worker: WorkerFacts | null) => AppServices;
+
+/** `indexRequires` from `@appflare/schema`: the argument is a schema-parsed manifest. */
+export type IndexRequiresOf = (
+  manifest: Pick<CatalogManifest, "plan" | "requires"> & {
+    install: Pick<CatalogManifest["install"], "workers">;
+  },
+) => string[];
 
 /** `combinedWorkerFacts` from `@appflare/schema`: the argument is a schema-parsed manifest. */
 export type WorkerFactsOf = (manifest: ArtifactManifest) => WorkerFacts;
@@ -291,6 +305,7 @@ export async function loadAppflareSchema(appflareDir: string): Promise<AppflareS
     },
     appServices: pickFunction<AppServicesOf>(mod, "appServices"),
     appWorkerFacts: workerFactsOf(mod),
+    indexRequires: pickFunction<IndexRequiresOf>(mod, "indexRequires"),
     revisionProblem: pickFunction<RevisionProblemOf>(mod, "revisedArtifactProblem"),
     verifySignature: pickFunction<VerifySignatureOf>(mod, "verifySignature"),
     signingKeys: pickSigningKeys(mod, "signingKeys"),

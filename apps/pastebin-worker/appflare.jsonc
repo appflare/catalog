@@ -10,7 +10,15 @@
   "authors": [{ "name": "Sharzy", "url": "https://sharzy.in", "github": "SharzyL" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags; the pin tracks the default branch, goshujin.
-  "source": { "ref": "goshujin", "sha": "0835cac4ab8f974035d31845f5c2b93b0c85b5c6" },
+  "source": {
+    "ref": "goshujin",
+    "sha": "0835cac4ab8f974035d31845f5c2b93b0c85b5c6",
+    // The commit's own version plus a build number: the release of
+    // 0.0.0-20260717.0835cac typed the Markdown and CSS modules as data, which
+    // broke the pages built from them; this build types them as text, as
+    // wrangler does. Remove this line when source moves.
+    "version": "0.0.0-20260717.0835cac.1"
+  },
   "install": {
     "packageManager": "pnpm",
     // Upstream's own deployment (a custom-domain route, a KV id, and a bucket

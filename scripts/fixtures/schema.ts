@@ -63,6 +63,9 @@ export async function testSchema(): Promise<AppflareSchema> {
     // The primary Worker only: tests of apps of several Workers run only
     // with the real schema.
     appWorkerFacts: (manifest) => manifest.worker,
+    // The entry's own `requires` only: tests of the manager features an
+    // index row adds run only with the real schema.
+    indexRequires: (manifest) => [...manifest.requires],
     // Accepts every revision: tests that check which revisions are refused
     // run only with the real schema.
     revisionProblem: () => null,
