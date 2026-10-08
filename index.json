@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-07T12:06:26.026Z",
+  "generatedAt": "2026-10-08T10:13:11.634Z",
   "apps": [
     {
       "slug": "2fa",
@@ -5422,7 +5422,7 @@
     },
     {
       "slug": "playwright-mcp",
-      "repo": "microsoft/playwright-mcp",
+      "repo": "cloudflare/playwright-mcp",
       "name": "Cloudflare Playwright MCP",
       "summary": "A remote MCP server that lets AI assistants browse for you: navigate, click, type, read page snapshots and take screenshots in a headless browser from Cloudflare Browser Rendering.",
       "tagline": "Let your AI assistant browse websites and take screenshots",
@@ -5473,12 +5473,12 @@
         "developer-tools"
       ],
       "license": "Apache-2.0",
-      "revision": 3,
+      "revision": 4,
       "catalogManifest": {
         "url": "https://appflare.github.io/catalog/apps/playwright-mcp/manifest.json",
-        "sha256": "f506bbec631bdfbb46bd6201c433bee29226be18a039d6ef0bb8ffd2800eddeb",
+        "sha256": "cfcedef3eeff64f161075e4e2a4fb60e2bc5039689901882348521437a8c8a44",
         "keyId": "catalog-2026-09",
-        "signature": "SbF09DjPXeKqncN7VomzMdonPO4xYeKj96MZ+XZZ4RzTIdvjgxq0Q02Jb3bqVf3eLkdA6ppSQAvjam65Vxd0BQ=="
+        "signature": "YWjlY01ydJJavgtZkpssW9YbLokYgWARrr7Tcr2VLS9PpyUTLv3YE/cmcyHlLArFZx3SUCyQ7uMfKqO+H7fYBg=="
       },
       "accessOffer": "offered"
     },
