@@ -20,7 +20,7 @@
     { "name": "Thaqif Rosdi", "github": "takippu" }
   ],
   "maintainers": ["MendyLanda"],
-  "source": { "ref": "v2.1.0", "sha": "0268c44dd565257f4ff5074e03bb9b3ac285ef5f" },
+  "source": { "ref": "v2.1.1", "sha": "30758646a438a51950173be81abf77803a6dc4dd" },
   "install": {
     "packageManager": "npm",
     "wranglerConfig": "wrangler.jsonc",
