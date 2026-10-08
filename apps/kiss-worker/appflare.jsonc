@@ -9,12 +9,19 @@
   "name": "KISS Worker",
   "summary": "Your own sync server for KISS Translator: keeps the extension's settings, rules and vocabulary in step across browsers and serves shared rule sets.",
   "tagline": "Sync your translation settings and vocabulary across browsers",
+  "features": [
+    "Keep KISS Translator preferences in sync between browsers",
+    "Reuse your translation rules across browsers",
+    "Keep your vocabulary lists in sync between browsers",
+    "Share translation rule sets through a link"
+  ],
   "repo": "fishjar/kiss-worker",
   "license": "MIT",
   "categories": ["sync", "utilities"],
   // The formatting of URLs in the notes changed after this release was published:
   // a revision, no new build.
-  "revision": 2,
+  // Features (revision 3).
+  "revision": 3,
   "authors": [{ "name": "Gabe", "url": "https://fishjar.com", "github": "fishjar" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no tags; the pin follows the default branch.

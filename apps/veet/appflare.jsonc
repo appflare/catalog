@@ -8,6 +8,15 @@
   "name": "Veet",
   "summary": "Video calls in the browser: share a meeting link and talk face to face, with chat, device settings and peer-to-peer media for small groups.",
   "tagline": "Share a link and talk face to face in your browser",
+  "features": [
+    "Start a browser video call and invite people with a meeting link",
+    "Talk with small groups of about four or five people",
+    "Send text messages during a call",
+    "Choose your camera and microphone and switch them during a call",
+    "Remember your display name and device settings for future calls",
+    "Send audio and video directly between participants"
+  ],
+  "alternativeTo": ["Google Meet"],
   "repo": "megaconfidence/veet",
   "homepage": "https://veet.conflare.workers.dev",
   // The repository has no LICENSE file and states no licence in its README or
@@ -15,7 +24,8 @@
   "license": "NONE",
   "categories": ["chat"],
   // Field links added after this release was published: a revision, no new build.
-  "revision": 3,
+  // Features and alternatives (revision 4).
+  "revision": 4,
   "authors": [
     {
       "name": "Confidence Okoghenun",

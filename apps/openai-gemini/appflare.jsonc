@@ -4,13 +4,21 @@
   "name": "OpenAI Gemini",
   "summary": "Use Gemini with OpenAI clients through your own API endpoint, with chat, embeddings, streaming replies, tool calls, and image or audio input.",
   "tagline": "Use Gemini in apps built for OpenAI",
+  "features": [
+    "Get chat replies using your own Gemini API key",
+    "Read replies as they arrive instead of waiting for the whole answer",
+    "Include images and audio in your chat requests",
+    "Request text embeddings through the same endpoint",
+    "Let models call tools supplied by your app"
+  ],
   "homepage": "https://my-openai-gemini-demo.vercel.app/",
   "repo": "PublicAffairs/openai-gemini",
   "license": "MIT",
   "categories": ["ai", "developer-tools"],
   // The formatting of URLs in the notes changed after this release was published:
   // a revision, no new build.
-  "revision": 3,
+  // features (revision 4).
+  "revision": 4,
   "authors": [{ "name": "PublicAffairs", "github": "PublicAffairs" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no semver release tags (its tags name Gemini models); the pin tracks main.

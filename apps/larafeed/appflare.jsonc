@@ -4,6 +4,15 @@
   "name": "Larafeed",
   "summary": "A private feed reader with passkey-only sign-in: RSS and Atom subscriptions refreshed on a schedule through Queues, OPML import and export, full-article extraction, favicons, and reader-client APIs, on D1, KV and Queues.",
   "tagline": "Keep up with your favorite websites in one private feed",
+  "features": [
+    "Follow RSS, Atom and JSON feeds with automatic updates",
+    "Keep your reader private with passkey sign-in",
+    "Organize subscriptions into named categories",
+    "Filter articles by title, content or author",
+    "Mark articles as read, starred or archived",
+    "Move subscriptions in or out with OPML files"
+  ],
+  "alternativeTo": ["Feedly"],
   "repo": "angristan/larafeed",
   "license": "MIT",
   "categories": ["productivity"],

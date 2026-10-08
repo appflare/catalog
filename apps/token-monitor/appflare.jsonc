@@ -8,13 +8,21 @@
   "name": "Token Monitor Hub",
   "summary": "Your own sync hub for Token Monitor: combine the token use, costs and plan limits of Claude Code, Codex, Cursor and 40 more AI coding tools across all your machines, live in every widget.",
   "tagline": "Sync your AI coding usage across all your devices",
+  "features": [
+    "Combine AI token counts and costs from all your connected machines",
+    "Send live usage updates to connected desktop widgets within seconds",
+    "Share account usage limits across your devices",
+    "Read usage totals on iPhone with Widgy or Scriptable widgets",
+    "Optionally publish combined totals without device or account identifiers"
+  ],
   "homepage": "https://javis-ai.com/token-monitor/",
   "repo": "Javis603/token-monitor",
   "license": "MIT",
   "categories": ["ai", "monitoring"],
   // The formatting of URLs in the notes changed after this release was published:
   // a revision, no new build.
-  "revision": 2,
+  // Features (revision 3).
+  "revision": 3,
   "authors": [{ "name": "Javis", "url": "https://javis-ai.com", "github": "Javis603" }],
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v0.68.0", "sha": "5d2db368d8313415763860d594de00e46a663418" },

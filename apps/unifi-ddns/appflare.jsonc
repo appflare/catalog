@@ -4,12 +4,20 @@
   "name": "UniFi DDNS",
   "summary": "Dynamic DNS for UniFi gateways: keeps Cloudflare A/AAAA records on your current IP.",
   "tagline": "Keep your domain pointed at your current IP address",
+  "features": [
+    "Update several domain names from one UniFi gateway setting",
+    "Keep both IPv4 and IPv6 address records up to date",
+    "Preserve each DNS record's proxy setting when its address changes",
+    "Support UniFi gateways with older firmware"
+  ],
+  "alternativeTo": ["No-IP"],
   "repo": "willswire/unifi-ddns",
   "license": "MIT",
   "categories": ["networking"],
   // The formatting of URLs in the notes changed after this release was published:
   // a revision, no new build.
-  "revision": 2,
+  // Features and alternatives (revision 3).
+  "revision": 3,
   "authors": [{ "name": "Will Walker", "url": "https://willswire.com", "github": "willswire" }],
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v3.3.1", "sha": "c3f1f1bf59378582c977fbed8c97b19cc9143736" },

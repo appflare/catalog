@@ -12,6 +12,15 @@
   "name": "Jant",
   "summary": "A personal microblog for notes, links and quotes, organized into threads and collections, with media attachments, full-text search, RSS, an API and an MCP endpoint for agents.",
   "tagline": "Your own blog for notes, links, quotes, and threads",
+  "features": [
+    "Publish notes without a title, or share links and quotes",
+    "Continue a post as a thread",
+    "Group related posts into collections",
+    "Attach images, video, audio and documents",
+    "Choose which posts appear in your RSS feed",
+    "Export your blog as a Hugo static site"
+  ],
+  "alternativeTo": ["Tumblr"],
   "homepage": "https://jant.me",
   "repo": "jant-me/jant-starter",
   // The pinned starter README identifies the main project:
@@ -22,7 +31,8 @@
   // The category changed in revision 2, which this release was built with. Edited
   // help text (revision 3) and field links (revision 4) came after it was
   // published: revisions, no new build.
-  "revision": 5,
+  // Features and alternatives (revision 6).
+  "revision": 6,
   "authors": [{ "name": "Jant", "url": "https://jant.me", "github": "jant-me" }],
   "maintainers": ["MendyLanda"],
   // The starter has no tags; upstream commits to main with each Jant release

@@ -4,11 +4,19 @@
   "name": "NodeCrypt",
   "summary": "End-to-end encrypted chat rooms in the browser: no accounts and no stored history, with private messages, images, and files, relayed by a Durable Object that never sees plaintext.",
   "tagline": "Private chat rooms without accounts or message history",
+  "features": [
+    "Join encrypted group conversations in your browser",
+    "Start a private conversation with one room member",
+    "Share images and files in the chat",
+    "Protect a room with a password",
+    "Join rooms without creating an account",
+    "Keep no message history, so people who join later cannot read earlier messages"
+  ],
   "homepage": "https://nodecrypt.shuaiplus.workers.dev/",
   "repo": "shuaiplus/nodecrypt",
   "license": "ISC",
   "categories": ["chat", "privacy"],
-  "revision": 2,
+  "revision": 3,
   "authors": [{ "name": "Shuai", "url": "https://shuai.plus", "github": "shuaiplus" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags; the pin tracks main.

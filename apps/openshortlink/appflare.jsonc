@@ -13,12 +13,22 @@
   "name": "OpenShort.link",
   "summary": "Link shortener and link management for your own domains: geo and device redirects, QR codes, tags, teams with roles, API keys, and click analytics on Analytics Engine.",
   "tagline": "Create short links on your own domains and track their clicks",
+  "features": [
+    "Choose custom short addresses for links on your domains",
+    "Send visitors to different destinations by country or device",
+    "Create downloadable QR codes for your links",
+    "See daily click totals for each link",
+    "Organize links with tags and categories",
+    "Give teammates permission to view or edit links"
+  ],
+  "alternativeTo": ["Bitly", "Rebrandly"],
   "homepage": "https://openshort.link",
   "repo": "idhamsy/openshortlink",
   "license": "AGPL-3.0-only",
   "categories": ["utilities", "analytics"],
   // openPath added after this release was published: a revision, no new build.
-  "revision": 2,
+  // features and alternatives (revision 3).
+  "revision": 3,
   "authors": [
     { "name": "OpenShort.link contributors", "url": "https://openshort.link", "github": "idhamsy" }
   ],

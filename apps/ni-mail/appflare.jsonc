@@ -10,6 +10,13 @@
   "name": "ni-mail",
   "summary": "A minimal mail receiver for your own domain with an HTTP API: fetch the latest message, list, read and thread mail per address, with attachments kept in R2, for scripts and automation.",
   "tagline": "Receive mail on your domain for scripts and automations",
+  "features": [
+    "Collect incoming mail for addresses on your own domain",
+    "Fetch the newest message for a script",
+    "Read message text and HTML through an access-key-protected API",
+    "List recent messages in a mailbox",
+    "Empty a mailbox through the API"
+  ],
   "repo": "mskatoni/ni-mail",
   "license": "Apache-2.0",
   "categories": ["email", "developer-tools"],

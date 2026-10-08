@@ -4,13 +4,23 @@
   "name": "ternssh",
   "summary": "An SSH workspace in the browser: a draggable dashboard of terminals, SFTP file management, server status and process monitors, saved servers and keys, and an AI command helper.",
   "tagline": "Manage SSH servers and files from your browser",
+  "features": [
+    "Open multiple SSH terminal sessions in your browser",
+    "Browse, edit and upload files on remote servers with SFTP",
+    "Check server CPU, memory and disk use in real time",
+    "Watch network activity and running processes",
+    "Save common commands and run them with one click",
+    "Arrange terminals and server panels by dragging them around"
+  ],
+  "alternativeTo": ["Termius"],
   "homepage": "https://ternssh.com",
   "repo": "haradakashiwa/ternssh",
   "license": "GPL-3.0-or-later",
   "categories": ["remote-access", "developer-tools"],
   // The Access help and steps after installing changed after this release was
   // published: a revision, no new build.
-  "revision": 3,
+  // Features and alternatives (revision 4).
+  "revision": 4,
   "authors": [{ "name": "Kashiwa", "url": "https://ternssh.com", "github": "haradakashiwa" }],
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v0.0.13", "sha": "b3d2b6c7c0ad00496d79e07c36532d549cd5e73a" },

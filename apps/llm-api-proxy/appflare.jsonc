@@ -7,12 +7,21 @@
   "name": "LLM API Proxy",
   "summary": "One OpenAI-compatible (and Ollama-compatible) API in front of OpenAI, Anthropic, Gemini, DeepSeek, Groq, Grok, OpenRouter, Azure OpenAI and more, using your own provider keys behind a key of its own.",
   "tagline": "Connect your AI tools to models from different providers",
+  "features": [
+    "Use OpenAI-compatible tools with your own AI provider API keys",
+    "Switch between providers by choosing a different model",
+    "Connect tools that use the Ollama interface",
+    "Give clients one access key while keeping provider keys private",
+    "List the models available from your configured providers"
+  ],
+  "alternativeTo": ["LiteLLM"],
   "repo": "rxliuli/llm-api-proxy",
   "license": "GPL-3.0-only",
   "categories": ["ai", "developer-tools"],
   // Field links (revision 2) and the formatting of URLs in the notes (revision 3)
   // came after this release was published: revisions, no new build.
-  "revision": 3,
+  // Features and alternatives (revision 4).
+  "revision": 4,
   "authors": [{ "name": "rxliuli", "url": "https://rxliuli.com", "github": "rxliuli" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags; the pin is the head of main.

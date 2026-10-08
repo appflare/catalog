@@ -11,6 +11,15 @@
   "name": "OpenSEO",
   "summary": "Self-hosted SEO research: keywords, rankings, backlinks and site audits, on your own Cloudflare account and behind Cloudflare Access.",
   "tagline": "Find search terms, track rankings, and check your site's health",
+  "features": [
+    "Research keyword ideas and search results with a paid DataForSEO account",
+    "Schedule checks of your keywords' search positions",
+    "Compare competitors' search traffic and ranking keywords",
+    "Review backlinks and the sites linking to a domain",
+    "Scan website pages for technical SEO issues",
+    "Give AI assistants access to SEO research through MCP"
+  ],
+  "alternativeTo": ["Semrush", "Ahrefs"],
   "repo": "every-app/open-seo",
   "homepage": "https://openseo.so",
   "license": "MIT",
@@ -18,7 +27,8 @@
   // Edited help text (revision 2), field links (revision 3) and the formatting of
   // URLs in the notes (revision 4) came after this release was published:
   // revisions, no new build.
-  "revision": 5,
+  // features and alternatives (revision 6).
+  "revision": 6,
   "authors": [
     { "name": "Ben Senescu", "github": "bensenescu", "x": "bensenescu" },
     { "name": "Every App", "url": "https://everyapp.dev", "github": "every-app" }

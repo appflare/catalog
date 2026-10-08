@@ -4,11 +4,19 @@
   "name": "Usage Guard Collector",
   "summary": "Usage surge alerts for your Cloudflare account: reads daily Workers, D1, Durable Objects, KV, R2 and Queues counts into D1 and pings Discord or Slack when a meter jumps.",
   "tagline": "Get alerts when your Cloudflare usage suddenly jumps",
+  "features": [
+    "Track daily usage for Workers, D1, Durable Objects, KV, R2 and Queues",
+    "See the past seven days of usage on one page",
+    "Flag usage surges against the previous seven days",
+    "Send surge alerts to Discord or Slack through your webhooks",
+    "Set minimum usage levels before alerts are sent"
+  ],
   "repo": "HowardZlh/usage-guard-collector",
   "license": "MIT",
   "categories": ["monitoring", "utilities"],
   // Field links added after this release was published: a revision, no new build.
-  "revision": 3,
+  // Features (revision 4).
+  "revision": 4,
   "authors": [{ "name": "Howard", "url": "https://guushu.com", "github": "HowardZlh" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags; the pin tracks the default branch, main.

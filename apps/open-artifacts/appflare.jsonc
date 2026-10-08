@@ -4,13 +4,22 @@
   "name": "Open Artifacts",
   "summary": "Let coding agents publish HTML and Markdown pages to shareable links, with client-side password protection, version history, and updates in place when the project changes, on D1 and R2.",
   "tagline": "Share pages from your coding agent with links that stay up to date",
+  "features": [
+    "Publish HTML or Markdown from your coding agent",
+    "Replace a page's content while keeping its existing link",
+    "Protect pages with a password before uploading them",
+    "Open earlier published versions of a page",
+    "Find pages that need updating when watched project files change"
+  ],
+  "alternativeTo": ["Claude Code Artifacts"],
   "homepage": "https://coda0.com",
   "repo": "coda0HQ/open-artifacts",
   // The LICENSE file is MIT; package.json still carries npm's default "ISC".
   "license": "MIT",
   "categories": ["developer-tools", "sharing"],
   // Help text edited after this release was published: a revision, no new build.
-  "revision": 3,
+  // features and alternatives (revision 4).
+  "revision": 4,
   "authors": [
     { "name": "Frad Lee", "url": "https://frad.me", "github": "FradSer", "x": "FradSer" },
     { "name": "code0", "url": "https://coda0.com", "github": "coda0HQ" }

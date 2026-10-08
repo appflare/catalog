@@ -4,6 +4,15 @@
   "name": "Synch",
   "summary": "Your own server for Synch, end-to-end encrypted real-time sync for Obsidian vaults: notes are encrypted on each device, and the Worker relays and stores only ciphertext in a Durable Object, D1 and R2.",
   "tagline": "Keep your Obsidian notes in sync on your own server",
+  "features": [
+    "Sync Obsidian notes and attachments between desktop and mobile devices",
+    "Encrypt notes and file names on your devices before uploading them",
+    "Restore earlier versions of your notes from encrypted history",
+    "Recover deleted notes and attachments from version history",
+    "Merge compatible edits when the same note changes on different devices",
+    "Keep a separate copy when conflicting edits overlap"
+  ],
+  "alternativeTo": ["Obsidian Sync"],
   "homepage": "https://synch.run",
   "repo": "hjinco/synch",
   "license": "MIT",
