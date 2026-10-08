@@ -20,6 +20,14 @@
   "name": "Cloudflare OS",
   "summary": "Cloudflare's AI productivity environment: an agent chat that gets work done for you, and builds small private apps (gadgets) on request, each in its own sandbox, shareable with your team.\n\nThis install has the workspace, the agents, gadgets and blueprints, the Context library, scheduled agent runs, and the connectors for GitHub, Google, Slack, Notion, Linear, Cloudflare and other services; most of them start working once you give them an OAuth client of your own. Everyone signs in through Cloudflare Access.",
   "tagline": "An AI workspace where agents do your work and build small apps for you",
+  "features": [
+    "Ask AI to build and edit small apps using your own model provider key",
+    "Share private apps with teammates and collaborate in real time",
+    "Start apps from reusable blueprints and share your own",
+    "Let AI work with connected services after you set up their OAuth clients",
+    "Review and approve changes before AI applies them to connected services",
+    "Choose which documents and accounts each AI agent can access"
+  ],
   "repo": "cloudflare/cloudflare-os",
   "license": "Apache-2.0",
   "categories": ["ai", "productivity", "developer-tools"],

@@ -9,12 +9,20 @@
   "name": "child-podcast",
   "summary": "A private, ad-free video and audiobook library for children: you upload to your own R2 bucket, and upstream's native apps play only what you put there, with daily limits and allowed hours.",
   "tagline": "Your own ad-free video and audiobook library for children",
+  "features": [
+    "Choose the videos and audiobooks your children can play in the companion apps",
+    "Set daily viewing limits and allowed hours behind a parent PIN",
+    "Resume videos and audiobooks where each child left off",
+    "See daily and weekly viewing reports",
+    "Upload videos from your computer with the companion desktop app"
+  ],
   "repo": "bitoceango/civideo",
   "license": "MIT",
   "categories": ["media", "family"],
   // Field links (revision 2) and the formatting of URLs in the notes (revision 3)
   // came after this release was published: revisions, no new build.
-  "revision": 4,
+  // Features (revision 5).
+  "revision": 5,
   "authors": [{ "name": "bitoceango", "github": "bitoceango" }],
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v0.2.0", "sha": "272d45d7e0d41a844795e1d76ffc138f1ad4a7ad" },

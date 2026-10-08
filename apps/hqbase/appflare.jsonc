@@ -11,6 +11,14 @@
   "name": "HQBase",
   "summary": "Your team's email workspace in your own account: shared mailboxes, drafts, labels, contacts and audit history, with a remote MCP server for agents.",
   "tagline": "Shared email for your team in your own Cloudflare account",
+  "features": [
+    "Receive and send email from shared team mailboxes",
+    "Manage mailboxes across multiple domains",
+    "Choose which mailboxes each team member can access",
+    "Save drafts and keep an audit history",
+    "Let AI clients search mail, draft replies and send through authorized access"
+  ],
+  "alternativeTo": ["Front"],
   "homepage": "https://hqbase.io",
   "repo": "HQBase/hqbase",
   "license": "AGPL-3.0-only",

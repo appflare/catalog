@@ -4,6 +4,13 @@
   "name": "fxTikTok",
   "summary": "Fixes TikTok embeds on Discord and other chat apps: swap tiktok.com for your own address in a link and it previews the video or slideshow inline, with the author, caption and counts.",
   "tagline": "Make TikTok links preview videos and slideshows in chat",
+  "features": [
+    "Play linked TikTok videos inside Discord",
+    "Preview multi-image TikTok slideshows",
+    "Show captions above video previews",
+    "Share direct video or image links without counts",
+    "Request higher quality video playback"
+  ],
   "homepage": "https://tnktok.com",
   "repo": "okdargy/fxTikTok",
   // GitHub does not detect the licence, but the LICENSE file is the MIT licence.
@@ -11,7 +18,8 @@
   "categories": ["media", "utilities"],
   // The formatting of URLs in the notes changed after this release was published:
   // a revision, no new build.
-  "revision": 2,
+  // Features added in revision 3.
+  "revision": 3,
   "authors": [{ "name": "dargy", "url": "https://dar.gy", "github": "okdargy", "x": "okdargy" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags; the pin is the head of its default branch,

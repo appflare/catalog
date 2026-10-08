@@ -4,6 +4,14 @@
   "name": "Cloudmark",
   "summary": "Bookmarks without an account: create a collection with a write token, save pages with a bookmarklet or the Chrome extension, and open them from any device. On D1.",
   "tagline": "Save bookmarks and open them from any device",
+  "features": [
+    "Save a page with a bookmarklet or the Chrome extension",
+    "Organize bookmarks into your own categories",
+    "Add notes and custom icons to saved pages",
+    "Search, filter and sort your bookmark collection",
+    "Create collections without registering and protect edits with a write token"
+  ],
+  "alternativeTo": ["Raindrop.io"],
   "homepage": "https://cloudmark.site",
   "repo": "wesleyel/cloudmark",
   // The LICENSE file is the GNU AGPL version 3 with no "or any later version" grant.
@@ -11,7 +19,8 @@
   "categories": ["productivity", "utilities"],
   // The formatting of URLs in the notes changed after this release was published:
   // a revision, no new build.
-  "revision": 2,
+  // Features and alternatives (revision 3).
+  "revision": 3,
   "authors": [{ "name": "Wesley Yang", "url": "https://wesleyel.github.io", "github": "wesleyel" }],
   "maintainers": ["MendyLanda"],
   // The repository's only tag, chrome-v0.2.0, releases the Chrome extension,

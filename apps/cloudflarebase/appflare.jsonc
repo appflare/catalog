@@ -11,6 +11,14 @@
   "name": "Cloudflarebase",
   "summary": "An open-source Firebase alternative on Cloudflare: auth, JSON collections and SQL tables with live queries, remote config and file storage, each project in Durable Objects of its own, run from one console. App hosting needs Workers for Platforms, which Appflare does not set up yet; the rest works.",
   "tagline": "Add sign-in, live data, and file storage to your app",
+  "features": [
+    "Add email and password sign-in to your apps",
+    "Store app data in collections or tables",
+    "Update connected apps as their data changes",
+    "Change app settings and feature flags without publishing a new version",
+    "Upload files and choose who can access them"
+  ],
+  "alternativeTo": ["Firebase"],
   "homepage": "https://cloudflarebase.com",
   "repo": "cloudflarebase/cloudflarebase",
   "license": "Apache-2.0",
