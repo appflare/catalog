@@ -8,6 +8,14 @@
   "name": "Screendrop Cloud",
   "summary": "The upload and sharing backend for the Screendrop macOS app: screenshots and screen recordings stored in R2, with share pages, transcripts, comments and likes.",
   "tagline": "Share screenshots and screen recordings with your own links",
+  "features": [
+    "Upload captures from the macOS app and get a public share link",
+    "Play recordings with captions, speed controls, and preview thumbnails",
+    "Search transcripts and click a line to jump to that moment",
+    "Let viewers comment and like captures with GitHub or Google sign-in",
+    "Let viewers download screenshots or copy them to the clipboard"
+  ],
+  "alternativeTo": ["Loom"],
   "repo": "fayazara/screendrop-worker",
   // The Worker's README identifies Screendrop as the main macOS app.
   "upstreamRepo": "fayazara/Screendrop",
@@ -16,7 +24,8 @@
   "categories": ["sharing", "media"],
   // Field links (revision 2) and the formatting of URLs in the notes (revision 3)
   // came after this release was published: revisions, no new build.
-  "revision": 4,
+  // Features and alternatives (revision 5).
+  "revision": 5,
   "authors": [{ "name": "Fayaz Ahmed", "github": "fayazara", "x": "fayazara" }],
   "maintainers": ["MendyLanda"],
   // Upstream publishes no release tags; the pin tracks main, which the

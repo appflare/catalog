@@ -4,11 +4,20 @@
   "name": "Second Brain",
   "summary": "A personal memory for your AI assistants: an MCP server that stores notes in D1 and recalls them by meaning with Vectorize and Workers AI.",
   "tagline": "Save notes once and recall them across your AI tools",
+  "features": [
+    "Keep ideas, decisions, and preferences available to all your connected AI tools",
+    "Find saved memories even when you ask in different words",
+    "Browse, edit, and delete memories in a web dashboard",
+    "Explore connections between memories in a visual graph",
+    "Sync selected Notion pages into memory automatically",
+    "Bring calendar events into memory using a private calendar link"
+  ],
+  "alternativeTo": ["Mem0"],
   "homepage": "https://www.thesecondbrain.dev",
   "repo": "rahilp/second-brain-cloudflare",
   "license": "MIT",
   "categories": ["ai", "notes"],
-  "revision": 2,
+  "revision": 3,
   "authors": [
     {
       "name": "Rahil Pirani",

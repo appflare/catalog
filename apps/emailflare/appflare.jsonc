@@ -11,12 +11,21 @@
   "name": "EmailFlare",
   "summary": "Transactional email on Cloudflare Email Sending: a sending API with templates, API keys, logs, suppressions and one-click unsubscribe, plus a team inbox and lightweight CRM on Email Routing.",
   "tagline": "Send emails and manage replies in a shared inbox",
+  "features": [
+    "Send transactional emails through Cloudflare Email Sending",
+    "Reuse email templates for welcomes, receipts and password resets",
+    "Create API keys for each app that sends mail",
+    "Review sent emails in the dashboard",
+    "Assign email conversations to teammates",
+    "Follow up with contacts through automated email sequences"
+  ],
+  "alternativeTo": ["Resend", "Front"],
   "homepage": "https://emailflare.dev",
   "repo": "0xdps/emailflare",
   "license": "MIT",
   "categories": ["email", "business"],
   // Help text edited after this release was published: a revision, no new build.
-  "revision": 3,
+  "revision": 4,
   "authors": [{ "name": "Devendra Pratap Singh", "github": "0xdps", "x": "0xdps" }],
   "maintainers": ["MendyLanda"],
   // Pinned to main: the latest tag, v2.0.2, predates the Workers deployment

@@ -4,13 +4,21 @@
   "name": "ShotSync",
   "summary": "A private image and text pool shared across your devices: drop a screenshot or snippet on one, grab it on another, from an installable web app backed by R2.",
   "tagline": "Share pictures and text between your devices, privately",
+  "features": [
+    "Upload photos, screenshots, and text snippets to a shared device gallery",
+    "Copy text or download images on another device",
+    "Share one item with a public link that expires after seven days",
+    "Add the gallery to your phone's home screen",
+    "Delete several items at once"
+  ],
   "repo": "Defiabell/shotsync",
   "homepage": "https://shotsync-demo.defiabell.workers.dev",
   "license": "MIT",
   "categories": ["files", "sharing"],
   // The formatting of URLs in the notes changed after this release was published:
   // a revision, no new build.
-  "revision": 3,
+  // Display features (revision 4).
+  "revision": 4,
   "authors": [{ "name": "Jinkun Sun", "github": "Defiabell" }],
   "maintainers": ["MendyLanda"],
   // The newest release tag. The commits after it add upstream's hosted,

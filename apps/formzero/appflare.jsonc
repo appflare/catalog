@@ -8,6 +8,13 @@
   "name": "FormZero",
   "summary": "A form backend for static sites: send HTML forms or JSON to your own endpoint and browse, chart and export the submissions from a dashboard.",
   "tagline": "Collect form submissions and see them in your own dashboard",
+  "features": [
+    "Connect your site's HTML forms to a submission endpoint",
+    "Accept JSON submissions from custom forms",
+    "See submission trends and statistics in the dashboard",
+    "Download all submissions as a CSV file"
+  ],
+  "alternativeTo": ["Formspree", "Getform"],
   "repo": "BohdanPetryshyn/formzero",
   "license": "MIT",
   "categories": ["business", "utilities"],

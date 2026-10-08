@@ -8,13 +8,20 @@
   "name": "Auto Reaction Bot",
   "summary": "Your own Telegram bot that adds an emoji reaction to posts in the channels and groups you add it to, and to private messages, from an emoji list you choose.",
   "tagline": "Emoji reactions for your Telegram chats and channels",
+  "features": [
+    "Add reactions automatically to private messages, groups and channel posts",
+    "Choose which emojis the bot picks from",
+    "Adjust how often the bot reacts in group chats",
+    "Exclude selected chats from automatic reactions"
+  ],
   "homepage": "https://t.me/Auto_ReactionBOT",
   "repo": "Malith-Rukshan/Auto-Reaction-Bot",
   "license": "MIT",
   "categories": ["bots", "chat"],
   // Field links (revision 2) and the formatting of URLs in the notes (revision 3)
   // came after this release was published: revisions, no new build.
-  "revision": 4,
+  // Display features (revision 5).
+  "revision": 5,
   "authors": [
     {
       "name": "Malith Rukshan",

@@ -9,6 +9,12 @@
   "name": "Alle",
   "summary": "One inbox for all your mail: forward your Gmail, Outlook and other accounts to your domain and read them together, with attachments, plus throwaway addresses on the same domain.",
   "tagline": "Read mail from all your accounts in one inbox",
+  "features": [
+    "Gather forwarded mail from several accounts in one place",
+    "Receive sign-up mail at throwaway addresses on your domain",
+    "Read your inbox on a phone or computer",
+    "Forward mail without sharing the passwords of your other accounts"
+  ],
   "repo": "bestruirui/Alle",
   // The repository has no LICENSE file and declares no licence anywhere, so
   // the catalog shows it as unlicensed.

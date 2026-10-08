@@ -9,12 +9,21 @@
   "name": "StatusBeam",
   "summary": "A public status page with uptime history and response-time charts. It checks your websites every five minutes and mirrors service status from Statuspage, incident.io, Sentry Uptime and AI gateways.",
   "tagline": "Monitor your services and share a public status page",
+  "features": [
+    "Check website availability and response times every five minutes",
+    "Show each service's current state on a public status page",
+    "Review 90 days of uptime history and response-time charts",
+    "Combine your own website checks with status from external services",
+    "Share status, uptime, and response-time badges"
+  ],
+  "alternativeTo": ["Upptime", "Instatus"],
   "homepage": "https://docs.statusbeam.dev",
   "repo": "pleaseai/statusbeam",
   "license": "MIT",
   "categories": ["monitoring", "utilities"],
   // Field links added after this release was published: a revision, no new build.
-  "revision": 3,
+  // Features and alternatives (revision 4).
+  "revision": 4,
   "authors": [{ "name": "pleaseai", "url": "https://pleaseai.dev", "github": "pleaseai" }],
   "maintainers": ["MendyLanda"],
   // The monorepo tags each package on its own (web-v0.1.1, worker-v0.1.1,

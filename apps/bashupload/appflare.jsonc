@@ -8,6 +8,14 @@
   "name": "BashUpload",
   "summary": "Upload a file from the terminal with curl or from a browser and get a link that works for one download or until it expires, with an optional password, on R2.",
   "tagline": "Share files from your browser or terminal with expiring links",
+  "features": [
+    "Upload files by dragging them into a browser or using curl",
+    "Share text directly from the terminal without creating a file",
+    "Delete a shared file after its first download",
+    "Allow repeated downloads until a chosen expiry time",
+    "Require a password for every upload and download"
+  ],
+  "alternativeTo": ["WeTransfer"],
   "homepage": "https://bashupload.app",
   "repo": "DullJZ/bashupload-r2",
   // The repository has no LICENSE file and declares no licence anywhere, so
@@ -16,7 +24,8 @@
   "categories": ["files", "sharing"],
   // Generated secrets (revision 2) and edited help text (revision 3) came after
   // this release was published: revisions, no new build.
-  "revision": 4,
+  // Features and alternatives (revision 5).
+  "revision": 5,
   "authors": [{ "name": "DullJZ", "url": "https://www.jz-home.top", "github": "DullJZ" }],
   "maintainers": ["MendyLanda"],
   // Upstream's tags (bashupload-0.1.0, chart-v0.1.0) name its Docker image

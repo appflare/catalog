@@ -12,6 +12,14 @@
   "name": "EmDash",
   "summary": "A full-stack TypeScript CMS built on Astro, the spiritual successor to WordPress: this is its blog template, with posts, pages, categories and tags, search, RSS and an admin editor, on D1 and R2.",
   "tagline": "Create a blog with built-in search and an editor",
+  "features": [
+    "Publish posts and pages from a rich text editor",
+    "Organize posts with categories and tags",
+    "Let readers search the full text of your posts",
+    "Publish an RSS feed readers can subscribe to",
+    "Save drafts and schedule posts to go live later"
+  ],
+  "alternativeTo": ["WordPress"],
   "homepage": "https://emdashcms.com",
   "repo": "emdash-cms/templates",
   // The pinned template README identifies this as the main project:
@@ -21,7 +29,8 @@
   "categories": ["cms"],
   // The category changed in revision 2, which this release was built with.
   // openPath added after it was published: a revision, no new build.
-  "revision": 4,
+  // Added features and alternatives (revision 5).
+  "revision": 5,
   "authors": [{ "name": "EmDash", "url": "https://emdashcms.com", "github": "emdash-cms" }],
   "maintainers": ["MendyLanda"],
   // The templates repository has no tags; the pin tracks main.

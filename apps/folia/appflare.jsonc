@@ -10,6 +10,13 @@
   "name": "Folia",
   "summary": "A web music player built around full-screen animated lyrics, for your local library or a Navidrome server, with automatic lyric matching and AI colour themes from your own Gemini key.",
   "tagline": "Play your music with full-screen animated lyrics",
+  "features": [
+    "Play music from a local folder without uploading the files",
+    "Listen to music from your own Navidrome server",
+    "Display local lyric files with animated full-screen text",
+    "Choose between different lyric animations",
+    "Generate song colour themes with your own Gemini API key"
+  ],
   "homepage": "https://folia-site.cielaniska.top",
   "repo": "chthollyphile/folia-major",
   // The LICENSE file is the GNU AGPL version 3 with no "or any later
@@ -18,7 +25,8 @@
   "categories": ["media"],
   // Edited help text (revision 2) and field links (revision 3) came after this
   // release was published: revisions, no new build.
-  "revision": 3,
+  // Added features (revision 4).
+  "revision": 4,
   "authors": [{ "name": "chthollyphile", "github": "chthollyphile" }],
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v0.7.15", "sha": "537fa57bbf2e1bc4958fb1614fbe6277851fef9c" },

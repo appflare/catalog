@@ -4,12 +4,20 @@
   "name": "ShareHTML",
   "summary": "Publish HTML, Markdown, and code files from the command line and get a shareable link with live comments, reactions, and presence. Sign-in through Cloudflare Access.",
   "tagline": "Publish web pages and documents by link and gather comments",
+  "features": [
+    "Upload HTML, Markdown, and code files from the command line",
+    "Update a shared document while keeping the same link",
+    "Leave comments on selected text and reply in threads",
+    "React to documents and see who else is viewing",
+    "Browse your documents and recently viewed shared files"
+  ],
   "repo": "jonesphillip/sharehtml",
   "license": "Apache-2.0",
   "categories": ["files", "sharing"],
   // Upstream has not moved since the released pin, so the Access protection
   // below is a revision of that build.
-  "revision": 2,
+  // Display features (revision 3).
+  "revision": 3,
   "authors": [{ "name": "Phillip Jones", "github": "jonesphillip", "x": "akaphill" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags, so the entry follows the default branch by commit.

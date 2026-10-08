@@ -9,13 +9,21 @@
   "name": "Skland Daily Attendance",
   "summary": "Claims the daily Skland sign-in rewards for your Arknights and Arknights: Endfield accounts on a schedule, with optional notifications of each run.",
   "tagline": "Automatically claim daily rewards for Arknights and Endfield",
+  "features": [
+    "Sign in to Skland on a schedule for multiple game accounts",
+    "Skip accounts that have already claimed their rewards that day",
+    "Retry failed sign-ins automatically",
+    "Receive run summaries through your chosen notification services",
+    "Hide character names in logs and notifications"
+  ],
   "repo": "AEtherside/skland-daily-attendance",
   // The repository has no LICENSE file; package.json and the README's
   // License section both say MIT.
   "license": "MIT",
   "categories": ["bots", "games"],
   // Field links added after this release was published: a revision, no new build.
-  "revision": 3,
+  // Display features (revision 4).
+  "revision": 4,
   "authors": [
     { "name": "AEtherside", "github": "AEtherside" },
     {

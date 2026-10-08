@@ -4,6 +4,15 @@
   "name": "shrtnr",
   "summary": "A URL shortener you drive from code and AI assistants: a REST API with typed SDKs, an MCP server, per-user links behind Cloudflare Access, bundles and click analytics, on D1 and KV.",
   "tagline": "Create short links and track clicks in one place",
+  "features": [
+    "Give one destination several short addresses and track each separately",
+    "Group campaign links and see their combined click statistics",
+    "See clicks by country, referrer, device, and browser",
+    "Create QR codes and count scans separately from link clicks",
+    "Set links to expire or disable them without losing their click history",
+    "Manage links through an API or an AI assistant after setting up Access"
+  ],
+  "alternativeTo": ["Bitly"],
   "homepage": "https://oddbit.id/en/projects/shrtnr",
   "repo": "oddbit/shrtnr",
   "license": "Apache-2.0",
@@ -11,7 +20,8 @@
   // The changed first step after installing (revision 2), openPath and field
   // links (revision 3) and the formatting of URLs in the notes (revision 4) came
   // after this release was published: revisions, no new build.
-  "revision": 5,
+  // Features and alternatives (revision 6).
+  "revision": 6,
   "authors": [
     { "name": "Oddbit", "url": "https://oddbit.id", "github": "oddbit", "x": "evenbit" },
     {

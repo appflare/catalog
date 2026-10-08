@@ -4,6 +4,15 @@
   "name": "2FA",
   "summary": "A two-factor code manager for TOTP and HOTP keys: scan or import from Google Authenticator, Aegis, 2FAS, and Bitwarden, encrypted in KV, with backups to WebDAV, S3, OneDrive, or Google Drive.",
   "tagline": "Store your two-factor codes with automatic backups",
+  "features": [
+    "Generate time-based and counter-based login codes",
+    "Add accounts by scanning a QR code or uploading its image",
+    "Import accounts from QR codes, JSON, CSV or text exports",
+    "Find accounts by service name or account name",
+    "Get login codes offline in an installable web app",
+    "Back up your accounts automatically and restore an earlier backup"
+  ],
+  "alternativeTo": ["Authy"],
   "repo": "wuzf/2fa",
   "license": "MIT",
   "categories": ["security", "utilities"],

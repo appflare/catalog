@@ -4,6 +4,15 @@
   "name": "FeedLog",
   "summary": "Feedback boards, a public roadmap and an AI-assisted changelog for your product, with an embeddable widget. Runs on Workers with R2 for uploads and your own Postgres through Hyperdrive.",
   "tagline": "Collect feedback, share your roadmap and announce updates",
+  "features": [
+    "Collect ideas and bug reports on public or private feedback boards",
+    "Let users vote and discuss suggestions",
+    "Show which changes are planned, underway and released",
+    "Publish release notes in a public changelog",
+    "Embed a feedback widget in your product",
+    "Draft release notes with your own OpenAI-compatible API key"
+  ],
+  "alternativeTo": ["Canny", "Featurebase"],
   "homepage": "https://feedlog.ai",
   "repo": "linkcraftstudio/feedlog",
   "license": "MIT",

@@ -4,13 +4,23 @@
   "name": "Agentic Inbox",
   "summary": "A self-hosted email client with an AI agent that reads, searches, and drafts replies, on Email Routing, Durable Objects, R2, and Workers AI.",
   "tagline": "Your own email inbox with an AI assistant that drafts replies",
+  "features": [
+    "Receive mail for addresses on your own domain",
+    "Search conversations and organise messages into folders",
+    "Read and download email attachments",
+    "Get AI reply drafts that wait for your approval before sending",
+    "Let AI tools read and search your mail through MCP",
+    "Send to verified addresses, or to anyone with Workers Paid and Email Sending"
+  ],
+  "alternativeTo": ["Roundcube"],
   "repo": "cloudflare/agentic-inbox",
   "license": "Apache-2.0",
   "categories": ["email", "ai"],
   // Upstream has not moved since the released pin, so the Access protection
   // below (revision 2), the edited help text (revision 3) and the formatting of
   // URLs in the notes (revision 4) are revisions of that build.
-  "revision": 4,
+  // Features and alternatives (revision 5).
+  "revision": 5,
   "authors": [
     { "name": "Cloudflare", "url": "https://www.cloudflare.com", "github": "cloudflare" }
   ],
