@@ -21,7 +21,7 @@
   "revision": 3,
   "authors": [{ "name": "chthollyphile", "github": "chthollyphile" }],
   "maintainers": ["MendyLanda"],
-  "source": { "ref": "v0.7.13", "sha": "74f77594799d5b97fd872c340f143459943525d7" },
+  "source": { "ref": "v0.7.15", "sha": "537fa57bbf2e1bc4958fb1614fbe6277851fef9c" },
   "install": {
     "packageManager": "npm",
     // The config at the root is the one upstream's Deploy button reads: the
