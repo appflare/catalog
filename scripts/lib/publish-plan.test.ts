@@ -155,6 +155,23 @@ describe("decide", () => {
     expect((await plan(hello, retagged)).action).toBe("skip");
   });
 
+  it("skips an edit to features or alternativeTo alone", async () => {
+    const released = releasedWith("hello@1.2.3", {
+      ...hello,
+      features: ["Shorten links", "Count clicks", "Use your own domain"],
+    });
+    const edited = {
+      ...hello,
+      features: ["Shorten links on your own domain", "Count clicks", "Share QR codes"],
+      alternativeTo: ["Bitly"],
+    };
+    expect(await plan(edited, released)).toEqual({
+      slug: "hello",
+      tag: "hello@1.2.3",
+      action: "skip",
+    });
+  });
+
   it("still fails when a tagline changes together with a field the artifact carries", async () => {
     const releases = releasedWith("hello@1.2.3", { ...hello, summary: "Old summary." });
     const decision = await plan({ ...hello, tagline: "Short links on your own domain" }, releases);

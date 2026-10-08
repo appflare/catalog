@@ -57,10 +57,11 @@ consumers, crons and Durable Object migrations, plus the catalog manifest packed
 into it) for an artifact tier entry, from the catalog manifest's declarations
 for a sandbox or self-deploying one.
 
-Every row lists the entry's tagline, license, and licenseNote when it has one,
-from the current appflare.jsonc, and addedAt: the committer time of the oldest
-commit that added apps/<slug>/appflare.jsonc (the time of this build for an
-entry not committed yet). That needs the whole git history; in a shallow clone
+Every row lists the entry's tagline and license, and its licenseNote, features
+and alternativeTo when it has them, from the current appflare.jsonc, and
+addedAt: the committer time of the oldest commit that added
+apps/<slug>/appflare.jsonc (the time of this build for an entry not committed
+yet). That needs the whole git history; in a shallow clone
 the rows keep the addedAt of the previous index, with a warning (fatal with
 --releases-only).
 

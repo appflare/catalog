@@ -956,7 +956,7 @@ describe("rowFacts for an app of several Workers", () => {
   });
 });
 
-describe("license, tagline and addedAt", () => {
+describe("license, tagline, features and addedAt", () => {
   const noted = (): CatalogManifest => ({
     ...hello,
     license: "BUSL-1.1",
@@ -983,6 +983,46 @@ describe("license, tagline and addedAt", () => {
     expect(row?.license).toBe("MIT");
     expect(row?.tagline).toBe("A fixture for the catalog's tests");
     expect(row).not.toHaveProperty("licenseNote");
+  });
+
+  it("carries features and alternativeTo from the current catalog manifest", () => {
+    const listed = (): CatalogManifest => ({
+      ...hello,
+      features: ["Shorten links on your own domain", "Count clicks per link", "Share QR codes"],
+      alternativeTo: ["Bitly", "TinyURL"],
+    });
+    // The artifact's own catalog manifest lists neither; the row follows the current one.
+    writeLocal(artifactManifestFixture({ app: "hello", version: "1.2.3", sha: PIN }));
+    const [row] = buildIndexApps([listed()], options());
+    expect(row).toMatchObject({
+      features: ["Shorten links on your own domain", "Count clicks per link", "Share QR codes"],
+      alternativeTo: ["Bitly", "TinyURL"],
+    });
+    const [sandboxRow] = buildIndexApps([sandboxFixture(listed(), schema)], options());
+    expect(sandboxRow).toMatchObject({
+      features: ["Shorten links on your own domain", "Count clicks per link", "Share QR codes"],
+      alternativeTo: ["Bitly", "TinyURL"],
+    });
+    const index = finalizeIndex(
+      [row, sandboxRow].filter((r) => r !== undefined),
+      null,
+      new Date(),
+      schema.indexJson,
+    );
+    expect(index.apps.map((app) => app.alternativeTo)).toEqual([
+      ["Bitly", "TinyURL"],
+      ["Bitly", "TinyURL"],
+    ]);
+  });
+
+  it("writes no features or alternativeTo when the entry lists none", () => {
+    writeLocal(artifactManifestFixture({ app: "hello", version: "1.2.3", sha: PIN }));
+    const rows = buildIndexApps([hello, sandboxFixture(hello, schema)], options());
+    expect(rows).toHaveLength(2);
+    for (const row of rows) {
+      expect(row).not.toHaveProperty("features");
+      expect(row).not.toHaveProperty("alternativeTo");
+    }
   });
 
   it("writes addedAt from the first commit, else the time the index is built", () => {

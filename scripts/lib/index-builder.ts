@@ -38,7 +38,8 @@ import type { VersionResolver } from "./versions.ts";
 /**
  * Builds the catalog index. Every row lists the app's `authors` from the
  * current manifest, or the owner of its repository (`authors.ts`), its
- * `tagline`, `categories`, `license` (and `licenseNote` when it has one),
+ * `tagline` (and `features` and `alternativeTo` when it lists them, see
+ * `pageFacts`), `categories`, `license` (and `licenseNote` when it has one),
  * its `revision`, and the Cloudflare `services` it uses (see `rowFacts`), so a
  * manager can show them without reading a manifest, and `addedAt`, when the
  * entry first appeared in the catalog (`added-at.ts`). Otherwise rows depend
@@ -332,6 +333,7 @@ export function toIndexApp(
     name: manifest.name,
     summary: manifest.summary,
     tagline: manifest.tagline,
+    ...pageFacts(manifest),
     ...addedAtOf(manifest, options),
     version: artifact.version,
     artifacts: artifactUrls(options.repo, manifest.slug, artifact.version, artifact.digest),
@@ -407,6 +409,21 @@ export function rowFacts(
   };
 }
 
+/**
+ * A row's `features` and `alternativeTo`, each only when the current catalog
+ * manifest lists it. Like `tagline`, both are index-only
+ * (`INDEX_ONLY_CATALOG_FIELDS` in `@appflare/schema`): the app's page reads
+ * them from the row, so an edit publishes with the next index and no release.
+ */
+export function pageFacts(
+  manifest: Pick<CatalogManifest, "features" | "alternativeTo">,
+): Pick<IndexApp, "features" | "alternativeTo"> {
+  return {
+    ...(manifest.features === undefined ? {} : { features: [...manifest.features] }),
+    ...(manifest.alternativeTo === undefined ? {} : { alternativeTo: [...manifest.alternativeTo] }),
+  };
+}
+
 /** A row's `addedAt`: the entry's first commit, else when the index is built. */
 function addedAtOf(
   manifest: CatalogManifest,
@@ -446,6 +463,7 @@ export function toSandboxIndexApp(
     name: manifest.name,
     summary: manifest.summary,
     tagline: manifest.tagline,
+    ...pageFacts(manifest),
     ...addedAtOf(manifest, options),
     version,
     tier: manifest.install.tier,
