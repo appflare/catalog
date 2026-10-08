@@ -4,12 +4,20 @@
   "name": "Workers Firecrawl",
   "summary": "A Firecrawl-compatible search, scrape and map API on Browser Rendering: point the Firecrawl SDKs at your own Worker and get pages as Markdown, HTML, links or screenshots.",
   "tagline": "Search the web and turn pages into readable text",
+  "features": [
+    "Search the web and retrieve the content of matching pages",
+    "Convert individual web pages to Markdown or HTML",
+    "Find a site's page links using its pages and sitemap",
+    "Capture screenshots of the visible area or the full page",
+    "Connect existing Firecrawl apps to your own service"
+  ],
+  "alternativeTo": ["Firecrawl"],
   "repo": "G4brym/workers-firecrawl",
   "license": "MIT",
   "categories": ["developer-tools", "ai"],
   // The formatting of URLs in the notes changed after this release was published:
   // a revision, no new build.
-  "revision": 2,
+  "revision": 3,
   "authors": [
     { "name": "Gabriel Massadas", "url": "https://massadas.com", "github": "G4brym", "x": "G4brym" }
   ],

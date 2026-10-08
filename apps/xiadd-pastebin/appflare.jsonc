@@ -7,11 +7,20 @@
   "name": "PasteShare",
   "summary": "A pastebin with syntax highlighting, Markdown, password-protected pastes, expiry times and file uploads up to 25 MB, on D1 and R2, with a JSON API.",
   "tagline": "Share text and files with links that can expire or use a password",
+  "features": [
+    "Share text and code snippets with a short link",
+    "Upload and share files up to 25 MB",
+    "Require a password to open a paste",
+    "Set paste expiry times from one minute to one month",
+    "Highlight code in languages such as Python, JavaScript and Go",
+    "Share text and files from scripts through an API"
+  ],
+  "alternativeTo": ["Pastebin"],
   "homepage": "https://as.al",
   "repo": "xiadd/pastebin-worker",
   "license": "MIT",
   "categories": ["sharing", "developer-tools"],
-  "revision": 2,
+  "revision": 3,
   "authors": [{ "name": "xiadd", "github": "xiadd" }],
   "maintainers": ["MendyLanda"],
   // Upstream publishes no release tags; the pin tracks main.

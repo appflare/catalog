@@ -10,11 +10,16 @@
   "name": "AndroMeld TURN Relay",
   "summary": "Your own TURN relay for AndroMeld: when your phone, Mac and browser cannot connect directly, they relay their encrypted traffic through Cloudflare Realtime TURN in your account.",
   "tagline": "Keep AndroMeld connected when a direct connection fails",
+  "features": [
+    "Connect your phone, Mac and browser across restrictive networks",
+    "Keep relayed traffic end-to-end encrypted",
+    "Get an AndroMeld relay URL using your Cloudflare Realtime TURN key"
+  ],
   "repo": "heruoxin/webrtc_turn",
   "license": "GPL-3.0-or-later",
   "categories": ["networking", "sync"],
   // Field links added after this release was published: a revision, no new build.
-  "revision": 2,
+  "revision": 3,
   "authors": [{ "name": "little_cup", "url": "https://www.1ittlecup.com", "github": "heruoxin" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no tags; the pin follows the default branch.
