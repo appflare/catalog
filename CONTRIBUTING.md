@@ -101,20 +101,23 @@ not say what matters; managers mark an app with a note as source-available.
    characters with no trailing period, such as `"Short links on your own domain"`.
    Managers show it under the app's name on catalog tiles, so write it in plain
    words for someone who is not a developer: what they get, not how it is built.
-   Changing it on a released entry needs no new pin and no revision.
+   Changing it on a released entry needs no new pin and no revision, unless the entry
+   already has a published revision, which then needs the next one (see "Revisions").
 6. Optionally, add `features`: three to six lines on what the app does for the
    person using it, shown on the app's page on appflare.dev. Write them like the
    tagline: plain words, at most 100 characters each, no trailing period, and no
    line twice, such as `"See how many people opened each link"`. Say what
    someone can do with the app, not what it is built with. Changing them on a
-   released entry needs no new pin and no revision.
+   released entry needs no new pin and no revision, unless the entry
+   already has a published revision, which then needs the next one (see "Revisions").
 7. Optionally, add `alternativeTo`: one to five names of well-known products the
    app can replace, such as `["Bitly"]`, shown on the app's page on appflare.dev.
    Each is a product's name, not its address, at most 40 characters, with no name
    repeated. List only products the app really replaces, preferably ones the
    upstream project names itself, and never a product it only integrates with or
    imports from. Leave it out when there is no honest candidate. Changing it on a
-   released entry needs no new pin and no revision.
+   released entry needs no new pin and no revision, unless the entry
+   already has a published revision, which then needs the next one (see "Revisions").
 8. Pick one to three `categories`, the most specific that fit, from this list (the
    manager's label follows each id): `ai` AI, `analytics` Analytics, `bots` Bots,
    `business` Business, `chat` Chat, `cms` Websites and blogs, `community`
