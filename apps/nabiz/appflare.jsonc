@@ -7,11 +7,20 @@
   "name": "nabiz",
   "summary": "A status page that probes your services every minute from Cloudflare's edge, with 90-day uptime bars, operator notices, and Telegram or webhook alerts.",
   "tagline": "A status page that checks your services every minute",
+  "features": [
+    "Check website responses against expected status codes or text",
+    "Show visitors 90 days of uptime history",
+    "View response times in a latency chart",
+    "Publish notices about outages or maintenance",
+    "Receive Telegram or webhook alerts when services go down or recover",
+    "Share service status through an RSS feed or badge"
+  ],
+  "alternativeTo": ["Uptime Kuma"],
   "repo": "productdevbook/nabiz",
   "license": "MIT",
   "categories": ["monitoring", "utilities"],
   // Field links added after this release was published: a revision, no new build.
-  "revision": 2,
+  "revision": 3,
   "authors": [
     {
       "name": "Wind",

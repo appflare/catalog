@@ -7,11 +7,17 @@
   "name": "MPP Payment-Gated Proxy",
   "summary": "Put paid access in front of selected website paths. The reverse proxy verifies Machine Payments Protocol payments on Tempo, forwards requests to your origin, and grants one hour of access through a cookie.",
   "tagline": "Require payments to access selected parts of your website",
+  "features": [
+    "Set a price for each website path or section",
+    "Accept stablecoin payments on Tempo before granting access",
+    "Let paying visitors return for one hour without paying again",
+    "Keep unprotected pages accessible without payment"
+  ],
   "repo": "cloudflare/mpp-proxy",
   "license": "Apache-2.0",
   "categories": ["finance", "developer-tools"],
   // Help text edited after this release was published: a revision, no new build.
-  "revision": 3,
+  "revision": 4,
   "authors": [
     {
       "name": "Cloudflare",

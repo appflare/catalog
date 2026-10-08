@@ -8,6 +8,14 @@
   "name": "EdgeChat",
   "summary": "Team chat on Cloudflare: public and private groups, direct messages, realtime delivery, voice messages, messages and files encrypted at rest, a Telegram bridge and an admin dashboard.",
   "tagline": "Private team chat with groups, direct messages and file sharing",
+  "features": [
+    "Create public or private groups for your team",
+    "Send direct messages, voice recordings and files",
+    "Invite users and manage access from an admin dashboard",
+    "Automatically delete older messages and their attachments",
+    "Bridge a group to Telegram through a bot you configure"
+  ],
+  "alternativeTo": ["Rocket.Chat", "Mattermost"],
   "homepage": "https://echat.azora.top",
   "repo": "aozorae/Edgechat",
   "license": "GPL-3.0-or-later",

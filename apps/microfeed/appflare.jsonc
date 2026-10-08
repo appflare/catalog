@@ -11,12 +11,21 @@
   "name": "microfeed",
   "summary": "A lightweight CMS for audio, video, photos, documents, blog posts and links, published as a website, RSS and JSON feed, with an admin dashboard and an API for agents.",
   "tagline": "Publish podcasts, photos, videos and posts on your own site",
+  "features": [
+    "Publish articles, audio, video, photos, documents and links",
+    "Let readers subscribe to your posts and podcasts by RSS",
+    "Edit posts and upload media from a web dashboard",
+    "Preview theme changes before publishing them",
+    "Add podcast transcripts, chapters, hosts and guests",
+    "Choose search titles, descriptions and social preview images"
+  ],
+  "alternativeTo": ["WordPress"],
   "homepage": "https://www.microfeed.org",
   "repo": "microfeed/microfeed",
   "license": "AGPL-3.0-only",
   "categories": ["cms", "media"],
   // openPath added after this release was published: a revision, no new build.
-  "revision": 3,
+  "revision": 4,
   "authors": [
     { "name": "Listen Notes", "url": "https://www.listennotes.com", "github": "ListenNotes" }
   ],

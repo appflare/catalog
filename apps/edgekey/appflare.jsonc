@@ -7,13 +7,22 @@
   "name": "EdgeKey",
   "summary": "A shop for digital goods: sell card keys and codes, take payment through USDT, Epay, Alipay or Stripe, and deliver each order automatically by page and email.",
   "tagline": "Sell digital codes and deliver them automatically after payment",
+  "features": [
+    "Import digital codes in bulk and track stock levels",
+    "Deliver purchased codes automatically after payment",
+    "Organize products into categories and set purchase limits",
+    "Accept payments with a configured BEpusdt or Epay gateway",
+    "Review orders and resend deliveries manually",
+    "Send delivery emails through an email provider you configure"
+  ],
   "homepage": "https://shop.v50.app",
   "repo": "34892002/edgeKey",
   "license": "MIT",
   "categories": ["business", "ecommerce"],
   // openPath and field links added after this release was published: a revision,
   // no new build.
-  "revision": 3,
+  // Features (revision 4), no new build.
+  "revision": 4,
   "authors": [{ "name": "ggyy", "github": "34892002" }],
   "maintainers": ["MendyLanda"],
   // No release tags upstream; the pin tracks main.

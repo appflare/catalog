@@ -4,13 +4,23 @@
   "name": "Punctual",
   "summary": "Scheduling links for you and your team, a Calendly alternative: booking pages, Google and Microsoft 365 calendar sync, round-robin and collective events, reminders, and webhooks.",
   "tagline": "Let people book time with you or your team",
+  "features": [
+    "Share a booking page for each meeting type",
+    "Connect Google Calendar or Microsoft 365 with your own calendar app credentials",
+    "Rotate meetings among teammates or book several hosts together",
+    "Let guests choose times in their own time zone",
+    "Send confirmations and reminders through your Resend or Brevo account",
+    "Let guests reschedule or cancel through links in their booking emails"
+  ],
+  "alternativeTo": ["Calendly"],
   "homepage": "https://punctual.sh",
   "repo": "CCCrafts/punctual",
   "license": "MIT",
   "categories": ["business", "scheduling"],
   // openPath and field links added after this release was published: a revision,
   // no new build.
-  "revision": 3,
+  // Features and alternatives (revision 4).
+  "revision": 4,
   "authors": [
     { "name": "Sergey Bulaev" },
     {

@@ -4,13 +4,23 @@
   "name": "CattoPic",
   "summary": "A self-hosted image host: upload, tag, and browse images, with WebP and AVIF copies, expiry, and a public random-image API, on R2, D1, KV, Queues, and Cloudflare Images.",
   "tagline": "Upload and organize images on your own image host",
+  "features": [
+    "Upload JPEG, PNG, GIF, WebP and AVIF images",
+    "Edit tags on several images at once",
+    "Create WebP and AVIF copies of supported images up to 20 MB",
+    "Set expiry dates to remove images automatically",
+    "Serve a random image filtered by tags or orientation",
+    "Upload multiple images from a ZIP file"
+  ],
+  "alternativeTo": ["ImgBB"],
   "repo": "Yuri-NagaSaki/CattoPic",
   // The LICENSE file is the GNU GPL version 3 with no "or any later version" grant.
   "license": "GPL-3.0-only",
   "categories": ["files"],
   // The category changed in revision 2, which this release was built with. Field
   // links added after it was published: a revision, no new build.
-  "revision": 3,
+  // Features and alternatives (revision 4).
+  "revision": 4,
   "authors": [{ "name": "Firefly", "url": "https://catcat.blog", "github": "Yuri-NagaSaki" }],
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v1.0.0", "sha": "7861a5477016717f05e53ea32fe63f5fd74739ca" },

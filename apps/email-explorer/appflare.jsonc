@@ -4,6 +4,15 @@
   "name": "Email Explorer",
   "summary": "A self-hosted email client: receive mail through Email Routing, read and write it in a web app with folders, search, contacts and several users, with each mailbox in its own Durable Object and attachments in R2.",
   "tagline": "Read and send email from your own domain",
+  "features": [
+    "Receive mail for every address on your domain",
+    "Write emails with formatted text, links and lists",
+    "Send to verified addresses, or enable Email Sending to reach other recipients",
+    "Organize mail in custom folders and search across mailboxes",
+    "View and download attachments in your browser",
+    "Give each user read or write access to selected mailboxes"
+  ],
+  "alternativeTo": ["Roundcube"],
   "repo": "G4brym/email-explorer",
   "license": "MIT",
   "categories": ["email"],

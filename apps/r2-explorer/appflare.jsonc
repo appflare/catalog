@@ -4,6 +4,12 @@
   "name": "R2 Explorer",
   "summary": "Browse folders, preview files and download objects from an R2 bucket through a read-only web interface.",
   "tagline": "Browse and preview files in your Cloudflare storage",
+  "features": [
+    "Browse the folders and files in your storage bucket",
+    "Preview images and PDF documents in your browser",
+    "Read text, Markdown and CSV files without downloading them",
+    "Download stored files to your device"
+  ],
   "homepage": "https://r2explorer.com",
   "repo": "cloudflare/templates",
   // The template pins r2-explorer 1.1.10. Its upstream README links back to this
@@ -14,7 +20,8 @@
   // The category changed after this release was published, and the Access
   // protection below came later still: revisions, no new build (the template is
   // unchanged in the repository's newer tags).
-  "revision": 4,
+  // Features (revision 5).
+  "revision": 5,
   "authors": [
     {
       "name": "Gabriel Massadas",

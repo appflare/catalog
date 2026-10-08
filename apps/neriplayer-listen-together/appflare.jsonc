@@ -9,6 +9,13 @@
   "name": "NeriPlayer Listen Together",
   "summary": "Your own listen-together server for the NeriPlayer Android app: create a room, share the invite, and everyone's playback, queue and track changes stay in sync.",
   "tagline": "Keep music playback in sync while listening with friends",
+  "features": [
+    "Create listening rooms in the NeriPlayer Android app",
+    "Invite friends with a room link",
+    "Keep playback, song changes and the queue synchronized",
+    "Let listeners control playback when the host allows it",
+    "Choose automatic pauses when people join or leave"
+  ],
   "repo": "TheSmallHanCat/NeriPlayer-LTW",
   // The pinned README identifies NeriPlayer as the main project:
   // https://github.com/TheSmallHanCat/NeriPlayer-LTW/blob/d83f9e2f6b12d0f020fd23145ace10c71e3de777/README.md
@@ -20,7 +27,7 @@
   "categories": ["media", "sync"],
   // The formatting of URLs in the notes changed after this release was published:
   // a revision, no new build.
-  "revision": 3,
+  "revision": 4,
   "authors": [{ "name": "TheSmallHanCat", "github": "TheSmallHanCat" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no tags; the pin follows the default branch.

@@ -4,6 +4,15 @@
   "name": "Minvoice",
   "summary": "Invoicing for one business: invoices with PDF attachments, pay links through Stripe and PayPal, payment reminders, reports and CSV export, on D1.",
   "tagline": "Create invoices with pay links and payment reminders",
+  "features": [
+    "Create itemized invoices with payment terms for each client",
+    "Give clients printable invoices and downloadable PDFs",
+    "Accept payments through your Stripe or PayPal account",
+    "Email PDF invoices through your Resend account",
+    "Send overdue payment reminders through Resend",
+    "Review monthly reports and export records as CSV"
+  ],
+  "alternativeTo": ["Invoice Ninja"],
   "homepage": "https://minvoice.dev",
   "repo": "ddyy/minvoice",
   "license": "MIT",
@@ -11,7 +20,8 @@
   // Upstream has not moved since the released pin, so the public paths below
   // (revision 2), the generated admin password (revision 3) and the field links
   // (revision 4) are revisions of that build.
-  "revision": 4,
+  // Features and alternatives (revision 5).
+  "revision": 5,
   "authors": [{ "name": "Daniel Yang", "url": "https://daniel-yang.com", "github": "ddyy" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags; the pin tracks the default branch, main.

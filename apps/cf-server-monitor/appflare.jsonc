@@ -8,12 +8,22 @@
   "name": "CF Server Monitor",
   "summary": "Monitor your servers from a Worker: live CPU, memory, disk, traffic and latency from a small agent on each machine, with history, a map, offline and threshold alerts, and expiry reminders.",
   "tagline": "Track your servers live and get alerts when they need attention",
+  "features": [
+    "See live CPU, memory, disk and traffic from an agent on each server",
+    "Review historical charts and monthly traffic totals",
+    "Track network latency and packet loss",
+    "Get alerts when a server goes offline or exceeds a resource limit",
+    "Receive reminders before your servers expire",
+    "View your servers on a map"
+  ],
+  "alternativeTo": ["Netdata"],
   "homepage": "https://demo.huilang.me",
   "repo": "huilang-me/CF-Server-Monitor",
   "license": "MIT",
   "categories": ["monitoring", "developer-tools"],
   // Help text edited after this release was published: a revision, no new build.
-  "revision": 3,
+  // Features and alternatives (revision 4).
+  "revision": 4,
   "authors": [{ "name": "huilang-me", "github": "huilang-me" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags, so the entry follows the default branch by commit.

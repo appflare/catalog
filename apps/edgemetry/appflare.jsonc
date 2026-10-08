@@ -8,6 +8,15 @@
   "name": "Edgemetry",
   "summary": "Privacy-friendly web analytics you run yourself: a 2 KB tracking script, no cookies, stackable filters, realtime views, custom events and several sites and users, on one Worker and D1.",
   "tagline": "See your website traffic without cookies",
+  "features": [
+    "Track visitors, pageviews, bounce rate and time on site",
+    "See which pages people are reading right now",
+    "Break down traffic by referrer, country, device and campaign",
+    "Combine filters to narrow every dashboard panel at once",
+    "Track custom events such as signups",
+    "Track several websites with separate viewer access"
+  ],
+  "alternativeTo": ["Google Analytics", "Plausible"],
   "repo": "hayaran/Edgemetry",
   "license": "MIT",
   "categories": ["analytics"],

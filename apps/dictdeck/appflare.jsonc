@@ -10,13 +10,21 @@
   "name": "DictDeck",
   "summary": "A self-hosted Japanese dictionary, translator and flashcard deck: several dictionary sources, AI explanations on Workers AI or your own LLM provider, saved words and review cards, a Telegram bot and an MCP server.",
   "tagline": "Look up Japanese words, translate them, and review flashcards",
+  "features": [
+    "Look up words across several dictionaries",
+    "Translate text between languages",
+    "Get AI word explanations with Workers AI or your chosen AI provider",
+    "Save vocabulary and review it as flashcards",
+    "Look up words through a Telegram bot you configure"
+  ],
   "repo": "Asutorufa/hujiang_dictionary",
   // The repository has no licence file.
   "license": "NONE",
   "categories": ["education", "ai"],
   // The formatting of URLs in the notes changed after this release was published:
   // a revision, no new build.
-  "revision": 2,
+  // Features (revision 3), no new build.
+  "revision": 3,
   "authors": [{ "name": "Asutorufa", "github": "Asutorufa", "x": "Asutorufa" }],
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v0.20.0", "sha": "2a9759e0504c99d7d2da4b622c1ec29507fac096" },

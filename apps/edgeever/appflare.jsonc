@@ -4,13 +4,23 @@
   "name": "EdgeEver",
   "summary": "An Evernote-style notes and knowledge base with a three-pane layout, full-text search, public note sharing, AI features and a built-in MCP server, on D1 and R2.",
   "tagline": "Notes you can organize, search, and share from your own account",
+  "features": [
+    "Write notes in rich text or Markdown",
+    "Organize notes in nested notebooks and tags",
+    "Share notes publicly with password protection",
+    "Restore earlier versions of a note",
+    "Export notes and attachments as a ZIP archive",
+    "Summarize or translate notes with your own AI provider"
+  ],
+  "alternativeTo": ["Evernote"],
   "homepage": "https://edgeever.org",
   "repo": "tianma-if/edgeever",
   "license": "AGPL-3.0-only",
   "categories": ["notes", "productivity"],
   // Generated secrets (revision 2) and edited help text (revision 3) came after
   // this release was published: revisions, no new build.
-  "revision": 3,
+  // Features and alternatives (revision 4), no new build.
+  "revision": 4,
   "authors": [{ "name": "tianma-if", "github": "tianma-if", "x": "tianma_if" }],
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v1.101.0", "sha": "00de9ce741b830743f5afe9e916f83d73379b1ca" },
