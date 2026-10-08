@@ -8,13 +8,22 @@
   "name": "blobatar API",
   "summary": "Your own avatar endpoint: GET /avatar/<name> returns a deterministic geometric blobatar SVG for any username, email or id, with Gravatar-compatible URLs.",
   "tagline": "Generate an avatar for any name or email address",
+  "features": [
+    "Get the same avatar every time for the same username, email or ID",
+    "Embed avatars in your website with an image URL",
+    "Choose the avatar size, colors, background and expression",
+    "Reuse Gravatar-style URLs by changing the host",
+    "Keep the original avatar style with a generation setting"
+  ],
+  "alternativeTo": ["Gravatar"],
   "homepage": "https://blobatar.dev",
   "repo": "Alain00/blobatar",
   "license": "MIT",
   "categories": ["developer-tools", "utilities"],
   // The formatting of URLs in the notes changed after this release was published:
   // a revision, no new build.
-  "revision": 2,
+  // Features and alternatives (revision 3).
+  "revision": 3,
   "authors": [{ "name": "Alain", "url": "https://blobatar.dev", "github": "Alain00" }],
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v2.7.0", "sha": "ebb7ea4808b1263629fc8fa65e2398b9cbdb6f6b" },

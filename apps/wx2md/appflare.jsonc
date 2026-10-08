@@ -4,6 +4,12 @@
   "name": "wx2md",
   "summary": "Turns WeChat Official Account articles, and any other web page, into clean Markdown or a readable HTML view: swap the article link's host for your Worker's, on Workers AI Markdown conversion.",
   "tagline": "Turn WeChat articles and web pages into Markdown",
+  "features": [
+    "Convert a WeChat article by changing its link to your own address",
+    "Download converted articles as Markdown files",
+    "Read converted articles in an HTML view",
+    "Convert other web pages by providing their address"
+  ],
   "homepage": "https://mp.084817.xyz",
   "repo": "loadchange/wx2md-worker",
   "license": "MIT",
@@ -11,7 +17,8 @@
   // Edited help text (revision 2), field links (revision 3) and the formatting of
   // URLs in the notes (revision 4) came after this release was published:
   // revisions, no new build.
-  "revision": 5,
+  // Added features (revision 6), no new build.
+  "revision": 6,
   "authors": [{ "name": "Asa", "github": "loadchange" }],
   "maintainers": ["MendyLanda"],
   // Upstream publishes no tags; the pin is the head of main.

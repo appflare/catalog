@@ -8,11 +8,19 @@
   "name": "dgit",
   "summary": "A git host on Durable Objects: push and clone over HTTPS with a stock git client and browse with a cgit-style web interface, one Durable Object per repository.",
   "tagline": "Host and browse your own code repositories",
+  "features": [
+    "Push and clone repositories with your usual Git client",
+    "Browse files, commit history and changes in your browser",
+    "See who last changed each line of a file",
+    "Keep private repositories behind a shared access token",
+    "Download a repository snapshot as a ZIP or tar.gz file"
+  ],
+  "alternativeTo": ["cgit"],
   "homepage": "https://git.littledivy.com",
   "repo": "littledivy/durable-git",
   "license": "MIT",
   "categories": ["developer-tools"],
-  "revision": 2,
+  "revision": 3,
   "authors": [
     { "name": "Divy Srivastava", "url": "https://littledivy.com", "github": "littledivy" }
   ],

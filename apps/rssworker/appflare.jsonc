@@ -4,12 +4,20 @@
   "name": "RSSWorker",
   "summary": "A small RSS feed generator: RSS and Atom feeds for Bilibili dynamics and videos, Telegram channels, Weibo users and Xiaohongshu users, one URL per feed.",
   "tagline": "RSS feeds for Bilibili, Telegram, Weibo and Xiaohongshu updates",
+  "features": [
+    "Follow Bilibili user updates and videos in your feed reader",
+    "Read Telegram channel posts as RSS feeds",
+    "Follow Weibo users with a cookie from your signed-in Weibo account",
+    "Generate feeds for Xiaohongshu users using their profile IDs"
+  ],
+  "alternativeTo": ["RSS.app"],
   "repo": "yllhwa/RSSWorker",
   "license": "MIT",
   "categories": ["utilities"],
   // Field links (revision 2) and the formatting of URLs in the notes (revision 3)
   // came after this release was published: revisions, no new build.
-  "revision": 3,
+  // Added features and alternatives (revision 4).
+  "revision": 4,
   "authors": [{ "name": "hwa", "url": "https://blog.yllhwa.com", "github": "yllhwa" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags; the pin is the head of main.

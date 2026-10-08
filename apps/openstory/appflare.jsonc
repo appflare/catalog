@@ -4,13 +4,20 @@
   "name": "OpenStory",
   "summary": "Turn scripts into storyboards and videos with scene breakdowns, consistent characters, locations and styles, AI-generated frames, motion, voices and music, shared team libraries and an MCP server. Bring your own AI provider keys.",
   "tagline": "Turn scripts into videos with consistent characters and scenes",
+  "features": [
+    "Break scripts into scenes using your OpenRouter key",
+    "Generate scene images using your fal.ai key",
+    "Animate still frames using your fal.ai key",
+    "Keep characters, locations and lighting consistent across scenes"
+  ],
   "homepage": "https://openstory.so",
   "repo": "openstory-so/openstory",
   "license": "MIT",
   "categories": ["ai", "media"],
   // Edited help text (revision 2) and field links (revision 3) came after this
   // release was published: revisions, no new build.
-  "revision": 4,
+  // Features (revision 5).
+  "revision": 5,
   "authors": [
     {
       "name": "OpenStory",

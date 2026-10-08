@@ -118,6 +118,10 @@ export interface CatalogManifest {
   summary: string;
   /** One plain line for catalog tiles. */
   tagline: string;
+  /** What the app does for the person, 3 to 6 short lines for its page. */
+  features?: string[];
+  /** Well-known products the app can replace, for its page. */
+  alternativeTo?: string[];
   /** The app's home page; the repository's GitHub page when omitted. */
   homepage?: string;
   repo: string;
@@ -407,6 +411,10 @@ export interface IndexApp {
   summary: string;
   /** The catalog manifest's `tagline`. */
   tagline: string;
+  /** The catalog manifest's `features`; omitted when it has none. */
+  features?: string[];
+  /** The catalog manifest's `alternativeTo`; omitted when it has none. */
+  alternativeTo?: string[];
   /**
    * When the entry first appeared in the catalog: the committer time of the
    * commit that added its `appflare.jsonc` (see `added-at.ts`).

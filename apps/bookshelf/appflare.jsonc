@@ -8,13 +8,22 @@
   "name": "Bookshelf",
   "summary": "A library for the ebooks you own: read EPUBs and PDFs in the browser or on a Kobo over OPDS, served from your own R2 bucket.",
   "tagline": "Read your ebooks in a library you host yourself",
+  "features": [
+    "Read EPUB and PDF books in your browser",
+    "Search your book collection on a shelf with covers",
+    "Keep a separate reading position for each reader",
+    "Resume a book on another device when read only is off",
+    "Download books to e-readers through OPDS when access protection is off"
+  ],
+  "alternativeTo": ["Calibre-Web"],
   "repo": "murerkinn/bookshelf",
   "license": "MIT",
   "categories": ["files", "productivity"],
   // Upstream has not moved since the released pin, so the Access protection
   // below (revision 2) and the formatting of URLs in the notes (revision 3) are
   // revisions of that build.
-  "revision": 4,
+  // Features and alternatives (revision 5).
+  "revision": 5,
   "authors": [
     {
       "name": "Murat Erkin Cicek",

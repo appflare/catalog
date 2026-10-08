@@ -7,13 +7,23 @@
   "name": "Reminal",
   "summary": "Your own relay for reminal: reach the terminals, app windows and desktops of your machines from any browser, end-to-end encrypted, with nothing listening on the machines.",
   "tagline": "Reach your computers' windows and terminals from any browser",
+  "features": [
+    "Use your computer's terminal from a phone or browser after installing its computer client",
+    "Control individual app windows or the full desktop remotely",
+    "Share a live session with someone using a session ID and PIN",
+    "Transfer files between computers with a one-time code",
+    "Share a local web app through a PIN-protected public link",
+    "Keep terminal and window sessions encrypted from computer to browser"
+  ],
+  "alternativeTo": ["ngrok", "TeamViewer"],
   "homepage": "https://reminal.app",
   "repo": "harshalgajjar/Reminal",
   "license": "AGPL-3.0-or-later",
   "categories": ["remote-access", "developer-tools"],
   // The formatting of URLs in the notes changed after this release was published:
   // a revision, no new build.
-  "revision": 2,
+  // Added features and alternatives (revision 3).
+  "revision": 3,
   "authors": [{ "name": "Harshal Gajjar", "github": "harshalgajjar" }],
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v3.16.2", "sha": "5146a9203483038f829f2765f013f7eaa7cc6018" },

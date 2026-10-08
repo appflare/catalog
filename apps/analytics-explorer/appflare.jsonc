@@ -12,13 +12,23 @@
   "name": "Cloudflare Analytics Explorer",
   "summary": "Build dashboards over your Workers Analytics Engine datasets: line, bar, area and pie charts, tables and stat cards from SQL queries, with filters and drag-and-drop layouts.",
   "tagline": "Build charts and dashboards from your Workers analytics data",
+  "features": [
+    "Turn Analytics Engine queries into charts, tables and number cards",
+    "Arrange several dashboards by dragging tiles into place",
+    "Filter dashboards by time range, text or a dropdown choice",
+    "Give dataset columns readable names",
+    "Explore several Analytics Engine datasets",
+    "Keep dashboards and data sources saved in your current browser"
+  ],
+  "alternativeTo": ["Grafana"],
   "homepage": "https://cloudflare-analytics-explorer.formatsapp.workers.dev",
   "repo": "rohanprasadofficial/visual-ae-cloudflare",
   // GitHub renamed the same project; keep the released build source unchanged.
   "upstreamRepo": "rohanprasadofficial/cloudflare-analytics-explorer",
   "license": "MIT",
   "categories": ["analytics", "developer-tools"],
-  "revision": 2,
+  // Features and alternatives (revision 3).
+  "revision": 3,
   "authors": [
     {
       "name": "Rohan Prasad",

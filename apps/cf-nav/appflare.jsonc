@@ -6,6 +6,14 @@
   "name": "cf-nav",
   "summary": "A card-style start page: your links in categories with a search box, public and private links, drag-and-drop ordering, and JSON export and import, stored in KV.",
   "tagline": "Organize your favorite links on a searchable start page",
+  "features": [
+    "Group saved links into categories",
+    "Keep selected links private behind the admin sign-in",
+    "Search the web with Baidu, Bing, Google or DuckDuckGo",
+    "Back up and restore your links with JSON export and import",
+    "Fill in link names and descriptions with an optional OpenAI API key"
+  ],
+  "alternativeTo": ["start.me"],
   "repo": "djkyc/cf-nav",
   "homepage": "https://cf-nav2.djcf.workers.dev/",
   // The repository has no LICENSE file and declares no licence anywhere, so
@@ -14,7 +22,8 @@
   "categories": ["productivity", "utilities"],
   // Edited help text (revision 2) and field links (revision 3) came after this
   // release was published: revisions, no new build.
-  "revision": 4,
+  // Features and alternatives (revision 5).
+  "revision": 5,
   "authors": [{ "name": "Diana Sari", "github": "djkyc" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags; the pin is the head of main.

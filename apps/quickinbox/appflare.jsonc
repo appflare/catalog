@@ -8,13 +8,22 @@
   "name": "Quickinbox",
   "summary": "Email for your own domain: a web mail client with threads, attachments, several users and domains, plus a REST API, CLI and MCP server.",
   "tagline": "Email for your own domain, with a web inbox you control",
+  "features": [
+    "Send and receive domain email through Resend or Cloudflare Email Service",
+    "Keep replies together in conversations",
+    "Send and receive file attachments",
+    "Give users their own addresses across multiple domains",
+    "Let AI assistants read and send mail with your approval"
+  ],
+  "alternativeTo": ["Gmail", "Outlook"],
   "homepage": "https://quickmail.divinprince.com",
   "repo": "DivinPrince/quickinbox",
   "license": "MIT",
   "categories": ["email"],
   // Generated secrets (revision 2) and field links (revision 3) came after this
   // release was published: revisions, no new build.
-  "revision": 3,
+  // Features and alternatives (revision 4).
+  "revision": 4,
   "authors": [
     { "name": "Irasubiza Divin Prince", "url": "https://divinprince.com", "github": "DivinPrince" }
   ],

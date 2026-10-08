@@ -7,13 +7,23 @@
   "name": "Garrul",
   "summary": "Self-hosted comments for static sites and blogs: an embeddable widget with threads, reactions and votes, OAuth or anonymous posting behind Turnstile, a moderation queue, and reply emails.",
   "tagline": "Comments and reactions for your website, hosted in your account",
+  "features": [
+    "Add threaded discussions with Markdown formatting to your pages",
+    "Let readers react to comments and vote",
+    "Allow signed-in readers or anonymous visitors to comment",
+    "Review flagged comments and manage users in a moderation panel",
+    "Send email digests of replies with a Resend API key",
+    "Download your site's comments and users as JSON or CSV"
+  ],
+  "alternativeTo": ["Disqus", "Commento", "Giscus"],
   "homepage": "https://garrul.com",
   "repo": "KingPin/Garrul",
   "license": "Apache-2.0",
   "categories": ["community"],
   // openPath and field links added after this release was published: a revision,
   // no new build.
-  "revision": 2,
+  // Features and alternatives (revision 3).
+  "revision": 3,
   "authors": [{ "name": "KingPin", "url": "https://sumguy.com", "github": "KingPin" }],
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v2.35.0", "sha": "3e89a3dcec87d3a9f268840c4b490dc9994fb602" },

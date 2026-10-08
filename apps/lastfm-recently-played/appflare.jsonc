@@ -4,12 +4,21 @@
   "name": "Last.fm Recently Played",
   "summary": "An SVG card of your recent Last.fm scrobbles for a GitHub profile README, with themes, artwork, stats and loved tracks, plus a configurator page to build the card's URL.",
   "tagline": "Show your recent music on your GitHub profile",
+  "features": [
+    "Create a music card using your Last.fm account and API key",
+    "Show up to ten recent tracks with album artwork",
+    "Highlight the song playing now and tracks you have loved",
+    "Choose themes, colors, card width and layout",
+    "Add listening totals and your profile picture",
+    "Copy a ready-to-use snippet from the card configurator"
+  ],
   "homepage": "https://lastfm-recently-played.jeffreyca.workers.dev",
   "repo": "JeffreyCA/lastfm-recently-played-readme",
   "license": "MIT",
   "categories": ["media", "utilities"],
   // Field links added after this release was published: a revision, no new build.
-  "revision": 3,
+  // Features (revision 4).
+  "revision": 4,
   "authors": [{ "name": "JeffreyCA", "github": "JeffreyCA" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags; the pin is the head of main.

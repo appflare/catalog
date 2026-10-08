@@ -4,13 +4,20 @@
   "name": "md.page",
   "summary": "Turn Markdown into a shareable web page with one request: an API, an MCP server for coding agents, and pages that expire after 24 hours, on Workers KV.",
   "tagline": "Turn your Markdown into a web page you can share",
+  "features": [
+    "Paste Markdown and publish without signing in",
+    "Share formatted pages with code blocks and tables",
+    "Publish pages from scripts or AI assistants",
+    "Have published pages delete themselves after 24 hours"
+  ],
+  "alternativeTo": ["Rentry"],
   "homepage": "https://md.page",
   "repo": "maypaz/md.page",
   "license": "MIT",
   "categories": ["sharing", "developer-tools"],
   // The formatting of URLs in the notes changed after this release was published:
   // a revision, no new build.
-  "revision": 3,
+  "revision": 4,
   "authors": [
     { "name": "Or May-Paz", "github": "maypaz" },
     { "name": "Matan Lachmish", "github": "mlachmish" }

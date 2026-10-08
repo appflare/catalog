@@ -10,12 +10,21 @@
   "name": "Counterscale",
   "summary": "Privacy-friendly web analytics you host yourself: a tracking script, a dashboard, and long-term rollups in R2, on Workers Analytics Engine.",
   "tagline": "Track website visits with a dashboard you host yourself",
+  "features": [
+    "See pageviews and referrers in your own analytics dashboard",
+    "Track multiple websites with a separate identifier for each",
+    "Measure traffic without cookies or browser fingerprinting",
+    "Keep daily traffic archives beyond the dashboard's 90-day history",
+    "Protect your analytics dashboard with a password"
+  ],
+  "alternativeTo": ["Google Analytics", "Plausible"],
   "homepage": "https://counterscale.dev",
   "repo": "benvinegar/counterscale",
   "license": "MIT",
   "categories": ["analytics"],
   // Generated secrets added after this release was published: a revision, no new build.
-  "revision": 2,
+  // Features and alternatives (revision 3).
+  "revision": 3,
   "authors": [
     { "name": "Ben Vinegar", "url": "https://benv.ca", "github": "benvinegar", "x": "bentlegen" }
   ],

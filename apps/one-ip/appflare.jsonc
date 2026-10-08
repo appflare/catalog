@@ -9,13 +9,23 @@
   "name": "One IP",
   "summary": "IP and network diagnostics: look up an address's location, ASN, reputation and risk, check your exit IP, DNS, CDN, WebRTC and browser fingerprint, and run a speed test.",
   "tagline": "Check your IP, network privacy, speed and online service status",
+  "features": [
+    "Look up an IP address's location, provider and risk flags",
+    "Check whether WebRTC exposes your IP address",
+    "Inspect your browser fingerprint and environment",
+    "Measure latency and packet loss from locations around the world",
+    "See AI service outages and whether you can reach them",
+    "Check DNS lookup paths and CDN responses"
+  ],
+  "alternativeTo": ["IPinfo", "BrowserLeaks"],
   "homepage": "https://ip.huzhihui.com",
   "repo": "zhihui-hu/one-ip",
   "license": "AGPL-3.0-only",
   "categories": ["networking", "utilities"],
   // Edited help text (revision 2) and field links (revision 3) came after this
   // release was published: revisions, no new build.
-  "revision": 3,
+  // features and alternatives (revision 4).
+  "revision": 4,
   "authors": [{ "name": "Hu Zhihui", "url": "https://huzhihui.com", "github": "zhihui-hu" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags, so the entry follows the default branch by commit.

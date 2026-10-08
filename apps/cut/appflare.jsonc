@@ -4,6 +4,14 @@
   "name": "Cut",
   "summary": "Self-hosted link shortener on Workers + KV.",
   "tagline": "Short links on your own domain",
+  "features": [
+    "Create and manage short links in a password-protected dashboard",
+    "See how many times each link has been opened",
+    "Require a password before visitors can open a link",
+    "Disable links after a chosen date and time",
+    "Set a maximum number of clicks for each link"
+  ],
+  "alternativeTo": ["Bitly", "TinyURL"],
   "repo": "MendyLanda/cut",
   "license": "MIT",
   "categories": ["utilities"],
@@ -48,5 +56,6 @@
   ],
   // The HOME_PAGE select came in revision 3, which this release was built with.
   // openPath added after it was published: a revision, no new build.
-  "revision": 4
+  // Features and alternatives (revision 5).
+  "revision": 5
 }

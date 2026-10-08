@@ -10,12 +10,18 @@
   "name": "Browser Relay Hub",
   "summary": "Your own relay for Browser Relay: let AI agents on other machines drive the Chrome you are signed in to, through a hub in your account instead of the hosted one.",
   "tagline": "Connect AI assistants on other devices to your signed-in Chrome",
+  "features": [
+    "Relay commands between remote AI assistants and your Chrome extension",
+    "Reach your browser without opening incoming network ports",
+    "Use a secret device ID to connect to the right browser"
+  ],
   "repo": "reliefeai/browser-relay",
   "license": "MIT",
   "categories": ["ai", "remote-access"],
   // The formatting of URLs in the notes changed after this release was published:
   // a revision, no new build.
-  "revision": 2,
+  // Features (revision 3).
+  "revision": 3,
   "authors": [{ "name": "reliefe", "github": "reliefeai" }],
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v1.5.4", "sha": "973434bc6b339dd56d831b1ebd089a8465850844" },

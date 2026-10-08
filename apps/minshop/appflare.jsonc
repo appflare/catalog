@@ -4,12 +4,21 @@
   "name": "minshop",
   "summary": "A small, server-rendered online store with a full admin: Stripe checkout for people, Lightning invoices and a JSON API that agents can pay through, on D1 and R2.",
   "tagline": "Run your own online store with card and Lightning payments",
+  "features": [
+    "Manage products, categories and photo galleries",
+    "Accept card payments through your Stripe account",
+    "Accept Lightning payments with phoenixd, LNbits or an OpenNode account",
+    "Set shipping zones, weight-based rates and free shipping thresholds",
+    "Track orders, customers and fulfillment, and export records as CSV",
+    "Let AI assistants browse products and buy through the store's API"
+  ],
+  "alternativeTo": ["Shopify"],
   "homepage": "https://minshop.dev",
   "repo": "ddyy/minshop",
   "license": "MIT",
   "categories": ["ecommerce"],
   // openPath added after this release was published: a revision, no new build.
-  "revision": 3,
+  "revision": 4,
   "authors": [{ "name": "Daniel Yang", "url": "https://daniel-yang.com", "github": "ddyy" }],
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v0.2.0", "sha": "e906890bef17bb514e7e7eabbd09c5501991857c" },

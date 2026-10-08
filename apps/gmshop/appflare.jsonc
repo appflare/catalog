@@ -4,6 +4,15 @@
   "name": "GMShop Edge",
   "summary": "A single-tenant digital-goods shop: stock items such as licence keys delivered on payment, private downloads from R2, entitlements, coupons and refunds, guest or account checkout, and an admin console with roles, on D1, KV, R2 and Queues.",
   "tagline": "Sell digital goods with automatic delivery from your own shop",
+  "features": [
+    "Deliver stocked licence keys and activation codes after payment",
+    "Sell private file downloads with controlled access",
+    "Let customers check out as guests or with an account",
+    "Offer coupons and handle refunds and after-sales requests",
+    "Set time limits and renewal rules for product access",
+    "Give shop administrators different roles and permissions"
+  ],
+  "alternativeTo": ["Gumroad"],
   "homepage": "https://shop.epusdt.com",
   "repo": "GMWalletApp/gmshop-edge",
   // The LICENSE file is the GNU GPL version 3; package.json grants "or any
@@ -11,7 +20,8 @@
   "license": "GPL-3.0-or-later",
   "categories": ["ecommerce", "business"],
   // openPath added after this release was published: a revision, no new build.
-  "revision": 3,
+  // Features and alternatives (revision 4).
+  "revision": 4,
   "authors": [
     {
       "name": "GM Wallet",

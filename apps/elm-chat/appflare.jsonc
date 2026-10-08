@@ -4,6 +4,14 @@
   "name": "elm.chat",
   "summary": "Account-free, end-to-end encrypted chat rooms that disappear: single-use invites, messages that vanish on a timer, and no transcript kept on the server. One Worker and a Durable Object per room.",
   "tagline": "Private chat rooms that disappear, with no account needed",
+  "features": [
+    "Send messages and files encrypted from end to end",
+    "Invite each person with a link that can only be used once",
+    "Choose how long messages remain visible",
+    "Set rooms to close automatically after inactivity",
+    "Revoke unused invites or remove participants",
+    "Destroy a room for everyone when the conversation ends"
+  ],
   "homepage": "https://elm.chat",
   "repo": "shawnbure/elm-chat",
   // The LICENSE file is the GNU AGPL version 3; the README badge and the

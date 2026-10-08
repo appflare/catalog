@@ -60,8 +60,16 @@ import type { VersionResolver } from "./versions.ts";
  *   from the index row only; nothing about an installed app uses it.
  * - `licenseNote`: shown next to the license. Managers read it from the index
  *   row, and an installed app does not use it.
+ * - `features` and `alternativeTo`: what the app does and which products it
+ *   can replace, on the app's page. Read from the index row only.
  */
-export const INDEX_ONLY_FIELDS: readonly string[] = ["authors", "tagline", "licenseNote"];
+export const INDEX_ONLY_FIELDS: readonly string[] = [
+  "authors",
+  "tagline",
+  "licenseNote",
+  "features",
+  "alternativeTo",
+];
 
 export type PlanDecision =
   | { slug: string; action: "not-released"; tier: InstallTier }

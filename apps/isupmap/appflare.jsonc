@@ -11,12 +11,22 @@
   "name": "isUpMap",
   "summary": "A live up/down heatmap for 80+ popular internet services, polled every five minutes, with history and community outage reports.",
   "tagline": "See which popular online services are up or down",
+  "features": [
+    "Check live status for over 80 internet services",
+    "Review 90 days of uptime and past incidents",
+    "Collect outage reports with reasons and country breakdowns",
+    "Spot unusual increases in community outage reports",
+    "Get desktop notifications when a service changes status",
+    "Subscribe to incident updates in a feed reader"
+  ],
+  "alternativeTo": ["Downdetector"],
   "homepage": "https://isupmap.com",
   "repo": "Jaironlanda/isupmap",
   "license": "MIT",
   "categories": ["monitoring"],
   // Field links added after this release was published: a revision, no new build.
-  "revision": 3,
+  // Features and alternatives (revision 4).
+  "revision": 4,
   "authors": [
     { "name": "Jairon Landa", "url": "https://jaironlanda.com", "github": "Jaironlanda" }
   ],

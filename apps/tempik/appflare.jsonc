@@ -7,6 +7,12 @@
   "name": "Tempik",
   "summary": "A disposable email service on your own domain: pick or generate an address in the browser and read the mail sent to it, received by Email Routing and kept in D1.",
   "tagline": "Disposable email addresses on your own domain",
+  "features": [
+    "Generate random email addresses on your own domain",
+    "Choose an inbox name to receive mail at a specific address",
+    "Read incoming emails in your browser after refreshing the inbox"
+  ],
+  "alternativeTo": ["Temp Mail"],
   "repo": "hirotomasato/tempik",
   "license": "MIT",
   "categories": ["email", "privacy"],

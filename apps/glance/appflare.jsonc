@@ -4,12 +4,22 @@
   "name": "Glance",
   "summary": "Share what your coding agents build: publish HTML, Markdown and files as private sites your team opens, comments on, and annotates. An open-source alternative to Claude Artifacts.",
   "tagline": "Share your coding agent's work as pages your team can review",
+  "features": [
+    "Upload HTML, Markdown or a folder of files to a live address",
+    "Choose who can open each published page",
+    "Leave comments and replies while reviewing pages in your browser",
+    "Record voice comments with automatic text transcripts",
+    "Publish audio files with a player and timestamped comments",
+    "Let coding agents read feedback and publish updated pages"
+  ],
+  "alternativeTo": ["Claude Artifacts"],
   "repo": "plivo-labs/glance",
   "license": "MIT",
   "categories": ["developer-tools"],
   // Generated secrets (revision 2) and field links (revision 3) came after this
   // release was published: revisions, no new build.
-  "revision": 3,
+  // Features and alternatives (revision 4).
+  "revision": 4,
   "authors": [{ "name": "Plivo", "url": "https://www.plivo.com", "github": "plivo-labs" }],
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v0.14.0", "sha": "caaed8f60a5365a652a9d519f77bfcb489016585" },

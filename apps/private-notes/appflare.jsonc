@@ -9,11 +9,20 @@
   "name": "Private Notes",
   "summary": "A private notebook behind one password: notes encrypted in the browser before they reach D1, search that runs in the browser, separate vaults per password, and one-time share links that burn after reading.",
   "tagline": "Keep encrypted notes behind a password",
+  "features": [
+    "Encrypt note titles and text in your browser before saving",
+    "Keep separate notebooks that open with different passwords",
+    "Search and filter your notes in your browser",
+    "Share a copy of a note through a link that can be opened once",
+    "Share notes through links that expire after 24 hours or 7 days"
+  ],
+  "alternativeTo": ["ProtectedText"],
   "repo": "tao-t356/private-notes",
   "license": "NONE",
   "categories": ["notes", "privacy"],
   // Generated secrets added after this release was published: a revision, no new build.
-  "revision": 2,
+  // Features and alternatives (revision 3).
+  "revision": 3,
   "authors": [{ "name": "tao-t356", "github": "tao-t356" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags, so the entry follows the default branch by commit.

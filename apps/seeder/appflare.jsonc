@@ -8,13 +8,23 @@
   "name": "Seeder",
   "summary": "A project manager for small teams: kanban tasks, client requests, a public client board, a daily planner and a built-in MCP server.",
   "tagline": "Manage team projects, tasks, and client requests in one place",
+  "features": [
+    "Organize work on kanban boards with priorities, assignees, and due dates",
+    "Collect client requests and turn them into planned work",
+    "Share a read-only progress board with clients without creating accounts",
+    "Arrange each day's work in a planner you can reorder",
+    "Add formatted notes, images, tables, and comments",
+    "Let connected AI assistants read and update your projects"
+  ],
+  "alternativeTo": ["Trello"],
   "homepage": "https://seederpm.xyz",
   "repo": "danielsyauqi/Seeder",
   "license": "MIT",
   "categories": ["productivity", "business"],
   // Generated secrets (revision 2) and field links (revision 3) came after this
   // release was published: revisions, no new build.
-  "revision": 3,
+  // Features and alternatives (revision 4).
+  "revision": 4,
   "authors": [
     { "name": "Daniel Syauqi", "url": "https://danielsyauqi.site", "github": "danielsyauqi" },
     { "name": "Thaqif Rosdi", "github": "takippu" }

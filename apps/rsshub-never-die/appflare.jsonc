@@ -6,13 +6,20 @@
   "name": "RSSHub Never Die",
   "summary": "A stable RSSHub address for your feed reader: requests go to a pool of public RSSHub instances, by load balancing, failover to the next instance, or the fastest of several.",
   "tagline": "One address for your feed reader that switches servers when one fails",
+  "features": [
+    "Spread feed requests across several RSSHub servers with weights you choose",
+    "Try another RSSHub server when the first one fails",
+    "Ask several RSSHub servers at once and return the first successful answer",
+    "Restrict feed requests with an optional access key"
+  ],
   "repo": "CaoMeiYouRen/rsshub-never-die",
   "license": "MIT",
   "categories": ["utilities", "networking"],
   // Generated secrets (revision 2), edited help text (revision 3) and the
   // formatting of URLs in the notes (revision 4) came after this release was
   // published: revisions, no new build.
-  "revision": 4,
+  // Added features (revision 5).
+  "revision": 5,
   "authors": [{ "name": "CaoMeiYouRen", "url": "https://blog.cmyr.ltd", "github": "CaoMeiYouRen" }],
   "maintainers": ["MendyLanda"],
   // The newest release tag. The commits after it on master bump

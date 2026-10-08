@@ -4,13 +4,23 @@
   "name": "CloudSSH",
   "summary": "A web SSH terminal on Workers: connect to your servers from the browser with multiple sessions, SFTP file management, jump hosts, saved servers, and a bring-your-own-key AI assistant.",
   "tagline": "Connect to your servers through a browser",
+  "features": [
+    "Keep several server terminals open in separate tabs",
+    "Upload, download and edit server files through SFTP",
+    "Save server connections and reconnect with one click",
+    "Reach private servers through up to three jump hosts",
+    "Share one-time server access links and revoke them when needed",
+    "Get AI help with server problems using your own OpenAI-compatible API key"
+  ],
+  "alternativeTo": ["Termius"],
   "homepage": "https://ssh.newbietan.cn",
   "repo": "newbietan/CloudSSH",
   "license": "Apache-2.0",
   "categories": ["remote-access", "developer-tools"],
   // Field links (revision 2) and the formatting of URLs in the notes (revision 3)
   // came after this release was published: revisions, no new build.
-  "revision": 4,
+  // Features and alternatives (revision 5).
+  "revision": 5,
   "authors": [{ "name": "TanXin", "url": "https://tanxin.me", "github": "newbietan" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags; the pin tracks main.

@@ -4,13 +4,22 @@
   "name": "Atalaya",
   "summary": "Uptime monitoring and a status page on one Worker: HTTP, TCP and DNS checks every minute, optionally from chosen Cloudflare regions, webhook alerts, and 90 days of history in D1.",
   "tagline": "Check if your sites are up and share a status page",
+  "features": [
+    "Check websites, server ports and DNS records",
+    "Run checks from selected regions",
+    "Receive webhook alerts after repeated failures",
+    "Share a public status page or require a password",
+    "Review 90 days of uptime and response time charts"
+  ],
+  "alternativeTo": ["UptimeRobot"],
   "homepage": "https://atalaya-docs.dcarrillo.es",
   "repo": "dcarrillo/atalaya",
   "license": "Apache-2.0",
   "categories": ["monitoring", "developer-tools"],
   // Generated secrets (revision 2), edited help text (revision 3) and field links
   // (revision 4) came after this release was published: revisions, no new build.
-  "revision": 4,
+  // Features and alternatives (revision 5).
+  "revision": 5,
   "authors": [
     {
       "name": "Daniel Carrillo",

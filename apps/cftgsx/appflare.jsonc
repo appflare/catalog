@@ -7,12 +7,22 @@
   "name": "cftgsx",
   "summary": "A two-way Telegram contact bot: messages to the bot reach your admin chat, your replies go back to the sender, with broadcasts, bans and one forum topic per user.",
   "tagline": "Answer messages to your Telegram bot from one chat",
+  "features": [
+    "Receive messages to your Telegram bot in one admin chat",
+    "Reply to a forwarded message to answer its sender",
+    "Forward photos and other media alongside text",
+    "Broadcast messages to selected users or everyone with user tracking enabled",
+    "Block or unblock users from the admin chat",
+    "Enable forum mode to give each sender a separate topic"
+  ],
+  "alternativeTo": ["Livegram Bot"],
   "repo": "SCSHIRKER/cftgsx",
   "license": "MIT",
   "categories": ["chat", "bots"],
   // Field links (revision 2) and the formatting of URLs in the notes (revision 3)
   // came after this release was published: revisions, no new build.
-  "revision": 3,
+  // Features and alternatives (revision 4).
+  "revision": 4,
   "authors": [{ "name": "SCSHIRKER", "github": "SCSHIRKER" }],
   "maintainers": ["MendyLanda"],
   // The default branch, not the only tag (v1.2.0, July 2025): the commits

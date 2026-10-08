@@ -4,6 +4,15 @@
   "name": "Mailflare",
   "summary": "A self-hosted email service for your own domains: mailboxes, forwarding rules, and a web inbox, on Email Routing, D1, R2, Queues, and Durable Objects. Shared inboxes require a paid Team license.",
   "tagline": "Receive, send and organize email on your own domain",
+  "features": [
+    "Create mailboxes and aliases across multiple domains",
+    "Send messages with attachments, rich text and signatures",
+    "Organize mail with folders, search, stars and snoozing",
+    "Forward, reject or sort incoming mail with rules",
+    "Back up your mailbox and import or export mail",
+    "Connect compatible desktop and mobile email apps through JMAP"
+  ],
+  "alternativeTo": ["Gmail"],
   "homepage": "https://mailflare.co",
   "repo": "hieunc229/mailflare",
   // The LICENSE file's Mailflare notice grants GNU AGPL version 3 or any later version.
@@ -11,7 +20,8 @@
   "categories": ["email"],
   // Help text (revision 2) and catalog metadata (revision 3) changed after
   // this release was published: revisions, no new build.
-  "revision": 3,
+  // Features and alternatives (revision 4).
+  "revision": 4,
   "authors": [{ "name": "Hieu Nguyen", "github": "hieunc229", "x": "hieuSSR" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags, so the entry follows the default branch by commit.

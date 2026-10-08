@@ -4,13 +4,23 @@
   "name": "NodeWarden",
   "summary": "A Bitwarden-compatible password manager server: the official Bitwarden apps and browser extensions sync to it, with a web vault, attachments, Send, and passkey sign-in, on D1 and R2.",
   "tagline": "A password vault that syncs with your Bitwarden apps",
+  "features": [
+    "Sync passwords across Bitwarden apps and browser extensions",
+    "Open and edit your vault in a browser",
+    "Generate one-time codes for your saved logins",
+    "Share text and files with Bitwarden Send",
+    "Schedule vault backups to WebDAV or S3 storage",
+    "Sign in with a passkey"
+  ],
+  "alternativeTo": ["Bitwarden"],
   "homepage": "https://nodewarden.app",
   "repo": "shuaiplus/nodewarden",
   "license": "LGPL-3.0-only",
   "categories": ["security", "passwords"],
   // The formatting of URLs in the notes changed after this release was published:
   // a revision, no new build.
-  "revision": 2,
+  // features and alternatives (revision 3).
+  "revision": 3,
   "authors": [{ "name": "Shuai", "url": "https://shuai.plus", "github": "shuaiplus" }],
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v1.8.1", "sha": "e92c91e771fac13c54042902d64d015514daa9ad" },

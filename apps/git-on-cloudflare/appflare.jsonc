@@ -9,11 +9,18 @@
   "name": "git-on-cloudflare",
   "summary": "A git server on Workers: push and clone over HTTPS, browse code in a web interface, with repositories in Durable Objects and R2.",
   "tagline": "Host your code and browse changes in your own Cloudflare account",
+  "features": [
+    "Push and clone repositories over HTTPS",
+    "Browse source files, commits and changes in your browser",
+    "Explore side-branch history inside merge commits",
+    "Keep repositories private or let anyone browse public ones",
+    "Create access tokens to control who can push code"
+  ],
   "homepage": "https://git.limic.dev",
   "repo": "zllovesuki/git-on-cloudflare",
   "license": "MIT",
   "categories": ["developer-tools"],
-  "revision": 2,
+  "revision": 3,
   "authors": [{ "name": "Rachel Chen", "url": "https://limic.dev", "github": "zllovesuki" }],
   "maintainers": ["MendyLanda"],
   // No release tags upstream; the pin tracks main.

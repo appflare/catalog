@@ -10,13 +10,20 @@
   "name": "screencapture Live",
   "summary": "The live-streaming relay for screencapture on FiveM: stream a player's game view to admins' browsers through Cloudflare Realtime, with one-time viewer grants and a visible indicator for the player.",
   "tagline": "Let admins watch a player's game live in their browser",
+  "features": [
+    "Relay a FiveM player's live video to your admin panel through Cloudflare Realtime",
+    "Let up to 25 admins watch the same stream without extra uploads from the player",
+    "Issue one-time viewer passes that must be used within 60 seconds",
+    "Show the player a visible indicator throughout streaming"
+  ],
   "homepage": "https://screencapture.projecterror.dev/live-streaming/",
   "repo": "itschip/screencapture",
   "license": "AGPL-3.0-only",
   "categories": ["games", "media"],
   // The category was renamed in revision 2, which this release was built with.
   // Field links added after it was published: a revision, no new build.
-  "revision": 3,
+  // Added features (revision 4).
+  "revision": 4,
   "authors": [{ "name": "Christopher", "github": "itschip" }],
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v0.17.2", "sha": "8fb1021330052eba49c9f9378026bd76203edc21" },

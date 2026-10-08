@@ -7,6 +7,14 @@
   "name": "Cap Worker",
   "summary": "A self-hosted backend for Cap, the privacy-friendly proof-of-work CAPTCHA: your sites get challenges and verify tokens against your own Worker, with no tracking.",
   "tagline": "Protect your site from bots without tracking visitors",
+  "features": [
+    "Add a CAPTCHA widget to your website forms",
+    "Check visitors with browser calculations instead of image puzzles",
+    "Verify completed challenges on your server",
+    "Collect no visitor tracking data",
+    "Prevent reuse of verified tokens by default"
+  ],
+  "alternativeTo": ["Google reCAPTCHA", "hCaptcha"],
   "repo": "xyTom/cap-worker",
   // The repository has no LICENSE file; its README states "This project is
   // licensed under the MIT License."
@@ -14,7 +22,8 @@
   "categories": ["security", "developer-tools"],
   // The formatting of URLs in the notes changed after this release was published:
   // a revision, no new build.
-  "revision": 2,
+  // Features and alternatives (revision 3).
+  "revision": 3,
   "authors": [{ "name": "xyTom", "github": "xyTom" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no tags; the pin follows the default branch.

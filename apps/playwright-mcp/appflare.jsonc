@@ -8,12 +8,18 @@
   "name": "Cloudflare Playwright MCP",
   "summary": "A remote MCP server that lets AI assistants browse for you: navigate, click, type, read page snapshots and take screenshots in a headless browser from Cloudflare Browser Rendering.",
   "tagline": "Let your AI assistant browse websites and take screenshots",
+  "features": [
+    "Ask an AI assistant to open websites and follow links",
+    "Let your assistant fill in forms and click page controls",
+    "Read page content through snapshots your assistant can inspect",
+    "Capture screenshots and save pages as PDFs"
+  ],
   // This app is Cloudflare's Browser Rendering adaptation of Playwright MCP:
   // https://github.com/cloudflare/playwright-mcp/blob/ee81e278966626f9ad72d94bdb16f949d06744e5/cloudflare/package.json
   "repo": "cloudflare/playwright-mcp",
   "license": "Apache-2.0",
   "categories": ["ai", "developer-tools"],
-  "revision": 4,
+  "revision": 5,
   "authors": [
     {
       "name": "Cloudflare",

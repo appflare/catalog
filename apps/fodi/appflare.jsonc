@@ -4,13 +4,21 @@
   "name": "FODI",
   "summary": "Browse, preview and download files from a personal OneDrive account, with password-protected folders, signed download links, uploads and WebDAV.",
   "tagline": "Browse and preview your OneDrive files in a web page",
+  "features": [
+    "Show a chosen folder from your personal OneDrive account",
+    "Preview text, photos, audio, video and Office documents",
+    "Protect selected folders with a password",
+    "Share download links that expire",
+    "Allow uploads into folders you choose",
+    "Access your files with a WebDAV client"
+  ],
   "homepage": "https://logi.im/fodi.html",
   "repo": "vcheckzen/FODI",
   // The LICENSE file is the GNU GPL version 3 with no "or any later version" grant.
   "license": "GPL-3.0-only",
   "categories": ["files", "sharing"],
   // Generated secrets added after this release was published: a revision, no new build.
-  "revision": 3,
+  "revision": 4,
   "authors": [{ "name": "LOGI", "url": "https://logi.im", "github": "vcheckzen" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags, so the entry follows the default branch by commit.

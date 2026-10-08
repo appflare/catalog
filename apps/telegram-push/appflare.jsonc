@@ -9,6 +9,11 @@
   "name": "Telegram Push",
   "summary": "Push notifications to Telegram with one HTTP request: your own bot hands each chat a push key, and any script or webhook sends a message with a GET to /push.",
   "tagline": "Send notifications to your Telegram chats with a web request",
+  "features": [
+    "Send text notifications to a Telegram chat",
+    "Trigger notifications from scripts with a web request",
+    "Deliver notifications through a bot you create"
+  ],
   "repo": "sduoduo233/telegram-push",
   "license": "NONE",
   "categories": ["notifications", "bots"],

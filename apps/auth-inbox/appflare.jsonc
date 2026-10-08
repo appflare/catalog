@@ -4,13 +4,22 @@
   "name": "Auth Inbox",
   "summary": "An inbox for sign-up and verification mail: Email Routing delivers it, an AI model of your choice pulls out codes and links and sorts each mail, and a dashboard, per-user grants and a remote MCP server let people and agents read them.",
   "tagline": "Get sign-up codes and links in one private inbox",
+  "features": [
+    "Extract email codes and links using your chosen AI provider and API key",
+    "Copy a code or verification link with one click",
+    "Sort received mail into sign-in, password reset and other categories",
+    "Choose which addresses and mail categories each user can read",
+    "Let AI agents wait for new codes with their own access keys",
+    "Store promotional mail without sending it to the AI provider"
+  ],
   "repo": "TooonyChen/AuthInbox",
   "license": "MIT",
   "categories": ["email", "ai"],
   // Edited help text (revision 2), field links (revision 3) and the formatting of
   // URLs in the notes (revision 4) came after this release was published:
   // revisions, no new build.
-  "revision": 4,
+  // Display features (revision 5).
+  "revision": 5,
   "authors": [{ "name": "Tony Chen", "url": "https://tonychen.net", "github": "TooonyChen" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags, so the entry follows the default branch by commit.

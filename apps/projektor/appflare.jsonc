@@ -4,6 +4,14 @@
   "name": "Projektor",
   "summary": "An issue tracker and wiki for teams and their AI coding agents: issues, boards, sprints and pages in the browser, and the same actions over MCP.",
   "tagline": "Track team issues and keep a wiki alongside AI coding agents",
+  "features": [
+    "Organize issues by status, priority and assignee",
+    "Plan sprints and move issues across a board",
+    "Write nested wiki pages and search their text",
+    "Let AI assistants create issues and update wiki pages",
+    "Collect feedback from a widget on your website"
+  ],
+  "alternativeTo": ["Linear", "Jira"],
   "homepage": "https://tajd.github.io/projektor/",
   "repo": "TAJD/projektor",
   "license": "MIT",

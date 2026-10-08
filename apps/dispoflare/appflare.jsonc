@@ -10,13 +10,21 @@
   "name": "Dispoflare",
   "summary": "Disposable email addresses on your own domains: create a random or chosen address that forwards to your inbox until the date you pick, on Email Routing.",
   "tagline": "Disposable email addresses on your own domains",
+  "features": [
+    "Choose a random or custom name for each email address",
+    "Forward mail to your verified inbox",
+    "Set when each forwarding address expires",
+    "Remove expired addresses automatically after a month"
+  ],
+  "alternativeTo": ["Firefox Relay"],
   "repo": "LeoColomb/dispoflare",
   "license": "MIT",
   "categories": ["email", "privacy"],
   // The tag the entry pins has not moved since the released build, so the Access
   // protection below (revision 2) and the field links (revision 3) are revisions
   // of that build.
-  "revision": 3,
+  // Features and alternatives (revision 4), no new build.
+  "revision": 4,
   "authors": [
     {
       "name": "Léo Colombaro",

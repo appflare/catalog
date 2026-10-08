@@ -4,6 +4,15 @@
   "name": "nodrix",
   "summary": "A self-hosted IoT platform: devices send telemetry over HTTPS or WebSocket, variables appear on their own, and you build realtime dashboards, controls and automations on top, with a read API and an MCP server, on Durable Objects, D1 and R2. Sends anonymous usage statistics to upstream daily, with no opt-out.",
   "tagline": "Track devices with live dashboards and automations",
+  "features": [
+    "View live sensor readings in charts and gauges",
+    "Build dashboards by dragging widgets into place",
+    "Control connected devices with toggles, sliders and buttons",
+    "Run actions when readings change or on a schedule",
+    "Share read-only dashboards by link",
+    "Review past readings through the read API"
+  ],
+  "alternativeTo": ["Blynk"],
   "homepage": "https://nodrix.live",
   "repo": "decoded-cipher/nodrix",
   "license": "MIT",

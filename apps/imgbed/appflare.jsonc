@@ -4,6 +4,15 @@
   "name": "CloudFlare ImgBed",
   "summary": "Self-hosted image and file hosting with an admin panel: uploads to R2, Telegram, Discord, S3, Hugging Face or WebDAV, file management, access control, a public gallery, a REST API and WebDAV, on D1.",
   "tagline": "Store and share images and files on your own site",
+  "features": [
+    "Upload images, videos, audio and other files",
+    "Copy file links for websites, blogs and forums",
+    "Organize files in folders and find them by name or tag",
+    "Protect uploads and limit who can access files",
+    "Let visitors browse selected folders as a public gallery",
+    "Access and upload files through an API or WebDAV"
+  ],
+  "alternativeTo": ["Postimages"],
   "homepage": "https://cfbed.sanyue.de",
   "repo": "MarSeventh/CloudFlare-ImgBed",
   "license": "MIT",
@@ -11,7 +20,8 @@
   // Generated secrets (revision 2), field links (revision 3) and the formatting of
   // URLs in the notes (revision 4) came after this release was published:
   // revisions, no new build.
-  "revision": 4,
+  // Features and alternatives (revision 5).
+  "revision": 5,
   "authors": [{ "name": "MarSeventh", "url": "https://home.sanyue.site", "github": "MarSeventh" }],
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v2.7.6", "sha": "bf9d8211ce6daa3af7b5b60685250bebcb2f681a" },

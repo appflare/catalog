@@ -4,12 +4,20 @@
   "name": "Memory Note",
   "summary": "A small notes and to-do API behind one token: push, list, edit, move and delete notes over REST from Siri Shortcuts, Alfred, a home screen widget or any script, stored in Workers KV or a Notion database.",
   "tagline": "Notes and to-dos you can reach from shortcuts, widgets and scripts",
+  "features": [
+    "Add notes by voice with Siri Shortcuts",
+    "Read your notes aloud with Siri",
+    "Show note lists in a home screen widget",
+    "Add, view and remove notes from Alfred",
+    "Edit notes and move them between lists"
+  ],
   "repo": "azu/memory-note",
   "license": "MIT",
   "categories": ["notes", "productivity", "developer-tools"],
   // Edited help text (revision 2) and field links (revision 3) came after this
   // release was published: revisions, no new build.
-  "revision": 3,
+  // Features (revision 4).
+  "revision": 4,
   "authors": [{ "name": "azu", "url": "https://efcl.info", "github": "azu", "x": "azu_re" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags, so the entry follows the default branch by

@@ -4,6 +4,13 @@
   "name": "Semantic Search",
   "summary": "A semantic search API on Vectorize and Workers AI: add documents with metadata over HTTP, then search them by meaning, with writer and read-only API keys and Swagger docs.",
   "tagline": "Find your documents by meaning",
+  "features": [
+    "Get ranked document matches for a search phrase",
+    "Store document text and extra details together",
+    "Add, update, retrieve, and delete documents through an API",
+    "Give search-only access without allowing document changes",
+    "Try searches and document updates in the built-in API explorer"
+  ],
   "homepage": "https://semanticsearch.ai",
   // Formerly SemanticSearch-ai/api.semanticsearch.ai, the address its Deploy
   // button still uses; GitHub redirects the old name.
@@ -16,7 +23,8 @@
   "categories": ["developer-tools", "ai"],
   // Generated secrets (revision 2) and the licence note (revision 3) came
   // after this release was published: revisions, no new build.
-  "revision": 3,
+  // Display features (revision 4).
+  "revision": 4,
   "authors": [
     {
       "name": "SemanticSearch.ai",

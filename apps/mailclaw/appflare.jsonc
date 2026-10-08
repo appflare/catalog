@@ -4,6 +4,15 @@
   "name": "MailClaw",
   "summary": "A catch-all inbox for your domain with a token-protected API for AI agents: every address receives into D1 and R2, with search, filters, export, sending through Resend or Cloudflare, and a web dashboard.",
   "tagline": "One searchable inbox for every address on your domain",
+  "features": [
+    "Receive mail sent to any address on your domain",
+    "Search email subjects and messages by keyword",
+    "Filter mail by sender, recipient and date",
+    "Download email attachments",
+    "Export full email messages",
+    "Send mail with a verified Resend or Cloudflare sending domain"
+  ],
+  "alternativeTo": ["AgentMail"],
   "homepage": "https://mailclaw.me",
   "repo": "missuo/mailclaw",
   // The repository has no LICENSE file; its README's License section
@@ -11,7 +20,7 @@
   "license": "MIT",
   "categories": ["email", "ai"],
   // Field links added after this release was published: a revision, no new build.
-  "revision": 2,
+  "revision": 3,
   "authors": [
     { "name": "Vincent Yang", "url": "https://missuo.me", "github": "missuo", "x": "m1ssuo" }
   ],

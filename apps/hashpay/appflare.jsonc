@@ -10,11 +10,20 @@
   "name": "HashPay",
   "summary": "A crypto payment gateway run from your own Telegram bot: take USDT, USDC and native coins on eight chains or through Binance, OKX and OKPay, with a signed order API, merchant callbacks and an admin console.",
   "tagline": "Accept crypto payments through your Telegram bot",
+  "features": [
+    "Collect USDT, USDC and supported native coins across eight blockchains",
+    "Create payment requests inline in Telegram",
+    "Create and check payment orders from your website or bot",
+    "Notify your shop when an order is paid, with retries if delivery fails",
+    "Manage payments in a browser or Telegram Mini App"
+  ],
+  "alternativeTo": ["NOWPayments"],
   "repo": "TGDash/HashPay",
   "license": "Apache-2.0",
   "categories": ["finance", "business"],
   // Field links added after this release was published: a revision, no new build.
-  "revision": 2,
+  // Features and alternatives (revision 3).
+  "revision": 3,
   "authors": [{ "name": "TGDash", "github": "TGDash" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags, so the entry follows the default branch by commit.

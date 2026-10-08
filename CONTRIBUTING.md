@@ -101,8 +101,24 @@ not say what matters; managers mark an app with a note as source-available.
    characters with no trailing period, such as `"Short links on your own domain"`.
    Managers show it under the app's name on catalog tiles, so write it in plain
    words for someone who is not a developer: what they get, not how it is built.
-   Changing it on a released entry needs no new pin and no revision.
-6. Pick one to three `categories`, the most specific that fit, from this list (the
+   Changing it on a released entry needs no new pin and no revision, unless the entry
+   already has a published revision, which then needs the next one (see "Revisions").
+6. Optionally, add `features`: three to six lines on what the app does for the
+   person using it, shown on the app's page on appflare.dev. Write them like the
+   tagline: plain words, at most 100 characters each, no trailing period, and no
+   line twice, such as `"See how many people opened each link"`. Say what
+   someone can do with the app, not what it is built with. Changing them on a
+   released entry needs no new pin and no revision, unless the entry
+   already has a published revision, which then needs the next one (see "Revisions").
+7. Optionally, add `alternativeTo`: one to five names of well-known products the
+   app can replace, such as `["Bitly"]`, shown on the app's page on appflare.dev.
+   Each is a product's name, not its address, at most 40 characters, with no name
+   repeated. List only products the app really replaces, preferably ones the
+   upstream project names itself, and never a product it only integrates with or
+   imports from. Leave it out when there is no honest candidate. Changing it on a
+   released entry needs no new pin and no revision, unless the entry
+   already has a published revision, which then needs the next one (see "Revisions").
+8. Pick one to three `categories`, the most specific that fit, from this list (the
    manager's label follows each id): `ai` AI, `analytics` Analytics, `bots` Bots,
    `business` Business, `chat` Chat, `cms` Websites and blogs, `community`
    Community, `developer-tools` Developer tools, `ecommerce` E-commerce,
@@ -113,9 +129,9 @@ not say what matters; managers mark an app with a note as source-available.
    Productivity, `remote-access` Remote access, `scheduling` Scheduling,
    `security` Security, `sharing` Sharing, `sync` Sync, `utilities` Utilities.
    `pnpm validate` refuses any other id, and more than three.
-7. Optionally, add images the upstream project publishes (see "Images" below): its
+9. Optionally, add images the upstream project publishes (see "Images" below): its
    icon, its cover, screenshots, and `MEDIA.md` saying where each one comes from.
-8. Run the checks below, then open a pull request.
+10. Run the checks below, then open a pull request.
 
 `repo` is the repository the packer checks out at `source.sha`. When the app
 builds from a template or packaging fork, set `upstreamRepo` to the main
@@ -990,12 +1006,12 @@ built from. If you change `appflare.jsonc` but the pin still packs to a version 
 is already released, publish fails and names the fields that changed, unless the
 change is one of these:
 
-- **`authors`, `tagline`, `licenseNote`**, and the images. `index.json` reads these
-  fields from the current `appflare.jsonc`, not from the release, and the images
-  from `apps/<slug>/`, so an edit to them publishes with the next `index.json` and
-  needs no new release and no revision (once the entry has a published revision,
-  an edit to any of them needs the next revision too, since a published revision
-  never changes; see "Revisions").
+- **`authors`, `tagline`, `licenseNote`, `features`, `alternativeTo`**, and the
+  images. `index.json` reads these fields from the current `appflare.jsonc`, not
+  from the release, and the images from `apps/<slug>/`, so an edit to them
+  publishes with the next `index.json` and needs no new release and no revision
+  (once the entry has a published revision, an edit to any of them needs the next
+  revision too, since a published revision never changes; see "Revisions").
 - **A revision: the form, the copy and Cloudflare Access.** Raise `revision` by one
   (it is 1 when omitted) in the same change. A revision may change `name`, `summary`,
   `homepage`, `upstreamRepo`, `license`, `categories`, `maintainers`, `secrets`, `vars`, `postInstall`,
@@ -1505,13 +1521,14 @@ entry of more than three Workers (see "Apps of several Workers"). The index sche
 keeps them, so `record-verified` and later rebuilds write them back unchanged.
 
 Every row also carries the entry's `tagline`, `categories` and `license`, and its
-`licenseNote` when it has one, from the current `appflare.jsonc`, and `addedAt`:
-the committer time of the oldest commit that added `apps/<slug>/appflare.jsonc` (a
-renamed slug counts from its new path; an entry not committed yet gets the time of
-the build), which managers use for "New this week". That needs the
-catalog's whole git history, so the publish job checks it out with `fetch-depth: 0`,
-and `build-index --releases-only` fails in a shallow clone. A local `pnpm
-build-index` in a shallow clone keeps the previous index's `addedAt`, with a warning.
+`licenseNote`, `features` and `alternativeTo` when it has them, from the current
+`appflare.jsonc`, and `addedAt`: the committer time of the oldest commit that
+added `apps/<slug>/appflare.jsonc` (a renamed slug counts from its new path; an
+entry not committed yet gets the time of the build), which managers use for "New
+this week". That needs the catalog's whole git history, so the publish job checks
+it out with `fetch-depth: 0`, and `build-index --releases-only` fails in a shallow
+clone. A local `pnpm build-index` in a shallow clone keeps the previous index's
+`addedAt`, with a warning.
 
 ## How CI gets @appflare/pack
 

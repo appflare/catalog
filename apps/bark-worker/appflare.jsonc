@@ -4,12 +4,19 @@
   "name": "Bark Worker",
   "summary": "Your own push server for Bark, the iOS notification app: send notifications to your iPhone from scripts and services with a simple HTTP call, with devices stored in D1.",
   "tagline": "Send notifications to your iPhone from your own server",
+  "features": [
+    "Send custom notifications to your iPhone through the Bark app",
+    "Notify several registered devices in one request",
+    "Trigger a notification by opening a link"
+  ],
+  "alternativeTo": ["Pushover"],
   "repo": "cwxiaos/bark-worker",
   "license": "GPL-3.0-only",
   "categories": ["notifications"],
   // The formatting of URLs in the notes changed after this release was published:
   // a revision, no new build.
-  "revision": 2,
+  // Features and alternatives (revision 3).
+  "revision": 3,
   "authors": [{ "name": "cwxia0s", "github": "cwxiaos" }],
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v2.2.6", "sha": "03ba2fe92c28dbe47bcdb5472fb8d8fe6fc888cd" },

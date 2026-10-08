@@ -11,6 +11,15 @@
   "name": "InfiPlot",
   "summary": "An interactive story game generated in real time: AI writes the plot, paints every scene and voices the characters as you play, with the text, image and speech providers you choose.",
   "tagline": "Play stories that AI writes and illustrates as you go",
+  "features": [
+    "Start a custom story using your own text, image and vision model API keys",
+    "Shape the story with choices and by clicking inside scenes",
+    "Choose an art style for generated scene images",
+    "Give characters distinct voices with a Xiaomi MiMo or StepFun speech API key",
+    "Save stories in your browser and resume them later",
+    "Export and share stories as .infiplot files"
+  ],
+  "alternativeTo": ["AI Dungeon"],
   "homepage": "https://infiplot.com",
   "repo": "zonghaoyuan/infiplot",
   "license": "AGPL-3.0-only",
@@ -18,7 +27,8 @@
   // Upstream has not moved since the released pin, so the Access protection
   // below (revision 2), the edited help text (revision 3) and the field links
   // (revision 4) are revisions of that build.
-  "revision": 4,
+  // Features and alternatives (revision 5).
+  "revision": 5,
   "authors": [{ "name": "Zonghao Yuan", "url": "https://yzh.im", "github": "zonghaoyuan" }],
   "maintainers": ["MendyLanda"],
   // InfiPlot publishes no release tags; the pin tracks main.

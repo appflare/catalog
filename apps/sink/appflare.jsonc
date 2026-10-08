@@ -9,13 +9,23 @@
   "name": "Sink",
   "summary": "Link shortener with visit analytics: custom slugs, expiring links, QR codes, AI slug suggestions and a realtime globe, all on Cloudflare.",
   "tagline": "Create short links and track their visits",
+  "features": [
+    "Choose custom link addresses or get AI suggestions",
+    "Set passwords and expiry dates for shared links",
+    "Redirect visitors to different destinations by device or country",
+    "Generate QR codes for your links",
+    "See visit charts and a live globe after adding a Cloudflare analytics token",
+    "Import and export links as JSON"
+  ],
+  "alternativeTo": ["Bitly"],
   "homepage": "https://sink.cool",
   "repo": "miantiao-me/Sink",
   "license": "AGPL-3.0-only",
   "categories": ["utilities", "analytics"],
   // Generated secrets (revision 2) and openPath (revision 3) came after this
   // release was published: revisions, no new build.
-  "revision": 3,
+  // Features and alternatives (revision 4).
+  "revision": 4,
   "authors": [
     {
       "name": "miantiao",

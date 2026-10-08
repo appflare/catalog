@@ -4,11 +4,20 @@
   "name": "binthere",
   "summary": "A zero-knowledge pastebin for one-time notes: encrypted in the browser with AES-256-GCM, burned on first read by a Durable Object, and gone after 24 hours.",
   "tagline": "Share private notes that disappear after one read",
+  "features": [
+    "Encrypt notes on your device so the server cannot read them",
+    "Delete each note automatically after its first read",
+    "Automatically remove unread notes after 24 hours",
+    "Require a password as well as the share link",
+    "Share notes by link or QR code",
+    "Delete a note before anyone opens it"
+  ],
+  "alternativeTo": ["PrivateBin", "Yopass"],
   "homepage": "https://binthere.gaury.dev",
   "repo": "nxfu/binthere",
   "license": "MIT",
   "categories": ["sharing", "privacy"],
-  "revision": 2,
+  "revision": 3,
   "authors": [{ "name": "Gaurav", "url": "https://gaury.dev", "github": "nxfu" }],
   "maintainers": ["MendyLanda"],
   // The default branch, not the newest tag (v1.1.0): the commit after that

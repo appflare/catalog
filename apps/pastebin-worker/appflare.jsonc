@@ -4,11 +4,20 @@
   "name": "Pastebin Worker",
   "summary": "A pastebin and file sharer with short links, syntax highlighting, rendered Markdown, client-side encryption, a URL shortener, and a curl-friendly API, on KV and R2.",
   "tagline": "Share text and files with short links on your own site",
+  "features": [
+    "Share text and files with short or custom links",
+    "Show code with syntax highlighting",
+    "Display Markdown as a formatted page",
+    "Encrypt pastes in your browser before uploading",
+    "Turn long web addresses into short links",
+    "Upload and manage pastes from the command line"
+  ],
+  "alternativeTo": ["Pastebin"],
   "homepage": "https://shz.al",
   "repo": "SharzyL/pastebin-worker",
   "license": "MIT",
   "categories": ["files", "sharing"],
-  "revision": 2,
+  "revision": 3,
   "authors": [{ "name": "Sharzy", "url": "https://sharzy.in", "github": "SharzyL" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags; the pin tracks the default branch, goshujin.

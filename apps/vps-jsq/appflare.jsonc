@@ -8,11 +8,18 @@
   "name": "VPS-JSQ",
   "summary": "Calculate the unused value of a prepaid VPS from its renewal price, billing cycle and dates, then set a resale premium. Includes currency conversion, live exchange rates and shareable image cards. Chinese interface.",
   "tagline": "See what the unused time on a prepaid server is worth",
+  "features": [
+    "Calculate the remaining days and value from your server's billing dates",
+    "Convert between currencies with live or custom exchange rates",
+    "Add a resale premium to the remaining value",
+    "Save a shareable image of your server's resale calculation",
+    "Switch between light and dark display modes"
+  ],
   "homepage": "https://jsq.xiaoge.org",
   "repo": "verkyer/vps-jsq",
   "license": "Apache-2.0",
   "categories": ["finance", "utilities"],
-  "revision": 2,
+  "revision": 3,
   "authors": [{ "name": "XiaoGe", "url": "https://www.xiaoge.org/", "github": "verkyer" }],
   "maintainers": ["MendyLanda"],
   // Upstream publishes no release tags; the pin tracks main.

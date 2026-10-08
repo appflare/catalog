@@ -4,13 +4,22 @@
   "name": "Cloudflare Prometheus Exporter",
   "summary": "Export Cloudflare analytics as Prometheus metrics: requests, bandwidth, threats, Workers, load balancers, certificates, Magic Transit and more, for every account and zone your API token can read, refreshed each minute by Durable Objects.",
   "tagline": "Send Cloudflare traffic and security metrics to Prometheus",
+  "features": [
+    "Collect request counts, bandwidth and security events for Prometheus",
+    "Track Worker requests, errors and time spent handling them",
+    "Include every account and website your API token can read",
+    "Choose which websites and metrics to include",
+    "Refresh metrics automatically at an interval you choose",
+    "Change collection settings without reinstalling"
+  ],
   "repo": "cloudflare/cloudflare-prometheus-exporter",
   "license": "MIT",
   "categories": ["monitoring", "analytics", "developer-tools"],
   // Edited help text (revision 2), field links (revision 3) and the formatting of
   // URLs in the notes (revision 4) came after this release was published:
   // revisions, no new build.
-  "revision": 4,
+  // Features (revision 5).
+  "revision": 5,
   "authors": [
     { "name": "Cloudflare", "url": "https://www.cloudflare.com", "github": "cloudflare" }
   ],

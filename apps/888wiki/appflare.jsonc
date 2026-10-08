@@ -8,12 +8,22 @@
   "name": "888wiki",
   "summary": "A Markdown-first notepad and wiki: write in Markdown, Block, Canvas or Whiteboard, publish password-protected or timed shares, and present notes as slides or books.",
   "tagline": "Write notes and share them with passwords or time limits",
+  "features": [
+    "Write Markdown notes with a live preview",
+    "Arrange text and media as blocks you can drag into place",
+    "Draw on a whiteboard or connect idea cards on a canvas",
+    "Protect shared notes with passwords, expiry dates or view limits",
+    "Present a note as slides or a book",
+    "Restore earlier saved versions of a note"
+  ],
+  "alternativeTo": ["Notion"],
   "homepage": "https://wiki.david888.com",
   "repo": "tbdavid2019/888wiki",
   "license": "AGPL-3.0-only",
   "categories": ["notes", "productivity"],
   // Field links added after this release was published: a revision, no new build.
-  "revision": 3,
+  // Features and alternatives (revision 4).
+  "revision": 4,
   "authors": [{ "name": "DAVID888", "github": "tbdavid2019" }],
   "maintainers": ["MendyLanda"],
   // 888wiki publishes no release tags; the pin tracks main.
