@@ -4,6 +4,15 @@
   "name": "ResolveHQ",
   "summary": "A self-hosted helpdesk: a shared inbox fed by Email Routing, threaded tickets, SLAs and snoozes, a help center and knowledge base, customer ratings, reports, a scoped API and outbound webhooks, on D1, R2 and Queues.",
   "tagline": "Manage customer emails and support tickets in your own account",
+  "features": [
+    "Handle customer email in a shared inbox, with replies sent through your Resend account",
+    "Assign tickets to teammates and organize them with priorities and tags",
+    "Save reusable replies for common questions",
+    "Set response deadlines around your working hours and holidays",
+    "Publish knowledge-base articles in a public help center",
+    "See ticket volume and response times, and export reports to CSV"
+  ],
+  "alternativeTo": ["Zendesk", "Intercom"],
   "homepage": "https://getresolvehq.com",
   "repo": "mirza-rizvi/ResolveHQ",
   // The LICENSE file is the author's own "ResolveHQ Source-Available License":
@@ -16,7 +25,8 @@
   // APP_URL starts at the app's address since revision 2, which this release was
   // built with. Edited help text (revision 3) and field links (revision 4) came
   // after it was published: revisions, no new build.
-  "revision": 4,
+  // Added features and alternatives (revision 5).
+  "revision": 5,
   "authors": [{ "name": "Rizvi", "github": "mirza-rizvi", "x": "mirza_rizvi" }],
   "maintainers": ["MendyLanda"],
   "source": { "ref": "v0.3.4", "sha": "427e7b061c68b4bc1ea5bd08be1c809e282529bd" },

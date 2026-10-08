@@ -4,6 +4,13 @@
   "name": "rdyrct",
   "summary": "A URL shortener for teams: organizations with roles, branded short links and QR codes, click analytics that never store an IP, an MCP server, and a KV redirect path in front of D1.",
   "tagline": "Branded short links, QR codes, and private click analytics for teams",
+  "features": [
+    "Create short links with custom names and extra aliases",
+    "Add source and campaign tags to the links you share",
+    "See daily clicks by country, referrer and device without storing IP addresses",
+    "Give teammates separate owner, admin and member roles"
+  ],
+  "alternativeTo": ["Bitly"],
   "homepage": "https://rdyrct.com",
   "repo": "baronunread/rdyrct",
   "license": "MIT",
@@ -11,7 +18,8 @@
   // Edited help text (revision 2), field links (revision 3) and the short link
   // host's default (revision 4) came after this release was published:
   // revisions, no new build.
-  "revision": 4,
+  // Added features and alternatives (revision 5).
+  "revision": 5,
   "authors": [
     {
       "name": "Andrea Bruno",

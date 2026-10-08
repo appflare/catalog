@@ -7,12 +7,22 @@
   "name": "Relay",
   "summary": "A link shortener with cookieless click and conversion analytics: A/B splits, device and country routing, per-channel suffixes, retargeting pixels, QR codes and CSV export, on D1.",
   "tagline": "Short links you control, with cookieless click and conversion stats",
+  "features": [
+    "Change a destination without replacing the link you already shared",
+    "Compare two destinations by splitting traffic between them",
+    "Send visitors to different pages based on their device or country",
+    "Track clicks and conversions separately for each channel without cookies",
+    "Protect links with a password",
+    "Download click data as CSV or JSON"
+  ],
+  "alternativeTo": ["Bitly"],
   "repo": "YuriCrystal/relay",
   "license": "MIT",
   "categories": ["utilities", "analytics"],
   // Generated secrets (revision 2) and field links (revision 3) came after this
   // release was published: revisions, no new build.
-  "revision": 4,
+  // Added features and alternatives (revision 5).
+  "revision": 5,
   "authors": [{ "name": "YuriCrystal", "github": "YuriCrystal" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags, so the entry follows the default branch by commit.
