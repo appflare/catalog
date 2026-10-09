@@ -18,8 +18,9 @@
   // Edited help text (revision 2), field links (revision 3) and the short link
   // host's default (revision 4) came after this release was published:
   // revisions, no new build.
-  // Added features and alternatives (revision 5).
-  "revision": 5,
+  // Added features and alternatives (revision 5). 1.0.0: email and Polar
+  // are optional (revision 6).
+  "revision": 6,
   "authors": [
     {
       "name": "Andrea Bruno",
@@ -28,9 +29,8 @@
       "x": "baronunread"
     }
   ],
-  "maintainers": ["MendyLanda"],
-  // Upstream has no release tags, so the entry follows the default branch by commit.
-  "source": { "ref": "main", "sha": "288184a6fd3cd0aa68a274f3eabad4141af58944" },
+  "maintainers": ["MendyLanda", "baronunread"],
+  "source": { "ref": "v1.0.0", "sha": "e9ba20e9bd2b65f9fbf7ed313b59e11fd90bd186" },
   "install": {
     "packageManager": "bun",
     // The config's KV, D1 and zone ids are upstream's production resources;
@@ -65,8 +65,9 @@
     {
       "name": "RESEND_API_KEY",
       "label": "Resend API key",
-      "help": "From resend.com. Sign-up and password reset send a one-time code by email, so without a working key nobody can create an account with a password.",
-      "link": { "label": "Get a key", "url": "https://resend.com/api-keys" }
+      "help": "From resend.com. Sign-up and password reset send a one-time code by email. Without it, sign-up needs no code and passwords cannot be reset by email, so set this or Google sign-in.",
+      "link": { "label": "Get a key", "url": "https://resend.com/api-keys" },
+      "optional": true
     },
     {
       "name": "CAP_SECRET",
@@ -97,7 +98,7 @@
     {
       "name": "POLAR_ACCESS_TOKEN",
       "label": "Polar access token",
-      "help": "Only to sell the Hobby and Pro plans through Polar (scopes checkouts:write and customer_sessions:write), with the product ids below.",
+      "help": "Leave empty and every organization gets unlimited use. Set it only to sell the Hobby and Pro plans through Polar (scopes checkouts:write and customer_sessions:write), with the product ids below.",
       "link": { "label": "Create a token", "url": "https://polar.sh/docs/integrate/oat" },
       "optional": true
     },
@@ -196,11 +197,11 @@
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Open {{appUrl}} and sign up with the platform admin email. The sign-up code arrives through Resend from the sender address you set."
+      "content": "Open {{appUrl}} and sign up with the platform admin email. With a Resend key, the sign-up code arrives from the sender address you set. Without one, sign-up needs no code: set Resend or Google sign-in before you share the address."
     },
     {
       "type": "markdown",
-      "content": "Everyone starts on the Free plan's limits. Without Polar, the platform admin grants Hobby or Pro by hand from /admin; with Polar, set the token, the webhook secret and both product ids in this app's settings."
+      "content": "Without Polar, every organization has unlimited use and the billing pages are hidden. To sell the Hobby and Pro plans, set the Polar token, the webhook secret and both product ids in this app's settings."
     }
   ],
   "tokenPermissions": [
