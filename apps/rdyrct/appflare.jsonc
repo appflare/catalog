@@ -141,8 +141,9 @@
     {
       "name": "MAIL_FROM",
       "label": "Sender address",
-      "help": "The From of sign-up and notification emails, at a domain verified in Resend, for example rdyrct <no-reply@mail.example.com>.",
-      "default": ""
+      "help": "Only with a Resend key: the From of sign-up and notification emails, at a domain verified in Resend, for example rdyrct <no-reply@mail.example.com>.",
+      "default": "",
+      "optional": true
     },
     {
       "name": "SENTRY_DSN",
