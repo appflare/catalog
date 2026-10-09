@@ -25,7 +25,7 @@
   "authors": [{ "name": "Hieu Nguyen", "github": "hieunc229", "x": "hieuSSR" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags, so the entry follows the default branch by commit.
-  "source": { "ref": "main", "sha": "6978c01de1ff5da68ee6e037414b134bf3bba008" },
+  "source": { "ref": "main", "sha": "83ade981e588bd7d693fe4a14850a844bcd8984a" },
   "install": {
     "packageManager": "npm",
     "wranglerConfig": "wrangler.jsonc",
