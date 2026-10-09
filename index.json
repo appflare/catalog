@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-09T11:17:17.582Z",
+  "generatedAt": "2026-10-09T14:19:42.668Z",
   "apps": [
     {
       "slug": "2fa",
@@ -77,19 +77,19 @@
         "Notion"
       ],
       "addedAt": "2026-09-27T06:02:01+03:00",
-      "version": "0.0.0-20261006.bb091b5",
+      "version": "0.0.0-20261009.de9bfe9",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20261006.bb091b5/888wiki-0.0.0-20261006.bb091b5.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20261006.bb091b5/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20261006.bb091b5/manifest.sig",
-        "digest": "fc2eb6ec78249dbd9a6508a296034bd798a21e0b08d7dc5a602365dbb4e9a3f0"
+        "zip": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20261009.de9bfe9/888wiki-0.0.0-20261009.de9bfe9.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20261009.de9bfe9/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20261009.de9bfe9/manifest.sig",
+        "digest": "abbbce20bf9f09b8aa029e28a4979bc9e5c81bdcb3e2546b4b49b3fa4fb6d65b"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-10-09T10:56:09.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "DAVID888",
@@ -139,12 +139,6 @@
       ],
       "license": "AGPL-3.0-only",
       "revision": 4,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/888wiki/manifest.json",
-        "sha256": "11dbebfa531dac30963f15c1dae9ec0297f39ca1ca3e3f71a623575b6421240f",
-        "keyId": "catalog-2026-09",
-        "signature": "TzTBBoyqXpEqtNabWKLkd91krX5CfMBn9pzzdPxzbq4nV3ci2uM/RAR5UMMOa714/LM2C4pJYIGH50s1qL7FDA=="
-      },
       "accessOffer": "offered"
     },
     {
@@ -1739,17 +1733,17 @@
         "Termius"
       ],
       "addedAt": "2026-09-26T23:19:31+03:00",
-      "version": "0.0.0-20261002.4678a76",
+      "version": "0.0.0-20261008.2c9a6e3",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20261002.4678a76/cloudssh-0.0.0-20261002.4678a76.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20261002.4678a76/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20261002.4678a76/manifest.sig",
-        "digest": "d802d3c237374a34c4903775cd26820f7564512761ae9e98487af290f361c3a8"
+        "zip": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20261008.2c9a6e3/cloudssh-0.0.0-20261008.2c9a6e3.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20261008.2c9a6e3/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20261008.2c9a6e3/manifest.sig",
+        "digest": "289b66bb5ea807e7080876fc8a6a9b517fb29d741ca9454da084e9169962fabe"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-10-09T10:58:40.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "TanXin",
@@ -1776,12 +1770,6 @@
       ],
       "license": "Apache-2.0",
       "revision": 5,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/cloudssh/manifest.json",
-        "sha256": "8619546939f75751c75010b44e0c6ceea6a59c4319be359c185103b23d01a077",
-        "keyId": "catalog-2026-09",
-        "signature": "rmq32WSnAPsZ3r3xSmeqMNPhv+C23ZfDdPyxBygYhZ6KBjcHNQT/IwEmdn4aS3jNa9ngmuQWma9j3u7W7C+vAg=="
-      },
       "accessOffer": "offered"
     },
     {
@@ -2297,19 +2285,19 @@
         "Evernote"
       ],
       "addedAt": "2026-09-27T05:18:00+03:00",
-      "version": "1.101.0",
+      "version": "1.103.0",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/edgeever@1.101.0/edgeever-1.101.0.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/edgeever@1.101.0/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/edgeever@1.101.0/manifest.sig",
-        "digest": "1518671b8155f4d8d21047a9b6e447e07c46417535bb71526c5717cc47ee69b3"
+        "zip": "https://github.com/appflare/catalog/releases/download/edgeever@1.103.0/edgeever-1.103.0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/edgeever@1.103.0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/edgeever@1.103.0/manifest.sig",
+        "digest": "681d345cc3f6e848fbf674ed081850ccad5d1e51541a6237064cbe86601c6121"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-10-09T11:00:50.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "tianma-if",
@@ -3129,17 +3117,17 @@
         "Generate song colour themes with your own Gemini API key"
       ],
       "addedAt": "2026-09-27T10:46:59+03:00",
-      "version": "0.7.15",
+      "version": "0.7.16",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/folia@0.7.15/folia-0.7.15.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/folia@0.7.15/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/folia@0.7.15/manifest.sig",
-        "digest": "88b9ad9360fe60b2173bff44181f120e891ce529b9da744eeb63288f859a7068"
+        "zip": "https://github.com/appflare/catalog/releases/download/folia@0.7.16/folia-0.7.16.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/folia@0.7.16/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/folia@0.7.16/manifest.sig",
+        "digest": "8f6946bd244b334f4c1bd1e55306c696b6a7898bca9ac71ed4351215ebbfe221"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-10-09T11:01:25.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "chthollyphile",
@@ -4832,12 +4820,12 @@
         "Gmail"
       ],
       "addedAt": "2026-09-24T07:29:19+03:00",
-      "version": "0.0.0-20261007.6978c01",
+      "version": "0.0.0-20261009.83ade98",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261007.6978c01/mailflare-0.0.0-20261007.6978c01.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261007.6978c01/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261007.6978c01/manifest.sig",
-        "digest": "731a35656f75bb691d6b8ca50c48351e2c597cfe6fc72d6e3d6231cc0c89b5b5"
+        "zip": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261009.83ade98/mailflare-0.0.0-20261009.83ade98.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261009.83ade98/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261009.83ade98/manifest.sig",
+        "digest": "708c6b3806ddfbee23ba60d0927cf31b2354670ce6551494ad6e1b514d471e30"
       },
       "tier": "artifact",
       "plan": "paid",
@@ -4896,12 +4884,6 @@
       ],
       "license": "AGPL-3.0-or-later",
       "revision": 4,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/mailflare/manifest.json",
-        "sha256": "098e785fbcbd9ada5be6c26506c72fc6f0f481b3111592fbeb2adb3f412b34f2",
-        "keyId": "catalog-2026-09",
-        "signature": "FWBS30o5WDksjwWnYdKXNuxm8xRqcrDaUVwpYxClgsj4KgBl8eiLMWyn8YNSatCOS8GXRba8uiWT+o7u/y58AQ=="
-      },
       "accessOffer": "offered"
     },
     {
@@ -6177,12 +6159,12 @@
         "Keep characters, locations and lighting consistent across scenes"
       ],
       "addedAt": "2026-09-27T12:03:21+03:00",
-      "version": "0.0.0-20261008.7a8ca4e",
+      "version": "0.0.0-20261009.90922d9",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261008.7a8ca4e/openstory-0.0.0-20261008.7a8ca4e.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261008.7a8ca4e/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261008.7a8ca4e/manifest.sig",
-        "digest": "75431a4e99a224796b5b9bcffba21f8f9b1fa3d973d0cd48c1af711b2896a7ef"
+        "zip": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261009.90922d9/openstory-0.0.0-20261009.90922d9.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261009.90922d9/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261009.90922d9/manifest.sig",
+        "digest": "cf917e4ec8e6b3fb103fbbb5c0fceb67bd5b65c0c00f0a98aca4595cfe30ef65"
       },
       "tier": "artifact",
       "plan": "paid",
@@ -6877,19 +6859,19 @@
         "Bitly"
       ],
       "addedAt": "2026-09-27T04:47:37+03:00",
-      "version": "0.0.0-20261007.b07fc08",
+      "version": "1.0.0",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/rdyrct@0.0.0-20261007.b07fc08/rdyrct-0.0.0-20261007.b07fc08.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/rdyrct@0.0.0-20261007.b07fc08/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/rdyrct@0.0.0-20261007.b07fc08/manifest.sig",
-        "digest": "84e64a52b109b38ab308a4a371543cb0d779fd0ec79fc3432570692c90a7b893"
+        "zip": "https://github.com/appflare/catalog/releases/download/rdyrct@1.0.0/rdyrct-1.0.0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/rdyrct@1.0.0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/rdyrct@1.0.0/manifest.sig",
+        "digest": "4810882564973ee47cf87aa0c6ae41d3907746c2150b1645abd6d1e57c5242c3"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-10-09T11:10:41.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Andrea Bruno",
@@ -6899,7 +6881,8 @@
         }
       ],
       "maintainers": [
-        "MendyLanda"
+        "MendyLanda",
+        "baronunread"
       ],
       "media": {
         "icon": {
@@ -6927,7 +6910,7 @@
         "analytics"
       ],
       "license": "MIT",
-      "revision": 5,
+      "revision": 6,
       "accessOffer": "offered"
     },
     {
@@ -7160,19 +7143,19 @@
         "Bobby"
       ],
       "addedAt": "2026-09-27T12:02:55+03:00",
-      "version": "0.3.28",
+      "version": "0.3.29",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/renewlet@0.3.28/renewlet-0.3.28.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/renewlet@0.3.28/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/renewlet@0.3.28/manifest.sig",
-        "digest": "f5d6393b83f0be4edeaf47538b4feeda26d41c5ef2a974b0f9a284cc4e424e0c"
+        "zip": "https://github.com/appflare/catalog/releases/download/renewlet@0.3.29/renewlet-0.3.29.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/renewlet@0.3.29/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/renewlet@0.3.29/manifest.sig",
+        "digest": "08dc4b2e5b3ea08d8dd18ddca6d34fae89cf396efed48851df7c7b453471fb14"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-10-09T11:11:01.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "zhiyingzhou",
@@ -7218,12 +7201,6 @@
       ],
       "license": "MIT",
       "revision": 3,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/renewlet/manifest.json",
-        "sha256": "94424bc5045507d666977faafbe74c9c93ccf5bb34ce1915e4251396fa8cfcc2",
-        "keyId": "catalog-2026-09",
-        "signature": "aG95/WcZx60a0usYxTeFElysEP42nJdYZeFm8tMLNxNaftJn6qwm9JIyuO02tF3rmc2APtPZ0LUn0UXwnxC+AQ=="
-      },
       "accessOffer": "offered"
     },
     {
@@ -8726,17 +8703,17 @@
         "Set minimum usage levels before alerts are sent"
       ],
       "addedAt": "2026-09-27T04:19:23+03:00",
-      "version": "0.0.0-20260930.f9809bb",
+      "version": "0.0.0-20261009.f1af3f0",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/usage-guard-collector@0.0.0-20260930.f9809bb/usage-guard-collector-0.0.0-20260930.f9809bb.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/usage-guard-collector@0.0.0-20260930.f9809bb/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/usage-guard-collector@0.0.0-20260930.f9809bb/manifest.sig",
-        "digest": "01f2af16f2e78807fe0a9857656c4f510b6b304e0df5e1f64517a8d963d7c81d"
+        "zip": "https://github.com/appflare/catalog/releases/download/usage-guard-collector@0.0.0-20261009.f1af3f0/usage-guard-collector-0.0.0-20261009.f1af3f0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/usage-guard-collector@0.0.0-20261009.f1af3f0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/usage-guard-collector@0.0.0-20261009.f1af3f0/manifest.sig",
+        "digest": "4503165b75e4f11dc1fb27a6499db8ec855673de1008bbd54531cc06d40410a2"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-10-09T11:14:16.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Howard",
@@ -8757,12 +8734,6 @@
       ],
       "license": "MIT",
       "revision": 4,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/usage-guard-collector/manifest.json",
-        "sha256": "d4166b82afb53ff44a2fe30997b1bf8c67de298fbf63a1b0c93bd609df07a6f4",
-        "keyId": "catalog-2026-09",
-        "signature": "ebcWjckA88tSSfv/KBpRnmaUrxhQje7mM3/P6SfDCURxRlGhc0rKj43aRf0zSAp7VQEH+F1rA5OKecldH5/IDQ=="
-      },
       "accessOffer": "recommended"
     },
     {
