@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-08T21:04:17.226Z",
+  "generatedAt": "2026-10-09T09:19:07.687Z",
   "apps": [
     {
       "slug": "2fa",
@@ -1458,12 +1458,12 @@
         "Choose which documents and accounts each AI agent can access"
       ],
       "addedAt": "2026-10-07T10:01:59+03:00",
-      "version": "0.0.0-20261006.9c2b76a",
+      "version": "0.0.0-20261007.4358072",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/cloudflare-os@0.0.0-20261006.9c2b76a/cloudflare-os-0.0.0-20261006.9c2b76a.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/cloudflare-os@0.0.0-20261006.9c2b76a/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/cloudflare-os@0.0.0-20261006.9c2b76a/manifest.sig",
-        "digest": "f90dfa627ece5a5fa09e615f77345570017a2122d67dbaf8b494377ad01bb595"
+        "zip": "https://github.com/appflare/catalog/releases/download/cloudflare-os@0.0.0-20261007.4358072/cloudflare-os-0.0.0-20261007.4358072.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/cloudflare-os@0.0.0-20261007.4358072/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/cloudflare-os@0.0.0-20261007.4358072/manifest.sig",
+        "digest": "2388cd8616a1583128ff0349932942a025d321ca537366e88dbcdf7ddc8e3793"
       },
       "tier": "artifact",
       "plan": "paid",
