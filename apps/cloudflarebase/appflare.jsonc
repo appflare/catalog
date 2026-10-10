@@ -34,7 +34,7 @@
   // Pinned to main: the repository has no tags.
   "source": {
     "ref": "main",
-    "sha": "adfd1b3007896b172f028c03dd0e442f0f8907b1",
+    "sha": "389a0211faad25742629e5a159787a4f3e0cd0c9",
     // The commit's own version plus a build number: the plan changed to
     // "free" after 0.0.0-20260827.adfd1b3 was released, which only a new
     // build can carry. Remove this line when source moves.
