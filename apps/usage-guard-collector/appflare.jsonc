@@ -20,7 +20,7 @@
   "authors": [{ "name": "Howard", "url": "https://guushu.com", "github": "HowardZlh" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags; the pin tracks the default branch, main.
-  "source": { "ref": "main", "sha": "f1af3f0ab895946fadbe902f6817e5110d2eb805" },
+  "source": { "ref": "main", "sha": "1d0d49da8933117dfd4d5fe8b4fda7b3e07e7159" },
   "install": {
     "packageManager": "pnpm",
     "wranglerConfig": "wrangler.jsonc"
