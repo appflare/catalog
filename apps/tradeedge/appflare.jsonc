@@ -1,0 +1,87 @@
+{
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "tradeedge",
+  "name": "TradeEdge",
+  "summary": "Options screeners, a trades board and broker holdings on live data, with an MCP server so AI agents can build and compare strategies for you.",
+  "tagline": "Options screeners and trade ideas, built for your AI agent",
+  "features": [
+    "Screen any options strategy on the live chain and rank real trades",
+    "Save trades and compare their payoff curves side by side",
+    "Sync your broker holdings with your own free SnapTrade key",
+    "Let AI agents screen, compare and save trades through MCP",
+    "Keep every person's data encrypted in your own database"
+  ],
+  "repo": "columenlabs/tradeedge",
+  "license": "MIT",
+  "categories": ["finance", "ai"],
+  "authors": [{ "name": "Columen Labs", "url": "https://edgedesk.app", "github": "columenlabs" }],
+  "maintainers": ["bchoor"],
+  "source": { "ref": "v0.1.106", "sha": "5c674040e8badc9b42aaef5c9e0545c50a37a4df" },
+  "install": {
+    "packageManager": "bun",
+    "wranglerConfig": "services/analytics-engine/wrangler.jsonc"
+  },
+  "plan": "free",
+  "requires": ["access"],
+  // The Worker refuses every signed-in route without a valid Access token.
+  // SnapTrade's webhook checks SnapTrade's signature itself.
+  "access": { "mode": "required", "bypass": ["/api/public/snaptrade-hook/*"] },
+  "openPath": "/app/",
+  "secrets": [
+    {
+      "name": "VAULT_KEK",
+      "label": "Encryption key",
+      "help": "Encrypts every person's data in the database. Keep a copy: without it the data can't be read.",
+      "generate": "base64-key-32"
+    },
+    {
+      "name": "ALPACA_API_KEY_ID",
+      "label": "Alpaca key ID",
+      "help": "Live quotes and option chains.",
+      "link": { "label": "Get a key", "url": "https://app.alpaca.markets/" }
+    },
+    {
+      "name": "ALPACA_API_SECRET_KEY",
+      "label": "Alpaca secret key",
+      "link": { "label": "Get a key", "url": "https://app.alpaca.markets/" }
+    }
+  ],
+  "vars": [
+    {
+      "name": "PUBLIC_ORIGIN",
+      "label": "App address",
+      "help": "Filled in by Appflare.",
+      "default": "{{appUrl}}"
+    },
+    {
+      "name": "TRADEEDGE_HOST",
+      "label": "App host",
+      "help": "Filled in by Appflare.",
+      "default": "{{appHostname}}"
+    },
+    {
+      "name": "ACCESS_TEAM_DOMAIN",
+      "label": "Cloudflare Access team domain",
+      "help": "Filled in by Appflare.",
+      "default": "{{accessTeamDomain}}"
+    },
+    {
+      "name": "ACCESS_AUD",
+      "label": "Cloudflare Access audience (MCP)",
+      "help": "Filled in by Appflare.",
+      "default": "{{accessAud}}"
+    },
+    {
+      "name": "ACCESS_APP_AUD",
+      "label": "Cloudflare Access audience (app)",
+      "help": "Filled in by Appflare.",
+      "default": "{{accessAud}}"
+    }
+  ],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "Open {{appUrl}}/app/ and sign in through Cloudflare Access. To sync your brokers, add your free SnapTrade Personal key under Settings > Integrations. AI agents connect at `{{appUrl}}/mcp`."
+    }
+  ]
+}
