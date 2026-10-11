@@ -26,7 +26,7 @@
   "authors": [{ "name": "tao-t356", "github": "tao-t356" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags, so the entry follows the default branch by commit.
-  "source": { "ref": "main", "sha": "e1f92dae4064a485b30b548f1109dcca5d9e653d" },
+  "source": { "ref": "main", "sha": "d66f0eb256205338f9f4939cdd8d40227d580f33" },
   "install": {
     "packageManager": "npm",
     // No build step: the Worker is TypeScript wrangler bundles, and public/
