@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-11T10:56:33.015Z",
+  "generatedAt": "2026-10-11T14:42:07.401Z",
   "apps": [
     {
       "slug": "2fa",
@@ -2268,6 +2268,66 @@
       "accessOffer": "offered"
     },
     {
+      "slug": "edgeever",
+      "repo": "tianma-if/edgeever",
+      "name": "EdgeEver",
+      "summary": "An Evernote-style notes and knowledge base with a three-pane layout, full-text search, public note sharing, AI features and a built-in MCP server, on D1 and R2.",
+      "tagline": "Notes you can organize, search, and share from your own account",
+      "features": [
+        "Write notes in rich text or Markdown",
+        "Organize notes in nested notebooks and tags",
+        "Share notes publicly with password protection",
+        "Restore earlier versions of a note",
+        "Export notes and attachments as a ZIP archive",
+        "Summarize or translate notes with your own AI provider"
+      ],
+      "alternativeTo": [
+        "Evernote"
+      ],
+      "addedAt": "2026-09-27T05:18:00+03:00",
+      "version": "1.109.0",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/edgeever@1.109.0/edgeever-1.109.0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/edgeever@1.109.0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/edgeever@1.109.0/manifest.sig",
+        "digest": "6effbcc7f8b5f2cf68307c5f93edc63517878b8738726274c240806286afd28e"
+      },
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "r2"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "tianma-if",
+          "github": "tianma-if",
+          "x": "tianma_if"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/edgeever/icon.svg",
+          "sha256": "1f13ba9f2ac4ea325eddce44a427eed4e98b64b9078b23de067ed23e67fe7257"
+        },
+        "screenshots": []
+      },
+      "services": [
+        "d1",
+        "r2"
+      ],
+      "categories": [
+        "notes",
+        "productivity"
+      ],
+      "license": "AGPL-3.0-only",
+      "revision": 4,
+      "accessOffer": "offered"
+    },
+    {
       "slug": "edgekey",
       "repo": "34892002/edgeKey",
       "name": "EdgeKey",
@@ -3035,6 +3095,55 @@
         "keyId": "catalog-2026-09",
         "signature": "QL+wO/ApWH/3OjaAyaqZg1r4LtvPb5UTzY4koFrkGmmuozuYDXc34C9K/db2NipeOdHBowuC8/kLsqf0trRBCw=="
       },
+      "accessOffer": "offered"
+    },
+    {
+      "slug": "folia",
+      "repo": "chthollyphile/folia-major",
+      "name": "Folia",
+      "summary": "A web music player built around full-screen animated lyrics, for your local library or a Navidrome server, with automatic lyric matching and AI colour themes from your own Gemini key.",
+      "tagline": "Play your music with full-screen animated lyrics",
+      "features": [
+        "Play music from a local folder without uploading the files",
+        "Listen to music from your own Navidrome server",
+        "Display local lyric files with animated full-screen text",
+        "Choose between different lyric animations",
+        "Generate song colour themes with your own Gemini API key"
+      ],
+      "addedAt": "2026-09-27T10:46:59+03:00",
+      "version": "0.7.17",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/folia@0.7.17/folia-0.7.17.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/folia@0.7.17/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/folia@0.7.17/manifest.sig",
+        "digest": "08b3441b9d5b695fb1e1c987391d0084a05207102bc1530ae33a2367edcbe27c"
+      },
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "chthollyphile",
+          "github": "chthollyphile"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/folia/icon.svg",
+          "sha256": "0045ede40bee2e9ac4f40a3a803b16febbf75ab9beca6c438bfbd1e6cd5529a8"
+        },
+        "screenshots": []
+      },
+      "services": [],
+      "categories": [
+        "media"
+      ],
+      "license": "AGPL-3.0-only",
+      "revision": 4,
       "accessOffer": "offered"
     },
     {
@@ -4688,6 +4797,90 @@
       "accessOffer": "offered"
     },
     {
+      "slug": "mailflare",
+      "repo": "hieunc229/mailflare",
+      "name": "Mailflare",
+      "summary": "A self-hosted email service for your own domains: mailboxes, forwarding rules, and a web inbox, on Email Routing, D1, R2, Queues, and Durable Objects. Shared inboxes require a paid Team license.",
+      "tagline": "Receive, send and organize email on your own domain",
+      "features": [
+        "Create mailboxes and aliases across multiple domains",
+        "Send messages with attachments, rich text and signatures",
+        "Organize mail with folders, search, stars and snoozing",
+        "Forward, reject or sort incoming mail with rules",
+        "Back up your mailbox and import or export mail",
+        "Connect compatible desktop and mobile email apps through JMAP"
+      ],
+      "alternativeTo": [
+        "Gmail"
+      ],
+      "addedAt": "2026-09-24T07:29:19+03:00",
+      "version": "0.0.0-20261011.2e24bfd",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261011.2e24bfd/mailflare-0.0.0-20261011.2e24bfd.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261011.2e24bfd/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261011.2e24bfd/manifest.sig",
+        "digest": "43a5f668737d423e77cdcb26003486ed0c1b9458307b1028c6c3b74b173f52e0"
+      },
+      "tier": "artifact",
+      "plan": "paid",
+      "requires": [
+        "zone",
+        "email-routing",
+        "r2"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Hieu Nguyen",
+          "github": "hieunc229",
+          "x": "hieuSSR"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/mailflare/icon.png",
+          "sha256": "99e25176a3c443b584503fe07a5ed66fe2e06413b7e1c605e52649ed57bdc493"
+        },
+        "screenshots": [
+          {
+            "url": "https://appflare.github.io/catalog/apps/mailflare/screenshots/01-inbox.png",
+            "sha256": "6d6116e232cb8f762303de24ce6cf818eeacb3f4a5e4d903be4adc0492865e14",
+            "alt": "Mailflare: Inbox"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/mailflare/screenshots/02-domains.png",
+            "sha256": "b2db3790cee7e45bc347f36889455cc7cf5f6a30280135921fbfb476f0e4de76",
+            "alt": "Mailflare: Domains"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/mailflare/screenshots/03-mailboxes.png",
+            "sha256": "450ffbebdd462fe98789d8e6c13a0757807726fad5bef16ce3751a0f23dcdbfb",
+            "alt": "Mailflare: Mailboxes"
+          }
+        ]
+      },
+      "services": [
+        "d1",
+        "r2",
+        "durable-objects",
+        "queues",
+        "cron",
+        "workers-ai",
+        "images",
+        "email-routing",
+        "zone"
+      ],
+      "categories": [
+        "email"
+      ],
+      "license": "AGPL-3.0-or-later",
+      "revision": 4,
+      "accessOffer": "offered"
+    },
+    {
       "slug": "md-page",
       "repo": "maypaz/md.page",
       "name": "md.page",
@@ -6205,6 +6398,137 @@
       "accessOffer": "offered"
     },
     {
+      "slug": "private-notes",
+      "repo": "tao-t356/private-notes",
+      "name": "Private Notes",
+      "summary": "A private notebook behind one password: notes encrypted in the browser before they reach D1, search that runs in the browser, separate vaults per password, and one-time share links that burn after reading.",
+      "tagline": "Keep encrypted notes behind a password",
+      "features": [
+        "Encrypt note titles and text in your browser before saving",
+        "Keep separate notebooks that open with different passwords",
+        "Search and filter your notes in your browser",
+        "Share a copy of a note through a link that can be opened once",
+        "Share notes through links that expire after 24 hours or 7 days"
+      ],
+      "alternativeTo": [
+        "ProtectedText"
+      ],
+      "addedAt": "2026-09-27T12:14:18+03:00",
+      "version": "0.0.0-20261010.d66f0eb",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/private-notes@0.0.0-20261010.d66f0eb/private-notes-0.0.0-20261010.d66f0eb.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/private-notes@0.0.0-20261010.d66f0eb/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/private-notes@0.0.0-20261010.d66f0eb/manifest.sig",
+        "digest": "c8adb2500cc1314637d105c30a1ea2c43244c2d354fb139dd63dcb567e9dbb35"
+      },
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "tao-t356",
+          "github": "tao-t356"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/private-notes/icon.svg",
+          "sha256": "b3a6d23833272e8d4bc8cf66f2bc2f5086626674484de60cce1d50e42b2a3505"
+        },
+        "screenshots": []
+      },
+      "services": [
+        "d1"
+      ],
+      "categories": [
+        "notes",
+        "privacy"
+      ],
+      "license": "NONE",
+      "revision": 3,
+      "accessOffer": "offered"
+    },
+    {
+      "slug": "projektor",
+      "repo": "TAJD/projektor",
+      "name": "Projektor",
+      "summary": "An issue tracker and wiki for teams and their AI coding agents: issues, boards, sprints and pages in the browser, and the same actions over MCP.",
+      "tagline": "Track team issues and keep a wiki alongside AI coding agents",
+      "features": [
+        "Organize issues by status, priority and assignee",
+        "Plan sprints and move issues across a board",
+        "Write nested wiki pages and search their text",
+        "Let AI assistants create issues and update wiki pages",
+        "Collect feedback from a widget on your website"
+      ],
+      "alternativeTo": [
+        "Linear",
+        "Jira"
+      ],
+      "addedAt": "2026-09-27T06:13:42+03:00",
+      "version": "0.8.0",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/projektor@0.8.0/projektor-0.8.0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/projektor@0.8.0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/projektor@0.8.0/manifest.sig",
+        "digest": "4f48bf31403cf2c88198741b7c5749e1908a4f2bafbab0ae5fac7c0a6fb5ee03"
+      },
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "r2",
+        "access"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Thomas Dickson",
+          "url": "https://tom-dickson.com",
+          "github": "TAJD"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/projektor/icon.png",
+          "sha256": "61b9dcb398c7917bda9c9db115006272811e056dc61c41b43d884fd11fb558d7"
+        },
+        "cover": {
+          "url": "https://appflare.github.io/catalog/apps/projektor/cover.png",
+          "sha256": "0e437dac08d558958d811477c990ba661258de1d3ef8d2a00c6e254cecf1172a"
+        },
+        "screenshots": [
+          {
+            "url": "https://appflare.github.io/catalog/apps/projektor/screenshots/01-issue-backlog.png",
+            "sha256": "ca1b063a811a33d175f04b7ec1a01c871b76352feed82baba284e76017de5d52",
+            "alt": "Projektor: Issue backlog"
+          }
+        ]
+      },
+      "services": [
+        "kv",
+        "d1",
+        "r2",
+        "durable-objects",
+        "cron",
+        "access"
+      ],
+      "categories": [
+        "productivity",
+        "developer-tools",
+        "ai"
+      ],
+      "license": "MIT",
+      "revision": 1,
+      "accessOffer": "required"
+    },
+    {
       "slug": "punctual",
       "repo": "CCCrafts/punctual",
       "name": "Punctual",
@@ -6463,6 +6787,51 @@
       "accessOffer": "required"
     },
     {
+      "slug": "r2-webdav",
+      "repo": "abersheeran/r2-webdav",
+      "name": "r2-webdav",
+      "summary": "A WebDAV server for an R2 bucket: mount it as a network drive in Finder, Windows Explorer or any WebDAV client, with locking and one user name and password.",
+      "tagline": "Access your R2 files as a network drive",
+      "features": [
+        "Mount stored files as a network drive",
+        "Upload, download, copy and move files with a WebDAV client",
+        "Protect access with one user name and password",
+        "Lock files while editing in clients that support locking"
+      ],
+      "addedAt": "2026-09-27T11:44:15+03:00",
+      "version": "0.0.0-20261011.6ce5bfe",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/r2-webdav@0.0.0-20261011.6ce5bfe/r2-webdav-0.0.0-20261011.6ce5bfe.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/r2-webdav@0.0.0-20261011.6ce5bfe/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/r2-webdav@0.0.0-20261011.6ce5bfe/manifest.sig",
+        "digest": "7d06269eceb1ad7c91b4f7bbe8f1d6069af61bb59f0c407d7633de096ba036de"
+      },
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "r2"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Aber",
+          "github": "abersheeran"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "services": [
+        "r2"
+      ],
+      "categories": [
+        "files"
+      ],
+      "license": "Apache-2.0",
+      "revision": 5,
+      "accessOffer": "offered"
+    },
+    {
       "slug": "rdyrct",
       "repo": "baronunread/rdyrct",
       "name": "rdyrct",
@@ -6585,6 +6954,73 @@
         "keyId": "catalog-2026-09",
         "signature": "OPGB0nCl1BUPPiZBV29ImorB0tW6ZjTZEYC1zMG/ZCOgjw4cxP+chkFYw6XFGBWmKIehxRdOP2dSCGg1zR7hCA=="
       },
+      "accessOffer": "offered"
+    },
+    {
+      "slug": "reminal",
+      "repo": "harshalgajjar/Reminal",
+      "name": "Reminal",
+      "summary": "Your own relay for reminal: reach the terminals, app windows and desktops of your machines from any browser, end-to-end encrypted, with nothing listening on the machines.",
+      "tagline": "Reach your computers' windows and terminals from any browser",
+      "features": [
+        "Use your computer's terminal from a phone or browser after installing its computer client",
+        "Control individual app windows or the full desktop remotely",
+        "Share a live session with someone using a session ID and PIN",
+        "Transfer files between computers with a one-time code",
+        "Share a local web app through a PIN-protected public link",
+        "Keep terminal and window sessions encrypted from computer to browser"
+      ],
+      "alternativeTo": [
+        "ngrok",
+        "TeamViewer"
+      ],
+      "addedAt": "2026-09-27T05:20:16+03:00",
+      "version": "3.16.3",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/reminal@3.16.3/reminal-3.16.3.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/reminal@3.16.3/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/reminal@3.16.3/manifest.sig",
+        "digest": "e1ded58d069d3c7a494445e02a599d972dbdf6422a6fa642090f727d6fb264e8"
+      },
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Harshal Gajjar",
+          "github": "harshalgajjar"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/reminal/icon.png",
+          "sha256": "97653908683f2bfe7bf4302b8a5e29c2839decd0fc37724b8a9c97c91f1968ed"
+        },
+        "cover": {
+          "url": "https://appflare.github.io/catalog/apps/reminal/cover.png",
+          "sha256": "90ed2f7be942e37e6e1ca09d92de076f542168c5b800fc622768fde7e87507b7"
+        },
+        "screenshots": [
+          {
+            "url": "https://appflare.github.io/catalog/apps/reminal/screenshots/01-alerts-sheet.png",
+            "sha256": "9895a77b7faae05671d4772a5ffceaeceaa6e679befb69b13c7bae6d61254e42",
+            "alt": "Reminal: Alerts sheet"
+          }
+        ]
+      },
+      "services": [
+        "durable-objects"
+      ],
+      "categories": [
+        "remote-access",
+        "developer-tools"
+      ],
+      "license": "AGPL-3.0-or-later",
+      "revision": 3,
       "accessOffer": "offered"
     },
     {
