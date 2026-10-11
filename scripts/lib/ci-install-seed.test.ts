@@ -12,6 +12,7 @@ import {
   type CiSeedValues,
   catalogForms,
   d1Steps,
+  isQueryStep,
   isSeedStep,
   needsSeedHelpers,
   planCiApp,
@@ -84,8 +85,8 @@ describe("planCiInstall with seeds", () => {
   it("lists each database's seed, a database with nothing but a seed included", () => {
     const d1 = plan().d1;
     expect(d1.map((d) => [d.binding, d.migrations, d.schema, d.postDeploy])).toEqual([
-      ["DB", true, ["d1-schema/DB/db/defaults.sql"], ["0100_cleanup.sql"]],
-      ["AUTH", false, [], []],
+      ["DB", ["0001_init.sql"], ["d1-schema/DB/db/defaults.sql"], ["0100_cleanup.sql"]],
+      ["AUTH", [], [], []],
     ]);
     expect(d1[0]?.seed?.beforeSchema).toBe(true);
     expect(d1[1]?.seed?.statements).toHaveLength(1);
@@ -116,13 +117,17 @@ describe("d1Steps with seeds", () => {
   it("seeds before the schema files when asked, and every other seed last", () => {
     const app = planCiApp(keep(), "ci-keep-pr1");
     const steps = d1Steps(app.d1).map((s) =>
-      isSeedStep(s) ? `seed ${s.database} (${s.binding})` : [s.config, ...s.args].join(" "),
+      isSeedStep(s)
+        ? `seed ${s.database} (${s.binding})`
+        : isQueryStep(s)
+          ? `/query ${s.query} ${s.database} ${s.file}`
+          : `/query ${s.tracked} ${s.database}`,
     );
     expect(steps).toEqual([
-      "wrangler.json d1 migrations apply ci-keep-pr1-db --remote",
+      "/query migrations ci-keep-pr1-db",
       "seed ci-keep-pr1-db (DB)",
-      "wrangler.json d1 execute ci-keep-pr1-db --remote --yes --file d1-schema/DB/db/defaults.sql",
-      "wrangler.post-deploy.json d1 migrations apply ci-keep-pr1-db --remote",
+      "/query schema ci-keep-pr1-db d1-schema/DB/db/defaults.sql",
+      "/query post-deploy migrations ci-keep-pr1-db",
       "seed ci-keep-pr1-auth (AUTH)",
     ]);
   });

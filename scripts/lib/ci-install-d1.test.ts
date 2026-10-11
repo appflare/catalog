@@ -11,13 +11,12 @@ import {
 import { appflareAvailable, appflareDir } from "../fixtures/schema.ts";
 import { loadAppflareSchema, loadEntryWorkerHelpers, parseOrThrow } from "./appflare-schema.ts";
 import {
-  type CiD1Database,
+  type CiD1Step,
   d1Steps,
+  isQueryStep,
   isSeedStep,
-  migrationsLayout,
   planCiApp,
   planCiInstall,
-  postDeployConfig,
   unpackArtifact,
 } from "./ci-install.ts";
 import type { ArtifactManifest } from "./types.ts";
@@ -26,41 +25,13 @@ const PIN = "0123456789abcdef0123456789abcdef01234567";
 
 const ledger = () => d1ArtifactManifestFixture({ sha: PIN }) as unknown as ArtifactManifest;
 
-describe("migrationsLayout", () => {
-  it("leaves wrangler's default pattern for flat .sql names", () => {
-    expect(migrationsLayout("d1/DB", ["0001_init.sql", "0002_more.sql"])).toEqual({
-      migrations_dir: "d1/DB",
-    });
-  });
-
-  it("matches every file under the folder when a name is a path or not .sql", () => {
-    expect(migrationsLayout("d1/DB", ["20240101_init/migration.sql"])).toEqual({
-      migrations_dir: "d1/DB",
-      migrations_pattern: "d1/DB/**",
-    });
-    expect(migrationsLayout("d1/DB", ["0001_init.up"])).toEqual({
-      migrations_dir: "d1/DB",
-      migrations_pattern: "d1/DB/**",
-    });
-  });
-
-  it("sets nothing for a binding without migrations", () => {
-    expect(migrationsLayout("d1/DB", [])).toEqual({});
-  });
-});
-
 describe("planCiInstall with resources.d1", () => {
   const plan = () => planCiInstall(ledger(), "ci-ledger-pr1");
 
-  it("points each database's migrations_dir at its unpacked migrations", () => {
+  it("names each database and nothing else, since no wrangler command runs its SQL", () => {
     expect(plan().config.d1_databases).toEqual([
-      {
-        binding: "DB",
-        database_name: "ci-ledger-pr1-db",
-        migrations_dir: "d1/DB",
-        migrations_pattern: "d1/DB/**",
-      },
-      { binding: "LOGS", database_name: "ci-ledger-pr1-logs", migrations_dir: "d1/LOGS" },
+      { binding: "DB", database_name: "ci-ledger-pr1-db" },
+      { binding: "LOGS", database_name: "ci-ledger-pr1-logs" },
       { binding: "SEEDS", database_name: "ci-ledger-pr1-seeds" },
       { binding: "AUDIT", database_name: "ci-ledger-pr1-audit" },
     ]);
@@ -71,28 +42,28 @@ describe("planCiInstall with resources.d1", () => {
       {
         database: "ci-ledger-pr1-db",
         binding: "DB",
-        migrations: true,
+        migrations: ["20240101_init/migration.sql", "20240302_tags/migration.sql"],
         schema: ["d1-schema/DB/db/views.sql"],
         postDeploy: ["0100_drop_legacy.sql"],
       },
       {
         database: "ci-ledger-pr1-logs",
         binding: "LOGS",
-        migrations: true,
+        migrations: ["0001_logs.sql"],
         schema: [],
         postDeploy: [],
       },
       {
         database: "ci-ledger-pr1-seeds",
         binding: "SEEDS",
-        migrations: false,
+        migrations: [],
         schema: ["d1-schema/SEEDS/db/seed.sql", "d1-schema/SEEDS/db/more.sql"],
         postDeploy: [],
       },
       {
         database: "ci-ledger-pr1-audit",
         binding: "AUDIT",
-        migrations: false,
+        migrations: [],
         schema: [],
         postDeploy: ["0001_audit.sql"],
       },
@@ -109,55 +80,82 @@ describe("planCiInstall with resources.d1", () => {
   });
 });
 
-describe("postDeployConfig", () => {
-  it("points only the databases with post-deploy migrations at them", () => {
-    const plan = planCiInstall(ledger(), "ci-ledger-pr1");
-    const config = postDeployConfig(plan.config, plan.d1);
-    expect(config?.d1_databases).toEqual([
-      { binding: "DB", database_name: "ci-ledger-pr1-db", migrations_dir: "d1-post-deploy/DB" },
-      { binding: "LOGS", database_name: "ci-ledger-pr1-logs", migrations_dir: "d1/LOGS" },
-      { binding: "SEEDS", database_name: "ci-ledger-pr1-seeds" },
-      {
-        binding: "AUDIT",
-        database_name: "ci-ledger-pr1-audit",
-        migrations_dir: "d1-post-deploy/AUDIT",
-      },
-    ]);
-    // Everything else is the deploy config's.
-    expect({ ...config, d1_databases: undefined }).toEqual({
-      ...plan.config,
-      d1_databases: undefined,
-    });
-  });
-
-  it("is null when no database has post-deploy migrations", () => {
-    const only: CiD1Database = {
-      database: "db",
-      binding: "DB",
-      migrations: true,
-      schema: [],
-      postDeploy: [],
-    };
-    expect(postDeployConfig({ d1_databases: [{ binding: "DB" }] }, [only])).toBeNull();
-  });
-});
+/** A D1 step in a line: what it sends to /query, on which database. */
+const line = (s: CiD1Step): string =>
+  isSeedStep(s)
+    ? `seed ${s.database}`
+    : isQueryStep(s)
+      ? `/query ${s.query} ${s.database} ${s.file}`
+      : `/query ${s.tracked} ${s.database} ${s.files.map((f) => f.name).join(" ")}`;
 
 describe("d1Steps", () => {
   it("runs migrations then schema files per database, then every post-deploy step", () => {
     const app = planCiApp(ledger(), "ci-ledger-pr1");
-    const steps = d1Steps(app.d1).map((s) =>
-      isSeedStep(s) ? `seed ${s.database}` : [s.config, ...s.args].join(" "),
-    );
-    expect(steps).toEqual([
-      "wrangler.json d1 migrations apply ci-ledger-pr1-db --remote",
-      "wrangler.json d1 execute ci-ledger-pr1-db --remote --yes --file d1-schema/DB/db/views.sql",
-      "wrangler.json d1 migrations apply ci-ledger-pr1-logs --remote",
-      "wrangler.json d1 execute ci-ledger-pr1-seeds --remote --yes --file d1-schema/SEEDS/db/seed.sql",
-      "wrangler.json d1 execute ci-ledger-pr1-seeds --remote --yes --file d1-schema/SEEDS/db/more.sql",
-      "wrangler.post-deploy.json d1 migrations apply ci-ledger-pr1-db --remote",
-      "wrangler.post-deploy.json d1 migrations apply ci-ledger-pr1-audit --remote",
+    expect(d1Steps(app.d1).map(line)).toEqual([
+      "/query migrations ci-ledger-pr1-db 20240101_init/migration.sql 20240302_tags/migration.sql",
+      "/query schema ci-ledger-pr1-db d1-schema/DB/db/views.sql",
+      "/query migrations ci-ledger-pr1-logs 0001_logs.sql",
+      "/query schema ci-ledger-pr1-seeds d1-schema/SEEDS/db/seed.sql",
+      "/query schema ci-ledger-pr1-seeds d1-schema/SEEDS/db/more.sql",
+      "/query post-deploy migrations ci-ledger-pr1-db 0100_drop_legacy.sql",
+      "/query post-deploy migrations ci-ledger-pr1-audit 0001_audit.sql",
     ]);
     expect(new Set(d1Steps(app.d1).map((s) => s.worker))).toEqual(new Set(["ci-ledger-pr1"]));
+  });
+
+  it("applies each database's tracked files from where they are unpacked, under their names", () => {
+    const steps = d1Steps(planCiApp(ledger(), "ci-ledger-pr1").d1);
+    const shipped = [
+      "20240101_init/migration.sql",
+      "20240302_tags/migration.sql",
+      "0100_drop_legacy.sql",
+    ];
+    expect(steps[0]).toEqual({
+      worker: "ci-ledger-pr1",
+      database: "ci-ledger-pr1-db",
+      binding: "DB",
+      tracked: "migrations",
+      files: [
+        { name: "20240101_init/migration.sql", file: "d1/DB/20240101_init/migration.sql" },
+        { name: "20240302_tags/migration.sql", file: "d1/DB/20240302_tags/migration.sql" },
+      ],
+      shipped,
+    });
+    expect(steps[5]).toEqual({
+      worker: "ci-ledger-pr1",
+      database: "ci-ledger-pr1-db",
+      binding: "DB",
+      tracked: "post-deploy migrations",
+      files: [{ name: "0100_drop_legacy.sql", file: "d1-post-deploy/DB/0100_drop_legacy.sql" }],
+      shipped,
+    });
+  });
+
+  it("sends each schema file to D1's /query on its own, from the Worker's work dir", () => {
+    const steps = d1Steps(planCiApp(ledger(), "ci-ledger-pr1").d1);
+    expect(steps.filter(isQueryStep)).toEqual([
+      {
+        worker: "ci-ledger-pr1",
+        database: "ci-ledger-pr1-db",
+        binding: "DB",
+        file: "d1-schema/DB/db/views.sql",
+        query: "schema",
+      },
+      {
+        worker: "ci-ledger-pr1",
+        database: "ci-ledger-pr1-seeds",
+        binding: "SEEDS",
+        file: "d1-schema/SEEDS/db/seed.sql",
+        query: "schema",
+      },
+      {
+        worker: "ci-ledger-pr1",
+        database: "ci-ledger-pr1-seeds",
+        binding: "SEEDS",
+        file: "d1-schema/SEEDS/db/more.sql",
+        query: "schema",
+      },
+    ]);
   });
 
   it("is empty without D1 SQL", () => {
@@ -217,7 +215,7 @@ describe("unpackArtifact with D1 schema files and post-deploy migrations", () =>
     expect(at("d1/DB/20240302_tags/migration.sql")).toBe(texts.tags);
     expect(at("d1-schema/DB/db/views.sql")).toBe(texts.views);
     expect(at("d1-post-deploy/DB/0100_drop_legacy.sql")).toBe(texts.drop);
-    // The migrations folder holds only the artifact's migrations, so `<dir>/**` finds just them.
+    // The migrations folder holds the artifact's migrations and nothing else.
     expect(readdirSync(path.join(out, "d1/DB"), { recursive: true }).sort()).toEqual([
       "20240101_init",
       "20240101_init/migration.sql",
@@ -266,7 +264,7 @@ describe.skipIf(!appflareAvailable)("D1 SQL with the real @appflare/schema", () 
       {
         database: "ci-duo-pr1-db",
         binding: "DB",
-        migrations: true,
+        migrations: ["0001_init.sql"],
         schema: ["d1-schema/DB/db/views.sql"],
         postDeploy: [],
         worker: "ci-duo-pr1-jobs",

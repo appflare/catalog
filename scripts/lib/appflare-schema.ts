@@ -224,6 +224,56 @@ export async function loadSeedHelpers(appflareDir: string): Promise<SeedHelpers>
 }
 
 /**
+ * The `@appflare/schema` functions the install check runs D1 SQL with, the
+ * ones the manager's migration, schema and baseline steps use, so D1 reads
+ * the SQL in CI as it reads it at install and migrations run in the same
+ * order.
+ */
+export interface D1QueryHelpers {
+  /**
+   * The SQL with every trigger's body written so `/query` ends it where
+   * SQLite does, not at an upper-case `END;` inside it. Null with a build
+   * that predates it, whose manager sends the file as it is.
+   */
+  normalizeForD1Query: ((sql: string) => string) | null;
+  /** Whether the SQL's last statement has no closing `;`. */
+  endsInsideStatement(sql: string): boolean;
+  /** The order migrations run in, as wrangler sorts them. */
+  compareMigrationNames(a: string, b: string): number;
+}
+
+/**
+ * The D1 query functions from `@appflare/schema` in `appflareDir`, loaded
+ * only for an artifact with D1 SQL besides seeds. A build without
+ * `normalizeForD1Query` still works: its manager sends the SQL unchanged,
+ * and so does the check. Throws, naming what is missing, with a build that
+ * lacks `endsInsideStatement` or `compareMigrationNames`.
+ */
+export async function loadD1QueryHelpers(appflareDir: string): Promise<D1QueryHelpers> {
+  assertAppflareBuilt(appflareDir);
+  const mod = (await import(pathToFileURL(appflarePaths(appflareDir).schemaDist).href)) as Record<
+    string,
+    unknown
+  > | null;
+  for (const name of ["endsInsideStatement", "compareMigrationNames"]) {
+    if (typeof mod?.[name] !== "function") {
+      throw new Error(
+        `@appflare/schema in ${appflareDir} does not export ${name}(); build a newer appflare checkout`,
+      );
+    }
+  }
+  const normalize = mod?.normalizeForD1Query;
+  // Checked: functions; the signatures are the ones @appflare/schema
+  // declares, mirrored by D1QueryHelpers.
+  return {
+    normalizeForD1Query:
+      typeof normalize === "function" ? (normalize as (sql: string) => string) : null,
+    endsInsideStatement: mod?.endsInsideStatement as (sql: string) => boolean,
+    compareMigrationNames: mod?.compareMigrationNames as (a: string, b: string) => number,
+  };
+}
+
+/**
  * The `@appflare/schema` function the install check sets an R2 bucket's
  * lifecycle rules with, the one the manager's install uses, so a bucket gets
  * in CI exactly the rules it gets at install.

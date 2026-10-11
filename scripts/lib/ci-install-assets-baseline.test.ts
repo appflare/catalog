@@ -10,12 +10,11 @@ import {
 import { appflareAvailable, appflareDir } from "../fixtures/schema.ts";
 import { loadAppflareSchema } from "./appflare-schema.ts";
 import {
+  CREATE_MIGRATIONS_TABLE_SQL,
   d1Steps,
-  isSeedStep,
   planCiApp,
   planCiInstall,
-  postDeployConfig,
-  recordMigrationsSql,
+  recordMigrationsQuery,
   unpackArtifact,
 } from "./ci-install.ts";
 import type { ArtifactManifest } from "./types.ts";
@@ -31,7 +30,7 @@ describe("a D1 baseline", () => {
       {
         database: "ci-notes-pr1-db",
         binding: "DB",
-        migrations: true,
+        migrations: ["0001_init.sql", "0002_add_o'clock.sql"],
         schema: [],
         postDeploy: ["0100_cleanup.sql"],
         baseline: {
@@ -42,31 +41,26 @@ describe("a D1 baseline", () => {
     ]);
   });
 
-  it("runs the baseline, then records the migrations without applying any", () => {
-    const steps = d1Steps(planCiApp(notes(), "ci-notes-pr1").d1);
-    expect(steps.map((s) => (isSeedStep(s) ? "seed" : [s.config, ...s.args].join(" ")))).toEqual([
-      "wrangler.json d1 execute ci-notes-pr1-db --remote --yes --file d1-baseline/DB/db/schema.sql",
-      "wrangler.json d1 execute ci-notes-pr1-db --remote --yes --file d1-baseline-record/DB.sql",
+  it("runs the baseline through /query with the migrations it records, applying none", () => {
+    expect(d1Steps(planCiApp(notes(), "ci-notes-pr1").d1)).toEqual([
+      {
+        worker: "ci-notes-pr1",
+        database: "ci-notes-pr1-db",
+        binding: "DB",
+        file: "d1-baseline/DB/db/schema.sql",
+        query: "baseline",
+        recorded: ["0001_init.sql", "0002_add_o'clock.sql", "0100_cleanup.sql"],
+      },
     ]);
-    const record = steps[1];
-    expect(record !== undefined && !isSeedStep(record) ? record.write : undefined).toEqual({
-      file: "d1-baseline-record/DB.sql",
-      text: recordMigrationsSql(["0001_init.sql", "0002_add_o'clock.sql", "0100_cleanup.sql"]),
-    });
-  });
-
-  it("writes no post-deploy config, since its post-deploy migrations are recorded", () => {
-    const plan = planCiInstall(notes(), "ci-notes-pr1");
-    expect(postDeployConfig(plan.config, plan.d1)).toBeNull();
   });
 
   it("records names as wrangler's d1_migrations table holds them, quotes escaped", () => {
-    const sql = recordMigrationsSql(["0001_init.sql", "0002_add_o'clock.sql"]);
-    expect(sql).toContain('CREATE TABLE IF NOT EXISTS "d1_migrations"(');
-    expect(sql).toContain("name       TEXT UNIQUE,");
-    expect(sql).toContain(
+    expect(CREATE_MIGRATIONS_TABLE_SQL).toContain('CREATE TABLE IF NOT EXISTS "d1_migrations"(');
+    expect(CREATE_MIGRATIONS_TABLE_SQL).toContain("name       TEXT UNIQUE,");
+    expect(recordMigrationsQuery(["0001_init.sql", "0002_add_o'clock.sql"])).toBe(
       `INSERT OR IGNORE INTO "d1_migrations" (name)\nvalues ('0001_init.sql'),\n('0002_add_o''clock.sql');`,
     );
+    expect(recordMigrationsQuery([])).toBe("");
   });
 
   it("runs just the baseline when the version ships no migrations", () => {
@@ -76,9 +70,11 @@ describe("a D1 baseline", () => {
     m.d1.DB = { ...db, migrations: [], postDeploy: [] };
     const steps = d1Steps(planCiApp(m, "ci-notes-pr1").d1);
     expect(steps).toHaveLength(1);
-    expect(steps[0] !== undefined && !isSeedStep(steps[0]) ? steps[0].args.at(-1) : null).toBe(
-      "d1-baseline/DB/db/schema.sql",
-    );
+    expect(steps[0]).toMatchObject({
+      file: "d1-baseline/DB/db/schema.sql",
+      query: "baseline",
+      recorded: [],
+    });
   });
 });
 
