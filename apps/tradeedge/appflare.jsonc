@@ -16,7 +16,7 @@
   "categories": ["finance", "ai"],
   "authors": [{ "name": "Columen Labs", "url": "https://edgedesk.app", "github": "columenlabs" }],
   "maintainers": ["bchoor"],
-  "source": { "ref": "v0.1.108", "sha": "f98f2272ed3990e3d3aac5db3d827e1782ae17fd" },
+  "source": { "ref": "v0.1.122", "sha": "d243c26e357fb0458ae265556723e56689c6e71a" },
   "install": {
     "packageManager": "bun",
     "wranglerConfig": "services/analytics-engine/wrangler.jsonc"
@@ -81,7 +81,7 @@
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Open {{appUrl}}/app/ and sign in through Cloudflare Access. To sync your brokers, add your free SnapTrade Personal key (up to 5 brokers, tax lots for eligible brokers) under Settings > Integrations. AI agents connect at `{{appUrl}}/mcp`."
+      "content": "Open {{appUrl}}/app/ and sign in through Cloudflare Access. To sync your brokers, add your free SnapTrade Personal key (up to 5 brokers, tax lots for eligible brokers) under Settings > Integrations. Placing trades through SnapTrade, for eligible accounts, is in progress and coming soon. AI agents connect at `{{appUrl}}/mcp`."
     }
   ]
 }
