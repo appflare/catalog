@@ -7,7 +7,7 @@
   "features": [
     "Screen any options strategy on the live chain and rank real trades",
     "Save trades and compare their payoff curves side by side",
-    "Sync your broker holdings with your own free SnapTrade key",
+    "Sync up to 5 brokers, with tax lots where eligible, through your own free SnapTrade key",
     "Let AI agents screen, compare and save trades through MCP",
     "Keep every person's data encrypted in your own database"
   ],
@@ -16,7 +16,7 @@
   "categories": ["finance", "ai"],
   "authors": [{ "name": "Columen Labs", "url": "https://edgedesk.app", "github": "columenlabs" }],
   "maintainers": ["bchoor"],
-  "source": { "ref": "v0.1.106", "sha": "5c674040e8badc9b42aaef5c9e0545c50a37a4df" },
+  "source": { "ref": "v0.1.108", "sha": "f98f2272ed3990e3d3aac5db3d827e1782ae17fd" },
   "install": {
     "packageManager": "bun",
     "wranglerConfig": "services/analytics-engine/wrangler.jsonc"
@@ -81,7 +81,7 @@
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Open {{appUrl}}/app/ and sign in through Cloudflare Access. To sync your brokers, add your free SnapTrade Personal key under Settings > Integrations. AI agents connect at `{{appUrl}}/mcp`."
+      "content": "Open {{appUrl}}/app/ and sign in through Cloudflare Access. To sync your brokers, add your free SnapTrade Personal key (up to 5 brokers, tax lots for eligible brokers) under Settings > Integrations. AI agents connect at `{{appUrl}}/mcp`."
     }
   ]
 }
