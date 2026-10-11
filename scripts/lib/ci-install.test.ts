@@ -108,7 +108,13 @@ describe("planCiInstall", () => {
       { type: "workflow", name: "ci-hello-pr1-jobs", binding: "JOBS" },
     ]);
     expect(plan.d1).toEqual([
-      { database: "ci-hello-pr1-db", binding: "DB", migrations: true, schema: [], postDeploy: [] },
+      {
+        database: "ci-hello-pr1-db",
+        binding: "DB",
+        migrations: ["0001_init.sql"],
+        schema: [],
+        postDeploy: [],
+      },
     ]);
     expect(plan.config).toMatchObject({
       name: "ci-hello-pr1",
@@ -116,7 +122,7 @@ describe("planCiInstall", () => {
       no_bundle: true,
       workers_dev: true,
       kv_namespaces: [{ binding: "CUT_KV" }],
-      d1_databases: [{ binding: "DB", database_name: "ci-hello-pr1-db", migrations_dir: "d1/DB" }],
+      d1_databases: [{ binding: "DB", database_name: "ci-hello-pr1-db" }],
       r2_buckets: [{ binding: "MEDIA_BUCKET", bucket_name: "ci-hello-pr1-media-bucket" }],
       workflows: [{ binding: "JOBS", name: "ci-hello-pr1-jobs", class_name: "JobWorkflow" }],
       durable_objects: { bindings: [{ name: "ROOMS", class_name: "Room" }] },
@@ -1821,9 +1827,7 @@ describe.skipIf(entryHelpers === null)("planCiApp for an app of several Workers"
     const app = await duoPlan();
     const [jobs, web] = app.workers.map((w) => w.plan.config);
     for (const config of [jobs, web]) {
-      expect(config?.d1_databases).toEqual([
-        { binding: "DB", database_name: "ci-duo-pr1-db", migrations_dir: "d1/DB" },
-      ]);
+      expect(config?.d1_databases).toEqual([{ binding: "DB", database_name: "ci-duo-pr1-db" }]);
       expect(config?.kv_namespaces).toEqual([{ binding: "CACHE" }]);
       // One rate limit namespace for the app, not one per Worker.
       expect(config?.ratelimits).toEqual([
@@ -1842,7 +1846,7 @@ describe.skipIf(entryHelpers === null)("planCiApp for an app of several Workers"
       {
         database: "ci-duo-pr1-db",
         binding: "DB",
-        migrations: true,
+        migrations: ["0001_init.sql"],
         schema: [],
         postDeploy: [],
         worker: "ci-duo-pr1-jobs",

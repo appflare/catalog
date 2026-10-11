@@ -2,7 +2,7 @@ import { createHash, randomBytes } from "node:crypto";
 import { closeSync, mkdirSync, openSync, readSync, statSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import bcrypt from "bcryptjs";
-import type { EntryWorkerHelpers, SeedHelpers } from "./appflare-schema.ts";
+import type { D1QueryHelpers, EntryWorkerHelpers, SeedHelpers } from "./appflare-schema.ts";
 import type {
   ArtifactBinding,
   ArtifactD1Binding,
@@ -45,21 +45,28 @@ export type { HealthMode } from "./types.ts";
  * wrangler creates the buckets during the deploy, so their rules are set
  * right after it, before any D1 SQL runs or any request reaches the app.
  *
- * D1 SQL runs as the manager runs it, once every Worker is deployed: each
- * database's migrations with `wrangler d1 migrations apply` (named and ordered
- * as the artifact records them), then its schema files in order with
- * `wrangler d1 execute --file`, unrecorded; then, for every database, its
- * post-deploy migrations with `wrangler d1 migrations apply` against a second
- * config whose `migrations_dir` is their folder, so they are recorded in
- * `d1_migrations` beside the others. A database with a baseline
- * (`resources.d1[binding].baseline`) instead runs it with `wrangler d1
- * execute --file`, then records every migration and post-deploy migration
- * of the version in `d1_migrations` without running them, as the manager
- * does on a new database. A database's seed
+ * D1 SQL runs once every Worker is deployed, in the manager's order, through
+ * the D1 API's `/query` endpoint, with the bodies the manager sends, so D1
+ * reads every file here as it reads it at install. For each database: its
+ * migrations, each file not yet recorded in `d1_migrations` as one `/query`
+ * call with the row that records it (see {@link runD1Migrations}); then its
+ * schema files in order, unrecorded, each as one `/query` call (see
+ * {@link runD1Query}). Then, for every database, its post-deploy migrations,
+ * applied and recorded like the migrations. A database with a baseline
+ * (`resources.d1[binding].baseline`) instead runs it as the manager does on a
+ * new database: `d1_migrations` is created, then the baseline goes in one
+ * `/query` call with the rows that record every migration and post-deploy
+ * migration of the version, none of which then runs. wrangler runs no D1 SQL
+ * here, as it runs none at install: `wrangler d1 migrations apply` sends each
+ * file as the file has it, while the manager rewrites what D1's `/query`
+ * would misread first, and `wrangler d1 execute --file` goes through D1's
+ * import API, which reads a trigger whose body holds an upper-case `END;`
+ * (`CASE ... END;`) whole where `/query` ends the body there; either way a
+ * file could pass here and fail at install. A database's seed
  * (`resources.d1[binding].seed`) runs last, or right after its migrations
- * when it says `beforeSchema`, through the D1 API rather than wrangler,
- * which cannot bind params (see {@link runSeed}). Seed-only secrets and vars
- * get values for the seeds and are never set on a Worker.
+ * when it says `beforeSchema`, one `/query` call per statement with its
+ * values as params (see {@link runSeed}). Seed-only secrets and vars get
+ * values for the seeds and are never set on a Worker.
  *
  * A Worker of static assets only (no modules and no `mainModule`) is deployed as `wrangler deploy` deploys a config with `assets`
  * and no `main`: the config names no entry module, no module rules and no
@@ -85,17 +92,14 @@ export type { HealthMode } from "./types.ts";
 
 export const WORKER_DIR = "worker";
 export const ASSETS_DIR = "assets";
+/** Where each D1 binding's migrations are unpacked: `<dir>/<binding>/<name>`. */
 export const D1_DIR = "d1";
 /** Where each D1 binding's schema files are unpacked: `<dir>/<binding>/<name>`. */
 export const D1_SCHEMA_DIR = "d1-schema";
-/** Where each D1 binding's post-deploy migrations are unpacked. */
+/** Where each D1 binding's post-deploy migrations are unpacked: `<dir>/<binding>/<name>`. */
 export const D1_POST_DEPLOY_DIR = "d1-post-deploy";
 /** Where each D1 baseline is unpacked, under `<binding>/<name>`. */
 export const D1_BASELINE_DIR = "d1-baseline";
-/** Where the SQL that records a baseline database's migrations is written, as `<binding>.sql`. */
-export const D1_BASELINE_RECORD_DIR = "d1-baseline-record";
-/** The config the post-deploy migrations are applied with (see {@link postDeployConfig}). */
-export const POST_DEPLOY_CONFIG = "wrangler.post-deploy.json";
 /** The config every Worker is deployed with. */
 export const DEPLOY_CONFIG = "wrangler.json";
 
@@ -185,11 +189,11 @@ export interface CiD1Database {
   /** The database's name, as the config gives it (`database_name`). */
   database: string;
   binding: string;
-  /** Whether it has migrations, applied from `d1/<binding>/` by the deploy config. */
-  migrations: boolean;
+  /** Its migrations' names, as `d1_migrations` records them; unpacked under `d1/<binding>/`. */
+  migrations: string[];
   /** Its schema files, relative to the work dir, in the order they run. */
   schema: string[];
-  /** Its post-deploy migrations' names, applied from `d1-post-deploy/<binding>/`. */
+  /** Its post-deploy migrations' names; unpacked under `d1-post-deploy/<binding>/`. */
   postDeploy: string[];
   /** The rows it gets once, at install (`resources.d1[binding].seed`); omitted when none. */
   seed?: CatalogD1Seed;
@@ -1089,20 +1093,13 @@ export function planCiInstall(
       case "d1": {
         const files = d1FilesOf(manifest, binding.name);
         const seed = d1SeedOf(manifest.catalog, binding.name);
-        d1.push({
-          binding: binding.name,
-          database_name: resource,
-          ...migrationsLayout(
-            `${D1_DIR}/${binding.name}`,
-            files.migrations.map((f) => f.name),
-          ),
-        });
+        d1.push({ binding: binding.name, database_name: resource });
         resources.push({ type: "d1", name: resource, binding: binding.name });
         const baseline = files.baseline;
         const database: CiD1Database = {
           database: resource,
           binding: binding.name,
-          migrations: files.migrations.length > 0,
+          migrations: files.migrations.map((f) => f.name),
           schema: files.schema.map((f) => `${D1_SCHEMA_DIR}/${binding.name}/${f.name}`),
           postDeploy: files.postDeploy.map((f) => f.name),
           ...(seed === null ? {} : { seed }),
@@ -1116,7 +1113,7 @@ export function planCiInstall(
               }),
         };
         if (
-          database.migrations ||
+          database.migrations.length > 0 ||
           database.schema.length > 0 ||
           database.postDeploy.length > 0 ||
           seed !== null ||
@@ -2077,105 +2074,63 @@ function d1SeedOf(catalog: unknown, binding: string): CatalogD1Seed | null {
 }
 
 /**
- * The `migrations_dir`, and `migrations_pattern` when it is needed, that make
- * `wrangler d1 migrations apply` find exactly the migrations `names` unpacked
- * under `dir`, under those names. wrangler's default pattern, `<dir>/*.sql`,
- * finds only `.sql` files directly in the folder. A migration named by a path
- * (`20240101_init/migration.sql`, from a migrations glob or an upstream
- * `migrations_pattern`) needs `<dir>/**`, every file under the folder, which
- * holds only what the artifact records. wrangler names each file by its path
- * from `dir` and sorts them as the packer does, so `d1_migrations` records
- * the artifact's names in the artifact's order.
- */
-export function migrationsLayout(
-  dir: string,
-  names: readonly string[],
-): { migrations_dir?: string; migrations_pattern?: string } {
-  if (names.length === 0) return {};
-  const flat = names.every((n) => !n.includes("/") && !n.startsWith(".") && n.endsWith(".sql"));
-  return flat ? { migrations_dir: dir } : { migrations_dir: dir, migrations_pattern: `${dir}/**` };
-}
-
-/**
- * The config the post-deploy migrations are applied with: the deploy config
- * with each such database's `migrations_dir` pointed at
- * `d1-post-deploy/<binding>`, so `wrangler d1 migrations apply` runs the ones
- * `d1_migrations` does not record yet and records them beside the others, as
- * the manager does. Null when no database has any.
- */
-export function postDeployConfig(
-  config: Record<string, unknown>,
-  databases: readonly CiD1Database[],
-): Record<string, unknown> | null {
-  const post = new Map(databases.filter(appliesPostDeploy).map((d) => [d.binding, d.postDeploy]));
-  if (post.size === 0) return null;
-  const entries = Array.isArray(config.d1_databases)
-    ? (config.d1_databases as Record<string, unknown>[])
-    : [];
-  return {
-    ...config,
-    d1_databases: entries.map((entry) => {
-      const names = typeof entry.binding === "string" ? post.get(entry.binding) : undefined;
-      if (names === undefined) return entry;
-      const { migrations_dir: _dir, migrations_pattern: _pattern, ...rest } = entry;
-      return { ...rest, ...migrationsLayout(`${D1_POST_DEPLOY_DIR}/${entry.binding}`, names) };
-    }),
-  };
-}
-
-/**
- * Whether a database's post-deploy migrations run with `wrangler d1
- * migrations apply`: it has some, and no baseline, after which they are
- * recorded without running.
+ * Whether a database's post-deploy migrations are applied: it has some, and
+ * no baseline, which records them without running them.
  */
 function appliesPostDeploy(d: CiD1Database): boolean {
   return d.postDeploy.length > 0 && d.baseline === undefined;
 }
 
 /**
- * The SQL that records `names` in `d1_migrations` as applied, without
- * running them: the table as `wrangler d1 migrations apply` creates it
- * (verbatim from wrangler 4, as the manager has it), then one row per name.
- * Names already recorded stay.
+ * `d1_migrations` as `wrangler d1 migrations apply` creates it, verbatim from
+ * wrangler 4, as the manager has it (`CREATE_MIGRATIONS_TABLE_SQL`).
  */
-export function recordMigrationsSql(names: readonly string[]): string {
-  const rows = names.map((name) => `('${name.replace(/'/g, "''")}')`).join(",\n");
-  return `CREATE TABLE IF NOT EXISTS "d1_migrations"(
+export const CREATE_MIGRATIONS_TABLE_SQL = `CREATE TABLE IF NOT EXISTS "d1_migrations"(
 \t\tid         INTEGER PRIMARY KEY AUTOINCREMENT,
 \t\tname       TEXT UNIQUE,
 \t\tapplied_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
-);
-INSERT OR IGNORE INTO "d1_migrations" (name)
-values ${rows};
-`;
+);`;
+
+/**
+ * The query that lists what `d1_migrations` records, verbatim from wrangler
+ * 4, as the manager has it (`LIST_APPLIED_MIGRATIONS_SQL`).
+ */
+export const LIST_APPLIED_MIGRATIONS_SQL = `SELECT *
+\t\tFROM "d1_migrations"
+\t\tORDER BY id`;
+
+/**
+ * The statement that records `names` in `d1_migrations` as applied, without
+ * running them, as the manager writes it (`recordMigrationsQuery`); empty when
+ * there are none. Names already recorded stay.
+ */
+export function recordMigrationsQuery(names: readonly string[]): string {
+  if (names.length === 0) return "";
+  const rows = names.map((name) => `('${name.replace(/'/g, "''")}')`).join(",\n");
+  return `INSERT OR IGNORE INTO "d1_migrations" (name)
+values ${rows};`;
+}
+
+/** One file of a migrations step: the name `d1_migrations` records it by, and the file, relative to the work dir. */
+export interface CiMigrationFile {
+  name: string;
+  file: string;
 }
 
 /**
- * One wrangler command of the D1 steps: its arguments, the config, the
- * Worker whose work dir it runs in, and a file to write there first (the
- * SQL that records a baseline database's migrations), relative to it.
+ * One database's migrations, or its post-deploy migrations, applied through
+ * the D1 API as the manager applies them (see {@link runD1Migrations}), from
+ * the work dir of `worker`.
  */
-export interface CiWranglerStep {
+export interface CiMigrationsStep {
   worker: string;
-  config: string;
-  args: string[];
-  write?: { file: string; text: string };
-}
-
-/**
- * Runs one D1 CLI step. A request can let an app apply its own migrations
- * after wrangler lists its pending files. A tracked migration and its ledger
- * row commit together, so retrying once rereads that ledger and skips the
- * app's work. Persistent SQL failures still fail. Untracked SQL is not retried.
- */
-export function runD1WranglerStep(step: CiWranglerStep, run: () => void): void {
-  try {
-    run();
-  } catch (error) {
-    const [command, operation, action] = step.args;
-    if (command !== "d1" || operation !== "migrations" || action !== "apply") throw error;
-    run();
-  }
+  database: string;
+  binding: string;
+  /** Which of the database's tracked files these are, as the log names them. */
+  tracked: "migrations" | "post-deploy migrations";
+  files: CiMigrationFile[];
+  /** Every migration and post-deploy migration the version ships, by name. */
+  shipped: string[];
 }
 
 /** One database's seed, run through the D1 API (see {@link runSeed}). */
@@ -2186,21 +2141,39 @@ export interface CiSeedStep {
   seed: CatalogD1Seed;
 }
 
-export type CiD1Step = CiWranglerStep | CiSeedStep;
+/**
+ * One schema file or baseline, run through the D1 API as the manager runs it
+ * (see {@link runD1Query}): the file, relative to the work dir of `worker`.
+ * A baseline also lists the migrations it records as applied, in the same
+ * query.
+ */
+export type CiQueryStep = {
+  worker: string;
+  database: string;
+  binding: string;
+  file: string;
+} & ({ query: "schema" } | { query: "baseline"; recorded: string[] });
 
-/** Whether a D1 step is a seed rather than a wrangler command. */
+export type CiD1Step = CiMigrationsStep | CiQueryStep | CiSeedStep;
+
+/** Whether a D1 step is a seed rather than migrations or a query. */
 export function isSeedStep(step: CiD1Step): step is CiSeedStep {
   return "seed" in step;
+}
+
+/** Whether a D1 step is a schema file or baseline rather than migrations or a seed. */
+export function isQueryStep(step: CiD1Step): step is CiQueryStep {
+  return "query" in step;
 }
 
 /**
  * The steps that run the app's D1 SQL once every Worker is deployed, in the
  * manager's order: for each database its migrations (or, with a baseline,
- * the baseline and then the rows that record every migration and
- * post-deploy migration as applied, none of which then runs), then its seed
- * when it says `beforeSchema`, then its schema files one by one (unrecorded;
- * the packer accepts only files that are safe to run again); then every
- * database's post-deploy migrations; then every other seed.
+ * the baseline with the rows that record every migration and post-deploy
+ * migration as applied, none of which then runs), then its seed when it says
+ * `beforeSchema`, then its schema files one by one (unrecorded; the packer
+ * accepts only files that are safe to run again); then every database's
+ * post-deploy migrations; then every other seed.
  */
 export function d1Steps(databases: readonly CiAppD1Database[]): CiD1Step[] {
   const steps: CiD1Step[] = [];
@@ -2210,49 +2183,209 @@ export function d1Steps(databases: readonly CiAppD1Database[]): CiD1Step[] {
     binding: d.binding,
     seed,
   });
+  const migrationsStep = (
+    d: CiAppD1Database,
+    tracked: CiMigrationsStep["tracked"],
+    dir: string,
+    names: readonly string[],
+  ): CiMigrationsStep => ({
+    worker: d.worker,
+    database: d.database,
+    binding: d.binding,
+    tracked,
+    files: names.map((name) => ({ name, file: `${dir}/${d.binding}/${name}` })),
+    shipped: [...d.migrations, ...d.postDeploy],
+  });
   for (const d of databases) {
+    const target = { worker: d.worker, database: d.database, binding: d.binding };
     if (d.baseline !== undefined) {
       steps.push({
-        worker: d.worker,
-        config: DEPLOY_CONFIG,
-        args: ["d1", "execute", d.database, "--remote", "--yes", "--file", d.baseline.file],
+        ...target,
+        file: d.baseline.file,
+        query: "baseline",
+        recorded: d.baseline.recorded,
       });
-      if (d.baseline.recorded.length > 0) {
-        const file = `${D1_BASELINE_RECORD_DIR}/${d.binding}.sql`;
-        steps.push({
-          worker: d.worker,
-          config: DEPLOY_CONFIG,
-          args: ["d1", "execute", d.database, "--remote", "--yes", "--file", file],
-          write: { file, text: recordMigrationsSql(d.baseline.recorded) },
-        });
-      }
-    } else if (d.migrations) {
-      steps.push({
-        worker: d.worker,
-        config: DEPLOY_CONFIG,
-        args: ["d1", "migrations", "apply", d.database, "--remote"],
-      });
+    } else if (d.migrations.length > 0) {
+      steps.push(migrationsStep(d, "migrations", D1_DIR, d.migrations));
     }
     if (d.seed?.beforeSchema === true) steps.push(seedStep(d, d.seed));
     for (const file of d.schema) {
-      steps.push({
-        worker: d.worker,
-        config: DEPLOY_CONFIG,
-        args: ["d1", "execute", d.database, "--remote", "--yes", "--file", file],
-      });
+      steps.push({ ...target, file, query: "schema" });
     }
   }
   for (const d of databases.filter(appliesPostDeploy)) {
-    steps.push({
-      worker: d.worker,
-      config: POST_DEPLOY_CONFIG,
-      args: ["d1", "migrations", "apply", d.database, "--remote"],
-    });
+    steps.push(migrationsStep(d, "post-deploy migrations", D1_POST_DEPLOY_DIR, d.postDeploy));
   }
   for (const d of databases) {
     if (d.seed !== undefined && d.seed.beforeSchema !== true) steps.push(seedStep(d, d.seed));
   }
   return steps;
+}
+
+// ---------------------------------------------------------------------------
+// D1 migrations
+
+/**
+ * The `/query` body that applies one migration, built as the manager's
+ * `buildMigrationQuery` builds it from wrangler's: the file's SQL through
+ * `normalizeForD1Query`, then the row that records it as `name`, so the file
+ * counts as applied exactly when its SQL does. With a schema build that
+ * predates `normalizeForD1Query` the SQL goes as the file has it, as managers
+ * up to 0.4.2 send it.
+ */
+export function migrationQueryBody(
+  fileSql: string,
+  name: string,
+  helpers: Pick<D1QueryHelpers, "normalizeForD1Query">,
+): string {
+  const sql = helpers.normalizeForD1Query?.(fileSql) ?? fileSql;
+  return `${sql}
+INSERT INTO "d1_migrations" (name)
+values ('${name.replace(/'/g, "''")}');`;
+}
+
+/** The names a `d1_migrations` listing holds, in the order they were recorded. */
+function listedNames(res: CfResponse): string[] {
+  const first: unknown = Array.isArray(res.body?.result) ? res.body.result[0] : undefined;
+  const rows = (first as { results?: unknown } | undefined)?.results;
+  return Array.isArray(rows) ? rows.map((row) => String((row as { name?: unknown }).name)) : [];
+}
+
+/**
+ * Applies one database's migrations or post-deploy migrations through the
+ * D1 API as the manager's `applyD1Migrations` does: creates `d1_migrations`
+ * when it is missing, lists what it records, then sends each file it does
+ * not record yet, in wrangler's order (`compareMigrationNames`), decoded as
+ * UTF-8 as the manager decodes it (a byte order mark dropped), as its own
+ * `POST /d1/database/{uuid}/query` with {@link migrationQueryBody}. D1 runs
+ * the file and its row as one transaction, so a file that fails records
+ * nothing, and the files after it do not run. Logs each file it applies with
+ * the number of statements D1 ran, and recorded names the version does not
+ * ship.
+ *
+ * An app can apply its own migrations when a request reaches it, after the
+ * list was read; a file the app has applied then fails here. So after a
+ * failure the whole run goes once more, from a new list, which skips what
+ * the app recorded. The manager does not retry a 4xx from D1; this one
+ * retry is a CI-only allowance for that race. A file that fails again fails
+ * the step, naming the file, the database and D1's message.
+ * Returns how many files it applied.
+ */
+export async function runD1Migrations(
+  request: CfRequest,
+  step: CiMigrationsStep,
+  read: (file: string) => Uint8Array,
+  helpers: D1QueryHelpers,
+  log: (line: string) => void,
+): Promise<number> {
+  const id = await findD1Database(request, step.database);
+  if (id === null) {
+    throw new Error(
+      `the database ${step.database} does not exist, so its ${step.tracked} cannot run`,
+    );
+  }
+  const query = async (sql: string, subject: string): Promise<CfResponse> => {
+    const res = await request("POST", `/d1/database/${encodeURIComponent(id)}/query`, { sql });
+    if (!created(res)) throw new Error(`${subject} failed: ${describe(res)}`);
+    return res;
+  };
+  const on = `${step.database} (${step.binding})`;
+  const shipped = new Set(step.shipped);
+  const ordered = [...step.files].sort((a, b) => helpers.compareMigrationNames(a.name, b.name));
+  let applied = 0;
+  const run = async (): Promise<void> => {
+    await query(CREATE_MIGRATIONS_TABLE_SQL, `creating d1_migrations on ${step.database}`);
+    const names = listedNames(
+      await query(LIST_APPLIED_MIGRATIONS_SQL, `listing d1_migrations on ${step.database}`),
+    );
+    const gone = names.filter((name) => !shipped.has(name));
+    if (gone.length > 0) {
+      log(
+        `d1_migrations of ${on} records ${gone.length} migration(s) this version does not ship: ${gone.join(", ")}`,
+      );
+    }
+    const recorded = new Set(names);
+    const pending = ordered.filter((f) => !recorded.has(f.name));
+    if (pending.length === 0) {
+      log(`${on} already records all ${ordered.length} of its ${step.tracked}`);
+      return;
+    }
+    log(
+      `${on} records ${names.length} migration(s); applying ${pending.length} ${step.tracked} through /query`,
+    );
+    for (const f of pending) {
+      const sql = migrationQueryBody(new TextDecoder().decode(read(f.file)), f.name, helpers);
+      const res = await query(sql, `${f.name} on ${step.database}`);
+      applied += 1;
+      const count = Array.isArray(res.body?.result) ? res.body.result.length : 0;
+      log(`applied ${f.name} to ${on}: ${count} statement(s), the last recording it`);
+    }
+  };
+  try {
+    await run();
+  } catch (error) {
+    log(
+      `${error instanceof Error ? error.message : String(error)}; listing d1_migrations again ` +
+        "and retrying once, since the app may have applied it itself",
+    );
+    await run();
+  }
+  return applied;
+}
+
+// ---------------------------------------------------------------------------
+// D1 schema files and baselines
+
+/**
+ * The `/query` body a schema file or baseline runs as, built as the manager's
+ * `buildSchemaQuery` and `buildBaselineQuery` build it, so D1 reads the SQL
+ * here as it reads it at install: the file's SQL through
+ * `normalizeForD1Query`, and for a baseline the rows that record `recorded`
+ * after it, in the same query (a last statement without its `;` gets one
+ * first, so it does not run into the insert). With a schema build that
+ * predates `normalizeForD1Query` the SQL goes as the file has it, as managers
+ * up to 0.4.2 send it.
+ */
+export function d1QueryBody(step: CiQueryStep, fileSql: string, helpers: D1QueryHelpers): string {
+  const sql = helpers.normalizeForD1Query?.(fileSql) ?? fileSql;
+  if (step.query === "schema") return sql;
+  const record = recordMigrationsQuery(step.recorded);
+  if (record === "") return sql;
+  const closed = helpers.endsInsideStatement(sql) ? `${sql}\n;` : sql;
+  return `${closed}\n${record}`;
+}
+
+/**
+ * Runs one schema file or baseline through the D1 API as the manager does:
+ * the file decoded as UTF-8 as the manager decodes it (a byte order mark
+ * dropped), then sent as its {@link d1QueryBody} in one
+ * `POST /d1/database/{uuid}/query` with `{ sql }`, after, for a baseline, the
+ * query that creates `d1_migrations`. D1 runs a query of several statements
+ * as one transaction, so a baseline that fails records nothing. Errors name
+ * the file, the database and D1's message. Returns the number of statements
+ * D1 ran for the file, the rows a baseline records among them.
+ */
+export async function runD1Query(
+  request: CfRequest,
+  step: CiQueryStep,
+  file: Uint8Array,
+  helpers: D1QueryHelpers,
+): Promise<number> {
+  const id = await findD1Database(request, step.database);
+  if (id === null) {
+    throw new Error(`the database ${step.database} does not exist, so ${step.file} cannot run`);
+  }
+  const query = async (sql: string, subject: string): Promise<CfResponse> => {
+    const res = await request("POST", `/d1/database/${encodeURIComponent(id)}/query`, { sql });
+    if (!created(res)) throw new Error(`${subject} failed: ${describe(res)}`);
+    return res;
+  };
+  if (step.query === "baseline") {
+    await query(CREATE_MIGRATIONS_TABLE_SQL, `creating d1_migrations on ${step.database}`);
+  }
+  const sql = d1QueryBody(step, new TextDecoder().decode(file), helpers);
+  const res = await query(sql, `${step.file} on ${step.database}`);
+  return Array.isArray(res.body?.result) ? res.body.result.length : 0;
 }
 
 // ---------------------------------------------------------------------------

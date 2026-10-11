@@ -872,9 +872,9 @@ empty.
   commit's migrations, so a column a migration adds must also be in the baseline.
   Check that when you add the entry and every time you move its pin.
 
-The install check runs the baseline with `wrangler d1 execute --remote --file`, then records every
-migration and post-deploy migration in `d1_migrations` without running them, as the
-manager does (see "Install checks").
+The install check runs the baseline as the manager does: through D1's `/query`
+endpoint, in one query with the rows that record every migration and post-deploy
+migration in `d1_migrations`, none of which then runs (see "Install checks").
 
 ### Static sites without Worker code
 
@@ -1960,17 +1960,24 @@ self-deploying entries have no install check in CI (see "Sandbox tier" and
    counters across every Worker in the account that binds the same id. After
    the deploy, each queue consumer the artifact records is attached to the
    Worker through the API, with its settings and dead-letter queue, as the
-   manager does. Then each database's SQL runs, as the manager runs it:
-   `wrangler d1 migrations apply --remote` for its migrations, named as the
-   artifact records them (a `migrations_pattern` covers migrations named by a
-   path), then each schema file in order with
-   `wrangler d1 execute --remote --file`; then, for every database, its
-   post-deploy migrations with `wrangler d1 migrations apply --remote` against a
-   second config whose `migrations_dir` is their folder, so `d1_migrations`
-   records them beside the others; then every seed. A database with a
-   `baseline` instead runs it with `wrangler d1 execute --remote --file`, then
-   records every migration and post-deploy migration of the version in
-   `d1_migrations` without running them. A seed with
+   manager does. Then each database's SQL runs as the manager runs it, through
+   the D1 API's `/query` endpoint with the body the manager sends: each
+   migration `d1_migrations` does not record yet, in wrangler's order, as one
+   call with the row that records it under the name the artifact gives it;
+   then each schema file in order, one call each; then, for every database, its
+   post-deploy migrations, applied and recorded like the migrations; then every
+   seed. A database with a `baseline` instead runs it in one call with the rows
+   that record every migration and post-deploy migration of the version in
+   `d1_migrations`, none of which then runs. The SQL goes through the same
+   rewrite as at install, so D1 reads a trigger whose body holds an upper-case
+   `END;` (as in `SELECT CASE ... END;`) whole instead of ending it there (with
+   an appflare build from before that rewrite, the files go as they are, as
+   that manager sends them). wrangler runs no D1 SQL here: `wrangler d1
+   migrations apply` skips the rewrite, and `wrangler d1 execute --file` goes
+   through D1's import API, which reads such a trigger whole anyway, so a file
+   could pass either and still fail at install. When a migration fails, the
+   check lists `d1_migrations` again and tries once more, since an app that
+   applies its own migrations may have run it in between. A seed with
    `beforeSchema` runs right after its database's migrations instead. Seeds go
    through the D1 API, one `/query` call per statement with its values as
    params (wrangler cannot bind params), after the statement is checked again
@@ -2011,8 +2018,9 @@ How this differs from installing with the manager:
   apart.
 - **Uploads and migrations.** The manager uploads the modules and assets itself
   and applies D1 migrations, schema files and post-deploy migrations itself, in
-  the same `d1_migrations` table format wrangler uses. Here wrangler does both
-  from the unpacked files.
+  the same `d1_migrations` table format wrangler uses. Here wrangler uploads
+  from the unpacked files, and the D1 SQL goes through D1's query API with the
+  same request the manager sends.
 - **Workers plan.** The CI account is on the free plan unless the
   `CI_ACCOUNT_PLAN` repository variable says `paid`. On the free plan an entry
   with `plan: "paid"` is packed but not deployed: it may use what the free plan

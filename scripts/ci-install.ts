@@ -2,7 +2,6 @@ import { spawnSync } from "node:child_process";
 import {
   appendFileSync,
   existsSync,
-  mkdirSync,
   mkdtempSync,
   readFileSync,
   rmSync,
@@ -14,6 +13,7 @@ import path from "node:path";
 import { parseArgs } from "node:util";
 import {
   loadAppflareSchema,
+  loadD1QueryHelpers,
   loadEntryWorkerHelpers,
   loadR2LifecycleHelpers,
   loadSeedHelpers,
@@ -47,15 +47,15 @@ import {
   HYPERDRIVE_TEST_URL,
   healthProbes,
   hyperdriveSkip,
+  isQueryStep,
   isSeedStep,
   needsPackerSecrets,
   needsR2LifecycleHelpers,
   needsSeedHelpers,
-  POST_DEPLOY_CONFIG,
   paidPlanSkip,
   planCiApp,
-  postDeployConfig,
-  runD1WranglerStep,
+  runD1Migrations,
+  runD1Query,
   runSeed,
   seedFunctions,
   seedValues,
@@ -92,16 +92,16 @@ deploy   Unpacks the artifact (checking every file's sha256), removes anything
          Worker, which is served at its workers.dev URL; a service binding to the app's own
          Worker aimed at the CI Worker, any other refused; no cron triggers,
          which the run summary notes), runs wrangler deploy --strict, attaches the recorded queue consumers through the API,
-         runs each D1 database's SQL as the manager does (its migrations
-         with wrangler d1 migrations apply, named as the artifact records
-         them; then its schema files in order with wrangler d1 execute
-         --file; then its post-deploy migrations with wrangler d1
-         migrations apply against wrangler.post-deploy.json, whose
-         migrations_dir is their folder, so d1_migrations records them;
-         a database with a baseline instead runs the baseline with wrangler
-         d1 execute --file, then records every migration and post-deploy
-         migration in d1_migrations without running them;
-         then each seed through the D1 API, one /query call per statement
+         runs each D1 database's SQL as the manager does, through the D1
+         API's /query with the bodies the manager sends (its migrations
+         d1_migrations does not record yet, each as one call with the row
+         that records it under the name the artifact gives it; then its
+         schema files in order, one call each; then its post-deploy
+         migrations, applied and recorded like the migrations; a database
+         with a baseline instead runs the baseline as one call with the
+         rows that record every migration and post-deploy migration in
+         d1_migrations, none of which then runs;
+         then each seed, one /query call per statement
          with its values as params, where it says beforeSchema before the
          schema files instead; each statement must add at least one row),
          sets each catalog secret to a random value
@@ -197,19 +197,17 @@ function wranglerBin(appflareDir: string): string {
   return path.join(path.dirname(pkgPath), rel);
 }
 
-function wrangler(
-  bin: string,
-  cwd: string,
-  args: string[],
-  stdin?: string,
-  config: string = DEPLOY_CONFIG,
-): void {
-  const res = spawnSync(process.execPath, [bin, ...args, "--config", path.join(cwd, config)], {
-    cwd,
-    env: { ...packerEnv(process.env), CI: "1", WRANGLER_SEND_METRICS: "false" },
-    input: stdin,
-    stdio: [stdin === undefined ? "ignore" : "pipe", "inherit", "inherit"],
-  });
+function wrangler(bin: string, cwd: string, args: string[], stdin?: string): void {
+  const res = spawnSync(
+    process.execPath,
+    [bin, ...args, "--config", path.join(cwd, DEPLOY_CONFIG)],
+    {
+      cwd,
+      env: { ...packerEnv(process.env), CI: "1", WRANGLER_SEND_METRICS: "false" },
+      input: stdin,
+      stdio: [stdin === undefined ? "ignore" : "pipe", "inherit", "inherit"],
+    },
+  );
   if (res.error || res.status !== 0) {
     // args never contain secret values; those go through stdin.
     throw new Error(
@@ -371,10 +369,6 @@ async function deployAndCheck(
     );
     configs.push(config);
     writeFileSync(path.join(dir, DEPLOY_CONFIG), `${JSON.stringify(config, null, 2)}\n`);
-    const postDeploy = postDeployConfig(config, w.plan.d1);
-    if (postDeploy !== null) {
-      writeFileSync(path.join(dir, POST_DEPLOY_CONFIG), `${JSON.stringify(postDeploy, null, 2)}\n`);
-    }
     info(`deploying ${w.manifest.app}@${w.manifest.version} as ${w.plan.name}`);
     try {
       wrangler(bin, dir, ["deploy", "--strict"]);
@@ -408,20 +402,44 @@ async function deployAndCheck(
     app.workers.map((w, i) => ({ ...w, config: configs[i] as Record<string, unknown> })),
     values,
   );
-  for (const step of d1Steps(app.d1)) {
-    if (!isSeedStep(step)) {
-      const dir = dirOf(step.worker);
-      if (step.write !== undefined) {
-        const target = path.join(dir, step.write.file);
-        mkdirSync(path.dirname(target), { recursive: true });
-        writeFileSync(target, step.write.text);
+  const steps = d1Steps(app.d1);
+  // Migrations, schema files and baselines go to D1's /query as the manager
+  // builds them; the functions that build them are loaded only for those.
+  const queries = steps.some((s) => !isSeedStep(s))
+    ? await loadD1QueryHelpers(resolveAppflareDir())
+    : null;
+  if (queries !== null && queries.normalizeForD1Query === null) {
+    info(
+      "this @appflare/schema build has no normalizeForD1Query(), so migrations, schema files " +
+        "and baselines go to D1 as they are, as managers up to 0.4.2 send them",
+    );
+  }
+  for (const step of steps) {
+    if (isSeedStep(step)) {
+      if (seeds === null) {
+        throw new Error(`${step.database} has a seed, and no seed functions were loaded`);
       }
-      runD1WranglerStep(step, () => wrangler(bin, dir, step.args, undefined, step.config));
-    } else if (seeds === null) {
-      throw new Error(`${step.database} has a seed, and no seed functions were loaded`);
-    } else {
       const count = await runSeed(request, step, seedInput, seeds);
       info(`seeded ${step.database} (${step.binding}): ${count} statement(s), each adding its row`);
+      continue;
+    }
+    if (queries === null) {
+      throw new Error(`${step.database} has D1 SQL, and no D1 query functions were loaded`);
+    }
+    if (isQueryStep(step)) {
+      const file = readFileSync(path.join(dirOf(step.worker), step.file));
+      const count = await runD1Query(request, step, file, queries);
+      const recorded =
+        step.query === "baseline"
+          ? `, recording ${step.recorded.length} migration(s) as applied`
+          : "";
+      info(
+        `ran the ${step.query === "baseline" ? "baseline" : "schema file"} ${step.file} on ` +
+          `${step.database} (${step.binding}) through /query${recorded}: ${count} statement(s)`,
+      );
+    } else {
+      const dir = dirOf(step.worker);
+      await runD1Migrations(request, step, (f) => readFileSync(path.join(dir, f)), queries, info);
     }
   }
   for (const [i, w] of app.workers.entries()) {
