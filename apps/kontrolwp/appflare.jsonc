@@ -1,0 +1,90 @@
+{
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "kontrolwp",
+  "name": "KontrolWP",
+  "summary": "A self-hosted dashboard for all your WordPress sites: updates, plugins, users, content, comments, uptime, analytics and SEO tools, without logging in to each site.\n\nIt runs on your own Cloudflare account behind Cloudflare Access. Each WordPress site connects through the KontrolWP Connect plugin, which only answers signed requests from your dashboard.",
+  "tagline": "Manage all your WordPress sites from one dashboard",
+  "features": [
+    "Update WordPress core, plugins and themes on every site in one click or on a schedule",
+    "Roll back a scheduled update automatically when it breaks a site's home page",
+    "Manage plugins, users, posts, pages and comments without logging in to each site",
+    "Watch uptime, response times and SSL certificate expiry for every site",
+    "See visitors from Umami or Google Analytics, plus Google Search Console",
+    "Open any site's WordPress admin without a password"
+  ],
+  "alternativeTo": ["ManageWP", "MainWP"],
+  "homepage": "https://kontrolwp.com",
+  "repo": "bedynamic-tech/KontrolWP",
+  // LICENSE is the GPL v3 text with no "or any later version" notice. The
+  // KontrolWP Connect plugin inside it is GPL-2.0-or-later, which GPL-3.0 covers.
+  "license": "GPL-3.0-only",
+  "categories": ["cms", "monitoring"],
+  "authors": [
+    {
+      "name": "Dynamic Technologies LLC",
+      "url": "https://kontrolwp.com",
+      "github": "bedynamic-tech"
+    }
+  ],
+  "maintainers": ["sweatyeggs69"],
+  // KontrolWP has no release tags yet; the pin tracks main.
+  "source": { "ref": "main", "sha": "9332308c597d51dbb264c41ce98df0d6842aff21" },
+  "install": {
+    "packageManager": "npm",
+    "wranglerConfig": "wrangler.jsonc",
+    // Upstream's `npm run deploy` without its migrate and deploy steps: it
+    // packages the KontrolWP Connect plugin zip into public/downloads, then
+    // Cloudflare's Vite plugin builds the dashboard and the Worker and writes
+    // the deploy config the packer follows.
+    "buildCommand": "npm run build"
+  },
+  // Upstream is built to fit Cloudflare's free plans (docs/deployment.md,
+  // "Cloudflare usage"): D1, Queues, Cron Triggers and Browser Rendering all
+  // work on Workers Free.
+  "plan": "free",
+  // BROWSER (Browser Rendering) checks a site's home page around its
+  // scheduled updates (src/worker/sites/update-check.ts).
+  "requires": ["access", "browser-rendering"],
+  // KontrolWP has no sign-in of its own: the Worker verifies the Access JWT on
+  // every API request and refuses all of them until WEB_ACCESS_TEAM_DOMAIN and
+  // WEB_ACCESS_AUD are set (src/worker/api/access.ts). WordPress sites never
+  // call the dashboard, so nothing needs to stay public.
+  "access": { "mode": "required" },
+  "secrets": [
+    {
+      // Upstream's scripts/deploy.mjs creates it on the first deploy as 32
+      // random bytes; the Worker accepts base64 or base64url of exactly 32
+      // bytes (src/worker/sites/secrets.ts isValidSecretsKey).
+      "name": "SITE_SECRETS_KEY",
+      "label": "Site secrets encryption key",
+      "help": "Encrypts every site's Connection Key secret in the database. Never change it after setup: every connected site would then need a new Connection Key.",
+      "generate": "base64-key-32"
+    }
+  ],
+  "vars": [
+    {
+      // src/worker/api/access.ts accessIssuer: an https origin on
+      // <team>.cloudflareaccess.com.
+      "name": "WEB_ACCESS_TEAM_DOMAIN",
+      "label": "Cloudflare Access team domain",
+      "help": "Filled in by Appflare from the app's Cloudflare Access protection: your Zero Trust team's address. KontrolWP checks each request's Access token against it.",
+      "default": "https://{{accessTeamDomain}}"
+    },
+    {
+      "name": "WEB_ACCESS_AUD",
+      "label": "Cloudflare Access audience (AUD) tag",
+      "help": "Filled in by Appflare: the audience tag of the app's Cloudflare Access application.",
+      "default": "{{accessAud}}"
+    }
+  ],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "Open {{appUrl}} and sign in through Cloudflare Access. The database is already migrated."
+    },
+    {
+      "type": "markdown",
+      "content": "To add a site, download the KontrolWP Connect plugin from the dashboard's sidebar, then install and activate it on the WordPress site. Copy the Connection Key from **Settings, KontrolWP Connect** on the site, then select **Add site** in KontrolWP and enter the site's https address and the key."
+    }
+  ]
+}

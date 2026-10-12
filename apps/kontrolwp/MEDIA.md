@@ -1,0 +1,2 @@
+- `icon.svg`: Copied unchanged from [`public/kontrolwp.svg`](https://github.com/bedynamic-tech/KontrolWP/blob/9332308c597d51dbb264c41ce98df0d6842aff21/public/kontrolwp.svg), the dashboard's own logo. Published by Dynamic Technologies LLC, the app's developer, who submitted this entry.
+- `cover.png`: Copied unchanged from the website's social preview, [`kontrolwp.com/og-image.png`](https://kontrolwp.com/og-image.png) (1200x630). Published by Dynamic Technologies LLC, who submitted this entry; the website's repository is private, so the link is to the published file.
