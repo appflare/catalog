@@ -30,7 +30,7 @@
   ],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags, so the entry follows the default branch by commit.
-  "source": { "ref": "main", "sha": "3c880fa8a1481b82a4cc0d48ec46a7a73eed138d" },
+  "source": { "ref": "main", "sha": "0f7a63e0e68f17ba56466e693af979f0cc5577d9" },
   "install": {
     // A pnpm workspace: the Worker at the root, the Astro status page in
     // status-page/.
