@@ -25,7 +25,7 @@
   "categories": ["email", "productivity"],
   "authors": [{ "name": "HQBase", "url": "https://hqbase.io", "github": "HQBase" }],
   "maintainers": ["MendyLanda"],
-  "source": { "ref": "v1.4.2", "sha": "a1161f1cebf67c147ec5ab934504f79a3bcfe807" },
+  "source": { "ref": "v1.4.3", "sha": "8871cfe81482f485fc85d0433e0d3d70a0bcf3d3" },
   "install": {
     "packageManager": "pnpm",
     "wranglerConfig": "wrangler.jsonc",
