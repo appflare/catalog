@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-11T14:42:07.401Z",
+  "generatedAt": "2026-10-12T05:51:24.802Z",
   "apps": [
     {
       "slug": "2fa",
@@ -8334,6 +8334,83 @@
       "categories": [
         "notes",
         "sync"
+      ],
+      "license": "MIT",
+      "revision": 1,
+      "accessOffer": "offered"
+    },
+    {
+      "slug": "talorys",
+      "repo": "rociiu/talorys",
+      "name": "Talorys",
+      "summary": "Personal AI agent with chat, memory, tasks, notes and scheduled reminders, on a Durable Object and Workers AI.",
+      "tagline": "Your own AI assistant that remembers, plans and reminds you",
+      "features": [
+        "Chat with an assistant that can add tasks, notes and reminders for you",
+        "See, edit and delete everything it remembers about you",
+        "Keep tasks, notes and projects in one place",
+        "Get one-time and recurring reminders and a daily task digest",
+        "Download a backup of all your data and import it again"
+      ],
+      "addedAt": "2026-10-12T08:47:06+03:00",
+      "version": "0.1.5",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/talorys@0.1.5/talorys-0.1.5.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/talorys@0.1.5/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/talorys@0.1.5/manifest.sig",
+        "digest": "c7a4abda682ddb2c678cea079d73bcce518eb14393288ad41936b8f91c030543"
+      },
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "workers-ai"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Roc Yu",
+          "github": "rociiu"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/talorys/icon.svg",
+          "sha256": "63a014d95c610746cb0d9c83e2242841812cc45e3b031d28d0d133e86f7ca2bc"
+        },
+        "screenshots": [
+          {
+            "url": "https://appflare.github.io/catalog/apps/talorys/screenshots/01-chat-conversation.png",
+            "sha256": "77c2b458c32b2023cb9c8b9e8a2c2e8111b63fe0700a061be7fa3749cceee719",
+            "alt": "Talorys: Chat conversation"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/talorys/screenshots/02-today-list.png",
+            "sha256": "687eaf00a980cbf72485eda45766a631a7ae8da9d9bbe2677350a487228e5a30",
+            "alt": "Talorys: Today list"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/talorys/screenshots/03-saved-memory.png",
+            "sha256": "6e6cd55cb5921d745caf2f017e793ed09bbcf2b29fa05e741c1fb52920da0109",
+            "alt": "Talorys: Saved memory"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/talorys/screenshots/04-scheduled-reminders.png",
+            "sha256": "58ec1906eb5608f6d85548702912daeadf108b21e4fb582793516ff90121cff7",
+            "alt": "Talorys: Scheduled reminders"
+          }
+        ]
+      },
+      "services": [
+        "durable-objects",
+        "workers-ai"
+      ],
+      "categories": [
+        "ai",
+        "productivity",
+        "notes"
       ],
       "license": "MIT",
       "revision": 1,
