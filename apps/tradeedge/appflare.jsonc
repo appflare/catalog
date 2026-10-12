@@ -16,7 +16,7 @@
   "categories": ["finance", "ai"],
   "authors": [{ "name": "Columen Labs", "url": "https://edgedesk.app", "github": "columenlabs" }],
   "maintainers": ["bchoor"],
-  "source": { "ref": "v0.1.170", "sha": "4cc5f134a50dd331e1e819660bb73f4bd63e7316" },
+  "source": { "ref": "v0.1.181", "sha": "d78d8a546f283e3095ec2319014f71299e651471" },
   "install": {
     "packageManager": "bun",
     "wranglerConfig": "services/analytics-engine/wrangler.jsonc"
@@ -31,7 +31,7 @@
     {
       "name": "VAULT_KEK",
       "label": "Encryption key",
-      "help": "Optional. Leave unset to store data readable in your database (broker keys included). Set 32 random bytes, base64 (openssl rand -base64 32), to encrypt every person's data; existing data is encrypted once on the next start, and it can't be turned off again. Keep a copy: without it the data can't be read.",
+      "help": "Optional. Leave unset to store data readable in your database (broker keys included). Set 32 random bytes, base64 (openssl rand -base64 32), to encrypt every person's data; existing data is encrypted once on the next start, and it can't be turned off again. Keep a copy, and once it is set never remove it here: TradeEdge stops reading the encrypted data until the same key is back, and without a copy the data is lost.",
       "optional": true
     },
     {
