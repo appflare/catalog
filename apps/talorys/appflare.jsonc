@@ -1,0 +1,58 @@
+{
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "talorys",
+  "name": "Talorys",
+  "summary": "Personal AI agent with chat, memory, tasks, notes and scheduled reminders, on a Durable Object and Workers AI.",
+  "tagline": "Your own AI assistant that remembers, plans and reminds you",
+  "features": [
+    "Chat with an assistant that can add tasks, notes and reminders for you",
+    "See, edit and delete everything it remembers about you",
+    "Keep tasks, notes and projects in one place",
+    "Get one-time and recurring reminders and a daily task digest",
+    "Download a backup of all your data and import it again"
+  ],
+  "repo": "rociiu/talorys",
+  "license": "MIT",
+  "categories": ["ai", "productivity", "notes"],
+  "authors": [{ "name": "Roc Yu", "github": "rociiu" }],
+  "maintainers": ["MendyLanda"],
+  // Upstream tags its releases create-talorys@<version>, which the bump bot does
+  // not read as a version: move source to the newest create-talorys@ tag and
+  // source.version with it by hand.
+  "source": {
+    "ref": "create-talorys@0.1.5",
+    "sha": "d156dbb88dcdef682269bb1203ee042354493bdd",
+    "version": "0.1.5"
+  },
+  "install": {
+    "packageManager": "npm",
+    // Upstream's one-Worker config: the agent Worker serves the built web UI as
+    // static assets instead of the Pages project its own installer creates.
+    "wranglerConfig": "apps/agent/wrangler.standalone.jsonc",
+    "buildCommand": "npm run build -w @talorys/web",
+    // Checks storage and that both secrets are set, without calling Workers AI.
+    "health": { "path": "/api/health" }
+  },
+  "plan": "free",
+  "requires": ["workers-ai"],
+  "secrets": [
+    {
+      "name": "OWNER_PASSWORD",
+      "label": "Owner password",
+      "help": "The password you sign in with. At least 10 characters, mixing letters with numbers or symbols. You can change it later in Settings → Security.",
+      "generate": "password"
+    },
+    {
+      "name": "SESSION_SECRET",
+      "label": "Session secret",
+      "help": "Signs sign-in sessions. Changing it signs out every device and resets the password to the owner password above.",
+      "generate": "password"
+    }
+  ],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "Open {{appUrl}} and sign in with the owner password. Chat uses your account's free daily Workers AI allowance; tasks, notes and reminders keep working when it runs out. Set your timezone in Settings so reminders fire at the right time."
+    }
+  ]
+}
