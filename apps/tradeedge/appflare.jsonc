@@ -9,14 +9,14 @@
     "Save trades and compare their payoff curves side by side",
     "Sync up to 5 brokers, with tax lots where eligible, through your own free SnapTrade key",
     "Let AI agents screen, compare and save trades through MCP",
-    "Keep every person's data encrypted in your own database"
+    "Keep your data in your own database, encrypted per person if you choose"
   ],
   "repo": "columenlabs/tradeedge",
   "license": "MIT",
   "categories": ["finance", "ai"],
   "authors": [{ "name": "Columen Labs", "url": "https://edgedesk.app", "github": "columenlabs" }],
   "maintainers": ["bchoor"],
-  "source": { "ref": "v0.1.137", "sha": "cbf3004995b05888f4c5bf1be948739013992a5f" },
+  "source": { "ref": "v0.1.170", "sha": "4cc5f134a50dd331e1e819660bb73f4bd63e7316" },
   "install": {
     "packageManager": "bun",
     "wranglerConfig": "services/analytics-engine/wrangler.jsonc"
@@ -31,8 +31,8 @@
     {
       "name": "VAULT_KEK",
       "label": "Encryption key",
-      "help": "Encrypts every person's data in the database. Keep a copy: without it the data can't be read.",
-      "generate": "base64-key-32"
+      "help": "Optional. Leave unset to store data readable in your database (broker keys included). Set 32 random bytes, base64 (openssl rand -base64 32), to encrypt every person's data; existing data is encrypted once on the next start, and it can't be turned off again. Keep a copy: without it the data can't be read.",
+      "optional": true
     },
     {
       "name": "ALPACA_API_KEY_ID",
