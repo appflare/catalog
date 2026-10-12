@@ -16,7 +16,7 @@
   "categories": ["finance", "ai"],
   "authors": [{ "name": "Columen Labs", "url": "https://edgedesk.app", "github": "columenlabs" }],
   "maintainers": ["bchoor"],
-  "source": { "ref": "v0.1.192", "sha": "25ffcacbfe599bbcb41a0fb8edcae5431828c283" },
+  "source": { "ref": "v0.1.209", "sha": "76fe872f924cbdd8ecd349d3a2600ea1d73e8aa1" },
   "install": {
     "packageManager": "bun",
     "wranglerConfig": "services/analytics-engine/wrangler.jsonc"
