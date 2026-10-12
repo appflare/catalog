@@ -2,21 +2,22 @@
   "$schema": "https://appflare.github.io/catalog/schema/v1.json",
   "slug": "tradeedge",
   "name": "TradeEdge",
-  "summary": "Options screeners, a trades board and broker holdings on live data, with an MCP server so AI agents can build and compare strategies for you.",
-  "tagline": "Options screeners and trade ideas, built for your AI agent",
+  "summary": "Manage your investments across all your brokers in one place, in your own Cloudflare account, on real data. Link your brokerage accounts with a free SnapTrade Personal key, price them live with a free Alpaca key, tag holdings by sector and basket, and shape them into your own views. Follow the news on what you hold: Alpaca news, the X accounts you track (with your own paid twitterapi.io key) and earnings straight from SEC 8-K filings, with Cloudflare's free AI models picking out symbols, sentiment and themes and folding repeats into one post. Get alerts on your phone through ntfy or on your own webhooks. Screen options strategies on live chains, and let your AI agent work alongside you through MCP. Brokers that trade through SnapTrade (such as Kraken, Coinbase and tastytrade) will let TradeEdge place trades for you; that part is in progress and coming soon.",
+  "tagline": "Your whole portfolio on real broker and market data, run with your AI agent",
   "features": [
-    "Screen any options strategy on the live chain and rank real trades",
-    "Save trades and compare their payoff curves side by side",
-    "Sync up to 5 brokers, with tax lots where eligible, through your own free SnapTrade key",
-    "Let AI agents screen, compare and save trades through MCP",
-    "Keep your data in your own database, encrypted per person if you choose"
+    "All your brokers in one place: holdings, transactions and tax lots, via your free SnapTrade key",
+    "Live prices from your free Alpaca key, with gains, sectors and baskets you tag yourself",
+    "News on your holdings from Alpaca, X and SEC earnings filings, sorted by free Cloudflare AI",
+    "Alerts on your phone (ntfy) or to your own webhooks when something needs you",
+    "Screen options strategies on live chains, and every screen is an MCP tool for your AI agent",
+    "Runs free on your own Cloudflare account, your data in your own database, encrypted if you choose"
   ],
   "repo": "columenlabs/tradeedge",
   "license": "MIT",
   "categories": ["finance", "ai"],
   "authors": [{ "name": "Columen Labs", "url": "https://edgedesk.app", "github": "columenlabs" }],
   "maintainers": ["bchoor"],
-  "source": { "ref": "v0.1.209", "sha": "76fe872f924cbdd8ecd349d3a2600ea1d73e8aa1" },
+  "source": { "ref": "v0.1.213", "sha": "9cfede758b2c2f546b7b639c7ab040b1a822e6a1" },
   "install": {
     "packageManager": "bun",
     "wranglerConfig": "services/analytics-engine/wrangler.jsonc"
