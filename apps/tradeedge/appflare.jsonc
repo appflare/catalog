@@ -16,7 +16,7 @@
   "categories": ["finance", "ai"],
   "authors": [{ "name": "Columen Labs", "url": "https://edgedesk.app", "github": "columenlabs" }],
   "maintainers": ["bchoor"],
-  "source": { "ref": "v0.1.181", "sha": "d78d8a546f283e3095ec2319014f71299e651471" },
+  "source": { "ref": "v0.1.192", "sha": "25ffcacbfe599bbcb41a0fb8edcae5431828c283" },
   "install": {
     "packageManager": "bun",
     "wranglerConfig": "services/analytics-engine/wrangler.jsonc"
@@ -33,17 +33,6 @@
       "label": "Encryption key",
       "help": "Optional. Leave unset to store data readable in your database (broker keys included). Set 32 random bytes, base64 (openssl rand -base64 32), to encrypt every person's data; existing data is encrypted once on the next start, and it can't be turned off again. Keep a copy, and once it is set never remove it here: TradeEdge stops reading the encrypted data until the same key is back, and without a copy the data is lost.",
       "optional": true
-    },
-    {
-      "name": "ALPACA_API_KEY_ID",
-      "label": "Alpaca key ID",
-      "help": "Live quotes and option chains.",
-      "link": { "label": "Get a key", "url": "https://app.alpaca.markets/" }
-    },
-    {
-      "name": "ALPACA_API_SECRET_KEY",
-      "label": "Alpaca secret key",
-      "link": { "label": "Get a key", "url": "https://app.alpaca.markets/" }
     }
   ],
   "vars": [
@@ -81,7 +70,7 @@
   "postInstall": [
     {
       "type": "markdown",
-      "content": "Open {{appUrl}}/app/ and sign in through Cloudflare Access. To sync your brokers, add your free SnapTrade Personal key (up to 5 brokers, tax lots for eligible brokers) under Settings > Integrations. Placing trades through SnapTrade, for eligible accounts, is in progress and coming soon. AI agents connect at `{{appUrl}}/mcp`."
+      "content": "Open {{appUrl}}/app/ and sign in through Cloudflare Access. Add your free Alpaca key under Settings > Integrations for live quotes and option chains. To sync your brokers, add your free SnapTrade Personal key (up to 5 brokers, tax lots for eligible brokers) under Settings > Integrations. Placing trades through SnapTrade, for eligible accounts, is in progress and coming soon. AI agents connect at `{{appUrl}}/mcp`."
     }
   ]
 }
