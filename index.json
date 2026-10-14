@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-14T09:23:38.015Z",
+  "generatedAt": "2026-10-14T09:39:40.075Z",
   "apps": [
     {
       "slug": "2fa",
@@ -57,6 +57,88 @@
       ],
       "license": "MIT",
       "revision": 1,
+      "accessOffer": "offered"
+    },
+    {
+      "slug": "888wiki",
+      "repo": "tbdavid2019/888wiki",
+      "name": "888wiki",
+      "summary": "A Markdown-first notepad and wiki: write in Markdown, Block, Canvas or Whiteboard, publish password-protected or timed shares, and present notes as slides or books.",
+      "tagline": "Write notes and share them with passwords or time limits",
+      "features": [
+        "Write Markdown notes with a live preview",
+        "Arrange text and media as blocks you can drag into place",
+        "Draw on a whiteboard or connect idea cards on a canvas",
+        "Protect shared notes with passwords, expiry dates or view limits",
+        "Present a note as slides or a book",
+        "Restore earlier saved versions of a note"
+      ],
+      "alternativeTo": [
+        "Notion"
+      ],
+      "addedAt": "2026-09-27T06:02:01+03:00",
+      "version": "0.0.0-20261013.b9ed1c1",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20261013.b9ed1c1/888wiki-0.0.0-20261013.b9ed1c1.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20261013.b9ed1c1/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20261013.b9ed1c1/manifest.sig",
+        "digest": "69601d1318b4ff53c9f884183e731ac933ef6235dff9861d678c2e1cfc1b807f"
+      },
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "r2"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "DAVID888",
+          "github": "tbdavid2019"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/888wiki/icon.svg",
+          "sha256": "25f8838549f4e6f9459497108d92cdc59aafe9bb418a5ab7ca05d476e039ef3a"
+        },
+        "screenshots": [
+          {
+            "url": "https://appflare.github.io/catalog/apps/888wiki/screenshots/01-markdown-editor.png",
+            "sha256": "60a45cbbca38cda3bfd3ac83f5c1f9e1a1fb92d4313f08c4eb8d22fa70944d5d",
+            "alt": "888wiki: Markdown editor"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/888wiki/screenshots/02-paragraph-annotations.png",
+            "sha256": "87dfe84ef81e2f8dd115ad748dba4e5499c8820bf1c7f27cd9ce61d3e0be66fb",
+            "alt": "888wiki: Paragraph annotations"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/888wiki/screenshots/03-slide-presentation.png",
+            "sha256": "1e00a0c4cec2f7f10659703fca2bad1bf49545be44616cb9686230c66b0786b9",
+            "alt": "888wiki: Slide presentation"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/888wiki/screenshots/04-seal-settings.png",
+            "sha256": "5634e55c85b74f02bfc23d4b7cf1f52ece35444c54104929d996e4e47704fce9",
+            "alt": "888wiki: Seal settings"
+          }
+        ]
+      },
+      "services": [
+        "kv",
+        "d1",
+        "r2",
+        "cron"
+      ],
+      "categories": [
+        "notes",
+        "productivity"
+      ],
+      "license": "AGPL-3.0-only",
+      "revision": 4,
       "accessOffer": "offered"
     },
     {
@@ -2893,55 +2975,6 @@
       "accessOffer": "offered"
     },
     {
-      "slug": "folia",
-      "repo": "chthollyphile/folia-major",
-      "name": "Folia",
-      "summary": "A web music player built around full-screen animated lyrics, for your local library or a Navidrome server, with automatic lyric matching and AI colour themes from your own Gemini key.",
-      "tagline": "Play your music with full-screen animated lyrics",
-      "features": [
-        "Play music from a local folder without uploading the files",
-        "Listen to music from your own Navidrome server",
-        "Display local lyric files with animated full-screen text",
-        "Choose between different lyric animations",
-        "Generate song colour themes with your own Gemini API key"
-      ],
-      "addedAt": "2026-09-27T10:46:59+03:00",
-      "version": "0.7.18",
-      "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/folia@0.7.18/folia-0.7.18.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/folia@0.7.18/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/folia@0.7.18/manifest.sig",
-        "digest": "ff7a7e221fa269371cc750d8a00cd6c8a7ac8b75d09a9e904327064f3560dc25"
-      },
-      "tier": "artifact",
-      "plan": "free",
-      "requires": [],
-      "lastVerified": "2026-10-14T09:08:20.000Z",
-      "authors": [
-        {
-          "name": "chthollyphile",
-          "github": "chthollyphile"
-        }
-      ],
-      "maintainers": [
-        "MendyLanda"
-      ],
-      "media": {
-        "icon": {
-          "url": "https://appflare.github.io/catalog/apps/folia/icon.svg",
-          "sha256": "0045ede40bee2e9ac4f40a3a803b16febbf75ab9beca6c438bfbd1e6cd5529a8"
-        },
-        "screenshots": []
-      },
-      "services": [],
-      "categories": [
-        "media"
-      ],
-      "license": "AGPL-3.0-only",
-      "revision": 4,
-      "accessOffer": "offered"
-    },
-    {
       "slug": "formzero",
       "repo": "BohdanPetryshyn/formzero",
       "name": "FormZero",
@@ -3469,6 +3502,74 @@
         "keyId": "catalog-2026-09",
         "signature": "V8HIerS5usG5mg7pzU/9G8+G6V1PacvTZtinJwKYQtujOXWFZRxkfHEwYFVMSjTe7yL4YE4lEhlGGZJcnUSIBg=="
       },
+      "accessOffer": "offered"
+    },
+    {
+      "slug": "hqbase",
+      "repo": "HQBase/hqbase",
+      "name": "HQBase",
+      "summary": "Your team's email workspace in your own account: shared mailboxes, drafts, labels, contacts and audit history, with a remote MCP server for agents.",
+      "tagline": "Shared email for your team in your own Cloudflare account",
+      "features": [
+        "Receive and send email from shared team mailboxes",
+        "Manage mailboxes across multiple domains",
+        "Choose which mailboxes each team member can access",
+        "Save drafts and keep an audit history",
+        "Let AI clients search mail, draft replies and send through authorized access"
+      ],
+      "alternativeTo": [
+        "Front"
+      ],
+      "addedAt": "2026-09-27T06:02:01+03:00",
+      "version": "1.4.5",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/hqbase@1.4.5/hqbase-1.4.5.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/hqbase@1.4.5/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/hqbase@1.4.5/manifest.sig",
+        "digest": "ab5c3502519690e3b1205b49a757bf56433d79eb0a35505f3d028005f2d48a8c"
+      },
+      "tier": "artifact",
+      "plan": "paid",
+      "requires": [
+        "zone",
+        "email-routing",
+        "r2"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "HQBase",
+          "url": "https://hqbase.io",
+          "github": "HQBase"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "screenshots": [
+          {
+            "url": "https://appflare.github.io/catalog/apps/hqbase/screenshots/01-shared-inbox.png",
+            "sha256": "6a7ebdf28f221f304e3abdcca31fdde32feba71491173144f589465cea45fd79",
+            "alt": "HQBase: Shared inbox"
+          }
+        ]
+      },
+      "services": [
+        "d1",
+        "r2",
+        "durable-objects",
+        "queues",
+        "cron",
+        "email-routing",
+        "zone"
+      ],
+      "categories": [
+        "email",
+        "productivity"
+      ],
+      "license": "AGPL-3.0-only",
+      "revision": 1,
       "accessOffer": "offered"
     },
     {
@@ -4129,6 +4230,73 @@
         "keyId": "catalog-2026-09",
         "signature": "r0bfNyyna1bu///x75J0FUWTSJnIMHqftnEGxH0nUZqYklowFvqp9JXOkxSOhehac8Y9xtqv+BRojKoF3NaoDw=="
       },
+      "accessOffer": "offered"
+    },
+    {
+      "slug": "larafeed",
+      "repo": "angristan/larafeed",
+      "name": "Larafeed",
+      "summary": "A private feed reader with passkey-only sign-in: RSS and Atom subscriptions refreshed on a schedule through Queues, OPML import and export, full-article extraction, favicons, and reader-client APIs, on D1, KV and Queues.",
+      "tagline": "Keep up with your favorite websites in one private feed",
+      "features": [
+        "Follow RSS, Atom and JSON feeds with automatic updates",
+        "Keep your reader private with passkey sign-in",
+        "Organize subscriptions into named categories",
+        "Filter articles by title, content or author",
+        "Mark articles as read, starred or archived",
+        "Move subscriptions in or out with OPML files"
+      ],
+      "alternativeTo": [
+        "Feedly"
+      ],
+      "addedAt": "2026-09-27T12:03:21+03:00",
+      "version": "0.0.0-20261012.c25e059",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/larafeed@0.0.0-20261012.c25e059/larafeed-0.0.0-20261012.c25e059.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/larafeed@0.0.0-20261012.c25e059/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/larafeed@0.0.0-20261012.c25e059/manifest.sig",
+        "digest": "476157bea5ff05bc81a5741bc92cb22c827bc3720c0faeb3cdef54aec17e87e2"
+      },
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Stanislas",
+          "url": "https://stanislas.blog",
+          "github": "angristan",
+          "x": "fuolpit"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/larafeed/icon.png",
+          "sha256": "901ec1bf7586628584a8e6695b9846c83b46dbd3763429340364ec0d9b3e7af8"
+        },
+        "screenshots": [
+          {
+            "url": "https://appflare.github.io/catalog/apps/larafeed/screenshots/01-reader-view.png",
+            "sha256": "2511e4ccfad4943961d7aa2ffc90dd61e0c3ab765a2915e47edf9d495c708d13",
+            "alt": "Larafeed: Reader view"
+          }
+        ]
+      },
+      "services": [
+        "kv",
+        "d1",
+        "queues",
+        "cron",
+        "images"
+      ],
+      "categories": [
+        "productivity"
+      ],
+      "license": "MIT",
+      "revision": 1,
       "accessOffer": "offered"
     },
     {
@@ -5437,89 +5605,6 @@
       "accessOffer": "offered"
     },
     {
-      "slug": "open-seo",
-      "repo": "every-app/open-seo",
-      "name": "OpenSEO",
-      "summary": "Self-hosted SEO research: keywords, rankings, backlinks and site audits, on your own Cloudflare account and behind Cloudflare Access.",
-      "tagline": "Find search terms, track rankings, and check your site's health",
-      "features": [
-        "Research keyword ideas and search results with a paid DataForSEO account",
-        "Schedule checks of your keywords' search positions",
-        "Compare competitors' search traffic and ranking keywords",
-        "Review backlinks and the sites linking to a domain",
-        "Scan website pages for technical SEO issues",
-        "Give AI assistants access to SEO research through MCP"
-      ],
-      "alternativeTo": [
-        "Semrush",
-        "Ahrefs"
-      ],
-      "addedAt": "2026-09-24T08:09:39+03:00",
-      "version": "0.1.12",
-      "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/open-seo@0.1.12/open-seo-0.1.12.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/open-seo@0.1.12/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/open-seo@0.1.12/manifest.sig",
-        "digest": "2f1e0cd65213d909c69332aaf48f6b0ab4fb88b1bb8ee1505001f8c1d2176371"
-      },
-      "tier": "artifact",
-      "plan": "free",
-      "requires": [
-        "r2",
-        "access"
-      ],
-      "lastVerified": "2026-10-14T09:14:25.000Z",
-      "authors": [
-        {
-          "name": "Ben Senescu",
-          "github": "bensenescu",
-          "x": "bensenescu"
-        },
-        {
-          "name": "Every App",
-          "url": "https://everyapp.dev",
-          "github": "every-app"
-        }
-      ],
-      "maintainers": [
-        "MendyLanda"
-      ],
-      "media": {
-        "icon": {
-          "url": "https://appflare.github.io/catalog/apps/open-seo/icon.png",
-          "sha256": "9d8d56587bd72607f0b86b096442122303b2be7406e43895da1c189a3ee72d27"
-        },
-        "screenshots": [
-          {
-            "url": "https://appflare.github.io/catalog/apps/open-seo/screenshots/01-keyword-results.png",
-            "sha256": "b38fbce16a87ec10950832b2e8cdf6d39fd34b97a20999d499931c6493ced18a",
-            "alt": "OpenSEO: Keyword results"
-          },
-          {
-            "url": "https://appflare.github.io/catalog/apps/open-seo/screenshots/02-site-audit.png",
-            "sha256": "53b23274ce22794376368d9ed87b242656d2c3659abbad03d5cb6502dafe3781",
-            "alt": "OpenSEO: Site audit"
-          }
-        ]
-      },
-      "services": [
-        "kv",
-        "d1",
-        "r2",
-        "durable-objects",
-        "workflows",
-        "cron",
-        "access"
-      ],
-      "categories": [
-        "marketing",
-        "analytics"
-      ],
-      "license": "MIT",
-      "revision": 6,
-      "accessOffer": "required"
-    },
-    {
       "slug": "openai-gemini",
       "repo": "PublicAffairs/openai-gemini",
       "name": "OpenAI Gemini",
@@ -6385,6 +6470,73 @@
         "keyId": "catalog-2026-09",
         "signature": "OPGB0nCl1BUPPiZBV29ImorB0tW6ZjTZEYC1zMG/ZCOgjw4cxP+chkFYw6XFGBWmKIehxRdOP2dSCGg1zR7hCA=="
       },
+      "accessOffer": "offered"
+    },
+    {
+      "slug": "reminal",
+      "repo": "harshalgajjar/Reminal",
+      "name": "Reminal",
+      "summary": "Your own relay for reminal: reach the terminals, app windows and desktops of your machines from any browser, end-to-end encrypted, with nothing listening on the machines.",
+      "tagline": "Reach your computers' windows and terminals from any browser",
+      "features": [
+        "Use your computer's terminal from a phone or browser after installing its computer client",
+        "Control individual app windows or the full desktop remotely",
+        "Share a live session with someone using a session ID and PIN",
+        "Transfer files between computers with a one-time code",
+        "Share a local web app through a PIN-protected public link",
+        "Keep terminal and window sessions encrypted from computer to browser"
+      ],
+      "alternativeTo": [
+        "ngrok",
+        "TeamViewer"
+      ],
+      "addedAt": "2026-09-27T05:20:16+03:00",
+      "version": "3.16.8",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/reminal@3.16.8/reminal-3.16.8.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/reminal@3.16.8/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/reminal@3.16.8/manifest.sig",
+        "digest": "951db1b3734f7d418ab58f40b3540694f8328984f7541885bcd7e4f833455020"
+      },
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Harshal Gajjar",
+          "github": "harshalgajjar"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/reminal/icon.png",
+          "sha256": "97653908683f2bfe7bf4302b8a5e29c2839decd0fc37724b8a9c97c91f1968ed"
+        },
+        "cover": {
+          "url": "https://appflare.github.io/catalog/apps/reminal/cover.png",
+          "sha256": "90ed2f7be942e37e6e1ca09d92de076f542168c5b800fc622768fde7e87507b7"
+        },
+        "screenshots": [
+          {
+            "url": "https://appflare.github.io/catalog/apps/reminal/screenshots/01-alerts-sheet.png",
+            "sha256": "9895a77b7faae05671d4772a5ffceaeceaa6e679befb69b13c7bae6d61254e42",
+            "alt": "Reminal: Alerts sheet"
+          }
+        ]
+      },
+      "services": [
+        "durable-objects"
+      ],
+      "categories": [
+        "remote-access",
+        "developer-tools"
+      ],
+      "license": "AGPL-3.0-or-later",
+      "revision": 3,
       "accessOffer": "offered"
     },
     {
