@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-14T09:39:40.075Z",
+  "generatedAt": "2026-10-14T13:32:03.352Z",
   "apps": [
     {
       "slug": "2fa",
@@ -1710,6 +1710,63 @@
       "accessOffer": "offered"
     },
     {
+      "slug": "cloudssh",
+      "repo": "newbietan/CloudSSH",
+      "name": "CloudSSH",
+      "summary": "A web SSH terminal on Workers: connect to your servers from the browser with multiple sessions, SFTP file management, jump hosts, saved servers, and a bring-your-own-key AI assistant.",
+      "tagline": "Connect to your servers through a browser",
+      "features": [
+        "Keep several server terminals open in separate tabs",
+        "Upload, download and edit server files through SFTP",
+        "Save server connections and reconnect with one click",
+        "Reach private servers through up to three jump hosts",
+        "Share one-time server access links and revoke them when needed",
+        "Get AI help with server problems using your own OpenAI-compatible API key"
+      ],
+      "alternativeTo": [
+        "Termius"
+      ],
+      "addedAt": "2026-09-26T23:19:31+03:00",
+      "version": "0.0.0-20261014.0f982a1",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20261014.0f982a1/cloudssh-0.0.0-20261014.0f982a1.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20261014.0f982a1/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20261014.0f982a1/manifest.sig",
+        "digest": "1a25eecb4b2123587bccf099c60dee0e2b1189c6d9fc0a3f7fb6e026413401be"
+      },
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "TanXin",
+          "url": "https://tanxin.me",
+          "github": "newbietan"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/cloudssh/icon.svg",
+          "sha256": "7798d8bc82566ea4bf5ad4f7088a9b3c0135dae4ad9fa83a1b52b8340db3daf3"
+        },
+        "screenshots": []
+      },
+      "services": [
+        "durable-objects"
+      ],
+      "categories": [
+        "remote-access",
+        "developer-tools"
+      ],
+      "license": "Apache-2.0",
+      "revision": 5,
+      "accessOffer": "offered"
+    },
+    {
       "slug": "collection-down",
       "repo": "heartalborada-del/Collection-Down",
       "name": "Collection Down",
@@ -2202,6 +2259,66 @@
       ],
       "license": "GPL-3.0-or-later",
       "revision": 1,
+      "accessOffer": "offered"
+    },
+    {
+      "slug": "edgeever",
+      "repo": "tianma-if/edgeever",
+      "name": "EdgeEver",
+      "summary": "An Evernote-style notes and knowledge base with a three-pane layout, full-text search, public note sharing, AI features and a built-in MCP server, on D1 and R2.",
+      "tagline": "Notes you can organize, search, and share from your own account",
+      "features": [
+        "Write notes in rich text or Markdown",
+        "Organize notes in nested notebooks and tags",
+        "Share notes publicly with password protection",
+        "Restore earlier versions of a note",
+        "Export notes and attachments as a ZIP archive",
+        "Summarize or translate notes with your own AI provider"
+      ],
+      "alternativeTo": [
+        "Evernote"
+      ],
+      "addedAt": "2026-09-27T05:18:00+03:00",
+      "version": "1.118.0",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/edgeever@1.118.0/edgeever-1.118.0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/edgeever@1.118.0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/edgeever@1.118.0/manifest.sig",
+        "digest": "3a9234b82baa530328a7b755c08a146be7c016d226b320da642354d9419a4854"
+      },
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "r2"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "tianma-if",
+          "github": "tianma-if",
+          "x": "tianma_if"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/edgeever/icon.svg",
+          "sha256": "1f13ba9f2ac4ea325eddce44a427eed4e98b64b9078b23de067ed23e67fe7257"
+        },
+        "screenshots": []
+      },
+      "services": [
+        "d1",
+        "r2"
+      ],
+      "categories": [
+        "notes",
+        "productivity"
+      ],
+      "license": "AGPL-3.0-only",
+      "revision": 4,
       "accessOffer": "offered"
     },
     {
@@ -2975,6 +3092,55 @@
       "accessOffer": "offered"
     },
     {
+      "slug": "folia",
+      "repo": "chthollyphile/folia-major",
+      "name": "Folia",
+      "summary": "A web music player built around full-screen animated lyrics, for your local library or a Navidrome server, with automatic lyric matching and AI colour themes from your own Gemini key.",
+      "tagline": "Play your music with full-screen animated lyrics",
+      "features": [
+        "Play music from a local folder without uploading the files",
+        "Listen to music from your own Navidrome server",
+        "Display local lyric files with animated full-screen text",
+        "Choose between different lyric animations",
+        "Generate song colour themes with your own Gemini API key"
+      ],
+      "addedAt": "2026-09-27T10:46:59+03:00",
+      "version": "0.7.19",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/folia@0.7.19/folia-0.7.19.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/folia@0.7.19/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/folia@0.7.19/manifest.sig",
+        "digest": "d1fbc1d98a499f4a81a159ecabee76ccd3bbd57618a274560043eb743c4ab810"
+      },
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "chthollyphile",
+          "github": "chthollyphile"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/folia/icon.svg",
+          "sha256": "0045ede40bee2e9ac4f40a3a803b16febbf75ab9beca6c438bfbd1e6cd5529a8"
+        },
+        "screenshots": []
+      },
+      "services": [],
+      "categories": [
+        "media"
+      ],
+      "license": "AGPL-3.0-only",
+      "revision": 4,
+      "accessOffer": "offered"
+    },
+    {
       "slug": "formzero",
       "repo": "BohdanPetryshyn/formzero",
       "name": "FormZero",
@@ -3502,6 +3668,73 @@
         "keyId": "catalog-2026-09",
         "signature": "V8HIerS5usG5mg7pzU/9G8+G6V1PacvTZtinJwKYQtujOXWFZRxkfHEwYFVMSjTe7yL4YE4lEhlGGZJcnUSIBg=="
       },
+      "accessOffer": "offered"
+    },
+    {
+      "slug": "hashpay",
+      "repo": "TGDash/HashPay",
+      "name": "HashPay",
+      "summary": "A crypto payment gateway run from your own Telegram bot: take USDT, USDC and native coins on eight chains or through Binance, OKX and OKPay, with a signed order API, merchant callbacks and an admin console.",
+      "tagline": "Accept crypto payments through your Telegram bot",
+      "features": [
+        "Collect USDT, USDC and supported native coins across eight blockchains",
+        "Create payment requests inline in Telegram",
+        "Create and check payment orders from your website or bot",
+        "Notify your shop when an order is paid, with retries if delivery fails",
+        "Manage payments in a browser or Telegram Mini App"
+      ],
+      "alternativeTo": [
+        "NOWPayments"
+      ],
+      "addedAt": "2026-09-27T10:46:59+03:00",
+      "version": "0.0.0-20261014.dd1f714",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/hashpay@0.0.0-20261014.dd1f714/hashpay-0.0.0-20261014.dd1f714.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/hashpay@0.0.0-20261014.dd1f714/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/hashpay@0.0.0-20261014.dd1f714/manifest.sig",
+        "digest": "bc1304f240875a868059559f278c587eb190e53a9325461f893d9c297ea21b35"
+      },
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "TGDash",
+          "github": "TGDash"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/hashpay/icon.svg",
+          "sha256": "848db8344f264004d2ac6be76a8e5d5350c2bcd11aad024ad47d2eb2b9237208"
+        },
+        "cover": {
+          "url": "https://appflare.github.io/catalog/apps/hashpay/cover.png",
+          "sha256": "92dd5009ce87b364ff86b375e84bd09654a6745f35f54bbdb56a75e89f3c7d08"
+        },
+        "screenshots": [
+          {
+            "url": "https://appflare.github.io/catalog/apps/hashpay/screenshots/01-admin-overview.png",
+            "sha256": "c7023d3e5c84a78ea3a15fedded3fd631213b8a525d6a185d6018f31e16345f1",
+            "alt": "HashPay: Admin overview"
+          }
+        ]
+      },
+      "services": [
+        "d1",
+        "queues",
+        "cron"
+      ],
+      "categories": [
+        "finance",
+        "business"
+      ],
+      "license": "Apache-2.0",
+      "revision": 3,
       "accessOffer": "offered"
     },
     {
@@ -4543,6 +4776,90 @@
         "keyId": "catalog-2026-09",
         "signature": "ucih7mnqImuBNA6GFTZll6ZHlwlp3zN9Uh1MQuKqgbli5yn53KVf8mHRpYv1WDshMx2JgYFNJWaXUekB63SnDw=="
       },
+      "accessOffer": "offered"
+    },
+    {
+      "slug": "mailflare",
+      "repo": "hieunc229/mailflare",
+      "name": "Mailflare",
+      "summary": "A self-hosted email service for your own domains: mailboxes, forwarding rules, and a web inbox, on Email Routing, D1, R2, Queues, and Durable Objects. Shared inboxes require a paid Team license.",
+      "tagline": "Receive, send and organize email on your own domain",
+      "features": [
+        "Create mailboxes and aliases across multiple domains",
+        "Send messages with attachments, rich text and signatures",
+        "Organize mail with folders, search, stars and snoozing",
+        "Forward, reject or sort incoming mail with rules",
+        "Back up your mailbox and import or export mail",
+        "Connect compatible desktop and mobile email apps through JMAP"
+      ],
+      "alternativeTo": [
+        "Gmail"
+      ],
+      "addedAt": "2026-09-24T07:29:19+03:00",
+      "version": "0.0.0-20261014.c76a810",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261014.c76a810/mailflare-0.0.0-20261014.c76a810.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261014.c76a810/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261014.c76a810/manifest.sig",
+        "digest": "14fa3f9d21c18e223c43a8931f02bc39d882269c4421874c19b543e43dd97bec"
+      },
+      "tier": "artifact",
+      "plan": "paid",
+      "requires": [
+        "zone",
+        "email-routing",
+        "r2"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Hieu Nguyen",
+          "github": "hieunc229",
+          "x": "hieuSSR"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/mailflare/icon.png",
+          "sha256": "99e25176a3c443b584503fe07a5ed66fe2e06413b7e1c605e52649ed57bdc493"
+        },
+        "screenshots": [
+          {
+            "url": "https://appflare.github.io/catalog/apps/mailflare/screenshots/01-inbox.png",
+            "sha256": "6d6116e232cb8f762303de24ce6cf818eeacb3f4a5e4d903be4adc0492865e14",
+            "alt": "Mailflare: Inbox"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/mailflare/screenshots/02-domains.png",
+            "sha256": "b2db3790cee7e45bc347f36889455cc7cf5f6a30280135921fbfb476f0e4de76",
+            "alt": "Mailflare: Domains"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/mailflare/screenshots/03-mailboxes.png",
+            "sha256": "450ffbebdd462fe98789d8e6c13a0757807726fad5bef16ce3751a0f23dcdbfb",
+            "alt": "Mailflare: Mailboxes"
+          }
+        ]
+      },
+      "services": [
+        "d1",
+        "r2",
+        "durable-objects",
+        "queues",
+        "cron",
+        "workers-ai",
+        "images",
+        "email-routing",
+        "zone"
+      ],
+      "categories": [
+        "email"
+      ],
+      "license": "AGPL-3.0-or-later",
+      "revision": 4,
       "accessOffer": "offered"
     },
     {
@@ -5605,6 +5922,89 @@
       "accessOffer": "offered"
     },
     {
+      "slug": "open-seo",
+      "repo": "every-app/open-seo",
+      "name": "OpenSEO",
+      "summary": "Self-hosted SEO research: keywords, rankings, backlinks and site audits, on your own Cloudflare account and behind Cloudflare Access.",
+      "tagline": "Find search terms, track rankings, and check your site's health",
+      "features": [
+        "Research keyword ideas and search results with a paid DataForSEO account",
+        "Schedule checks of your keywords' search positions",
+        "Compare competitors' search traffic and ranking keywords",
+        "Review backlinks and the sites linking to a domain",
+        "Scan website pages for technical SEO issues",
+        "Give AI assistants access to SEO research through MCP"
+      ],
+      "alternativeTo": [
+        "Semrush",
+        "Ahrefs"
+      ],
+      "addedAt": "2026-09-24T08:09:39+03:00",
+      "version": "0.1.13",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/open-seo@0.1.13/open-seo-0.1.13.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/open-seo@0.1.13/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/open-seo@0.1.13/manifest.sig",
+        "digest": "131c87dca89f2ca0fe9122b00e3eb42d7cdbce2cd00ce803e41811a19a63e8cd"
+      },
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "r2",
+        "access"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Ben Senescu",
+          "github": "bensenescu",
+          "x": "bensenescu"
+        },
+        {
+          "name": "Every App",
+          "url": "https://everyapp.dev",
+          "github": "every-app"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/open-seo/icon.png",
+          "sha256": "9d8d56587bd72607f0b86b096442122303b2be7406e43895da1c189a3ee72d27"
+        },
+        "screenshots": [
+          {
+            "url": "https://appflare.github.io/catalog/apps/open-seo/screenshots/01-keyword-results.png",
+            "sha256": "b38fbce16a87ec10950832b2e8cdf6d39fd34b97a20999d499931c6493ced18a",
+            "alt": "OpenSEO: Keyword results"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/open-seo/screenshots/02-site-audit.png",
+            "sha256": "53b23274ce22794376368d9ed87b242656d2c3659abbad03d5cb6502dafe3781",
+            "alt": "OpenSEO: Site audit"
+          }
+        ]
+      },
+      "services": [
+        "kv",
+        "d1",
+        "r2",
+        "durable-objects",
+        "workflows",
+        "cron",
+        "access"
+      ],
+      "categories": [
+        "marketing",
+        "analytics"
+      ],
+      "license": "MIT",
+      "revision": 6,
+      "accessOffer": "required"
+    },
+    {
       "slug": "openai-gemini",
       "repo": "PublicAffairs/openai-gemini",
       "name": "OpenAI Gemini",
@@ -5720,6 +6120,72 @@
         "keyId": "catalog-2026-09",
         "signature": "NbS4Et2AIs0SYhBQZba8l1ww/qPXIfxH5i3ur/dDK5SXwUDvtYM/SfJWMojfvFxLEbcPBWF7HwE+2WWGnSD4CA=="
       },
+      "accessOffer": "offered"
+    },
+    {
+      "slug": "openstory",
+      "repo": "openstory-so/openstory",
+      "name": "OpenStory",
+      "summary": "Turn scripts into storyboards and videos with scene breakdowns, consistent characters, locations and styles, AI-generated frames, motion, voices and music, shared team libraries and an MCP server. Bring your own AI provider keys.",
+      "tagline": "Turn scripts into videos with consistent characters and scenes",
+      "features": [
+        "Break scripts into scenes using your OpenRouter key",
+        "Generate scene images using your fal.ai key",
+        "Animate still frames using your fal.ai key",
+        "Keep characters, locations and lighting consistent across scenes"
+      ],
+      "addedAt": "2026-09-27T12:03:21+03:00",
+      "version": "0.0.0-20261014.46a643f",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261014.46a643f/openstory-0.0.0-20261014.46a643f.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261014.46a643f/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261014.46a643f/manifest.sig",
+        "digest": "a987e6d85b071dcaeb16861ca840f3394d0bbb5c1649365f82e585516121e7fe"
+      },
+      "tier": "artifact",
+      "plan": "paid",
+      "requires": [
+        "r2",
+        "zone"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "OpenStory",
+          "url": "https://openstory.so",
+          "github": "openstory-so",
+          "x": "openstory_so"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/openstory/icon.svg",
+          "sha256": "3653ac735fbddc8941fe10457f42d9bff774e603afcfcc89ae315d0189c5ae38"
+        },
+        "cover": {
+          "url": "https://appflare.github.io/catalog/apps/openstory/cover.png",
+          "sha256": "1d94e3445dabe727b99742604f739b11b99f8cd63bfd6d0241ef1498939a6e74"
+        },
+        "screenshots": []
+      },
+      "services": [
+        "d1",
+        "r2",
+        "durable-objects",
+        "workflows",
+        "cron",
+        "email-routing",
+        "zone"
+      ],
+      "categories": [
+        "ai",
+        "media"
+      ],
+      "license": "MIT",
+      "revision": 5,
       "accessOffer": "offered"
     },
     {
