@@ -30,8 +30,11 @@ Each artifact tier app's version and artifacts (release URLs and the sha256 of
 its manifest.json) come from dist/<slug>/manifest.json when it was built from
 the current pin, otherwise from the GitHub Release <slug>@<version> for the
 version the current pin packs to (via gh api), provided the catalog manifest
-packed into it has the same source.sha; otherwise the app is omitted with a
-warning.
+packed into it has the same source.sha. When that release does not exist
+yet, the previous index's row for the app is kept as it was (only its images
+are rebuilt), so an app whose bump landed while publish was running stays
+listed at its last released version; a row that lists a revised catalog
+manifest is not kept. Otherwise the app is omitted with a warning.
 
   --releases-only   ignore dist/; fail if the release lookup fails or the
                     catalog's git history is shallow (publish CI)

@@ -273,6 +273,82 @@ describe("buildIndexApps", () => {
     ]);
   });
 
+  it("keeps the previous row while its new pin has no release yet, rebuilding only its images", () => {
+    const older = releaseOf("1.2.2");
+    const releases = releasesOf(older);
+    const icon = {
+      icon: {
+        url: "https://appflare.github.io/catalog/apps/hello/icon.svg",
+        sha256: "a".repeat(64),
+      },
+      screenshots: [],
+    };
+    const [listed] = buildIndexApps(
+      [hello],
+      options({ distDir: null, releases, versions: { versionOf: () => "1.2.2" } }),
+    );
+    const before = { ...listed, lastVerified: "2026-09-01T00:00:00.000Z" } as IndexApp;
+    for (const strictReleases of [false, true]) {
+      warnings = [];
+      const rows = buildIndexApps(
+        [hello],
+        options({
+          distDir: null,
+          releases,
+          strictReleases,
+          previousApps: [before],
+          mediaFor: () => icon,
+        }),
+      );
+      expect(rows).toEqual([{ ...before, media: icon }]);
+      expect(warnings).toEqual([
+        "hello: no release hello@1.2.3 for the current pin yet; keeping the listed hello@1.2.2",
+      ]);
+    }
+    const [noImages] = buildIndexApps(
+      [hello],
+      options({ distDir: null, releases, previousApps: [{ ...before, media: icon }] }),
+    );
+    expect(noImages).toEqual(before);
+    expect(noImages).not.toHaveProperty("media");
+  });
+
+  it("does not keep a previous row that is a sandbox entry or lists a revised manifest", () => {
+    const [listed] = buildIndexApps(
+      [hello],
+      options({
+        distDir: null,
+        releases: releasesOf(releaseOf("1.2.2")),
+        versions: { versionOf: () => "1.2.2" },
+      }),
+    );
+    const revised = {
+      ...listed,
+      catalogManifest: {
+        url: "https://appflare.github.io/catalog/apps/hello/manifest.json",
+        sha256: "b".repeat(64),
+        keyId: "catalog-2026-09",
+        signature: "c2lnbmVk",
+      },
+    } as IndexApp;
+    const { artifacts: _artifacts, ...rest } = listed as IndexApp;
+    const sandbox = {
+      ...rest,
+      build: { pin: PIN, manifestDigest: "c".repeat(64) },
+    } as unknown as IndexApp;
+    for (const before of [revised, sandbox]) {
+      warnings = [];
+      const rows = buildIndexApps(
+        [hello],
+        options({ distDir: null, releases: releasesOf(), previousApps: [before] }),
+      );
+      expect(rows).toEqual([]);
+      expect(warnings).toEqual([
+        "hello: no release hello@1.2.3 for the current pin; omitted from index.json",
+      ]);
+    }
+  });
+
   it("omits apps with a warning when no release lookup is available", () => {
     expect(buildIndexApps([hello], options())).toEqual([]);
     expect(warnings).toEqual([

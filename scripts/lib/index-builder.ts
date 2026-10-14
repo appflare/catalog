@@ -67,7 +67,12 @@ import type { VersionResolver } from "./versions.ts";
  *    it carries the three assets and its `manifest.json` names the same app,
  *    version, and pin. Never "the most recent release": a pin whose
  *    release does not exist yet is not listed with an older artifact.
- * 3. Otherwise the app is omitted, with a warning.
+ * 3. When that release does not exist yet, the app's row from the index being
+ *    replaced, unchanged but for its images (see {@link keptRow}). A bump can
+ *    land on main while publish is releasing the pin before it, and the next
+ *    publish may not run until the next night; until then the app stays listed
+ *    at the version it had.
+ * 4. Otherwise the app is omitted, with a warning.
  *
  * `artifacts.digest` is always the sha256 hex of the exact `manifest.json` bytes.
  * Publish CI passes `distDir: null` so every digest is over bytes actually on a
@@ -90,7 +95,10 @@ export interface IndexBuildOptions {
   strictReleases: boolean;
   artifactManifest: Parser<ArtifactManifest>;
   warn: (message: string) => void;
-  /** Rows of the index being replaced, to carry `lastVerified` forward. */
+  /**
+   * Rows of the index being replaced, to carry `lastVerified` forward and to
+   * keep listing an app whose current pin is not released yet.
+   */
   previousApps?: readonly IndexApp[];
   /** What `install.container` defaults to, from `@appflare/schema`. */
   sandboxDefaults: SandboxDefaults;
@@ -181,12 +189,17 @@ function parseArtifactManifest(
   return parseOrThrow(parser, json, label);
 }
 
-/** Resolves an app's listed artifact per the rule in this module's header. */
+/**
+ * Resolves an app's listed artifact per the rule in this module's header:
+ * `{ unreleased: tag }` when the release lookup works but the current pin's
+ * release does not exist yet, null (with a warning) when the app cannot be
+ * listed from the current pin otherwise.
+ */
 export function resolveArtifact(
   manifest: CatalogManifest,
   options: IndexBuildOptions,
   state: { releasesDisabled: boolean },
-): ResolvedArtifact | null {
+): ResolvedArtifact | { unreleased: string } | null {
   const { slug } = manifest;
   if (options.distDir) {
     const localPath = path.join(options.distDir, slug, "manifest.json");
@@ -257,8 +270,7 @@ export function resolveArtifact(
       };
     }
     if (tag && !state.releasesDisabled) {
-      options.warn(`${slug}: no release ${tag} for the current pin; omitted from index.json`);
-      return null;
+      return { unreleased: tag };
     }
   }
 
@@ -493,6 +505,32 @@ function mediaBlock(
   return media === undefined ? {} : { media };
 }
 
+/**
+ * The previous index's row for an artifact tier app whose current pin has no
+ * release yet, or null when there is none to keep. The row is kept as it was,
+ * so its version, artifacts, revision and services still describe the same
+ * release; only `media` is rebuilt, because the Pages site publishes the
+ * images now in `apps/<slug>/` and checks them against the row. A row that
+ * lists a revised catalog manifest is not kept: the site publishes that from
+ * the current appflare.jsonc, which no longer matches it.
+ */
+export function keptRow(
+  manifest: CatalogManifest,
+  options: Pick<IndexBuildOptions, "previousApps" | "mediaFor">,
+): IndexApp | null {
+  const before = options.previousApps?.find((row) => row.slug === manifest.slug);
+  if (
+    before === undefined ||
+    before.build !== undefined ||
+    before.artifacts === undefined ||
+    before.catalogManifest !== undefined
+  ) {
+    return null;
+  }
+  const { media: _media, ...rest } = before;
+  return { ...rest, ...mediaBlock(manifest, options) };
+}
+
 /** Index rows for every listable manifest, in slug order (see this module's header). */
 export function buildIndexApps(
   manifests: readonly CatalogManifest[],
@@ -509,6 +547,21 @@ export function buildIndexApps(
       continue;
     }
     const artifact = resolveArtifact(manifest, options, state);
+    if (artifact !== null && "unreleased" in artifact) {
+      const kept = keptRow(manifest, options);
+      if (kept === null) {
+        options.warn(
+          `${manifest.slug}: no release ${artifact.unreleased} for the current pin; omitted from index.json`,
+        );
+      } else {
+        options.warn(
+          `${manifest.slug}: no release ${artifact.unreleased} for the current pin yet; ` +
+            `keeping the listed ${manifest.slug}@${kept.version}`,
+        );
+        rows.push(kept);
+      }
+      continue;
+    }
     if (artifact) {
       const verifiedAt = lastVerifiedFor(manifest.slug, artifact, options.previousApps ?? []);
       let row: IndexApp;
