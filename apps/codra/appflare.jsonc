@@ -1,0 +1,183 @@
+{
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "codra",
+  "name": "Codra",
+  "summary": "Self-hosted AI code review for GitHub pull requests: your own GitHub App posts inline findings and a summary on each pull request, with a dashboard for jobs, repositories and model routing. Runs on Workers with Queues, Workflows, KV and Workers AI or your own model keys, and your own Postgres through Hyperdrive.",
+  "tagline": "AI code reviews on your GitHub pull requests",
+  "features": [
+    "Get an AI review with inline comments on every pull request that is ready for review",
+    "Ask for a review on demand by mentioning @codra-app in a comment",
+    "Use Workers AI or your own OpenAI, Anthropic, Google or OpenRouter key",
+    "Pick models per repository, with fallbacks and larger models for big pull requests",
+    "Pause or resume reviews per repository",
+    "Follow review jobs, findings and model usage in a dashboard"
+  ],
+  "alternativeTo": ["CodeRabbit"],
+  "homepage": "https://codra.run",
+  "repo": "devarshishimpi/codra",
+  // package.json says AGPL-3.0-only; the README names AGPL v3.0 with no "or later".
+  "license": "AGPL-3.0-only",
+  "categories": ["developer-tools", "ai"],
+  "authors": [
+    {
+      "name": "Devarshi Shimpi",
+      "url": "https://devarshi.dev",
+      "github": "devarshishimpi",
+      "x": "devarshishimpi"
+    }
+  ],
+  "maintainers": ["MendyLanda"],
+  "source": { "ref": "v0.9.5", "sha": "faf39e5f74161352d380a2fe8bbb702c15e88de0" },
+  "install": {
+    "packageManager": "npm",
+    // The Worker's config sits in apps/worker; its assets are the dashboard
+    // that the root Vite build writes to dist/client. The config's custom
+    // domain route is upstream's own address, which the packer leaves out:
+    // routes belong to the install.
+    "wranglerConfig": "apps/worker/wrangler.jsonc",
+    // Upstream's build: vite build of the dashboard, then wrangler types.
+    "buildCommand": "npm run build"
+  },
+  // Workers, KV, one queue (10,000 operations a day on the free plan), a
+  // Workflow without a schedule, Workers AI (10,000 neurons a day) and
+  // Hyperdrive all have free tiers, and upstream keeps each review within
+  // the free plan's 50 subrequests per invocation. The cron trigger runs
+  // every two minutes, one of the account's 5 free cron triggers. The
+  // Postgres database runs elsewhere (Neon and Supabase have free tiers).
+  "plan": "free",
+  "requires": ["workers-ai"],
+  "resources": {
+    "hyperdrive": {
+      "HYPERDRIVE": {
+        "protocol": "postgres",
+        "label": "Postgres database",
+        "help": "PostgreSQL 13 or later, reachable from the internet, where Codra may enable the pgcrypto extension. Codra does not create its tables on its own: run its migrations against this database after the install (the steps after the install say how)."
+      }
+    }
+  },
+  // The wrangler config's secrets.required, in the order of upstream's
+  // installation guide. CF_ACCOUNT_ID is a var below: Appflare fills it in.
+  "secrets": [
+    {
+      "name": "GITHUB_APP_ID",
+      "label": "GitHub App ID",
+      "help": "Codra reviews as a GitHub App you create for it: Contents and Metadata read-only; Pull requests, Checks and Issues read and write; the Pull request and Issue comment events. Until the install gives Codra an address, enter any homepage URL and leave the webhook inactive. The App ID is on the app's settings page, under About.",
+      "link": { "label": "Create a GitHub App", "url": "https://github.com/settings/apps/new" }
+    },
+    {
+      "name": "GITHUB_CLIENT_ID",
+      "label": "GitHub App client ID",
+      "help": "On the GitHub App's settings page, under About. Codra signs you in to its dashboard through the same app."
+    },
+    {
+      "name": "GITHUB_CLIENT_SECRET",
+      "label": "GitHub App client secret",
+      "help": "Generate one on the GitHub App's settings page, under Client secrets."
+    },
+    {
+      "name": "APP_PRIVATE_KEY",
+      "label": "GitHub App private key",
+      "help": "Generate a private key at the bottom of the GitHub App's settings page and paste the whole downloaded .pem file, BEGIN and END lines included.",
+      "multiline": true
+    },
+    {
+      "name": "GITHUB_APP_WEBHOOK_SECRET",
+      "label": "Webhook secret",
+      "help": "Paste this value into the GitHub App's Webhook secret field. Codra rejects webhook deliveries signed with any other secret.",
+      "generate": "password"
+    },
+    {
+      "name": "LLM_CONFIG_ENCRYPTION_KEY",
+      "label": "Model key encryption key",
+      "help": "Encrypts the model provider API keys you save in the dashboard. Setting a new value makes the saved keys unreadable; enter them again afterwards.",
+      "generate": "password"
+    },
+    {
+      // Workers AI is not among the permission groups Appflare can prefill
+      // in a token link, so this is a plain secret, not `cloudflareToken`.
+      "name": "CF_API_TOKEN",
+      "label": "Cloudflare API token",
+      "help": "Lets Codra list every Workers AI text model in this account when the dashboard refreshes models. Needs the Workers AI Read permission on this account. Without it, Codra offers its built-in list of Workers AI models.",
+      "link": {
+        "label": "Create a token",
+        "url": "https://dash.cloudflare.com/profile/api-tokens"
+      },
+      "optional": true
+    }
+  ],
+  "vars": [
+    {
+      "name": "DASHBOARD_ALLOWED_USERS",
+      "label": "Dashboard users",
+      "help": "The GitHub user names allowed to sign in to the dashboard, comma separated, for example octocat,hubot. Anyone else is turned away after signing in with GitHub.",
+      // The wrangler config's value is upstream's author. Without a default
+      // the form would start with it; an empty one makes the form ask.
+      "default": ""
+    },
+    {
+      "name": "BOT_USERNAME",
+      "label": "GitHub App slug",
+      "help": "The name in your GitHub App's public address, github.com/apps/<slug>. Codra's reviews appear as <slug>[bot], and Codra recognizes its own comments by this name.",
+      // The wrangler config's value is upstream's own GitHub App.
+      "default": ""
+    },
+    {
+      "name": "GITHUB_APP_SLUG",
+      "label": "GitHub App slug for the install link",
+      "help": "The same slug, for the dashboard's link that installs the app on more repositories. Leave empty and Codra looks it up from GitHub.",
+      // The wrangler config's value is upstream's own GitHub App.
+      "default": "",
+      "optional": true
+    },
+    {
+      "name": "APP_URL",
+      "label": "Public URL",
+      "help": "Where Codra is reached, without a trailing slash.",
+      "default": "{{appUrl}}"
+    },
+    {
+      "name": "AUTH_CALLBACK_URL",
+      "label": "Sign-in callback URL",
+      "help": "Must equal the Callback URL in the GitHub App's settings.",
+      "default": "{{appUrl}}/auth/github/callback"
+    },
+    {
+      "name": "CF_ACCOUNT_ID",
+      "label": "Cloudflare account ID",
+      "help": "The account whose Workers AI models Codra lists with the token above: this one. Filled in on every install and update.",
+      "default": "{{accountId}}"
+    },
+    {
+      // Upstream sends these by default (apps/worker/src/core/telemetry.ts);
+      // the install starts with them off, as imgbed and punctual do.
+      "name": "TELEMETRY_DISABLED",
+      "label": "Usage statistics to upstream",
+      "help": "After each review: a random instance ID, Codra's version, line, finding and token counts, the models used, file extensions and the review's duration and verdict. No code, file names or repository names. Sent to codra.run.",
+      "type": "select",
+      "options": [
+        { "value": "true", "label": "Off" },
+        { "value": "false", "label": "Send usage statistics" }
+      ],
+      "default": "true"
+    }
+  ],
+  "openPath": "/dashboard",
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "Create Codra's tables before anything else. With Node.js 22 and git, run `git clone --branch v<version> https://github.com/devarshishimpi/codra.git`, using the version Appflare installed (`v0.9.5`, say), then in the `codra` folder run `npm ci --ignore-scripts` and `DATABASE_URL='<connection string>' npm run migrate` with the connection string you gave the install form. Do the same after each update, with the new version."
+    },
+    {
+      "type": "markdown",
+      "content": "In your GitHub App's settings, set the Homepage URL to {{appUrl}}, the Callback URL to {{appUrl}}/auth/github/callback, and the Webhook URL to {{appUrl}}/webhook, with Active checked and the **Webhook secret** from Codra's settings. Under Permissions & events, check Contents and Metadata read-only; Pull requests, Checks and Issues read and write; and the Pull request and Issue comment events."
+    },
+    {
+      "type": "markdown",
+      "content": "Install the GitHub App on the repositories Codra should review (**Install App** in its settings), then sign in at {{appUrl}}/login with a GitHub account listed in **Dashboard users**. Pull requests are reviewed on their own once they are ready for review (drafts wait until marked ready); a comment that mentions `@codra-app` asks for a review on demand."
+    },
+    {
+      "type": "markdown",
+      "content": "Before the first review, choose a model under **Settings > Default models** in the dashboard. Workers AI models need no key; for OpenAI, Anthropic, Google, OpenRouter or another provider, add its API key under **Settings** first."
+    }
+  ]
+}
