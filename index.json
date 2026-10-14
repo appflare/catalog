@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-14T13:32:03.352Z",
+  "generatedAt": "2026-10-14T20:30:57.958Z",
   "apps": [
     {
       "slug": "2fa",
@@ -1764,6 +1764,81 @@
       ],
       "license": "Apache-2.0",
       "revision": 5,
+      "accessOffer": "offered"
+    },
+    {
+      "slug": "codra",
+      "repo": "devarshishimpi/codra",
+      "name": "Codra",
+      "summary": "Self-hosted AI code review for GitHub pull requests: your own GitHub App posts inline findings and a summary on each pull request, with a dashboard for jobs, repositories and model routing. Runs on Workers with Queues, Workflows, KV and Workers AI or your own model keys, and your own Postgres through Hyperdrive.",
+      "tagline": "AI code reviews on your GitHub pull requests",
+      "features": [
+        "Get an AI review with inline comments on every pull request that is ready for review",
+        "Ask for a review on demand by mentioning @codra-app in a comment",
+        "Use Workers AI or your own OpenAI, Anthropic, Google or OpenRouter key",
+        "Pick models per repository, with fallbacks and larger models for big pull requests",
+        "Pause or resume reviews per repository",
+        "Follow review jobs, findings and model usage in a dashboard"
+      ],
+      "alternativeTo": [
+        "CodeRabbit"
+      ],
+      "addedAt": "2026-10-14T23:25:29+03:00",
+      "version": "0.9.5",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/codra@0.9.5/codra-0.9.5.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/codra@0.9.5/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/codra@0.9.5/manifest.sig",
+        "digest": "2a96c11bad1db19aba0a15a7b44d854def364481f4c2bbdf96ed0c3281737e0b"
+      },
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "workers-ai"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Devarshi Shimpi",
+          "url": "https://devarshi.dev",
+          "github": "devarshishimpi",
+          "x": "devarshishimpi"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/codra/icon.svg",
+          "sha256": "5123aa602cbcfe2341eaeef3311ad6e8556758e274bc2d5fe5041526c7b87037"
+        },
+        "cover": {
+          "url": "https://appflare.github.io/catalog/apps/codra/cover.png",
+          "sha256": "2a766aee3c9f28f4432cfdd4e1db1d509ee7ca73ab3cf9edbee5fe06100907cb"
+        },
+        "screenshots": [
+          {
+            "url": "https://appflare.github.io/catalog/apps/codra/screenshots/01-dashboard.png",
+            "sha256": "6184853e68c9ebafff311f15c17ccee83e83c5ed5f2ec707d6a6fe926c3e2bb6",
+            "alt": "Codra: Dashboard"
+          }
+        ]
+      },
+      "services": [
+        "kv",
+        "hyperdrive",
+        "queues",
+        "workflows",
+        "cron",
+        "workers-ai"
+      ],
+      "categories": [
+        "developer-tools",
+        "ai"
+      ],
+      "license": "AGPL-3.0-only",
+      "revision": 1,
       "accessOffer": "offered"
     },
     {
