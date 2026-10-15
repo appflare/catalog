@@ -1,0 +1,77 @@
+{
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "tradeedge",
+  "name": "TradeEdge",
+  "summary": "Manage your investments across all your brokers in one place, in your own Cloudflare account, on real data. Link your brokerage accounts with a free SnapTrade Personal key, price them live with a free Alpaca key, tag holdings by sector and basket, and shape them into your own views. Follow the news on what you hold: Alpaca news, the X accounts you track (with your own paid twitterapi.io key) and earnings straight from SEC 8-K filings, with Cloudflare's free AI models picking out symbols, sentiment and themes and folding repeats into one post. Get alerts on your phone through ntfy or on your own webhooks. Screen options strategies on live chains, and let your AI agent work alongside you through MCP. Brokers that trade through SnapTrade (such as Kraken, Coinbase and tastytrade) will let TradeEdge place trades for you; that part is in progress and coming soon.",
+  "tagline": "Your whole portfolio on real broker and market data, run with your AI agent",
+  "features": [
+    "All your brokers in one place: holdings, transactions and tax lots, via your free SnapTrade key",
+    "Live prices from your free Alpaca key, with gains, sectors and baskets you tag yourself",
+    "News on your holdings from Alpaca, X and SEC earnings filings, sorted by free Cloudflare AI",
+    "Alerts on your phone (ntfy) or to your own webhooks when something needs you",
+    "Screen options strategies on live chains, and every screen is an MCP tool for your AI agent",
+    "Runs free on your own Cloudflare account, your data in your own database, encrypted if you choose"
+  ],
+  "repo": "columenlabs/tradeedge",
+  "license": "MIT",
+  "categories": ["finance", "ai"],
+  "authors": [{ "name": "Columen Labs", "url": "https://edgedesk.app", "github": "columenlabs" }],
+  "maintainers": ["bchoor"],
+  "source": { "ref": "v0.1.213", "sha": "9cfede758b2c2f546b7b639c7ab040b1a822e6a1" },
+  "install": {
+    "packageManager": "bun",
+    "wranglerConfig": "services/analytics-engine/wrangler.jsonc"
+  },
+  "plan": "free",
+  "requires": ["access"],
+  // The Worker refuses every signed-in route without a valid Access token.
+  // SnapTrade's webhook checks SnapTrade's signature itself.
+  "access": { "mode": "required", "bypass": ["/api/public/snaptrade-hook/*"] },
+  "openPath": "/app/",
+  "secrets": [
+    {
+      "name": "VAULT_KEK",
+      "label": "Encryption key",
+      "help": "Optional. Leave unset to store data readable in your database (broker keys included). Set 32 random bytes, base64 (openssl rand -base64 32), to encrypt every person's data; existing data is encrypted once on the next start, and it can't be turned off again. Keep a copy, and once it is set never remove it here: TradeEdge stops reading the encrypted data until the same key is back, and without a copy the data is lost.",
+      "optional": true
+    }
+  ],
+  "vars": [
+    {
+      "name": "PUBLIC_ORIGIN",
+      "label": "App address",
+      "help": "Filled in by Appflare.",
+      "default": "{{appUrl}}"
+    },
+    {
+      "name": "TRADEEDGE_HOST",
+      "label": "App host",
+      "help": "Filled in by Appflare.",
+      "default": "{{appHostname}}"
+    },
+    {
+      "name": "ACCESS_TEAM_DOMAIN",
+      "label": "Cloudflare Access team domain",
+      "help": "Filled in by Appflare.",
+      "default": "{{accessTeamDomain}}"
+    },
+    {
+      "name": "ACCESS_AUD",
+      "label": "Cloudflare Access audience (MCP)",
+      "help": "Filled in by Appflare.",
+      "default": "{{accessAud}}"
+    },
+    {
+      "name": "ACCESS_APP_AUD",
+      "label": "Cloudflare Access audience (app)",
+      "help": "Filled in by Appflare.",
+      "default": "{{accessAud}}"
+    }
+  ],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "Open {{appUrl}}/app/ and sign in through Cloudflare Access. Add your free Alpaca key under Settings > Integrations for live quotes and option chains. To sync your brokers, add your free SnapTrade Personal key (up to 5 brokers, tax lots for eligible brokers) under Settings > Integrations. Placing trades through SnapTrade, for eligible accounts, is in progress and coming soon. AI agents connect at `{{appUrl}}/mcp`."
+    }
+  ]
+}
