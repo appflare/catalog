@@ -1,0 +1,166 @@
+// Appflare catalog manifest for TokiAPI (github.com/limccn/TokiAPI).
+// Schema: https://appflare.github.io/catalog/schema/v1.json
+// source.sha pins main HEAD carrying the Appflare adaptation (wrangler.jsonc $NAME
+// placeholder resource ids; see the repo README for the install forms).
+{
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "tokiapi",
+  "name": "TokiAPI",
+  "summary": "Self-hosted OpenAI-compatible AI gateway on Cloudflare Workers: one endpoint in front of OpenAI-compatible and Anthropic-native model providers, with team API keys, prepaid pay-per-token billing, rate limiting, response caching, usage analytics and a web admin console.",
+  "tagline": "One gateway for all your AI model providers",
+  "features": [
+    "Connect OpenAI, Anthropic and other model providers behind one OpenAI-compatible endpoint",
+    "Issue team API keys with prepaid balances, per-key rate limits and revocation",
+    "Pay per token with prepaid credit; failed requests are never charged",
+    "Cache repeated responses and block over-quota requests automatically",
+    "Manage keys, members, providers and model prices in a web admin console"
+  ],
+  "alternativeTo": ["LiteLLM", "One API"],
+  "repo": "limccn/TokiAPI",
+  "license": "MIT",
+  "categories": ["ai", "developer-tools"],
+  "authors": [{ "name": "limccn", "github": "limccn" }],
+  "maintainers": ["limccn"],
+  // TokiAPI has no semver release tags yet; the pin tracks main. The bump bot edits this.
+  "source": { "ref": "main", "sha": "e2f54e7fa0be225f2e0c937bec9fa077d20435a4" },
+  "install": {
+    "packageManager": "npm",
+    "wranglerConfig": "wrangler.jsonc",
+    // The repo has no `build` section in its wrangler config (Workers Builds runs the
+    // package.json build script instead); the SPA bundle must exist before bundling.
+    "buildCommand": "npm run build",
+    // Public liveness probe, does not touch the database or any secret; answers 200 JSON.
+    "health": { "path": "/api/health" }
+  },
+  // Queues (usage aggregation + deferred billing) run on the Workers Free plan
+  // (10,000 ops/day); nothing here requires Workers Paid.
+  "plan": "free",
+  "secrets": [
+    {
+      "name": "BETTER_AUTH_SECRET",
+      "label": "Session signing secret",
+      "help": "Signs Better Auth sessions. Generated for you; you never need to choose it.",
+      "generate": "password"
+    },
+    {
+      "name": "GATEWAY_SECRET_KEY",
+      "label": "Provider key encryption key",
+      "help": "Encrypts the upstream provider API keys you store in the admin console (AES-GCM). Generated for you, independent of the session secret.",
+      "generate": "password"
+    },
+    {
+      "name": "GITHUB_CLIENT_SECRET",
+      "label": "GitHub OAuth client secret",
+      "help": "Enables GitHub sign-in, which is also the only entry point for the first admin account. Create an OAuth App with the callback URL {{appUrl}}/api/auth/callback/github.",
+      "link": { "label": "Create an OAuth App", "url": "https://github.com/settings/developers" },
+      "optional": true
+    },
+    {
+      "name": "RESEND_API_KEY",
+      "label": "Resend API key",
+      "help": "Transactional email (verification mail and its sign-up credit). Leave empty to keep email features off; nothing else depends on it.",
+      "link": { "label": "Get an API key", "url": "https://resend.com/api-keys" },
+      "optional": true
+    }
+  ],
+  "vars": [
+    {
+      "name": "BETTER_AUTH_URL",
+      "label": "Site URL",
+      "help": "The address the app is served at; doubles as the platform origin for routing. The default is already correct.",
+      "default": "{{appUrl}}"
+    },
+    {
+      "name": "GITHUB_CLIENT_ID",
+      "label": "GitHub OAuth client ID",
+      "help": "The Client ID of the OAuth App whose secret you set above.",
+      "link": { "label": "Create an OAuth App", "url": "https://github.com/settings/developers" },
+      "optional": true
+    },
+    {
+      "name": "GITHUB_ALLOWED_EMAILS",
+      "label": "GitHub sign-in whitelist",
+      "help": "Comma-separated GitHub account emails allowed to sign in. Empty = every GitHub sign-in is rejected (fail-closed). Add your own email to bootstrap the first admin.",
+      "optional": true
+    },
+    {
+      "name": "API_DOMAIN",
+      "label": "Public API domain",
+      "help": "Hostname of the public API when you serve the console and the API on different domains. Leave empty: everything works on the single Appflare address.",
+      "optional": true
+    },
+    {
+      "name": "CACHE_ENABLED",
+      "label": "Response cache",
+      "help": "Serve repeated identical requests from the cache. Billing is skipped for cache hits.",
+      "type": "select",
+      "options": [
+        { "value": "false", "label": "Off (default)" },
+        { "value": "true", "label": "On" }
+      ],
+      "default": "false"
+    },
+    {
+      "name": "EMAIL_VERIFICATION_ENABLED",
+      "label": "Email verification",
+      "help": "Require email verification at sign-up and grant its sign-up credit. Needs the Resend API key; otherwise the system stays dormant.",
+      "type": "select",
+      "options": [
+        { "value": "false", "label": "Off (default)" },
+        { "value": "true", "label": "On" }
+      ],
+      "default": "false"
+    },
+    {
+      "name": "EMAIL_ACCOUNT_ADMIN_PROMOTION_ENABLED",
+      "label": "Promote email accounts to admin",
+      "help": "Allow promoting email-registered accounts to admin in the console. Keep off to restrict admin promotion to GitHub-whitelisted accounts.",
+      "type": "select",
+      "options": [
+        { "value": "false", "label": "Off (default)" },
+        { "value": "true", "label": "On" }
+      ],
+      "default": "false"
+    },
+    {
+      "name": "SIGNUP_BONUS_AMOUNT",
+      "label": "Sign-up credit (USD)",
+      "help": "Prepaid credit granted to every new account. Set 0 to grant nothing.",
+      "default": "5"
+    },
+    {
+      "name": "EMAIL_VERIFY_BONUS_AMOUNT",
+      "label": "Verification credit (USD)",
+      "help": "Prepaid credit granted when an account verifies its email. Set 0 to grant nothing.",
+      "default": "5"
+    },
+    {
+      "name": "EMAIL_ALLOWED_RECIPIENTS",
+      "label": "Email recipient whitelist",
+      "help": "Comma-separated addresses transactional email may be sent to. Empty = every recipient is allowed.",
+      "optional": true
+    },
+    {
+      "name": "REQUEST_LOG_RETENTION_DAYS",
+      "label": "Request log retention (days)",
+      "help": "A daily cleanup job deletes request logs older than this many days.",
+      "default": "30"
+    },
+    {
+      "name": "API_KEY_PREFIX",
+      "label": "API key prefix",
+      "help": "Plaintext prefix of newly issued gateway API keys (the rest is stored hashed).",
+      "default": "sk-"
+    }
+  ],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "Point an OpenAI-compatible client at `{{appUrl}}/v1`, or the official Anthropic SDK at `{{appUrl}}/anthropic`, with a gateway API key created in the console as its API key."
+    },
+    {
+      "type": "markdown",
+      "content": "The first admin account comes from GitHub sign-in: create a GitHub OAuth App with the callback URL `{{appUrl}}/api/auth/callback/github`, set its client ID and secret in this app's settings, put your email into the GitHub sign-in whitelist, sign in, then run `npx wrangler d1 execute DB --remote --command \"UPDATE users SET role='admin' WHERE email='you@example.com';\"` in your Cloudflare account. Never insert user rows by hand — see the repo README's post-deployment checklist for details."
+    }
+  ]
+}
