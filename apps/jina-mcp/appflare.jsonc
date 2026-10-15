@@ -23,7 +23,7 @@
   "authors": [{ "name": "Jina AI", "url": "https://jina.ai", "github": "jina-ai", "x": "JinaAI_" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags; the pin is the head of main.
-  "source": { "ref": "main", "sha": "5d6eb191a75d8e67b6e01ce427f0cc5c05c800aa" },
+  "source": { "ref": "main", "sha": "72be25ea909cb8e2694a84e0876d351c85d3661b" },
   "install": {
     "packageManager": "npm",
     // The config also routes upstream's own mcp.jina.ai custom domain; the
