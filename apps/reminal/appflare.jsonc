@@ -26,7 +26,7 @@
   "revision": 3,
   "authors": [{ "name": "Harshal Gajjar", "github": "harshalgajjar" }],
   "maintainers": ["MendyLanda"],
-  "source": { "ref": "v3.16.12", "sha": "404e6fb11496db30591086992db52e75a7ae3a3e" },
+  "source": { "ref": "v3.17.3", "sha": "ef6f6919be833866c4b4a30a179867ac80d9560c" },
   "install": {
     "packageManager": "npm",
     "wranglerConfig": "cloudflare/wrangler.toml",
