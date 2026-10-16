@@ -10,7 +10,7 @@
   "categories": ["ai", "business"],
   "authors": [{ "name": "Mainbrella", "github": "mainbrella", "url": "https://mainbrella.com" }],
   "maintainers": ["andrewarrow"],
-  "source": { "ref": "main", "sha": "0254e19a11e2194833dc0f6a203f28845d905570" },
+  "source": { "ref": "main", "sha": "7d3e023318f36f7a45e5d155c46d96e3896f9502" },
   "install": {
     "packageManager": "npm",
     "wranglerConfig": "wrangler.jsonc",
