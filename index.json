@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-17T08:24:51.748Z",
+  "generatedAt": "2026-10-17T08:40:50.969Z",
   "apps": [
     {
       "slug": "2fa",
@@ -1727,17 +1727,17 @@
         "Termius"
       ],
       "addedAt": "2026-09-26T23:19:31+03:00",
-      "version": "0.0.0-20261015.0c5d81a",
+      "version": "0.0.0-20261016.4e6c7e8",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20261015.0c5d81a/cloudssh-0.0.0-20261015.0c5d81a.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20261015.0c5d81a/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20261015.0c5d81a/manifest.sig",
-        "digest": "889fd9ff7daf55e87a281821f404f11d848be15f0c1f31fc4ad5b6ee2d898fd9"
+        "zip": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20261016.4e6c7e8/cloudssh-0.0.0-20261016.4e6c7e8.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20261016.4e6c7e8/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20261016.4e6c7e8/manifest.sig",
+        "digest": "1a906298bfff6757de46aebf86698d6abf9b492bc3f317c59cafb253524021bf"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-10-17T08:06:33.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "TanXin",
@@ -2354,19 +2354,19 @@
         "Evernote"
       ],
       "addedAt": "2026-09-27T05:18:00+03:00",
-      "version": "1.119.0",
+      "version": "1.120.0",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/edgeever@1.119.0/edgeever-1.119.0.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/edgeever@1.119.0/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/edgeever@1.119.0/manifest.sig",
-        "digest": "9dc75550b4d7fa212d521b27f980bb02e80ecb1028ddb022add1e991b6873a81"
+        "zip": "https://github.com/appflare/catalog/releases/download/edgeever@1.120.0/edgeever-1.120.0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/edgeever@1.120.0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/edgeever@1.120.0/manifest.sig",
+        "digest": "9fd603afd91759c650c6b75d5fd42be5fcf60154c7714ca78e67dd0937faf3bc"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-10-17T08:08:03.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "tianma-if",
@@ -3180,17 +3180,17 @@
         "Generate song colour themes with your own Gemini API key"
       ],
       "addedAt": "2026-09-27T10:46:59+03:00",
-      "version": "0.7.19",
+      "version": "0.7.20",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/folia@0.7.19/folia-0.7.19.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/folia@0.7.19/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/folia@0.7.19/manifest.sig",
-        "digest": "d1fbc1d98a499f4a81a159ecabee76ccd3bbd57618a274560043eb743c4ab810"
+        "zip": "https://github.com/appflare/catalog/releases/download/folia@0.7.20/folia-0.7.20.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/folia@0.7.20/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/folia@0.7.20/manifest.sig",
+        "digest": "3b65a581688766492e5ff7c61e28f7955546902a8fb54691231bf47ef021b914"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-10-17T08:09:06.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "chthollyphile",
@@ -4313,19 +4313,19 @@
         "Tumblr"
       ],
       "addedAt": "2026-09-27T12:14:18+03:00",
-      "version": "0.0.0-20260929.d3ee87b",
+      "version": "0.0.0-20261016.19bd273",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/jant@0.0.0-20260929.d3ee87b/jant-0.0.0-20260929.d3ee87b.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/jant@0.0.0-20260929.d3ee87b/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/jant@0.0.0-20260929.d3ee87b/manifest.sig",
-        "digest": "adb35e089f79d66a054dbbf648c9e00a91a6d62788ab36a1d676d24836e95362"
+        "zip": "https://github.com/appflare/catalog/releases/download/jant@0.0.0-20261016.19bd273/jant-0.0.0-20261016.19bd273.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/jant@0.0.0-20261016.19bd273/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/jant@0.0.0-20261016.19bd273/manifest.sig",
+        "digest": "1103583059948c3db35dbfc8d50c9c94ee0687f36b4e8cdef07c9d8d36ed69ab"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-10-17T08:11:39.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Jant",
@@ -4364,12 +4364,6 @@
       ],
       "license": "AGPL-3.0-or-later",
       "revision": 6,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/jant/manifest.json",
-        "sha256": "4ad75a346736e21f2ff42896ceea297d45939786329f9dc55572a866e4cf5b6b",
-        "keyId": "catalog-2026-09",
-        "signature": "mmpT/WY/qGl4QcUeQS/joICRTJsM+tviwe+fEyBLXcHVc5Go5lO4TbHR5TlzQjE7OLT5tkm7zoyRrSij5oglAQ=="
-      },
       "accessOffer": "offered"
     },
     {
@@ -4387,17 +4381,17 @@
         "Remove text with similar meanings using a Jina API key"
       ],
       "addedAt": "2026-09-27T10:43:20+03:00",
-      "version": "0.0.0-20261014.72be25e",
+      "version": "0.0.0-20261015.b938c00",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/jina-mcp@0.0.0-20261014.72be25e/jina-mcp-0.0.0-20261014.72be25e.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/jina-mcp@0.0.0-20261014.72be25e/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/jina-mcp@0.0.0-20261014.72be25e/manifest.sig",
-        "digest": "18b20e20bfaa3be7384a091eeab1d5620049265d3ce5338ec24fa02deed6ee1a"
+        "zip": "https://github.com/appflare/catalog/releases/download/jina-mcp@0.0.0-20261015.b938c00/jina-mcp-0.0.0-20261015.b938c00.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/jina-mcp@0.0.0-20261015.b938c00/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/jina-mcp@0.0.0-20261015.b938c00/manifest.sig",
+        "digest": "f7e6467eaebbdee4f2e2c11a31d94b872de16cff06d44578e183635646f7fc84"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-10-17T08:11:01.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Jina AI",
@@ -4938,12 +4932,12 @@
       "summary": "An AI receptionist with browser and text tests, incoming Twilio or Telnyx calls, and private call transcripts in your own Cloudflare account.",
       "tagline": "Answer calls with an AI receptionist you host yourself",
       "addedAt": "2026-10-15T18:15:06+03:00",
-      "version": "0.0.0-20261015.0254e19",
+      "version": "0.0.0-20261016.7d3e023",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/mainbrella-voice@0.0.0-20261015.0254e19/mainbrella-voice-0.0.0-20261015.0254e19.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/mainbrella-voice@0.0.0-20261015.0254e19/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/mainbrella-voice@0.0.0-20261015.0254e19/manifest.sig",
-        "digest": "8f5c6bc411526dabcadc8c3e0753bb1813f131eb662a19b6b4ea7053b8428a15"
+        "zip": "https://github.com/appflare/catalog/releases/download/mainbrella-voice@0.0.0-20261016.7d3e023/mainbrella-voice-0.0.0-20261016.7d3e023.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/mainbrella-voice@0.0.0-20261016.7d3e023/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/mainbrella-voice@0.0.0-20261016.7d3e023/manifest.sig",
+        "digest": "15748eaa1d23faba921832ff7d46407a9079bafb5fcee577ccde1a34a3395018"
       },
       "tier": "artifact",
       "plan": "paid",
@@ -5823,83 +5817,6 @@
       "accessOffer": "offered"
     },
     {
-      "slug": "omnimail",
-      "repo": "mibgb65-cloud/OmniMail",
-      "name": "OmniMail",
-      "summary": "Self-hosted multi-domain webmail on one Worker: mailboxes and users on your own domains through Email Routing, sending through Resend or SendFlare, and external Gmail, Microsoft and other accounts in one place. The interface is in Chinese.",
-      "tagline": "Mail for your domains and other inboxes in one place",
-      "features": [
-        "Create mailboxes for several domains in one browser workspace",
-        "Read connected Gmail, Microsoft and other supported inboxes",
-        "Send messages and replies with a Resend or SendFlare account",
-        "Search messages by sender, subject or body",
-        "Invite users and set mailbox storage quotas",
-        "Translate messages on request with Workers AI"
-      ],
-      "alternativeTo": [
-        "Roundcube"
-      ],
-      "addedAt": "2026-09-27T04:47:37+03:00",
-      "version": "1.2.0",
-      "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/omnimail@1.2.0/omnimail-1.2.0.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/omnimail@1.2.0/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/omnimail@1.2.0/manifest.sig",
-        "digest": "72578ee22b70c86945427e902a460d555e50aeed39f31f94fb7b02c37607c0a4"
-      },
-      "tier": "artifact",
-      "plan": "free",
-      "requires": [
-        "zone",
-        "email-routing",
-        "r2"
-      ],
-      "lastVerified": "2026-10-17T08:14:47.000Z",
-      "authors": [
-        {
-          "name": "OmniMail contributors",
-          "url": "https://omnimail.aicnos.com",
-          "github": "mibgb65-cloud"
-        },
-        {
-          "name": "mimanchi412",
-          "github": "mimanchi412"
-        }
-      ],
-      "maintainers": [
-        "MendyLanda"
-      ],
-      "media": {
-        "icon": {
-          "url": "https://appflare.github.io/catalog/apps/omnimail/icon.svg",
-          "sha256": "a0bf76d88fa98bae3253efe1e8f5772a64901b56f8ecdb8f234205f632d23007"
-        },
-        "screenshots": []
-      },
-      "services": [
-        "d1",
-        "r2",
-        "queues",
-        "workflows",
-        "cron",
-        "workers-ai",
-        "email-routing",
-        "zone"
-      ],
-      "categories": [
-        "email"
-      ],
-      "license": "MIT",
-      "revision": 5,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/omnimail/manifest.json",
-        "sha256": "ec2f9df7ad21ad29e0efeba8da739239a0825ebbeb7b8421cd91bc9e96d031c4",
-        "keyId": "catalog-2026-09",
-        "signature": "1fMY6N8oh0TIgqE32kDmWWnk6p7vDG55iYr/z/FTrH4AZvZpkZ1fQMeS1lNWzRsR16V644DP6XFbXaBOXPWgCQ=="
-      },
-      "accessOffer": "offered"
-    },
-    {
       "slug": "one-ip",
       "repo": "zhihui-hu/one-ip",
       "name": "One IP",
@@ -6257,12 +6174,12 @@
         "Keep characters, locations and lighting consistent across scenes"
       ],
       "addedAt": "2026-09-27T12:03:21+03:00",
-      "version": "0.0.0-20261015.f49fdf5",
+      "version": "0.0.0-20261016.0870353",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261015.f49fdf5/openstory-0.0.0-20261015.f49fdf5.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261015.f49fdf5/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261015.f49fdf5/manifest.sig",
-        "digest": "654321eb064fc2245912f939915d336462120c339f0ee16f77c1ba513d1cedd0"
+        "zip": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261016.0870353/openstory-0.0.0-20261016.0870353.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261016.0870353/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261016.0870353/manifest.sig",
+        "digest": "08b4ed2a0d6b050ae1d40ad048744a473ce05b0901f8159801ac7ba24eb3b1e6"
       },
       "tier": "artifact",
       "plan": "paid",
