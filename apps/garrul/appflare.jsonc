@@ -26,7 +26,7 @@
   "revision": 3,
   "authors": [{ "name": "KingPin", "url": "https://sumguy.com", "github": "KingPin" }],
   "maintainers": ["MendyLanda"],
-  "source": { "ref": "v2.36.1", "sha": "9ff9634d7aab73382a7e14ba39411e00c60c9624" },
+  "source": { "ref": "v2.37.0", "sha": "f8034f52c990ed7d590a64a40126ed37d404c9ea" },
   "install": {
     "packageManager": "npm",
     // Upstream keeps only this example config in the repository (the real one
