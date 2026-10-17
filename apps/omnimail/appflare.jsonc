@@ -33,7 +33,7 @@
   // v1.1.4 is the web and Worker release; the repository's float-v* tags
   // belong to the desktop companion app and are not versions of this entry.
   // The bump bot reads only v-prefixed semver tags, which are the web ones.
-  "source": { "ref": "v1.2.0", "sha": "629a8102074a3eb8b66e962b68db7f32e45bc4ce" },
+  "source": { "ref": "v1.3.0", "sha": "6f765dd401f406a8188728402064ca524caae754" },
   "install": {
     "packageManager": "npm",
     "wranglerConfig": "wrangler.jsonc",
