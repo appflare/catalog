@@ -2,7 +2,7 @@
   // EmDash's Cloudflare blog template, the project its README's Deploy button
   // deploys. EmDash itself (emdash-cms/emdash) is MIT; the templates repository
   // has no LICENSE file of its own. Its pinned README says the templates are
-  // auto-synced from EmDash, whose emdash@1.0.1 release declares MIT.
+  // auto-synced from EmDash, whose emdash@1.3.0 release declares MIT.
   //
   // The template directory ships without a lockfile, so its dependencies are
   // resolved at pack time (installDirs, lockfile "none") within the ranges its
@@ -23,7 +23,7 @@
   "homepage": "https://emdashcms.com",
   "repo": "emdash-cms/templates",
   // The pinned template README identifies this as the main project:
-  // https://github.com/emdash-cms/templates/blob/1930243108073ebb41ff48533678af7635b01c37/README.md
+  // https://github.com/emdash-cms/templates/blob/a7bb43df40b2a1dbc63495579be612837e95aa2e/README.md
   "upstreamRepo": "emdash-cms/emdash",
   "license": "MIT",
   "categories": ["cms"],
@@ -34,7 +34,15 @@
   "authors": [{ "name": "EmDash", "url": "https://emdashcms.com", "github": "emdash-cms" }],
   "maintainers": ["MendyLanda"],
   // The templates repository has no tags; the pin tracks main.
-  "source": { "ref": "main", "sha": "1930243108073ebb41ff48533678af7635b01c37" },
+  "source": {
+    "ref": "main",
+    "sha": "a7bb43df40b2a1dbc63495579be612837e95aa2e",
+    // Upstream syncs this repository from each EmDash release ("chore: sync
+    // templates from emdash v1.3.0"), and the template depends on emdash
+    // ^1.3.0, so the entry shows that release instead of a date-based
+    // version. Change it whenever source moves.
+    "version": "1.3.0"
+  },
   "install": {
     "packageManager": "pnpm",
     // The template is a project of its own with no package.json at the root
