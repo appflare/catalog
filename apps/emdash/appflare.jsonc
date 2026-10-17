@@ -34,7 +34,7 @@
   "authors": [{ "name": "EmDash", "url": "https://emdashcms.com", "github": "emdash-cms" }],
   "maintainers": ["MendyLanda"],
   // The templates repository has no tags; the pin tracks main.
-  "source": { "ref": "main", "sha": "1930243108073ebb41ff48533678af7635b01c37" },
+  "source": { "ref": "main", "sha": "a7bb43df40b2a1dbc63495579be612837e95aa2e" },
   "install": {
     "packageManager": "pnpm",
     // The template is a project of its own with no package.json at the root
