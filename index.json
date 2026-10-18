@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-18T08:58:14.736Z",
+  "generatedAt": "2026-10-18T12:42:49.792Z",
   "apps": [
     {
       "slug": "2fa",
@@ -19,17 +19,17 @@
         "Authy"
       ],
       "addedAt": "2026-09-26T23:19:31+03:00",
-      "version": "1.12.0",
+      "version": "1.13.0",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/2fa@1.12.0/2fa-1.12.0.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/2fa@1.12.0/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/2fa@1.12.0/manifest.sig",
-        "digest": "409779f1b1d1983a8767f01e704a4949c0e823ffea60ea57bac26bcf6cd5e2c7"
+        "zip": "https://github.com/appflare/catalog/releases/download/2fa@1.13.0/2fa-1.13.0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/2fa@1.13.0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/2fa@1.13.0/manifest.sig",
+        "digest": "88e46bdbf60ab0ca39a432ffc7bd7b1b866618f3dd8259fc9ef04913bc1a725d"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-10-18T08:21:17.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "wuzf",
@@ -1446,12 +1446,12 @@
         "Choose which documents and accounts each AI agent can access"
       ],
       "addedAt": "2026-10-07T10:01:59+03:00",
-      "version": "0.0.0-20261007.4358072",
+      "version": "0.0.0-20261016.b4f706a",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/cloudflare-os@0.0.0-20261007.4358072/cloudflare-os-0.0.0-20261007.4358072.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/cloudflare-os@0.0.0-20261007.4358072/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/cloudflare-os@0.0.0-20261007.4358072/manifest.sig",
-        "digest": "2388cd8616a1583128ff0349932942a025d321ca537366e88dbcdf7ddc8e3793"
+        "zip": "https://github.com/appflare/catalog/releases/download/cloudflare-os@0.0.0-20261016.b4f706a/cloudflare-os-0.0.0-20261016.b4f706a.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/cloudflare-os@0.0.0-20261016.b4f706a/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/cloudflare-os@0.0.0-20261016.b4f706a/manifest.sig",
+        "digest": "9a7a8080fbe69a1eee2453ae8ef8a3add5b9095e7e043a244ee8216807bc92ab"
       },
       "tier": "artifact",
       "plan": "paid",
@@ -2354,19 +2354,19 @@
         "Evernote"
       ],
       "addedAt": "2026-09-27T05:18:00+03:00",
-      "version": "1.120.0",
+      "version": "1.122.0",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/edgeever@1.120.0/edgeever-1.120.0.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/edgeever@1.120.0/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/edgeever@1.120.0/manifest.sig",
-        "digest": "9fd603afd91759c650c6b75d5fd42be5fcf60154c7714ca78e67dd0937faf3bc"
+        "zip": "https://github.com/appflare/catalog/releases/download/edgeever@1.122.0/edgeever-1.122.0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/edgeever@1.122.0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/edgeever@1.122.0/manifest.sig",
+        "digest": "c74f3d94949008099d4b78a050a4fd357b82dba7d631f41705718d8ded413aae"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-10-18T08:25:45.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "tianma-if",
@@ -2657,81 +2657,6 @@
       ],
       "license": "MIT",
       "revision": 1,
-      "accessOffer": "offered"
-    },
-    {
-      "slug": "emailflare",
-      "repo": "0xdps/emailflare",
-      "name": "EmailFlare",
-      "summary": "Transactional email on Cloudflare Email Sending: a sending API with templates, API keys, logs, suppressions and one-click unsubscribe, plus a team inbox and lightweight CRM on Email Routing.",
-      "tagline": "Send emails and manage replies in a shared inbox",
-      "features": [
-        "Send transactional emails through Cloudflare Email Sending",
-        "Reuse email templates for welcomes, receipts and password resets",
-        "Create API keys for each app that sends mail",
-        "Review sent emails in the dashboard",
-        "Assign email conversations to teammates",
-        "Follow up with contacts through automated email sequences"
-      ],
-      "alternativeTo": [
-        "Resend",
-        "Front"
-      ],
-      "addedAt": "2026-09-27T06:14:13+03:00",
-      "version": "0.0.0-20260920.d448ea2",
-      "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/emailflare@0.0.0-20260920.d448ea2/emailflare-0.0.0-20260920.d448ea2.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/emailflare@0.0.0-20260920.d448ea2/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/emailflare@0.0.0-20260920.d448ea2/manifest.sig",
-        "digest": "5a0a039af72f1c9149a900c55591ad31466b73f77fdd2959ba83ac3b2807ad06"
-      },
-      "tier": "artifact",
-      "plan": "paid",
-      "requires": [
-        "zone",
-        "email-routing",
-        "r2"
-      ],
-      "lastVerified": null,
-      "authors": [
-        {
-          "name": "Devendra Pratap Singh",
-          "github": "0xdps",
-          "x": "0xdps"
-        }
-      ],
-      "maintainers": [
-        "MendyLanda"
-      ],
-      "media": {
-        "icon": {
-          "url": "https://appflare.github.io/catalog/apps/emailflare/icon.svg",
-          "sha256": "5e8635350d69a57174b2dc25ca9e98335f7dc553924b103cd827202c20d6f625"
-        },
-        "screenshots": []
-      },
-      "services": [
-        "kv",
-        "d1",
-        "r2",
-        "durable-objects",
-        "queues",
-        "cron",
-        "email-routing",
-        "zone"
-      ],
-      "categories": [
-        "email",
-        "business"
-      ],
-      "license": "MIT",
-      "revision": 4,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/emailflare/manifest.json",
-        "sha256": "9674a746c3ab97785dcfdc9b4f42b157912e709cd58fb1df8394dab38db60682",
-        "keyId": "catalog-2026-09",
-        "signature": "7h0G5fpUReyn/E9rxv/jfRFgjjIirWJ4nGcsU2oaZsyGRnu5P6+vx/k2GNagTbXzGyX+xTgrWU6btApUk4ioCw=="
-      },
       "accessOffer": "offered"
     },
     {
@@ -3174,17 +3099,17 @@
         "Generate song colour themes with your own Gemini API key"
       ],
       "addedAt": "2026-09-27T10:46:59+03:00",
-      "version": "0.7.20",
+      "version": "0.7.21",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/folia@0.7.20/folia-0.7.20.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/folia@0.7.20/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/folia@0.7.20/manifest.sig",
-        "digest": "3b65a581688766492e5ff7c61e28f7955546902a8fb54691231bf47ef021b914"
+        "zip": "https://github.com/appflare/catalog/releases/download/folia@0.7.21/folia-0.7.21.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/folia@0.7.21/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/folia@0.7.21/manifest.sig",
+        "digest": "33a791157d5c754c149fde0d4e181214bbdeac721d12463579babe0fdd8a8726"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-10-18T08:26:25.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "chthollyphile",
@@ -3756,17 +3681,17 @@
         "NOWPayments"
       ],
       "addedAt": "2026-09-27T10:46:59+03:00",
-      "version": "0.0.0-20261014.dd1f714",
+      "version": "0.0.0-20261018.26a6508",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/hashpay@0.0.0-20261014.dd1f714/hashpay-0.0.0-20261014.dd1f714.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/hashpay@0.0.0-20261014.dd1f714/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/hashpay@0.0.0-20261014.dd1f714/manifest.sig",
-        "digest": "bc1304f240875a868059559f278c587eb190e53a9325461f893d9c297ea21b35"
+        "zip": "https://github.com/appflare/catalog/releases/download/hashpay@0.0.0-20261018.26a6508/hashpay-0.0.0-20261018.26a6508.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/hashpay@0.0.0-20261018.26a6508/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/hashpay@0.0.0-20261018.26a6508/manifest.sig",
+        "digest": "b0d81e87516eb4ca97c96ca37db80d19fb5208c786c0dee1f14aca89da48764f"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-10-18T08:27:38.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "TGDash",
@@ -4853,12 +4778,12 @@
         "Gmail"
       ],
       "addedAt": "2026-09-24T07:29:19+03:00",
-      "version": "0.0.0-20261015.8a7ba96",
+      "version": "0.0.0-20261018.f297c25",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261015.8a7ba96/mailflare-0.0.0-20261015.8a7ba96.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261015.8a7ba96/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261015.8a7ba96/manifest.sig",
-        "digest": "97787d47850dd2e4bea4aa6fdc00aec5b0e8493fcab55d52b3c30e1bfd6eb7b4"
+        "zip": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261018.f297c25/mailflare-0.0.0-20261018.f297c25.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261018.f297c25/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261018.f297c25/manifest.sig",
+        "digest": "70fb0eb8b4463edbc21ae888b3ff7087618c9c76c4904b84888baf92d5b2bb38"
       },
       "tier": "artifact",
       "plan": "paid",
@@ -6239,12 +6164,12 @@
         "Keep characters, locations and lighting consistent across scenes"
       ],
       "addedAt": "2026-09-27T12:03:21+03:00",
-      "version": "0.0.0-20261016.0870353",
+      "version": "0.0.0-20261018.85b16bc",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261016.0870353/openstory-0.0.0-20261016.0870353.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261016.0870353/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261016.0870353/manifest.sig",
-        "digest": "08b4ed2a0d6b050ae1d40ad048744a473ce05b0901f8159801ac7ba24eb3b1e6"
+        "zip": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261018.85b16bc/openstory-0.0.0-20261018.85b16bc.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261018.85b16bc/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261018.85b16bc/manifest.sig",
+        "digest": "a7d2b8711ab2f377b3ceb0c3a48ccba368038e3384deb9b726b4df1cff7d3973"
       },
       "tier": "artifact",
       "plan": "paid",
@@ -6290,66 +6215,6 @@
       ],
       "license": "MIT",
       "revision": 5,
-      "accessOffer": "offered"
-    },
-    {
-      "slug": "pastebin-worker",
-      "repo": "SharzyL/pastebin-worker",
-      "name": "Pastebin Worker",
-      "summary": "A pastebin and file sharer with short links, syntax highlighting, rendered Markdown, client-side encryption, a URL shortener, and a curl-friendly API, on KV and R2.",
-      "tagline": "Share text and files with short links on your own site",
-      "features": [
-        "Share text and files with short or custom links",
-        "Show code with syntax highlighting",
-        "Display Markdown as a formatted page",
-        "Encrypt pastes in your browser before uploading",
-        "Turn long web addresses into short links",
-        "Upload and manage pastes from the command line"
-      ],
-      "alternativeTo": [
-        "Pastebin"
-      ],
-      "addedAt": "2026-09-26T23:19:31+03:00",
-      "version": "0.0.0-20260717.0835cac.1",
-      "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/pastebin-worker@0.0.0-20260717.0835cac.1/pastebin-worker-0.0.0-20260717.0835cac.1.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/pastebin-worker@0.0.0-20260717.0835cac.1/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/pastebin-worker@0.0.0-20260717.0835cac.1/manifest.sig",
-        "digest": "c1b32e11058775869717f106f3307b6c28e509cde7433181110abef040f1e018"
-      },
-      "tier": "artifact",
-      "plan": "free",
-      "requires": [
-        "r2"
-      ],
-      "lastVerified": "2026-10-18T08:32:02.000Z",
-      "authors": [
-        {
-          "name": "Sharzy",
-          "url": "https://sharzy.in",
-          "github": "SharzyL"
-        }
-      ],
-      "maintainers": [
-        "MendyLanda"
-      ],
-      "services": [
-        "kv",
-        "r2",
-        "cron"
-      ],
-      "categories": [
-        "files",
-        "sharing"
-      ],
-      "license": "MIT",
-      "revision": 3,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/pastebin-worker/manifest.json",
-        "sha256": "46861bb31ee2e3987b6e9c583509cfcabf06363c3f58c6d26030fe1cffe6e0ac",
-        "keyId": "catalog-2026-09",
-        "signature": "OmMJK5OwgUHu2BscnzC+FVf2Utwo9G/fraQwKCQmjuCPwdZpBh0c9+2ZeIgV5++PCkOJ53etQAwa5rI0OJmGCQ=="
-      },
       "accessOffer": "offered"
     },
     {
@@ -8684,17 +8549,17 @@
         "Optionally publish combined totals without device or account identifiers"
       ],
       "addedAt": "2026-09-27T11:42:03+03:00",
-      "version": "0.71.0",
+      "version": "0.74.0",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/token-monitor@0.71.0/token-monitor-0.71.0.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/token-monitor@0.71.0/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/token-monitor@0.71.0/manifest.sig",
-        "digest": "86ab7eee83e34932306677229780e4a6cc80eb9be2006833183d8483863660e6"
+        "zip": "https://github.com/appflare/catalog/releases/download/token-monitor@0.74.0/token-monitor-0.74.0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/token-monitor@0.74.0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/token-monitor@0.74.0/manifest.sig",
+        "digest": "9fe918615be52350de3ad590f18dc86692c1a247d41c121e1dbd8b44d2106bbd"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-10-18T08:36:51.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Javis",
