@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-18T12:42:49.792Z",
+  "generatedAt": "2026-10-18T12:53:03.091Z",
   "apps": [
     {
       "slug": "2fa",
@@ -2660,6 +2660,75 @@
       "accessOffer": "offered"
     },
     {
+      "slug": "emailflare",
+      "repo": "0xdps/emailflare",
+      "name": "EmailFlare",
+      "summary": "Transactional email on Cloudflare Email Sending: a sending API with templates, API keys, logs, suppressions and one-click unsubscribe, plus a team inbox and lightweight CRM on Email Routing.",
+      "tagline": "Send emails and manage replies in a shared inbox",
+      "features": [
+        "Send transactional emails through Cloudflare Email Sending",
+        "Reuse email templates for welcomes, receipts and password resets",
+        "Create API keys for each app that sends mail",
+        "Review sent emails in the dashboard",
+        "Assign email conversations to teammates",
+        "Follow up with contacts through automated email sequences"
+      ],
+      "alternativeTo": [
+        "Resend",
+        "Front"
+      ],
+      "addedAt": "2026-09-27T06:14:13+03:00",
+      "version": "0.0.0-20261014.4111270",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/emailflare@0.0.0-20261014.4111270/emailflare-0.0.0-20261014.4111270.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/emailflare@0.0.0-20261014.4111270/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/emailflare@0.0.0-20261014.4111270/manifest.sig",
+        "digest": "38aa8275e9f9c3a7c58e04db49c74e44c64c7892eea33b721b5a5fdb1d87eea2"
+      },
+      "tier": "artifact",
+      "plan": "paid",
+      "requires": [
+        "zone",
+        "email-routing",
+        "r2"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Devendra Pratap Singh",
+          "github": "0xdps",
+          "x": "0xdps"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/emailflare/icon.svg",
+          "sha256": "5e8635350d69a57174b2dc25ca9e98335f7dc553924b103cd827202c20d6f625"
+        },
+        "screenshots": []
+      },
+      "services": [
+        "kv",
+        "d1",
+        "r2",
+        "durable-objects",
+        "queues",
+        "cron",
+        "email-routing",
+        "zone"
+      ],
+      "categories": [
+        "email",
+        "business"
+      ],
+      "license": "MIT",
+      "revision": 4,
+      "accessOffer": "offered"
+    },
+    {
       "slug": "emdash",
       "repo": "emdash-cms/emdash",
       "name": "EmDash",
@@ -2809,12 +2878,12 @@
         "Featurebase"
       ],
       "addedAt": "2026-09-27T04:47:55+03:00",
-      "version": "0.5.1-0",
+      "version": "0.6.0",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/feedlog@0.5.1-0/feedlog-0.5.1-0.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/feedlog@0.5.1-0/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/feedlog@0.5.1-0/manifest.sig",
-        "digest": "5345ef431228fa43a144aa5f3edfc56a04d57176269548914d86000373c4ec8f"
+        "zip": "https://github.com/appflare/catalog/releases/download/feedlog@0.6.0/feedlog-0.6.0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/feedlog@0.6.0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/feedlog@0.6.0/manifest.sig",
+        "digest": "85206142e0c30843298a9bc9fe9a28a2fb3aad70c718a82d1420a0020f336b05"
       },
       "tier": "artifact",
       "plan": "free",
@@ -2885,7 +2954,9 @@
       },
       "services": [
         "r2",
-        "hyperdrive"
+        "hyperdrive",
+        "queues",
+        "cron"
       ],
       "categories": [
         "business",
@@ -6218,6 +6289,60 @@
       "accessOffer": "offered"
     },
     {
+      "slug": "pastebin-worker",
+      "repo": "SharzyL/pastebin-worker",
+      "name": "Pastebin Worker",
+      "summary": "A pastebin and file sharer with short links, syntax highlighting, rendered Markdown, client-side encryption, a URL shortener, and a curl-friendly API, on KV and R2.",
+      "tagline": "Share text and files with short links on your own site",
+      "features": [
+        "Share text and files with short or custom links",
+        "Show code with syntax highlighting",
+        "Display Markdown as a formatted page",
+        "Encrypt pastes in your browser before uploading",
+        "Turn long web addresses into short links",
+        "Upload and manage pastes from the command line"
+      ],
+      "alternativeTo": [
+        "Pastebin"
+      ],
+      "addedAt": "2026-09-26T23:19:31+03:00",
+      "version": "0.0.0-20261010.534111f",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/pastebin-worker@0.0.0-20261010.534111f/pastebin-worker-0.0.0-20261010.534111f.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/pastebin-worker@0.0.0-20261010.534111f/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/pastebin-worker@0.0.0-20261010.534111f/manifest.sig",
+        "digest": "546d21f481c4d664c1078b127787fd90844212301d7876e5314ec3f310426674"
+      },
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "r2"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Sharzy",
+          "url": "https://sharzy.in",
+          "github": "SharzyL"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "services": [
+        "kv",
+        "r2",
+        "cron"
+      ],
+      "categories": [
+        "files",
+        "sharing"
+      ],
+      "license": "MIT",
+      "revision": 3,
+      "accessOffer": "offered"
+    },
+    {
       "slug": "placeholders-dev",
       "repo": "Cherry/placeholders.dev",
       "name": "placeholders.dev",
@@ -8298,19 +8423,19 @@
         "Download a backup of all your data and import it again"
       ],
       "addedAt": "2026-10-12T08:47:06+03:00",
-      "version": "0.1.5",
+      "version": "0.1.6",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/talorys@0.1.5/talorys-0.1.5.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/talorys@0.1.5/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/talorys@0.1.5/manifest.sig",
-        "digest": "c7a4abda682ddb2c678cea079d73bcce518eb14393288ad41936b8f91c030543"
+        "zip": "https://github.com/appflare/catalog/releases/download/talorys@0.1.6/talorys-0.1.6.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/talorys@0.1.6/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/talorys@0.1.6/manifest.sig",
+        "digest": "519a5b1671b6de7ffd83c69b71ecbb69d0efba0e20ca5363fe75b62cec7fac68"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "workers-ai"
       ],
-      "lastVerified": "2026-10-18T08:36:22.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Roc Yu",
