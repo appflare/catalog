@@ -24,14 +24,8 @@
   ],
   "maintainers": ["MendyLanda"],
   "source": {
-    "ref": "v0.5.0",
-    "sha": "44dd5b593e225e8afc1a35b94780f4031ce2d668",
-    // A rebuild of v0.5.0: the release of 0.5.0 typed the migrations journal
-    // as data where the Worker reads it as text, and this build types it as
-    // wrangler does. A version above 0.5.0 and below upstream's next release
-    // (semver's next prerelease), so managers offer it as an update. Remove
-    // this line when source moves.
-    "version": "0.5.1-0"
+    "ref": "v0.6.0",
+    "sha": "ad09e5941647934fe54ef02a6c5b4e3931bdc450"
   },
   "install": {
     "packageManager": "pnpm",
