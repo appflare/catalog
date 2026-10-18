@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-18T08:41:33.467Z",
+  "generatedAt": "2026-10-18T08:58:14.736Z",
   "apps": [
     {
       "slug": "2fa",
@@ -3453,19 +3453,19 @@
         "Giscus"
       ],
       "addedAt": "2026-09-27T05:55:55+03:00",
-      "version": "2.36.1",
+      "version": "2.37.0",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/garrul@2.36.1/garrul-2.36.1.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/garrul@2.36.1/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/garrul@2.36.1/manifest.sig",
-        "digest": "71f816624eda3a4b985c23808898c1c43a53588b38249943a6658206784a85b5"
+        "zip": "https://github.com/appflare/catalog/releases/download/garrul@2.37.0/garrul-2.37.0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/garrul@2.37.0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/garrul@2.37.0/manifest.sig",
+        "digest": "545aab09e202c9711c0764502142444c70c3122b1c6bb2edb517afc24b086ffc"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "analytics-engine"
       ],
-      "lastVerified": "2026-10-18T08:27:41.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "KingPin",
@@ -5811,6 +5811,77 @@
       "accessOffer": "offered"
     },
     {
+      "slug": "omnimail",
+      "repo": "mibgb65-cloud/OmniMail",
+      "name": "OmniMail",
+      "summary": "Self-hosted multi-domain webmail on one Worker: mailboxes and users on your own domains through Email Routing, sending through Resend or SendFlare, and external Gmail, Microsoft and other accounts in one place. The interface is in Chinese.",
+      "tagline": "Mail for your domains and other inboxes in one place",
+      "features": [
+        "Create mailboxes for several domains in one browser workspace",
+        "Read connected Gmail, Microsoft and other supported inboxes",
+        "Send messages and replies with a Resend or SendFlare account",
+        "Search messages by sender, subject or body",
+        "Invite users and set mailbox storage quotas",
+        "Translate messages on request with Workers AI"
+      ],
+      "alternativeTo": [
+        "Roundcube"
+      ],
+      "addedAt": "2026-09-27T04:47:37+03:00",
+      "version": "1.3.0",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/omnimail@1.3.0/omnimail-1.3.0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/omnimail@1.3.0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/omnimail@1.3.0/manifest.sig",
+        "digest": "85e8f55febc2f2b9e442963064912bb5dfd247793d37239d7b19113cffbf889d"
+      },
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "zone",
+        "email-routing",
+        "r2"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "OmniMail contributors",
+          "url": "https://omnimail.aicnos.com",
+          "github": "mibgb65-cloud"
+        },
+        {
+          "name": "mimanchi412",
+          "github": "mimanchi412"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/omnimail/icon.svg",
+          "sha256": "a0bf76d88fa98bae3253efe1e8f5772a64901b56f8ecdb8f234205f632d23007"
+        },
+        "screenshots": []
+      },
+      "services": [
+        "d1",
+        "r2",
+        "queues",
+        "workflows",
+        "cron",
+        "workers-ai",
+        "email-routing",
+        "zone"
+      ],
+      "categories": [
+        "email"
+      ],
+      "license": "MIT",
+      "revision": 5,
+      "accessOffer": "offered"
+    },
+    {
       "slug": "one-ip",
       "repo": "zhihui-hu/one-ip",
       "name": "One IP",
@@ -7146,19 +7217,19 @@
         "Bobby"
       ],
       "addedAt": "2026-09-27T12:02:55+03:00",
-      "version": "0.3.30",
+      "version": "0.3.31",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/renewlet@0.3.30/renewlet-0.3.30.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/renewlet@0.3.30/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/renewlet@0.3.30/manifest.sig",
-        "digest": "2679fcdc6e9059609b98984c6ff5694ce941e26913dad3b4e7a5cbc3d0249fb4"
+        "zip": "https://github.com/appflare/catalog/releases/download/renewlet@0.3.31/renewlet-0.3.31.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/renewlet@0.3.31/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/renewlet@0.3.31/manifest.sig",
+        "digest": "be4965e26540939cc8b06448dcca9c18302908069bc963ea40ca211467f54342"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-10-18T08:34:17.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "zhiyingzhou",
