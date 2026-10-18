@@ -20,9 +20,9 @@
   // not read as a version: move source to the newest create-talorys@ tag and
   // source.version with it by hand.
   "source": {
-    "ref": "create-talorys@0.1.5",
-    "sha": "d156dbb88dcdef682269bb1203ee042354493bdd",
-    "version": "0.1.5"
+    "ref": "create-talorys@0.1.6",
+    "sha": "a2761243dadeff9a2dbe7ca0fec46435b5689754",
+    "version": "0.1.6"
   },
   "install": {
     "packageManager": "npm",
