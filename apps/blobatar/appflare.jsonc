@@ -26,7 +26,7 @@
   "revision": 3,
   "authors": [{ "name": "Alain", "url": "https://blobatar.dev", "github": "Alain00" }],
   "maintainers": ["MendyLanda"],
-  "source": { "ref": "v2.7.0", "sha": "ebb7ea4808b1263629fc8fa65e2398b9cbdb6f6b" },
+  "source": { "ref": "v2.8.0", "sha": "44bdffda5c956563eed11dacfc4bb982e5f333f7" },
   "install": {
     "packageManager": "bun",
     // The endpoint is apps/api of a bun workspace, and it imports the blobatar
