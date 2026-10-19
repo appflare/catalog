@@ -32,6 +32,13 @@
     "wranglerConfig": "cloudflare/wrangler.toml",
     // The relay is its own npm project with its own lockfile; the root is Go.
     "installDirs": [{ "path": "cloudflare" }],
+    // The config's build makes the viewer from internal/client/web, and for a
+    // deploy it refuses to run unless an earlier run kept the live Worker's
+    // older builds. A new install has no live Worker, so --first-deploy keeps
+    // none. Updates also skip keeping them, so a browser tab left open across
+    // an update has to reload.
+    "buildCommand": "node cloudflare/scripts/build-viewer.mjs --first-deploy",
+    "configPatch": { "build": null },
     // The critical-upgrade beacon the reminal program polls; no sign-in.
     "health": { "path": "/version" }
   },
