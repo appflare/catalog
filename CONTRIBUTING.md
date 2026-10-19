@@ -55,7 +55,8 @@ may rise over time, as the catalog grows. The `min-stars` workflow checks every 
 request that adds an app, and closes one that adds an app under the bar with a
 comment saying so; reopen it once the repository has the stars, and the check runs
 again. The check runs only when an app is added, not on updates to apps already in
-the catalog.
+the catalog. The catalog's maintainers can let an app in under the bar with the
+`skip-min-stars` label: add it, then reopen the pull request if it was closed.
 
 If an app works with Cloudflare's Deploy
 button, it should work with Appflare: bindings, compatibility settings, assets, and
