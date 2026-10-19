@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-18T12:53:03.091Z",
+  "generatedAt": "2026-10-19T06:50:29.499Z",
   "apps": [
     {
       "slug": "2fa",
@@ -1575,9 +1575,9 @@
     },
     {
       "slug": "cloudflarebase",
-      "repo": "cloudflarebase/cloudflarebase",
-      "name": "Cloudflarebase",
-      "summary": "An open-source Firebase alternative on Cloudflare: auth, JSON collections and SQL tables with live queries, remote config and file storage, each project in Durable Objects of its own, run from one console. App hosting needs Workers for Platforms, which Appflare does not set up yet; the rest works.",
+      "repo": "frostbase-dev/frostbase",
+      "name": "Frostbase",
+      "summary": "An open-source Firebase alternative on Cloudflare: auth, JSON collections and SQL tables with live queries, remote config and file storage, each project in Durable Objects of its own, run from one console.",
       "tagline": "Add sign-in, live data, and file storage to your app",
       "features": [
         "Add email and password sign-in to your apps",
@@ -1590,12 +1590,12 @@
         "Firebase"
       ],
       "addedAt": "2026-09-27T10:14:04+03:00",
-      "version": "0.0.0-20260827.adfd1b3.1",
+      "version": "0.0.0-20261013.2ed6e45",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/cloudflarebase@0.0.0-20260827.adfd1b3.1/cloudflarebase-0.0.0-20260827.adfd1b3.1.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/cloudflarebase@0.0.0-20260827.adfd1b3.1/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/cloudflarebase@0.0.0-20260827.adfd1b3.1/manifest.sig",
-        "digest": "3e90fbe2fc304d289171574449919f65d02f71d7be407e8d26dc0429ef6a8b69"
+        "zip": "https://github.com/appflare/catalog/releases/download/cloudflarebase@0.0.0-20261013.2ed6e45/cloudflarebase-0.0.0-20261013.2ed6e45.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/cloudflarebase@0.0.0-20261013.2ed6e45/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/cloudflarebase@0.0.0-20261013.2ed6e45/manifest.sig",
+        "digest": "c51da117728874765d0fc05e4e01793290a9e29e8ef0f0ddcc156f708f985b37"
       },
       "tier": "artifact",
       "plan": "free",
@@ -1605,12 +1605,12 @@
         "analytics-engine",
         "manager:spread-jobs"
       ],
-      "lastVerified": "2026-10-18T08:23:59.000Z",
+      "lastVerified": null,
       "authors": [
         {
-          "name": "The Cloudflarebase Authors",
-          "url": "https://cloudflarebase.com",
-          "github": "cloudflarebase"
+          "name": "The Frostbase Authors",
+          "url": "https://frostbase.dev",
+          "github": "frostbase-dev"
         }
       ],
       "maintainers": [
@@ -1619,11 +1619,11 @@
       "media": {
         "icon": {
           "url": "https://appflare.github.io/catalog/apps/cloudflarebase/icon.svg",
-          "sha256": "3597c9373649c7d95eedef6fd5fa71886675ac86188ea8b1c2258a6a35cd85b4"
+          "sha256": "95d3ed03e4b144e308fcb53c57247443b3a19bb32ddfb8eabe5df70eda0467ff"
         },
         "cover": {
           "url": "https://appflare.github.io/catalog/apps/cloudflarebase/cover.png",
-          "sha256": "708e67f5eb24ccf64fd1f572f62b22d01767e98780c6d9c64cb4d71a48407fff"
+          "sha256": "a0a103848570ef5f422c8219947fe39dd4893b06c4bd14ea9cca449a2c855758"
         },
         "screenshots": []
       },
@@ -7051,17 +7051,17 @@
         "TeamViewer"
       ],
       "addedAt": "2026-09-27T05:20:16+03:00",
-      "version": "3.16.12",
+      "version": "3.17.11",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/reminal@3.16.12/reminal-3.16.12.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/reminal@3.16.12/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/reminal@3.16.12/manifest.sig",
-        "digest": "37ea5fa8d1ba664b4f812cbb03b96932d52b042ec51ee978846ca1e73e6f1b4a"
+        "zip": "https://github.com/appflare/catalog/releases/download/reminal@3.17.11/reminal-3.17.11.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/reminal@3.17.11/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/reminal@3.17.11/manifest.sig",
+        "digest": "73a0ca82853b3435b330a91c948cfbbc6aa08f7c9a2ca47a5244791581afdc95"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-10-18T08:33:45.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Harshal Gajjar",
