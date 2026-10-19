@@ -1,15 +1,14 @@
 {
-  // Upstream deploys five Workers with plain wrangler, one per directory: the
+  // Upstream deploys four Workers with plain wrangler, one per directory: the
   // SvelteKit console at the root, and one agent Worker each for auth, the
-  // database, storage and hosting under agents/. The console reaches every
-  // agent over a service binding and proxies the apps' API calls to them, so
-  // the agents need no public address. The optional hosting-outbound Worker
-  // (agents/hosting/wrangler.outbound.jsonc) only serves a Workers for
-  // Platforms namespace, which this entry does not set up, and is left out.
+  // database and storage under agents/. The console reaches every agent over
+  // a service binding and proxies the apps' API calls to them, so the agents
+  // need no public address. Upstream renamed the project from Cloudflarebase
+  // to Frostbase; the slug stays.
   "$schema": "https://appflare.github.io/catalog/schema/v1.json",
   "slug": "cloudflarebase",
-  "name": "Cloudflarebase",
-  "summary": "An open-source Firebase alternative on Cloudflare: auth, JSON collections and SQL tables with live queries, remote config and file storage, each project in Durable Objects of its own, run from one console. App hosting needs Workers for Platforms, which Appflare does not set up yet; the rest works.",
+  "name": "Frostbase",
+  "summary": "An open-source Firebase alternative on Cloudflare: auth, JSON collections and SQL tables with live queries, remote config and file storage, each project in Durable Objects of its own, run from one console.",
   "tagline": "Add sign-in, live data, and file storage to your app",
   "features": [
     "Add email and password sign-in to your apps",
@@ -19,26 +18,22 @@
     "Upload files and choose who can access them"
   ],
   "alternativeTo": ["Firebase"],
-  "homepage": "https://cloudflarebase.com",
-  "repo": "cloudflarebase/cloudflarebase",
+  "homepage": "https://frostbase.dev",
+  "repo": "frostbase-dev/frostbase",
   "license": "Apache-2.0",
   "categories": ["developer-tools", "files"],
   "authors": [
     {
-      "name": "The Cloudflarebase Authors",
-      "url": "https://cloudflarebase.com",
-      "github": "cloudflarebase"
+      "name": "The Frostbase Authors",
+      "url": "https://frostbase.dev",
+      "github": "frostbase-dev"
     }
   ],
   "maintainers": ["MendyLanda"],
   // Pinned to main: the repository has no tags.
   "source": {
     "ref": "main",
-    "sha": "adfd1b3007896b172f028c03dd0e442f0f8907b1",
-    // The commit's own version plus a build number: the plan changed to
-    // "free" after 0.0.0-20260827.adfd1b3 was released, which only a new
-    // build can carry. Remove this line when source moves.
-    "version": "0.0.0-20260827.adfd1b3.1"
+    "sha": "2ed6e45cedb3d3c38a1b5c3ce05ca1827fe68f2c"
   },
   "install": {
     "packageManager": "npm",
@@ -50,8 +45,7 @@
       { "path": "." },
       { "path": "agents/auth" },
       { "path": "agents/db" },
-      { "path": "agents/storage" },
-      { "path": "agents/hosting" }
+      { "path": "agents/storage" }
     ],
     // `vite build` syncs SvelteKit's generated files itself and writes the
     // Worker and its assets to .svelte-kit/cloudflare. The agents are bundled
@@ -73,17 +67,12 @@
         // requests with a 503 until one is added. The install provisions the
         // bucket instead.
         "configPatch": { "r2_buckets": [{ "binding": "BUCKET" }] }
-      },
-      // Installed although it cannot serve apps yet: without it the console's
-      // Hosting pages fail with a missing binding instead of the agent's own
-      // explanation, and deleting a project reports that its hosting data
-      // could not be erased.
-      { "name": "hosting", "wranglerConfig": "agents/hosting/wrangler.jsonc", "workersDev": false }
+      }
     ]
   },
   // D1, R2, Durable Objects, Workers AI (the project copilot) and Analytics
   // Engine (database events) all have free tiers, and managers from 0.4.0
-  // install five Workers on Workers Free.
+  // install four Workers on Workers Free.
   "plan": "free",
   // The db agent writes database events to an Analytics Engine dataset, and
   // Cloudflare refuses the upload on an account that has not turned
@@ -111,10 +100,6 @@
     {
       "type": "markdown",
       "content": "Open {{appUrl}}/login and paste the console setup token to create the first operator account, then create a project. Apps call its API at `{{appUrl}}/api/projects/<project id>`."
-    },
-    {
-      "type": "markdown",
-      "content": "App hosting needs Workers for Platforms, which Appflare does not set up yet; the rest works. The Hosting pages answer that hosting is not configured."
     }
   ]
 }
