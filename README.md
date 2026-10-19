@@ -49,12 +49,15 @@ with their own pricing.
 ## Add or improve an app
 
 You can submit an app, update an existing entry or improve its description and
-images. Adding an app does not require changing the upstream project's repository.
+images. Adding an app does not require changing the upstream project's repository,
+but its repository needs at least 50 GitHub stars. That bar may rise over time.
 
 1. Follow the [submission guide](https://appflare.dev/catalog/submit/?utm_source=github&utm_medium=readme&utm_campaign=appflare&utm_content=catalog-readme-catalog-submit-2) to create
    `apps/<slug>/appflare.jsonc`, or edit an existing entry.
 2. Set up the [local tooling and checks](CONTRIBUTING.md#local-tooling).
 3. Open a pull request with your changes.
+4. Once the app is listed, please ask the upstream project to add the
+   [Install with Appflare badge](https://appflare.dev/catalog/install-badge/) to its README.
 
 The [contribution guide](CONTRIBUTING.md) covers app requirements, packaging,
 images, version updates and review. To request an app or report a packaging

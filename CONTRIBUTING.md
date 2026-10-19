@@ -34,6 +34,7 @@ TEMPLATE.md                    running a catalog of your own from a copy of this
 .github/workflows/stats.yml    hourly: rebuild stats.json and redeploy Pages, no commit
 .github/workflows/verify-tier.yml  manual: record lastVerified for a sandbox or self-deploying entry
 .github/workflows/conventions.yml  every push and PR: commit messages
+.github/workflows/min-stars.yml    PRs that add an app: at least 50 GitHub stars, else closed
 ```
 
 ## Commit messages
@@ -48,7 +49,16 @@ branch locally.
 
 ## Catalog policy
 
-Every app needs a public repository. If an app works with Cloudflare's Deploy
+Every app needs a public repository with at least **50 GitHub stars** when it is
+added: the stars of `upstreamRepo` when the entry sets it, else of `repo`. The bar
+may rise over time, as the catalog grows. The `min-stars` workflow checks every pull
+request that adds an app, and closes one that adds an app under the bar with a
+comment saying so; reopen it once the repository has the stars, and the check runs
+again. The check runs only when an app is added, not on updates to apps already in
+the catalog. The catalog's maintainers can let an app in under the bar with the
+`skip-min-stars` label: add it, then reopen the pull request if it was closed.
+
+If an app works with Cloudflare's Deploy
 button, it should work with Appflare: bindings, compatibility settings, assets, and
 crons come from the app's own wrangler config, so the manifest does not repeat them.
 A catalog entry's install replaces the app's Deploy button rather than wrapping it:
@@ -132,6 +142,12 @@ not say what matters; managers mark an app with a note as source-available.
 9. Optionally, add images the upstream project publishes (see "Images" below): its
    icon, its cover, screenshots, and `MEDIA.md` saying where each one comes from.
 10. Run the checks below, then open a pull request.
+11. Once the app is in the catalog, please ask its upstream project to add the
+    [Install with Appflare badge](https://appflare.dev/catalog/install-badge/) to
+    its README, or add it yourself if the project is yours. For the slug `cut`:
+    `[![Install with Appflare](https://appflare.dev/badge.svg)](https://appflare.dev/install/cut/)`.
+    The badge's link works only once the app is listed, so ask after the merge. It
+    is a request, not a requirement.
 
 `repo` is the repository the packer checks out at `source.sha`. When the app
 builds from a template or packaging fork, set `upstreamRepo` to the main

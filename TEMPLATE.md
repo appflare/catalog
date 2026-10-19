@@ -106,6 +106,9 @@ with source **GitHub Actions**, add the deploy key, and protect `main`.
   official catalog. Disable the `stats` workflow (**Actions > stats > ⋯ > Disable
   workflow**) or delete `.github/workflows/stats.yml`.
 - **Sponsored slot.** Keep `featured.json` empty, as above.
+- **Minimum stars.** The `min-stars` workflow closes pull requests that add an app
+  with fewer than 50 GitHub stars, the official catalog's bar. Disable it, or change
+  `MIN_STARS` in `scripts/lib/min-stars.ts`.
 - **Nightly install checks**, if you have no Cloudflare account for them: disable
   the `nightly` workflow. Your apps then never get a `lastVerified` time, so
   managers show no **Install checked** badge on them.
