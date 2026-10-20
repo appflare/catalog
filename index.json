@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-19T09:41:27.014Z",
+  "generatedAt": "2026-10-20T09:05:53.179Z",
   "apps": [
     {
       "slug": "2fa",
@@ -77,19 +77,19 @@
         "Notion"
       ],
       "addedAt": "2026-09-27T06:02:01+03:00",
-      "version": "0.0.0-20261013.b9ed1c1",
+      "version": "0.0.0-20261019.f218bd0",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20261013.b9ed1c1/888wiki-0.0.0-20261013.b9ed1c1.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20261013.b9ed1c1/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20261013.b9ed1c1/manifest.sig",
-        "digest": "69601d1318b4ff53c9f884183e731ac933ef6235dff9861d678c2e1cfc1b807f"
+        "zip": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20261019.f218bd0/888wiki-0.0.0-20261019.f218bd0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20261019.f218bd0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20261019.f218bd0/manifest.sig",
+        "digest": "85cd9a0ca39ccdac188e5ad0962aad98e1d6729d3ca21a8087e8bef020be6f34"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-10-19T09:19:53.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "DAVID888",
@@ -730,17 +730,17 @@
         "Gravatar"
       ],
       "addedAt": "2026-09-27T11:42:03+03:00",
-      "version": "2.7.0",
+      "version": "2.8.0",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/blobatar@2.7.0/blobatar-2.7.0.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/blobatar@2.7.0/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/blobatar@2.7.0/manifest.sig",
-        "digest": "28605349d0b8f1eae989da861c21b413e4033c65fe8c80b9f80d435ad10168df"
+        "zip": "https://github.com/appflare/catalog/releases/download/blobatar@2.8.0/blobatar-2.8.0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/blobatar@2.8.0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/blobatar@2.8.0/manifest.sig",
+        "digest": "4537001778277c9225bf01511f60fe2786658700ff5fe221c40c393f8d5b6934"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-10-19T09:20:29.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Alain",
@@ -780,12 +780,6 @@
       ],
       "license": "MIT",
       "revision": 3,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/blobatar/manifest.json",
-        "sha256": "61e81d5ef7b35f477001fd1223d4531178a1af8b35e795070058ce329a7a7327",
-        "keyId": "catalog-2026-09",
-        "signature": "ePTzEYzvyaT1Kd0gebZSshJGNreXc253fju1dn3dwhtCJfNlHwJMqoqjQ9VFTOBLvSKCMwCm+ka3lkszQQHMDA=="
-      },
       "accessOffer": "offered"
     },
     {
@@ -1127,17 +1121,17 @@
         "Netdata"
       ],
       "addedAt": "2026-09-27T10:46:59+03:00",
-      "version": "0.0.0-20261014.fa60c60",
+      "version": "0.0.0-20261019.42ad10a",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/cf-server-monitor@0.0.0-20261014.fa60c60/cf-server-monitor-0.0.0-20261014.fa60c60.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/cf-server-monitor@0.0.0-20261014.fa60c60/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/cf-server-monitor@0.0.0-20261014.fa60c60/manifest.sig",
-        "digest": "0b6a25ca4290f1be3bd1c0e51c7dc190a6b9865f83c0b4e89009e344eaa21000"
+        "zip": "https://github.com/appflare/catalog/releases/download/cf-server-monitor@0.0.0-20261019.42ad10a/cf-server-monitor-0.0.0-20261019.42ad10a.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/cf-server-monitor@0.0.0-20261019.42ad10a/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/cf-server-monitor@0.0.0-20261019.42ad10a/manifest.sig",
+        "digest": "07279e01339b71e81f45dea7bfe183643f8d920031e773f0f1db442b26efb950"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-10-19T09:21:06.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "huilang-me",
@@ -1727,17 +1721,17 @@
         "Termius"
       ],
       "addedAt": "2026-09-26T23:19:31+03:00",
-      "version": "0.0.0-20261016.4e6c7e8",
+      "version": "0.0.0-20261019.4df9f46",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20261016.4e6c7e8/cloudssh-0.0.0-20261016.4e6c7e8.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20261016.4e6c7e8/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20261016.4e6c7e8/manifest.sig",
-        "digest": "1a906298bfff6757de46aebf86698d6abf9b492bc3f317c59cafb253524021bf"
+        "zip": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20261019.4df9f46/cloudssh-0.0.0-20261019.4df9f46.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20261019.4df9f46/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20261019.4df9f46/manifest.sig",
+        "digest": "2473b25a20e26676650d0b29e23564c3e4f517e91651740584ef2cd78660ad60"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-10-19T09:22:18.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "TanXin",
@@ -2354,19 +2348,19 @@
         "Evernote"
       ],
       "addedAt": "2026-09-27T05:18:00+03:00",
-      "version": "1.122.0",
+      "version": "1.124.0",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/edgeever@1.122.0/edgeever-1.122.0.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/edgeever@1.122.0/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/edgeever@1.122.0/manifest.sig",
-        "digest": "c74f3d94949008099d4b78a050a4fd357b82dba7d631f41705718d8ded413aae"
+        "zip": "https://github.com/appflare/catalog/releases/download/edgeever@1.124.0/edgeever-1.124.0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/edgeever@1.124.0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/edgeever@1.124.0/manifest.sig",
+        "digest": "80c59c7a48686e6cb89e208605910b52209ded872e29f261413cdab333e77550"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-10-19T09:24:14.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "tianma-if",
@@ -4849,12 +4843,12 @@
         "Gmail"
       ],
       "addedAt": "2026-09-24T07:29:19+03:00",
-      "version": "0.0.0-20261018.f297c25",
+      "version": "0.0.0-20261019.07d98ae",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261018.f297c25/mailflare-0.0.0-20261018.f297c25.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261018.f297c25/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261018.f297c25/manifest.sig",
-        "digest": "70fb0eb8b4463edbc21ae888b3ff7087618c9c76c4904b84888baf92d5b2bb38"
+        "zip": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261019.07d98ae/mailflare-0.0.0-20261019.07d98ae.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261019.07d98ae/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261019.07d98ae/manifest.sig",
+        "digest": "e0948ee9d6c321fb784087508dd6210bd3a9e7b8a093f45b2522cfb8d98d87ea"
       },
       "tier": "artifact",
       "plan": "paid",
@@ -6235,12 +6229,12 @@
         "Keep characters, locations and lighting consistent across scenes"
       ],
       "addedAt": "2026-09-27T12:03:21+03:00",
-      "version": "0.0.0-20261018.85b16bc",
+      "version": "0.0.0-20261019.5ef4e19",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261018.85b16bc/openstory-0.0.0-20261018.85b16bc.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261018.85b16bc/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261018.85b16bc/manifest.sig",
-        "digest": "a7d2b8711ab2f377b3ceb0c3a48ccba368038e3384deb9b726b4df1cff7d3973"
+        "zip": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261019.5ef4e19/openstory-0.0.0-20261019.5ef4e19.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261019.5ef4e19/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261019.5ef4e19/manifest.sig",
+        "digest": "4a60d76e9be5d5ed1dd2ac5ccb176dc952b200cb3e28368abdbd12b05ddd549b"
       },
       "tier": "artifact",
       "plan": "paid",
@@ -7051,17 +7045,17 @@
         "TeamViewer"
       ],
       "addedAt": "2026-09-27T05:20:16+03:00",
-      "version": "3.17.11",
+      "version": "3.17.13",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/reminal@3.17.11/reminal-3.17.11.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/reminal@3.17.11/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/reminal@3.17.11/manifest.sig",
-        "digest": "73a0ca82853b3435b330a91c948cfbbc6aa08f7c9a2ca47a5244791581afdc95"
+        "zip": "https://github.com/appflare/catalog/releases/download/reminal@3.17.13/reminal-3.17.13.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/reminal@3.17.13/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/reminal@3.17.13/manifest.sig",
+        "digest": "d1222c5aff3676fc8db32726885765855c0c92b1095b289751651aa9643adbaf"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-10-19T09:33:13.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Harshal Gajjar",
@@ -8423,12 +8417,12 @@
         "Download a backup of all your data and import it again"
       ],
       "addedAt": "2026-10-12T08:47:06+03:00",
-      "version": "0.1.6",
+      "version": "0.1.7",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/talorys@0.1.6/talorys-0.1.6.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/talorys@0.1.6/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/talorys@0.1.6/manifest.sig",
-        "digest": "519a5b1671b6de7ffd83c69b71ecbb69d0efba0e20ca5363fe75b62cec7fac68"
+        "zip": "https://github.com/appflare/catalog/releases/download/talorys@0.1.7/talorys-0.1.7.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/talorys@0.1.7/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/talorys@0.1.7/manifest.sig",
+        "digest": "190035060837f5bc06ed22d7f88e483300c5ab656abdb98f2fcc28ee2ad07ba7"
       },
       "tier": "artifact",
       "plan": "free",
