@@ -18,7 +18,7 @@
   "categories": ["security", "utilities"],
   "authors": [{ "name": "wuzf", "github": "wuzf" }],
   "maintainers": ["MendyLanda"],
-  "source": { "ref": "v1.13.0", "sha": "f9e3e2450bb22bd07498f51d5c6dedbe23e77896" },
+  "source": { "ref": "v1.13.1", "sha": "e0ff291b515c5ba0530cb96c663f42d22ec8d6aa" },
   "install": {
     "packageManager": "npm",
     // Plain JavaScript with no build step. Upstream's deploy script only
