@@ -22,7 +22,7 @@
   "source": {
     "ref": "create-talorys@0.1.7",
     "sha": "ce7b6af9ad8026833e45f4f301c38da63c917880",
-    "version": "0.1.6"
+    "version": "0.1.7"
   },
   "install": {
     "packageManager": "npm",
