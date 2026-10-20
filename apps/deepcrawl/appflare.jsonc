@@ -23,9 +23,8 @@
   // Upstream's release tags (deepcrawl@X.Y.Z) version the project's
   // TypeScript SDK, the package named deepcrawl, which is released together
   // with the API Worker; the Worker's own package carries no version. So the
-  // version comes from source.version, and the bump bot, which reads no
-  // deepcrawl@ prefix as a version, cannot move this pin: move source to the
-  // newest deepcrawl@ tag and source.version with it by hand.
+  // version comes from source.version, which the bump bot moves with the
+  // deepcrawl@ tag.
   "source": {
     "ref": "deepcrawl@0.5.5",
     "sha": "c40e8e567b7d85b36bf45aa6b5d828249e1831ba",

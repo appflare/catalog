@@ -27,7 +27,8 @@
   "authors": [{ "name": "pleaseai", "url": "https://pleaseai.dev", "github": "pleaseai" }],
   "maintainers": ["MendyLanda"],
   // The monorepo tags each package on its own (web-v0.1.1, worker-v0.1.1,
-  // both on this commit), so the version is set here.
+  // both on this commit), so the version is set here; the bump bot moves it
+  // with the web-v tag.
   "source": {
     "ref": "web-v0.1.1",
     "sha": "4473885671aa0227c21ac4e08d69d5023c7c0879",

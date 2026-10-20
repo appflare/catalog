@@ -94,11 +94,39 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 /**
  * Whether the bump pull request for `pin` merges itself: only for an
  * `artifact` tier entry, the one tier the install check covers, whose `bump`
- * setting does not opt out and which does not state `source.version` (a
- * person has to set the new version first, or publish refuses the moved pin).
+ * setting does not opt out, and which either does not state `source.version`
+ * or gets its new one from the bump (`version`, see `followedVersion`).
+ * Otherwise a person has to set the new version first, or publish refuses the
+ * moved pin.
  */
-export function autoMerges(pin: AppPin): boolean {
-  return pin.tier === "artifact" && pin.autoMerge === "on" && pin.source.version === undefined;
+export function autoMerges(pin: AppPin, version?: string): boolean {
+  return (
+    pin.tier === "artifact" &&
+    pin.autoMerge === "on" &&
+    (pin.source.version === undefined || version !== undefined)
+  );
+}
+
+/**
+ * The `source.version` a move to `target` sets: the version in the new tag,
+ * when the entry's `source.version` is the version in its pinned tag
+ * (`create-talorys@0.1.6` stating `0.1.6`), so the tags are known to carry the
+ * app's version. Null when the entry states no version, the move is not from
+ * a tag to a stable tag, or the stated version is not the pinned tag's (a
+ * repository-wide `v11.0.0` stating `1.1.10`, or a rebuild's `0.5.1-0`): a
+ * person sets those.
+ */
+export function followedVersion(pin: AppPin, target: UpstreamTarget): string | null {
+  const stated = pin.source.version;
+  if (stated === undefined || target.kind !== "tag") {
+    return null;
+  }
+  const from = parseSeriesTag(pin.source.ref);
+  const to = parseSeriesTag(target.ref);
+  if (from?.version !== stated || !to?.stable) {
+    return null;
+  }
+  return to.version;
 }
 
 /** A pin that moved upstream. */
@@ -118,6 +146,11 @@ export interface Bump {
    * never merges itself, since a person has to confirm the line to follow.
    */
   refChange?: string;
+  /**
+   * The `source.version` the bump sets, from the new tag; see
+   * `followedVersion`. Absent leaves `source.version` as it is.
+   */
+  version?: string;
   /**
    * The workflow enables GitHub auto-merge (squash, with `title` as the
    * subject) on the pull request, so it merges once the required checks pass.
@@ -140,6 +173,7 @@ function bumpFor(pin: AppPin, target: UpstreamTarget, refChange?: string): Bump 
   const full = `chore(${pin.slug}): bump to ${label}`;
   const title =
     full.length <= MAX_HEADER ? full : `chore(${pin.slug}): bump to ${shortSha(target.sha)}`;
+  const version = followedVersion(pin, target) ?? undefined;
   return {
     slug: pin.slug,
     repo: pin.repo,
@@ -148,7 +182,8 @@ function bumpFor(pin: AppPin, target: UpstreamTarget, refChange?: string): Bump 
     branch: `bump/${pin.slug}/${shortSha(target.sha)}`,
     title,
     ...(refChange ? { refChange } : {}),
-    autoMerge: autoMerges(pin) && !refChange,
+    ...(version ? { version } : {}),
+    autoMerge: autoMerges(pin, version) && !refChange,
   };
 }
 
@@ -520,7 +555,8 @@ function codeSpan(text: string): string {
 
 /**
  * The pull request body: where the pin moves, the compare link, the commits,
- * and, for an entry that states `source.version`, a reminder to update it.
+ * and, for an entry that states `source.version`, the new version the bump
+ * sets or a reminder to update it.
  */
 export function renderBumpBody(
   pin: AppPin,
@@ -564,7 +600,14 @@ export function renderBumpBody(
       lines.push(`- ${codeSpan(subject)}`);
     }
   }
-  if (pin.source.version !== undefined) {
+  if (pin.source.version !== undefined && bump.version !== undefined) {
+    lines.push(
+      "",
+      `It also sets \`source.version\` to ${codeSpan(bump.version)}, the version in the new ` +
+        `tag ${codeSpan(bump.to.ref)} (it is ${codeSpan(pin.source.version)} now), as it was ` +
+        "the version in the pinned tag.",
+    );
+  } else if (pin.source.version !== undefined) {
     const manifest = `\`apps/${pin.slug}/appflare.jsonc\``;
     const now = `(it is ${codeSpan(pin.source.version)} now)`;
     const refused =
@@ -625,7 +668,7 @@ function mergePathText(pin: AppPin, bump: Bump): string {
       `none of its bumps merges itself. ${tail}`
     );
   }
-  if (pin.source.version !== undefined) {
+  if (pin.source.version !== undefined && bump.version === undefined) {
     return (
       `${head} ${manifest} sets \`source.version\`, which has to be updated by hand first, ` +
       `so this pull request does not merge itself. ${tail}`
@@ -649,11 +692,18 @@ function mergePathText(pin: AppPin, bump: Bump): string {
   );
 }
 
-/** `appflare.jsonc` text with `source.ref`/`source.sha` replaced, comments kept. */
-export function applyBump(text: string, to: { ref: string; sha: string }): string {
+/**
+ * `appflare.jsonc` text with `source.ref`/`source.sha` replaced, and
+ * `source.version` when `to.version` is given, comments kept.
+ */
+export function applyBump(
+  text: string,
+  to: { ref: string; sha: string; version?: string },
+): string {
   return setJsoncStrings(text, [
     { path: ["source", "ref"], value: to.ref },
     { path: ["source", "sha"], value: to.sha },
+    ...(to.version === undefined ? [] : [{ path: ["source", "version"], value: to.version }]),
   ]);
 }
 

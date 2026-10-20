@@ -360,7 +360,8 @@ describe("decideBump for a tag with a prefix", () => {
       to: { ref: "deepcrawl@0.6.0", sha: NEW, kind: "tag" },
       branch: "bump/hello/89abcde",
       title: "chore(hello): bump to deepcrawl@0.6.0",
-      autoMerge: false,
+      version: "0.6.0",
+      autoMerge: true,
     });
     expect(b.refChange).toBeUndefined();
   });
@@ -401,8 +402,32 @@ describe("decideBump for a tag with a prefix", () => {
     const related = () => ({ ahead: 1, behind: 0 });
     expect(bumped(decideBump(pinOn("app-v0.42.1"), upstream, related)).autoMerge).toBe(true);
     expect(bumped(decideBump(pinOn("app-v0.42.1", "0.42.1"), upstream, related)).autoMerge).toBe(
+      true,
+    );
+    expect(bumped(decideBump(pinOn("app-v0.42.1", "0.42.2-0"), upstream, related)).autoMerge).toBe(
       false,
     );
+  });
+
+  it("moves source.version with the tag when it was the pinned tag's version", () => {
+    const pin = pinOn("create-talorys@0.1.6", "0.1.6");
+    const upstream = tags(["create-talorys@0.1.6", PIN], ["create-talorys@0.1.7", NEW]);
+    const b = bumped(decideBump(pin, upstream, contains));
+    expect(b).toMatchObject({ version: "0.1.7", autoMerge: true });
+    const body = renderBumpBody(pin, b, null);
+    expect(body).toContain(
+      "It also sets `source.version` to `0.1.7`, the version in the new tag " +
+        "`create-talorys@0.1.7` (it is `0.1.6` now), as it was the version in the pinned tag.",
+    );
+    expect(body).not.toContain("Before merging");
+    expect(body).toContain("**This pull request merges itself.**");
+  });
+
+  it("leaves a source.version that is not the pinned tag's version to a maintainer", () => {
+    const upstream = tags(["app-v0.42.1", PIN], ["app-v0.43.0", NEW]);
+    const b = bumped(decideBump(pinOn("app-v0.42.1", "0.42.2-0"), upstream, contains));
+    expect(b.version).toBeUndefined();
+    expect(b.autoMerge).toBe(false);
   });
 
   it("is left alone when its series has no newer stable tag", () => {
@@ -441,12 +466,12 @@ describe("decideBump for a tag with a prefix", () => {
   });
 
   it("names the new tag's version in the source.version checklist", () => {
-    const pin = pinOn("deepcrawl@0.5.5", "0.5.5");
+    const pin = pinOn("deepcrawl@0.5.5", "0.5.6-0");
     const upstream = tags(["deepcrawl@0.5.5", PIN], ["deepcrawl@0.6.0", NEW]);
     const body = renderBumpBody(pin, bumped(decideBump(pin, upstream, contains)), null);
     expect(body).toContain(
       "- [ ] Set `source.version` in `apps/hello/appflare.jsonc` to `0.6.0`, the version in " +
-        "the new tag `deepcrawl@0.6.0` (it is `0.5.5` now).",
+        "the new tag `deepcrawl@0.6.0` (it is `0.5.6-0` now).",
     );
     expect(body).toContain("**A maintainer merges this pull request.**");
   });
@@ -1092,7 +1117,7 @@ describe("auto-merge", () => {
     expect(body).not.toContain("merges itself.**");
   });
 
-  it("never auto-merges an entry that sets source.version", () => {
+  it("never auto-merges an entry whose source.version is not its tag's version", () => {
     const versioned: AppPin = { ...tagPin, source: { ...tagPin.source, version: "1.1.10" } };
     const bump = bumped(decideBump(versioned, tag("v1.3.0"), never));
     expect(bump.autoMerge).toBe(false);
@@ -1100,6 +1125,25 @@ describe("auto-merge", () => {
     expect(body).toContain("sets `source.version`, which has to be updated by hand first");
     expect(body).toContain("- [ ] Set `source.version`");
     expect(body).not.toContain("merges itself.**");
+  });
+
+  it("auto-merges an entry whose source.version follows its tag, and sets the new one", () => {
+    const versioned: AppPin = { ...tagPin, source: { ...tagPin.source, version: "1.2.3" } };
+    const bump = bumped(decideBump(versioned, tag("v1.3.0"), never));
+    expect(bump).toMatchObject({ version: "1.3.0", autoMerge: true });
+    const body = renderBumpBody(versioned, bump, null);
+    expect(body).toContain("It also sets `source.version` to `1.3.0`");
+    expect(body).toContain("**This pull request merges itself.**");
+  });
+
+  it("never moves the source.version of a branch pin, even to a tag", () => {
+    const versioned: AppPin = { ...branchPin, source: { ...branchPin.source, version: "1.3.0" } };
+    const toHead = bumped(decideBump(versioned, head(), () => ({ ahead: 1, behind: 0 })));
+    expect(toHead.version).toBeUndefined();
+    expect(toHead.autoMerge).toBe(false);
+    const toTag = bumped(decideBump(versioned, tag("v1.3.0"), () => ({ ahead: 0, behind: 0 })));
+    expect(toTag.version).toBeUndefined();
+    expect(toTag.autoMerge).toBe(false);
   });
 
   it("never auto-merges a sandbox or self-deploying entry, which CI does not install", () => {
@@ -1138,5 +1182,18 @@ describe("applyBump", () => {
     expect(out.split("\n")[0]).toBe(text.split("\n")[0]);
     expect((parseJsonc(out) as { source: unknown }).source).toEqual({ ref: "v1.3.0", sha: NEW });
     expect(out.replace("v1.3.0", "v1.2.3").replace(NEW, PIN)).toBe(text);
+  });
+
+  it("sets source.version too when given one", () => {
+    const text = readFileSync(hello.manifestPath, "utf8").replace(
+      `"sha": "${PIN}" }`,
+      `"sha": "${PIN}", "version": "1.2.3" }`,
+    );
+    const out = applyBump(text, { ref: "v1.3.0", sha: NEW, version: "1.3.0" });
+    expect((parseJsonc(out) as { source: unknown }).source).toEqual({
+      ref: "v1.3.0",
+      sha: NEW,
+      version: "1.3.0",
+    });
   });
 });

@@ -1056,8 +1056,8 @@ a pin without a semver tag, add a build number to the version the commit packs t
 (`0.0.0-20260717.0835cac` becomes `0.0.0-20260717.0835cac.1`); for a tag, use the
 next patch's first prerelease (`0.5.0` becomes `0.5.1-0`). Both sort above the
 released version and below any later upstream release, so managers offer the build
-as an update and later bumps still move forward. A bump of an entry that sets
-`source.version` does not merge itself (see "Who merges a bump").
+as an update and later bumps still move forward. While it is set, the entry's
+bumps do not merge themselves (see "Who merges a bump").
 
 `publish-plan` tells you which case you are in: with only form and copy changes it
 fails with "or bump revision to N", and it refuses a revision that changes anything
@@ -1819,11 +1819,13 @@ place, keeping the manifest's comments and layout. It commits
 `chore(<slug>): bump to <ref>` (branch targets add `@<short sha>`) on
 `bump/<slug>/<short sha>` and opens a pull request. The pull request body links
 the upstream compare view and lists the commits in between. For an app that sets
-`source.version`, the body also has a checklist item to update it: the
-workflow does not change it. When the new pin is a tag with a prefix, the item
-names the version in the tag (`0.6.0` for `deepcrawl@0.6.0`), since the packer
-reads a version only from a tag that is a bare version such as `v1.2.3`;
-otherwise the workflow cannot know the app's new version.
+`source.version` to the version in its pinned tag (`0.1.6` for
+`create-talorys@0.1.6`, as for a monorepo's tags, from which the packer reads no
+version), a move to a newer tag sets `source.version` to the version in that
+tag too. Any other `source.version` (a branch pin's, a repository-wide tag that
+does not describe the app, a rebuild's `0.5.1-0`) the workflow does not change:
+the body has a checklist item to update it, which names the version in the new
+tag when that tag has a prefix.
 
 Cadence and cleanup:
 
@@ -1871,14 +1873,16 @@ and branch-tracked entries alike, when the entry:
 
 - is on the `artifact` tier, the default. CI does not install sandbox and
   self-deploying entries, so a maintainer merges each of their bumps;
-- does not set `source.version`, which someone has to update by hand first;
+- does not set `source.version`, or sets it to the version in its pinned tag,
+  which the bump then moves with the tag (see "Keeping pins current"). Any
+  other `source.version` someone has to update by hand first;
 - does not opt out with `"bump": { "autoMerge": false }`;
 
 and the bump does not move `source.ref` to another branch (see "Keeping pins
 current"). A move to the next tag of a prefixed series (`app-v0.42.1` to
 `app-v0.43.0`) is a tag bump like any other. An entry pinned to such a tag
-usually sets `source.version`, since the packer cannot read a version from the
-tag, so a maintainer merges its bumps after updating it.
+usually sets `source.version` to the tag's version, since the packer cannot
+read a version from the tag, and its bumps update it and merge themselves.
 
 `bump.yml` enables GitHub auto-merge on such a pull request right after opening
 it, before the checks start. GitHub squash-merges it once the required checks

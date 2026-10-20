@@ -16,9 +16,8 @@
   "categories": ["ai", "productivity", "notes"],
   "authors": [{ "name": "Roc Yu", "github": "rociiu" }],
   "maintainers": ["MendyLanda"],
-  // Upstream tags its releases create-talorys@<version>, which the bump bot does
-  // not read as a version: move source to the newest create-talorys@ tag and
-  // source.version with it by hand.
+  // Upstream tags its releases create-talorys@<version>, which the packer does
+  // not read as a version, so it is set here; the bump bot moves it with the tag.
   "source": {
     "ref": "create-talorys@0.1.6",
     "sha": "a2761243dadeff9a2dbe7ca0fec46435b5689754",

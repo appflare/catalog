@@ -20,7 +20,7 @@ import { createGhUpstream } from "./lib/upstream.ts";
 
 const USAGE = `Usage:
   pnpm -s bump plan [--only <slug,...>] --out <dir>
-  pnpm -s bump apply <slug> --ref <ref> --sha <sha>
+  pnpm -s bump apply <slug> --ref <ref> --sha <sha> [--version <version>]
 
 plan   Resolves each app's upstream with read-only gh api calls (newest stable
        semver tag; for a pin on a tag with a prefix such as app-v0.42.1, the
@@ -30,16 +30,18 @@ plan   Resolves each app's upstream with read-only gh api calls (newest stable
        branch) and keeps only moves forward.
        Skips targets already proposed, and branch-tracked apps with a bump pull
        request opened in the last week. Prints { bumps, failed, outstanding }
-       as JSON (each bump with the open pull requests it supersedes, and
-       autoMerge: true for an artifact tier entry that sets neither
-       bump.autoMerge: false nor source.version, unless the bump moves
-       source.ref to another branch) and writes the pull request
+       as JSON (each bump with the open pull requests it supersedes; version,
+       the new source.version, for an entry whose source.version is the
+       version in its pinned tag; and autoMerge: true for an artifact tier
+       entry that does not set bump.autoMerge: false and either does not set
+       source.version or gets a new one, unless the bump moves source.ref to
+       another branch) and writes the pull request
        body for each bump to <dir>/<slug>.md. "outstanding" lists existing
        bumps that need a person: a bump branch without a pull request, and an
        open bump pull request whose head still lacks a required check after a
        few hours.
-apply  Sets source.ref and source.sha in apps/<slug>/appflare.jsonc, keeping
-       its comments and layout.
+apply  Sets source.ref and source.sha in apps/<slug>/appflare.jsonc, and
+       source.version with --version, keeping its comments and layout.
 `;
 
 runMain(() => {
@@ -50,6 +52,7 @@ runMain(() => {
       out: { type: "string" },
       ref: { type: "string" },
       sha: { type: "string" },
+      version: { type: "string" },
       help: { type: "boolean", short: "h" },
     },
   });
@@ -142,13 +145,23 @@ runMain(() => {
     const updated = applyBump(readFileSync(app.manifestPath, "utf8"), {
       ref: values.ref,
       sha: values.sha,
+      ...(values.version === undefined ? {} : { version: values.version }),
     });
-    const parsed = parseJsonc(updated) as { source?: { ref?: string; sha?: string } };
-    if (parsed.source?.ref !== values.ref || parsed.source?.sha !== values.sha) {
+    const parsed = parseJsonc(updated) as {
+      source?: { ref?: string; sha?: string; version?: string };
+    };
+    if (
+      parsed.source?.ref !== values.ref ||
+      parsed.source?.sha !== values.sha ||
+      (values.version !== undefined && parsed.source?.version !== values.version)
+    ) {
       throw new Error(`${app.manifestPath}: the edit did not produce the expected source`);
     }
     writeFileSync(app.manifestPath, updated);
-    info(`${slug}: source is now ${values.ref}@${values.sha}`);
+    info(
+      `${slug}: source is now ${values.ref}@${values.sha}` +
+        (values.version === undefined ? "" : `, version ${values.version}`),
+    );
     return 0;
   }
 

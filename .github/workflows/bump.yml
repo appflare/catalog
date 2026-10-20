@@ -30,12 +30,16 @@ name: bump
 # main's rules, to this job, and the pull request would still be opened (and
 # its first runs held) by the workflow token.
 #
+# An app whose source.version is the version in its pinned tag (a monorepo's
+# create-talorys@0.1.6 stating 0.1.6) gets source.version set to the version in
+# the new tag too. Any other source.version is left for a maintainer to update.
+#
 # Bumps merge themselves by default: the catalog checks that a release builds,
 # matches its hashes and installs, not upstream's code, and users choose when to
 # update. A bump of an artifact tier app gets GitHub auto-merge (squash) enabled
 # on its pull request, so it merges once the required checks pass, unless its
-# appflare.jsonc sets bump.autoMerge to false or sets source.version, or the
-# bump moves source.ref to another branch. Those bumps, and every bump of a
+# appflare.jsonc sets bump.autoMerge to false or sets a source.version the bump
+# does not update, or the bump moves source.ref to another branch. Those bumps, and every bump of a
 # sandbox or self-deploying app (CI does not install either), wait for a
 # maintainer.
 #
@@ -172,12 +176,14 @@ jobs:
           # Opens bump number $i. Runs in a subshell with set -e of its own, so
           # a failure ends this app's attempt only.
           open_bump() {
-            local slug branch title ref sha url number merge old
+            local slug branch title ref sha version url number merge old
             slug="$(field slug)"
             branch="$(field branch)"
             title="$(field title)"
             ref="$(field to.ref)"
             sha="$(field to.sha)"
+            # The new source.version, when the bump sets one.
+            version="$(jq -r --argjson i "${i}" '.bumps[$i].version // empty' "${RUNNER_TEMP}/bumps.json")"
             # The plan already skipped targets with a branch; this guards a race.
             if git ls-remote --exit-code --heads origin "${branch}" > /dev/null; then
               echo "::notice::${branch} already exists; skipping ${slug}"
@@ -186,7 +192,7 @@ jobs:
             # --force: a failed attempt may have left an edited manifest behind.
             git switch --quiet --force main
             git switch --quiet -c "${branch}"
-            pnpm -s bump apply "${slug}" --ref "${ref}" --sha "${sha}"
+            pnpm -s bump apply "${slug}" --ref "${ref}" --sha "${sha}" ${version:+--version "${version}"}
             git add "apps/${slug}/appflare.jsonc"
             git commit --quiet -m "${title}"
             git push --quiet origin "${branch}"

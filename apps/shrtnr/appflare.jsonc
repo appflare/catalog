@@ -32,9 +32,8 @@
   ],
   "maintainers": ["MendyLanda"],
   // Upstream tags the app as app-vX.Y.Z and its SDKs as sdk-vX.Y.Z in the same
-  // repository, so the version comes from source.version. The bump bot reads
-  // neither prefix as a version: move source to the newest app-v tag and
-  // source.version with it by hand.
+  // repository, so the version comes from source.version, which the bump bot
+  // moves with the app-v tag.
   "source": {
     "ref": "app-v0.42.1",
     "sha": "bf99dafaf7f164800f9327a341d160c7862b51f7",
