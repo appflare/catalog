@@ -23,7 +23,7 @@
   "authors": [{ "name": "little_cup", "url": "https://www.1ittlecup.com", "github": "heruoxin" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no tags; the pin follows the default branch.
-  "source": { "ref": "main", "sha": "500651a0fa12f96acbc73362fe3b6dc3d751ffd1" },
+  "source": { "ref": "main", "sha": "4b93fee096d258786bf72f4a2e8c81d9f19b054a" },
   "install": {
     "packageManager": "npm",
     // The Worker is its own npm project in cloudflare/, beside a Docker
