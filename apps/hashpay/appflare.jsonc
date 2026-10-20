@@ -27,7 +27,7 @@
   "authors": [{ "name": "TGDash", "github": "TGDash" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags, so the entry follows the default branch by commit.
-  "source": { "ref": "main", "sha": "26a65087e639827027c6b87d9a48f3e1f2c56a94" },
+  "source": { "ref": "main", "sha": "c60d78aeb002ebea3bbae729ee2a667628df9247" },
   "install": {
     "packageManager": "npm",
     // Cloudflare's Vite plugin writes the bundled Worker and its deploy
