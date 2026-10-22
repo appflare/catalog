@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-22T09:18:36.020Z",
+  "generatedAt": "2026-10-22T09:32:24.850Z",
   "apps": [
     {
       "slug": "2fa",
@@ -358,17 +358,17 @@
         "UptimeRobot"
       ],
       "addedAt": "2026-09-27T04:47:37+03:00",
-      "version": "0.0.0-20261011.0f7a63e",
+      "version": "0.0.0-20261020.cd3d21b",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/atalaya@0.0.0-20261011.0f7a63e/atalaya-0.0.0-20261011.0f7a63e.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/atalaya@0.0.0-20261011.0f7a63e/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/atalaya@0.0.0-20261011.0f7a63e/manifest.sig",
-        "digest": "39c7ba609c98f362130f5da21432f197164e3a7e9aab11d144d2ce76b6e2e57d"
+        "zip": "https://github.com/appflare/catalog/releases/download/atalaya@0.0.0-20261020.cd3d21b/atalaya-0.0.0-20261020.cd3d21b.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/atalaya@0.0.0-20261020.cd3d21b/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/atalaya@0.0.0-20261020.cd3d21b/manifest.sig",
+        "digest": "36f0f781a2929a7b9d08f323685920bc91c3263d415c5210f7ca17dd9471bc2c"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-10-22T08:56:37.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Daniel Carrillo",
@@ -1360,68 +1360,6 @@
         "sha256": "a6c38f9a3196fdc028e068a7e54508701df4dc4770bb44db27d3d4e64408bda2",
         "keyId": "catalog-2026-09",
         "signature": "xTt/+dLOSjLajwh3pIJtlIwcVkcgX/83IplJYaz64hBBrQZxk7rdTfNRWVU4K58TahTyk3lOhpFqtw+hoouMAA=="
-      },
-      "accessOffer": "offered"
-    },
-    {
-      "slug": "clist",
-      "repo": "ooyyh/Cloudflare-Clist",
-      "name": "CList",
-      "summary": "A file browser and WebDAV server over your S3, WebDAV, OneDrive and Google Drive storage, with previews, share links and audit logs.",
-      "tagline": "Browse and share files from all your storage in one place",
-      "features": [
-        "Manage files across your existing cloud drives and storage buckets",
-        "Upload, rename, move, copy and delete files from your browser",
-        "Preview documents, pictures, audio and video before downloading",
-        "Create share links for individual files",
-        "Connect desktop and mobile file managers by enabling WebDAV",
-        "Review a log of file operations and admin changes"
-      ],
-      "alternativeTo": [
-        "AList"
-      ],
-      "addedAt": "2026-09-27T06:14:13+03:00",
-      "version": "0.0.0-20260924.cb7cc24",
-      "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/clist@0.0.0-20260924.cb7cc24/clist-0.0.0-20260924.cb7cc24.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/clist@0.0.0-20260924.cb7cc24/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/clist@0.0.0-20260924.cb7cc24/manifest.sig",
-        "digest": "fafd95bd9d8f7c3ee65a2cfe725751389478e9fb884cbaab0579e42734671df3"
-      },
-      "tier": "artifact",
-      "plan": "free",
-      "requires": [],
-      "lastVerified": "2026-10-22T08:58:38.000Z",
-      "authors": [
-        {
-          "name": "ooyyh",
-          "url": "https://blog.ooyyh.top",
-          "github": "ooyyh"
-        }
-      ],
-      "maintainers": [
-        "MendyLanda"
-      ],
-      "media": {
-        "icon": {
-          "url": "https://appflare.github.io/catalog/apps/clist/icon.png",
-          "sha256": "51b6075bdd3ea239493994b8740854da08a1aacc9b5836a5e4b3dd79cfad864e"
-        },
-        "screenshots": []
-      },
-      "services": [
-        "d1"
-      ],
-      "categories": [
-        "files"
-      ],
-      "license": "MIT",
-      "revision": 5,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/clist/manifest.json",
-        "sha256": "a1bc761f7934947dfe8abc3efad690dd29ee2e69201463f3a783a8cf036213b5",
-        "keyId": "catalog-2026-09",
-        "signature": "kh7xg1Dy59y0Mzr3Xa74xAlLixEc97y8ICJdhIghFcwWFaC1U8do4kl24BxGUejBEYeObFMpmANAaJRDopq5AA=="
       },
       "accessOffer": "offered"
     },
@@ -4843,12 +4781,12 @@
         "Gmail"
       ],
       "addedAt": "2026-09-24T07:29:19+03:00",
-      "version": "0.0.0-20261019.07d98ae",
+      "version": "0.0.0-20261020.4738250",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261019.07d98ae/mailflare-0.0.0-20261019.07d98ae.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261019.07d98ae/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261019.07d98ae/manifest.sig",
-        "digest": "e0948ee9d6c321fb784087508dd6210bd3a9e7b8a093f45b2522cfb8d98d87ea"
+        "zip": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261020.4738250/mailflare-0.0.0-20261020.4738250.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261020.4738250/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261020.4738250/manifest.sig",
+        "digest": "674959df6f1559544b615b7d86f5355b7f074bdc81bc85d38e8d985978d85892"
       },
       "tier": "artifact",
       "plan": "paid",
@@ -5936,77 +5874,6 @@
       ],
       "license": "AGPL-3.0-only",
       "revision": 4,
-      "accessOffer": "offered"
-    },
-    {
-      "slug": "open-artifacts",
-      "repo": "coda0HQ/open-artifacts",
-      "name": "Open Artifacts",
-      "summary": "Let coding agents publish HTML and Markdown pages to shareable links, with client-side password protection, version history, and updates in place when the project changes, on D1 and R2.",
-      "tagline": "Share pages from your coding agent with links that stay up to date",
-      "features": [
-        "Publish HTML or Markdown from your coding agent",
-        "Replace a page's content while keeping its existing link",
-        "Protect pages with a password before uploading them",
-        "Open earlier published versions of a page",
-        "Find pages that need updating when watched project files change"
-      ],
-      "alternativeTo": [
-        "Claude Code Artifacts"
-      ],
-      "addedAt": "2026-09-27T04:19:23+03:00",
-      "version": "0.0.0-20260827.4f8b54b",
-      "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/open-artifacts@0.0.0-20260827.4f8b54b/open-artifacts-0.0.0-20260827.4f8b54b.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/open-artifacts@0.0.0-20260827.4f8b54b/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/open-artifacts@0.0.0-20260827.4f8b54b/manifest.sig",
-        "digest": "505b8cab4bb502ef572a5a16ba135912aece3c3c9458ddb909ae5ae6c747fe3d"
-      },
-      "tier": "artifact",
-      "plan": "free",
-      "requires": [
-        "r2"
-      ],
-      "lastVerified": "2026-10-22T09:07:58.000Z",
-      "authors": [
-        {
-          "name": "Frad Lee",
-          "url": "https://frad.me",
-          "github": "FradSer",
-          "x": "FradSer"
-        },
-        {
-          "name": "code0",
-          "url": "https://coda0.com",
-          "github": "coda0HQ"
-        }
-      ],
-      "maintainers": [
-        "MendyLanda"
-      ],
-      "media": {
-        "icon": {
-          "url": "https://appflare.github.io/catalog/apps/open-artifacts/icon.svg",
-          "sha256": "c22bb6df9af03c7ecfe3c42f4b08354c22d2526ba34a02dfe74872f836c2bdf4"
-        },
-        "screenshots": []
-      },
-      "services": [
-        "d1",
-        "r2"
-      ],
-      "categories": [
-        "developer-tools",
-        "sharing"
-      ],
-      "license": "MIT",
-      "revision": 4,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/open-artifacts/manifest.json",
-        "sha256": "4de078e8606e2dfc6624871741b5075cabb815c31e9e0775545fe49fa2365dbc",
-        "keyId": "catalog-2026-09",
-        "signature": "LOVm5KOgsXoqceShnhWbrkiTvWVTsfu2RrW6mvJICYrMx3txkJZy93Qj082IZJNh3AvKMW39UL4pZWIBNEX8Cw=="
-      },
       "accessOffer": "offered"
     },
     {
@@ -8293,17 +8160,17 @@
         "Use the same sign-in helper with Decap CMS"
       ],
       "addedAt": "2026-09-27T10:43:20+03:00",
-      "version": "0.0.0-20261011.33674be",
+      "version": "0.0.0-20261020.5623041",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/sveltia-cms-auth@0.0.0-20261011.33674be/sveltia-cms-auth-0.0.0-20261011.33674be.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/sveltia-cms-auth@0.0.0-20261011.33674be/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/sveltia-cms-auth@0.0.0-20261011.33674be/manifest.sig",
-        "digest": "83afb09cfc4cc1c8520cc2dffbabb55e9cee0f38f55bb0271a7cff6db6fd0be3"
+        "zip": "https://github.com/appflare/catalog/releases/download/sveltia-cms-auth@0.0.0-20261020.5623041/sveltia-cms-auth-0.0.0-20261020.5623041.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/sveltia-cms-auth@0.0.0-20261020.5623041/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/sveltia-cms-auth@0.0.0-20261020.5623041/manifest.sig",
+        "digest": "dbed5d1f4b22e753daccb3f294816af5824e6573d9ac94414329d1facb042c19"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-10-22T09:13:44.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Sveltia",
