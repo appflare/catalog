@@ -26,7 +26,7 @@
   ],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags, so the entry follows the default branch by commit.
-  "source": { "ref": "main", "sha": "4f8b54bec3af00ebb7e0750aa052ca7147c0f039" },
+  "source": { "ref": "main", "sha": "bc128a6e288eeabd86e29cda86102cf6b6bfda09" },
   "install": {
     "packageManager": "pnpm",
     "wranglerConfig": "wrangler.jsonc"
