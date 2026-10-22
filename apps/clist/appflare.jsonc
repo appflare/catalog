@@ -32,7 +32,7 @@
   "maintainers": ["MendyLanda"],
   // Pinned to master: the latest tag, v1.2.0, predates the repository's
   // LICENSE file and the wrangler.jsonc.example this entry builds from.
-  "source": { "ref": "master", "sha": "cb7cc248c5adc6ebb4241204ff7f162d01ee1c51" },
+  "source": { "ref": "master", "sha": "0dba83f98cac0046f8d9d316f33a23ee55c04542" },
   "install": {
     "packageManager": "npm",
     // Upstream keeps its config only as an example to copy.
