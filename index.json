@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-23T09:22:43.368Z",
+  "generatedAt": "2026-10-23T09:29:14.280Z",
   "apps": [
     {
       "slug": "2fa",
@@ -77,19 +77,19 @@
         "Notion"
       ],
       "addedAt": "2026-09-27T06:02:01+03:00",
-      "version": "0.0.0-20261019.f218bd0",
+      "version": "0.0.0-20261022.3c5c264",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20261019.f218bd0/888wiki-0.0.0-20261019.f218bd0.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20261019.f218bd0/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20261019.f218bd0/manifest.sig",
-        "digest": "85cd9a0ca39ccdac188e5ad0962aad98e1d6729d3ca21a8087e8bef020be6f34"
+        "zip": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20261022.3c5c264/888wiki-0.0.0-20261022.3c5c264.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20261022.3c5c264/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20261022.3c5c264/manifest.sig",
+        "digest": "e4547612c26618526cd6fb52246bc9d44c0151705c0a437dd93752362e2bca9c"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-10-22T08:57:02.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "DAVID888",
@@ -1364,6 +1364,62 @@
       "accessOffer": "offered"
     },
     {
+      "slug": "clist",
+      "repo": "ooyyh/Cloudflare-Clist",
+      "name": "CList",
+      "summary": "A file browser and WebDAV server over your S3, WebDAV, OneDrive and Google Drive storage, with previews, share links and audit logs.",
+      "tagline": "Browse and share files from all your storage in one place",
+      "features": [
+        "Manage files across your existing cloud drives and storage buckets",
+        "Upload, rename, move, copy and delete files from your browser",
+        "Preview documents, pictures, audio and video before downloading",
+        "Create share links for individual files",
+        "Connect desktop and mobile file managers by enabling WebDAV",
+        "Review a log of file operations and admin changes"
+      ],
+      "alternativeTo": [
+        "AList"
+      ],
+      "addedAt": "2026-09-27T06:14:13+03:00",
+      "version": "0.0.0-20261022.0dba83f",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/clist@0.0.0-20261022.0dba83f/clist-0.0.0-20261022.0dba83f.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/clist@0.0.0-20261022.0dba83f/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/clist@0.0.0-20261022.0dba83f/manifest.sig",
+        "digest": "99d65d5ee0830497f215c056f7af57be3290f1236a97296ca6763aaa9b313c5e"
+      },
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "ooyyh",
+          "url": "https://blog.ooyyh.top",
+          "github": "ooyyh"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/clist/icon.png",
+          "sha256": "51b6075bdd3ea239493994b8740854da08a1aacc9b5836a5e4b3dd79cfad864e"
+        },
+        "screenshots": []
+      },
+      "services": [
+        "d1"
+      ],
+      "categories": [
+        "files"
+      ],
+      "license": "MIT",
+      "revision": 5,
+      "accessOffer": "offered"
+    },
+    {
       "slug": "cloudflare-os",
       "repo": "cloudflare/cloudflare-os",
       "name": "Cloudflare OS",
@@ -2286,19 +2342,19 @@
         "Evernote"
       ],
       "addedAt": "2026-09-27T05:18:00+03:00",
-      "version": "2.0.1",
+      "version": "2.3.0",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/edgeever@2.0.1/edgeever-2.0.1.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/edgeever@2.0.1/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/edgeever@2.0.1/manifest.sig",
-        "digest": "7ac76cc90fb01e8a9cc5fa1023b074dac9f26954fc1f7bb8d0308d6968ecec41"
+        "zip": "https://github.com/appflare/catalog/releases/download/edgeever@2.3.0/edgeever-2.3.0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/edgeever@2.3.0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/edgeever@2.3.0/manifest.sig",
+        "digest": "c73a3244d220d67c7a7a699966cfa071c87ca8524ec16fa40c7eccb139bb5973"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-10-23T08:56:34.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "tianma-if",
@@ -3381,19 +3437,19 @@
         "Giscus"
       ],
       "addedAt": "2026-09-27T05:55:55+03:00",
-      "version": "2.37.0",
+      "version": "2.40.0",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/garrul@2.37.0/garrul-2.37.0.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/garrul@2.37.0/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/garrul@2.37.0/manifest.sig",
-        "digest": "545aab09e202c9711c0764502142444c70c3122b1c6bb2edb517afc24b086ffc"
+        "zip": "https://github.com/appflare/catalog/releases/download/garrul@2.40.0/garrul-2.40.0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/garrul@2.40.0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/garrul@2.40.0/manifest.sig",
+        "digest": "6d84e27a4b8afc5c40fb0c6ba2491b388264e0217081fc4412323d468b74f060"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "analytics-engine"
       ],
-      "lastVerified": "2026-10-22T09:03:23.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "KingPin",
@@ -3684,17 +3740,17 @@
         "NOWPayments"
       ],
       "addedAt": "2026-09-27T10:46:59+03:00",
-      "version": "0.0.0-20261018.26a6508",
+      "version": "0.0.0-20261022.9429dd2",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/hashpay@0.0.0-20261018.26a6508/hashpay-0.0.0-20261018.26a6508.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/hashpay@0.0.0-20261018.26a6508/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/hashpay@0.0.0-20261018.26a6508/manifest.sig",
-        "digest": "b0d81e87516eb4ca97c96ca37db80d19fb5208c786c0dee1f14aca89da48764f"
+        "zip": "https://github.com/appflare/catalog/releases/download/hashpay@0.0.0-20261022.9429dd2/hashpay-0.0.0-20261022.9429dd2.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/hashpay@0.0.0-20261022.9429dd2/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/hashpay@0.0.0-20261022.9429dd2/manifest.sig",
+        "digest": "b2abd9b5869c908e765225957f807a4011ce990ca01af15ac468816627accb78"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-10-22T09:03:29.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "TGDash",
@@ -5877,6 +5933,71 @@
       "accessOffer": "offered"
     },
     {
+      "slug": "open-artifacts",
+      "repo": "coda0HQ/open-artifacts",
+      "name": "Open Artifacts",
+      "summary": "Let coding agents publish HTML and Markdown pages to shareable links, with client-side password protection, version history, and updates in place when the project changes, on D1 and R2.",
+      "tagline": "Share pages from your coding agent with links that stay up to date",
+      "features": [
+        "Publish HTML or Markdown from your coding agent",
+        "Replace a page's content while keeping its existing link",
+        "Protect pages with a password before uploading them",
+        "Open earlier published versions of a page",
+        "Find pages that need updating when watched project files change"
+      ],
+      "alternativeTo": [
+        "Claude Code Artifacts"
+      ],
+      "addedAt": "2026-09-27T04:19:23+03:00",
+      "version": "0.0.0-20261017.bc128a6",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/open-artifacts@0.0.0-20261017.bc128a6/open-artifacts-0.0.0-20261017.bc128a6.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/open-artifacts@0.0.0-20261017.bc128a6/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/open-artifacts@0.0.0-20261017.bc128a6/manifest.sig",
+        "digest": "e6e7a1073a71060e1d9cad2e09d668f2f1ce550f79d099089387aff2af5ad1e3"
+      },
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "r2"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Frad Lee",
+          "url": "https://frad.me",
+          "github": "FradSer",
+          "x": "FradSer"
+        },
+        {
+          "name": "code0",
+          "url": "https://coda0.com",
+          "github": "coda0HQ"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/open-artifacts/icon.svg",
+          "sha256": "c22bb6df9af03c7ecfe3c42f4b08354c22d2526ba34a02dfe74872f836c2bdf4"
+        },
+        "screenshots": []
+      },
+      "services": [
+        "d1",
+        "r2"
+      ],
+      "categories": [
+        "developer-tools",
+        "sharing"
+      ],
+      "license": "MIT",
+      "revision": 4,
+      "accessOffer": "offered"
+    },
+    {
       "slug": "open-seo",
       "repo": "every-app/open-seo",
       "name": "OpenSEO",
@@ -7197,55 +7318,6 @@
       "accessOffer": "offered"
     },
     {
-      "slug": "rsshub-never-die",
-      "repo": "CaoMeiYouRen/rsshub-never-die",
-      "name": "RSSHub Never Die",
-      "summary": "A stable RSSHub address for your feed reader: requests go to a pool of public RSSHub instances, by load balancing, failover to the next instance, or the fastest of several.",
-      "tagline": "One address for your feed reader that switches servers when one fails",
-      "features": [
-        "Spread feed requests across several RSSHub servers with weights you choose",
-        "Try another RSSHub server when the first one fails",
-        "Ask several RSSHub servers at once and return the first successful answer",
-        "Restrict feed requests with an optional access key"
-      ],
-      "addedAt": "2026-09-27T12:13:25+03:00",
-      "version": "1.4.2",
-      "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/rsshub-never-die@1.4.2/rsshub-never-die-1.4.2.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/rsshub-never-die@1.4.2/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/rsshub-never-die@1.4.2/manifest.sig",
-        "digest": "2511ebba9de7a5ea89e49ac8746022ff5fae2c1471d182fafa431dc4c784957b"
-      },
-      "tier": "artifact",
-      "plan": "free",
-      "requires": [],
-      "lastVerified": "2026-10-22T09:10:55.000Z",
-      "authors": [
-        {
-          "name": "CaoMeiYouRen",
-          "url": "https://blog.cmyr.ltd",
-          "github": "CaoMeiYouRen"
-        }
-      ],
-      "maintainers": [
-        "MendyLanda"
-      ],
-      "services": [],
-      "categories": [
-        "utilities",
-        "networking"
-      ],
-      "license": "MIT",
-      "revision": 5,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/rsshub-never-die/manifest.json",
-        "sha256": "932d4ccb394d23b2cadfa5bdab3ac119ed4c82e03f04498efa97366a504937c8",
-        "keyId": "catalog-2026-09",
-        "signature": "BxEE92HWueFqkGSnZz8IFGOJLTT2u05BoI9UhoSZJsTCe6yAnb6FTBHX/Lx43qI6+H/qVMhdUbDP97eIF7alBg=="
-      },
-      "accessOffer": "offered"
-    },
-    {
       "slug": "rssworker",
       "repo": "yllhwa/RSSWorker",
       "name": "RSSWorker",
@@ -8529,17 +8601,17 @@
         "Optionally publish combined totals without device or account identifiers"
       ],
       "addedAt": "2026-09-27T11:42:03+03:00",
-      "version": "0.76.0",
+      "version": "0.77.0",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/token-monitor@0.76.0/token-monitor-0.76.0.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/token-monitor@0.76.0/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/token-monitor@0.76.0/manifest.sig",
-        "digest": "06ae29502019e329318d7e31947188de04e9e53eab42f6baaf44afe9732779d6"
+        "zip": "https://github.com/appflare/catalog/releases/download/token-monitor@0.77.0/token-monitor-0.77.0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/token-monitor@0.77.0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/token-monitor@0.77.0/manifest.sig",
+        "digest": "59507b5a97e9424357d864ed44d74d08faa5b9f6d0ea8182b86f3ad1693c13a6"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-10-22T09:13:57.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Javis",
