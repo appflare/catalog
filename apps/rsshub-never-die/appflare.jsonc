@@ -25,7 +25,7 @@
   // The newest release tag. The commits after it on master bump
   // dependencies and CI tooling; the one the Worker bundles, hono 4.12.25 to
   // 4.12.32, fixes nothing this Worker uses.
-  "source": { "ref": "v1.4.2", "sha": "989f97b083bb22faa0c63a8d66dd432987dbaba6" },
+  "source": { "ref": "v1.5.1", "sha": "cdc8059dce1d751a9840e33e95e58e29689b4c4f" },
   "install": {
     "packageManager": "pnpm",
     // The wrangler config points at dist/app.mjs, which tsup writes. This is
