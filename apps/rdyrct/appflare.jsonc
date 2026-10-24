@@ -30,7 +30,7 @@
     }
   ],
   "maintainers": ["MendyLanda", "baronunread"],
-  "source": { "ref": "v1.0.0", "sha": "e9ba20e9bd2b65f9fbf7ed313b59e11fd90bd186" },
+  "source": { "ref": "v1.1.0", "sha": "a9372cf8af9de8a9fc1c7476e34a381f132d838d" },
   "install": {
     "packageManager": "bun",
     // The config's KV, D1 and zone ids are upstream's production resources;
