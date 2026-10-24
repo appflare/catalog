@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-24T08:50:59.637Z",
+  "generatedAt": "2026-10-24T08:59:48.499Z",
   "apps": [
     {
       "slug": "2fa",
@@ -2666,12 +2666,12 @@
         "Front"
       ],
       "addedAt": "2026-09-27T06:14:13+03:00",
-      "version": "0.0.0-20261014.5678452",
+      "version": "0.0.0-20261022.7065a54",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/emailflare@0.0.0-20261014.5678452/emailflare-0.0.0-20261014.5678452.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/emailflare@0.0.0-20261014.5678452/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/emailflare@0.0.0-20261014.5678452/manifest.sig",
-        "digest": "feda4b963bbb7ce06dc94608268f6698600945eb03777228c9bc1143fd7fb7a6"
+        "zip": "https://github.com/appflare/catalog/releases/download/emailflare@0.0.0-20261022.7065a54/emailflare-0.0.0-20261022.7065a54.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/emailflare@0.0.0-20261022.7065a54/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/emailflare@0.0.0-20261022.7065a54/manifest.sig",
+        "digest": "a17e72555bd2b705ed55186e558c6095a5ce70047811421c78fb804942a536e5"
       },
       "tier": "artifact",
       "plan": "paid",
@@ -6282,19 +6282,19 @@
         "Pastebin"
       ],
       "addedAt": "2026-09-26T23:19:31+03:00",
-      "version": "0.0.0-20261010.534111f",
+      "version": "0.0.0-20261023.b682ddc",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/pastebin-worker@0.0.0-20261010.534111f/pastebin-worker-0.0.0-20261010.534111f.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/pastebin-worker@0.0.0-20261010.534111f/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/pastebin-worker@0.0.0-20261010.534111f/manifest.sig",
-        "digest": "546d21f481c4d664c1078b127787fd90844212301d7876e5314ec3f310426674"
+        "zip": "https://github.com/appflare/catalog/releases/download/pastebin-worker@0.0.0-20261023.b682ddc/pastebin-worker-0.0.0-20261023.b682ddc.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/pastebin-worker@0.0.0-20261023.b682ddc/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/pastebin-worker@0.0.0-20261023.b682ddc/manifest.sig",
+        "digest": "03bb35d9b4594852801eb786c413ace9847785b2601340fddaa0d865db9503f2"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-10-24T08:38:11.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Sharzy",
@@ -6308,6 +6308,7 @@
       "services": [
         "kv",
         "r2",
+        "durable-objects",
         "cron"
       ],
       "categories": [
@@ -7027,17 +7028,17 @@
         "TeamViewer"
       ],
       "addedAt": "2026-09-27T05:20:16+03:00",
-      "version": "3.17.13",
+      "version": "3.17.25",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/reminal@3.17.13/reminal-3.17.13.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/reminal@3.17.13/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/reminal@3.17.13/manifest.sig",
-        "digest": "d1222c5aff3676fc8db32726885765855c0c92b1095b289751651aa9643adbaf"
+        "zip": "https://github.com/appflare/catalog/releases/download/reminal@3.17.25/reminal-3.17.25.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/reminal@3.17.25/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/reminal@3.17.25/manifest.sig",
+        "digest": "8240a121d974ce5e8b4dbe8a33c004f5d399e69a0a5c7279bc7e095ba40e1859"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-10-24T08:40:58.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Harshal Gajjar",
@@ -7183,19 +7184,19 @@
         "Bobby"
       ],
       "addedAt": "2026-09-27T12:02:55+03:00",
-      "version": "0.3.33",
+      "version": "0.3.34",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/renewlet@0.3.33/renewlet-0.3.33.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/renewlet@0.3.33/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/renewlet@0.3.33/manifest.sig",
-        "digest": "a9956aba5cea9aee9ac3d4369e679c11aea8e5d8e4782b102563cc6c95bc0162"
+        "zip": "https://github.com/appflare/catalog/releases/download/renewlet@0.3.34/renewlet-0.3.34.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/renewlet@0.3.34/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/renewlet@0.3.34/manifest.sig",
+        "digest": "9fae358adcf15663de26e6ce74dda4e0a9cbfb1fa5cdf6106a7235b981b53f07"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-10-24T08:41:53.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "zhiyingzhou",
@@ -7315,6 +7316,49 @@
         "keyId": "catalog-2026-09",
         "signature": "h0zBwFftR1PEf3FGfmxL4RtX0gZJsgvSbxG1G1I8MwCM+x4nY7YPbDbMSCwQRgsKKLA1XLxWj/gg6DnI11yLAQ=="
       },
+      "accessOffer": "offered"
+    },
+    {
+      "slug": "rsshub-never-die",
+      "repo": "CaoMeiYouRen/rsshub-never-die",
+      "name": "RSSHub Never Die",
+      "summary": "A stable RSSHub address for your feed reader: requests go to a pool of public RSSHub instances, by load balancing, failover to the next instance, or the fastest of several.",
+      "tagline": "One address for your feed reader that switches servers when one fails",
+      "features": [
+        "Spread feed requests across several RSSHub servers with weights you choose",
+        "Try another RSSHub server when the first one fails",
+        "Ask several RSSHub servers at once and return the first successful answer",
+        "Restrict feed requests with an optional access key"
+      ],
+      "addedAt": "2026-09-27T12:13:25+03:00",
+      "version": "1.5.1",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/rsshub-never-die@1.5.1/rsshub-never-die-1.5.1.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/rsshub-never-die@1.5.1/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/rsshub-never-die@1.5.1/manifest.sig",
+        "digest": "8a8bf4d607004c08a5903d4ff1843ec404270a816efad881216f0af14b17a574"
+      },
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "CaoMeiYouRen",
+          "url": "https://blog.cmyr.ltd",
+          "github": "CaoMeiYouRen"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "services": [],
+      "categories": [
+        "utilities",
+        "networking"
+      ],
+      "license": "MIT",
+      "revision": 5,
       "accessOffer": "offered"
     },
     {
