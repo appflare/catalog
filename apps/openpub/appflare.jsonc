@@ -1,0 +1,62 @@
+{
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "openpub",
+  "name": "OpenPub",
+  "summary": "Self-hosted cross-posting engine for technical blogs. Write one draft, publish it to dev.to, Hashnode, WordPress, Ghost, Medium, Substack, GitHub Pages and your own site, with a CLI and an MCP server for agents.",
+  "tagline": "Write once, publish to every dev blog",
+  "features": [
+    "Publish one draft to eight platforms at once",
+    "Cover images and canonical links per platform",
+    "CLI and MCP server so agents can queue a publish",
+    "Publish log with per-platform status and retry",
+    "Keeps drafts and platform credentials in your own D1 and KV"
+  ],
+  "repo": "princepal9120/openpub",
+  "license": "MIT",
+  "categories": ["cms", "developer-tools", "productivity"],
+  "authors": [{ "name": "Prince Pal", "github": "princepal9120" }],
+  "maintainers": ["princepal9120"],
+  "source": { "ref": "main", "sha": "64745b80aecc3c77bdddaf482e0fe73ddba9e3b0" },
+  "install": {
+    "packageManager": "npm",
+    // Root holds the Worker and its dependencies; the dashboard is a separate
+    // npm project that ships no lockfile of its own, so the packer resolves it.
+    "installDirs": [{ "path": "." }, { "path": "dashboard", "lockfile": "none" }],
+    // wrangler.toml serves the built SPA as static assets, so the dashboard
+    // has to exist before the pack bundles the Worker.
+    "buildCommand": "npm --prefix dashboard run build",
+    "wranglerConfig": "wrangler.toml",
+    // Upstream pins this repository's own D1/KV/R2 ids and production URLs in
+    // wrangler.toml. An upstream change to ship placeholders is pending; until
+    // it merges, the patch provisions each install its own resources and
+    // points the app at the address it is installed under.
+    "configPatch": {
+      "d1_databases": [{ "binding": "DB", "database_name": "openpub-db", "database_id": "" }],
+      "kv_namespaces": [{ "binding": "KEYS", "id": "" }],
+      "r2_buckets": [{ "binding": "MEDIA", "bucket_name": "" }],
+      "vars": { "BASE_URL": "{{appUrl}}", "DASHBOARD_URL": "{{appUrl}}" }
+    }
+  },
+  "requires": ["config-patch-values"],
+  // D1, KV, R2, the publish queue and Workers AI all fit the free plan.
+  "plan": "free",
+  "openPath": "/app",
+  "secrets": [
+    {
+      "name": "ADMIN_KEY",
+      "label": "Admin key",
+      "help": "Bearer key for the /api surface. Store it in a password manager: Appflare shows it once and never again.",
+      "generate": "password"
+    }
+  ],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "Save the admin key from the install form in a password manager now. The API needs it as `Authorization: Bearer <key>`."
+    },
+    {
+      "type": "markdown",
+      "content": "Open {{appUrl}}/app to write a draft. Store a platform credential from the API, then queue a publish."
+    }
+  ]
+}
