@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-25T09:05:27.727Z",
+  "generatedAt": "2026-10-25T09:16:50.385Z",
   "apps": [
     {
       "slug": "2fa",
@@ -77,19 +77,19 @@
         "Notion"
       ],
       "addedAt": "2026-09-27T06:02:01+03:00",
-      "version": "0.0.0-20261022.3c5c264",
+      "version": "0.0.0-20261024.12d7b80",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20261022.3c5c264/888wiki-0.0.0-20261022.3c5c264.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20261022.3c5c264/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20261022.3c5c264/manifest.sig",
-        "digest": "e4547612c26618526cd6fb52246bc9d44c0151705c0a437dd93752362e2bca9c"
+        "zip": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20261024.12d7b80/888wiki-0.0.0-20261024.12d7b80.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20261024.12d7b80/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20261024.12d7b80/manifest.sig",
+        "digest": "6982d12c2514fdb8b36642b752a8cf476fd4b1761263016932aec979818b481b"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-10-25T08:45:00.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "DAVID888",
@@ -1715,17 +1715,17 @@
         "Termius"
       ],
       "addedAt": "2026-09-26T23:19:31+03:00",
-      "version": "0.0.0-20261019.71feb1d",
+      "version": "0.0.0-20261023.3b331db",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20261019.71feb1d/cloudssh-0.0.0-20261019.71feb1d.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20261019.71feb1d/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20261019.71feb1d/manifest.sig",
-        "digest": "faebc85a505023ebe147f4cc790ac14eacddbfdb8ab655d0d8b854e5d2c3e985"
+        "zip": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20261023.3b331db/cloudssh-0.0.0-20261023.3b331db.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20261023.3b331db/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20261023.3b331db/manifest.sig",
+        "digest": "a2ef35af99c85e20e7c0ffdbbe9b2657af5651361765e80675c554629bada7c4"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-10-25T08:47:13.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "TanXin",
@@ -3022,12 +3022,12 @@
         "flomo"
       ],
       "addedAt": "2026-09-23T20:44:39+03:00",
-      "version": "0.22.1",
+      "version": "0.22.2",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/flaremo@0.22.1/flaremo-0.22.1.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/flaremo@0.22.1/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/flaremo@0.22.1/manifest.sig",
-        "digest": "755cfff91c16a186966d7f1bfb161baa1cff128357548b8265211a819b25ce3b"
+        "zip": "https://github.com/appflare/catalog/releases/download/flaremo@0.22.2/flaremo-0.22.2.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/flaremo@0.22.2/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/flaremo@0.22.2/manifest.sig",
+        "digest": "f1f2d0df33abbc9d88460ca3361d503d65d458514bea42716803f44cd8d2ae39"
       },
       "tier": "artifact",
       "plan": "free",
@@ -3035,7 +3035,7 @@
         "r2",
         "workers-ai"
       ],
-      "lastVerified": "2026-10-25T08:50:21.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "realchendahuang",
@@ -3158,17 +3158,17 @@
         "Generate song colour themes with your own Gemini API key"
       ],
       "addedAt": "2026-09-27T10:46:59+03:00",
-      "version": "0.7.21",
+      "version": "0.7.22",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/folia@0.7.21/folia-0.7.21.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/folia@0.7.21/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/folia@0.7.21/manifest.sig",
-        "digest": "33a791157d5c754c149fde0d4e181214bbdeac721d12463579babe0fdd8a8726"
+        "zip": "https://github.com/appflare/catalog/releases/download/folia@0.7.22/folia-0.7.22.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/folia@0.7.22/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/folia@0.7.22/manifest.sig",
+        "digest": "68c577198899e23c03bc9d5a9e3822ac4b5dc9f964e358b443afe4c3e8f6e43f"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-10-25T08:49:57.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "chthollyphile",
@@ -6900,19 +6900,19 @@
         "Bitly"
       ],
       "addedAt": "2026-09-27T04:47:37+03:00",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/rdyrct@1.0.0/rdyrct-1.0.0.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/rdyrct@1.0.0/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/rdyrct@1.0.0/manifest.sig",
-        "digest": "4810882564973ee47cf87aa0c6ae41d3907746c2150b1645abd6d1e57c5242c3"
+        "zip": "https://github.com/appflare/catalog/releases/download/rdyrct@1.1.0/rdyrct-1.1.0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/rdyrct@1.1.0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/rdyrct@1.1.0/manifest.sig",
+        "digest": "89592e0c034e850314e0770541bf2fd6ce10169c51f6dfc6f8271665a6a663b0"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-10-25T08:58:19.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Andrea Bruno",
@@ -8645,17 +8645,17 @@
         "Optionally publish combined totals without device or account identifiers"
       ],
       "addedAt": "2026-09-27T11:42:03+03:00",
-      "version": "0.77.0",
+      "version": "0.78.0",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/token-monitor@0.77.0/token-monitor-0.77.0.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/token-monitor@0.77.0/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/token-monitor@0.77.0/manifest.sig",
-        "digest": "59507b5a97e9424357d864ed44d74d08faa5b9f6d0ea8182b86f3ad1693c13a6"
+        "zip": "https://github.com/appflare/catalog/releases/download/token-monitor@0.78.0/token-monitor-0.78.0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/token-monitor@0.78.0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/token-monitor@0.78.0/manifest.sig",
+        "digest": "750cd8819f4999f711ad72105070c0be0f2eb08ad0367a4c6ed5c24073283e4f"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-10-25T09:01:10.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Javis",
