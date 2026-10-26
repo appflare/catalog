@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-26T09:45:06.051Z",
+  "generatedAt": "2026-10-26T10:15:08.849Z",
   "apps": [
     {
       "slug": "2fa",
@@ -358,17 +358,17 @@
         "UptimeRobot"
       ],
       "addedAt": "2026-09-27T04:47:37+03:00",
-      "version": "0.0.0-20261020.cd3d21b",
+      "version": "0.0.0-20261024.a21e34d",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/atalaya@0.0.0-20261020.cd3d21b/atalaya-0.0.0-20261020.cd3d21b.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/atalaya@0.0.0-20261020.cd3d21b/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/atalaya@0.0.0-20261020.cd3d21b/manifest.sig",
-        "digest": "36f0f781a2929a7b9d08f323685920bc91c3263d415c5210f7ca17dd9471bc2c"
+        "zip": "https://github.com/appflare/catalog/releases/download/atalaya@0.0.0-20261024.a21e34d/atalaya-0.0.0-20261024.a21e34d.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/atalaya@0.0.0-20261024.a21e34d/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/atalaya@0.0.0-20261024.a21e34d/manifest.sig",
+        "digest": "27987bf175bf7232a052112ef54c8fd1c80865261f34ca2fcd2beec2f0fae721"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-10-26T09:23:07.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Daniel Carrillo",
@@ -469,69 +469,6 @@
         "sha256": "92cb946ece41c490d944913c9c26a9a9da239b3bb08176fd0140e6fca79af4b8",
         "keyId": "catalog-2026-09",
         "signature": "do5LWc4Csp1Lgd2PRudKnlUrbDZInbKl3R+v9wRyx7ZhcX0rzdG3n8sMjqMkX32wTFB9Jj8dcxH+zVDurMPWCQ=="
-      },
-      "accessOffer": "offered"
-    },
-    {
-      "slug": "auto-reaction-bot",
-      "repo": "Malith-Rukshan/Auto-Reaction-Bot",
-      "name": "Auto Reaction Bot",
-      "summary": "Your own Telegram bot that adds an emoji reaction to posts in the channels and groups you add it to, and to private messages, from an emoji list you choose.",
-      "tagline": "Emoji reactions for your Telegram chats and channels",
-      "features": [
-        "Add reactions automatically to private messages, groups and channel posts",
-        "Choose which emojis the bot picks from",
-        "Adjust how often the bot reacts in group chats",
-        "Exclude selected chats from automatic reactions"
-      ],
-      "addedAt": "2026-09-27T12:04:07+03:00",
-      "version": "0.0.0-20260613.2382a29",
-      "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/auto-reaction-bot@0.0.0-20260613.2382a29/auto-reaction-bot-0.0.0-20260613.2382a29.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/auto-reaction-bot@0.0.0-20260613.2382a29/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/auto-reaction-bot@0.0.0-20260613.2382a29/manifest.sig",
-        "digest": "949b1ab1a1aed4c6061e12b64ad05ad77cb429dcefeb5e6eac7c1c576801931e"
-      },
-      "tier": "artifact",
-      "plan": "free",
-      "requires": [],
-      "lastVerified": "2026-10-26T09:23:32.000Z",
-      "authors": [
-        {
-          "name": "Malith Rukshan",
-          "url": "https://malith.dev",
-          "github": "Malith-Rukshan",
-          "x": "SinglDeveloper"
-        }
-      ],
-      "maintainers": [
-        "MendyLanda"
-      ],
-      "media": {
-        "icon": {
-          "url": "https://appflare.github.io/catalog/apps/auto-reaction-bot/icon.png",
-          "sha256": "9442aee48cd5a0aedf14bc452404c3b8c05d2f7b75a443c85e1e5aebdfc82b87"
-        },
-        "screenshots": [
-          {
-            "url": "https://appflare.github.io/catalog/apps/auto-reaction-bot/screenshots/01-reactions-in-a-private-chat.png",
-            "sha256": "2f66024da61a7a20e96ee32ca3b874789fa59e4f6c378cd124233639021c3684",
-            "alt": "Auto Reaction Bot: Reactions in a private chat"
-          }
-        ]
-      },
-      "services": [],
-      "categories": [
-        "bots",
-        "chat"
-      ],
-      "license": "MIT",
-      "revision": 5,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/auto-reaction-bot/manifest.json",
-        "sha256": "39c7bcabcb5b592e4d2ecdbde75c7257f61ce9f36ba9e5fa50291207ef2662cb",
-        "keyId": "catalog-2026-09",
-        "signature": "UOWIqK+d8j8Zk2a7857+JMgztJRbfRlMKPzcjzyZgc628SqWibiUyECMJPUJP/sDtiVOw1NE7QZOwdUnupqaCw=="
       },
       "accessOffer": "offered"
     },
@@ -1121,17 +1058,17 @@
         "Netdata"
       ],
       "addedAt": "2026-09-27T10:46:59+03:00",
-      "version": "0.0.0-20261019.42ad10a",
+      "version": "0.0.0-20261024.dd785ea",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/cf-server-monitor@0.0.0-20261019.42ad10a/cf-server-monitor-0.0.0-20261019.42ad10a.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/cf-server-monitor@0.0.0-20261019.42ad10a/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/cf-server-monitor@0.0.0-20261019.42ad10a/manifest.sig",
-        "digest": "07279e01339b71e81f45dea7bfe183643f8d920031e773f0f1db442b26efb950"
+        "zip": "https://github.com/appflare/catalog/releases/download/cf-server-monitor@0.0.0-20261024.dd785ea/cf-server-monitor-0.0.0-20261024.dd785ea.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/cf-server-monitor@0.0.0-20261024.dd785ea/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/cf-server-monitor@0.0.0-20261024.dd785ea/manifest.sig",
+        "digest": "64ad8c74398c9eaa3a9e6efe5df492c698042fffa439f80d2f5f9622588e642b"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-10-26T09:24:44.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "huilang-me",
@@ -3653,77 +3590,6 @@
       "accessOffer": "offered"
     },
     {
-      "slug": "gmshop",
-      "repo": "GMWalletApp/gmshop-edge",
-      "name": "GMShop Edge",
-      "summary": "A single-tenant digital-goods shop: stock items such as licence keys delivered on payment, private downloads from R2, entitlements, coupons and refunds, guest or account checkout, and an admin console with roles, on D1, KV, R2 and Queues.",
-      "tagline": "Sell digital goods with automatic delivery from your own shop",
-      "features": [
-        "Deliver stocked licence keys and activation codes after payment",
-        "Sell private file downloads with controlled access",
-        "Let customers check out as guests or with an account",
-        "Offer coupons and handle refunds and after-sales requests",
-        "Set time limits and renewal rules for product access",
-        "Give shop administrators different roles and permissions"
-      ],
-      "alternativeTo": [
-        "Gumroad"
-      ],
-      "addedAt": "2026-09-27T12:03:21+03:00",
-      "version": "1.0.3",
-      "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/gmshop@1.0.3/gmshop-1.0.3.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/gmshop@1.0.3/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/gmshop@1.0.3/manifest.sig",
-        "digest": "3aad09bf19180d42d1a13b862327f87382f0c87f7d065e61e274e4739797b4f3"
-      },
-      "tier": "artifact",
-      "plan": "paid",
-      "requires": [
-        "r2"
-      ],
-      "lastVerified": null,
-      "authors": [
-        {
-          "name": "GM Wallet",
-          "url": "https://gmwallet.app",
-          "github": "GMWalletApp",
-          "x": "GMwalletApp"
-        }
-      ],
-      "maintainers": [
-        "MendyLanda"
-      ],
-      "media": {
-        "icon": {
-          "url": "https://appflare.github.io/catalog/apps/gmshop/icon.png",
-          "sha256": "a5672ae3ae7fa7809b01e0554e283e59857c0f291eeb591770a09b8fc18c8608"
-        },
-        "screenshots": []
-      },
-      "services": [
-        "kv",
-        "d1",
-        "r2",
-        "queues",
-        "cron",
-        "email-routing"
-      ],
-      "categories": [
-        "ecommerce",
-        "business"
-      ],
-      "license": "GPL-3.0-or-later",
-      "revision": 4,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/gmshop/manifest.json",
-        "sha256": "349f599d66048f2ea23fb9a00170b5cdee4938ad42658dbd7be427f3209b68dd",
-        "keyId": "catalog-2026-09",
-        "signature": "V8HIerS5usG5mg7pzU/9G8+G6V1PacvTZtinJwKYQtujOXWFZRxkfHEwYFVMSjTe7yL4YE4lEhlGGZJcnUSIBg=="
-      },
-      "accessOffer": "offered"
-    },
-    {
       "slug": "hashpay",
       "repo": "TGDash/HashPay",
       "name": "HashPay",
@@ -3856,89 +3722,6 @@
       ],
       "license": "AGPL-3.0-only",
       "revision": 1,
-      "accessOffer": "offered"
-    },
-    {
-      "slug": "imgbed",
-      "repo": "MarSeventh/CloudFlare-ImgBed",
-      "name": "CloudFlare ImgBed",
-      "summary": "Self-hosted image and file hosting with an admin panel: uploads to R2, Telegram, Discord, S3, Hugging Face or WebDAV, file management, access control, a public gallery, a REST API and WebDAV, on D1.",
-      "tagline": "Store and share images and files on your own site",
-      "features": [
-        "Upload images, videos, audio and other files",
-        "Copy file links for websites, blogs and forums",
-        "Organize files in folders and find them by name or tag",
-        "Protect uploads and limit who can access files",
-        "Let visitors browse selected folders as a public gallery",
-        "Access and upload files through an API or WebDAV"
-      ],
-      "alternativeTo": [
-        "Postimages"
-      ],
-      "addedAt": "2026-09-27T06:13:42+03:00",
-      "version": "2.7.6",
-      "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/imgbed@2.7.6/imgbed-2.7.6.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/imgbed@2.7.6/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/imgbed@2.7.6/manifest.sig",
-        "digest": "58bd44da03a347d90024fc5601e3233673c3aefe01ba176bf1ce54a4e8b2a454"
-      },
-      "tier": "artifact",
-      "plan": "free",
-      "requires": [
-        "r2"
-      ],
-      "lastVerified": "2026-10-26T09:30:14.000Z",
-      "authors": [
-        {
-          "name": "MarSeventh",
-          "url": "https://home.sanyue.site",
-          "github": "MarSeventh"
-        }
-      ],
-      "maintainers": [
-        "MendyLanda"
-      ],
-      "media": {
-        "icon": {
-          "url": "https://appflare.github.io/catalog/apps/imgbed/icon.png",
-          "sha256": "8f126ce76901654d34caf19ec8082ac6ed8a3875fbd545fbbe87b4eae95f4418"
-        },
-        "screenshots": [
-          {
-            "url": "https://appflare.github.io/catalog/apps/imgbed/screenshots/01-upload-sign-in.png",
-            "sha256": "4f050603a7ef2b0616f977e3041796928f0dd5ac8508eb02cad6c5457601fdc8",
-            "alt": "CloudFlare ImgBed: Upload sign in"
-          },
-          {
-            "url": "https://appflare.github.io/catalog/apps/imgbed/screenshots/02-system-status.png",
-            "sha256": "358ebc9d55de709a39773de1be0b5ae13e1bfcd583e6e823929cc44ab9298a91",
-            "alt": "CloudFlare ImgBed: System status"
-          },
-          {
-            "url": "https://appflare.github.io/catalog/apps/imgbed/screenshots/03-upload-result.png",
-            "sha256": "323e39d81d3169b80198163a63114baad0e3794a8c9b0c854f7d43aec57f3e8a",
-            "alt": "CloudFlare ImgBed: Upload result"
-          }
-        ]
-      },
-      "services": [
-        "d1",
-        "r2",
-        "images"
-      ],
-      "categories": [
-        "files",
-        "sharing"
-      ],
-      "license": "MIT",
-      "revision": 5,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/imgbed/manifest.json",
-        "sha256": "290730f3d98ebca8ffbe853a0d28b4005f7a55d985703543dbd29ad6ecb1ac1d",
-        "keyId": "catalog-2026-09",
-        "signature": "fWdkeeRUBynv9msrVXuHyzyC3fJM4ICTo2PPJfmLuFbdSxvTI++wtCm2jDS9fIgpTrK8dWbu+q6HTaDcShC/Bg=="
-      },
       "accessOffer": "offered"
     },
     {
@@ -4837,12 +4620,12 @@
         "Gmail"
       ],
       "addedAt": "2026-09-24T07:29:19+03:00",
-      "version": "0.0.0-20261020.4738250",
+      "version": "0.0.0-20261025.ce0090a",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261020.4738250/mailflare-0.0.0-20261020.4738250.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261020.4738250/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261020.4738250/manifest.sig",
-        "digest": "674959df6f1559544b615b7d86f5355b7f074bdc81bc85d38e8d985978d85892"
+        "zip": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261025.ce0090a/mailflare-0.0.0-20261025.ce0090a.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261025.ce0090a/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261025.ce0090a/manifest.sig",
+        "digest": "480cff51f79d8a5e1398a93c455133411a56e7bc60b14dd9f267cfe625cc3df3"
       },
       "tier": "artifact",
       "plan": "paid",
