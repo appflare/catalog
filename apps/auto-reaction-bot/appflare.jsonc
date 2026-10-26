@@ -32,7 +32,7 @@
   ],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags; the pin is the head of main.
-  "source": { "ref": "main", "sha": "2382a29cd863a9a47aacf99fc28afb37a4d4c260" },
+  "source": { "ref": "main", "sha": "ae14c719fe97e9bfe6a31489b29e970c69060a61" },
   "install": {
     // package.json lists express and dotenv for the Node.js server; the
     // Worker entry imports neither.
