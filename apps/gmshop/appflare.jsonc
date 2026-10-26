@@ -31,7 +31,7 @@
     }
   ],
   "maintainers": ["MendyLanda"],
-  "source": { "ref": "v1.0.3", "sha": "9312956fe883816538660852c4f3db5d611cdbde" },
+  "source": { "ref": "v1.0.4", "sha": "7560f1917bf0e27300e291ced4ea2892b0f022b8" },
   "install": {
     "packageManager": "bun",
     "wranglerConfig": "wrangler.jsonc",
