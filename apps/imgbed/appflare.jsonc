@@ -24,7 +24,7 @@
   "revision": 5,
   "authors": [{ "name": "MarSeventh", "url": "https://home.sanyue.site", "github": "MarSeventh" }],
   "maintainers": ["MendyLanda"],
-  "source": { "ref": "v2.7.6", "sha": "bf9d8211ce6daa3af7b5b60685250bebcb2f681a" },
+  "source": { "ref": "v2.7.8", "sha": "b0fc780ee2afd1a6f9d606adcba8c581699c884b" },
   "install": {
     "packageManager": "npm",
     // Upstream's Workers deployment. The Worker wraps the Pages Functions in
