@@ -29,7 +29,7 @@
   "authors": [{ "name": "Hu Zhihui", "url": "https://huzhihui.com", "github": "zhihui-hu" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags, so the entry follows the default branch by commit.
-  "source": { "ref": "main", "sha": "8dff832f7af9be9f3c812402dd680395ec081c0c" },
+  "source": { "ref": "main", "sha": "1cea733a934906ea3ee5290051d3687750aca4b4" },
   "install": {
     "packageManager": "pnpm",
     // The Worker is plain JavaScript in public/worker/; the build is the
