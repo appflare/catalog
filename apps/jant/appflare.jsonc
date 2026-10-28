@@ -37,7 +37,7 @@
   "maintainers": ["MendyLanda"],
   // The starter has no tags; upstream commits to main with each Jant release
   // ("sync with jant v0.8.0"), so the pin follows main.
-  "source": { "ref": "main", "sha": "c92e3362879f5d20ab7c6ae9cec723b80464314e" },
+  "source": { "ref": "main", "sha": "d7d316f04c0c44f834dc12ebcfc316abc5b55fde" },
   "install": {
     "packageManager": "npm",
     // No build: @jant/core ships its Worker code and its built client
