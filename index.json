@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-28T10:28:01.073Z",
+  "generatedAt": "2026-10-28T10:42:52.757Z",
   "apps": [
     {
       "slug": "2fa",
@@ -1709,17 +1709,17 @@
         "Termius"
       ],
       "addedAt": "2026-09-26T23:19:31+03:00",
-      "version": "0.0.0-20261023.3b331db",
+      "version": "0.0.0-20261026.445548d",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20261023.3b331db/cloudssh-0.0.0-20261023.3b331db.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20261023.3b331db/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20261023.3b331db/manifest.sig",
-        "digest": "a2ef35af99c85e20e7c0ffdbbe9b2657af5651361765e80675c554629bada7c4"
+        "zip": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20261026.445548d/cloudssh-0.0.0-20261026.445548d.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20261026.445548d/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20261026.445548d/manifest.sig",
+        "digest": "944ccbeedea9cd5626ab038163453a129de0ae24ecdd4f39497b5b76025fd28c"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-10-28T10:05:31.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "TanXin",
@@ -5866,17 +5866,17 @@
         "BrowserLeaks"
       ],
       "addedAt": "2026-09-27T10:46:59+03:00",
-      "version": "0.0.0-20261020.8dff832",
+      "version": "0.0.0-20261027.1cea733",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/one-ip@0.0.0-20261020.8dff832/one-ip-0.0.0-20261020.8dff832.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/one-ip@0.0.0-20261020.8dff832/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/one-ip@0.0.0-20261020.8dff832/manifest.sig",
-        "digest": "c8307b4e79b4c32066c0464595f5d4d960cb2feba7f0ac059dcfb005a8ab8992"
+        "zip": "https://github.com/appflare/catalog/releases/download/one-ip@0.0.0-20261027.1cea733/one-ip-0.0.0-20261027.1cea733.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/one-ip@0.0.0-20261027.1cea733/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/one-ip@0.0.0-20261027.1cea733/manifest.sig",
+        "digest": "45abe28cb5cfa68aa9210aae93a367e24abb6e50dd777dff7ae439398dfd0df8"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-10-28T10:15:23.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Hu Zhihui",
@@ -5998,12 +5998,12 @@
         "Ahrefs"
       ],
       "addedAt": "2026-09-24T08:09:39+03:00",
-      "version": "0.1.14",
+      "version": "0.1.19",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/open-seo@0.1.14/open-seo-0.1.14.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/open-seo@0.1.14/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/open-seo@0.1.14/manifest.sig",
-        "digest": "f987ed65716fe9c3ad4dbfbe74591f5414c7f2a1d28768ca2d2ab09daa32781c"
+        "zip": "https://github.com/appflare/catalog/releases/download/open-seo@0.1.19/open-seo-0.1.19.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/open-seo@0.1.19/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/open-seo@0.1.19/manifest.sig",
+        "digest": "3acfc667aed15dad6bc12d5b2384ae145e5a93f5947c9fcb90ce46d016f133b2"
       },
       "tier": "artifact",
       "plan": "free",
@@ -6011,7 +6011,7 @@
         "r2",
         "access"
       ],
-      "lastVerified": "2026-10-28T10:17:58.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Ben Senescu",
@@ -6193,12 +6193,12 @@
         "Keep characters, locations and lighting consistent across scenes"
       ],
       "addedAt": "2026-09-27T12:03:21+03:00",
-      "version": "0.0.0-20261019.5ef4e19",
+      "version": "0.0.0-20261027.13b8a6a",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261019.5ef4e19/openstory-0.0.0-20261019.5ef4e19.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261019.5ef4e19/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261019.5ef4e19/manifest.sig",
-        "digest": "4a60d76e9be5d5ed1dd2ac5ccb176dc952b200cb3e28368abdbd12b05ddd549b"
+        "zip": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261027.13b8a6a/openstory-0.0.0-20261027.13b8a6a.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261027.13b8a6a/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261027.13b8a6a/manifest.sig",
+        "digest": "cef28f532effce74741c77eeddd9dc1e62ff2fcbd0551561c2539f839bf208b7"
       },
       "tier": "artifact",
       "plan": "paid",
@@ -8627,17 +8627,17 @@
         "Optionally publish combined totals without device or account identifiers"
       ],
       "addedAt": "2026-09-27T11:42:03+03:00",
-      "version": "0.78.0",
+      "version": "0.80.0",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/token-monitor@0.78.0/token-monitor-0.78.0.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/token-monitor@0.78.0/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/token-monitor@0.78.0/manifest.sig",
-        "digest": "750cd8819f4999f711ad72105070c0be0f2eb08ad0367a4c6ed5c24073283e4f"
+        "zip": "https://github.com/appflare/catalog/releases/download/token-monitor@0.80.0/token-monitor-0.80.0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/token-monitor@0.80.0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/token-monitor@0.80.0/manifest.sig",
+        "digest": "da4cc45044b8e7d8355d40a1cc4b559860625b6e42a0fa9077e7767e5ab2ed5d"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-10-28T10:22:45.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Javis",
