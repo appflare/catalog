@@ -32,7 +32,7 @@
   // master rejects each incoming message that has no forwarding target, so
   // senders get a bounce while the mail is still stored. The bump bot moves
   // the pin with the next tag.
-  "source": { "ref": "v5.3.1", "sha": "a95c1710e7eeb9f2c74a49ef962f4f43a36695b3" },
+  "source": { "ref": "v5.3.2", "sha": "8ff40b80a7d0f4a77fc31ebef221ab2f0d8f0913" },
   "install": {
     "packageManager": "npm",
     // Plain JavaScript and static files: no build step. The config's D1 id is
