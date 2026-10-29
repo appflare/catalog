@@ -30,7 +30,7 @@
   "maintainers": ["MendyLanda"],
   // Upstream publishes no release tags; the pin tracks main, which the
   // Screendrop app compares against through /api/version.
-  "source": { "ref": "main", "sha": "32a8898dac62da1b190dd9edcb63d22a2049a257" },
+  "source": { "ref": "main", "sha": "e6cc1e009ad76f544f8bf56d75368cd2c456e3f7" },
   "install": {
     "packageManager": "pnpm",
     // TanStack Start through the Cloudflare Vite plugin, which writes the
