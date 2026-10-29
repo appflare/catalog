@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-29T10:47:51.260Z",
+  "generatedAt": "2026-10-29T11:01:00.747Z",
   "apps": [
     {
       "slug": "2fa",
@@ -3152,17 +3152,17 @@
         "Generate song colour themes with your own Gemini API key"
       ],
       "addedAt": "2026-09-27T10:46:59+03:00",
-      "version": "0.7.22",
+      "version": "0.7.23",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/folia@0.7.22/folia-0.7.22.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/folia@0.7.22/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/folia@0.7.22/manifest.sig",
-        "digest": "68c577198899e23c03bc9d5a9e3822ac4b5dc9f964e358b443afe4c3e8f6e43f"
+        "zip": "https://github.com/appflare/catalog/releases/download/folia@0.7.23/folia-0.7.23.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/folia@0.7.23/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/folia@0.7.23/manifest.sig",
+        "digest": "7d088521ed2321fd99ec4c798792ddcf8eaf6174745ea7c0ae62b681bcce757c"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-10-29T10:31:48.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "chthollyphile",
@@ -3246,118 +3246,6 @@
       ],
       "license": "MIT",
       "revision": 1,
-      "accessOffer": "offered"
-    },
-    {
-      "slug": "freemail",
-      "repo": "idinging/freemail",
-      "name": "Freemail",
-      "summary": "Temporary and domain mailboxes on your own domain: create addresses in the browser, read what Email Routing delivers, share mailboxes with users, and send through Resend, SendFlare or Cyberpersons, on D1 and R2.",
-      "tagline": "Create mailboxes and read mail on your own domain",
-      "features": [
-        "Generate random email addresses on your own domains",
-        "Read incoming messages as formatted email or plain text",
-        "Find verification codes extracted from incoming messages",
-        "Create separate sign-ins for individual mailboxes",
-        "Forward mail to verified destination addresses",
-        "Send mail with your own Resend, SendFlare or Cyberpersons API key"
-      ],
-      "alternativeTo": [
-        "Temp Mail",
-        "Guerrilla Mail"
-      ],
-      "addedAt": "2026-09-27T11:44:15+03:00",
-      "version": "5.3.1",
-      "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/freemail@5.3.1/freemail-5.3.1.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/freemail@5.3.1/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/freemail@5.3.1/manifest.sig",
-        "digest": "4df6208c58613e1bf22148a81be590f59b7388577029e71900739efe235355e9"
-      },
-      "tier": "artifact",
-      "plan": "free",
-      "requires": [
-        "r2",
-        "zone",
-        "email-routing"
-      ],
-      "lastVerified": "2026-10-29T10:32:36.000Z",
-      "authors": [
-        {
-          "name": "iding",
-          "url": "https://blog.iding.qzz.io",
-          "github": "idinging"
-        }
-      ],
-      "maintainers": [
-        "MendyLanda"
-      ],
-      "media": {
-        "icon": {
-          "url": "https://appflare.github.io/catalog/apps/freemail/icon.svg",
-          "sha256": "66c27b132a4b6a1dff87ced4de49ebfdc9f90ad06c7545ee981b024ccb294aac"
-        },
-        "screenshots": [
-          {
-            "url": "https://appflare.github.io/catalog/apps/freemail/screenshots/01-mailbox.png",
-            "sha256": "e78b98df2bd6cba686e65a129b15e29552cb194b646dfb4580d2dd1c5c33f4bb",
-            "alt": "Freemail: Mailbox"
-          },
-          {
-            "url": "https://appflare.github.io/catalog/apps/freemail/screenshots/02-home.png",
-            "sha256": "b9103015da79d63234b399af0d154e2461019a677000e5655cc6c4e8f14e6a4c",
-            "alt": "Freemail: Home"
-          },
-          {
-            "url": "https://appflare.github.io/catalog/apps/freemail/screenshots/03-all-mailboxes.png",
-            "sha256": "79a5944c6bcdf58ec9c9ef050d198aba5504b1d4330e8cfe317b62dc2ccd853b",
-            "alt": "Freemail: All mailboxes"
-          },
-          {
-            "url": "https://appflare.github.io/catalog/apps/freemail/screenshots/04-user-management.png",
-            "sha256": "ac5daffff854a79d789eca30af9fb817f854b70174e521eafc7c9f71d3692a6c",
-            "alt": "Freemail: User management"
-          },
-          {
-            "url": "https://appflare.github.io/catalog/apps/freemail/screenshots/05-compose-message.png",
-            "sha256": "f067dba4abcf911c73ec93a8ec626480b42b9eb59bc065c684e112a4f383f9bf",
-            "alt": "Freemail: Compose message"
-          },
-          {
-            "url": "https://appflare.github.io/catalog/apps/freemail/screenshots/06-message-detail.png",
-            "sha256": "91c2e245edb81a31de33332776ef3c16987480abfd5791b4712d1015e3607531",
-            "alt": "Freemail: Message detail"
-          },
-          {
-            "url": "https://appflare.github.io/catalog/apps/freemail/screenshots/07-mailbox-forwarding.png",
-            "sha256": "484850eaa14167039f8458fb29ac07dbf49bd3a7c6c1dbf269596e48ef787c57",
-            "alt": "Freemail: Mailbox forwarding"
-          },
-          {
-            "url": "https://appflare.github.io/catalog/apps/freemail/screenshots/08-create-user.png",
-            "sha256": "f57948fb3f89e9445bf38a95350596313c850dc6793cd25d53b069cf56a2f132",
-            "alt": "Freemail: Create user"
-          }
-        ]
-      },
-      "services": [
-        "d1",
-        "r2",
-        "email-routing",
-        "zone"
-      ],
-      "categories": [
-        "email",
-        "privacy"
-      ],
-      "license": "Apache-2.0",
-      "revision": 5,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/freemail/manifest.json",
-        "sha256": "8750ed34e37e3be3a472a47edaf35504617257e86f2c038129b9bf5ba4159bc1",
-        "keyId": "catalog-2026-09",
-        "signature": "8tPm6mtqc2RFgQqDnax8buf4oIMgkE+pQC8k9z8paJZrViD6f+43Wui9z9/6zZ3v2w175gvfR09ubjVEdk9jBg=="
-      },
       "accessOffer": "offered"
     },
     {
@@ -4273,19 +4161,19 @@
         "Tumblr"
       ],
       "addedAt": "2026-09-27T12:14:18+03:00",
-      "version": "0.0.0-20261019.c92e336",
+      "version": "0.0.0-20261028.d7d316f",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/jant@0.0.0-20261019.c92e336/jant-0.0.0-20261019.c92e336.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/jant@0.0.0-20261019.c92e336/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/jant@0.0.0-20261019.c92e336/manifest.sig",
-        "digest": "a45994961e0eaecebc827a4a4bf7762d632abad7d935e1588d34ca727e3a6785"
+        "zip": "https://github.com/appflare/catalog/releases/download/jant@0.0.0-20261028.d7d316f/jant-0.0.0-20261028.d7d316f.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/jant@0.0.0-20261028.d7d316f/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/jant@0.0.0-20261028.d7d316f/manifest.sig",
+        "digest": "d24f0b220e029e538cda30175d4e20f9fac9de7f398675cac59a71bb2144ee57"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-10-29T10:34:37.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Jant",
@@ -7010,17 +6898,17 @@
         "TeamViewer"
       ],
       "addedAt": "2026-09-27T05:20:16+03:00",
-      "version": "3.17.25",
+      "version": "3.17.44",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/reminal@3.17.25/reminal-3.17.25.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/reminal@3.17.25/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/reminal@3.17.25/manifest.sig",
-        "digest": "8240a121d974ce5e8b4dbe8a33c004f5d399e69a0a5c7279bc7e095ba40e1859"
+        "zip": "https://github.com/appflare/catalog/releases/download/reminal@3.17.44/reminal-3.17.44.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/reminal@3.17.44/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/reminal@3.17.44/manifest.sig",
+        "digest": "090ed18e6cb285ad61691374f941076e3d08c16fb04d7b0a3a0de090307e7864"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-10-29T10:39:33.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Harshal Gajjar",
@@ -7494,71 +7382,6 @@
         "sha256": "6b7a0c77915d6f91a6625a9a12cfc620a6d8f66819f39cc507b155cb31c9cbf7",
         "keyId": "catalog-2026-09",
         "signature": "YPqJTkaZRHCDoIvcytNqKY1WRHK71X+id7xSSpobQdFpTJdsj8lDTj532OmN+B3Hq6LDVfxoT8pGTivVvY+4DA=="
-      },
-      "accessOffer": "offered"
-    },
-    {
-      "slug": "screendrop",
-      "repo": "fayazara/Screendrop",
-      "name": "Screendrop Cloud",
-      "summary": "The upload and sharing backend for the Screendrop macOS app: screenshots and screen recordings stored in R2, with share pages, transcripts, comments and likes.",
-      "tagline": "Share screenshots and screen recordings with your own links",
-      "features": [
-        "Upload captures from the macOS app and get a public share link",
-        "Play recordings with captions, speed controls, and preview thumbnails",
-        "Search transcripts and click a line to jump to that moment",
-        "Let viewers comment and like captures with GitHub or Google sign-in",
-        "Let viewers download screenshots or copy them to the clipboard"
-      ],
-      "alternativeTo": [
-        "Loom"
-      ],
-      "addedAt": "2026-09-27T11:50:07+03:00",
-      "version": "0.0.0-20260805.32a8898",
-      "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/screendrop@0.0.0-20260805.32a8898/screendrop-0.0.0-20260805.32a8898.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/screendrop@0.0.0-20260805.32a8898/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/screendrop@0.0.0-20260805.32a8898/manifest.sig",
-        "digest": "9c8c2ad97267276db5e6a98ae71f4b283850dd334bb8d3b2e59e1804683b0dcb"
-      },
-      "tier": "artifact",
-      "plan": "free",
-      "requires": [
-        "r2"
-      ],
-      "lastVerified": "2026-10-29T10:41:05.000Z",
-      "authors": [
-        {
-          "name": "Fayaz Ahmed",
-          "github": "fayazara",
-          "x": "fayazara"
-        }
-      ],
-      "maintainers": [
-        "MendyLanda"
-      ],
-      "media": {
-        "icon": {
-          "url": "https://appflare.github.io/catalog/apps/screendrop/icon.png",
-          "sha256": "ecb7bd2056e44a75898416b0498f082c33e808626d558b69ff688036018f09af"
-        },
-        "screenshots": []
-      },
-      "services": [
-        "d1",
-        "r2"
-      ],
-      "categories": [
-        "sharing",
-        "media"
-      ],
-      "license": "MIT",
-      "revision": 5,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/screendrop/manifest.json",
-        "sha256": "9aa9399206716d035d04faa48c324ef0e2b9312876ecc0936a7d1348dd09429b",
-        "keyId": "catalog-2026-09",
-        "signature": "L50Fg6RmioWZG/kwJ991zuPL/bQu6LiyCcqXTJ8Kq3cIoibqrowUvI+aK5j/O07pGzLG/wg8CoQQjc5W/aCYAA=="
       },
       "accessOffer": "offered"
     },
