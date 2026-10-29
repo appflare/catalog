@@ -36,8 +36,8 @@
   // neither prefix as a version: move source to the newest app-v tag and
   // source.version with it by hand.
   "source": {
-    "ref": "app-v0.42.1",
-    "sha": "bf99dafaf7f164800f9327a341d160c7862b51f7",
+    "ref": "app-v0.43.0",
+    "sha": "90ac2781886b11ad333361c628b1d930767d26b2",
     "version": "0.42.1"
   },
   "install": {
