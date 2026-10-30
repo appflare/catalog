@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-30T10:50:11.560Z",
+  "generatedAt": "2026-10-30T10:59:55.370Z",
   "apps": [
     {
       "slug": "2fa",
@@ -77,19 +77,19 @@
         "Notion"
       ],
       "addedAt": "2026-09-27T06:02:01+03:00",
-      "version": "0.0.0-20261024.12d7b80",
+      "version": "0.0.0-20261029.54749ba",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20261024.12d7b80/888wiki-0.0.0-20261024.12d7b80.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20261024.12d7b80/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20261024.12d7b80/manifest.sig",
-        "digest": "6982d12c2514fdb8b36642b752a8cf476fd4b1761263016932aec979818b481b"
+        "zip": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20261029.54749ba/888wiki-0.0.0-20261029.54749ba.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20261029.54749ba/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20261029.54749ba/manifest.sig",
+        "digest": "1feac529f93ea8d1d6d69d12b3043fdbc1f27a618ba4f3b95946fdd0595711bc"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-10-30T10:29:19.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "DAVID888",
@@ -1115,17 +1115,17 @@
         "Netdata"
       ],
       "addedAt": "2026-09-27T10:46:59+03:00",
-      "version": "0.0.0-20261024.dd785ea",
+      "version": "0.0.0-20261027.5ddd42c",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/cf-server-monitor@0.0.0-20261024.dd785ea/cf-server-monitor-0.0.0-20261024.dd785ea.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/cf-server-monitor@0.0.0-20261024.dd785ea/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/cf-server-monitor@0.0.0-20261024.dd785ea/manifest.sig",
-        "digest": "64ad8c74398c9eaa3a9e6efe5df492c698042fffa439f80d2f5f9622588e642b"
+        "zip": "https://github.com/appflare/catalog/releases/download/cf-server-monitor@0.0.0-20261027.5ddd42c/cf-server-monitor-0.0.0-20261027.5ddd42c.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/cf-server-monitor@0.0.0-20261027.5ddd42c/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/cf-server-monitor@0.0.0-20261027.5ddd42c/manifest.sig",
+        "digest": "c671c0401a4a76ccb0156a7123fb049cb0500e296f84137d176870f9d1044520"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-10-30T10:30:29.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "huilang-me",
@@ -3246,6 +3246,112 @@
       ],
       "license": "MIT",
       "revision": 1,
+      "accessOffer": "offered"
+    },
+    {
+      "slug": "freemail",
+      "repo": "idinging/freemail",
+      "name": "Freemail",
+      "summary": "Temporary and domain mailboxes on your own domain: create addresses in the browser, read what Email Routing delivers, share mailboxes with users, and send through Resend, SendFlare or Cyberpersons, on D1 and R2.",
+      "tagline": "Create mailboxes and read mail on your own domain",
+      "features": [
+        "Generate random email addresses on your own domains",
+        "Read incoming messages as formatted email or plain text",
+        "Find verification codes extracted from incoming messages",
+        "Create separate sign-ins for individual mailboxes",
+        "Forward mail to verified destination addresses",
+        "Send mail with your own Resend, SendFlare or Cyberpersons API key"
+      ],
+      "alternativeTo": [
+        "Temp Mail",
+        "Guerrilla Mail"
+      ],
+      "addedAt": "2026-09-27T11:44:15+03:00",
+      "version": "5.3.2",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/freemail@5.3.2/freemail-5.3.2.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/freemail@5.3.2/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/freemail@5.3.2/manifest.sig",
+        "digest": "d09339d635eab40d6d452b08c66f7394dc1d069878791c39ac96f6d379c622f5"
+      },
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "r2",
+        "zone",
+        "email-routing"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "iding",
+          "url": "https://blog.iding.qzz.io",
+          "github": "idinging"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/freemail/icon.svg",
+          "sha256": "66c27b132a4b6a1dff87ced4de49ebfdc9f90ad06c7545ee981b024ccb294aac"
+        },
+        "screenshots": [
+          {
+            "url": "https://appflare.github.io/catalog/apps/freemail/screenshots/01-mailbox.png",
+            "sha256": "e78b98df2bd6cba686e65a129b15e29552cb194b646dfb4580d2dd1c5c33f4bb",
+            "alt": "Freemail: Mailbox"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/freemail/screenshots/02-home.png",
+            "sha256": "b9103015da79d63234b399af0d154e2461019a677000e5655cc6c4e8f14e6a4c",
+            "alt": "Freemail: Home"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/freemail/screenshots/03-all-mailboxes.png",
+            "sha256": "79a5944c6bcdf58ec9c9ef050d198aba5504b1d4330e8cfe317b62dc2ccd853b",
+            "alt": "Freemail: All mailboxes"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/freemail/screenshots/04-user-management.png",
+            "sha256": "ac5daffff854a79d789eca30af9fb817f854b70174e521eafc7c9f71d3692a6c",
+            "alt": "Freemail: User management"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/freemail/screenshots/05-compose-message.png",
+            "sha256": "f067dba4abcf911c73ec93a8ec626480b42b9eb59bc065c684e112a4f383f9bf",
+            "alt": "Freemail: Compose message"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/freemail/screenshots/06-message-detail.png",
+            "sha256": "91c2e245edb81a31de33332776ef3c16987480abfd5791b4712d1015e3607531",
+            "alt": "Freemail: Message detail"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/freemail/screenshots/07-mailbox-forwarding.png",
+            "sha256": "484850eaa14167039f8458fb29ac07dbf49bd3a7c6c1dbf269596e48ef787c57",
+            "alt": "Freemail: Mailbox forwarding"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/freemail/screenshots/08-create-user.png",
+            "sha256": "f57948fb3f89e9445bf38a95350596313c850dc6793cd25d53b069cf56a2f132",
+            "alt": "Freemail: Create user"
+          }
+        ]
+      },
+      "services": [
+        "d1",
+        "r2",
+        "email-routing",
+        "zone"
+      ],
+      "categories": [
+        "email",
+        "privacy"
+      ],
+      "license": "Apache-2.0",
+      "revision": 5,
       "accessOffer": "offered"
     },
     {
@@ -7386,6 +7492,65 @@
       "accessOffer": "offered"
     },
     {
+      "slug": "screendrop",
+      "repo": "fayazara/Screendrop",
+      "name": "Screendrop Cloud",
+      "summary": "The upload and sharing backend for the Screendrop macOS app: screenshots and screen recordings stored in R2, with share pages, transcripts, comments and likes.",
+      "tagline": "Share screenshots and screen recordings with your own links",
+      "features": [
+        "Upload captures from the macOS app and get a public share link",
+        "Play recordings with captions, speed controls, and preview thumbnails",
+        "Search transcripts and click a line to jump to that moment",
+        "Let viewers comment and like captures with GitHub or Google sign-in",
+        "Let viewers download screenshots or copy them to the clipboard"
+      ],
+      "alternativeTo": [
+        "Loom"
+      ],
+      "addedAt": "2026-09-27T11:50:07+03:00",
+      "version": "0.0.0-20261028.e6cc1e0",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/screendrop@0.0.0-20261028.e6cc1e0/screendrop-0.0.0-20261028.e6cc1e0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/screendrop@0.0.0-20261028.e6cc1e0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/screendrop@0.0.0-20261028.e6cc1e0/manifest.sig",
+        "digest": "4604ae12cd8f0f60d14012223784fb82cb20d5e13e500caf79a6fe940a845682"
+      },
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "r2"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Fayaz Ahmed",
+          "github": "fayazara",
+          "x": "fayazara"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/screendrop/icon.png",
+          "sha256": "ecb7bd2056e44a75898416b0498f082c33e808626d558b69ff688036018f09af"
+        },
+        "screenshots": []
+      },
+      "services": [
+        "d1",
+        "r2"
+      ],
+      "categories": [
+        "sharing",
+        "media"
+      ],
+      "license": "MIT",
+      "revision": 5,
+      "accessOffer": "offered"
+    },
+    {
       "slug": "second-brain-cloudflare",
       "repo": "rahilp/second-brain-cloudflare",
       "name": "Second Brain",
@@ -8450,17 +8615,17 @@
         "Optionally publish combined totals without device or account identifiers"
       ],
       "addedAt": "2026-09-27T11:42:03+03:00",
-      "version": "0.80.0",
+      "version": "0.81.0",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/token-monitor@0.80.0/token-monitor-0.80.0.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/token-monitor@0.80.0/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/token-monitor@0.80.0/manifest.sig",
-        "digest": "da4cc45044b8e7d8355d40a1cc4b559860625b6e42a0fa9077e7767e5ab2ed5d"
+        "zip": "https://github.com/appflare/catalog/releases/download/token-monitor@0.81.0/token-monitor-0.81.0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/token-monitor@0.81.0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/token-monitor@0.81.0/manifest.sig",
+        "digest": "c8c5407c1cebd57c144b3fbdbce676b936389f3b3b99071061bf6ffe371f9fee"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-10-30T10:45:27.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Javis",
