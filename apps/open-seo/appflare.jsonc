@@ -34,7 +34,7 @@
     { "name": "Every App", "url": "https://everyapp.dev", "github": "every-app" }
   ],
   "maintainers": ["MendyLanda"],
-  "source": { "ref": "v0.1.21", "sha": "beca5c1f5c728acfb243249107dbfaded0ef552e" },
+  "source": { "ref": "v0.1.22", "sha": "1523750b76857324573a086b1d93bd3c3612b5b1" },
   "install": {
     "packageManager": "pnpm",
     "wranglerConfig": "wrangler.jsonc",
