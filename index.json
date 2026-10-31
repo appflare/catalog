@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-31T10:17:46.956Z",
+  "generatedAt": "2026-10-31T10:31:15.862Z",
   "apps": [
     {
       "slug": "2fa",
@@ -6187,12 +6187,12 @@
         "Keep characters, locations and lighting consistent across scenes"
       ],
       "addedAt": "2026-09-27T12:03:21+03:00",
-      "version": "0.0.0-20261027.13b8a6a",
+      "version": "0.0.0-20261030.049f2e6",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261027.13b8a6a/openstory-0.0.0-20261027.13b8a6a.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261027.13b8a6a/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261027.13b8a6a/manifest.sig",
-        "digest": "cef28f532effce74741c77eeddd9dc1e62ff2fcbd0551561c2539f839bf208b7"
+        "zip": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261030.049f2e6/openstory-0.0.0-20261030.049f2e6.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261030.049f2e6/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261030.049f2e6/manifest.sig",
+        "digest": "4f4c9611c7aa36bcb7d28f0a48d49d1d6025c8f9860e1bc8d954c1e24f0d87ee"
       },
       "tier": "artifact",
       "plan": "paid",
