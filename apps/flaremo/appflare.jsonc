@@ -22,7 +22,7 @@
   "revision": 4,
   "authors": [{ "name": "realchendahuang", "github": "realchendahuang" }],
   "maintainers": ["MendyLanda"],
-  "source": { "ref": "v0.23.0", "sha": "e9cb6db9271b10998801cb3f406d60948147c24e" },
+  "source": { "ref": "v0.24.0", "sha": "e362d3162a97f2e236f3c601aee95beed2b1494e" },
   "install": {
     "packageManager": "pnpm",
     // The button-ready config. Upstream's wrangler.jsonc is a local, untracked
