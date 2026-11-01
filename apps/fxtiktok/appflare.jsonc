@@ -24,7 +24,7 @@
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags; the pin is the head of its default branch,
   // hono-rewrite.
-  "source": { "ref": "hono-rewrite", "sha": "5c3e70b0abb549dda2b034c09533fc4565674eba" },
+  "source": { "ref": "hono-rewrite", "sha": "1cc30a64de13eb3d450ab6d65379a6b669fff4b3" },
   "install": {
     // package.json pins pnpm, but upstream commits no lockfile, so the packer
     // resolves package.json's ranges at pack time; the pack log records the
