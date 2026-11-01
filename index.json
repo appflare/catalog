@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-01T11:08:40.808Z",
+  "generatedAt": "2026-11-01T11:23:48.473Z",
   "apps": [
     {
       "slug": "2fa",
@@ -2336,19 +2336,19 @@
         "Evernote"
       ],
       "addedAt": "2026-09-27T05:18:00+03:00",
-      "version": "2.3.0",
+      "version": "2.16.1",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/edgeever@2.3.0/edgeever-2.3.0.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/edgeever@2.3.0/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/edgeever@2.3.0/manifest.sig",
-        "digest": "c73a3244d220d67c7a7a699966cfa071c87ca8524ec16fa40c7eccb139bb5973"
+        "zip": "https://github.com/appflare/catalog/releases/download/edgeever@2.16.1/edgeever-2.16.1.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/edgeever@2.16.1/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/edgeever@2.16.1/manifest.sig",
+        "digest": "aec4b75b999c8667fd46d1443ce5415a9b7e21fcc1c00ba2491e8ed696a2e390"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-11-01T10:53:36.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "tianma-if",
@@ -3152,17 +3152,17 @@
         "Generate song colour themes with your own Gemini API key"
       ],
       "addedAt": "2026-09-27T10:46:59+03:00",
-      "version": "0.7.23",
+      "version": "0.7.25",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/folia@0.7.23/folia-0.7.23.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/folia@0.7.23/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/folia@0.7.23/manifest.sig",
-        "digest": "7d088521ed2321fd99ec4c798792ddcf8eaf6174745ea7c0ae62b681bcce757c"
+        "zip": "https://github.com/appflare/catalog/releases/download/folia@0.7.25/folia-0.7.25.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/folia@0.7.25/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/folia@0.7.25/manifest.sig",
+        "digest": "86c114ba287d25da9a71287435adf03ad31b12cd3431bc11df13cbc5b6a2a2bf"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-11-01T10:54:32.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "chthollyphile",
@@ -3355,57 +3355,6 @@
       "accessOffer": "offered"
     },
     {
-      "slug": "fxtiktok",
-      "repo": "okdargy/fxTikTok",
-      "name": "fxTikTok",
-      "summary": "Fixes TikTok embeds on Discord and other chat apps: swap tiktok.com for your own address in a link and it previews the video or slideshow inline, with the author, caption and counts.",
-      "tagline": "Make TikTok links preview videos and slideshows in chat",
-      "features": [
-        "Play linked TikTok videos inside Discord",
-        "Preview multi-image TikTok slideshows",
-        "Show captions above video previews",
-        "Share direct video or image links without counts",
-        "Request higher quality video playback"
-      ],
-      "addedAt": "2026-09-27T10:43:20+03:00",
-      "version": "0.0.0-20261004.5c3e70b",
-      "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/fxtiktok@0.0.0-20261004.5c3e70b/fxtiktok-0.0.0-20261004.5c3e70b.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/fxtiktok@0.0.0-20261004.5c3e70b/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/fxtiktok@0.0.0-20261004.5c3e70b/manifest.sig",
-        "digest": "a3f78994581f806baf06d65900682497e888d55fd6433d0432b1e8822cf9c93c"
-      },
-      "tier": "artifact",
-      "plan": "free",
-      "requires": [],
-      "lastVerified": "2026-11-01T10:54:47.000Z",
-      "authors": [
-        {
-          "name": "dargy",
-          "url": "https://dar.gy",
-          "github": "okdargy",
-          "x": "okdargy"
-        }
-      ],
-      "maintainers": [
-        "MendyLanda"
-      ],
-      "services": [],
-      "categories": [
-        "media",
-        "utilities"
-      ],
-      "license": "MIT",
-      "revision": 3,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/fxtiktok/manifest.json",
-        "sha256": "9dc5a15a42088af3716f7f5fc6b4295babd9fda2deba9ae0c2d55c9b261c8c65",
-        "keyId": "catalog-2026-09",
-        "signature": "FHUKU7qaB1gXR4pGfulxP8T8tEyuNpphxq99y0A706Zt18sxUGhx5jccaVWPya+Vp40+Pvz9OPTcvhtCT0MBBw=="
-      },
-      "accessOffer": "offered"
-    },
-    {
       "slug": "garrul",
       "repo": "KingPin/Garrul",
       "name": "Garrul",
@@ -3425,19 +3374,19 @@
         "Giscus"
       ],
       "addedAt": "2026-09-27T05:55:55+03:00",
-      "version": "2.40.0",
+      "version": "2.41.0",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/garrul@2.40.0/garrul-2.40.0.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/garrul@2.40.0/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/garrul@2.40.0/manifest.sig",
-        "digest": "6d84e27a4b8afc5c40fb0c6ba2491b388264e0217081fc4412323d468b74f060"
+        "zip": "https://github.com/appflare/catalog/releases/download/garrul@2.41.0/garrul-2.41.0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/garrul@2.41.0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/garrul@2.41.0/manifest.sig",
+        "digest": "7887bc03a97d519991517f077cd7496e93134b5a9604f18778c478a22cb43ffd"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "analytics-engine"
       ],
-      "lastVerified": "2026-11-01T10:55:35.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "KingPin",
@@ -5992,12 +5941,12 @@
         "Ahrefs"
       ],
       "addedAt": "2026-09-24T08:09:39+03:00",
-      "version": "0.1.19",
+      "version": "0.1.22",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/open-seo@0.1.19/open-seo-0.1.19.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/open-seo@0.1.19/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/open-seo@0.1.19/manifest.sig",
-        "digest": "3acfc667aed15dad6bc12d5b2384ae145e5a93f5947c9fcb90ce46d016f133b2"
+        "zip": "https://github.com/appflare/catalog/releases/download/open-seo@0.1.22/open-seo-0.1.22.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/open-seo@0.1.22/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/open-seo@0.1.22/manifest.sig",
+        "digest": "73202c9a320b6bd68ebd7ca4d30782bda5d45a4d8514916b882027470abee31c"
       },
       "tier": "artifact",
       "plan": "free",
@@ -6005,7 +5954,7 @@
         "r2",
         "access"
       ],
-      "lastVerified": "2026-11-01T11:00:36.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Ben Senescu",
