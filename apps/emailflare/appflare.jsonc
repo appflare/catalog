@@ -30,7 +30,7 @@
   "maintainers": ["MendyLanda"],
   // Pinned to main: the latest tag, v2.0.2, predates the Workers deployment
   // (it has neither Worker config).
-  "source": { "ref": "trunk", "sha": "7065a54a29d9a2deae492f0dcd2a7086536bd914" },
+  "source": { "ref": "trunk", "sha": "cf31f33bbb4a324d5353b8a5db0312fedc19618f" },
   "install": {
     "packageManager": "pnpm",
     // Upstream's tracked configs; its setup script fills in the resource ids,
