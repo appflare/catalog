@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-02T12:04:07.912Z",
+  "generatedAt": "2026-11-02T12:31:17.503Z",
   "apps": [
     {
       "slug": "2fa",
@@ -358,17 +358,17 @@
         "UptimeRobot"
       ],
       "addedAt": "2026-09-27T04:47:37+03:00",
-      "version": "0.0.0-20261024.a21e34d",
+      "version": "0.0.0-20261031.a0b9455",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/atalaya@0.0.0-20261024.a21e34d/atalaya-0.0.0-20261024.a21e34d.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/atalaya@0.0.0-20261024.a21e34d/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/atalaya@0.0.0-20261024.a21e34d/manifest.sig",
-        "digest": "27987bf175bf7232a052112ef54c8fd1c80865261f34ca2fcd2beec2f0fae721"
+        "zip": "https://github.com/appflare/catalog/releases/download/atalaya@0.0.0-20261031.a0b9455/atalaya-0.0.0-20261031.a0b9455.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/atalaya@0.0.0-20261031.a0b9455/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/atalaya@0.0.0-20261031.a0b9455/manifest.sig",
+        "digest": "af534f52a4384907deb8df8cf9feb1af78bac86372d54978b2f3e514bfdaf34e"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-11-02T11:42:21.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Daniel Carrillo",
@@ -3016,12 +3016,12 @@
         "flomo"
       ],
       "addedAt": "2026-09-23T20:44:39+03:00",
-      "version": "0.22.2",
+      "version": "0.25.0",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/flaremo@0.22.2/flaremo-0.22.2.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/flaremo@0.22.2/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/flaremo@0.22.2/manifest.sig",
-        "digest": "f1f2d0df33abbc9d88460ca3361d503d65d458514bea42716803f44cd8d2ae39"
+        "zip": "https://github.com/appflare/catalog/releases/download/flaremo@0.25.0/flaremo-0.25.0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/flaremo@0.25.0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/flaremo@0.25.0/manifest.sig",
+        "digest": "819dabefde22fd5654081265ac993b4a9579a86a61ebba2694eb81fcc0254d9b"
       },
       "tier": "artifact",
       "plan": "free",
@@ -3029,7 +3029,7 @@
         "r2",
         "workers-ai"
       ],
-      "lastVerified": "2026-11-02T11:48:20.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "realchendahuang",
@@ -4762,12 +4762,12 @@
         "Gmail"
       ],
       "addedAt": "2026-09-24T07:29:19+03:00",
-      "version": "0.0.0-20261025.ce0090a",
+      "version": "0.0.0-20261031.be89083",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261025.ce0090a/mailflare-0.0.0-20261025.ce0090a.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261025.ce0090a/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261025.ce0090a/manifest.sig",
-        "digest": "480cff51f79d8a5e1398a93c455133411a56e7bc60b14dd9f267cfe625cc3df3"
+        "zip": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261031.be89083/mailflare-0.0.0-20261031.be89083.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261031.be89083/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261031.be89083/manifest.sig",
+        "digest": "4b88004d778ecde07bc9e7567fc15bf0b8014db5ed1b15aa4144658f10b32c6f"
       },
       "tier": "artifact",
       "plan": "paid",
