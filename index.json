@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-03T11:42:17.972Z",
+  "generatedAt": "2026-11-03T12:04:42.268Z",
   "apps": [
     {
       "slug": "2fa",
@@ -639,75 +639,6 @@
       "accessOffer": "offered"
     },
     {
-      "slug": "binthere",
-      "repo": "nxfu/binthere",
-      "name": "binthere",
-      "summary": "A zero-knowledge pastebin for one-time notes: encrypted in the browser with AES-256-GCM, burned on first read by a Durable Object, and gone after 24 hours.",
-      "tagline": "Share private notes that disappear after one read",
-      "features": [
-        "Encrypt notes on your device so the server cannot read them",
-        "Delete each note automatically after its first read",
-        "Automatically remove unread notes after 24 hours",
-        "Require a password as well as the share link",
-        "Share notes by link or QR code",
-        "Delete a note before anyone opens it"
-      ],
-      "alternativeTo": [
-        "PrivateBin",
-        "Yopass"
-      ],
-      "addedAt": "2026-09-27T04:19:23+03:00",
-      "version": "0.0.0-20260919.63e5544",
-      "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/binthere@0.0.0-20260919.63e5544/binthere-0.0.0-20260919.63e5544.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/binthere@0.0.0-20260919.63e5544/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/binthere@0.0.0-20260919.63e5544/manifest.sig",
-        "digest": "99a6e88a084e1be282d247beb0e9fc41e36eb795291051459151e2ab2d925bc4"
-      },
-      "tier": "artifact",
-      "plan": "free",
-      "requires": [],
-      "lastVerified": "2026-11-03T11:22:30.000Z",
-      "authors": [
-        {
-          "name": "Gaurav",
-          "url": "https://gaury.dev",
-          "github": "nxfu"
-        }
-      ],
-      "maintainers": [
-        "MendyLanda"
-      ],
-      "media": {
-        "icon": {
-          "url": "https://appflare.github.io/catalog/apps/binthere/icon.svg",
-          "sha256": "af943153557907a8b083a4e4ba99280b938b71b9e74508c51df8fb4cf105daa1"
-        },
-        "cover": {
-          "url": "https://appflare.github.io/catalog/apps/binthere/cover.png",
-          "sha256": "2897a9ca636b69902dc6b131f196fa26d089063f9be51606a687a398272215ad"
-        },
-        "screenshots": []
-      },
-      "services": [
-        "kv",
-        "durable-objects"
-      ],
-      "categories": [
-        "sharing",
-        "privacy"
-      ],
-      "license": "MIT",
-      "revision": 3,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/binthere/manifest.json",
-        "sha256": "c94dfa6aeb9a634004295e305578236b66c4da4faae37920504f4db4d8bff553",
-        "keyId": "catalog-2026-09",
-        "signature": "oasLyuMhQQF7i7euviIbr/FUL6g5GoYXsWT4mpHbOYTtSoo8t7PcENM4ed1lQE8C4/KLLJOzcZyLXz1TbEmbBQ=="
-      },
-      "accessOffer": "offered"
-    },
-    {
       "slug": "blobatar",
       "repo": "Alain00/blobatar",
       "name": "blobatar API",
@@ -1115,17 +1046,17 @@
         "Netdata"
       ],
       "addedAt": "2026-09-27T10:46:59+03:00",
-      "version": "0.0.0-20261027.5ddd42c",
+      "version": "0.0.0-20261102.609cc0b",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/cf-server-monitor@0.0.0-20261027.5ddd42c/cf-server-monitor-0.0.0-20261027.5ddd42c.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/cf-server-monitor@0.0.0-20261027.5ddd42c/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/cf-server-monitor@0.0.0-20261027.5ddd42c/manifest.sig",
-        "digest": "c671c0401a4a76ccb0156a7123fb049cb0500e296f84137d176870f9d1044520"
+        "zip": "https://github.com/appflare/catalog/releases/download/cf-server-monitor@0.0.0-20261102.609cc0b/cf-server-monitor-0.0.0-20261102.609cc0b.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/cf-server-monitor@0.0.0-20261102.609cc0b/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/cf-server-monitor@0.0.0-20261102.609cc0b/manifest.sig",
+        "digest": "ba781d84115c897967f93671d8b3c4805121f89bbcb2c10703d156691e7169d3"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-11-03T11:23:17.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "huilang-me",
@@ -2660,12 +2591,12 @@
         "Front"
       ],
       "addedAt": "2026-09-27T06:14:13+03:00",
-      "version": "0.0.0-20261022.7065a54",
+      "version": "0.0.0-20261102.cf31f33",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/emailflare@0.0.0-20261022.7065a54/emailflare-0.0.0-20261022.7065a54.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/emailflare@0.0.0-20261022.7065a54/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/emailflare@0.0.0-20261022.7065a54/manifest.sig",
-        "digest": "a17e72555bd2b705ed55186e558c6095a5ce70047811421c78fb804942a536e5"
+        "zip": "https://github.com/appflare/catalog/releases/download/emailflare@0.0.0-20261102.cf31f33/emailflare-0.0.0-20261102.cf31f33.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/emailflare@0.0.0-20261102.cf31f33/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/emailflare@0.0.0-20261102.cf31f33/manifest.sig",
+        "digest": "bcef033c22fc82586db9a1d778a7166f8b3c91f5184730f10686e925b2ef8a97"
       },
       "tier": "artifact",
       "plan": "paid",
@@ -3352,6 +3283,51 @@
       ],
       "license": "Apache-2.0",
       "revision": 5,
+      "accessOffer": "offered"
+    },
+    {
+      "slug": "fxtiktok",
+      "repo": "okdargy/fxTikTok",
+      "name": "fxTikTok",
+      "summary": "Fixes TikTok embeds on Discord and other chat apps: swap tiktok.com for your own address in a link and it previews the video or slideshow inline, with the author, caption and counts.",
+      "tagline": "Make TikTok links preview videos and slideshows in chat",
+      "features": [
+        "Play linked TikTok videos inside Discord",
+        "Preview multi-image TikTok slideshows",
+        "Show captions above video previews",
+        "Share direct video or image links without counts",
+        "Request higher quality video playback"
+      ],
+      "addedAt": "2026-09-27T10:43:20+03:00",
+      "version": "0.0.0-20261101.6d5f912",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/fxtiktok@0.0.0-20261101.6d5f912/fxtiktok-0.0.0-20261101.6d5f912.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/fxtiktok@0.0.0-20261101.6d5f912/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/fxtiktok@0.0.0-20261101.6d5f912/manifest.sig",
+        "digest": "46ef061f27433dd09ba0fee4c685dfd51096655ffcb82d3656113bb9527e0ff8"
+      },
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "dargy",
+          "url": "https://dar.gy",
+          "github": "okdargy",
+          "x": "okdargy"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "services": [],
+      "categories": [
+        "media",
+        "utilities"
+      ],
+      "license": "MIT",
+      "revision": 3,
       "accessOffer": "offered"
     },
     {
@@ -4449,17 +4425,17 @@
         "Feedly"
       ],
       "addedAt": "2026-09-27T12:03:21+03:00",
-      "version": "0.0.0-20261014.4a3eec5",
+      "version": "0.0.0-20261101.2677179",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/larafeed@0.0.0-20261014.4a3eec5/larafeed-0.0.0-20261014.4a3eec5.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/larafeed@0.0.0-20261014.4a3eec5/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/larafeed@0.0.0-20261014.4a3eec5/manifest.sig",
-        "digest": "0beb58b42b9d817c1e25e3cf1112ab8c1877c528f383562a98cd34b8c3ab2f6f"
+        "zip": "https://github.com/appflare/catalog/releases/download/larafeed@0.0.0-20261101.2677179/larafeed-0.0.0-20261101.2677179.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/larafeed@0.0.0-20261101.2677179/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/larafeed@0.0.0-20261101.2677179/manifest.sig",
+        "digest": "ac68a52ef7426c91fbd99de2b740079015506bac7103d162158ae522bc45630a"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-11-03T11:29:51.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Stanislas",
@@ -6136,12 +6112,12 @@
         "Keep characters, locations and lighting consistent across scenes"
       ],
       "addedAt": "2026-09-27T12:03:21+03:00",
-      "version": "0.0.0-20261030.049f2e6",
+      "version": "0.0.0-20261102.1999cb1",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261030.049f2e6/openstory-0.0.0-20261030.049f2e6.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261030.049f2e6/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261030.049f2e6/manifest.sig",
-        "digest": "4f4c9611c7aa36bcb7d28f0a48d49d1d6025c8f9860e1bc8d954c1e24f0d87ee"
+        "zip": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261102.1999cb1/openstory-0.0.0-20261102.1999cb1.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261102.1999cb1/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261102.1999cb1/manifest.sig",
+        "digest": "66b40078282491fe4132b06bd4587196140ed2f6139989743cd5e4bbb1d65dc4"
       },
       "tier": "artifact",
       "plan": "paid",
