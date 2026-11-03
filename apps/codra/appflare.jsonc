@@ -27,7 +27,7 @@
     }
   ],
   "maintainers": ["MendyLanda"],
-  "source": { "ref": "v0.9.5", "sha": "faf39e5f74161352d380a2fe8bbb702c15e88de0" },
+  "source": { "ref": "v0.10.0", "sha": "f39a0d9c064f5d542f04e95f8031dfc9534e14a5" },
   "install": {
     "packageManager": "npm",
     // The Worker's config sits in apps/worker; its assets are the dashboard
