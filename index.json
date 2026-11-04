@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-03T12:04:42.268Z",
+  "generatedAt": "2026-11-04T11:51:53.837Z",
   "apps": [
     {
       "slug": "2fa",
@@ -29,7 +29,7 @@
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-11-03T11:21:34.000Z",
+      "lastVerified": "2026-11-04T11:35:43.000Z",
       "authors": [
         {
           "name": "wuzf",
@@ -89,7 +89,7 @@
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-11-03T11:22:03.000Z",
+      "lastVerified": "2026-11-04T11:36:08.000Z",
       "authors": [
         {
           "name": "DAVID888",
@@ -175,7 +175,7 @@
         "workers-ai",
         "access"
       ],
-      "lastVerified": "2026-11-03T11:21:47.000Z",
+      "lastVerified": "2026-11-04T11:35:52.000Z",
       "authors": [
         {
           "name": "Cloudflare",
@@ -248,7 +248,7 @@
         "zone",
         "email-routing"
       ],
-      "lastVerified": "2026-11-03T11:21:47.000Z",
+      "lastVerified": "2026-11-04T11:35:44.000Z",
       "authors": [
         {
           "name": "BESTRUI",
@@ -301,7 +301,7 @@
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-11-03T11:21:40.000Z",
+      "lastVerified": "2026-11-04T11:35:43.000Z",
       "authors": [
         {
           "name": "Rohan Prasad",
@@ -368,7 +368,7 @@
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-11-03T11:21:54.000Z",
+      "lastVerified": "2026-11-04T11:36:11.000Z",
       "authors": [
         {
           "name": "Daniel Carrillo",
@@ -428,7 +428,7 @@
         "zone",
         "email-routing"
       ],
-      "lastVerified": "2026-11-03T11:22:17.000Z",
+      "lastVerified": "2026-11-04T11:36:21.000Z",
       "authors": [
         {
           "name": "Tony Chen",
@@ -554,7 +554,7 @@
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-11-03T11:22:27.000Z",
+      "lastVerified": "2026-11-04T11:36:20.000Z",
       "authors": [
         {
           "name": "cwxia0s",
@@ -609,7 +609,7 @@
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-11-03T11:22:29.000Z",
+      "lastVerified": "2026-11-04T11:36:30.000Z",
       "authors": [
         {
           "name": "DullJZ",
@@ -736,7 +736,7 @@
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-11-03T11:22:58.000Z",
+      "lastVerified": "2026-11-04T11:36:50.000Z",
       "authors": [
         {
           "name": "Murat Erkin Cicek",
@@ -809,7 +809,7 @@
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-11-03T11:22:47.000Z",
+      "lastVerified": "2026-11-04T11:36:56.000Z",
       "authors": [
         {
           "name": "reliefe",
@@ -871,7 +871,7 @@
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-11-03T11:23:04.000Z",
+      "lastVerified": "2026-11-04T11:36:53.000Z",
       "authors": [
         {
           "name": "xyTom",
@@ -928,7 +928,7 @@
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-11-03T11:23:17.000Z",
+      "lastVerified": "2026-11-04T11:37:11.000Z",
       "authors": [
         {
           "name": "Firefly",
@@ -994,7 +994,7 @@
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-11-03T11:22:58.000Z",
+      "lastVerified": "2026-11-04T11:37:16.000Z",
       "authors": [
         {
           "name": "Diana Sari",
@@ -1826,7 +1826,7 @@
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-11-03T11:24:50.000Z",
+      "lastVerified": "2026-11-04T11:38:39.000Z",
       "authors": [
         {
           "name": "Ben Vinegar",
@@ -2021,7 +2021,7 @@
       "requires": [
         "workers-ai"
       ],
-      "lastVerified": "2026-11-03T11:24:55.000Z",
+      "lastVerified": "2026-11-04T11:39:01.000Z",
       "authors": [
         {
           "name": "Asutorufa",
@@ -2207,7 +2207,7 @@
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-11-03T11:25:27.000Z",
+      "lastVerified": "2026-11-04T11:39:17.000Z",
       "authors": [
         {
           "name": "aozorae",
@@ -2670,7 +2670,7 @@
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-11-01T10:54:12.000Z",
+      "lastVerified": "2026-11-04T11:40:29.000Z",
       "authors": [
         {
           "name": "EmDash",
@@ -3093,7 +3093,7 @@
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-11-03T11:26:57.000Z",
+      "lastVerified": "2026-11-04T11:40:37.000Z",
       "authors": [
         {
           "name": "chthollyphile",
@@ -3145,7 +3145,7 @@
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-11-03T11:26:54.000Z",
+      "lastVerified": "2026-11-04T11:40:44.000Z",
       "authors": [
         {
           "name": "Bohdan Petryshyn",
@@ -3212,7 +3212,7 @@
         "zone",
         "email-routing"
       ],
-      "lastVerified": "2026-11-03T11:27:47.000Z",
+      "lastVerified": "2026-11-04T11:40:49.000Z",
       "authors": [
         {
           "name": "iding",
@@ -3309,7 +3309,7 @@
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": null,
+      "lastVerified": "2026-11-04T11:40:50.000Z",
       "authors": [
         {
           "name": "dargy",
@@ -3526,7 +3526,7 @@
         "r2",
         "workers-ai"
       ],
-      "lastVerified": "2026-11-03T11:28:20.000Z",
+      "lastVerified": "2026-11-04T11:41:55.000Z",
       "authors": [
         {
           "name": "Plivo",
@@ -3966,7 +3966,7 @@
         "r2",
         "workers-ai"
       ],
-      "lastVerified": "2026-11-03T11:28:47.000Z",
+      "lastVerified": "2026-11-04T11:42:03.000Z",
       "authors": [
         {
           "name": "Shuai",
@@ -4314,7 +4314,7 @@
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-11-03T11:29:02.000Z",
+      "lastVerified": "2026-11-04T11:42:31.000Z",
       "authors": [
         {
           "name": "Gabe",
@@ -4370,7 +4370,7 @@
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-11-03T11:29:26.000Z",
+      "lastVerified": "2026-11-04T11:42:37.000Z",
       "authors": [
         {
           "name": "Saiday",
@@ -4499,7 +4499,7 @@
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-11-03T11:29:29.000Z",
+      "lastVerified": "2026-11-04T11:42:50.000Z",
       "authors": [
         {
           "name": "JeffreyCA",
@@ -4551,7 +4551,7 @@
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-11-03T11:29:56.000Z",
+      "lastVerified": "2026-11-04T11:43:06.000Z",
       "authors": [
         {
           "name": "rxliuli",
@@ -4606,7 +4606,7 @@
         "email-routing",
         "r2"
       ],
-      "lastVerified": "2026-11-03T11:29:59.000Z",
+      "lastVerified": "2026-11-04T11:43:12.000Z",
       "authors": [
         {
           "name": "TBXark",
@@ -5196,7 +5196,7 @@
       "requires": [
         "access"
       ],
-      "lastVerified": "2026-11-03T11:30:54.000Z",
+      "lastVerified": "2026-11-04T11:44:17.000Z",
       "authors": [
         {
           "name": "Daniel Yang",
@@ -5474,7 +5474,7 @@
         "zone",
         "email-routing"
       ],
-      "lastVerified": "2026-11-03T11:31:25.000Z",
+      "lastVerified": "2026-11-04T11:44:18.000Z",
       "authors": [
         {
           "name": "mskatoni",
@@ -5795,7 +5795,7 @@
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-11-03T11:31:57.000Z",
+      "lastVerified": "2026-11-04T11:44:56.000Z",
       "authors": [
         {
           "name": "Hu Zhihui",
@@ -6195,7 +6195,7 @@
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-11-03T11:32:54.000Z",
+      "lastVerified": "2026-11-04T11:45:40.000Z",
       "authors": [
         {
           "name": "Sharzy",
@@ -6246,7 +6246,7 @@
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-11-03T11:33:01.000Z",
+      "lastVerified": "2026-11-04T11:45:41.000Z",
       "authors": [
         {
           "name": "James Ross",
@@ -6378,7 +6378,7 @@
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-11-03T11:33:26.000Z",
+      "lastVerified": "2026-11-04T11:46:03.000Z",
       "authors": [
         {
           "name": "tao-t356",
@@ -6437,7 +6437,7 @@
         "r2",
         "access"
       ],
-      "lastVerified": "2026-11-03T11:33:52.000Z",
+      "lastVerified": "2026-11-04T11:46:23.000Z",
       "authors": [
         {
           "name": "Thomas Dickson",
@@ -6765,7 +6765,7 @@
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-11-03T11:34:04.000Z",
+      "lastVerified": "2026-11-04T11:46:25.000Z",
       "authors": [
         {
           "name": "Aber",
@@ -7005,7 +7005,7 @@
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-11-03T11:34:39.000Z",
+      "lastVerified": "2026-11-04T11:46:55.000Z",
       "authors": [
         {
           "name": "LOSTFREE",
@@ -7288,7 +7288,7 @@
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-11-03T11:35:04.000Z",
+      "lastVerified": "2026-11-04T11:47:38.000Z",
       "authors": [
         {
           "name": "hwa",
@@ -7339,7 +7339,7 @@
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-11-03T11:35:21.000Z",
+      "lastVerified": "2026-11-04T11:47:25.000Z",
       "authors": [
         {
           "name": "Ozan van Oosten-Şener",
@@ -7445,7 +7445,7 @@
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-11-03T11:35:50.000Z",
+      "lastVerified": "2026-11-04T11:48:13.000Z",
       "authors": [
         {
           "name": "Fayaz Ahmed",
@@ -7505,7 +7505,7 @@
       "requires": [
         "workers-ai"
       ],
-      "lastVerified": "2026-11-03T11:35:53.000Z",
+      "lastVerified": "2026-11-04T11:48:10.000Z",
       "authors": [
         {
           "name": "Rahil Pirani",
@@ -7736,7 +7736,7 @@
         "r2",
         "access"
       ],
-      "lastVerified": "2026-11-03T11:36:12.000Z",
+      "lastVerified": "2026-11-04T11:48:09.000Z",
       "authors": [
         {
           "name": "Phillip Jones",
@@ -8053,7 +8053,7 @@
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-11-03T11:36:25.000Z",
+      "lastVerified": "2026-11-04T11:48:46.000Z",
       "authors": [
         {
           "name": "AEtherside",
@@ -8234,7 +8234,7 @@
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-11-03T11:37:11.000Z",
+      "lastVerified": "2026-11-04T11:49:08.000Z",
       "authors": [
         {
           "name": "Synch",
@@ -8663,7 +8663,7 @@
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-11-03T11:38:21.000Z",
+      "lastVerified": "2026-11-04T11:49:43.000Z",
       "authors": [
         {
           "name": "Will Walker",
@@ -8824,7 +8824,7 @@
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-11-03T11:38:33.000Z",
+      "lastVerified": "2026-11-04T11:49:55.000Z",
       "authors": [
         {
           "name": "XiaoGe",
@@ -8886,7 +8886,7 @@
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-11-03T11:38:37.000Z",
+      "lastVerified": "2026-11-04T11:49:53.000Z",
       "authors": [
         {
           "name": "little_cup",
@@ -8935,7 +8935,7 @@
       "requires": [
         "browser-rendering"
       ],
-      "lastVerified": "2026-11-03T11:38:50.000Z",
+      "lastVerified": "2026-11-04T11:50:11.000Z",
       "authors": [
         {
           "name": "Gabriel Massadas",
@@ -8990,7 +8990,7 @@
         "workers-ai",
         "r2"
       ],
-      "lastVerified": "2026-11-03T11:38:56.000Z",
+      "lastVerified": "2026-11-04T11:50:16.000Z",
       "authors": [
         {
           "name": "Asa",
@@ -9113,7 +9113,7 @@
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-11-03T11:39:01.000Z",
+      "lastVerified": "2026-11-04T11:50:28.000Z",
       "authors": [
         {
           "name": "Kavin",
