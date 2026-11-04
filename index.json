@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-04T11:51:53.837Z",
+  "generatedAt": "2026-11-04T12:17:12.397Z",
   "apps": [
     {
       "slug": "2fa",
@@ -77,19 +77,19 @@
         "Notion"
       ],
       "addedAt": "2026-09-27T06:02:01+03:00",
-      "version": "0.0.0-20261029.54749ba",
+      "version": "0.0.0-20261103.4f8e1c1",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20261029.54749ba/888wiki-0.0.0-20261029.54749ba.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20261029.54749ba/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20261029.54749ba/manifest.sig",
-        "digest": "1feac529f93ea8d1d6d69d12b3043fdbc1f27a618ba4f3b95946fdd0595711bc"
+        "zip": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20261103.4f8e1c1/888wiki-0.0.0-20261103.4f8e1c1.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20261103.4f8e1c1/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20261103.4f8e1c1/manifest.sig",
+        "digest": "2ca1c4f6197427fff659d90094307bf4d2f0a971f2e98875b781e67eeb38ae81"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-11-04T11:36:08.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "DAVID888",
@@ -636,6 +636,69 @@
         "keyId": "catalog-2026-09",
         "signature": "YVWFJzq741TBL5aT1pyXjUiG8PWa1fyS+T7EuovUiQdDe5DFiwa7O3PeDMZx/1HVJio4vEuu5oHdy8KrpUVPCg=="
       },
+      "accessOffer": "offered"
+    },
+    {
+      "slug": "binthere",
+      "repo": "nxfu/binthere",
+      "name": "binthere",
+      "summary": "A zero-knowledge pastebin for one-time notes: encrypted in the browser with AES-256-GCM, burned on first read by a Durable Object, and gone after 24 hours.",
+      "tagline": "Share private notes that disappear after one read",
+      "features": [
+        "Encrypt notes on your device so the server cannot read them",
+        "Delete each note automatically after its first read",
+        "Automatically remove unread notes after 24 hours",
+        "Require a password as well as the share link",
+        "Share notes by link or QR code",
+        "Delete a note before anyone opens it"
+      ],
+      "alternativeTo": [
+        "PrivateBin",
+        "Yopass"
+      ],
+      "addedAt": "2026-09-27T04:19:23+03:00",
+      "version": "0.0.0-20261102.ba579c0",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/binthere@0.0.0-20261102.ba579c0/binthere-0.0.0-20261102.ba579c0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/binthere@0.0.0-20261102.ba579c0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/binthere@0.0.0-20261102.ba579c0/manifest.sig",
+        "digest": "ee43c95ce76f18eb3580558ece8b825b607208e9524841ed1fb15ddcbbdd5fdb"
+      },
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Gaurav",
+          "url": "https://gaury.dev",
+          "github": "nxfu"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/binthere/icon.svg",
+          "sha256": "af943153557907a8b083a4e4ba99280b938b71b9e74508c51df8fb4cf105daa1"
+        },
+        "cover": {
+          "url": "https://appflare.github.io/catalog/apps/binthere/cover.png",
+          "sha256": "2897a9ca636b69902dc6b131f196fa26d089063f9be51606a687a398272215ad"
+        },
+        "screenshots": []
+      },
+      "services": [
+        "kv",
+        "durable-objects"
+      ],
+      "categories": [
+        "sharing",
+        "privacy"
+      ],
+      "license": "MIT",
+      "revision": 3,
       "accessOffer": "offered"
     },
     {
@@ -1640,17 +1703,17 @@
         "Termius"
       ],
       "addedAt": "2026-09-26T23:19:31+03:00",
-      "version": "0.0.0-20261026.445548d",
+      "version": "0.0.0-20261103.cbd0afb",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20261026.445548d/cloudssh-0.0.0-20261026.445548d.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20261026.445548d/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20261026.445548d/manifest.sig",
-        "digest": "944ccbeedea9cd5626ab038163453a129de0ae24ecdd4f39497b5b76025fd28c"
+        "zip": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20261103.cbd0afb/cloudssh-0.0.0-20261103.cbd0afb.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20261103.cbd0afb/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20261103.cbd0afb/manifest.sig",
+        "digest": "6bd092a7c0fda115c6efccf481d77b1e77d9b3b907680ade3a2c2a86bead6a10"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-11-03T11:24:07.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "TanXin",
@@ -1697,12 +1760,12 @@
         "CodeRabbit"
       ],
       "addedAt": "2026-10-14T23:25:29+03:00",
-      "version": "0.9.5",
+      "version": "0.10.0",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/codra@0.9.5/codra-0.9.5.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/codra@0.9.5/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/codra@0.9.5/manifest.sig",
-        "digest": "2a96c11bad1db19aba0a15a7b44d854def364481f4c2bbdf96ed0c3281737e0b"
+        "zip": "https://github.com/appflare/catalog/releases/download/codra@0.10.0/codra-0.10.0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/codra@0.10.0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/codra@0.10.0/manifest.sig",
+        "digest": "837ca853f416e788051944a55f4c31a66b818048f8fd8c63f5563651fd47be74"
       },
       "tier": "artifact",
       "plan": "free",
@@ -6183,19 +6246,19 @@
         "Pastebin"
       ],
       "addedAt": "2026-09-26T23:19:31+03:00",
-      "version": "0.0.0-20261026.95ed86f",
+      "version": "0.0.0-20261103.aae764c",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/pastebin-worker@0.0.0-20261026.95ed86f/pastebin-worker-0.0.0-20261026.95ed86f.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/pastebin-worker@0.0.0-20261026.95ed86f/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/pastebin-worker@0.0.0-20261026.95ed86f/manifest.sig",
-        "digest": "b2a7c3b56e92897f2da9063d429ee2d1a79db82069aa7ca914dab2df16955975"
+        "zip": "https://github.com/appflare/catalog/releases/download/pastebin-worker@0.0.0-20261103.aae764c/pastebin-worker-0.0.0-20261103.aae764c.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/pastebin-worker@0.0.0-20261103.aae764c/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/pastebin-worker@0.0.0-20261103.aae764c/manifest.sig",
+        "digest": "b68a53cdb88a070cb9a33b715087cb61da2d7dcdab9fa64d20587fa4b49ea7a4"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-11-04T11:45:40.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Sharzy",
@@ -8540,17 +8603,17 @@
         "Optionally publish combined totals without device or account identifiers"
       ],
       "addedAt": "2026-09-27T11:42:03+03:00",
-      "version": "0.81.0",
+      "version": "0.85.0",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/token-monitor@0.81.0/token-monitor-0.81.0.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/token-monitor@0.81.0/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/token-monitor@0.81.0/manifest.sig",
-        "digest": "c8c5407c1cebd57c144b3fbdbce676b936389f3b3b99071061bf6ffe371f9fee"
+        "zip": "https://github.com/appflare/catalog/releases/download/token-monitor@0.85.0/token-monitor-0.85.0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/token-monitor@0.85.0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/token-monitor@0.85.0/manifest.sig",
+        "digest": "890d7ad97a22757fde13262a178a66d3a5a75d066fc5ca561be8eb76f5864b25"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-11-03T11:37:40.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Javis",
