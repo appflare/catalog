@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-05T11:50:39.790Z",
+  "generatedAt": "2026-11-05T12:29:18.128Z",
   "apps": [
     {
       "slug": "2fa",
@@ -5980,12 +5980,12 @@
         "Ahrefs"
       ],
       "addedAt": "2026-09-24T08:09:39+03:00",
-      "version": "0.1.22",
+      "version": "0.1.24",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/open-seo@0.1.22/open-seo-0.1.22.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/open-seo@0.1.22/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/open-seo@0.1.22/manifest.sig",
-        "digest": "73202c9a320b6bd68ebd7ca4d30782bda5d45a4d8514916b882027470abee31c"
+        "zip": "https://github.com/appflare/catalog/releases/download/open-seo@0.1.24/open-seo-0.1.24.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/open-seo@0.1.24/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/open-seo@0.1.24/manifest.sig",
+        "digest": "3386d2ec97fe4784a4d8671bd2041506e265b96c078603e5219b671cff36ac21"
       },
       "tier": "artifact",
       "plan": "free",
@@ -5993,7 +5993,7 @@
         "r2",
         "access"
       ],
-      "lastVerified": "2026-11-05T11:42:24.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Ben Senescu",
