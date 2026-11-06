@@ -23,7 +23,7 @@
   "revision": 4,
   "authors": [{ "name": "tianma-if", "github": "tianma-if", "x": "tianma_if" }],
   "maintainers": ["MendyLanda"],
-  "source": { "ref": "v2.21.0", "sha": "65ccbb503abf81ba0b897c7053224e07a3771c9f" },
+  "source": { "ref": "v2.22.0", "sha": "b7781f469d2c86d4ea1e08383189ae0986b238f0" },
   "install": {
     "packageManager": "bun",
     "wranglerConfig": "wrangler.toml",
