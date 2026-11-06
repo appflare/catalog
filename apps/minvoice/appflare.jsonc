@@ -25,7 +25,7 @@
   "authors": [{ "name": "Daniel Yang", "url": "https://daniel-yang.com", "github": "ddyy" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags; the pin tracks the default branch, main.
-  "source": { "ref": "main", "sha": "99563a5a4d8e90481e76d2440c719c909a67f243" },
+  "source": { "ref": "main", "sha": "0607ff206183901bf7e81c4f347d6b7315daa11f" },
   "install": {
     "packageManager": "npm",
     // The zero-config starter the Deploy button uses: the Worker, its D1
