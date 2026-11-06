@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-06T11:51:47.894Z",
+  "generatedAt": "2026-11-06T12:14:53.573Z",
   "apps": [
     {
       "slug": "2fa",
@@ -1703,17 +1703,17 @@
         "Termius"
       ],
       "addedAt": "2026-09-26T23:19:31+03:00",
-      "version": "0.0.0-20261103.cbd0afb",
+      "version": "0.0.0-20261105.289d163",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20261103.cbd0afb/cloudssh-0.0.0-20261103.cbd0afb.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20261103.cbd0afb/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20261103.cbd0afb/manifest.sig",
-        "digest": "6bd092a7c0fda115c6efccf481d77b1e77d9b3b907680ade3a2c2a86bead6a10"
+        "zip": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20261105.289d163/cloudssh-0.0.0-20261105.289d163.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20261105.289d163/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20261105.289d163/manifest.sig",
+        "digest": "1b21befe33bf00c91abe1b0da3cd378699c90b6a2a1dcffb5f9ba086923aeab8"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-11-06T11:33:33.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "TanXin",
@@ -5230,99 +5230,6 @@
       "accessOffer": "offered"
     },
     {
-      "slug": "minvoice",
-      "repo": "ddyy/minvoice",
-      "name": "Minvoice",
-      "summary": "Invoicing for one business: invoices with PDF attachments, pay links through Stripe and PayPal, payment reminders, reports and CSV export, on D1.",
-      "tagline": "Create invoices with pay links and payment reminders",
-      "features": [
-        "Create itemized invoices with payment terms for each client",
-        "Give clients printable invoices and downloadable PDFs",
-        "Accept payments through your Stripe or PayPal account",
-        "Email PDF invoices through your Resend account",
-        "Send overdue payment reminders through Resend",
-        "Review monthly reports and export records as CSV"
-      ],
-      "alternativeTo": [
-        "Invoice Ninja"
-      ],
-      "addedAt": "2026-09-27T04:19:23+03:00",
-      "version": "0.0.0-20260720.99563a5",
-      "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/minvoice@0.0.0-20260720.99563a5/minvoice-0.0.0-20260720.99563a5.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/minvoice@0.0.0-20260720.99563a5/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/minvoice@0.0.0-20260720.99563a5/manifest.sig",
-        "digest": "30eceab44296a68eb746a77551bd8db73774b98e1a4280c5ea859ed7a2e1b149"
-      },
-      "tier": "artifact",
-      "plan": "free",
-      "requires": [
-        "access"
-      ],
-      "lastVerified": "2026-11-06T11:40:08.000Z",
-      "authors": [
-        {
-          "name": "Daniel Yang",
-          "url": "https://daniel-yang.com",
-          "github": "ddyy"
-        }
-      ],
-      "maintainers": [
-        "MendyLanda"
-      ],
-      "media": {
-        "icon": {
-          "url": "https://appflare.github.io/catalog/apps/minvoice/icon.svg",
-          "sha256": "b2c9d0f4ba33955d2013f989e6aa09f764f3097e69591d89f082c88750720ab3"
-        },
-        "screenshots": [
-          {
-            "url": "https://appflare.github.io/catalog/apps/minvoice/screenshots/01-dashboard.png",
-            "sha256": "038214ae56e29c9b64d1c753f0d264c0082373d88a8fa07edd9426ee1feae76c",
-            "alt": "Minvoice: Dashboard"
-          },
-          {
-            "url": "https://appflare.github.io/catalog/apps/minvoice/screenshots/02-invoice-detail.png",
-            "sha256": "f211e6ab4b9067d4ae994dc67d712def0d47ac5a89b604c9267d187e5b5d6792",
-            "alt": "Minvoice: Invoice detail"
-          },
-          {
-            "url": "https://appflare.github.io/catalog/apps/minvoice/screenshots/03-pay-page.png",
-            "sha256": "b5f848571a71f1f18d1bd80031ff5728874b4a16b32111ee710a814757f3c1c5",
-            "alt": "Minvoice: Pay page"
-          },
-          {
-            "url": "https://appflare.github.io/catalog/apps/minvoice/screenshots/04-payments-history.png",
-            "sha256": "ac3f02bdcf36c37771b5925c49922551296cc7ae5a0cec3b21c4a68fb72a95f6",
-            "alt": "Minvoice: Payments history"
-          },
-          {
-            "url": "https://appflare.github.io/catalog/apps/minvoice/screenshots/05-print-view.png",
-            "sha256": "0d9750b1604104ec14982e4aa008c1b7f1c50a20cfeba60d34e9248ea0faa000",
-            "alt": "Minvoice: Print view"
-          }
-        ]
-      },
-      "services": [
-        "d1",
-        "cron",
-        "access"
-      ],
-      "categories": [
-        "business",
-        "finance"
-      ],
-      "license": "MIT",
-      "revision": 5,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/minvoice/manifest.json",
-        "sha256": "3e1d18f1cac7c74984b2467350c909a66311e6a8197759ef4adff46cd8e967c3",
-        "keyId": "catalog-2026-09",
-        "signature": "+Em0eGoFd8T5K0inQRqptKzOeuEEDJP5DldFH5XXWTSDkWo41aA9qIhCXAjF9MQ+Ve0pTVHTO7QeJkET6dN6Dg=="
-      },
-      "accessOffer": "offered"
-    },
-    {
       "slug": "mpp-proxy",
       "repo": "cloudflare/mpp-proxy",
       "name": "MPP Payment-Gated Proxy",
@@ -8285,19 +8192,19 @@
         "Obsidian Sync"
       ],
       "addedAt": "2026-09-27T04:47:37+03:00",
-      "version": "0.5.5",
+      "version": "0.5.6",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/synch@0.5.5/synch-0.5.5.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/synch@0.5.5/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/synch@0.5.5/manifest.sig",
-        "digest": "8b82db02fc3ab1de164fddafe3aa29578f97fc29118334d11999f36a2f9b2042"
+        "zip": "https://github.com/appflare/catalog/releases/download/synch@0.5.6/synch-0.5.6.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/synch@0.5.6/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/synch@0.5.6/manifest.sig",
+        "digest": "38d9431a354d8370337e25ea14ebcd63f1aa31d185e17d69c9d5a03a1464f520"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-11-06T11:46:15.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Synch",
