@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-07T11:01:57.652Z",
+  "generatedAt": "2026-11-07T11:11:32.970Z",
   "apps": [
     {
       "slug": "2fa",
@@ -401,78 +401,6 @@
       "accessOffer": "offered"
     },
     {
-      "slug": "auth-inbox",
-      "repo": "TooonyChen/AuthInbox",
-      "name": "Auth Inbox",
-      "summary": "An inbox for sign-up and verification mail: Email Routing delivers it, an AI model of your choice pulls out codes and links and sorts each mail, and a dashboard, per-user grants and a remote MCP server let people and agents read them.",
-      "tagline": "Get sign-up codes and links in one private inbox",
-      "features": [
-        "Extract email codes and links using your chosen AI provider and API key",
-        "Copy a code or verification link with one click",
-        "Sort received mail into sign-in, password reset and other categories",
-        "Choose which addresses and mail categories each user can read",
-        "Let AI agents wait for new codes with their own access keys",
-        "Store promotional mail without sending it to the AI provider"
-      ],
-      "addedAt": "2026-09-27T06:14:13+03:00",
-      "version": "0.0.0-20260709.83927b8",
-      "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/auth-inbox@0.0.0-20260709.83927b8/auth-inbox-0.0.0-20260709.83927b8.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/auth-inbox@0.0.0-20260709.83927b8/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/auth-inbox@0.0.0-20260709.83927b8/manifest.sig",
-        "digest": "0f9fa0c25cd57be00ecbde259cd7d45b26601bbf5b470fb223fc83e00b44925d"
-      },
-      "tier": "artifact",
-      "plan": "free",
-      "requires": [
-        "zone",
-        "email-routing"
-      ],
-      "lastVerified": "2026-11-07T10:43:10.000Z",
-      "authors": [
-        {
-          "name": "Tony Chen",
-          "url": "https://tonychen.net",
-          "github": "TooonyChen"
-        }
-      ],
-      "maintainers": [
-        "MendyLanda"
-      ],
-      "media": {
-        "screenshots": [
-          {
-            "url": "https://appflare.github.io/catalog/apps/auth-inbox/screenshots/01-verification-code.png",
-            "sha256": "0a6e9d6551601cd9019e14758aa7f0d68b001c2babe36b3e1ce2db44e1e5a676",
-            "alt": "Auth Inbox: Verification code"
-          },
-          {
-            "url": "https://appflare.github.io/catalog/apps/auth-inbox/screenshots/02-mail-list.png",
-            "sha256": "60ed6d4d0eacde987d2a307d200e6cd8597644ff909afb8c6cfb7e6cdb3b6ab2",
-            "alt": "Auth Inbox: Mail list"
-          }
-        ]
-      },
-      "services": [
-        "d1",
-        "email-routing",
-        "zone"
-      ],
-      "categories": [
-        "email",
-        "ai"
-      ],
-      "license": "MIT",
-      "revision": 5,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/auth-inbox/manifest.json",
-        "sha256": "92cb946ece41c490d944913c9c26a9a9da239b3bb08176fd0140e6fca79af4b8",
-        "keyId": "catalog-2026-09",
-        "signature": "do5LWc4Csp1Lgd2PRudKnlUrbDZInbKl3R+v9wRyx7ZhcX0rzdG3n8sMjqMkX32wTFB9Jj8dcxH+zVDurMPWCQ=="
-      },
-      "accessOffer": "offered"
-    },
-    {
       "slug": "auto-reaction-bot",
       "repo": "Malith-Rukshan/Auto-Reaction-Bot",
       "name": "Auto Reaction Bot",
@@ -657,17 +585,17 @@
         "Yopass"
       ],
       "addedAt": "2026-09-27T04:19:23+03:00",
-      "version": "0.0.0-20261102.ba579c0",
+      "version": "0.0.0-20261105.65c9670",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/binthere@0.0.0-20261102.ba579c0/binthere-0.0.0-20261102.ba579c0.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/binthere@0.0.0-20261102.ba579c0/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/binthere@0.0.0-20261102.ba579c0/manifest.sig",
-        "digest": "ee43c95ce76f18eb3580558ece8b825b607208e9524841ed1fb15ddcbbdd5fdb"
+        "zip": "https://github.com/appflare/catalog/releases/download/binthere@0.0.0-20261105.65c9670/binthere-0.0.0-20261105.65c9670.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/binthere@0.0.0-20261105.65c9670/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/binthere@0.0.0-20261105.65c9670/manifest.sig",
+        "digest": "8e841e00834a0d8904e69755324d1ca190ff4c1638ca9b51ffff5f001264b8b9"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-11-07T10:42:57.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Gaurav",
@@ -2330,19 +2258,19 @@
         "Evernote"
       ],
       "addedAt": "2026-09-27T05:18:00+03:00",
-      "version": "2.16.1",
+      "version": "2.22.0",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/edgeever@2.16.1/edgeever-2.16.1.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/edgeever@2.16.1/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/edgeever@2.16.1/manifest.sig",
-        "digest": "aec4b75b999c8667fd46d1443ce5415a9b7e21fcc1c00ba2491e8ed696a2e390"
+        "zip": "https://github.com/appflare/catalog/releases/download/edgeever@2.22.0/edgeever-2.22.0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/edgeever@2.22.0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/edgeever@2.22.0/manifest.sig",
+        "digest": "bc547b663b6e1b522430a92b5e8075f989daf46cb515626107988c1fce9bc65f"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-11-07T10:46:29.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "tianma-if",
@@ -5230,6 +5158,93 @@
       "accessOffer": "offered"
     },
     {
+      "slug": "minvoice",
+      "repo": "ddyy/minvoice",
+      "name": "Minvoice",
+      "summary": "Invoicing for one business: invoices with PDF attachments, pay links through Stripe and PayPal, payment reminders, reports and CSV export, on D1.",
+      "tagline": "Create invoices with pay links and payment reminders",
+      "features": [
+        "Create itemized invoices with payment terms for each client",
+        "Give clients printable invoices and downloadable PDFs",
+        "Accept payments through your Stripe or PayPal account",
+        "Email PDF invoices through your Resend account",
+        "Send overdue payment reminders through Resend",
+        "Review monthly reports and export records as CSV"
+      ],
+      "alternativeTo": [
+        "Invoice Ninja"
+      ],
+      "addedAt": "2026-09-27T04:19:23+03:00",
+      "version": "0.0.0-20261105.0607ff2",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/minvoice@0.0.0-20261105.0607ff2/minvoice-0.0.0-20261105.0607ff2.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/minvoice@0.0.0-20261105.0607ff2/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/minvoice@0.0.0-20261105.0607ff2/manifest.sig",
+        "digest": "f1851e6b1566ce86e675ce5110e69a6de7ee616e7dea8c1b6849848966e746d4"
+      },
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "access"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Daniel Yang",
+          "url": "https://daniel-yang.com",
+          "github": "ddyy"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/minvoice/icon.svg",
+          "sha256": "b2c9d0f4ba33955d2013f989e6aa09f764f3097e69591d89f082c88750720ab3"
+        },
+        "screenshots": [
+          {
+            "url": "https://appflare.github.io/catalog/apps/minvoice/screenshots/01-dashboard.png",
+            "sha256": "038214ae56e29c9b64d1c753f0d264c0082373d88a8fa07edd9426ee1feae76c",
+            "alt": "Minvoice: Dashboard"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/minvoice/screenshots/02-invoice-detail.png",
+            "sha256": "f211e6ab4b9067d4ae994dc67d712def0d47ac5a89b604c9267d187e5b5d6792",
+            "alt": "Minvoice: Invoice detail"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/minvoice/screenshots/03-pay-page.png",
+            "sha256": "b5f848571a71f1f18d1bd80031ff5728874b4a16b32111ee710a814757f3c1c5",
+            "alt": "Minvoice: Pay page"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/minvoice/screenshots/04-payments-history.png",
+            "sha256": "ac3f02bdcf36c37771b5925c49922551296cc7ae5a0cec3b21c4a68fb72a95f6",
+            "alt": "Minvoice: Payments history"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/minvoice/screenshots/05-print-view.png",
+            "sha256": "0d9750b1604104ec14982e4aa008c1b7f1c50a20cfeba60d34e9248ea0faa000",
+            "alt": "Minvoice: Print view"
+          }
+        ]
+      },
+      "services": [
+        "d1",
+        "cron",
+        "access"
+      ],
+      "categories": [
+        "business",
+        "finance"
+      ],
+      "license": "MIT",
+      "revision": 5,
+      "accessOffer": "offered"
+    },
+    {
       "slug": "mpp-proxy",
       "repo": "cloudflare/mpp-proxy",
       "name": "MPP Payment-Gated Proxy",
@@ -5755,17 +5770,17 @@
         "BrowserLeaks"
       ],
       "addedAt": "2026-09-27T10:46:59+03:00",
-      "version": "0.0.0-20261027.1cea733",
+      "version": "0.0.0-20261106.94be991",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/one-ip@0.0.0-20261027.1cea733/one-ip-0.0.0-20261027.1cea733.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/one-ip@0.0.0-20261027.1cea733/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/one-ip@0.0.0-20261027.1cea733/manifest.sig",
-        "digest": "45abe28cb5cfa68aa9210aae93a367e24abb6e50dd777dff7ae439398dfd0df8"
+        "zip": "https://github.com/appflare/catalog/releases/download/one-ip@0.0.0-20261106.94be991/one-ip-0.0.0-20261106.94be991.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/one-ip@0.0.0-20261106.94be991/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/one-ip@0.0.0-20261106.94be991/manifest.sig",
+        "digest": "df2a7e6f735418099a093e6dc188aa5e23bb828ef812975b2834dd03502a965f"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-11-07T10:51:46.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Hu Zhihui",
@@ -6899,17 +6914,17 @@
         "TeamViewer"
       ],
       "addedAt": "2026-09-27T05:20:16+03:00",
-      "version": "3.17.44",
+      "version": "3.18.6",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/reminal@3.17.44/reminal-3.17.44.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/reminal@3.17.44/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/reminal@3.17.44/manifest.sig",
-        "digest": "090ed18e6cb285ad61691374f941076e3d08c16fb04d7b0a3a0de090307e7864"
+        "zip": "https://github.com/appflare/catalog/releases/download/reminal@3.18.6/reminal-3.18.6.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/reminal@3.18.6/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/reminal@3.18.6/manifest.sig",
+        "digest": "be0a9563706e7ccf88056fdf0094e96ea952f4dca5c5d1244356f20a01f42b56"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-11-07T10:53:56.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Harshal Gajjar",
@@ -8510,17 +8525,17 @@
         "Optionally publish combined totals without device or account identifiers"
       ],
       "addedAt": "2026-09-27T11:42:03+03:00",
-      "version": "0.85.0",
+      "version": "0.87.0",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/token-monitor@0.85.0/token-monitor-0.85.0.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/token-monitor@0.85.0/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/token-monitor@0.85.0/manifest.sig",
-        "digest": "890d7ad97a22757fde13262a178a66d3a5a75d066fc5ca561be8eb76f5864b25"
+        "zip": "https://github.com/appflare/catalog/releases/download/token-monitor@0.87.0/token-monitor-0.87.0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/token-monitor@0.87.0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/token-monitor@0.87.0/manifest.sig",
+        "digest": "414167e5f9d77d065f9a8ecfa23883c7ae4bb960965f130dc19b075d8f3cb5a0"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-11-07T10:57:05.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Javis",
