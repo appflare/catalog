@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-08T11:06:50.360Z",
+  "generatedAt": "2026-11-08T11:26:37.670Z",
   "apps": [
     {
       "slug": "2fa",
@@ -397,6 +397,72 @@
         "developer-tools"
       ],
       "license": "Apache-2.0",
+      "revision": 5,
+      "accessOffer": "offered"
+    },
+    {
+      "slug": "auth-inbox",
+      "repo": "TooonyChen/AuthInbox",
+      "name": "Auth Inbox",
+      "summary": "An inbox for sign-up and verification mail: Email Routing delivers it, an AI model of your choice pulls out codes and links and sorts each mail, and a dashboard, per-user grants and a remote MCP server let people and agents read them.",
+      "tagline": "Get sign-up codes and links in one private inbox",
+      "features": [
+        "Extract email codes and links using your chosen AI provider and API key",
+        "Copy a code or verification link with one click",
+        "Sort received mail into sign-in, password reset and other categories",
+        "Choose which addresses and mail categories each user can read",
+        "Let AI agents wait for new codes with their own access keys",
+        "Store promotional mail without sending it to the AI provider"
+      ],
+      "addedAt": "2026-09-27T06:14:13+03:00",
+      "version": "0.0.0-20261107.9df547b",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/auth-inbox@0.0.0-20261107.9df547b/auth-inbox-0.0.0-20261107.9df547b.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/auth-inbox@0.0.0-20261107.9df547b/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/auth-inbox@0.0.0-20261107.9df547b/manifest.sig",
+        "digest": "e35e5cc57383af037cf74c86dd9784d7075106428ebb6b07019bd5841aa293b8"
+      },
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "zone",
+        "email-routing"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Tony Chen",
+          "url": "https://tonychen.net",
+          "github": "TooonyChen"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "screenshots": [
+          {
+            "url": "https://appflare.github.io/catalog/apps/auth-inbox/screenshots/01-verification-code.png",
+            "sha256": "0a6e9d6551601cd9019e14758aa7f0d68b001c2babe36b3e1ce2db44e1e5a676",
+            "alt": "Auth Inbox: Verification code"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/auth-inbox/screenshots/02-mail-list.png",
+            "sha256": "60ed6d4d0eacde987d2a307d200e6cd8597644ff909afb8c6cfb7e6cdb3b6ab2",
+            "alt": "Auth Inbox: Mail list"
+          }
+        ]
+      },
+      "services": [
+        "d1",
+        "email-routing",
+        "zone"
+      ],
+      "categories": [
+        "email",
+        "ai"
+      ],
+      "license": "MIT",
       "revision": 5,
       "accessOffer": "offered"
     },
@@ -1631,17 +1697,17 @@
         "Termius"
       ],
       "addedAt": "2026-09-26T23:19:31+03:00",
-      "version": "0.0.0-20261105.289d163",
+      "version": "0.0.0-20261107.8e22808",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20261105.289d163/cloudssh-0.0.0-20261105.289d163.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20261105.289d163/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20261105.289d163/manifest.sig",
-        "digest": "1b21befe33bf00c91abe1b0da3cd378699c90b6a2a1dcffb5f9ba086923aeab8"
+        "zip": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20261107.8e22808/cloudssh-0.0.0-20261107.8e22808.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20261107.8e22808/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20261107.8e22808/manifest.sig",
+        "digest": "e1ada34d9b4622d632573e512caebe7827ed763f29f0b0237cb6254be85e9ab2"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-11-08T10:49:51.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "TanXin",
@@ -3074,17 +3140,17 @@
         "Generate song colour themes with your own Gemini API key"
       ],
       "addedAt": "2026-09-27T10:46:59+03:00",
-      "version": "0.7.25",
+      "version": "0.7.27",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/folia@0.7.25/folia-0.7.25.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/folia@0.7.25/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/folia@0.7.25/manifest.sig",
-        "digest": "86c114ba287d25da9a71287435adf03ad31b12cd3431bc11df13cbc5b6a2a2bf"
+        "zip": "https://github.com/appflare/catalog/releases/download/folia@0.7.27/folia-0.7.27.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/folia@0.7.27/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/folia@0.7.27/manifest.sig",
+        "digest": "0cfaf7328870c20cd48f57f91112d47f836349be9e2e350d63c3aede68e85ca5"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-11-08T10:52:14.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "chthollyphile",
@@ -5902,12 +5968,12 @@
         "Ahrefs"
       ],
       "addedAt": "2026-09-24T08:09:39+03:00",
-      "version": "0.1.24",
+      "version": "0.1.26",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/open-seo@0.1.24/open-seo-0.1.24.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/open-seo@0.1.24/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/open-seo@0.1.24/manifest.sig",
-        "digest": "3386d2ec97fe4784a4d8671bd2041506e265b96c078603e5219b671cff36ac21"
+        "zip": "https://github.com/appflare/catalog/releases/download/open-seo@0.1.26/open-seo-0.1.26.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/open-seo@0.1.26/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/open-seo@0.1.26/manifest.sig",
+        "digest": "0e584119d0d5f54df72d0bf438a41e4196101b728edaecb786bb73bd2edfba82"
       },
       "tier": "artifact",
       "plan": "free",
@@ -5915,7 +5981,7 @@
         "r2",
         "access"
       ],
-      "lastVerified": "2026-11-08T10:57:49.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Ben Senescu",
@@ -7070,19 +7136,19 @@
         "Bobby"
       ],
       "addedAt": "2026-09-27T12:02:55+03:00",
-      "version": "0.3.34",
+      "version": "0.3.36",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/renewlet@0.3.34/renewlet-0.3.34.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/renewlet@0.3.34/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/renewlet@0.3.34/manifest.sig",
-        "digest": "9fae358adcf15663de26e6ce74dda4e0a9cbfb1fa5cdf6106a7235b981b53f07"
+        "zip": "https://github.com/appflare/catalog/releases/download/renewlet@0.3.36/renewlet-0.3.36.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/renewlet@0.3.36/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/renewlet@0.3.36/manifest.sig",
+        "digest": "ee9d87aa6fddbdd2a0a6e99177ee20a91510cc76d4e5e854d5f2dfac9f134598"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-11-08T10:59:41.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "zhiyingzhou",
