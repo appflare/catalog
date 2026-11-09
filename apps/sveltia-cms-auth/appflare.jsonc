@@ -23,7 +23,7 @@
   ],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags; the pin is the head of main.
-  "source": { "ref": "main", "sha": "33500e16141793d4be3d878abb9733658069f5b7" },
+  "source": { "ref": "main", "sha": "7c34594cfef8c314c0b79d30157b80a3f8af1ca3" },
   "install": {
     "packageManager": "pnpm",
     "wranglerConfig": "wrangler.toml"
