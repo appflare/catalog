@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-09T12:29:20.128Z",
+  "generatedAt": "2026-11-09T12:59:57.335Z",
   "apps": [
     {
       "slug": "2fa",
@@ -358,17 +358,17 @@
         "UptimeRobot"
       ],
       "addedAt": "2026-09-27T04:47:37+03:00",
-      "version": "0.0.0-20261031.a0b9455",
+      "version": "0.0.0-20261107.fffa2f0",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/atalaya@0.0.0-20261031.a0b9455/atalaya-0.0.0-20261031.a0b9455.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/atalaya@0.0.0-20261031.a0b9455/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/atalaya@0.0.0-20261031.a0b9455/manifest.sig",
-        "digest": "af534f52a4384907deb8df8cf9feb1af78bac86372d54978b2f3e514bfdaf34e"
+        "zip": "https://github.com/appflare/catalog/releases/download/atalaya@0.0.0-20261107.fffa2f0/atalaya-0.0.0-20261107.fffa2f0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/atalaya@0.0.0-20261107.fffa2f0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/atalaya@0.0.0-20261107.fffa2f0/manifest.sig",
+        "digest": "744d6f29bed6bdb22982d017068dee492884de079ef0db3602de2fa57e1cc6b5"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-11-08T10:47:30.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Daniel Carrillo",
@@ -651,17 +651,17 @@
         "Yopass"
       ],
       "addedAt": "2026-09-27T04:19:23+03:00",
-      "version": "0.0.0-20261105.65c9670",
+      "version": "0.0.0-20261108.25ceb7f",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/binthere@0.0.0-20261105.65c9670/binthere-0.0.0-20261105.65c9670.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/binthere@0.0.0-20261105.65c9670/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/binthere@0.0.0-20261105.65c9670/manifest.sig",
-        "digest": "8e841e00834a0d8904e69755324d1ca190ff4c1638ca9b51ffff5f001264b8b9"
+        "zip": "https://github.com/appflare/catalog/releases/download/binthere@0.0.0-20261108.25ceb7f/binthere-0.0.0-20261108.25ceb7f.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/binthere@0.0.0-20261108.25ceb7f/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/binthere@0.0.0-20261108.25ceb7f/manifest.sig",
+        "digest": "5e33371b4deea86439687d5c8b2869afbf4f5e8c948f78827b9a9e61dc46c09d"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-11-09T12:10:23.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Gaurav",
@@ -4795,12 +4795,12 @@
         "Gmail"
       ],
       "addedAt": "2026-09-24T07:29:19+03:00",
-      "version": "0.0.0-20261031.be89083",
+      "version": "0.0.0-20261108.cee65a5",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261031.be89083/mailflare-0.0.0-20261031.be89083.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261031.be89083/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261031.be89083/manifest.sig",
-        "digest": "4b88004d778ecde07bc9e7567fc15bf0b8014db5ed1b15aa4144658f10b32c6f"
+        "zip": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261108.cee65a5/mailflare-0.0.0-20261108.cee65a5.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261108.cee65a5/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261108.cee65a5/manifest.sig",
+        "digest": "6f7c6df17920abf93049e62a3dc321c77f8588d0f46042bccfb9d83ccef5ad70"
       },
       "tier": "artifact",
       "plan": "paid",
@@ -7698,69 +7698,6 @@
       "accessOffer": "offered"
     },
     {
-      "slug": "semanticsearch",
-      "repo": "SemanticSearch-ai/semanticsearch",
-      "name": "Semantic Search",
-      "summary": "A semantic search API on Vectorize and Workers AI: add documents with metadata over HTTP, then search them by meaning, with writer and read-only API keys and Swagger docs.",
-      "tagline": "Find your documents by meaning",
-      "features": [
-        "Get ranked document matches for a search phrase",
-        "Store document text and extra details together",
-        "Add, update, retrieve, and delete documents through an API",
-        "Give search-only access without allowing document changes",
-        "Try searches and document updates in the built-in API explorer"
-      ],
-      "addedAt": "2026-09-27T12:00:01+03:00",
-      "version": "0.0.0-20260603.baa959e",
-      "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/semanticsearch@0.0.0-20260603.baa959e/semanticsearch-0.0.0-20260603.baa959e.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/semanticsearch@0.0.0-20260603.baa959e/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/semanticsearch@0.0.0-20260603.baa959e/manifest.sig",
-        "digest": "27e8b86fed8c97844a1bbab42b9d67ee55cc514c2129dfccf3c7ccb10b406b97"
-      },
-      "tier": "artifact",
-      "plan": "free",
-      "requires": [
-        "workers-ai"
-      ],
-      "lastVerified": "2026-11-09T12:23:29.000Z",
-      "authors": [
-        {
-          "name": "SemanticSearch.ai",
-          "url": "https://semanticsearch.ai",
-          "github": "SemanticSearch-ai"
-        }
-      ],
-      "maintainers": [
-        "MendyLanda"
-      ],
-      "media": {
-        "icon": {
-          "url": "https://appflare.github.io/catalog/apps/semanticsearch/icon.svg",
-          "sha256": "1829f9ce8b34013fa385cfe49689e3feacc24fd5373c0936b4e23c164ee05b4e"
-        },
-        "screenshots": []
-      },
-      "services": [
-        "vectorize",
-        "workers-ai"
-      ],
-      "categories": [
-        "developer-tools",
-        "ai"
-      ],
-      "license": "Apache-2.0",
-      "licenseNote": "The README requires products built on this app to include a link to https://semanticsearch.ai/.",
-      "revision": 4,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/semanticsearch/manifest.json",
-        "sha256": "b3660792b1d834d9dceb79a059774913518150d665accca76294ae957df7648c",
-        "keyId": "catalog-2026-09",
-        "signature": "qBgRTcmMUwGFdSFbNkj8R+MI1C5RE3K9Siz9W7oO/sMt+DN8n3N6lFm6yPW6BE1toJ8PlxQc6b5snCrWjuLZBg=="
-      },
-      "accessOffer": "offered"
-    },
-    {
       "slug": "sharehtml",
       "repo": "jonesphillip/sharehtml",
       "name": "ShareHTML",
@@ -8591,17 +8528,17 @@
         "Optionally publish combined totals without device or account identifiers"
       ],
       "addedAt": "2026-09-27T11:42:03+03:00",
-      "version": "0.87.0",
+      "version": "0.88.0",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/token-monitor@0.87.0/token-monitor-0.87.0.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/token-monitor@0.87.0/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/token-monitor@0.87.0/manifest.sig",
-        "digest": "414167e5f9d77d065f9a8ecfa23883c7ae4bb960965f130dc19b075d8f3cb5a0"
+        "zip": "https://github.com/appflare/catalog/releases/download/token-monitor@0.88.0/token-monitor-0.88.0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/token-monitor@0.88.0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/token-monitor@0.88.0/manifest.sig",
+        "digest": "a1a2adec731ee383c441c7be5e61438c0c40a702cf616d150f8f9b7ca7dc85dd"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-11-09T12:25:20.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Javis",
