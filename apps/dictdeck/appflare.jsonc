@@ -27,7 +27,7 @@
   "revision": 3,
   "authors": [{ "name": "Asutorufa", "github": "Asutorufa", "x": "Asutorufa" }],
   "maintainers": ["MendyLanda"],
-  "source": { "ref": "v0.20.0", "sha": "2a9759e0504c99d7d2da4b622c1ec29507fac096" },
+  "source": { "ref": "v0.21.0", "sha": "328143e11b4bc225e9913f0794de65fc0dc105c5" },
   "install": {
     "packageManager": "npm",
     "wranglerConfig": "wrangler.toml",
