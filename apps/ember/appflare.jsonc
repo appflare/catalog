@@ -32,9 +32,10 @@
     // Upstream's Deploy to Cloudflare entry point, at the root beside the
     // workspace: the Worker, the web app as static assets, five SQLite
     // Durable Objects, the R2 bucket for uploads, the send_email binding and
-    // the D1 database messages go to only when STORAGE_BACKEND is "d1".
-    // STORAGE_BACKEND stays "do-sqlite" as the config sets it: switching it
-    // later starts an empty Ember, so it is not offered as a setting.
+    // the D1 database messages go to only when STORAGE_BACKEND is "d1"
+    // (below). The database is made and migrated on every install, as
+    // Deploy to Cloudflare's form makes it; on "do-sqlite" Ember never reads
+    // it (apps/worker/src/db.ts).
     "wranglerConfig": "wrangler.jsonc",
     // The config has no build.command. The web app is the only workspace
     // with a real build (tsc, then Vite into apps/web/dist); the shared
@@ -111,6 +112,21 @@
     }
   ],
   "vars": [
+    {
+      // Upstream asks the same question in Deploy to Cloudflare's form, with
+      // the same default (docs/self-hosting.md#storage-durable-object-sqlite-or-d1).
+      // Nothing moves messages between the two, so the help says to choose
+      // once, before setting Ember up.
+      "name": "STORAGE_BACKEND",
+      "label": "Where messages are stored",
+      "help": "Choose once, before setting Ember up: nothing moves messages from one to the other, so changing this later starts an empty Ember that must be set up again, and leaves the old messages behind. Durable Objects scale furthest. D1 keeps everything in one database you can query, export and restore to an earlier minute, up to 500 MB on Workers Free and 10 GB on Workers Paid.",
+      "type": "select",
+      "options": [
+        { "value": "do-sqlite", "label": "Durable Objects: each room keeps its own (recommended)" },
+        { "value": "d1", "label": "D1: one database you can query and export" }
+      ],
+      "default": "do-sqlite"
+    },
     {
       "name": "VAPID_PUBLIC_KEY",
       "label": "Push public key",
