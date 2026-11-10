@@ -29,7 +29,7 @@
   // CORS and cache middleware this server uses, and a timing-safe token
   // comparison) are released only on master so far. The bump bot moves the
   // pin to the next tag that contains this commit.
-  "source": { "ref": "master", "sha": "b0aaab5c3063dd5f8d15e38e69398a0c040edcda" },
+  "source": { "ref": "master", "sha": "c402ad49a0035693631e05fb30589c14624f187b" },
   "install": {
     "packageManager": "pnpm",
     // wrangler bundles src/index.ts directly; the Vite config is for local
