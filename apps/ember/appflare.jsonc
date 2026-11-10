@@ -1,0 +1,187 @@
+{
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "ember",
+  "name": "Ember",
+  "summary": "Real-time team chat in the spirit of Slack and Campfire: rooms, threads, DMs, files, search, Slack-compatible bots, an optional AI teammate and push notifications, on Durable Objects and R2.",
+  "tagline": "Team chat with rooms, threads and DMs, without per-seat fees",
+  "features": [
+    "Chat in rooms, private rooms, threads and direct messages",
+    "Share files, pictures and videos of up to 250 MB",
+    "Search every message, narrowed by room, person, links or files",
+    "Connect bots and alerts through Slack-compatible webhooks",
+    "Ask @ember, an AI teammate, questions right in the conversation",
+    "Install it on your phone and get push notifications"
+  ],
+  // Upstream's README compares Ember with Slack throughout, and credits
+  // Campfire as what it grew out of.
+  "alternativeTo": ["Slack", "Campfire"],
+  "repo": "NYLLON-SOFTWARE/ember-cloudflare",
+  // The LICENSE file is MIT, its copyright held by 37signals (Campfire, which
+  // Ember grew out of) and NYLLON.
+  "license": "MIT",
+  "categories": ["chat", "community"],
+  "authors": [
+    { "name": "NYLLON", "url": "https://nyllon.com", "github": "NYLLON-SOFTWARE" },
+    { "name": "Kevin Rose", "url": "https://www.kevinrose.com", "github": "kropdx" },
+    { "name": "37signals", "url": "https://37signals.com", "github": "basecamp" }
+  ],
+  "maintainers": ["MendyLanda"],
+  "source": { "ref": "v0.4.2", "sha": "3ee4d23cc2c9bdb94ef481110d609e7b17fdb07b" },
+  "install": {
+    "packageManager": "pnpm",
+    // Upstream's Deploy to Cloudflare entry point, at the root beside the
+    // workspace: the Worker, the web app as static assets, five SQLite
+    // Durable Objects, the R2 bucket for uploads, the send_email binding and
+    // the D1 database messages go to only when STORAGE_BACKEND is "d1"
+    // (below). The database is made and migrated on every install, as
+    // Deploy to Cloudflare's form makes it; on "do-sqlite" Ember never reads
+    // it (apps/worker/src/db.ts).
+    "wranglerConfig": "wrangler.jsonc",
+    // The config has no build.command. The web app is the only workspace
+    // with a real build (tsc, then Vite into apps/web/dist); the shared
+    // packages are TypeScript sources the bundles import directly, and the
+    // worker's own `build` script is a `wrangler deploy --dry-run`, which the
+    // packer does anyway.
+    "buildCommand": "pnpm --filter @ember/web build",
+    // Answers without a sign-in, and checks the Workspace and a room's
+    // Durable Object storage (apps/worker/src/health.ts). / sends a new
+    // install to its setup page instead.
+    "health": { "path": "/api/health" }
+  },
+  // Upstream builds Ember to fit Workers Free: SQLite Durable Objects, no
+  // cron, queues or KV. Workers Paid only raises the daily limits, and
+  // Cloudflare Email Service needs it to send, while Resend works on Free.
+  "plan": "free",
+  "requires": ["r2"],
+  // upstream's apps/worker/scripts/deploy.ts makes SESSION_SECRET, the VAPID
+  // pair and (Deploy to Cloudflare's form) the setup password on a first
+  // deploy; here the install form makes them. Left out: EMBER_SETUP_TOKEN, an
+  // alternative to the setup password for terminal deploys, and
+  // EMBER_RECOVERY_TOKEN, which upstream asks to set only while resetting a
+  // password and remove after (docs/self-hosting.md#resetting-a-password).
+  "secrets": [
+    {
+      "name": "EMBER_SETUP_PASSWORD",
+      "label": "Setup password",
+      "help": "Ember's setup page asks for it once, so only you can create the community and its administrator. Give it a new value here if you forget it before setting Ember up.",
+      "generate": "password"
+    },
+    {
+      "name": "SESSION_SECRET",
+      "label": "Session secret",
+      "help": "Signs sessions and encrypts a Resend key pasted into Ember's settings. Changing it signs everyone out and makes that key unreadable until it is pasted again.",
+      "generate": "password"
+    },
+    {
+      "name": "VAPID_PRIVATE_KEY",
+      "label": "Push private key",
+      "help": "The VAPID private key that signs push notifications. Keep it once people use push: a new key leaves everyone to turn notifications on again.",
+      "generate": "vapid-private-key"
+    },
+    {
+      "name": "RESEND_API_KEY",
+      "label": "Resend API key",
+      "help": "To send invitations and join links by email through Resend. Can also be pasted in Ember's Workspace settings, under Membership, Set up email, which also offers Cloudflare Email Service.",
+      "link": { "label": "Get a key", "url": "https://resend.com/api-keys" },
+      "optional": true
+    },
+    {
+      "name": "TURNSTILE_SECRET_KEY",
+      "label": "Turnstile secret key",
+      "help": "With the site key below, checks that whoever signs up to an open community is a person. Can also be set in Ember's Membership settings, under Set up Turnstile.",
+      "link": {
+        "label": "Add a widget",
+        "url": "https://dash.cloudflare.com/?to=/:account/turnstile"
+      },
+      "optional": true
+    },
+    {
+      "name": "MEMBERFUL_CLIENT_SECRET",
+      "label": "Memberful client secret",
+      "help": "The OAuth client secret of a Memberful custom app, with which members of your Memberful site sign in. Its redirect URL is this app's address followed by /auth/memberful/callback.",
+      "optional": true
+    },
+    {
+      "name": "MEMBERFUL_API_KEY",
+      "label": "Memberful API key",
+      "help": "The custom app's API key, so Ember can check a member whose Memberful webhook arrives.",
+      "optional": true
+    },
+    {
+      "name": "MEMBERFUL_WEBHOOK_SECRET",
+      "label": "Memberful webhook secret",
+      "help": "The secret key of a Memberful webhook pointing at this app's address followed by /webhooks/memberful, which signs out members whose membership lapses.",
+      "optional": true
+    }
+  ],
+  "vars": [
+    {
+      // Upstream asks the same question in Deploy to Cloudflare's form, with
+      // the same default (docs/self-hosting.md#storage-durable-object-sqlite-or-d1).
+      // Nothing moves messages between the two, so the help says to choose
+      // once, before setting Ember up.
+      "name": "STORAGE_BACKEND",
+      "label": "Where messages are stored",
+      "help": "Choose once, before setting Ember up: nothing moves messages from one to the other, so changing this later starts an empty Ember that must be set up again, and leaves the old messages behind. Durable Objects scale furthest. D1 keeps everything in one database you can query, export and restore to an earlier minute, up to 500 MB on Workers Free and 10 GB on Workers Paid.",
+      "type": "select",
+      "options": [
+        { "value": "do-sqlite", "label": "Durable Objects: each room keeps its own (recommended)" },
+        { "value": "d1", "label": "D1: one database you can query and export" }
+      ],
+      "default": "do-sqlite"
+    },
+    {
+      "name": "VAPID_PUBLIC_KEY",
+      "label": "Push public key",
+      "help": "The public half of the push private key, which browsers subscribe with.",
+      "derive": { "from": "VAPID_PRIVATE_KEY", "method": "vapid-public-key" }
+    },
+    {
+      "name": "VAPID_SUBJECT",
+      "label": "Push contact",
+      "help": "A mailto: or https: address push services may contact about your notifications. Leave empty to name Ember's project.",
+      "optional": true
+    },
+    {
+      // Prefills the account in Set up Ember AI
+      // (apps/worker/src/assistant/settings.ts); upstream's deploy script sets
+      // it the same way.
+      "name": "CLOUDFLARE_ACCOUNT_ID",
+      "label": "Cloudflare account ID",
+      "help": "Filled in by Appflare. Set up Ember AI suggests this account for Workers AI and AI Gateway.",
+      "default": "{{accountId}}"
+    },
+    {
+      "name": "TURNSTILE_SITE_KEY",
+      "label": "Turnstile site key",
+      "help": "The site key of the Turnstile widget whose secret key is above.",
+      "optional": true
+    },
+    {
+      "name": "MEMBERFUL_URL",
+      "label": "Memberful site",
+      "help": "Your Memberful site's address, such as https://example.memberful.com, for Memberful sign-in.",
+      "optional": true
+    },
+    {
+      "name": "MEMBERFUL_CLIENT_ID",
+      "label": "Memberful client ID",
+      "help": "The OAuth identifier of the Memberful custom app whose secret is above.",
+      "optional": true
+    }
+  ],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "Open {{appUrl}}, type the setup password from this app's settings, and create your community and its administrator. Then invite your team with the join link on the general room's welcome card, or by email."
+    },
+    {
+      "type": "markdown",
+      "content": "To send email (invitations and join links), open Workspace settings, Membership, Set up email, and choose Resend or Cloudflare Email Service. Cloudflare Email Service sends only on Workers Paid, with your domain onboarded under Email Sending."
+    },
+    {
+      "type": "markdown",
+      "content": "After adding a custom domain, open Workspace settings, Domain settings, at {{appUrl}} and save the domain there too, so Ember sends people to it and its links name it."
+    }
+  ]
+}
