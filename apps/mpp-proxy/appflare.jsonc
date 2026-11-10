@@ -28,7 +28,7 @@
   ],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags; the pin is the head of main.
-  "source": { "ref": "main", "sha": "0e4dd80f136c8a42ed844374543c7fef02e17092" },
+  "source": { "ref": "main", "sha": "86fa3c099df41edcbf6ba5252e72c10273cd0da3" },
   "install": {
     "packageManager": "npm",
     // No build: wrangler bundles src/index.ts. The config's routes and the
