@@ -27,7 +27,7 @@
   "maintainers": ["MendyLanda"],
   // The last tag, v1.0.2, predates the web dashboard; the pin follows the
   // default branch until upstream tags again.
-  "source": { "ref": "main", "sha": "f13f82addd88a4cfe2f371763c6051e4a8dd87ad" },
+  "source": { "ref": "main", "sha": "9a721f1f1a59b7f4b0faae916c486eba60cdfdc4" },
   "install": {
     "packageManager": "bun",
     "wranglerConfig": "wrangler.jsonc",
