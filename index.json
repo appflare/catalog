@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-09T12:59:57.335Z",
+  "generatedAt": "2026-11-10T07:44:08.547Z",
   "apps": [
     {
       "slug": "2fa",
@@ -1103,17 +1103,17 @@
         "Netdata"
       ],
       "addedAt": "2026-09-27T10:46:59+03:00",
-      "version": "0.0.0-20261102.609cc0b",
+      "version": "0.0.0-20261109.612027c",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/cf-server-monitor@0.0.0-20261102.609cc0b/cf-server-monitor-0.0.0-20261102.609cc0b.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/cf-server-monitor@0.0.0-20261102.609cc0b/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/cf-server-monitor@0.0.0-20261102.609cc0b/manifest.sig",
-        "digest": "ba781d84115c897967f93671d8b3c4805121f89bbcb2c10703d156691e7169d3"
+        "zip": "https://github.com/appflare/catalog/releases/download/cf-server-monitor@0.0.0-20261109.612027c/cf-server-monitor-0.0.0-20261109.612027c.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/cf-server-monitor@0.0.0-20261109.612027c/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/cf-server-monitor@0.0.0-20261109.612027c/manifest.sig",
+        "digest": "b9a88ff9f98249f29399ff78e708ad0d1c3c17dceceac3ad063cc6c05642ac0c"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-11-09T12:10:57.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "huilang-me",
@@ -1697,17 +1697,17 @@
         "Termius"
       ],
       "addedAt": "2026-09-26T23:19:31+03:00",
-      "version": "0.0.0-20261107.8e22808",
+      "version": "0.0.0-20261109.0649f71",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20261107.8e22808/cloudssh-0.0.0-20261107.8e22808.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20261107.8e22808/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20261107.8e22808/manifest.sig",
-        "digest": "e1ada34d9b4622d632573e512caebe7827ed763f29f0b0237cb6254be85e9ab2"
+        "zip": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20261109.0649f71/cloudssh-0.0.0-20261109.0649f71.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20261109.0649f71/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20261109.0649f71/manifest.sig",
+        "digest": "676a2a1890097e36940a69d8b508dac11efdda700facfdcb79986e398bdcaf14"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-11-09T12:12:07.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "TanXin",
@@ -2066,19 +2066,19 @@
         "Look up words through a Telegram bot you configure"
       ],
       "addedAt": "2026-09-27T11:58:16+03:00",
-      "version": "0.20.0",
+      "version": "0.21.0",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/dictdeck@0.20.0/dictdeck-0.20.0.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/dictdeck@0.20.0/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/dictdeck@0.20.0/manifest.sig",
-        "digest": "192bb36cf0de1673e00fed723eb10756f1068556b8df0d775af2301e72b950a2"
+        "zip": "https://github.com/appflare/catalog/releases/download/dictdeck@0.21.0/dictdeck-0.21.0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/dictdeck@0.21.0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/dictdeck@0.21.0/manifest.sig",
+        "digest": "5451f7ae36086908ddd153b1d39a58db0f22a5bb95a302f3b8179e70196b1d9a"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "workers-ai"
       ],
-      "lastVerified": "2026-11-09T12:12:43.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Asutorufa",
@@ -2107,12 +2107,6 @@
       ],
       "license": "NONE",
       "revision": 3,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/dictdeck/manifest.json",
-        "sha256": "ed9aa54465b6d4585abff71b716cafcc4b56b875a082516c11c0ac60a5e52416",
-        "keyId": "catalog-2026-09",
-        "signature": "2tooQUsL6nndpcRn8dE/+fEm9I7amSb1Oqz02cEUmfLHdAC7pRB8P97zcoyWWBxtcBQJ7+dgALDmkE5ngIkGDw=="
-      },
       "accessOffer": "offered"
     },
     {
@@ -2324,19 +2318,19 @@
         "Evernote"
       ],
       "addedAt": "2026-09-27T05:18:00+03:00",
-      "version": "2.22.0",
+      "version": "2.24.0",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/edgeever@2.22.0/edgeever-2.22.0.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/edgeever@2.22.0/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/edgeever@2.22.0/manifest.sig",
-        "digest": "bc547b663b6e1b522430a92b5e8075f989daf46cb515626107988c1fce9bc65f"
+        "zip": "https://github.com/appflare/catalog/releases/download/edgeever@2.24.0/edgeever-2.24.0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/edgeever@2.24.0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/edgeever@2.24.0/manifest.sig",
+        "digest": "2d21d421b3ad6d593593fbfe0d65de5be3770c98ac038b3673cd1e1c56e84f62"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-11-09T12:13:42.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "tianma-if",
@@ -2696,6 +2690,119 @@
       ],
       "license": "MIT",
       "revision": 4,
+      "accessOffer": "offered"
+    },
+    {
+      "slug": "ember",
+      "repo": "NYLLON-SOFTWARE/ember-cloudflare",
+      "name": "Ember",
+      "summary": "Real-time team chat in the spirit of Slack and Campfire: rooms, threads, DMs, files, search, Slack-compatible bots, an optional AI teammate and push notifications, on Durable Objects and R2.",
+      "tagline": "Team chat with rooms, threads and DMs, without per-seat fees",
+      "features": [
+        "Chat in rooms, private rooms, threads and direct messages",
+        "Share files, pictures and videos of up to 250 MB",
+        "Search every message, narrowed by room, person, links or files",
+        "Connect bots and alerts through Slack-compatible webhooks",
+        "Ask @ember, an AI teammate, questions right in the conversation",
+        "Install it on your phone and get push notifications"
+      ],
+      "alternativeTo": [
+        "Slack",
+        "Campfire"
+      ],
+      "addedAt": "2026-11-10T07:33:09Z",
+      "version": "0.4.2",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/ember@0.4.2/ember-0.4.2.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/ember@0.4.2/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/ember@0.4.2/manifest.sig",
+        "digest": "b9c0a1f3d971034a0e29122b77ecc4b09a3c85c9fd4d49678bf6ff469c00444b"
+      },
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "r2"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "NYLLON",
+          "url": "https://nyllon.com",
+          "github": "NYLLON-SOFTWARE"
+        },
+        {
+          "name": "Kevin Rose",
+          "url": "https://www.kevinrose.com",
+          "github": "kropdx"
+        },
+        {
+          "name": "37signals",
+          "url": "https://37signals.com",
+          "github": "basecamp"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/ember/icon.png",
+          "sha256": "d93bfb957863d1aca5ab6ca4e2f81d592e5ed101df6850b89ac792f6f67d88f3"
+        },
+        "cover": {
+          "url": "https://appflare.github.io/catalog/apps/ember/cover.png",
+          "sha256": "c3063702a74b3e74c67cad9760a879faa7bbbcab4a68d8148413cd0c81074c29"
+        },
+        "screenshots": [
+          {
+            "url": "https://appflare.github.io/catalog/apps/ember/screenshots/01-launch-room-thread.png",
+            "sha256": "01ad7dac5712690105f1c78eedebe080528276ef00d559a05314bf79f7fde9a7",
+            "alt": "Ember: Launch room thread"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/ember/screenshots/02-engineering-room-dark.png",
+            "sha256": "669b82762e381b7c20db53e2d1f735e37852c2ecba042285d87745d938c3a168",
+            "alt": "Ember: Engineering room dark"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/ember/screenshots/03-files-and-video.png",
+            "sha256": "ed373cd91687bc361920c9c5858ca2f792616f9ceb977ffdc83e9a9edf676c2e",
+            "alt": "Ember: Files and video"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/ember/screenshots/04-monitoring-bot-alerts.png",
+            "sha256": "f3c388acef949b2420c76b0b3e9432a8a7e8d9884eb9165555373ddbe2185360",
+            "alt": "Ember: Monitoring bot alerts"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/ember/screenshots/05-message-search.png",
+            "sha256": "695eddd58a26836f8a15659dc5c9754bba5a0664e61d6f4e96345f1f208c711d",
+            "alt": "Ember: Message search"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/ember/screenshots/06-on-phones.png",
+            "sha256": "d0d3c8a2e4b4d16dcc652e631535c07ef06b287efa6f6132c7c9c045aec693b6",
+            "alt": "Ember: On phones"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/ember/screenshots/07-membership-settings.png",
+            "sha256": "604dc6eea194163ec35ccac406cf72b7edf6fe620858edea5791af0a7c237dfc",
+            "alt": "Ember: Membership settings"
+          }
+        ]
+      },
+      "services": [
+        "d1",
+        "r2",
+        "durable-objects",
+        "email-routing"
+      ],
+      "categories": [
+        "chat",
+        "community"
+      ],
+      "license": "MIT",
+      "revision": 1,
       "accessOffer": "offered"
     },
     {
@@ -6163,12 +6270,12 @@
         "Keep characters, locations and lighting consistent across scenes"
       ],
       "addedAt": "2026-09-27T12:03:21+03:00",
-      "version": "0.0.0-20261102.1999cb1",
+      "version": "0.0.0-20261109.d436445",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261102.1999cb1/openstory-0.0.0-20261102.1999cb1.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261102.1999cb1/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261102.1999cb1/manifest.sig",
-        "digest": "66b40078282491fe4132b06bd4587196140ed2f6139989743cd5e4bbb1d65dc4"
+        "zip": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261109.d436445/openstory-0.0.0-20261109.d436445.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261109.d436445/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261109.d436445/manifest.sig",
+        "digest": "7d75ddfdfd11b77e8d53ecedf381c8575be7a918e50f409eacc47ab2a587fddc"
       },
       "tier": "artifact",
       "plan": "paid",
@@ -6234,19 +6341,19 @@
         "Pastebin"
       ],
       "addedAt": "2026-09-26T23:19:31+03:00",
-      "version": "0.0.0-20261103.aae764c",
+      "version": "0.0.0-20261109.dcf3922",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/pastebin-worker@0.0.0-20261103.aae764c/pastebin-worker-0.0.0-20261103.aae764c.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/pastebin-worker@0.0.0-20261103.aae764c/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/pastebin-worker@0.0.0-20261103.aae764c/manifest.sig",
-        "digest": "b68a53cdb88a070cb9a33b715087cb61da2d7dcdab9fa64d20587fa4b49ea7a4"
+        "zip": "https://github.com/appflare/catalog/releases/download/pastebin-worker@0.0.0-20261109.dcf3922/pastebin-worker-0.0.0-20261109.dcf3922.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/pastebin-worker@0.0.0-20261109.dcf3922/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/pastebin-worker@0.0.0-20261109.dcf3922/manifest.sig",
+        "digest": "a632fdf5b0d11f7862004f120058247f43a6fe1167be2b87e399ea822918860b"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-11-09T12:20:27.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Sharzy",
@@ -6475,12 +6582,12 @@
         "Jira"
       ],
       "addedAt": "2026-09-27T06:13:42+03:00",
-      "version": "0.9.1",
+      "version": "0.10.2",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/projektor@0.9.1/projektor-0.9.1.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/projektor@0.9.1/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/projektor@0.9.1/manifest.sig",
-        "digest": "aa5adcb6f88f3087eac5efefee9163c9eb8436bf2d56d7b86e8bfa43a582e741"
+        "zip": "https://github.com/appflare/catalog/releases/download/projektor@0.10.2/projektor-0.10.2.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/projektor@0.10.2/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/projektor@0.10.2/manifest.sig",
+        "digest": "9540e45f0931932df7d1f335a0a7013e775d4985848552f375dde99090e12385"
       },
       "tier": "artifact",
       "plan": "free",
@@ -6488,7 +6595,7 @@
         "r2",
         "access"
       ],
-      "lastVerified": "2026-11-09T12:21:35.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Thomas Dickson",
@@ -7698,6 +7805,63 @@
       "accessOffer": "offered"
     },
     {
+      "slug": "semanticsearch",
+      "repo": "SemanticSearch-ai/semanticsearch",
+      "name": "Semantic Search",
+      "summary": "A semantic search API on Vectorize and Workers AI: add documents with metadata over HTTP, then search them by meaning, with writer and read-only API keys and Swagger docs.",
+      "tagline": "Find your documents by meaning",
+      "features": [
+        "Get ranked document matches for a search phrase",
+        "Store document text and extra details together",
+        "Add, update, retrieve, and delete documents through an API",
+        "Give search-only access without allowing document changes",
+        "Try searches and document updates in the built-in API explorer"
+      ],
+      "addedAt": "2026-09-27T12:00:01+03:00",
+      "version": "0.0.0-20261109.813b198",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/semanticsearch@0.0.0-20261109.813b198/semanticsearch-0.0.0-20261109.813b198.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/semanticsearch@0.0.0-20261109.813b198/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/semanticsearch@0.0.0-20261109.813b198/manifest.sig",
+        "digest": "5ae46f2f47a259f6efa2da4cdad8c19ff2740b4a667cc1cb49a67a60e4169a24"
+      },
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "workers-ai"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "SemanticSearch.ai",
+          "url": "https://semanticsearch.ai",
+          "github": "SemanticSearch-ai"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/semanticsearch/icon.svg",
+          "sha256": "1829f9ce8b34013fa385cfe49689e3feacc24fd5373c0936b4e23c164ee05b4e"
+        },
+        "screenshots": []
+      },
+      "services": [
+        "vectorize",
+        "workers-ai"
+      ],
+      "categories": [
+        "developer-tools",
+        "ai"
+      ],
+      "license": "Apache-2.0",
+      "licenseNote": "The README requires products built on this app to include a link to https://semanticsearch.ai/.",
+      "revision": 4,
+      "accessOffer": "offered"
+    },
+    {
       "slug": "sharehtml",
       "repo": "jonesphillip/sharehtml",
       "name": "ShareHTML",
@@ -8159,17 +8323,17 @@
         "Use the same sign-in helper with Decap CMS"
       ],
       "addedAt": "2026-09-27T10:43:20+03:00",
-      "version": "0.0.0-20261026.33500e1",
+      "version": "0.0.0-20261108.7c34594",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/sveltia-cms-auth@0.0.0-20261026.33500e1/sveltia-cms-auth-0.0.0-20261026.33500e1.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/sveltia-cms-auth@0.0.0-20261026.33500e1/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/sveltia-cms-auth@0.0.0-20261026.33500e1/manifest.sig",
-        "digest": "571cf16c9aaaa2b960cc3197455a0d159830c99ab425cff9142d4c9dabe9b727"
+        "zip": "https://github.com/appflare/catalog/releases/download/sveltia-cms-auth@0.0.0-20261108.7c34594/sveltia-cms-auth-0.0.0-20261108.7c34594.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/sveltia-cms-auth@0.0.0-20261108.7c34594/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/sveltia-cms-auth@0.0.0-20261108.7c34594/manifest.sig",
+        "digest": "631cbff37f910d40ff44223d2eef41da1b06fda7a92013c113ff622a44ea940e"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-11-09T12:25:22.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Sveltia",
