@@ -89,7 +89,10 @@
       "name": "TURNSTILE_SECRET_KEY",
       "label": "Turnstile secret key",
       "help": "With the site key below, checks that whoever signs up to an open community is a person. Can also be set in Ember's Membership settings, under Set up Turnstile.",
-      "link": { "label": "Add a widget", "url": "https://dash.cloudflare.com/?to=/:account/turnstile" },
+      "link": {
+        "label": "Add a widget",
+        "url": "https://dash.cloudflare.com/?to=/:account/turnstile"
+      },
       "optional": true
     },
     {
