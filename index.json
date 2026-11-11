@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-11T11:50:51.774Z",
+  "generatedAt": "2026-11-11T11:58:55.481Z",
   "apps": [
     {
       "slug": "2fa",
@@ -77,19 +77,19 @@
         "Notion"
       ],
       "addedAt": "2026-09-27T06:02:01+03:00",
-      "version": "0.0.0-20261103.4f8e1c1",
+      "version": "0.0.0-20261110.1050ec4",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20261103.4f8e1c1/888wiki-0.0.0-20261103.4f8e1c1.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20261103.4f8e1c1/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20261103.4f8e1c1/manifest.sig",
-        "digest": "2ca1c4f6197427fff659d90094307bf4d2f0a971f2e98875b781e67eeb38ae81"
+        "zip": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20261110.1050ec4/888wiki-0.0.0-20261110.1050ec4.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20261110.1050ec4/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20261110.1050ec4/manifest.sig",
+        "digest": "6f06be3ad3adf905cf97d505853052c7507ab1f6fb8e12d88b624ceddbb3b4b8"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-11-11T11:28:26.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "DAVID888",
@@ -2318,19 +2318,19 @@
         "Evernote"
       ],
       "addedAt": "2026-09-27T05:18:00+03:00",
-      "version": "2.24.0",
+      "version": "2.25.0",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/edgeever@2.24.0/edgeever-2.24.0.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/edgeever@2.24.0/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/edgeever@2.24.0/manifest.sig",
-        "digest": "2d21d421b3ad6d593593fbfe0d65de5be3770c98ac038b3673cd1e1c56e84f62"
+        "zip": "https://github.com/appflare/catalog/releases/download/edgeever@2.25.0/edgeever-2.25.0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/edgeever@2.25.0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/edgeever@2.25.0/manifest.sig",
+        "digest": "7439d937f532b543a1278d9839827e8ca960eee3f952d95149d72f81b3859ca6"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-11-11T11:32:33.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "tianma-if",
@@ -4356,19 +4356,19 @@
         "Tumblr"
       ],
       "addedAt": "2026-09-27T12:14:18+03:00",
-      "version": "0.0.0-20261028.d7d316f",
+      "version": "0.0.0-20261110.b8c2273",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/jant@0.0.0-20261028.d7d316f/jant-0.0.0-20261028.d7d316f.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/jant@0.0.0-20261028.d7d316f/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/jant@0.0.0-20261028.d7d316f/manifest.sig",
-        "digest": "d24f0b220e029e538cda30175d4e20f9fac9de7f398675cac59a71bb2144ee57"
+        "zip": "https://github.com/appflare/catalog/releases/download/jant@0.0.0-20261110.b8c2273/jant-0.0.0-20261110.b8c2273.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/jant@0.0.0-20261110.b8c2273/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/jant@0.0.0-20261110.b8c2273/manifest.sig",
+        "digest": "b5eb5cb70c5377e465959eaac9e5f7bfd7476191d85e499983ecf912838a7610"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-11-11T11:36:07.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Jant",
@@ -4831,12 +4831,12 @@
         "AgentMail"
       ],
       "addedAt": "2026-09-27T12:02:55+03:00",
-      "version": "0.0.0-20260528.f13f82a",
+      "version": "0.0.0-20261109.9a721f1",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/mailclaw@0.0.0-20260528.f13f82a/mailclaw-0.0.0-20260528.f13f82a.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/mailclaw@0.0.0-20260528.f13f82a/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/mailclaw@0.0.0-20260528.f13f82a/manifest.sig",
-        "digest": "a1d299efa5ded4a96c4fd2586a458d5d6191e39faf3e72f08ac37315657a9bc7"
+        "zip": "https://github.com/appflare/catalog/releases/download/mailclaw@0.0.0-20261109.9a721f1/mailclaw-0.0.0-20261109.9a721f1.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/mailclaw@0.0.0-20261109.9a721f1/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/mailclaw@0.0.0-20261109.9a721f1/manifest.sig",
+        "digest": "18ba71326a2fe203d50c039764dc6e7fce89f48d7a87618cb1388d421c02f30d"
       },
       "tier": "artifact",
       "plan": "free",
@@ -4845,7 +4845,7 @@
         "email-routing",
         "r2"
       ],
-      "lastVerified": "2026-11-11T11:36:59.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Vincent Yang",
@@ -4867,6 +4867,8 @@
       "services": [
         "d1",
         "r2",
+        "cron",
+        "workers-ai",
         "email-routing",
         "zone"
       ],
@@ -4876,12 +4878,6 @@
       ],
       "license": "MIT",
       "revision": 3,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/mailclaw/manifest.json",
-        "sha256": "b081311ac524def61527fe6f2d2018bfb8f22af196bf65c24d68ecbce126237a",
-        "keyId": "catalog-2026-09",
-        "signature": "ucih7mnqImuBNA6GFTZll6ZHlwlp3zN9Uh1MQuKqgbli5yn53KVf8mHRpYv1WDshMx2JgYFNJWaXUekB63SnDw=="
-      },
       "accessOffer": "offered"
     },
     {
@@ -5430,17 +5426,17 @@
         "Keep unprotected pages accessible without payment"
       ],
       "addedAt": "2026-09-27T12:13:25+03:00",
-      "version": "0.0.0-20260722.0e4dd80",
+      "version": "0.0.0-20261109.86fa3c0",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/mpp-proxy@0.0.0-20260722.0e4dd80/mpp-proxy-0.0.0-20260722.0e4dd80.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/mpp-proxy@0.0.0-20260722.0e4dd80/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/mpp-proxy@0.0.0-20260722.0e4dd80/manifest.sig",
-        "digest": "7d58a0b2d05cb11f1d1ba4c5638cf67c5f76cbf6d9af0c2e6bd76f8c2cb4a6f2"
+        "zip": "https://github.com/appflare/catalog/releases/download/mpp-proxy@0.0.0-20261109.86fa3c0/mpp-proxy-0.0.0-20261109.86fa3c0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/mpp-proxy@0.0.0-20261109.86fa3c0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/mpp-proxy@0.0.0-20261109.86fa3c0/manifest.sig",
+        "digest": "5a1abf040da697fd73d48db6a16c43a4a378f8ce0d2c6b6a467d7291bc70f05d"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-11-11T11:38:12.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Cloudflare",
@@ -5459,19 +5455,15 @@
         },
         "screenshots": []
       },
-      "services": [],
+      "services": [
+        "durable-objects"
+      ],
       "categories": [
         "finance",
         "developer-tools"
       ],
       "license": "Apache-2.0",
       "revision": 4,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/mpp-proxy/manifest.json",
-        "sha256": "1ba471e3b0bb7d545f1909c13df37dba77876c7e28d2f2194355c74b4fe44dea",
-        "keyId": "catalog-2026-09",
-        "signature": "waT/3eZ2bM7ETGI8vkx+usiwwph4Sx6lJjfgHioA8MPNxlh6cwoEyCITXOcaYLEb5zoG8LV9+jC5kt/oBTtrCA=="
-      },
       "accessOffer": "offered"
     },
     {
@@ -6582,12 +6574,12 @@
         "Jira"
       ],
       "addedAt": "2026-09-27T06:13:42+03:00",
-      "version": "0.10.2",
+      "version": "0.11.0",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/projektor@0.10.2/projektor-0.10.2.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/projektor@0.10.2/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/projektor@0.10.2/manifest.sig",
-        "digest": "9540e45f0931932df7d1f335a0a7013e775d4985848552f375dde99090e12385"
+        "zip": "https://github.com/appflare/catalog/releases/download/projektor@0.11.0/projektor-0.11.0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/projektor@0.11.0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/projektor@0.11.0/manifest.sig",
+        "digest": "a152d170e3737dfbc08a7fb483c54aa0610563dddb00350631c42d146e4c9583"
       },
       "tier": "artifact",
       "plan": "free",
@@ -6595,7 +6587,7 @@
         "r2",
         "access"
       ],
-      "lastVerified": "2026-11-11T11:41:33.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Thomas Dickson",
@@ -6959,19 +6951,19 @@
         "Bitly"
       ],
       "addedAt": "2026-09-27T04:47:37+03:00",
-      "version": "1.1.0",
+      "version": "1.2.0",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/rdyrct@1.1.0/rdyrct-1.1.0.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/rdyrct@1.1.0/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/rdyrct@1.1.0/manifest.sig",
-        "digest": "89592e0c034e850314e0770541bf2fd6ce10169c51f6dfc6f8271665a6a663b0"
+        "zip": "https://github.com/appflare/catalog/releases/download/rdyrct@1.2.0/rdyrct-1.2.0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/rdyrct@1.2.0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/rdyrct@1.2.0/manifest.sig",
+        "digest": "aa218c73179d00c57ddc3a163cbffab7ae63187a91e0c185944b4bba3f208a75"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-11-11T11:42:28.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Andrea Bruno",
@@ -8692,17 +8684,17 @@
         "Optionally publish combined totals without device or account identifiers"
       ],
       "addedAt": "2026-09-27T11:42:03+03:00",
-      "version": "0.88.0",
+      "version": "0.90.0",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/token-monitor@0.88.0/token-monitor-0.88.0.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/token-monitor@0.88.0/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/token-monitor@0.88.0/manifest.sig",
-        "digest": "a1a2adec731ee383c441c7be5e61438c0c40a702cf616d150f8f9b7ca7dc85dd"
+        "zip": "https://github.com/appflare/catalog/releases/download/token-monitor@0.90.0/token-monitor-0.90.0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/token-monitor@0.90.0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/token-monitor@0.90.0/manifest.sig",
+        "digest": "6412c85435ec31197c31434d81fc1ba501a2fdefa3fd0bb4fef8ec87d4fc7218"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-11-11T11:45:12.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Javis",
