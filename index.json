@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-12T12:15:13.181Z",
+  "generatedAt": "2026-11-12T12:51:42.293Z",
   "apps": [
     {
       "slug": "2fa",
@@ -6333,19 +6333,19 @@
         "Pastebin"
       ],
       "addedAt": "2026-09-26T23:19:31+03:00",
-      "version": "0.0.0-20261109.dcf3922",
+      "version": "0.0.0-20261111.e07988c",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/pastebin-worker@0.0.0-20261109.dcf3922/pastebin-worker-0.0.0-20261109.dcf3922.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/pastebin-worker@0.0.0-20261109.dcf3922/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/pastebin-worker@0.0.0-20261109.dcf3922/manifest.sig",
-        "digest": "a632fdf5b0d11f7862004f120058247f43a6fe1167be2b87e399ea822918860b"
+        "zip": "https://github.com/appflare/catalog/releases/download/pastebin-worker@0.0.0-20261111.e07988c/pastebin-worker-0.0.0-20261111.e07988c.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/pastebin-worker@0.0.0-20261111.e07988c/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/pastebin-worker@0.0.0-20261111.e07988c/manifest.sig",
+        "digest": "98a2857821846c6548095b7d3e7fbd643f1b70e119b18014a615e34479c47313"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-11-12T12:04:27.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Sharzy",
