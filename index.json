@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-13T11:56:38.274Z",
+  "generatedAt": "2026-11-13T12:22:48.790Z",
   "apps": [
     {
       "slug": "2fa",
@@ -1697,17 +1697,17 @@
         "Termius"
       ],
       "addedAt": "2026-09-26T23:19:31+03:00",
-      "version": "0.0.0-20261109.0649f71",
+      "version": "0.0.0-20261112.365869e",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20261109.0649f71/cloudssh-0.0.0-20261109.0649f71.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20261109.0649f71/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20261109.0649f71/manifest.sig",
-        "digest": "676a2a1890097e36940a69d8b508dac11efdda700facfdcb79986e398bdcaf14"
+        "zip": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20261112.365869e/cloudssh-0.0.0-20261112.365869e.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20261112.365869e/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20261112.365869e/manifest.sig",
+        "digest": "8cc36c96affb8a296a446e6dcfef559a109785a35bdda030ac61f741ffa9c4ee"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-11-13T11:37:37.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "TanXin",
@@ -3247,17 +3247,17 @@
         "Generate song colour themes with your own Gemini API key"
       ],
       "addedAt": "2026-09-27T10:46:59+03:00",
-      "version": "0.7.27",
+      "version": "0.7.28",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/folia@0.7.27/folia-0.7.27.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/folia@0.7.27/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/folia@0.7.27/manifest.sig",
-        "digest": "0cfaf7328870c20cd48f57f91112d47f836349be9e2e350d63c3aede68e85ca5"
+        "zip": "https://github.com/appflare/catalog/releases/download/folia@0.7.28/folia-0.7.28.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/folia@0.7.28/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/folia@0.7.28/manifest.sig",
+        "digest": "8a0079d3bd2c04fd70c628a49d3e7d5dc9767b71da1ed8e9bc7937f290a1e5b8"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-11-13T11:40:40.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "chthollyphile",
@@ -6067,12 +6067,12 @@
         "Ahrefs"
       ],
       "addedAt": "2026-09-24T08:09:39+03:00",
-      "version": "0.1.26",
+      "version": "0.1.27",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/open-seo@0.1.26/open-seo-0.1.26.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/open-seo@0.1.26/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/open-seo@0.1.26/manifest.sig",
-        "digest": "0e584119d0d5f54df72d0bf438a41e4196101b728edaecb786bb73bd2edfba82"
+        "zip": "https://github.com/appflare/catalog/releases/download/open-seo@0.1.27/open-seo-0.1.27.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/open-seo@0.1.27/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/open-seo@0.1.27/manifest.sig",
+        "digest": "0e3fce97bd6543757362201a0d5c7f61440b003fa0fd2620a4742e37fb5e336b"
       },
       "tier": "artifact",
       "plan": "free",
@@ -6080,7 +6080,7 @@
         "r2",
         "access"
       ],
-      "lastVerified": "2026-11-13T11:47:14.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Ben Senescu",
@@ -6574,12 +6574,12 @@
         "Jira"
       ],
       "addedAt": "2026-09-27T06:13:42+03:00",
-      "version": "0.11.0",
+      "version": "0.11.1",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/projektor@0.11.0/projektor-0.11.0.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/projektor@0.11.0/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/projektor@0.11.0/manifest.sig",
-        "digest": "a152d170e3737dfbc08a7fb483c54aa0610563dddb00350631c42d146e4c9583"
+        "zip": "https://github.com/appflare/catalog/releases/download/projektor@0.11.1/projektor-0.11.1.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/projektor@0.11.1/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/projektor@0.11.1/manifest.sig",
+        "digest": "2eb1f21f59824e940e17470c3688a20aa61cebd40b1fccedf1b0473c8170a511"
       },
       "tier": "artifact",
       "plan": "free",
@@ -6587,7 +6587,7 @@
         "r2",
         "access"
       ],
-      "lastVerified": "2026-11-13T11:47:59.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Thomas Dickson",
@@ -8315,17 +8315,17 @@
         "Use the same sign-in helper with Decap CMS"
       ],
       "addedAt": "2026-09-27T10:43:20+03:00",
-      "version": "0.0.0-20261108.7c34594",
+      "version": "0.0.0-20261111.5822c9f",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/sveltia-cms-auth@0.0.0-20261108.7c34594/sveltia-cms-auth-0.0.0-20261108.7c34594.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/sveltia-cms-auth@0.0.0-20261108.7c34594/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/sveltia-cms-auth@0.0.0-20261108.7c34594/manifest.sig",
-        "digest": "631cbff37f910d40ff44223d2eef41da1b06fda7a92013c113ff622a44ea940e"
+        "zip": "https://github.com/appflare/catalog/releases/download/sveltia-cms-auth@0.0.0-20261111.5822c9f/sveltia-cms-auth-0.0.0-20261111.5822c9f.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/sveltia-cms-auth@0.0.0-20261111.5822c9f/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/sveltia-cms-auth@0.0.0-20261111.5822c9f/manifest.sig",
+        "digest": "dd1dca7c792427272b6ed5bc63b260f9617d5767bee2af1e50d60249210d1f34"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-11-13T11:52:40.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Sveltia",
@@ -8684,17 +8684,17 @@
         "Optionally publish combined totals without device or account identifiers"
       ],
       "addedAt": "2026-09-27T11:42:03+03:00",
-      "version": "0.90.0",
+      "version": "0.91.0",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/token-monitor@0.90.0/token-monitor-0.90.0.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/token-monitor@0.90.0/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/token-monitor@0.90.0/manifest.sig",
-        "digest": "6412c85435ec31197c31434d81fc1ba501a2fdefa3fd0bb4fef8ec87d4fc7218"
+        "zip": "https://github.com/appflare/catalog/releases/download/token-monitor@0.91.0/token-monitor-0.91.0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/token-monitor@0.91.0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/token-monitor@0.91.0/manifest.sig",
+        "digest": "3e0f531c98ade4b6013fae3f1f3a9286f28a35aa8e040e49daef17bb140bfce2"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-11-13T11:52:17.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Javis",
