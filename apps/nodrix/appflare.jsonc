@@ -26,7 +26,7 @@
     }
   ],
   "maintainers": ["MendyLanda"],
-  "source": { "ref": "v1.0.1", "sha": "1b8af9175cd68fe097f548a6adbfd735237ce103" },
+  "source": { "ref": "v1.0.2", "sha": "0cc4ee05f11a5c90df393920492bdc690f5e0eee" },
   "install": {
     "packageManager": "bun",
     "wranglerConfig": "wrangler.toml",
