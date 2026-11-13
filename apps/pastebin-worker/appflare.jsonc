@@ -23,7 +23,7 @@
   // Upstream has no release tags; the pin tracks the default branch, goshujin.
   "source": {
     "ref": "goshujin",
-    "sha": "e07988c3e8eaed8ab05a2d739eae891ea3238e69"
+    "sha": "f799873eeadbd47a7f126c6fc9f0410e9e37fc1d"
   },
   "install": {
     "packageManager": "pnpm",
