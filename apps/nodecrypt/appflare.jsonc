@@ -20,7 +20,7 @@
   "authors": [{ "name": "Shuai", "url": "https://shuai.plus", "github": "shuaiplus" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags; the pin tracks main.
-  "source": { "ref": "main", "sha": "54ed04903182799895e98af365cf4172f7b2f3f3" },
+  "source": { "ref": "main", "sha": "f53c4b74834966aaf257be8bdd9dea3138b8b4f5" },
   "install": {
     "packageManager": "npm",
     "wranglerConfig": "wrangler.toml",
