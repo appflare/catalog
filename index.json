@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-15T11:52:44.507Z",
+  "generatedAt": "2026-11-15T12:03:48.444Z",
   "apps": [
     {
       "slug": "2fa",
@@ -4899,12 +4899,12 @@
         "Gmail"
       ],
       "addedAt": "2026-09-24T07:29:19+03:00",
-      "version": "0.0.0-20261108.cee65a5",
+      "version": "0.0.0-20261114.f4a17bd",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261108.cee65a5/mailflare-0.0.0-20261108.cee65a5.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261108.cee65a5/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261108.cee65a5/manifest.sig",
-        "digest": "6f7c6df17920abf93049e62a3dc321c77f8588d0f46042bccfb9d83ccef5ad70"
+        "zip": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261114.f4a17bd/mailflare-0.0.0-20261114.f4a17bd.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261114.f4a17bd/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261114.f4a17bd/manifest.sig",
+        "digest": "c3dedfb3b5c1d29aa20174ed6c812cf74c157a2ef1ee9feb9e5623419c846c51"
       },
       "tier": "artifact",
       "plan": "paid",
@@ -5650,66 +5650,6 @@
       "accessOffer": "offered"
     },
     {
-      "slug": "nodecrypt",
-      "repo": "shuaiplus/nodecrypt",
-      "name": "NodeCrypt",
-      "summary": "End-to-end encrypted chat rooms in the browser: no accounts and no stored history, with private messages, images, and files, relayed by a Durable Object that never sees plaintext.",
-      "tagline": "Private chat rooms without accounts or message history",
-      "features": [
-        "Join encrypted group conversations in your browser",
-        "Start a private conversation with one room member",
-        "Share images and files in the chat",
-        "Protect a room with a password",
-        "Join rooms without creating an account",
-        "Keep no message history, so people who join later cannot read earlier messages"
-      ],
-      "addedAt": "2026-09-26T23:19:31+03:00",
-      "version": "0.0.0-20260817.54ed049",
-      "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/nodecrypt@0.0.0-20260817.54ed049/nodecrypt-0.0.0-20260817.54ed049.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/nodecrypt@0.0.0-20260817.54ed049/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/nodecrypt@0.0.0-20260817.54ed049/manifest.sig",
-        "digest": "0bf04cc1764e7ff9aec08e0060c5cb3e478635752e2ed0b881d3f55e80214bc1"
-      },
-      "tier": "artifact",
-      "plan": "free",
-      "requires": [],
-      "lastVerified": "2026-11-15T11:41:45.000Z",
-      "authors": [
-        {
-          "name": "Shuai",
-          "url": "https://shuai.plus",
-          "github": "shuaiplus"
-        }
-      ],
-      "maintainers": [
-        "MendyLanda"
-      ],
-      "media": {
-        "icon": {
-          "url": "https://appflare.github.io/catalog/apps/nodecrypt/icon.svg",
-          "sha256": "8db4eaea8273e3ae789c91cdfbc74bff674649b5045aac7c33695fb51e6692a4"
-        },
-        "screenshots": []
-      },
-      "services": [
-        "durable-objects"
-      ],
-      "categories": [
-        "chat",
-        "privacy"
-      ],
-      "license": "ISC",
-      "revision": 3,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/nodecrypt/manifest.json",
-        "sha256": "8c6e16c4974e512fa1afa1ab967cba1ef1115e626a99c067e218065a67b1f15a",
-        "keyId": "catalog-2026-09",
-        "signature": "PbH4YX8617HUPR7C24Za1HcFTZ5U2/tr8zq6qbzUaZsNmqGD2hhXimrJ1oL9eX3Mu5trgsjw2KPip9H671IvAg=="
-      },
-      "accessOffer": "offered"
-    },
-    {
       "slug": "nodewarden",
       "repo": "shuaiplus/nodewarden",
       "name": "NodeWarden",
@@ -6263,12 +6203,12 @@
         "Keep characters, locations and lighting consistent across scenes"
       ],
       "addedAt": "2026-09-27T12:03:21+03:00",
-      "version": "0.0.0-20261109.d436445",
+      "version": "0.0.0-20261114.5da052c",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261109.d436445/openstory-0.0.0-20261109.d436445.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261109.d436445/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261109.d436445/manifest.sig",
-        "digest": "7d75ddfdfd11b77e8d53ecedf381c8575be7a918e50f409eacc47ab2a587fddc"
+        "zip": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261114.5da052c/openstory-0.0.0-20261114.5da052c.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261114.5da052c/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261114.5da052c/manifest.sig",
+        "digest": "5349a0850a732c386c03314e25ce06693735c7431c053c576d5d0e5dbe7f4cd5"
       },
       "tier": "artifact",
       "plan": "paid",
