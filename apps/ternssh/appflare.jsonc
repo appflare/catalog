@@ -23,7 +23,7 @@
   "revision": 4,
   "authors": [{ "name": "Kashiwa", "url": "https://ternssh.com", "github": "haradakashiwa" }],
   "maintainers": ["MendyLanda"],
-  "source": { "ref": "v0.0.13", "sha": "b3d2b6c7c0ad00496d79e07c36532d549cd5e73a" },
+  "source": { "ref": "v0.0.14", "sha": "07055cd2e43805d7bba55d18332965dc5e229f46" },
   "install": {
     "packageManager": "npm",
     "wranglerConfig": "wrangler.jsonc",
