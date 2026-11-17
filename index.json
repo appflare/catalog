@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-17T12:55:55.702Z",
+  "generatedAt": "2026-11-17T13:36:01.042Z",
   "apps": [
     {
       "slug": "2fa",
@@ -358,17 +358,17 @@
         "UptimeRobot"
       ],
       "addedAt": "2026-09-27T04:47:37+03:00",
-      "version": "0.0.0-20261107.fffa2f0",
+      "version": "0.0.0-20261115.78b6be4",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/atalaya@0.0.0-20261107.fffa2f0/atalaya-0.0.0-20261107.fffa2f0.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/atalaya@0.0.0-20261107.fffa2f0/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/atalaya@0.0.0-20261107.fffa2f0/manifest.sig",
-        "digest": "744d6f29bed6bdb22982d017068dee492884de079ef0db3602de2fa57e1cc6b5"
+        "zip": "https://github.com/appflare/catalog/releases/download/atalaya@0.0.0-20261115.78b6be4/atalaya-0.0.0-20261115.78b6be4.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/atalaya@0.0.0-20261115.78b6be4/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/atalaya@0.0.0-20261115.78b6be4/manifest.sig",
+        "digest": "0d10d6bb81a00c6a2546b383493d51cd8cd8cbb4af5ec121ad38332db19e374a"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-11-17T12:29:39.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Daniel Carrillo",
@@ -1561,12 +1561,12 @@
         "Firebase"
       ],
       "addedAt": "2026-09-27T10:14:04+03:00",
-      "version": "0.0.0-20261013.2ed6e45",
+      "version": "0.0.0-20261115.a8ca8d4",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/cloudflarebase@0.0.0-20261013.2ed6e45/cloudflarebase-0.0.0-20261013.2ed6e45.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/cloudflarebase@0.0.0-20261013.2ed6e45/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/cloudflarebase@0.0.0-20261013.2ed6e45/manifest.sig",
-        "digest": "c51da117728874765d0fc05e4e01793290a9e29e8ef0f0ddcc156f708f985b37"
+        "zip": "https://github.com/appflare/catalog/releases/download/cloudflarebase@0.0.0-20261115.a8ca8d4/cloudflarebase-0.0.0-20261115.a8ca8d4.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/cloudflarebase@0.0.0-20261115.a8ca8d4/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/cloudflarebase@0.0.0-20261115.a8ca8d4/manifest.sig",
+        "digest": "73671cc84a66df60f879f21108577a9350e89556e38cecbc4111b2fff4a2d035"
       },
       "tier": "artifact",
       "plan": "free",
@@ -1576,7 +1576,7 @@
         "analytics-engine",
         "manager:spread-jobs"
       ],
-      "lastVerified": "2026-11-17T12:33:09.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "The Frostbase Authors",
@@ -4272,74 +4272,6 @@
       "accessOffer": "offered"
     },
     {
-      "slug": "isupmap",
-      "repo": "Jaironlanda/isupmap",
-      "name": "isUpMap",
-      "summary": "A live up/down heatmap for 80+ popular internet services, polled every five minutes, with history and community outage reports.",
-      "tagline": "See which popular online services are up or down",
-      "features": [
-        "Check live status for over 80 internet services",
-        "Review 90 days of uptime and past incidents",
-        "Collect outage reports with reasons and country breakdowns",
-        "Spot unusual increases in community outage reports",
-        "Get desktop notifications when a service changes status",
-        "Subscribe to incident updates in a feed reader"
-      ],
-      "alternativeTo": [
-        "Downdetector"
-      ],
-      "addedAt": "2026-09-27T06:14:13+03:00",
-      "version": "0.0.0-20260927.0b78646",
-      "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/isupmap@0.0.0-20260927.0b78646/isupmap-0.0.0-20260927.0b78646.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/isupmap@0.0.0-20260927.0b78646/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/isupmap@0.0.0-20260927.0b78646/manifest.sig",
-        "digest": "f31ede47b37ed620dc932ccd9d426871d9584c50c2b57cce17450132cfe9844a"
-      },
-      "tier": "artifact",
-      "plan": "free",
-      "requires": [
-        "analytics-engine"
-      ],
-      "lastVerified": "2026-11-16T12:12:54.000Z",
-      "authors": [
-        {
-          "name": "Jairon Landa",
-          "url": "https://jaironlanda.com",
-          "github": "Jaironlanda"
-        }
-      ],
-      "maintainers": [
-        "MendyLanda"
-      ],
-      "media": {
-        "icon": {
-          "url": "https://appflare.github.io/catalog/apps/isupmap/icon.png",
-          "sha256": "d97c8e9f9185e2366acbcc5c64f3545f9a7e660e09914e41ef6c00d4e3e3693b"
-        },
-        "screenshots": []
-      },
-      "services": [
-        "kv",
-        "d1",
-        "analytics-engine",
-        "queues",
-        "cron"
-      ],
-      "categories": [
-        "monitoring"
-      ],
-      "license": "MIT",
-      "revision": 4,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/isupmap/manifest.json",
-        "sha256": "f2a32fd014c9a8c46db3c6bece858cc45241f818412ee134ee707d1fdbf0c0c9",
-        "keyId": "catalog-2026-09",
-        "signature": "HSwQ5rEJKWq7lZaq7N52/gkIYst5jY7qsmNHrs753h4mg0xl01nfLQnTasVV014hVlAoIVmiss79NK/P4XfWAA=="
-      },
-      "accessOffer": "offered"
-    },
-    {
       "slug": "jant",
       "repo": "jant-me/jant",
       "name": "Jant",
@@ -4899,12 +4831,12 @@
         "Gmail"
       ],
       "addedAt": "2026-09-24T07:29:19+03:00",
-      "version": "0.0.0-20261114.f4a17bd",
+      "version": "0.0.0-20261116.5330fa4",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261114.f4a17bd/mailflare-0.0.0-20261114.f4a17bd.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261114.f4a17bd/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261114.f4a17bd/manifest.sig",
-        "digest": "c3dedfb3b5c1d29aa20174ed6c812cf74c157a2ef1ee9feb9e5623419c846c51"
+        "zip": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261116.5330fa4/mailflare-0.0.0-20261116.5330fa4.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261116.5330fa4/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261116.5330fa4/manifest.sig",
+        "digest": "cd6de3472774fed34a2bc69655451f8f176148f715743990822c66d446922ac2"
       },
       "tier": "artifact",
       "plan": "paid",
@@ -5650,6 +5582,60 @@
       "accessOffer": "offered"
     },
     {
+      "slug": "nodecrypt",
+      "repo": "shuaiplus/nodecrypt",
+      "name": "NodeCrypt",
+      "summary": "End-to-end encrypted chat rooms in the browser: no accounts and no stored history, with private messages, images, and files, relayed by a Durable Object that never sees plaintext.",
+      "tagline": "Private chat rooms without accounts or message history",
+      "features": [
+        "Join encrypted group conversations in your browser",
+        "Start a private conversation with one room member",
+        "Share images and files in the chat",
+        "Protect a room with a password",
+        "Join rooms without creating an account",
+        "Keep no message history, so people who join later cannot read earlier messages"
+      ],
+      "addedAt": "2026-09-26T23:19:31+03:00",
+      "version": "0.0.0-20261114.f53c4b7",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/nodecrypt@0.0.0-20261114.f53c4b7/nodecrypt-0.0.0-20261114.f53c4b7.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/nodecrypt@0.0.0-20261114.f53c4b7/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/nodecrypt@0.0.0-20261114.f53c4b7/manifest.sig",
+        "digest": "80ae49180ab0d6e6f1dc9896d6049911d2fd11466d7cf1035694fa9f00418c43"
+      },
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Shuai",
+          "url": "https://shuai.plus",
+          "github": "shuaiplus"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/nodecrypt/icon.svg",
+          "sha256": "8db4eaea8273e3ae789c91cdfbc74bff674649b5045aac7c33695fb51e6692a4"
+        },
+        "screenshots": []
+      },
+      "services": [
+        "durable-objects"
+      ],
+      "categories": [
+        "chat",
+        "privacy"
+      ],
+      "license": "ISC",
+      "revision": 3,
+      "accessOffer": "offered"
+    },
+    {
       "slug": "nodewarden",
       "repo": "shuaiplus/nodewarden",
       "name": "NodeWarden",
@@ -6203,12 +6189,12 @@
         "Keep characters, locations and lighting consistent across scenes"
       ],
       "addedAt": "2026-09-27T12:03:21+03:00",
-      "version": "0.0.0-20261114.5da052c",
+      "version": "0.0.0-20261116.49474bc",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261114.5da052c/openstory-0.0.0-20261114.5da052c.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261114.5da052c/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261114.5da052c/manifest.sig",
-        "digest": "5349a0850a732c386c03314e25ce06693735c7431c053c576d5d0e5dbe7f4cd5"
+        "zip": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261116.49474bc/openstory-0.0.0-20261116.49474bc.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261116.49474bc/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261116.49474bc/manifest.sig",
+        "digest": "0c3dcc7dc1c080a690a079dc0f725edb320c951a46b7c17747f8a75a5c013b51"
       },
       "tier": "artifact",
       "plan": "paid",
@@ -6515,12 +6501,12 @@
         "Jira"
       ],
       "addedAt": "2026-09-27T06:13:42+03:00",
-      "version": "0.11.1",
+      "version": "0.11.2",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/projektor@0.11.1/projektor-0.11.1.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/projektor@0.11.1/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/projektor@0.11.1/manifest.sig",
-        "digest": "2eb1f21f59824e940e17470c3688a20aa61cebd40b1fccedf1b0473c8170a511"
+        "zip": "https://github.com/appflare/catalog/releases/download/projektor@0.11.2/projektor-0.11.2.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/projektor@0.11.2/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/projektor@0.11.2/manifest.sig",
+        "digest": "647ddd52be22686eaa6a60e41172f482b0754bb50acf93f9169ec9a6938d2ee4"
       },
       "tier": "artifact",
       "plan": "free",
@@ -6528,7 +6514,7 @@
         "r2",
         "access"
       ],
-      "lastVerified": "2026-11-17T12:44:25.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Thomas Dickson",
@@ -8556,19 +8542,19 @@
         "Termius"
       ],
       "addedAt": "2026-09-27T05:20:16+03:00",
-      "version": "0.0.13",
+      "version": "0.0.14",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/ternssh@0.0.13/ternssh-0.0.13.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/ternssh@0.0.13/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/ternssh@0.0.13/manifest.sig",
-        "digest": "7f8dc546781f08b597b03a0debeecb26058b158e3ac916d92b94fee21f3fe580"
+        "zip": "https://github.com/appflare/catalog/releases/download/ternssh@0.0.14/ternssh-0.0.14.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/ternssh@0.0.14/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/ternssh@0.0.14/manifest.sig",
+        "digest": "469a51cebc310acb2e09045da01269453de8add43287f83933bafeb9583f0e6a"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "access"
       ],
-      "lastVerified": "2026-11-17T12:49:10.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Kashiwa",
@@ -8603,12 +8589,6 @@
       ],
       "license": "GPL-3.0-or-later",
       "revision": 4,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/ternssh/manifest.json",
-        "sha256": "417d51bb9c06f6490e562a31e3bba13e12a272e3549b91ecf54a726a61156243",
-        "keyId": "catalog-2026-09",
-        "signature": "1rZJq3O+h8htoChCCVSVKgOKKKbU6hKZJ6pm9vQctciaXxuKA3hQIzOyQ+OAi6GF3rzg5iQjyMfkmQ31gTcsCw=="
-      },
       "accessOffer": "offered"
     },
     {
@@ -8625,17 +8605,17 @@
         "Optionally publish combined totals without device or account identifiers"
       ],
       "addedAt": "2026-09-27T11:42:03+03:00",
-      "version": "0.91.0",
+      "version": "0.93.1",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/token-monitor@0.91.0/token-monitor-0.91.0.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/token-monitor@0.91.0/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/token-monitor@0.91.0/manifest.sig",
-        "digest": "3e0f531c98ade4b6013fae3f1f3a9286f28a35aa8e040e49daef17bb140bfce2"
+        "zip": "https://github.com/appflare/catalog/releases/download/token-monitor@0.93.1/token-monitor-0.93.1.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/token-monitor@0.93.1/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/token-monitor@0.93.1/manifest.sig",
+        "digest": "208fe02bb2a34b6a3d0a620a477e89a76356ab18bdfe1953f669d3ce5538f62f"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-11-17T12:49:29.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Javis",
