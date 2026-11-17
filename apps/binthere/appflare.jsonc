@@ -24,7 +24,7 @@
   // release that caps the paste body while it streams in (instead of reading
   // the whole request first) is released only on main so far. The bump bot
   // moves the pin to the next tag that contains this commit.
-  "source": { "ref": "main", "sha": "ce78470c39f49cec7ce19ed153954b49503a395a" },
+  "source": { "ref": "main", "sha": "f969b70fc43f997373534033a1045cc3b8e282cf" },
   "install": {
     "packageManager": "npm",
     // Plain JavaScript and static files: no build step. Upstream's origin
