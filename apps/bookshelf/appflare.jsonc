@@ -34,7 +34,7 @@
   ],
   "maintainers": ["MendyLanda"],
   // Bookshelf publishes no release tags; the pin tracks main.
-  "source": { "ref": "main", "sha": "8888795162ff76285f246957cc34cc9988253a60" },
+  "source": { "ref": "main", "sha": "144b101cf3671e06e28298c69e2ca9dff626c64e" },
   "install": {
     "packageManager": "npm",
     // The app package of the npm workspace. Upstream's EU jurisdiction on the
