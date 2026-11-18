@@ -31,7 +31,7 @@
     { "name": "Jairon Landa", "url": "https://jaironlanda.com", "github": "Jaironlanda" }
   ],
   "maintainers": ["MendyLanda"],
-  "source": { "ref": "v1.0.2", "sha": "3525cab0647ba5214f989f281dfbb0f40fd65eae" },
+  "source": { "ref": "v1.0.3", "sha": "55582069363c3579d978d147618f63fc7106d24e" },
   "install": {
     "packageManager": "npm",
     "wranglerConfig": "wrangler.jsonc"
