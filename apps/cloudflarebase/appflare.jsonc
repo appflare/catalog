@@ -33,7 +33,7 @@
   // Pinned to main: the repository has no tags.
   "source": {
     "ref": "main",
-    "sha": "a8ca8d42aeaa88bbf579e8c88088617010709eb2"
+    "sha": "6060592f80d0356fea79391f0157991dbdb18224"
   },
   "install": {
     "packageManager": "npm",
