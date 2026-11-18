@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-18T12:40:56.017Z",
+  "generatedAt": "2026-11-18T13:12:19.756Z",
   "apps": [
     {
       "slug": "2fa",
@@ -651,17 +651,17 @@
         "Yopass"
       ],
       "addedAt": "2026-09-27T04:19:23+03:00",
-      "version": "0.0.0-20261112.ce78470",
+      "version": "0.0.0-20261117.f969b70",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/binthere@0.0.0-20261112.ce78470/binthere-0.0.0-20261112.ce78470.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/binthere@0.0.0-20261112.ce78470/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/binthere@0.0.0-20261112.ce78470/manifest.sig",
-        "digest": "57787b9f9eaac099829dd5da213317b84047fe5b2a82caa617c71166626973d7"
+        "zip": "https://github.com/appflare/catalog/releases/download/binthere@0.0.0-20261117.f969b70/binthere-0.0.0-20261117.f969b70.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/binthere@0.0.0-20261117.f969b70/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/binthere@0.0.0-20261117.f969b70/manifest.sig",
+        "digest": "c52a1d488ec7b4290843e025009c16558a9a25894ab27e37c991b47e9907993c"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-11-18T12:16:49.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Gaurav",
@@ -764,86 +764,6 @@
       "license": "MIT",
       "revision": 3,
       "accessOffer": "offered"
-    },
-    {
-      "slug": "bookshelf",
-      "repo": "murerkinn/bookshelf",
-      "name": "Bookshelf",
-      "summary": "A library for the ebooks you own: read EPUBs and PDFs in the browser or on a Kobo over OPDS, served from your own R2 bucket.",
-      "tagline": "Read your ebooks in a library you host yourself",
-      "features": [
-        "Read EPUB and PDF books in your browser",
-        "Search your book collection on a shelf with covers",
-        "Keep a separate reading position for each reader",
-        "Resume a book on another device when read only is off",
-        "Download books to e-readers through OPDS when access protection is off"
-      ],
-      "alternativeTo": [
-        "Calibre-Web"
-      ],
-      "addedAt": "2026-09-27T04:46:44+03:00",
-      "version": "0.0.0-20260826.8888795",
-      "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/bookshelf@0.0.0-20260826.8888795/bookshelf-0.0.0-20260826.8888795.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/bookshelf@0.0.0-20260826.8888795/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/bookshelf@0.0.0-20260826.8888795/manifest.sig",
-        "digest": "d6b63712c418a9042fa316e8fe7ff1e479d72bfa85ffd02d59a16dae2d2ddc51"
-      },
-      "tier": "artifact",
-      "plan": "free",
-      "requires": [
-        "r2"
-      ],
-      "lastVerified": "2026-11-18T12:17:21.000Z",
-      "authors": [
-        {
-          "name": "Murat Erkin Cicek",
-          "url": "https://erkin.space",
-          "github": "murerkinn",
-          "x": "murerkinn"
-        }
-      ],
-      "maintainers": [
-        "MendyLanda"
-      ],
-      "media": {
-        "icon": {
-          "url": "https://appflare.github.io/catalog/apps/bookshelf/icon.png",
-          "sha256": "2d89dc9405c40b7abce4a32a9eb8ee017592c0e35ab8c2f1730c12d8dca38788"
-        },
-        "cover": {
-          "url": "https://appflare.github.io/catalog/apps/bookshelf/cover.png",
-          "sha256": "2079c2d86dabb25e3ae3fa1748572becb0a99fd0fefc3412a7d92390f3632b69"
-        },
-        "screenshots": [
-          {
-            "url": "https://appflare.github.io/catalog/apps/bookshelf/screenshots/01-book-shelf.png",
-            "sha256": "656a95db569bc5efaf9760209e535cd087abb3102d94cb49d5b408ca89553677",
-            "alt": "Bookshelf: Book shelf"
-          },
-          {
-            "url": "https://appflare.github.io/catalog/apps/bookshelf/screenshots/02-book-reader.png",
-            "sha256": "b31ecb134f7ada295e4541ddbe72a37b0f44f5310b89b5c290e2d7c04dbac12b",
-            "alt": "Bookshelf: Book reader"
-          }
-        ]
-      },
-      "services": [
-        "r2"
-      ],
-      "categories": [
-        "files",
-        "productivity"
-      ],
-      "license": "MIT",
-      "revision": 5,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/bookshelf/manifest.json",
-        "sha256": "37122d61d7d86c50a08aac2d6ef7cec0816fc2dcf9cbc7826ccca595b097ee19",
-        "keyId": "catalog-2026-09",
-        "signature": "j+9mcZWjxRHDLxWNtR8Qf/TdB4XIr2tVqDdXWi817fAjLcaLbciJhgsjO+SrU3/13D39qi34yoX6iwnTToFqAg=="
-      },
-      "accessOffer": "recommended"
     },
     {
       "slug": "browser-relay",
@@ -1698,17 +1618,17 @@
         "Termius"
       ],
       "addedAt": "2026-09-26T23:19:31+03:00",
-      "version": "0.0.0-20261112.365869e",
+      "version": "0.0.0-20261117.200172e",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20261112.365869e/cloudssh-0.0.0-20261112.365869e.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20261112.365869e/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20261112.365869e/manifest.sig",
-        "digest": "8cc36c96affb8a296a446e6dcfef559a109785a35bdda030ac61f741ffa9c4ee"
+        "zip": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20261117.200172e/cloudssh-0.0.0-20261117.200172e.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20261117.200172e/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20261117.200172e/manifest.sig",
+        "digest": "f43e538714c79ab1b0bc3a58ce11ec914094405d39880c3c8138f38e288309a1"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-11-18T12:19:12.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "TanXin",
@@ -2319,19 +2239,19 @@
         "Evernote"
       ],
       "addedAt": "2026-09-27T05:18:00+03:00",
-      "version": "2.26.0",
+      "version": "2.28.2",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/edgeever@2.26.0/edgeever-2.26.0.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/edgeever@2.26.0/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/edgeever@2.26.0/manifest.sig",
-        "digest": "3eb26f8c5c3ac343cb8c364a993d6751d6bcc03529ca6e5a822c49ea7dfb29df"
+        "zip": "https://github.com/appflare/catalog/releases/download/edgeever@2.28.2/edgeever-2.28.2.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/edgeever@2.28.2/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/edgeever@2.28.2/manifest.sig",
+        "digest": "10dbba29aefcc0dca334ae3b1ca9d8bd437ca743e20090b35e69f00f69857685"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-11-18T12:21:21.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "tianma-if",
@@ -3248,17 +3168,17 @@
         "Generate song colour themes with your own Gemini API key"
       ],
       "addedAt": "2026-09-27T10:46:59+03:00",
-      "version": "0.7.28",
+      "version": "0.7.29",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/folia@0.7.28/folia-0.7.28.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/folia@0.7.28/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/folia@0.7.28/manifest.sig",
-        "digest": "8a0079d3bd2c04fd70c628a49d3e7d5dc9767b71da1ed8e9bc7937f290a1e5b8"
+        "zip": "https://github.com/appflare/catalog/releases/download/folia@0.7.29/folia-0.7.29.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/folia@0.7.29/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/folia@0.7.29/manifest.sig",
+        "digest": "0d80a8992746a17e039ded1aba5f922ef396fe602344713405b1a4f035edcac6"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-11-18T12:22:53.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "chthollyphile",
@@ -4357,17 +4277,17 @@
         "Remove text with similar meanings using a Jina API key"
       ],
       "addedAt": "2026-09-27T10:43:20+03:00",
-      "version": "0.0.0-20261015.b938c00",
+      "version": "0.0.0-20261116.abe174f",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/jina-mcp@0.0.0-20261015.b938c00/jina-mcp-0.0.0-20261015.b938c00.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/jina-mcp@0.0.0-20261015.b938c00/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/jina-mcp@0.0.0-20261015.b938c00/manifest.sig",
-        "digest": "f7e6467eaebbdee4f2e2c11a31d94b872de16cff06d44578e183635646f7fc84"
+        "zip": "https://github.com/appflare/catalog/releases/download/jina-mcp@0.0.0-20261116.abe174f/jina-mcp-0.0.0-20261116.abe174f.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/jina-mcp@0.0.0-20261116.abe174f/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/jina-mcp@0.0.0-20261116.abe174f/manifest.sig",
+        "digest": "a7809e0e64847786484528be114dc26d5c4bc2152d6130dad10d49534490436c"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-11-18T12:24:39.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Jina AI",
@@ -8293,19 +8213,19 @@
         "Obsidian Sync"
       ],
       "addedAt": "2026-09-27T04:47:37+03:00",
-      "version": "0.5.6",
+      "version": "0.5.7",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/synch@0.5.6/synch-0.5.6.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/synch@0.5.6/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/synch@0.5.6/manifest.sig",
-        "digest": "38d9431a354d8370337e25ea14ebcd63f1aa31d185e17d69c9d5a03a1464f520"
+        "zip": "https://github.com/appflare/catalog/releases/download/synch@0.5.7/synch-0.5.7.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/synch@0.5.7/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/synch@0.5.7/manifest.sig",
+        "digest": "eeb716d90d68adc68550703ec396416534ed96b716dfa620f943ef40b23bef8b"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-11-18T12:34:46.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Synch",
