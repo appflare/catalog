@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-19T12:35:53.588Z",
+  "generatedAt": "2026-11-19T13:14:35.054Z",
   "apps": [
     {
       "slug": "2fa",
@@ -1481,12 +1481,12 @@
         "Firebase"
       ],
       "addedAt": "2026-09-27T10:14:04+03:00",
-      "version": "0.0.0-20261115.a8ca8d4",
+      "version": "0.0.0-20261117.6060592",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/cloudflarebase@0.0.0-20261115.a8ca8d4/cloudflarebase-0.0.0-20261115.a8ca8d4.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/cloudflarebase@0.0.0-20261115.a8ca8d4/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/cloudflarebase@0.0.0-20261115.a8ca8d4/manifest.sig",
-        "digest": "73671cc84a66df60f879f21108577a9350e89556e38cecbc4111b2fff4a2d035"
+        "zip": "https://github.com/appflare/catalog/releases/download/cloudflarebase@0.0.0-20261117.6060592/cloudflarebase-0.0.0-20261117.6060592.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/cloudflarebase@0.0.0-20261117.6060592/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/cloudflarebase@0.0.0-20261117.6060592/manifest.sig",
+        "digest": "265c6f1fa07c19d160f29953c3febb10c1c6a221994aae3ef6bbce293071571f"
       },
       "tier": "artifact",
       "plan": "free",
@@ -1496,7 +1496,7 @@
         "analytics-engine",
         "manager:spread-jobs"
       ],
-      "lastVerified": "2026-11-19T12:13:32.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "The Frostbase Authors",
@@ -3435,19 +3435,19 @@
         "Giscus"
       ],
       "addedAt": "2026-09-27T05:55:55+03:00",
-      "version": "2.43.0",
+      "version": "2.46.0",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/garrul@2.43.0/garrul-2.43.0.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/garrul@2.43.0/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/garrul@2.43.0/manifest.sig",
-        "digest": "69cb75948e51c85fd4660494b1704b29905d107cedacd621beabad7bc08e9d09"
+        "zip": "https://github.com/appflare/catalog/releases/download/garrul@2.46.0/garrul-2.46.0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/garrul@2.46.0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/garrul@2.46.0/manifest.sig",
+        "digest": "078dfaff8e7550baa9f7c913338ba53afa9c6e54a0f0161e3d3f8e2a84146637"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "analytics-engine"
       ],
-      "lastVerified": "2026-11-19T12:17:57.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "KingPin",
@@ -4192,6 +4192,68 @@
       "accessOffer": "offered"
     },
     {
+      "slug": "isupmap",
+      "repo": "Jaironlanda/isupmap",
+      "name": "isUpMap",
+      "summary": "A live up/down heatmap for 80+ popular internet services, polled every five minutes, with history and community outage reports.",
+      "tagline": "See which popular online services are up or down",
+      "features": [
+        "Check live status for over 80 internet services",
+        "Review 90 days of uptime and past incidents",
+        "Collect outage reports with reasons and country breakdowns",
+        "Spot unusual increases in community outage reports",
+        "Get desktop notifications when a service changes status",
+        "Subscribe to incident updates in a feed reader"
+      ],
+      "alternativeTo": [
+        "Downdetector"
+      ],
+      "addedAt": "2026-09-27T06:14:13+03:00",
+      "version": "1.0.3",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/isupmap@1.0.3/isupmap-1.0.3.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/isupmap@1.0.3/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/isupmap@1.0.3/manifest.sig",
+        "digest": "70db09fa0c08ad5420d545295d3aceb5dfbda36db19dc68a14b187aaad1bffd4"
+      },
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "analytics-engine"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Jairon Landa",
+          "url": "https://jaironlanda.com",
+          "github": "Jaironlanda"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/isupmap/icon.png",
+          "sha256": "d97c8e9f9185e2366acbcc5c64f3545f9a7e660e09914e41ef6c00d4e3e3693b"
+        },
+        "screenshots": []
+      },
+      "services": [
+        "kv",
+        "d1",
+        "analytics-engine",
+        "queues",
+        "cron"
+      ],
+      "categories": [
+        "monitoring"
+      ],
+      "license": "MIT",
+      "revision": 4,
+      "accessOffer": "offered"
+    },
+    {
       "slug": "jant",
       "repo": "jant-me/jant",
       "name": "Jant",
@@ -4209,19 +4271,19 @@
         "Tumblr"
       ],
       "addedAt": "2026-09-27T12:14:18+03:00",
-      "version": "0.0.0-20261110.b8c2273",
+      "version": "0.0.0-20261117.584a8f2",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/jant@0.0.0-20261110.b8c2273/jant-0.0.0-20261110.b8c2273.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/jant@0.0.0-20261110.b8c2273/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/jant@0.0.0-20261110.b8c2273/manifest.sig",
-        "digest": "b5eb5cb70c5377e465959eaac9e5f7bfd7476191d85e499983ecf912838a7610"
+        "zip": "https://github.com/appflare/catalog/releases/download/jant@0.0.0-20261117.584a8f2/jant-0.0.0-20261117.584a8f2.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/jant@0.0.0-20261117.584a8f2/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/jant@0.0.0-20261117.584a8f2/manifest.sig",
+        "digest": "a34f65c4d43508c550772033b4d92d8dc328380517ee22604799af1a5ea1e80c"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-11-19T12:19:43.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Jant",
@@ -7082,19 +7144,19 @@
         "Bobby"
       ],
       "addedAt": "2026-09-27T12:02:55+03:00",
-      "version": "0.3.36",
+      "version": "0.3.37",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/renewlet@0.3.36/renewlet-0.3.36.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/renewlet@0.3.36/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/renewlet@0.3.36/manifest.sig",
-        "digest": "ee9d87aa6fddbdd2a0a6e99177ee20a91510cc76d4e5e854d5f2dfac9f134598"
+        "zip": "https://github.com/appflare/catalog/releases/download/renewlet@0.3.37/renewlet-0.3.37.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/renewlet@0.3.37/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/renewlet@0.3.37/manifest.sig",
+        "digest": "23e0ac58c4f8169e1e129db6b727293f9bb19788ce8ac4cce6c84747c707e477"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-11-19T12:26:26.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "zhiyingzhou",
@@ -8162,17 +8224,17 @@
         "Use the same sign-in helper with Decap CMS"
       ],
       "addedAt": "2026-09-27T10:43:20+03:00",
-      "version": "0.0.0-20261111.5822c9f",
+      "version": "0.0.0-20261118.26b168a",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/sveltia-cms-auth@0.0.0-20261111.5822c9f/sveltia-cms-auth-0.0.0-20261111.5822c9f.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/sveltia-cms-auth@0.0.0-20261111.5822c9f/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/sveltia-cms-auth@0.0.0-20261111.5822c9f/manifest.sig",
-        "digest": "dd1dca7c792427272b6ed5bc63b260f9617d5767bee2af1e50d60249210d1f34"
+        "zip": "https://github.com/appflare/catalog/releases/download/sveltia-cms-auth@0.0.0-20261118.26b168a/sveltia-cms-auth-0.0.0-20261118.26b168a.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/sveltia-cms-auth@0.0.0-20261118.26b168a/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/sveltia-cms-auth@0.0.0-20261118.26b168a/manifest.sig",
+        "digest": "855b68bfd3a3bb9ea03c97eba54b4f0dbafdefb942720cdd1d1848e2f906763d"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-11-19T12:28:59.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Sveltia",
