@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-20T12:34:54.998Z",
+  "generatedAt": "2026-11-20T13:01:39.618Z",
   "apps": [
     {
       "slug": "2fa",
@@ -764,6 +764,80 @@
       "license": "MIT",
       "revision": 3,
       "accessOffer": "offered"
+    },
+    {
+      "slug": "bookshelf",
+      "repo": "murerkinn/bookshelf",
+      "name": "Bookshelf",
+      "summary": "A library for the ebooks you own: read EPUBs and PDFs in the browser or on a Kobo over OPDS, served from your own R2 bucket.",
+      "tagline": "Read your ebooks in a library you host yourself",
+      "features": [
+        "Read EPUB and PDF books in your browser",
+        "Search your book collection on a shelf with covers",
+        "Keep a separate reading position for each reader",
+        "Resume a book on another device when read only is off",
+        "Download books to e-readers through OPDS when access protection is off"
+      ],
+      "alternativeTo": [
+        "Calibre-Web"
+      ],
+      "addedAt": "2026-09-27T04:46:44+03:00",
+      "version": "0.0.0-20261118.7711de5",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/bookshelf@0.0.0-20261118.7711de5/bookshelf-0.0.0-20261118.7711de5.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/bookshelf@0.0.0-20261118.7711de5/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/bookshelf@0.0.0-20261118.7711de5/manifest.sig",
+        "digest": "1ec5cca26e865d3b365a83234a8c7520646d1b24df1cc92a5c96816d363387ce"
+      },
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "r2"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Murat Erkin Cicek",
+          "url": "https://erkin.space",
+          "github": "murerkinn",
+          "x": "murerkinn"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/bookshelf/icon.png",
+          "sha256": "2d89dc9405c40b7abce4a32a9eb8ee017592c0e35ab8c2f1730c12d8dca38788"
+        },
+        "cover": {
+          "url": "https://appflare.github.io/catalog/apps/bookshelf/cover.png",
+          "sha256": "2079c2d86dabb25e3ae3fa1748572becb0a99fd0fefc3412a7d92390f3632b69"
+        },
+        "screenshots": [
+          {
+            "url": "https://appflare.github.io/catalog/apps/bookshelf/screenshots/01-book-shelf.png",
+            "sha256": "656a95db569bc5efaf9760209e535cd087abb3102d94cb49d5b408ca89553677",
+            "alt": "Bookshelf: Book shelf"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/bookshelf/screenshots/02-book-reader.png",
+            "sha256": "b31ecb134f7ada295e4541ddbe72a37b0f44f5310b89b5c290e2d7c04dbac12b",
+            "alt": "Bookshelf: Book reader"
+          }
+        ]
+      },
+      "services": [
+        "r2"
+      ],
+      "categories": [
+        "files",
+        "productivity"
+      ],
+      "license": "MIT",
+      "revision": 5,
+      "accessOffer": "recommended"
     },
     {
       "slug": "browser-relay",
@@ -4813,12 +4887,12 @@
         "Gmail"
       ],
       "addedAt": "2026-09-24T07:29:19+03:00",
-      "version": "0.0.0-20261116.5330fa4",
+      "version": "0.0.0-20261119.cec33ee",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261116.5330fa4/mailflare-0.0.0-20261116.5330fa4.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261116.5330fa4/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261116.5330fa4/manifest.sig",
-        "digest": "cd6de3472774fed34a2bc69655451f8f176148f715743990822c66d446922ac2"
+        "zip": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261119.cec33ee/mailflare-0.0.0-20261119.cec33ee.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261119.cec33ee/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261119.cec33ee/manifest.sig",
+        "digest": "ad518bd4d8023fbce1cbfadc82181d68a5455b9c1f484c5afc22841ec9e708a7"
       },
       "tier": "artifact",
       "plan": "paid",
@@ -5976,12 +6050,12 @@
         "Ahrefs"
       ],
       "addedAt": "2026-09-24T08:09:39+03:00",
-      "version": "0.1.27",
+      "version": "0.1.30",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/open-seo@0.1.27/open-seo-0.1.27.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/open-seo@0.1.27/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/open-seo@0.1.27/manifest.sig",
-        "digest": "0e3fce97bd6543757362201a0d5c7f61440b003fa0fd2620a4742e37fb5e336b"
+        "zip": "https://github.com/appflare/catalog/releases/download/open-seo@0.1.30/open-seo-0.1.30.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/open-seo@0.1.30/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/open-seo@0.1.30/manifest.sig",
+        "digest": "a0e80a04482dd2f98bea7b069514001e9c4ce469b993370766c1df562253a8bc"
       },
       "tier": "artifact",
       "plan": "free",
@@ -5989,7 +6063,7 @@
         "r2",
         "access"
       ],
-      "lastVerified": "2026-11-18T12:29:40.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Ben Senescu",
@@ -6171,12 +6245,12 @@
         "Keep characters, locations and lighting consistent across scenes"
       ],
       "addedAt": "2026-09-27T12:03:21+03:00",
-      "version": "0.0.0-20261116.49474bc",
+      "version": "0.0.0-20261119.28b1fe3",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261116.49474bc/openstory-0.0.0-20261116.49474bc.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261116.49474bc/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261116.49474bc/manifest.sig",
-        "digest": "0c3dcc7dc1c080a690a079dc0f725edb320c951a46b7c17747f8a75a5c013b51"
+        "zip": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261119.28b1fe3/openstory-0.0.0-20261119.28b1fe3.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261119.28b1fe3/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261119.28b1fe3/manifest.sig",
+        "digest": "454bf9e77156cb547cd7da478dff3ced885ee0847e7556ff1d79d9e0bc588a77"
       },
       "tier": "artifact",
       "plan": "paid",
