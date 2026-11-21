@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-21T12:11:36.786Z",
+  "generatedAt": "2026-11-21T12:46:07.790Z",
   "apps": [
     {
       "slug": "2fa",
@@ -77,19 +77,19 @@
         "Notion"
       ],
       "addedAt": "2026-09-27T06:02:01+03:00",
-      "version": "0.0.0-20261110.1050ec4",
+      "version": "0.0.0-20261120.b7c3cca",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20261110.1050ec4/888wiki-0.0.0-20261110.1050ec4.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20261110.1050ec4/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20261110.1050ec4/manifest.sig",
-        "digest": "6f06be3ad3adf905cf97d505853052c7507ab1f6fb8e12d88b624ceddbb3b4b8"
+        "zip": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20261120.b7c3cca/888wiki-0.0.0-20261120.b7c3cca.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20261120.b7c3cca/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20261120.b7c3cca/manifest.sig",
+        "digest": "d24250dfde1b9286aa9892c1f211867b4f61d4059267e2ae695861b90e90b68e"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-11-21T11:48:32.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "DAVID888",
@@ -1692,17 +1692,17 @@
         "Termius"
       ],
       "addedAt": "2026-09-26T23:19:31+03:00",
-      "version": "0.0.0-20261117.200172e",
+      "version": "0.0.0-20261120.983adf8",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20261117.200172e/cloudssh-0.0.0-20261117.200172e.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20261117.200172e/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20261117.200172e/manifest.sig",
-        "digest": "f43e538714c79ab1b0bc3a58ce11ec914094405d39880c3c8138f38e288309a1"
+        "zip": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20261120.983adf8/cloudssh-0.0.0-20261120.983adf8.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20261120.983adf8/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/cloudssh@0.0.0-20261120.983adf8/manifest.sig",
+        "digest": "fcc3184527f80478ff4ef693ce7f3d32905e4e7e9d97f3ed1711bde85273b75f"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-11-21T11:51:10.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "TanXin",
@@ -2313,19 +2313,19 @@
         "Evernote"
       ],
       "addedAt": "2026-09-27T05:18:00+03:00",
-      "version": "2.28.2",
+      "version": "2.31.0",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/edgeever@2.28.2/edgeever-2.28.2.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/edgeever@2.28.2/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/edgeever@2.28.2/manifest.sig",
-        "digest": "10dbba29aefcc0dca334ae3b1ca9d8bd437ca743e20090b35e69f00f69857685"
+        "zip": "https://github.com/appflare/catalog/releases/download/edgeever@2.31.0/edgeever-2.31.0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/edgeever@2.31.0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/edgeever@2.31.0/manifest.sig",
+        "digest": "7b83fa5aaf9160f8f47e1ed6d3a15a703596ca243d46c54226bf1d95ce3a6d5d"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-11-21T11:53:08.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "tianma-if",
@@ -3509,19 +3509,19 @@
         "Giscus"
       ],
       "addedAt": "2026-09-27T05:55:55+03:00",
-      "version": "2.46.0",
+      "version": "2.47.0",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/garrul@2.46.0/garrul-2.46.0.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/garrul@2.46.0/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/garrul@2.46.0/manifest.sig",
-        "digest": "078dfaff8e7550baa9f7c913338ba53afa9c6e54a0f0161e3d3f8e2a84146637"
+        "zip": "https://github.com/appflare/catalog/releases/download/garrul@2.47.0/garrul-2.47.0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/garrul@2.47.0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/garrul@2.47.0/manifest.sig",
+        "digest": "3a64ecb3e38f586744c564e0454e3a4cf8e402e7c95cd9b6c75bad9285de19ad"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "analytics-engine"
       ],
-      "lastVerified": "2026-11-21T11:55:22.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "KingPin",
@@ -4578,17 +4578,17 @@
         "Feedly"
       ],
       "addedAt": "2026-09-27T12:03:21+03:00",
-      "version": "0.0.0-20261101.2677179",
+      "version": "0.0.0-20261119.0f2ec70",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/larafeed@0.0.0-20261101.2677179/larafeed-0.0.0-20261101.2677179.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/larafeed@0.0.0-20261101.2677179/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/larafeed@0.0.0-20261101.2677179/manifest.sig",
-        "digest": "ac68a52ef7426c91fbd99de2b740079015506bac7103d162158ae522bc45630a"
+        "zip": "https://github.com/appflare/catalog/releases/download/larafeed@0.0.0-20261119.0f2ec70/larafeed-0.0.0-20261119.0f2ec70.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/larafeed@0.0.0-20261119.0f2ec70/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/larafeed@0.0.0-20261119.0f2ec70/manifest.sig",
+        "digest": "3acfb3fda7fac13f5336a659d31acabe6e14e233151a678b2f0a154ff083ffeb"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-11-21T11:57:13.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Stanislas",
@@ -5689,74 +5689,6 @@
       ],
       "license": "ISC",
       "revision": 3,
-      "accessOffer": "offered"
-    },
-    {
-      "slug": "nodewarden",
-      "repo": "shuaiplus/nodewarden",
-      "name": "NodeWarden",
-      "summary": "A Bitwarden-compatible password manager server: the official Bitwarden apps and browser extensions sync to it, with a web vault, attachments, Send, and passkey sign-in, on D1 and R2.",
-      "tagline": "A password vault that syncs with your Bitwarden apps",
-      "features": [
-        "Sync passwords across Bitwarden apps and browser extensions",
-        "Open and edit your vault in a browser",
-        "Generate one-time codes for your saved logins",
-        "Share text and files with Bitwarden Send",
-        "Schedule vault backups to WebDAV or S3 storage",
-        "Sign in with a passkey"
-      ],
-      "alternativeTo": [
-        "Bitwarden"
-      ],
-      "addedAt": "2026-09-26T23:19:31+03:00",
-      "version": "1.8.1",
-      "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/nodewarden@1.8.1/nodewarden-1.8.1.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/nodewarden@1.8.1/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/nodewarden@1.8.1/manifest.sig",
-        "digest": "7d6c64d0b5c6b0be013ec58182a36e5630773cb898396daa7edb9f930ddea037"
-      },
-      "tier": "artifact",
-      "plan": "free",
-      "requires": [
-        "r2"
-      ],
-      "lastVerified": "2026-11-20T12:24:41.000Z",
-      "authors": [
-        {
-          "name": "Shuai",
-          "url": "https://shuai.plus",
-          "github": "shuaiplus"
-        }
-      ],
-      "maintainers": [
-        "MendyLanda"
-      ],
-      "media": {
-        "icon": {
-          "url": "https://appflare.github.io/catalog/apps/nodewarden/icon.png",
-          "sha256": "88641ef4cf25005932a80d875a072512040be381f9afb470a77e7f4fc0aa6b2a"
-        },
-        "screenshots": []
-      },
-      "services": [
-        "d1",
-        "r2",
-        "durable-objects",
-        "cron"
-      ],
-      "categories": [
-        "security",
-        "passwords"
-      ],
-      "license": "LGPL-3.0-only",
-      "revision": 3,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/nodewarden/manifest.json",
-        "sha256": "38cc3222b5d1c16b2702095a19c6ff829ef8cde703b8da8d5fe95a8267f93329",
-        "keyId": "catalog-2026-09",
-        "signature": "McBhYu+YX764YuZhHUUeRIHEyHTa42P5ppe2AaQt3deJ8Sgshp/uXr/wFvSEyz13capTyj0cIJf9KJwXCiVyAg=="
-      },
       "accessOffer": "offered"
     },
     {
@@ -7062,17 +6994,17 @@
         "TeamViewer"
       ],
       "addedAt": "2026-09-27T05:20:16+03:00",
-      "version": "3.18.6",
+      "version": "3.21.2",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/reminal@3.18.6/reminal-3.18.6.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/reminal@3.18.6/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/reminal@3.18.6/manifest.sig",
-        "digest": "be0a9563706e7ccf88056fdf0094e96ea952f4dca5c5d1244356f20a01f42b56"
+        "zip": "https://github.com/appflare/catalog/releases/download/reminal@3.21.2/reminal-3.21.2.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/reminal@3.21.2/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/reminal@3.21.2/manifest.sig",
+        "digest": "9c5adeb975b1f069ed8bc5c98c079e26cbdab4f66ebb1587061b2729b0761e08"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-11-21T12:02:31.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Harshal Gajjar",
@@ -7100,6 +7032,7 @@
         ]
       },
       "services": [
+        "r2",
         "durable-objects"
       ],
       "categories": [
