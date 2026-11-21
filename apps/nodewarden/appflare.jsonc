@@ -23,7 +23,7 @@
   "revision": 3,
   "authors": [{ "name": "Shuai", "url": "https://shuai.plus", "github": "shuaiplus" }],
   "maintainers": ["MendyLanda"],
-  "source": { "ref": "v1.8.1", "sha": "e92c91e771fac13c54042902d64d015514daa9ad" },
+  "source": { "ref": "v1.8.2", "sha": "a95df3af6a73d6288dbe7c89d51f3bcc55ea0978" },
   "install": {
     "packageManager": "npm",
     // The R2 variant, upstream's default. wrangler.kv.toml keeps attachments in
