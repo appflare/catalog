@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-22T12:24:09.191Z",
+  "generatedAt": "2026-11-22T12:43:19.825Z",
   "apps": [
     {
       "slug": "2fa",
@@ -4345,19 +4345,19 @@
         "Tumblr"
       ],
       "addedAt": "2026-09-27T12:14:18+03:00",
-      "version": "0.0.0-20261117.584a8f2",
+      "version": "0.0.0-20261121.71816e8",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/jant@0.0.0-20261117.584a8f2/jant-0.0.0-20261117.584a8f2.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/jant@0.0.0-20261117.584a8f2/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/jant@0.0.0-20261117.584a8f2/manifest.sig",
-        "digest": "a34f65c4d43508c550772033b4d92d8dc328380517ee22604799af1a5ea1e80c"
+        "zip": "https://github.com/appflare/catalog/releases/download/jant@0.0.0-20261121.71816e8/jant-0.0.0-20261121.71816e8.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/jant@0.0.0-20261121.71816e8/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/jant@0.0.0-20261121.71816e8/manifest.sig",
+        "digest": "cc811a2c1489867010e9d9b1be19d2a9421715abb0734c58e202d9a250fe3e5f"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-11-22T12:09:00.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Jant",
@@ -4887,12 +4887,12 @@
         "Gmail"
       ],
       "addedAt": "2026-09-24T07:29:19+03:00",
-      "version": "0.0.0-20261119.cec33ee",
+      "version": "0.0.0-20261121.dd5df0d",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261119.cec33ee/mailflare-0.0.0-20261119.cec33ee.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261119.cec33ee/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261119.cec33ee/manifest.sig",
-        "digest": "ad518bd4d8023fbce1cbfadc82181d68a5455b9c1f484c5afc22841ec9e708a7"
+        "zip": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261121.dd5df0d/mailflare-0.0.0-20261121.dd5df0d.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261121.dd5df0d/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/mailflare@0.0.0-20261121.dd5df0d/manifest.sig",
+        "digest": "03140ed17c643beb2f9db18608bbfa33187d4bf1646954bc82252de64a304e40"
       },
       "tier": "artifact",
       "plan": "paid",
@@ -5692,6 +5692,68 @@
       "accessOffer": "offered"
     },
     {
+      "slug": "nodewarden",
+      "repo": "shuaiplus/nodewarden",
+      "name": "NodeWarden",
+      "summary": "A Bitwarden-compatible password manager server: the official Bitwarden apps and browser extensions sync to it, with a web vault, attachments, Send, and passkey sign-in, on D1 and R2.",
+      "tagline": "A password vault that syncs with your Bitwarden apps",
+      "features": [
+        "Sync passwords across Bitwarden apps and browser extensions",
+        "Open and edit your vault in a browser",
+        "Generate one-time codes for your saved logins",
+        "Share text and files with Bitwarden Send",
+        "Schedule vault backups to WebDAV or S3 storage",
+        "Sign in with a passkey"
+      ],
+      "alternativeTo": [
+        "Bitwarden"
+      ],
+      "addedAt": "2026-09-26T23:19:31+03:00",
+      "version": "1.8.2",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/nodewarden@1.8.2/nodewarden-1.8.2.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/nodewarden@1.8.2/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/nodewarden@1.8.2/manifest.sig",
+        "digest": "79791d76ee5700e048a7bba69abce330c618062039a717de52b60fc9e4f5f580"
+      },
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "r2"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Shuai",
+          "url": "https://shuai.plus",
+          "github": "shuaiplus"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/nodewarden/icon.png",
+          "sha256": "88641ef4cf25005932a80d875a072512040be381f9afb470a77e7f4fc0aa6b2a"
+        },
+        "screenshots": []
+      },
+      "services": [
+        "d1",
+        "r2",
+        "durable-objects",
+        "cron"
+      ],
+      "categories": [
+        "security",
+        "passwords"
+      ],
+      "license": "LGPL-3.0-only",
+      "revision": 3,
+      "accessOffer": "offered"
+    },
+    {
       "slug": "nodrix",
       "repo": "decoded-cipher/nodrix",
       "name": "nodrix",
@@ -6177,12 +6239,12 @@
         "Keep characters, locations and lighting consistent across scenes"
       ],
       "addedAt": "2026-09-27T12:03:21+03:00",
-      "version": "0.0.0-20261119.28b1fe3",
+      "version": "0.0.0-20261121.afe1450",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261119.28b1fe3/openstory-0.0.0-20261119.28b1fe3.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261119.28b1fe3/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261119.28b1fe3/manifest.sig",
-        "digest": "454bf9e77156cb547cd7da478dff3ced885ee0847e7556ff1d79d9e0bc588a77"
+        "zip": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261121.afe1450/openstory-0.0.0-20261121.afe1450.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261121.afe1450/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261121.afe1450/manifest.sig",
+        "digest": "f40c096f422d8bd6eb31bc49d5fd0e8d390ea3c2c679599ed5f4bd70f0f25264"
       },
       "tier": "artifact",
       "plan": "paid",
