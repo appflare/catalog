@@ -1,0 +1,53 @@
+{
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "mdviewer",
+  "name": "MDViewer",
+  "summary": "Protocol-3 markdown share API on Workers + R2: manage token, optional view password, fixed TTL, fair-use limits, and MCP for agents. Pair it with the MDViewer SPA (or any client) pointed at this Worker.",
+  "tagline": "Share markdown from your own Worker",
+  "features": [
+    "Upload markdown shares to your own R2 bucket with a fixed TTL",
+    "Manage shares with a token; optionally lock viewing behind a password",
+    "Fair-use rate limits and an hourly-safe daily sweep of expired shares",
+    "OpenAPI + MCP so agents can upload and fetch shares",
+    "Point the MDViewer SPA (or your own client) at the Worker URL"
+  ],
+  "alternativeTo": ["HackMD", "GitHub Gist"],
+  "repo": "zamdevio/mdviewer",
+  "homepage": "https://mdviewer.zamdev.dev",
+  "license": "MIT",
+  "categories": ["productivity", "utilities", "sharing"],
+  "authors": [{ "name": "zamdevio", "github": "zamdevio" }],
+  "maintainers": ["zamdevio"],
+  // Packaging commit after v4.0.0: dedicated scripts/appflare wrangler (no prod routes).
+  "source": {
+    "ref": "main",
+    "sha": "963d35a3a4eed30b225876274fac44bf08fd706e",
+    "version": "4.0.1"
+  },
+  "install": {
+    "packageManager": "pnpm",
+    "wranglerConfig": "scripts/appflare/wrangler.jsonc",
+    "installDirs": [{ "path": "." }],
+    "buildCommand": "pnpm --filter @mdviewer/worker run generate:llms",
+    "health": { "path": "/health" }
+  },
+  "plan": "paid",
+  "requires": ["r2"],
+  "vars": [
+    {
+      "name": "ALLOWED_ORIGINS",
+      "label": "Allowed SPA origins",
+      "help": "Comma-separated origins for CORS and share links (include your MDViewer SPA, e.g. https://your-pages.example). Required for uploads and browser clients."
+    }
+  ],
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "This install is the **share API Worker** only. Point your MDViewer SPA (Settings → Share API, or `VITE_API_URL`) at `{{appUrl}}`, and set **Allowed SPA origins** to that SPA's origin so CORS and share links work."
+    },
+    {
+      "type": "markdown",
+      "content": "Health: `{{appUrl}}/health`. OpenAPI: `{{appUrl}}/openapi.json`. MCP: `{{appUrl}}/mcp`. Expired shares are swept by the Worker cron (Workers Paid)."
+    }
+  ]
+}
