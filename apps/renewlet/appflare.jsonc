@@ -20,7 +20,7 @@
   "revision": 3,
   "authors": [{ "name": "zhiyingzhou", "url": "https://renewlet.cc", "github": "zhiyingzzhou" }],
   "maintainers": ["MendyLanda"],
-  "source": { "ref": "v0.3.37", "sha": "2aa8c8e1134d2d9670e888e03e9222c2ce00fbed" },
+  "source": { "ref": "v0.3.38", "sha": "91e81f7b435132d2be2d380f4ab81068753f92ba" },
   "install": {
     // A pnpm 11 workspace: the Worker in apps/worker, the React app in
     // apps/web, both installed from the root lockfile.
