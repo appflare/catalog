@@ -22,7 +22,7 @@
   "revision": 4,
   "authors": [{ "name": "Plivo", "url": "https://www.plivo.com", "github": "plivo-labs" }],
   "maintainers": ["MendyLanda"],
-  "source": { "ref": "v0.14.0", "sha": "caaed8f60a5365a652a9d519f77bfcb489016585" },
+  "source": { "ref": "v0.14.1", "sha": "8f4666fca9c785d611f66048d187cbf3283977b1" },
   "install": {
     "packageManager": "bun",
     // The app Worker serves the web app (built below) and the API; the content
