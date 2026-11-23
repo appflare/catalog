@@ -26,7 +26,7 @@
     { "name": "37signals", "url": "https://37signals.com", "github": "basecamp" }
   ],
   "maintainers": ["MendyLanda"],
-  "source": { "ref": "v0.4.2", "sha": "3ee4d23cc2c9bdb94ef481110d609e7b17fdb07b" },
+  "source": { "ref": "v0.5.0", "sha": "2e6c78863100af1739ccf6c4bac12fa15958ceed" },
   "install": {
     "packageManager": "pnpm",
     // Upstream's Deploy to Cloudflare entry point, at the root beside the
