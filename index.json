@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-23T14:06:15.705Z",
+  "generatedAt": "2026-11-23T14:48:58.385Z",
   "apps": [
     {
       "slug": "2fa",
@@ -77,19 +77,19 @@
         "Notion"
       ],
       "addedAt": "2026-09-27T06:02:01+03:00",
-      "version": "0.0.0-20261120.b7c3cca",
+      "version": "0.0.0-20261122.fc954c9",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20261120.b7c3cca/888wiki-0.0.0-20261120.b7c3cca.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20261120.b7c3cca/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20261120.b7c3cca/manifest.sig",
-        "digest": "d24250dfde1b9286aa9892c1f211867b4f61d4059267e2ae695861b90e90b68e"
+        "zip": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20261122.fc954c9/888wiki-0.0.0-20261122.fc954c9.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20261122.fc954c9/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/888wiki@0.0.0-20261122.fc954c9/manifest.sig",
+        "digest": "f475028b2b33612503f8d1f5f19da58b7a51016a7402ecfbe2035b4180df10b4"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-11-22T12:00:57.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "DAVID888",
@@ -358,17 +358,17 @@
         "UptimeRobot"
       ],
       "addedAt": "2026-09-27T04:47:37+03:00",
-      "version": "0.0.0-20261115.78b6be4",
+      "version": "0.0.0-20261121.e9e1d0a",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/atalaya@0.0.0-20261115.78b6be4/atalaya-0.0.0-20261115.78b6be4.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/atalaya@0.0.0-20261115.78b6be4/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/atalaya@0.0.0-20261115.78b6be4/manifest.sig",
-        "digest": "0d10d6bb81a00c6a2546b383493d51cd8cd8cbb4af5ec121ad38332db19e374a"
+        "zip": "https://github.com/appflare/catalog/releases/download/atalaya@0.0.0-20261121.e9e1d0a/atalaya-0.0.0-20261121.e9e1d0a.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/atalaya@0.0.0-20261121.e9e1d0a/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/atalaya@0.0.0-20261121.e9e1d0a/manifest.sig",
+        "digest": "d312ebca0c3427f71460c050d2323e1751f1eae9345021385a12eed538926544"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-11-22T12:00:35.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Daniel Carrillo",
@@ -2313,19 +2313,19 @@
         "Evernote"
       ],
       "addedAt": "2026-09-27T05:18:00+03:00",
-      "version": "2.31.0",
+      "version": "2.31.1",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/edgeever@2.31.0/edgeever-2.31.0.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/edgeever@2.31.0/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/edgeever@2.31.0/manifest.sig",
-        "digest": "7b83fa5aaf9160f8f47e1ed6d3a15a703596ca243d46c54226bf1d95ce3a6d5d"
+        "zip": "https://github.com/appflare/catalog/releases/download/edgeever@2.31.1/edgeever-2.31.1.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/edgeever@2.31.1/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/edgeever@2.31.1/manifest.sig",
+        "digest": "a8169f59efdfdb93c215a99388b19bd6c61c57106afa1f6757584cb646dccced"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-11-23T13:46:12.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "tianma-if",
@@ -3651,76 +3651,6 @@
         "sha256": "001fcc57d3dca4721ed158c3424a558309edf573cfb2636e94b7fdcd3954e157",
         "keyId": "catalog-2026-09",
         "signature": "MhNi1TU7/LJMYETU2UU8yvTcFwEhTvZrTE/SsKawitZZRXw4M5uv4W6KzLAZXIF0mLNEaiXvU2Kq+NmtiZbYBQ=="
-      },
-      "accessOffer": "offered"
-    },
-    {
-      "slug": "glance",
-      "repo": "plivo-labs/glance",
-      "name": "Glance",
-      "summary": "Share what your coding agents build: publish HTML, Markdown and files as private sites your team opens, comments on, and annotates. An open-source alternative to Claude Artifacts.",
-      "tagline": "Share your coding agent's work as pages your team can review",
-      "features": [
-        "Upload HTML, Markdown or a folder of files to a live address",
-        "Choose who can open each published page",
-        "Leave comments and replies while reviewing pages in your browser",
-        "Record voice comments with automatic text transcripts",
-        "Publish audio files with a player and timestamped comments",
-        "Let coding agents read feedback and publish updated pages"
-      ],
-      "alternativeTo": [
-        "Claude Artifacts"
-      ],
-      "addedAt": "2026-09-27T01:13:10+03:00",
-      "version": "0.14.0",
-      "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/glance@0.14.0/glance-0.14.0.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/glance@0.14.0/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/glance@0.14.0/manifest.sig",
-        "digest": "862de2e8e431b34514fbc43570087a2172d797df5b77508dcb8cbf719227bb01"
-      },
-      "tier": "artifact",
-      "plan": "free",
-      "requires": [
-        "r2",
-        "workers-ai"
-      ],
-      "lastVerified": "2026-11-23T13:49:21.000Z",
-      "authors": [
-        {
-          "name": "Plivo",
-          "url": "https://www.plivo.com",
-          "github": "plivo-labs"
-        }
-      ],
-      "maintainers": [
-        "MendyLanda"
-      ],
-      "media": {
-        "icon": {
-          "url": "https://appflare.github.io/catalog/apps/glance/icon.svg",
-          "sha256": "4defbf089c76f9880688ae69324b874e51292894c44529b0cad2fa9937bb9be5"
-        },
-        "screenshots": []
-      },
-      "services": [
-        "kv",
-        "d1",
-        "r2",
-        "durable-objects",
-        "cron",
-        "workers-ai"
-      ],
-      "categories": [
-        "developer-tools"
-      ],
-      "license": "MIT",
-      "revision": 4,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/glance/manifest.json",
-        "sha256": "53a859278d80c8d8e2496dadce6fe8cf2ed43ad4d8b49ee8cf6af5131deca512",
-        "keyId": "catalog-2026-09",
-        "signature": "/IKj/1NBhYYx+Pf99a3KkXFj87aaq6IAwE9kkSdJZE0TovtSixLRnGwWL/dz1MhCJtIMqbHDFZyvmaBzben6AQ=="
       },
       "accessOffer": "offered"
     },
