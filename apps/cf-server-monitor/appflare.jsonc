@@ -27,7 +27,7 @@
   "authors": [{ "name": "huilang-me", "github": "huilang-me" }],
   "maintainers": ["MendyLanda"],
   // Upstream has no release tags, so the entry follows the default branch by commit.
-  "source": { "ref": "main", "sha": "1be24f0eabdcc2d06c215c45258382b02e438b49" },
+  "source": { "ref": "main", "sha": "1e4931fbebb8dc82f113cd2da80b962fab646a3b" },
   "install": {
     "packageManager": "npm",
     // The config upstream's Deploy button reads. Its D1 binding names no
