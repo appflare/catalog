@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-24T14:44:55.300Z",
+  "generatedAt": "2026-11-24T15:03:06.400Z",
   "apps": [
     {
       "slug": "2fa",
@@ -782,19 +782,19 @@
         "Calibre-Web"
       ],
       "addedAt": "2026-09-27T04:46:44+03:00",
-      "version": "0.0.0-20261118.7711de5",
+      "version": "0.0.0-20261123.f057c00",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/bookshelf@0.0.0-20261118.7711de5/bookshelf-0.0.0-20261118.7711de5.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/bookshelf@0.0.0-20261118.7711de5/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/bookshelf@0.0.0-20261118.7711de5/manifest.sig",
-        "digest": "1ec5cca26e865d3b365a83234a8c7520646d1b24df1cc92a5c96816d363387ce"
+        "zip": "https://github.com/appflare/catalog/releases/download/bookshelf@0.0.0-20261123.f057c00/bookshelf-0.0.0-20261123.f057c00.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/bookshelf@0.0.0-20261123.f057c00/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/bookshelf@0.0.0-20261123.f057c00/manifest.sig",
+        "digest": "e722a789fd82275ccdd19b67a1905126748b6dbbdb9b123068f97881e14eb2be"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-11-24T14:19:13.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Murat Erkin Cicek",
@@ -1098,17 +1098,17 @@
         "Netdata"
       ],
       "addedAt": "2026-09-27T10:46:59+03:00",
-      "version": "0.0.0-20261113.1be24f0",
+      "version": "0.0.0-20261123.1e4931f",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/cf-server-monitor@0.0.0-20261113.1be24f0/cf-server-monitor-0.0.0-20261113.1be24f0.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/cf-server-monitor@0.0.0-20261113.1be24f0/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/cf-server-monitor@0.0.0-20261113.1be24f0/manifest.sig",
-        "digest": "37694a8ddf31059c17d26fae06ee1eaeaecfb0e2cc1cc654b6aa8c18226849bf"
+        "zip": "https://github.com/appflare/catalog/releases/download/cf-server-monitor@0.0.0-20261123.1e4931f/cf-server-monitor-0.0.0-20261123.1e4931f.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/cf-server-monitor@0.0.0-20261123.1e4931f/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/cf-server-monitor@0.0.0-20261123.1e4931f/manifest.sig",
+        "digest": "e8a652188074ca18b43fcbfb5cb56406889b288a30f56d35ccc11ff35639feeb"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-11-24T14:20:11.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "huilang-me",
@@ -2706,19 +2706,19 @@
         "Campfire"
       ],
       "addedAt": "2026-11-10T07:33:09Z",
-      "version": "0.4.2",
+      "version": "0.5.0",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/ember@0.4.2/ember-0.4.2.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/ember@0.4.2/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/ember@0.4.2/manifest.sig",
-        "digest": "b9c0a1f3d971034a0e29122b77ecc4b09a3c85c9fd4d49678bf6ff469c00444b"
+        "zip": "https://github.com/appflare/catalog/releases/download/ember@0.5.0/ember-0.5.0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/ember@0.5.0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/ember@0.5.0/manifest.sig",
+        "digest": "4272a8f2dd5f1e40c80b97271e3244d587a0834208b3192fef5ebfa6afa1260f"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-11-24T14:24:25.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "NYLLON",
@@ -2790,6 +2790,7 @@
         "d1",
         "r2",
         "durable-objects",
+        "images",
         "email-routing"
       ],
       "categories": [
@@ -3509,19 +3510,19 @@
         "Giscus"
       ],
       "addedAt": "2026-09-27T05:55:55+03:00",
-      "version": "2.47.0",
+      "version": "2.48.0",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/garrul@2.47.0/garrul-2.47.0.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/garrul@2.47.0/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/garrul@2.47.0/manifest.sig",
-        "digest": "3a64ecb3e38f586744c564e0454e3a4cf8e402e7c95cd9b6c75bad9285de19ad"
+        "zip": "https://github.com/appflare/catalog/releases/download/garrul@2.48.0/garrul-2.48.0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/garrul@2.48.0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/garrul@2.48.0/manifest.sig",
+        "digest": "87db463eb6e51fbb3f4e20978e93c3aae6fda194ab684794bcf010e41831dfbb"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "analytics-engine"
       ],
-      "lastVerified": "2026-11-24T14:26:23.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "KingPin",
@@ -3652,6 +3653,70 @@
         "keyId": "catalog-2026-09",
         "signature": "MhNi1TU7/LJMYETU2UU8yvTcFwEhTvZrTE/SsKawitZZRXw4M5uv4W6KzLAZXIF0mLNEaiXvU2Kq+NmtiZbYBQ=="
       },
+      "accessOffer": "offered"
+    },
+    {
+      "slug": "glance",
+      "repo": "plivo-labs/glance",
+      "name": "Glance",
+      "summary": "Share what your coding agents build: publish HTML, Markdown and files as private sites your team opens, comments on, and annotates. An open-source alternative to Claude Artifacts.",
+      "tagline": "Share your coding agent's work as pages your team can review",
+      "features": [
+        "Upload HTML, Markdown or a folder of files to a live address",
+        "Choose who can open each published page",
+        "Leave comments and replies while reviewing pages in your browser",
+        "Record voice comments with automatic text transcripts",
+        "Publish audio files with a player and timestamped comments",
+        "Let coding agents read feedback and publish updated pages"
+      ],
+      "alternativeTo": [
+        "Claude Artifacts"
+      ],
+      "addedAt": "2026-09-27T01:13:10+03:00",
+      "version": "0.14.1",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/glance@0.14.1/glance-0.14.1.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/glance@0.14.1/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/glance@0.14.1/manifest.sig",
+        "digest": "34af413120d6e68a3bba51bcaf626627da8a519ee165e8b5393baee69c4492f4"
+      },
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "r2",
+        "workers-ai"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Plivo",
+          "url": "https://www.plivo.com",
+          "github": "plivo-labs"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/glance/icon.svg",
+          "sha256": "4defbf089c76f9880688ae69324b874e51292894c44529b0cad2fa9937bb9be5"
+        },
+        "screenshots": []
+      },
+      "services": [
+        "kv",
+        "d1",
+        "r2",
+        "durable-objects",
+        "cron",
+        "workers-ai"
+      ],
+      "categories": [
+        "developer-tools"
+      ],
+      "license": "MIT",
+      "revision": 4,
       "accessOffer": "offered"
     },
     {
@@ -5075,85 +5140,6 @@
       "accessOffer": "offered"
     },
     {
-      "slug": "microfeed",
-      "repo": "microfeed/microfeed",
-      "name": "microfeed",
-      "summary": "A lightweight CMS for audio, video, photos, documents, blog posts and links, published as a website, RSS and JSON feed, with an admin dashboard and an API for agents.",
-      "tagline": "Publish podcasts, photos, videos and posts on your own site",
-      "features": [
-        "Publish articles, audio, video, photos, documents and links",
-        "Let readers subscribe to your posts and podcasts by RSS",
-        "Edit posts and upload media from a web dashboard",
-        "Preview theme changes before publishing them",
-        "Add podcast transcripts, chapters, hosts and guests",
-        "Choose search titles, descriptions and social preview images"
-      ],
-      "alternativeTo": [
-        "WordPress"
-      ],
-      "addedAt": "2026-09-27T06:14:13+03:00",
-      "version": "1.0.13",
-      "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/microfeed@1.0.13/microfeed-1.0.13.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/microfeed@1.0.13/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/microfeed@1.0.13/manifest.sig",
-        "digest": "ba044b37a793542086ecefe6e7fa10e71695492418b25ffd15a275bc85f34a9a"
-      },
-      "tier": "artifact",
-      "plan": "free",
-      "requires": [
-        "r2"
-      ],
-      "lastVerified": "2026-11-24T14:29:50.000Z",
-      "authors": [
-        {
-          "name": "Listen Notes",
-          "url": "https://www.listennotes.com",
-          "github": "ListenNotes"
-        }
-      ],
-      "maintainers": [
-        "MendyLanda"
-      ],
-      "media": {
-        "icon": {
-          "url": "https://appflare.github.io/catalog/apps/microfeed/icon.png",
-          "sha256": "7a098d51508b60a8adf084b34b0dc9c80462abfe3d296a98f267327ee92e3852"
-        },
-        "screenshots": [
-          {
-            "url": "https://appflare.github.io/catalog/apps/microfeed/screenshots/01-dashboard-overview.png",
-            "sha256": "1b2b08cd716e9f2bbd23c8d97444cb35c858fb18ad32028e07a5d4b43f575bd7",
-            "alt": "microfeed: Dashboard overview"
-          },
-          {
-            "url": "https://appflare.github.io/catalog/apps/microfeed/screenshots/02-code-editor.png",
-            "sha256": "e4a4d6de07cc9d5f4a30eb31eb9855b21f513c349d01f2419ed8265c8094e38e",
-            "alt": "microfeed: Code editor"
-          }
-        ]
-      },
-      "services": [
-        "d1",
-        "r2",
-        "queues",
-        "cron"
-      ],
-      "categories": [
-        "cms",
-        "media"
-      ],
-      "license": "AGPL-3.0-only",
-      "revision": 4,
-      "catalogManifest": {
-        "url": "https://appflare.github.io/catalog/apps/microfeed/manifest.json",
-        "sha256": "6523144c167d0bb2114c6531d404d546808c349a4ab422b1b6065697435875e3",
-        "keyId": "catalog-2026-09",
-        "signature": "o92tUHLLEnjSqM3zCDcgOSwhT5RkaD/2BlqaX4i35CEfEQ71U+QkynrEZDF84/cgqC195L4VO1s47hODNXE1BA=="
-      },
-      "accessOffer": "offered"
-    },
-    {
       "slug": "minshop",
       "repo": "ddyy/minshop",
       "name": "minshop",
@@ -5842,17 +5828,17 @@
         "BrowserLeaks"
       ],
       "addedAt": "2026-09-27T10:46:59+03:00",
-      "version": "0.0.0-20261106.94be991",
+      "version": "0.0.0-20261121.a232cb5",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/one-ip@0.0.0-20261106.94be991/one-ip-0.0.0-20261106.94be991.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/one-ip@0.0.0-20261106.94be991/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/one-ip@0.0.0-20261106.94be991/manifest.sig",
-        "digest": "df2a7e6f735418099a093e6dc188aa5e23bb828ef812975b2834dd03502a965f"
+        "zip": "https://github.com/appflare/catalog/releases/download/one-ip@0.0.0-20261121.a232cb5/one-ip-0.0.0-20261121.a232cb5.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/one-ip@0.0.0-20261121.a232cb5/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/one-ip@0.0.0-20261121.a232cb5/manifest.sig",
+        "digest": "e1cfe7fd3eef2d7322490552b0544ea61280000ce3dbe6d94ecd3ff523048c7f"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-11-24T14:31:10.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Hu Zhihui",
@@ -7143,19 +7129,19 @@
         "Bobby"
       ],
       "addedAt": "2026-09-27T12:02:55+03:00",
-      "version": "0.3.37",
+      "version": "0.3.38",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/renewlet@0.3.37/renewlet-0.3.37.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/renewlet@0.3.37/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/renewlet@0.3.37/manifest.sig",
-        "digest": "23e0ac58c4f8169e1e129db6b727293f9bb19788ce8ac4cce6c84747c707e477"
+        "zip": "https://github.com/appflare/catalog/releases/download/renewlet@0.3.38/renewlet-0.3.38.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/renewlet@0.3.38/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/renewlet@0.3.38/manifest.sig",
+        "digest": "0c379e9a13981790bc9483d65de453bd763389236c5f81af1221424ff7ae12b6"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [
         "r2"
       ],
-      "lastVerified": "2026-11-24T14:34:50.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "zhiyingzhou",
@@ -8223,17 +8209,17 @@
         "Use the same sign-in helper with Decap CMS"
       ],
       "addedAt": "2026-09-27T10:43:20+03:00",
-      "version": "0.0.0-20261118.26b168a",
+      "version": "0.0.0-20261122.e62e76a",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/sveltia-cms-auth@0.0.0-20261118.26b168a/sveltia-cms-auth-0.0.0-20261118.26b168a.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/sveltia-cms-auth@0.0.0-20261118.26b168a/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/sveltia-cms-auth@0.0.0-20261118.26b168a/manifest.sig",
-        "digest": "855b68bfd3a3bb9ea03c97eba54b4f0dbafdefb942720cdd1d1848e2f906763d"
+        "zip": "https://github.com/appflare/catalog/releases/download/sveltia-cms-auth@0.0.0-20261122.e62e76a/sveltia-cms-auth-0.0.0-20261122.e62e76a.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/sveltia-cms-auth@0.0.0-20261122.e62e76a/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/sveltia-cms-auth@0.0.0-20261122.e62e76a/manifest.sig",
+        "digest": "06633e7c3caebb08605b4f200079034f14756373643a126a1ab52597951c2af3"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-11-24T14:38:20.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Sveltia",
