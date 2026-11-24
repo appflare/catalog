@@ -30,7 +30,7 @@
     { "name": "Listen Notes", "url": "https://www.listennotes.com", "github": "ListenNotes" }
   ],
   "maintainers": ["MendyLanda"],
-  "source": { "ref": "v1.0.13", "sha": "45096852f90fd617b34b368b93f339ab383ea248" },
+  "source": { "ref": "v1.1.0", "sha": "3c0734241e8f8a47a205e480f6b15b2b969e5b49" },
   "install": {
     // Yarn 4, pinned in package.json's packageManager.
     "packageManager": "yarn",
