@@ -27,7 +27,7 @@
   "authors": [{ "name": "DAVID888", "github": "tbdavid2019" }],
   "maintainers": ["MendyLanda"],
   // 888wiki publishes no release tags; the pin tracks main.
-  "source": { "ref": "main", "sha": "d8020c9e5fe655f6e33b54bc1ed96215e5e25f1f" },
+  "source": { "ref": "main", "sha": "9db605783224826b6f65b712370598350d66a44c" },
   "install": {
     "packageManager": "npm",
     "wranglerConfig": "wrangler.toml",
