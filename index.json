@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-25T13:56:48.202Z",
+  "generatedAt": "2026-11-25T14:31:59.729Z",
   "apps": [
     {
       "slug": "2fa",
@@ -651,17 +651,17 @@
         "Yopass"
       ],
       "addedAt": "2026-09-27T04:19:23+03:00",
-      "version": "0.0.0-20261117.f969b70",
+      "version": "0.0.0-20261124.553395b",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/binthere@0.0.0-20261117.f969b70/binthere-0.0.0-20261117.f969b70.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/binthere@0.0.0-20261117.f969b70/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/binthere@0.0.0-20261117.f969b70/manifest.sig",
-        "digest": "c52a1d488ec7b4290843e025009c16558a9a25894ab27e37c991b47e9907993c"
+        "zip": "https://github.com/appflare/catalog/releases/download/binthere@0.0.0-20261124.553395b/binthere-0.0.0-20261124.553395b.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/binthere@0.0.0-20261124.553395b/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/binthere@0.0.0-20261124.553395b/manifest.sig",
+        "digest": "4390df0266d48f5b2b159adbf3b9c9581808a7c155442c9b25b51042d10b4fa7"
       },
       "tier": "artifact",
       "plan": "free",
       "requires": [],
-      "lastVerified": "2026-11-25T13:32:30.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Gaurav",
@@ -5140,6 +5140,79 @@
       "accessOffer": "offered"
     },
     {
+      "slug": "microfeed",
+      "repo": "microfeed/microfeed",
+      "name": "microfeed",
+      "summary": "A lightweight CMS for audio, video, photos, documents, blog posts and links, published as a website, RSS and JSON feed, with an admin dashboard and an API for agents.",
+      "tagline": "Publish podcasts, photos, videos and posts on your own site",
+      "features": [
+        "Publish articles, audio, video, photos, documents and links",
+        "Let readers subscribe to your posts and podcasts by RSS",
+        "Edit posts and upload media from a web dashboard",
+        "Preview theme changes before publishing them",
+        "Add podcast transcripts, chapters, hosts and guests",
+        "Choose search titles, descriptions and social preview images"
+      ],
+      "alternativeTo": [
+        "WordPress"
+      ],
+      "addedAt": "2026-09-27T06:14:13+03:00",
+      "version": "1.1.0",
+      "artifacts": {
+        "zip": "https://github.com/appflare/catalog/releases/download/microfeed@1.1.0/microfeed-1.1.0.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/microfeed@1.1.0/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/microfeed@1.1.0/manifest.sig",
+        "digest": "4f65256ff647b9d16c2a6ed3bdf830bd119d1a81a39035c45eeac88bfd088495"
+      },
+      "tier": "artifact",
+      "plan": "free",
+      "requires": [
+        "r2"
+      ],
+      "lastVerified": null,
+      "authors": [
+        {
+          "name": "Listen Notes",
+          "url": "https://www.listennotes.com",
+          "github": "ListenNotes"
+        }
+      ],
+      "maintainers": [
+        "MendyLanda"
+      ],
+      "media": {
+        "icon": {
+          "url": "https://appflare.github.io/catalog/apps/microfeed/icon.png",
+          "sha256": "7a098d51508b60a8adf084b34b0dc9c80462abfe3d296a98f267327ee92e3852"
+        },
+        "screenshots": [
+          {
+            "url": "https://appflare.github.io/catalog/apps/microfeed/screenshots/01-dashboard-overview.png",
+            "sha256": "1b2b08cd716e9f2bbd23c8d97444cb35c858fb18ad32028e07a5d4b43f575bd7",
+            "alt": "microfeed: Dashboard overview"
+          },
+          {
+            "url": "https://appflare.github.io/catalog/apps/microfeed/screenshots/02-code-editor.png",
+            "sha256": "e4a4d6de07cc9d5f4a30eb31eb9855b21f513c349d01f2419ed8265c8094e38e",
+            "alt": "microfeed: Code editor"
+          }
+        ]
+      },
+      "services": [
+        "d1",
+        "r2",
+        "queues",
+        "cron"
+      ],
+      "categories": [
+        "cms",
+        "media"
+      ],
+      "license": "AGPL-3.0-only",
+      "revision": 4,
+      "accessOffer": "offered"
+    },
+    {
       "slug": "minshop",
       "repo": "ddyy/minshop",
       "name": "minshop",
@@ -5960,12 +6033,12 @@
         "Ahrefs"
       ],
       "addedAt": "2026-09-24T08:09:39+03:00",
-      "version": "0.1.30",
+      "version": "0.1.32",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/open-seo@0.1.30/open-seo-0.1.30.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/open-seo@0.1.30/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/open-seo@0.1.30/manifest.sig",
-        "digest": "a0e80a04482dd2f98bea7b069514001e9c4ce469b993370766c1df562253a8bc"
+        "zip": "https://github.com/appflare/catalog/releases/download/open-seo@0.1.32/open-seo-0.1.32.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/open-seo@0.1.32/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/open-seo@0.1.32/manifest.sig",
+        "digest": "1dcf429a74d83db0178db0d7537369ba1375270d8e722d8f9da93b58f9fed893"
       },
       "tier": "artifact",
       "plan": "free",
@@ -5973,7 +6046,7 @@
         "r2",
         "access"
       ],
-      "lastVerified": "2026-11-25T13:45:51.000Z",
+      "lastVerified": null,
       "authors": [
         {
           "name": "Ben Senescu",
@@ -6155,12 +6228,12 @@
         "Keep characters, locations and lighting consistent across scenes"
       ],
       "addedAt": "2026-09-27T12:03:21+03:00",
-      "version": "0.0.0-20261121.afe1450",
+      "version": "0.0.0-20261124.4895540",
       "artifacts": {
-        "zip": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261121.afe1450/openstory-0.0.0-20261121.afe1450.zip",
-        "manifest": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261121.afe1450/manifest.json",
-        "sig": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261121.afe1450/manifest.sig",
-        "digest": "f40c096f422d8bd6eb31bc49d5fd0e8d390ea3c2c679599ed5f4bd70f0f25264"
+        "zip": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261124.4895540/openstory-0.0.0-20261124.4895540.zip",
+        "manifest": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261124.4895540/manifest.json",
+        "sig": "https://github.com/appflare/catalog/releases/download/openstory@0.0.0-20261124.4895540/manifest.sig",
+        "digest": "ebf6f8ce938be47990ce2583ee9717932bf9999d34962d35c6866677bd30497d"
       },
       "tier": "artifact",
       "plan": "paid",
