@@ -29,7 +29,7 @@
   "revision": 4,
   "authors": [{ "name": "chthollyphile", "github": "chthollyphile" }],
   "maintainers": ["MendyLanda"],
-  "source": { "ref": "v0.8.0", "sha": "3b91924f1e2da7b7f8f9cf1e0cd0b25d4a789e6d" },
+  "source": { "ref": "v0.8.2", "sha": "2ac1f6262d2f9f342217ea7a0b3df5bf63c9f72b" },
   "install": {
     "packageManager": "npm",
     // The config at the root is the one upstream's Deploy button reads: the
