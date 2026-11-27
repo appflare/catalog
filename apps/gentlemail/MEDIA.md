@@ -1,0 +1,14 @@
+# Media for GentleMail
+
+Upstream: [`Softwaiz/gentlemail`](https://github.com/Softwaiz/gentlemail) at commit [`efe93cd3a85b0b653a89da28c448412e04786a62`](https://github.com/Softwaiz/gentlemail/tree/efe93cd3a85b0b653a89da28c448412e04786a62) (tag `v0.8.1`), licensed [MIT](https://github.com/Softwaiz/gentlemail/blob/efe93cd3a85b0b653a89da28c448412e04786a62/LICENSE).
+
+- `icon.svg`: [`apps/mail/public/favicon.svg`](https://github.com/Softwaiz/gentlemail/blob/efe93cd3a85b0b653a89da28c448412e04786a62/apps/mail/public/favicon.svg), the app's own favicon, linked in [`apps/mail/src/app/document.tsx` line 15](https://github.com/Softwaiz/gentlemail/blob/efe93cd3a85b0b653a89da28c448412e04786a62/apps/mail/src/app/document.tsx#L15). Unchanged.
+- `cover.png`: [`.github/assets/gentlemail.png`](https://github.com/Softwaiz/gentlemail/blob/efe93cd3a85b0b653a89da28c448412e04786a62/.github/assets/gentlemail.png), the banner at the top of the README ([line 1](https://github.com/Softwaiz/gentlemail/blob/efe93cd3a85b0b653a89da28c448412e04786a62/README.md#L1)). Unchanged (already 1200x630).
+- `screenshots/01-inbox.png`: [`.github/assets/inbox.png`](https://github.com/Softwaiz/gentlemail/blob/efe93cd3a85b0b653a89da28c448412e04786a62/.github/assets/inbox.png), from [README line 18](https://github.com/Softwaiz/gentlemail/blob/efe93cd3a85b0b653a89da28c448412e04786a62/README.md#L18). Scaled from 2880 to 1600 px wide.
+- `screenshots/02-api-keys-and-webhooks.png`: [`.github/assets/api.png`](https://github.com/Softwaiz/gentlemail/blob/efe93cd3a85b0b653a89da28c448412e04786a62/.github/assets/api.png), from [README line 22](https://github.com/Softwaiz/gentlemail/blob/efe93cd3a85b0b653a89da28c448412e04786a62/README.md#L22). Scaled from 2880 to 1600 px wide.
+- `screenshots/03-inbox-on-a-phone.png`: [`.github/assets/phone-inbox.png`](https://github.com/Softwaiz/gentlemail/blob/efe93cd3a85b0b653a89da28c448412e04786a62/.github/assets/phone-inbox.png), from [README line 23](https://github.com/Softwaiz/gentlemail/blob/efe93cd3a85b0b653a89da28c448412e04786a62/README.md#L23). Scaled from 1170 to 780 px wide.
+- `screenshots/04-menu-on-a-phone.png`: [`.github/assets/phone-menu.png`](https://github.com/Softwaiz/gentlemail/blob/efe93cd3a85b0b653a89da28c448412e04786a62/.github/assets/phone-menu.png), from [README line 24](https://github.com/Softwaiz/gentlemail/blob/efe93cd3a85b0b653a89da28c448412e04786a62/README.md#L24). Scaled from 1170 to 780 px wide.
+
+The mailboxes, senders and messages in the screenshots are made up (`example.test` addresses); the company names in them are sender names in text, with no logos.
+
+Left out: `apps/docs/public/og.png` and `og-mcp.png`, the documentation site's social previews, which repeat the cover's design; `apps/docs/src/assets/wordmark.svg`, a wordmark, not a square icon.
