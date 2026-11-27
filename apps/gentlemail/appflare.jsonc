@@ -1,0 +1,133 @@
+{
+  "$schema": "https://appflare.github.io/catalog/schema/v1.json",
+  "slug": "gentlemail",
+  "name": "GentleMail",
+  "summary": "Multi-domain webmail, email API and webhooks on Workers, D1, R2, Email Routing and Email Service.",
+  "tagline": "Webmail for all your domains, with an email API and webhooks",
+  "features": [
+    "Receive and send mail for any number of domains and mailboxes from one install",
+    "Choose which people can open which mailboxes, with two-step sign-in",
+    "Read mail in conversations, with search, attachments and a spam folder",
+    "Send and read mail from your own code with scoped API keys",
+    "Get signed webhooks the moment mail arrives or is sent",
+    "Let AI assistants such as Claude search and answer mail, asking before they send"
+  ],
+  "repo": "Softwaiz/gentlemail",
+  "homepage": "https://gentlemail.dev",
+  "license": "MIT",
+  "categories": ["email", "business"],
+  "authors": [{ "name": "Softwaiz", "url": "https://gentlemail.dev", "github": "Softwaiz" }],
+  "maintainers": ["MendyLanda"],
+  "source": { "ref": "v0.8.1", "sha": "efe93cd3a85b0b653a89da28c448412e04786a62" },
+  "install": {
+    "packageManager": "pnpm",
+    // The source config. The Worker is built with RedwoodSDK and Cloudflare's
+    // Vite plugin, which writes the bundled Worker and its deploy config under
+    // apps/mail/dist and points wrangler at it through
+    // apps/mail/.wrangler/deploy/config.json; the packer follows that redirect.
+    "wranglerConfig": "apps/mail/wrangler.jsonc",
+    // apps/mail/package.json's build script (vite build). It runs in apps/mail,
+    // where vite.config.mts reads wrangler.jsonc. The config has no build.command.
+    "buildCommand": "pnpm --dir apps/mail run build",
+    // Upstream's setup (apps/mail/README.md, "Connect a domain") points the
+    // zone's catch-all at the Worker; the email handler rejects mail to an
+    // address without a mailbox with a 550 (src/lib/inbound.ts).
+    "emailRouting": { "catchAll": true }
+  },
+  // Upstream requires Workers Paid (README, "What you need"): sending goes
+  // through Email Sending, and every sign-in derives a PBKDF2 hash with 100,000
+  // iterations, more CPU than the free plan's 10 ms.
+  "plan": "paid",
+  "requires": ["zone", "email-routing", "r2", "email-placeholders"],
+  // Left out: SETUP_TOKEN. Upstream's /setup page takes it once to create the
+  // first admin (src/app/pages/auth.tsx). The seed below creates that admin at
+  // install instead, and /setup redirects to /login once any user exists.
+  "secrets": [
+    {
+      "name": "ADMIN_PASSWORD",
+      "label": "Admin password",
+      "help": "The password of the first admin account, at least 10 characters. You can change it later under Admin, Users.",
+      "generate": "password",
+      "seedOnly": true
+    }
+  ],
+  "vars": [
+    {
+      "name": "ADMIN_EMAIL",
+      "label": "Admin email",
+      "help": "You sign in to GentleMail with this address. It does not need a mailbox in GentleMail.",
+      "seedOnly": true
+    },
+    {
+      // src/lib/webhooks.ts publicUrl: links in webhook payloads.
+      "name": "PUBLIC_URL",
+      "label": "Public address",
+      "help": "The address GentleMail is served at, used for links in webhook payloads. Appflare fills it in and keeps it in step with a custom domain.",
+      "default": "{{appUrl}}"
+    },
+    {
+      // The form starts with the wrangler config's value, GentleMail.
+      "name": "APP_NAME",
+      "label": "Name",
+      "help": "The name shown in the interface and the browser tab."
+    },
+    {
+      "name": "SPAM_SCORE_THRESHOLD",
+      "label": "Spam score threshold",
+      "help": "Move mail to Spam when Cloudflare's spam score (up to 5, higher is spammier) reaches this number. Leave empty to turn it off; if you turn it on, start at 5.",
+      "optional": true
+    }
+  ],
+  "resources": {
+    "d1": {
+      "DB": {
+        // src/lib/auth.ts: hashPassword stores pbkdf2$<iterations>$<salt>$<hash>,
+        // PBKDF2-SHA-256 with 100,000 iterations, a 16-byte salt and a 32-byte
+        // key, both in padded base64 (btoa); verifyPassword reads the
+        // iterations from the stored value. createUser lowercases the email
+        // and stores created_at in milliseconds. Ids are only compared, so a
+        // random hex id serves as well as upstream's crypto.randomUUID().
+        "seed": {
+          "hashes": {
+            "admin": {
+              "from": "ADMIN_PASSWORD",
+              "method": "pbkdf2-sha256",
+              "iterations": 100000,
+              "saltBytes": 16,
+              "keyBytes": 32,
+              "encoding": "base64"
+            }
+          },
+          "statements": [
+            {
+              "sql": "INSERT OR IGNORE INTO users (id, email, name, password_hash, role, created_at) VALUES (lower(hex(randomblob(16))), lower(trim(?)), ?, ? || ? || ? || ?, ?, CAST((julianday('now') - 2440587.5) * 86400000 AS INTEGER))",
+              "params": [
+                { "var": "ADMIN_EMAIL" },
+                { "value": "Admin" },
+                { "value": "pbkdf2$100000$" },
+                { "salt": "admin" },
+                { "value": "$" },
+                { "hash": "admin" },
+                { "value": "admin" }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  },
+  "postInstall": [
+    {
+      "type": "markdown",
+      "content": "Open {{appUrl}} and sign in with the admin email and password you chose. In **Admin → Domains**, add `{{emailDomain}}`, then create mailboxes and users in **Admin**. Appflare already turned on Email Routing for `{{emailDomain}}` and sent its catch-all to GentleMail, so mail to any mailbox you create there arrives; mail to an address without a mailbox is rejected."
+    },
+    {
+      "type": "markdown",
+      "content": "To send from `{{emailDomain}}`, onboard it to Email Sending in the Cloudflare dashboard (**Email Service → Email Sending**), or run `npx wrangler email sending enable {{emailDomain}}`."
+    },
+    {
+      "type": "markdown",
+      "content": "For another domain, run the commands its page in GentleMail shows, but point the catch-all at the Worker **{{workerName}}**: the page names the Worker from the upstream build (`my-gentlemail`)."
+    }
+  ]
+}
